@@ -1,0 +1,340 @@
+---
+title: 'Livestock ownership and malaria risk in Mopeia'
+output: github_document
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(scales)
+library(databrew)
+library(ggplot2)
+library(cism)
+library(readxl)
+library(tidyr)
+library(tidyverse)
+```
+
+```{r}
+## Comments from Carlos
+# It would be (a) a heat map of livestock (only pigs, goats and poultry) at the district and (b) a heat map of malaria incidence in the cohort children finally (c) both combined in a single index. We could even try to get mosquito densities but lets start with just malaria + livestock.
+
+# Read in the livestock data sent from Charfudin
+livestock <- read_excel('data/Distribuicao de gado em Mopeia (1).xlsx', skip = 2)
+
+# Forward fill the Posto Administrativo variable
+livestock <- livestock %>%
+  fill(`Posto Administrativo`, .direction = 'down')
+# Remove the unecessary "Total" row
+livestock <- livestock %>% dplyr::filter(`Posto Administrativo` != 'Total')
+livestock <- livestock %>% gather(key, value, Bovino:Ovino)
+# Translate to English
+livestock_dict <- tibble(key = c('Bovino',
+                                 'Caprino',
+                                 'Ovino',
+                                 'Suino'),
+                         animal = c('Cattle',
+                                    'Goats',
+                                    'Sheep',
+                                    'Swine'))
+livestock <- livestock %>% left_join(livestock_dict, by = 'key')
+```
+
+# Overlap of livestock ownership
+
+
+### Total livestock ownership (all localidades)
+
+```{r}
+pd <- livestock %>% group_by(animal) %>%
+  summarise(value = sum(value)) %>%
+  mutate(p = paste0(round(value / sum(value) * 100, digits = 1), '%'))
+
+cols <- RColorBrewer::brewer.pal(n = length(unique(pd$animal)),
+                                 name = 'Spectral')
+
+ggplot(data = pd,
+       aes(x = animal,
+           y = value,
+           fill = animal)) +
+  geom_bar(stat = 'identity',
+           alpha = 0.8) +
+  theme_databrew() +
+  labs(x = '',
+       y = '') +
+  theme(axis.text.x = element_text(size = 20)) +
+  geom_text(aes(label = paste0(comma(value), '\n(', p, ')')),
+            nudge_y = -800,
+            color = 'white',
+            size = 5) +
+  scale_fill_manual(name = '',
+                    values = cols) +
+  theme(legend.position = 'none')
+```
+
+### Total livestock ownership (by "Posto Administrativo")
+
+```{r}
+pd <- livestock %>% group_by(animal,`Posto Administrativo`) %>%
+  summarise(value = sum(value)) %>%
+  ungroup %>%
+  group_by(`Posto Administrativo`) %>%
+  mutate(p = paste0(round(value / sum(value) * 100, digits = 1), '%'))
+
+ggplot(data = pd,
+       aes(x = animal,
+           y = value,
+           fill = animal)) +
+  facet_wrap(~`Posto Administrativo`) +
+  geom_bar(stat = 'identity',
+           alpha = 0.8) +
+  theme_databrew() +
+  labs(x = '',
+       y = '') +
+  theme(axis.text.x = element_text(size = 15, angle = 90, vjust = 0.5),
+        strip.text = element_text(size = 20)) +
+  geom_text(aes(label = paste0(comma(value), '\n(', p, ')')),
+            nudge_y = -300,
+            color = 'white',
+            size = 3) +
+    scale_fill_manual(name = '',
+                    values = cols) +
+  theme(legend.position = 'none')
+```
+
+
+### Total livestock ownership (by "Localidade")
+
+```{r}
+pd <- livestock %>% group_by(animal,Localidade) %>%
+  summarise(value = sum(value)) %>%
+  ungroup %>%
+  group_by(Localidade) %>%
+  mutate(p = paste0(round(value / sum(value) * 100, digits = 1), '%'))
+
+ggplot(data = pd,
+       aes(x = animal,
+           y = value,
+           fill = animal)) +
+  facet_wrap(~Localidade,
+             ncol = 4) +
+  geom_bar(stat = 'identity',
+           alpha = 0.8) +
+  theme_databrew() +
+  labs(x = '',
+       y = '') +
+  theme(axis.text.x = element_text(size = 15, angle = 90, vjust = 0.5),
+        strip.text = element_text(size = 15)) +
+  geom_text(aes(label = paste0(comma(value), '\n(', p, ')')),
+            nudge_y = 500,
+            color = 'black',
+            alpha = 0.6,
+            size = 3) +
+    scale_fill_manual(name = '',
+                    values = cols) +
+  theme(legend.position = 'none')
+```
+
+### Correlation between ownership of one animal and another
+
+On May 27 2019, Cassidy Rist asked the following (via email):
+
+```
+I wonder what the overlap is among livestock ownership. 
+For example, do most people own pigs and goats, or is it 
+more likely that one or the other species is owned?
+```
+
+As of now, we only have aggregate-level data (most granular: localidade). Without individual-level data, the above can be addressed. Until then. we can examine the correlation at the localidade level (below), but in doing so we're committing the ecological fallacy.
+
+The below aims to address the above question, using aggregated data ("localidade"-level).
+
+#### Cattle and Goats
+
+```{r}
+pd <- livestock %>% dplyr::select(Localidade, animal, value) %>% spread(key = animal, value = value)
+
+ggplot(data = pd,
+       aes(x = Cattle,
+           y = Goats,
+           color = Localidade)) +
+  geom_point(size = 4, 
+             alpha = 0.8) +
+  scale_color_manual(name = '',
+                    values = RColorBrewer::brewer.pal(n = length(unique(pd$Localidade)), 
+                                                    name = 'Spectral')) +
+  theme_databrew() + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25)) +
+  geom_line(aes(group = 1),
+            stat="smooth",method = "lm", formula = y ~ 0 + I(1/x) + I((x-1)/x),
+              size = 1,
+              linetype ="dashed",
+              alpha = 0.5) +
+  labs(title = 'Association of Cattle and Goats',
+       subtitle = 'Smoothed line formula: y ~ 0 + I(1/x)')
+```
+
+
+
+#### Cattle and Sheep
+
+```{r}
+
+ggplot(data = pd,
+       aes(x = Cattle,
+           y = Sheep,
+           color = Localidade)) +
+  geom_point(size = 4, 
+             alpha = 0.8) +
+  scale_color_manual(name = '',
+                    values = RColorBrewer::brewer.pal(n = length(unique(pd$Localidade)), 
+                                                    name = 'Spectral')) +
+  theme_databrew() + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25)) +
+  geom_line(aes(group = 1),
+            stat="smooth",method = "lm", formula = y ~ 0 + I(1/x) + I((x-1)/x),
+              size = 1,
+              linetype ="dashed",
+              alpha = 0.5) +
+  labs(title = 'Association of Cattle and Sheep',
+       subtitle = 'Smoothed line formula: y ~ 0 + I(1/x)') +
+  ylim(0, 610)
+```
+
+#### Cattle and Swine
+
+```{r}
+
+ggplot(data = pd,
+       aes(x = Cattle,
+           y = Swine,
+           color = Localidade)) +
+  geom_point(size = 4, 
+             alpha = 0.8) +
+  scale_color_manual(name = '',
+                    values = RColorBrewer::brewer.pal(n = length(unique(pd$Localidade)), 
+                                                    name = 'Spectral')) +
+  theme_databrew() + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25)) +
+  geom_line(aes(group = 1),
+            stat="smooth",method = "lm", formula = y ~ 0 + I(1/x) + I((x-1)/x),
+              size = 1,
+              linetype ="dashed",
+              alpha = 0.5) +
+  labs(title = 'Association of Cattle and Swine',
+       subtitle = 'Smoothed line formula: y ~ 0 + I(1/x)') 
+```
+
+
+#### Goats and Sheep
+
+```{r}
+
+ggplot(data = pd,
+       aes(x = Goats,
+           y = Sheep,
+           color = Localidade)) +
+  geom_point(size = 4, 
+             alpha = 0.8) +
+  scale_color_manual(name = '',
+                    values = RColorBrewer::brewer.pal(n = length(unique(pd$Localidade)), 
+                                                    name = 'Spectral')) +
+  theme_databrew() + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25)) +
+  geom_line(aes(group = 1),
+            stat="smooth",method = "lm", formula = y ~ 0 + I(1/x) + I((x-1)/x),
+              size = 1,
+              linetype ="dashed",
+              alpha = 0.5) +
+  labs(title = 'Association of Goats and Sheep',
+       subtitle = 'Smoothed line formula: y ~ 0 + I(1/x)') 
+```
+
+#### Goats and Swine
+
+```{r}
+
+ggplot(data = pd,
+       aes(x = Goats,
+           y = Swine,
+           color = Localidade)) +
+  geom_point(size = 4, 
+             alpha = 0.8) +
+  scale_color_manual(name = '',
+                    values = RColorBrewer::brewer.pal(n = length(unique(pd$Localidade)), 
+                                                    name = 'Spectral')) +
+  theme_databrew() + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25)) +
+  geom_line(aes(group = 1),
+            stat="smooth",method = "lm", formula = y ~ 0 + I(1/x) + I((x-1)/x),
+              size = 1,
+              linetype ="dashed",
+              alpha = 0.5) +
+  labs(title = 'Association of Goats and Swine',
+       subtitle = 'Smoothed line formula: y ~ 0 + I(1/x)') 
+```
+
+#### Sheep and Swine
+
+```{r}
+
+ggplot(data = pd,
+       aes(x = Sheep,
+           y = Swine,
+           color = Localidade)) +
+  geom_point(size = 4, 
+             alpha = 0.8) +
+  scale_color_manual(name = '',
+                    values = RColorBrewer::brewer.pal(n = length(unique(pd$Localidade)), 
+                                                    name = 'Spectral')) +
+  theme_databrew() + 
+  theme(axis.title.x = element_text(size = 25),
+        axis.title.y = element_text(size = 25)) +
+  geom_line(aes(group = 1),
+            stat="smooth",method = "lm", formula = y ~ 0 + I(1/x) + I((x-1)/x),
+              size = 1,
+              linetype ="dashed",
+              alpha = 0.5) +
+  labs(title = 'Association of Sheep and Swine',
+       subtitle = 'Smoothed line formula: y ~ 0 + I(1/x)') 
+```
+
+
+# Map of livestock
+
+# Map of malaria incidence in cohort children
+
+# Map of livestock and malaria incidence combined into single index
+
+# Pending: Map of mosquito densities
+
+# Technical details
+
+This document was produced on `r Sys.Date()` on a `r Sys.info()['sysname']` machine (release `r Sys.info()['release']`. To reproduce, one should take the following steps:
+
+1. Clone the repository at https://github.com/databrew/bohemia
+
+2. Populate the `analyses/livestock_distribution/data` directory with the following files: `Distribuicao de gado em Mopeia (1).xlsx` (emailed to team members from Charfudin Sacoor on May 27 2019);  
+
+3. "Render" (using `rmarkdown`) the code in `analysis/livestock_distribution/README.Rmd`
+
+Any questions or problems should be addressed to joe@databrew.cc
