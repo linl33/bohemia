@@ -16,3 +16,19 @@ Suggests:
     testthat
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.0
+Imports: 
+    dplyr,
+    ggplot2,
+    ggthemes,
+    leaflet,
+    lubridate,
+    maps,
+    sp,
+    DT,
+    Hmisc,
+    extrafont,
+    grDevices,
+    grid,
+    scales,
+    databrew,
+    cism

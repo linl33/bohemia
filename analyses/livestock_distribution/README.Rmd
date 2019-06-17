@@ -52,10 +52,12 @@ livestock_dict <- tibble(key = c('Bovino',
                                     'Sheep',
                                     'Swine'))
 livestock <- livestock %>% left_join(livestock_dict, by = 'key')
+
 ```
 
-# Overlap of livestock ownership
+# Analysis of aggregate data
 
+## Overlap of livestock ownership
 
 ### Total livestock ownership (all localidades)
 
@@ -319,6 +321,279 @@ ggplot(data = pd,
 ```
 
 
+# Analysis of person-level data
+
+
+
+
+```{r}
+library(cism)
+
+# Create acd from 3 datasets, per Eldo's instructions
+acda <- read_csv('data/from_eldo/COST_ACD_Core_13-05-2019.csv')
+acdb <- read_csv('data/from_eldo/COST_ACD_Childs_13-05-2019.csv')
+acdc <- read_csv('data/from_eldo/COST_ACD_nets_13-05-2019.csv')
+
+acd <- 
+  left_join(acdb,
+            acda,
+            by = c('_PARENT_AURI' = '_URI')) %>%
+  left_join(acdc,
+            by = c('_URI' = '_PARENT_AURI'))
+
+# Read in eldo files
+eldo_perm <- read_csv('data/from_eldo/COST_Permids.New&Old_EE.csv')
+eldo_census_agg <- read_csv('data/from_eldo/COST_SprayStatus_by_Village_Id_11.04.2019.EE.csv')
+eldo_livestock <- read_csv('data/from_eldo/COST_ACD_Core_13-05-2019.csv')
+eldo_census_2016 <- read_csv('data/from_eldo/Census_2016.csv')
+eldo_census_2017 <- read_csv('data/from_eldo/COST_Censo2017_Core.1.4.2019.csv')
+census <- eldo_census_2016 %>% dplyr::select(gpc_lng,
+                                             gpc_lat,
+                                             locality_Final,
+                                             `village number_final`,
+                                             household_number) %>%
+  dplyr::rename(lng = gpc_lng,
+           lat = gpc_lat,
+           localidade = locality_Final,
+           hhid = household_number,
+           village_number = `village number_final`) %>% mutate(year = 2016) %>%
+  mutate(family_id )
+  bind_rows(eldo_census_2017 %>%
+              dplyr::rename(lng = LOCALITY_GPS_LNG,
+                            lat = LOCALITY_GPS_LAT,
+                            localidade = LOCAL_VILLAGENAME,
+                            village_number = FAMILY_ID) %>%
+              dplyr::select(village_number,
+                            localidade, lng, lat) %>%
+              mutate(village_number = as.numeric(unlist(lapply(strsplit(village_number, '-'), function(x){x[1]})))) %>%
+              mutate(year = 2017))
+
+# Sort out locations of clusters, etc.
+locations <- eldo_census_2016 %>%
+  group_by(lng = gpc_lng,
+           lat = gpc_lat,
+           localidade = locality_Final,
+           village_number = `village number_final`) %>%
+  tally %>%
+  dplyr::filter(n == 1) %>%
+  dplyr::select(village_number, localidade, lng, lat)
+
+# Try to get locations for each localidade for livestock
+avg_locations <- locations %>%
+  mutate()
+  group_by(localidade) %>%
+  summarise(lng = mean(lng),
+            lat = mean(lat))
+
+
+# # Define function for converting a meta_instance_name from livestock
+# to a household id in the census dataset
+numeric_convert <- function(x){
+  # Minimize
+  x <- strsplit(x, '-')
+  # Make numeric
+  x <- lapply(x, function(z){as.character(as.numeric(z))})
+  x <- lapply(x, function(z){paste0(z[1], '-', z[2], '-', z[3], '-', z[4])})
+  x <- unlist(x)
+  return(x)
+}
+
+# Join acd and eldo perm info
+acd <-
+  left_join(acd %>% 
+              mutate(permid = numeric_convert(PERM_ID)), 
+            eldo_perm %>% 
+              mutate(permid = numeric_convert(new_permid)),
+            by = 'permid')
+
+# It would be (a) a heat map of livestock (only pigs, goats and poultry) at the district and (b) a heat map of malaria incidence in the cohort children finally (c) both combined in a single index. We could even try to get mosquito densities but lets start with just malaria + livestock.
+
+# USE ACD data for both human distribution and animal distribution
+# The relevant variables are main_animal_<animal name>
+
+# Keep only relevant vars
+
+acd <- acd %>%
+  dplyr::select(
+    permid,
+         gender,
+         cluster,
+         longitude,
+         latitude,
+    chicken = MAIN_ANIMAL_CHICK,
+         animals = MAIN_ANIMALS,
+         cattle = MAIN_ANIMAL_CATTLE,
+         pigs = MAIN_ANIMAL_PIGS,
+         horses = MAIN_ANIMAL_HORSE,
+         sheel = MAIN_ANIMAL_SHEEP,
+         goats = MAIN_ANIMAL_COATS,
+         FAMILY_ID,
+         DEMOGRAFIC_DOB,
+         HOME_WORK,
+         HOME_WORK_TIME,
+         HAD_MALARIA,
+         INDUSTRY,
+         MAIN_MALARIA_CONTROL_UNDERNET_SLEEP) %>%
+  filter(!is.na(longitude),
+         !is.na(latitude))
+```
+
+## Overall distribution of humans (point map)
+
+```{r}
+ggplot() +
+  geom_polygon(data = mop2_fortified,
+               aes(x = long,
+                   y = lat,
+                   group = group)) +
+  theme_databrew() +
+  coord_map() +
+  geom_point(data = locations,
+             aes(x = lng,
+                 y = lat),
+             color = 'red',
+             alpha = 0.6,
+             size = 0.1) +
+  labs(x = '',
+       y = '') +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank())
+```
+
+## Overall distribution of humans ("heat map")
+
+```{r}
+library(raster)
+library(rasterVis)
+
+heat_map <- function(the_map = mop2,
+                     the_densities = locations,
+                     griddy = 0.1){
+  
+  # Define the densities
+  df_spatial <- the_densities %>% mutate(x = lng, y = lat)
+  coordinates(df_spatial) <- ~x+y
+  proj4string(df_spatial) <- proj4string(the_map)
+  # First we need to create a uniform grid
+  # Create a gridded dataframe with values 
+  # for the entire range (bbox) of magude
+  df_grid <- expand.grid(lng = seq(bbox(the_map)[1,1],
+                                   bbox(the_map)[1,2],
+                                   by = griddy), # make this smaller for better quality
+                         lat = seq(bbox(the_map)[2,1],
+                                   bbox(the_map)[2,2],
+                                   by = griddy), # make this smaller for better quality
+                         pos_score = NA)
+  df_grid$latitude <- df_grid$lat
+  df_grid$longitude <- df_grid$lng
+  coordinates(df_grid) <- ~longitude+latitude
+  proj4string(df_grid) <- proj4string(the_map)
+  # # Visualize the grid
+  # plot(the_map)
+  # points(df_grid$lng, df_grid$lat, pch = ".")
+  
+  
+  # Loop through each point in our grid
+  for (i in 1:nrow(df_grid)){
+    message(i)
+    # Get distance from this grid point to every point in df_spatial
+    distances <- spDistsN1(pts = df_spatial,
+                           pt = df_grid[i,],
+                           longlat = TRUE)
+    # Define which are acceptably close (define a radius)
+    close_enough <- which(distances <= 50)
+    # Get a positivity score ( 1 means yes and 0 means no)
+    # positivity <- stats::weighted.mean(
+    #   x = df_spatial$pcr_mujer[close_enough],
+    #   w = (1 / distances[close_enough])^2,
+    #                                    na.rm = TRUE)
+    positivity <- mean(1 / (distances[close_enough]^(1/4)), na.rm = TRUE)
+    # Assign irs to the dataframe
+    df_grid$pos_score[i] <- positivity
+  }
+  
+  # Convert df_grid to raster
+  temp <- df_grid@data %>% arrange(lng, lat)
+  r <- rasterFromXYZ(temp[, c('lng', 'lat', 'pos_score')])
+  # plot(r)
+  # plot(the_map, add = TRUE)
+  
+  # Make grid smaller and then reconvert to raster
+  proj4string(df_grid) <- proj4string(the_map)
+  x <- over(df_grid, polygons(the_map))
+  df_grid_small <- df_grid[!is.na(x),]
+  # plot(df_grid_small,
+  #      col = adjustcolor('black', alpha.f = 0.2))
+  temp <- df_grid_small@data %>% arrange(lng, lat)
+  r <- rasterFromXYZ(temp[, c('lng', 'lat', 'pos_score')])
+  plot(r, legend = FALSE)
+  plot(the_map, add = TRUE)
+  
+}
+heat_map(griddy = 0.2)
+# heat_map(griddy = 0.01)
+
+# points(df_spatial,
+#        col = adjustcolor("black", alpha.f = 0.2),
+#        cex = 0.2)
+
+```
+
+## Overall distribution of livestock (point map)
+
+```{r}
+livestock_long
+ggplot() +
+  geom_polygon(data = mop2_fortified,
+               aes(x = long,
+                   y = lat,
+                   group = group)) +
+  theme_databrew() +
+  coord_map() +
+  # geom_point(data = livestock,
+  #            aes(x = lng,
+  #                y = lat),
+  #            color = 'red',
+  #            alpha = 0.6,
+  #            size = 0.1) +
+  labs(x = '',
+       y = '') +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank())
+```
+
+## Overall distribution of livestock ("heat map")
+
+```{r}
+livestock_long <- 
+  acd %>% 
+  dplyr::select(longitude,
+                latitude, 
+                animals)
+out_list <- list()
+counter <- 0
+for(i in 1:nrow(livestock_long)){
+  this_row <- livestock_long[i,]
+  n_animals <- this_row$animals
+  if(!is.na(n_animals)){
+    if(n_animals > 0){
+      out_row <- tibble(longitude = this_row$longitude,
+                        latitude = this_row$latitude,
+                        animals = 1:n_animals)
+      counter <- counter + 1
+      out_list[[counter]] <- out_row
+    }
+  }
+}
+livestock_long <- bind_rows(out_list) %>%
+  mutate(lng = longitude,
+         lat = latitude)
+heat_map(the_map = mop2,
+         the_densities = livestock_long,
+         griddy = 0.1)
+
+```
+
 # Map of livestock
 
 # Map of malaria incidence in cohort children
@@ -335,6 +610,26 @@ This document was produced on `r Sys.Date()` on a `r Sys.info()['sysname']` mach
 
 2. Populate the `analyses/livestock_distribution/data` directory with the following files: `Distribuicao de gado em Mopeia (1).xlsx` (emailed to team members from Charfudin Sacoor on May 27 2019);  
 
-3. "Render" (using `rmarkdown`) the code in `analysis/livestock_distribution/README.Rmd`
+3. Populate the `analyses/livestock_distribution/data/from_eldo` directory with the following files (emailed from Eldo to team on June 10 2019):
+
+```
+├── Census_2016.csv
+├── COST_ACD_Core_13-05-2019.csv
+├── COST_ACD_Follow_Up_Core_13-05-2019.csv
+├── COST_ACD_Follow_Up_V062017_Core_10-05-2019.csv
+├── COST_Censo2017_Core.1.4.2019.csv
+├── COST_CROSS_2017_Core_Final_11.04.2019.csv
+├── COST_CROSS_2018_Core_Final_11.10.2018.csv
+├── COST_Cross_2019_Core_10-06-2019.csv
+├── COST_PCD_2019_Core_15-04-2019.csv
+├── COST_PCD_V062017_Core_17-01-2019.csv
+├── COST_SprayStatus_by_Village_Id_11.04.2019.EE.csv
+├── Livestock_Mopeia.csv
+└── Pcd1_core.csv
+```
+
+4. Download the `COST_Permids.New&Old_EE.csv` file, sent by Eldo to team on June 11 2019, into `data/from_eldo`.
+
+5. "Render" (using `rmarkdown`) the code in `analysis/livestock_distribution/README.Rmd`
 
 Any questions or problems should be addressed to joe@databrew.cc
