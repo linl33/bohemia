@@ -55,13 +55,17 @@ livestock <- livestock %>% left_join(livestock_dict, by = 'key')
 
 ```
 
+# Major caveat
+
+Livestock data is only available at the aggregated "localidade" level. The methods used in the production of "heat maps" in this report may be affected by the (false) concentration of livestock at a point location (the localidade) rather than their true (dispersed) locations. In other words, interpretation of heat maps should be carried out with caution as there may exist visual artefacts from the (false) concentration of livestock at the localidade centroids.
+
 # Analysis of aggregate data
 
 ## Overlap of livestock ownership
 
 ### Total livestock ownership (all localidades)
 
-```{r}
+```{r, fig.height = 8}
 pd <- livestock %>% group_by(animal) %>%
   summarise(value = sum(value)) %>%
   mutate(p = paste0(round(value / sum(value) * 100, digits = 1), '%'))
@@ -347,26 +351,26 @@ eldo_census_agg <- read_csv('data/from_eldo/COST_SprayStatus_by_Village_Id_11.04
 eldo_livestock <- read_csv('data/from_eldo/COST_ACD_Core_13-05-2019.csv')
 eldo_census_2016 <- read_csv('data/from_eldo/Census_2016.csv')
 eldo_census_2017 <- read_csv('data/from_eldo/COST_Censo2017_Core.1.4.2019.csv')
-census <- eldo_census_2016 %>% dplyr::select(gpc_lng,
-                                             gpc_lat,
-                                             locality_Final,
-                                             `village number_final`,
-                                             household_number) %>%
-  dplyr::rename(lng = gpc_lng,
-           lat = gpc_lat,
-           localidade = locality_Final,
-           hhid = household_number,
-           village_number = `village number_final`) %>% mutate(year = 2016) %>%
-  mutate(family_id )
-  bind_rows(eldo_census_2017 %>%
-              dplyr::rename(lng = LOCALITY_GPS_LNG,
-                            lat = LOCALITY_GPS_LAT,
-                            localidade = LOCAL_VILLAGENAME,
-                            village_number = FAMILY_ID) %>%
-              dplyr::select(village_number,
-                            localidade, lng, lat) %>%
-              mutate(village_number = as.numeric(unlist(lapply(strsplit(village_number, '-'), function(x){x[1]})))) %>%
-              mutate(year = 2017))
+# census <- eldo_census_2016 %>% dplyr::select(gpc_lng,
+#                                              gpc_lat,
+#                                              locality_Final,
+#                                              `village number_final`,
+#                                              household_number) %>%
+#   dplyr::rename(lng = gpc_lng,
+#            lat = gpc_lat,
+#            localidade = locality_Final,
+#            hhid = household_number,
+#            village_number = `village number_final`) %>% mutate(year = 2016) %>%
+#   mutate(family_id )
+#   bind_rows(eldo_census_2017 %>%
+#               dplyr::rename(lng = LOCALITY_GPS_LNG,
+#                             lat = LOCALITY_GPS_LAT,
+#                             localidade = LOCAL_VILLAGENAME,
+#                             village_number = FAMILY_ID) %>%
+#               dplyr::select(village_number,
+#                             localidade, lng, lat) %>%
+#               mutate(village_number = as.numeric(unlist(lapply(strsplit(village_number, '-'), function(x){x[1]})))) %>%
+#               mutate(year = 2017))
 
 # Sort out locations of clusters, etc.
 locations <- eldo_census_2016 %>%
@@ -380,7 +384,7 @@ locations <- eldo_census_2016 %>%
 
 # Try to get locations for each localidade for livestock
 avg_locations <- locations %>%
-  mutate()
+  # mutate()
   group_by(localidade) %>%
   summarise(lng = mean(lng),
             lat = mean(lat))
@@ -440,6 +444,8 @@ acd <- acd %>%
 
 ## Overall distribution of humans (point map)
 
+(The below uses census data)
+
 ```{r}
 ggplot() +
   geom_polygon(data = mop2_fortified,
@@ -462,16 +468,18 @@ ggplot() +
 
 ## Overall distribution of humans ("heat map")
 
+(The below uses census data)
+
 ```{r}
 library(raster)
 library(rasterVis)
 
-heat_map <- function(the_map = mop2,
-                     the_densities = locations,
-                     griddy = 0.1){
+make_grid <- function(the_densities = locations,
+                      the_map = mop2,
+                     griddy = 0.005){
   
   # Define the densities
-  df_spatial <- the_densities %>% mutate(x = lng, y = lat)
+  df_spatial <- the_densities %>% mutate(x = lng, y = lat) %>% filter(!is.na(lng), !is.na(lat))
   coordinates(df_spatial) <- ~x+y
   proj4string(df_spatial) <- proj4string(the_map)
   # First we need to create a uniform grid
@@ -501,7 +509,7 @@ heat_map <- function(the_map = mop2,
                            pt = df_grid[i,],
                            longlat = TRUE)
     # Define which are acceptably close (define a radius)
-    close_enough <- which(distances <= 50)
+    close_enough <- which(distances <= 500)
     # Get a positivity score ( 1 means yes and 0 means no)
     # positivity <- stats::weighted.mean(
     #   x = df_spatial$pcr_mujer[close_enough],
@@ -526,11 +534,104 @@ heat_map <- function(the_map = mop2,
   #      col = adjustcolor('black', alpha.f = 0.2))
   temp <- df_grid_small@data %>% arrange(lng, lat)
   r <- rasterFromXYZ(temp[, c('lng', 'lat', 'pos_score')])
-  plot(r, legend = FALSE)
-  plot(the_map, add = TRUE)
-  
+  return(r)
+  # # plot(r, legend = FALSE)
+  # # plot(the_map, add = TRUE)
+  # 
+  # # plot(the_map, add = T)
 }
-heat_map(griddy = 0.2)
+
+# Define another function for getting a population adjusted grid
+make_grid_adjusted <- function(the_densities = locations,
+                     the_map = mop2,
+                      the_population = locations,
+                     griddy = 0.01){
+  
+  # Define the densities
+  df_spatial <- the_densities %>% mutate(x = lng, y = lat) %>% filter(!is.na(lng), !is.na(lat))
+  coordinates(df_spatial) <- ~x+y
+  proj4string(df_spatial) <- proj4string(the_map)
+  
+  # Define the population densities
+  population_spatial <- the_population %>% mutate(x = lng, y = lat) %>% filter(!is.na(lng), !is.na(lat))
+  coordinates(population_spatial) <- ~x+y
+  proj4string(population_spatial) <- proj4string(the_map)
+  
+  # First we need to create a uniform grid
+  # Create a gridded dataframe with values 
+  # for the entire range (bbox) of magude
+  df_grid <- expand.grid(lng = seq(bbox(the_map)[1,1],
+                                   bbox(the_map)[1,2],
+                                   by = griddy), # make this smaller for better quality
+                         lat = seq(bbox(the_map)[2,1],
+                                   bbox(the_map)[2,2],
+                                   by = griddy), # make this smaller for better quality
+                         pos_score = NA)
+  df_grid$latitude <- df_grid$lat
+  df_grid$longitude <- df_grid$lng
+  coordinates(df_grid) <- ~longitude+latitude
+  proj4string(df_grid) <- proj4string(the_map)
+  
+  
+  # Loop through each point in our grid
+  for (i in 1:nrow(df_grid)){
+    message(i)
+    # Get distance from this grid point to every point in df_spatial
+    distances <- spDistsN1(pts = df_spatial,
+                           pt = df_grid[i,],
+                           longlat = TRUE)
+    population_distances <- spDistsN1(pts = population_spatial,
+                                      pt = df_grid[i,],
+                                      longlat = TRUE)
+    # Define which are acceptably close (define a radius)
+    close_enough <- which(distances <= 500)
+    # Get a positivity score ( 1 means yes and 0 means no)
+    # positivity <- stats::weighted.mean(
+    #   x = df_spatial$pcr_mujer[close_enough],
+    #   w = (1 / distances[close_enough])^2,
+    #                                    na.rm = TRUE)
+    positivity <- mean(1 / (distances[close_enough]^(1/4)), na.rm = TRUE)
+    population_positivity <-   mean(1 / (population_distances[close_enough]^(1/4)), na.rm = TRUE)
+    # Assign irs to the dataframe
+    df_grid$pos_score[i] <- positivity / population_positivity
+  }
+  
+  # Convert df_grid to raster
+  temp <- df_grid@data %>% arrange(lng, lat)
+  r <- rasterFromXYZ(temp[, c('lng', 'lat', 'pos_score')])
+  # plot(r)
+  # plot(the_map, add = TRUE)
+  
+  # Make grid smaller and then reconvert to raster
+  proj4string(df_grid) <- proj4string(the_map)
+  x <- over(df_grid, polygons(the_map))
+  df_grid_small <- df_grid[!is.na(x),]
+  # plot(df_grid_small,
+  #      col = adjustcolor('black', alpha.f = 0.2))
+  temp <- df_grid_small@data %>% arrange(lng, lat)
+  r <- rasterFromXYZ(temp[, c('lng', 'lat', 'pos_score')])
+  return(r)
+  # # plot(r, legend = FALSE)
+  # # plot(the_map, add = TRUE)
+  # 
+  # # plot(the_map, add = T)
+}
+
+heat_map <- function(r){
+  # levelplot(r, contour = F, par.settings = BuRdTheme()) +
+  levelplot(r, contour = F, par.settings = infernoTheme()) +
+  layer(sp.polygons(mop2, lwd = 3))
+}
+
+file_name <- 'grids/1.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(griddy = 0.01)
+  save(r, file = file_name)
+}
+
+heat_map(r) 
 # heat_map(griddy = 0.01)
 
 # points(df_spatial,
@@ -541,8 +642,28 @@ heat_map(griddy = 0.2)
 
 ## Overall distribution of livestock (point map)
 
-```{r}
-livestock_long
+The below uses municipality data. This means that it is aggregated at the localidade-level. We also have person-level livestock data, but only in the ACD records (which are not comprehensive of all people).
+
+```{r, fig.height = 8}
+# Make a long df of livestock long
+livestock_with_locations <-
+  livestock %>%
+  mutate(localidade = ifelse(Localidade == 'Campo sede', 'POSTO CAMPO-SEDE',
+                           ifelse(Localidade == 'Catale', 'CATALE',
+                                  ifelse(Localidade == 'Lua lua', 'LUA LUA',
+                                         ifelse(Localidade == 'Mopeia sede', 'MOPEIA-SEDE/CUA CUA',
+                                                ifelse(Localidade == 'Mungane', 'MUNGANE',
+                                                       ifelse(Localidade == 'Nzanza', 'Nzanza',
+                                                              ifelse(Localidade == 'Rovuma', 'ROVUMA-CONHO',
+                                                                     ifelse(Localidade == 'Sambalendo',
+                                                                            'SAMBALENDO/CHIMUARA',
+                                                                            Localidade))))))))) %>%
+  left_join(locations %>%
+              dplyr::select(localidade, lng, lat) %>%
+              group_by(localidade) %>%
+              summarise(lng = mean(lng),
+                        lat = mean(lat)))
+
 ggplot() +
   geom_polygon(data = mop2_fortified,
                aes(x = long,
@@ -550,55 +671,390 @@ ggplot() +
                    group = group)) +
   theme_databrew() +
   coord_map() +
-  # geom_point(data = livestock,
-  #            aes(x = lng,
-  #                y = lat),
-  #            color = 'red',
-  #            alpha = 0.6,
-  #            size = 0.1) +
+  geom_point(data = livestock_with_locations,
+             aes(x = lng,
+                 y = lat,
+                 size = value,
+                 color = animal),
+             alpha = 0.6) +
+  labs(x = '',
+       y = '') +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank()) +
+  facet_wrap(~animal) +
+  scale_color_manual(name = '',
+                     values = cols,
+                     guide = FALSE) +
+  scale_size_continuous(name = '',
+                        breaks = c(100, 500, 1000, 2000, 3000),
+                        range = c(0, 15))
+```
+
+## Overall distribution of livestock ("heat map")
+
+The below uses municipality data. This means that it is aggregated at the localidade-level. The person-level livestock data (only in the ACD records) are not comprehensive of all people.
+
+There are two kinds of maps for each animal: (1) a straightforward heat map (showing the distribution of animals) and (2) a human population-adjusted heatmap (showing where the animal in question is more or less prevalent, relative to the distribution of the human population). In the latter map, if livestock distribution reflected perfectly human distribution, there would be no variation in color throughout the map.
+
+```{r}
+animal_densities_list <- list()
+for(i in 1:nrow(livestock_with_locations)){
+  # message(i)
+  this_row <- livestock_with_locations[i,]
+  out <- tibble(animal = this_row$animal,
+                lng = this_row$lng,
+                lat = this_row$lat,
+                n = 1:this_row$value)
+  animal_densities_list[[i]] <- out
+}
+animal_densities <- bind_rows(animal_densities_list)
+```
+
+### Cattle
+
+#### Distribution of cattle
+
+```{r}
+file_name <- 'grids/2.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = animal_densities %>% filter(animal == 'Cattle'))
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+#### Distribution of cattle adjusted by human population
+
+
+```{r}
+file_name <- 'grids/2b.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid_adjusted(the_densities = animal_densities %>% filter(animal == 'Cattle'),
+                          the_population = locations)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+### Goats
+
+#### Distribution of goats
+
+```{r}
+file_name <- 'grids/3.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = animal_densities %>% filter(animal == 'Goats'))
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+#### Distribution of cattle adjusted by human population
+
+
+```{r}
+file_name <- 'grids/db.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid_adjusted(the_densities = animal_densities %>% filter(animal == 'Goats'),
+                          the_population = locations)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+### Sheep
+
+#### Distribution of sheep
+
+```{r}
+file_name <- 'grids/4.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = animal_densities %>% filter(animal == 'Sheep'))
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+#### Distribution of sheep adjusted by human population
+
+
+```{r}
+file_name <- 'grids/4b.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid_adjusted(the_densities = animal_densities %>% filter(animal == 'Sheep'),
+                          the_population = locations)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+### Swine
+
+#### Distribution of swine
+
+```{r}
+file_name <- 'grids/5.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = animal_densities %>% filter(animal == 'Swine'))
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+#### Distribution of swine adjusted by human population
+
+
+```{r}
+file_name <- 'grids/5b.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid_adjusted(the_densities = animal_densities %>% filter(animal == 'Swine'),
+                          the_population = locations)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+
+### All livestock
+
+#### Distribution of all livestock
+
+```{r}
+file_name <- 'grids/all.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = animal_densities)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+#### Distribution of all livestock adjusted by human population
+
+
+```{r}
+file_name <- 'grids/allb.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid_adjusted(the_densities = animal_densities,
+                          the_population = locations)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+#### Distribution of all livestock except cattle
+
+```{r}
+file_name <- 'grids/all_not_cattle.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = animal_densities %>% filter(animal != 'Cattle'))
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+#### Distribution of all livestock adjusted by human population
+
+
+```{r}
+file_name <- 'grids/all_not_cattleb.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid_adjusted(the_densities = animal_densities%>% filter(animal != 'Cattle'),
+                          the_population = locations)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+
+
+
+## Malaria maps
+
+### Overall distribution of malaria (all ACD cases) (point map)
+
+
+```{r}
+ggplot() +
+  geom_polygon(data = mop2_fortified,
+               aes(x = long,
+                   y = lat,
+                   group = group)) +
+  theme_databrew() +
+  coord_map() +
+  geom_jitter(data = acd,
+             aes(x = longitude,
+                 y = latitude),
+             color = 'red',
+             alpha = 0.6,
+             size = 0.5) +
   labs(x = '',
        y = '') +
   theme(axis.text.x = element_blank(),
         axis.text.y = element_blank())
 ```
 
-## Overall distribution of livestock ("heat map")
+
+
+### Overall distribution of malaria (all ACD cases) with population (point map, jittered)
+
+(Grey: house)
+(Red: malaria case)
 
 ```{r}
-livestock_long <- 
-  acd %>% 
-  dplyr::select(longitude,
-                latitude, 
-                animals)
-out_list <- list()
-counter <- 0
-for(i in 1:nrow(livestock_long)){
-  this_row <- livestock_long[i,]
-  n_animals <- this_row$animals
-  if(!is.na(n_animals)){
-    if(n_animals > 0){
-      out_row <- tibble(longitude = this_row$longitude,
-                        latitude = this_row$latitude,
-                        animals = 1:n_animals)
-      counter <- counter + 1
-      out_list[[counter]] <- out_row
-    }
-  }
-}
-livestock_long <- bind_rows(out_list) %>%
-  mutate(lng = longitude,
-         lat = latitude)
-heat_map(the_map = mop2,
-         the_densities = livestock_long,
-         griddy = 0.1)
-
+ggplot() +
+  geom_polygon(data = mop2_fortified,
+               aes(x = long,
+                   y = lat,
+                   group = group)) +
+  theme_databrew() +
+  coord_map() +
+    geom_point(data = locations,
+             aes(x = lng,
+                 y = lat),
+             color = 'grey',
+             alpha = 0.3,
+             size = 0.8) +
+  geom_jitter(data = acd,
+             aes(x = longitude,
+                 y = latitude),
+             color = 'red',
+             alpha = 0.6,
+             size = 0.4) +
+  labs(x = '',
+       y = '') +
+  theme(axis.text.x = element_blank(),
+        axis.text.y = element_blank())
 ```
 
-# Map of livestock
+### Overall distribution of malaria (all ACD cases) ("heat map")
 
-# Map of malaria incidence in cohort children
+```{r}
+file_name <- 'grids/6.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = acd %>% mutate(lng = longitude, lat = latitude) %>% data.frame())
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+### Overall distribution of malaria, adjusted by human population (incidence heat map)
+
+```{r}
+file_name <- 'grids/7.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid_adjusted(
+    the_densities = acd %>% mutate(lng = longitude, lat = latitude) %>% data.frame(),
+    the_population = locations)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+
 
 # Map of livestock and malaria incidence combined into single index
+
+(Excludes cattle)
+
+The below shows the product of two values: 
+
+1. The (percentilized) malaria distribution and
+
+2. The (percentilized) distribution of livestock
+
+The lighter areas show areas with the highest (percentilized) values of both. In other words, light yellow means there is a lot of malaria and livestock, whereas dark purple means the opposite.
+
+```{r}
+# Malaria
+load('grids/6.RData')
+malaria <- r
+values(malaria) <- dplyr::percent_rank(values(malaria)) #* 100
+proj4string(malaria) <- proj4string(mop2)
+
+# Livestock
+load('grids/all_not_cattle.RData')
+livestock <- r
+values(livestock) <- dplyr::percent_rank(values(livestock))# * 100
+proj4string(livestock) <- proj4string(mop2)
+
+# Crop
+malaria <- crop(malaria, livestock)
+extent(malaria) <- extent(livestock)
+malaria <- projectRaster(from = malaria, 
+                         to = livestock#,
+                         # method = 'ngb',
+                         # res = res(mosq),
+                         # crs = proj4string(mosq)
+  )
+
+combined <- overlay(malaria, livestock, 
+                       # fun = combine_function
+                       fun = prod
+                       )
+heat_map(r = combined)
+```
+
+One problem with the above map is that it too closely tracks population density. There is, as would be expected, more malaria where there are more people. Accordingly, we can also examine our human population-adjusted malaria distribution and combine it (again using percentilized product aggregation) with the distribution of livestock. See below.
+
+```{r}
+# Malaria
+load('grids/7.RData')
+malaria <- r
+values(malaria) <- dplyr::percent_rank(values(malaria)) #* 100
+proj4string(malaria) <- proj4string(mop2)
+
+# Livestock
+load('grids/all_not_cattle.RData')
+livestock <- r
+values(livestock) <- dplyr::percent_rank(values(livestock))# * 100
+proj4string(livestock) <- proj4string(mop2)
+
+# Crop
+malaria <- crop(malaria, livestock)
+extent(malaria) <- extent(livestock)
+malaria <- projectRaster(from = malaria, 
+                         to = livestock#,
+                         # method = 'ngb',
+                         # res = res(mosq),
+                         # crs = proj4string(mosq)
+  )
+
+combined <- overlay(malaria, livestock, 
+                       # fun = combine_function
+                       fun = prod
+                       )
+heat_map(r = combined)
+```
+
+
 
 # Pending: Map of mosquito densities
 
@@ -606,11 +1062,11 @@ heat_map(the_map = mop2,
 
 This document was produced on `r Sys.Date()` on a `r Sys.info()['sysname']` machine (release `r Sys.info()['release']`. To reproduce, one should take the following steps:
 
-1. Clone the repository at https://github.com/databrew/bohemia
+- Clone the repository at https://github.com/databrew/bohemia
 
-2. Populate the `analyses/livestock_distribution/data` directory with the following files: `Distribuicao de gado em Mopeia (1).xlsx` (emailed to team members from Charfudin Sacoor on May 27 2019);  
+- Populate the `analyses/livestock_distribution/data` directory with the following files: `Distribuicao de gado em Mopeia (1).xlsx` (emailed to team members from Charfudin Sacoor on May 27 2019);  
 
-3. Populate the `analyses/livestock_distribution/data/from_eldo` directory with the following files (emailed from Eldo to team on June 10 2019):
+- Populate the `analyses/livestock_distribution/data/from_eldo` directory with the following files (emailed from Eldo to team on June 10 2019):
 
 ```
 ├── Census_2016.csv
@@ -628,8 +1084,8 @@ This document was produced on `r Sys.Date()` on a `r Sys.info()['sysname']` mach
 └── Pcd1_core.csv
 ```
 
-4. Download the `COST_Permids.New&Old_EE.csv` file, sent by Eldo to team on June 11 2019, into `data/from_eldo`.
+- Download the `COST_Permids.New&Old_EE.csv` file, sent by Eldo to team on June 11 2019, into `data/from_eldo`.
 
-5. "Render" (using `rmarkdown`) the code in `analysis/livestock_distribution/README.Rmd`
+- "Render" (using `rmarkdown`) the code in `analysis/livestock_distribution/README.Rmd`
 
 Any questions or problems should be addressed to joe@databrew.cc
