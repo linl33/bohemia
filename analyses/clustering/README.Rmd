@@ -1,0 +1,43 @@
+---
+title: 'Bohemia clustering'
+output: github_document
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(databrew)
+library(ggplot2)
+library(tidyr)
+library(tidyverse)
+```
+
+
+```{r}
+# Generate some random places
+```
+
+
+# Technical details
+
+This document was produced on `r Sys.Date()` on a `r Sys.info()['sysname']` machine (release `r Sys.info()['release']`. To reproduce, one should take the following steps:
+
+- Clone the repository at https://github.com/databrew/bohemia
+
+- "Render" (using `rmarkdown`) the code in `analysis/clustering/README.Rmd`
+
+Any questions or problems should be addressed to joe@databrew.cc

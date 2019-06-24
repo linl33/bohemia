@@ -16,12 +16,11 @@ make_it <- function(){
   usethis::use_package('grDevices')
   usethis::use_package('grid')
   usethis::use_package('scales')
-  # usethis::use_package('databrew')
-  # usethis::use_package('cism')
+  usethis::use_package('databrew')
   document()
   # build
   install()
-  # render('README.Rmd')
+  render('README.Rmd')
 }
 make_it()
 

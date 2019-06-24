@@ -1,13 +1,12 @@
 Package: bohemia
-Title: What the Package Does (One Line, Title Case)
+Title: Utilities for the Bohemia project
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Joe",
+           family = "Brew",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "joe@databrew.cc")
+Description: Some tools for analysis and data flows related to the Bohemia project.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -30,5 +29,4 @@ Imports:
     grDevices,
     grid,
     scales,
-    databrew,
-    cism
+    databrew
