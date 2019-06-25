@@ -65,13 +65,82 @@ The package includes both tools (functions) as well as data. In order to set up 
 
 2. Download Tanzania data from https://download.geofabrik.de/africa/tanzania-latest-free.shp.zip into `data-raw/geofabrik` and extract
 
+#### Run the data compilation script
+
+1. From the command line, run `cd data-raw; Rscript DATASET.R; cd..`
+
 ## Building the package
 
 Having done the above, run `Rscript build_package.R` from within the main directory to compile the package.
 
 ## Package utilities
 
-This package contains several noteworthy tools.
+This package contains several noteworthy tools. What follows is a walk-through of some of them.
+
+### Data
+
+#### Country-level polygonal data
+
+```{r}
+library(sp)
+library(bohemia)
+
+# Create a map of Mozambique at the second administrative level (district)
+plot(bohemia::mozambique2)
+
+# Create a map of Mozambique at the tertiary administrative level (posto administrativo)
+plot(bohemia::mozambique3)
+
+# Create a map of Tanzania at the second administrative level (district)
+plot(bohemia::tanzania2)
+
+# Create a map of Tanzania at the tertiary administrative level (posto administrativo)
+plot(bohemia::tanzania3, lwd = 0.2)
+```
+
+#### Study area polygonal data
+
+```{r}
+plot(bohemia::mopeia2)
+plot(bohemia::mopeia3)
+
+plot(bohemia::rufiji2)
+plot(bohemia::rufiji3)
+```
+
+#### Study area road data
+
+```{r}
+plot(bohemia::mopeia2)
+plot(bohemia::mopeia_roads, add = TRUE)
+
+plot(bohemia::rufiji2)
+plot(bohemia::rufiji_roads, add = TRUE)
+```
+
+#### Study area road data
+
+```{r}
+plot(bohemia::mopeia2)
+plot(bohemia::mopeia_roads, add = TRUE)
+
+plot(bohemia::rufiji2)
+plot(bohemia::rufiji_roads, add = TRUE)
+```
+
+#### Study area water data
+
+```{r}
+plot(bohemia::mopeia2)
+plot(bohemia::mopeia_water, add = TRUE)
+plot(bohemia::mopeia_waterways, add = TRUE)
+
+plot(bohemia::rufiji2)
+plot(bohemia::rufiji_water, add = TRUE)
+plot(bohemia::rufiji_waterways, add = TRUE)
+```
+
+### Functions
 
 ### Generating fake data
 
