@@ -200,9 +200,11 @@ plot(fake$x, fake$y, col = rainbow(10)[fake$cluster])
 # Generate boundaries from the point locations
 boundaries <- bohemia::create_borders(df = fake)
 # Plot the boundaries
-cols <- rainbow(10)[fake$cluster]
+cols10 <- rainbow(10)
+cols <- cols10[fake$cluster]
 plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
-plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
+plot(boundaries, add = T, col = adjustcolor(cols10, alpha.f = 0.3),
+     border = NA)
 ```
 
 ![](figures/unnamed-chunk-8-1.png)
@@ -237,8 +239,8 @@ Just like with convex hull generated borders, we can add buffers to delauney tri
 buffers <- bohemia::create_buffers(shp = boundaries,
                                    meters = 5000)
 plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
-plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
-plot(buffers, add = T, col = adjustcolor(cols, alpha.f = 0.3))
+plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3), border = NA)
+plot(buffers, add = T, col = adjustcolor(cols10, alpha.f = 0.3))
 ```
 
 ![](figures/unnamed-chunk-11-1.png)
@@ -250,8 +252,8 @@ In the above, we use *external* boundaries, which results in one areas borders b
 buffers <- bohemia::create_buffers(shp = boundaries,
                                    meters = -5000)
 plot(fake$x, fake$y, col = 'white', pch = 16, cex = 0.5)
-plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
-plot(buffers, add = T, col = adjustcolor(cols, alpha.f = 0.5))
+# plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
+plot(buffers, add = T, col = adjustcolor(cols10, alpha.f = 0.4))
 points(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 ```
 
@@ -265,14 +267,20 @@ ids <- sample(1:2, nrow(boundaries), replace = TRUE)
 cols2 <- c('lightblue', 'orange')
 cols <- cols2[ids]
 
+# Create a dataframe for joining clusters to ids
+merger <- data.frame(cluster = boundaries@data$cluster,
+                     id = ids)
+# Bring the ids into the point data
+fake <- left_join(fake, merger, by = 'cluster')
+
 # Generate buffers from boundaries
 buffers <- create_buffers(shp = boundaries,
                                    meters = -5000,
                                    ids = ids)
 plot(fake$x, fake$y, col = 'white', pch = 16, cex = 0.5)
 # plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.8))
-plot(buffers, add = T, col = adjustcolor(cols2, alpha.f = 0.5))
-points(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
+plot(buffers, add = T, col = adjustcolor(cols2[buffers@data$id], alpha.f = 0.5))
+points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
 ```
 
 ![](figures/unnamed-chunk-13-1.png)

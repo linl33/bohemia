@@ -38,9 +38,9 @@ create_buffers <- function(shp,
     suppressWarnings(shp_projected <- unionSpatialPolygons(shp_projected,
                                                            ids,
                                                            avoidGEOS=TRUE))
-  } else {
-    shp_projected$data$id <- shp_projected@data$cluster
-  }
+    shp_projected <- SpatialPolygonsDataFrame(Sr = shp_projected,
+                                              data = data.frame(id = sort(unique(ids))))
+  } 
 
   # Add the buffer
   buffered <- rgeos::gBuffer(spgeom = shp_projected,
