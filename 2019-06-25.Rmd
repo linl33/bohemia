@@ -20,3 +20,9 @@ knitr::opts_chunk$set(
 - Installation / architecture set-up (local sites)
 - "Dummy" deploy (local sites deploy administer forms)
 - "Dummy" ETL (dashboard, credentialing, cleaning, etc.)
+  - Local infrastructure in place and functioning
+  - Back-up infrastructure in place and functioning
+- Site training / tutorials for data team?
+- Mini-census (ie, of site employees, for example), edge-case testing
+- Dashboarding
+- Pre-scripting analysis
