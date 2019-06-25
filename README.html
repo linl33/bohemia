@@ -32,6 +32,13 @@ body {
 <p>To install this package, run the below from within the R console.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="cf">if</span>(<span class="op">!</span><span class="kw">require</span>(devtools)) <span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)
 <span class="kw">install_github</span>(<span class="st">'databrew/bohemia'</span>)</code></pre></div>
+<h2 id="setting-up-data">Setting up data</h2>
+<p>The package includes both tools (functions) as well as data. In order to set up the package's datasets, the following steps should be taken:</p>
+<h4 id="download-osm-data">Download OSM data</h4>
+<ol>
+<li><p>Download Mozambique data from <a href="https://download.geofabrik.de/africa/mozambique-latest-free.shp.zip" class="uri">https://download.geofabrik.de/africa/mozambique-latest-free.shp.zip</a> into <code>data-raw/geofabrik</code> and extract</p></li>
+<li><p>Download Tanzania data from <a href="https://download.geofabrik.de/africa/tanzania-latest-free.shp.zip" class="uri">https://download.geofabrik.de/africa/tanzania-latest-free.shp.zip</a> into <code>data-raw/geofabrik</code> and extract</p></li>
+</ol>
 <h2 id="building-the-package">Building the package</h2>
 <p>Having done the above, run <code>Rscript build_package.R</code> from within the main directory to compile the package.</p>
 <h2 id="package-utilities">Package utilities</h2>

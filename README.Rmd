@@ -61,9 +61,9 @@ The package includes both tools (functions) as well as data. In order to set up 
 
 #### Download OSM data
 
-1. Download Mozambique data from https://download.geofabrik.de/africa/mozambique-latest-free.shp.zip into `data-raw/geofabrik`
+1. Download Mozambique data from https://download.geofabrik.de/africa/mozambique-latest-free.shp.zip into `data-raw/geofabrik` and extract
 
-2. Download Tanzania data from https://download.geofabrik.de/africa/tanzania-latest-free.shp.zip into `data-raw/geofabrik`
+2. Download Tanzania data from https://download.geofabrik.de/africa/tanzania-latest-free.shp.zip into `data-raw/geofabrik` and extract
 
 ## Building the package
 
