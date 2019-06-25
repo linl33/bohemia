@@ -14,15 +14,14 @@ knitr::opts_chunk$set(
 
 # Next steps
 
-- Finalize questionnaires (all)
-- Write forms (databrew)
-- Document deployment / architecture guide (databrew)
-- Installation / architecture set-up (local sites)
-- "Dummy" deploy (local sites deploy administer forms)
-- "Dummy" ETL (dashboard, credentialing, cleaning, etc.)
-  - Local infrastructure in place and functioning
-  - Back-up infrastructure in place and functioning
-- Site training / tutorials for data team?
-- Mini-census (ie, of site employees, for example), edge-case testing
-- Dashboarding
-- Pre-scripting analysis
+- Finalize questionnaires (all) (2019-07-05)
+- Write forms (databrew) (2019-07-15)
+- Translations (2019-07-31)
+- Document deployment / architecture guide (databrew) (2019-07-25)
+- Installation / architecture set-up (local sites) (2019-08-05)
+- "Dummy" deploy (local sites deploy administer forms) (2019-08-08)
+- "Dummy" ETL (credentialing, cleaning, alert system, safety checks, etc.) (2019-08-10)
+- Site training / tutorials for data team? (August/September 2019)
+- Mini-census (ie, of site employees, for example), edge-case testing (August/September 2019)
+- Dashboarding and scripting (September 2019) 
+
