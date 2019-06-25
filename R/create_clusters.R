@@ -10,6 +10,7 @@
 #' @param start The start strategy
 #' @param rest The rest strategy
 #' @param messaging Whether to message or not, boolean
+#' @param save Where to save pngs (if null, no saving)
 #' @return A dataframe of size \code{times} times the number of points in \code{locations}, with columns indicating each \code{simulation_number}
 #' @export
 #' @import dplyr
@@ -22,7 +23,8 @@ create_clusters <- function(cluster_size = 10,
                              shp = NULL, 
                              start= 'close', #c("far", "close", "random"),
                              rest=  'close', #c("far", "close", "random"),
-                             messaging = FALSE){
+                             messaging = FALSE,
+                            save = NULL){
   
   require(dplyr)
   require(sp)
@@ -75,7 +77,11 @@ create_clusters <- function(cluster_size = 10,
   cluster <- 1
   
   # Go until all the points are filled
+  counter <- 0
   while(length(which(!locations_fresh$selected)) > 0){
+    counter <- counter +1
+    file_name <- add_zero(counter, n = 5)
+    file_name <- paste0(file_name, '.png')
     if(messaging){
       message(paste0('making cluster number ', cluster,'\n',
                      length(which(!locations_fresh$selected)),
@@ -150,22 +156,50 @@ create_clusters <- function(cluster_size = 10,
       
       # Plot if necessary
       if(plot_map){
-        colors <- ifelse(locations_fresh$selected, 'red', 'grey')
-        plot(shp)
-        points(locations_fresh, col = colors, pch = 3)
-        points(locations_fresh[nearest$index,], col = 'blue', pch = 1)
-        legend('topleft',
-               legend = c('This cluster',
-                          'Already selected',
-                          'Not selected yet'),
-               pch = c(1, 3, 3),
-               col = c('blue', 'red', 'grey'),
-               border = FALSE,
-               bty = 'n')
-        title(main = paste0('Simulation number ', 
-                            # time, 
-                            '\n',
-                            'Cluster number ', cluster))
+        if(!is.null(save)){
+          if(!dir.exists(save)){
+            dir.create(save)  
+          }
+          setwd(save)
+          png(file_name)
+          colors <- ifelse(locations_fresh$selected, 'red', 'grey')
+          # plot(shp)
+          plot(locations_fresh, col = colors, pch = 3)
+          points(locations_fresh[nearest$index,], col = 'blue', pch = 1)
+          legend('topleft',
+                 legend = c('This cluster',
+                            'Already selected',
+                            'Not selected yet'),
+                 pch = c(1, 3, 3),
+                 col = c('blue', 'red', 'grey'),
+                 border = FALSE,
+                 bty = 'n')
+          title(main = paste0('Simulation number ', 
+                              # time, 
+                              '\n',
+                              'Cluster number ', cluster))
+          dev.off()
+          setwd('..')
+        } else {
+          colors <- ifelse(locations_fresh$selected, 'red', 'grey')
+          plot(shp)
+          points(locations_fresh, col = colors, pch = 3)
+          points(locations_fresh[nearest$index,], col = 'blue', pch = 1)
+          legend('topleft',
+                 legend = c('This cluster',
+                            'Already selected',
+                            'Not selected yet'),
+                 pch = c(1, 3, 3),
+                 col = c('blue', 'red', 'grey'),
+                 border = FALSE,
+                 bty = 'n')
+          title(main = paste0('Simulation number ', 
+                              # time, 
+                              '\n',
+                              'Cluster number ', cluster))
+          Sys.sleep(sleep)
+        }
+        
         Sys.sleep(sleep)
       }
     }

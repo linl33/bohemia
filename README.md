@@ -307,6 +307,12 @@ Clusters can be defined *a priori* (ie, named administrative units) or programat
 fake <- generate_fake_locations(n = 1000,
                                 n_clusters = 10,
                                 sd = 0.1) %>% dplyr::select(-cluster)
+plot(fake$x, fake$y, pch = 16)
+```
+
+![](figures/unnamed-chunk-14-1.png)
+
+``` r
 cs <- create_clusters(cluster_size = 100,
                       locations = fake)
 
@@ -314,7 +320,7 @@ rcols <- length(unique(cs$cluster))
 plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
 ```
 
-![](figures/unnamed-chunk-14-1.png)
+![](figures/unnamed-chunk-14-2.png)
 
 The data generated from `create_clusters` is compatible with the other functions herein described. Here are some usage examples:
 
@@ -374,3 +380,21 @@ plot(buffered, add = TRUE)
 ```
 
 ![](figures/unnamed-chunk-15-4.png)
+
+What follows below is a visualization of how the `create_buffers` algorithm works.
+
+``` r
+set.seed(2)
+fake <- generate_fake_locations(n = 1000,
+                                n_clusters = 5,
+                                sd = 0.1) %>% dplyr::select(-cluster)
+cs <- create_clusters(cluster_size = 100,
+                      locations = fake,
+                      plot_map = TRUE,
+                      save = 'animation')
+setwd('animation')
+system('convert -delay 100 -loop 0 *.png result.gif')
+setwd('..')
+```
+
+![](animation/result.gif)

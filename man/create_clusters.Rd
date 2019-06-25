@@ -6,7 +6,7 @@
 \usage{
 create_clusters(cluster_size = 10, plot_map = FALSE, sleep = 0,
   locations, shp = NULL, start = "close", rest = "close",
-  messaging = FALSE)
+  messaging = FALSE, save = NULL)
 }
 \arguments{
 \item{cluster_size}{The size of each cluster}
@@ -24,6 +24,8 @@ create_clusters(cluster_size = 10, plot_map = FALSE, sleep = 0,
 \item{rest}{The rest strategy}
 
 \item{messaging}{Whether to message or not, boolean}
+
+\item{save}{Where to save pngs (if null, no saving)}
 
 \item{locations}{locations}
 }
