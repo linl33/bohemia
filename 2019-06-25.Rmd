@@ -1,0 +1,22 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.height = 6.5,
+  fig.path = 'figures/')
+```
+
+# Next steps
+
+- Finalize questionnaires (all)
+- Write forms (databrew)
+- Document deployment / architecture guide (databrew)
+- Installation / architecture set-up (local sites)
+- "Dummy" deploy (local sites deploy administer forms)
+- "Dummy" ETL (dashboard, credentialing, cleaning, etc.)

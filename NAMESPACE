@@ -3,6 +3,7 @@
 export(add_zero)
 export(create_borders)
 export(create_buffers)
+export(create_clusters)
 export(generate_fake_locations)
 import(dismo)
 import(dplyr)

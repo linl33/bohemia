@@ -4,6 +4,7 @@
     -   [Setting up data](#setting-up-data)
     -   [Building the package](#building-the-package)
     -   [Package utilities](#package-utilities)
+    -   [Functions](#functions)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 bohemia: The R package of the Bohemia project
@@ -164,7 +165,8 @@ plot(bohemia::rufiji_waterways, add = TRUE)
 
 ![](figures/unnamed-chunk-6-2.png)
 
-### Functions
+Functions
+---------
 
 ### Generating fake data
 
@@ -196,6 +198,8 @@ plot(fake$x, fake$y, col = rainbow(10)[fake$cluster])
 
 ![](figures/unnamed-chunk-7-1.png)
 
+### Generating village boundaries
+
 ``` r
 # Generate boundaries from the point locations
 boundaries <- bohemia::create_borders(df = fake)
@@ -209,6 +213,8 @@ plot(boundaries, add = T, col = adjustcolor(cols10, alpha.f = 0.3),
 
 ![](figures/unnamed-chunk-8-1.png)
 
+### Generating external buffers
+
 ``` r
 # Generate buffers from boundaries
 buffers <- bohemia::create_buffers(shp = boundaries,
@@ -219,6 +225,8 @@ plot(buffers, add = T)
 ```
 
 ![](figures/unnamed-chunk-9-1.png)
+
+### Generating buffers based on tesselation
 
 As an alternative to the above approach, and so as to generate generealizable boundaries with no "holes", we can use voronoi tesselation as opposed to convex hulling.
 
@@ -231,6 +239,8 @@ plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
 ```
 
 ![](figures/unnamed-chunk-10-1.png)
+
+### Generating tesselated buffers
 
 Just like with convex hull generated borders, we can add buffers to delauney triangles.
 
@@ -245,6 +255,8 @@ plot(buffers, add = T, col = adjustcolor(cols10, alpha.f = 0.3))
 
 ![](figures/unnamed-chunk-11-1.png)
 
+### Generating tesselated internal buffers
+
 In the above, we use *external* boundaries, which results in one areas borders bleeding into the core of another area. As an alternative to this, we can use *internal* boundaries.
 
 ``` r
@@ -258,6 +270,8 @@ points(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 ```
 
 ![](figures/unnamed-chunk-12-1.png)
+
+### Generating "collapsed" tesselated internal buffers
 
 For the purposes of an intervention in which each area is assigned status A or B (ie, intervention or control), the need for buffers between areas of identical intervention status is redundant (and can unecessarily eliminate potential study participants).
 
@@ -284,3 +298,79 @@ points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
 ```
 
 ![](figures/unnamed-chunk-13-1.png)
+
+### Generating village-agnostic clusters
+
+Clusters can be defined *a priori* (ie, named administrative units) or programatically (ie, village-agnostic groups of `n` people). Alternatively, a cluster could be formed programatically, but with certain restrictions (such as the a rule prohibiting the division of a village into two). To do this, use the `create_clusters` function.
+
+``` r
+fake <- generate_fake_locations(n = 1000,
+                                n_clusters = 10,
+                                sd = 0.1) %>% dplyr::select(-cluster)
+cs <- create_clusters(cluster_size = 100,
+                      locations = fake)
+
+rcols <- length(unique(cs$cluster))
+plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
+```
+
+![](figures/unnamed-chunk-14-1.png)
+
+The data generated from `create_clusters` is compatible with the other functions herein described. Here are some usage examples:
+
+``` r
+set.seed(2)
+fake <- generate_fake_locations(n = 1000,
+                                n_clusters = 5,
+                                sd = 0.1) %>% dplyr::select(-cluster)
+cs <- create_clusters(cluster_size = 100,
+                      locations = fake)
+rcols <- length(unique(cs$cluster))
+
+# Create true borders
+plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
+boundaries <- create_borders(df = cs)
+plot(boundaries, add = T)
+```
+
+![](figures/unnamed-chunk-15-1.png)
+
+``` r
+
+# Create tesselation borders
+plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
+boundaries <- create_borders(df = cs, voronoi = TRUE)
+plot(boundaries, add = TRUE)
+```
+
+![](figures/unnamed-chunk-15-2.png)
+
+``` r
+
+# Create internal buffered tesselation borders
+plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
+boundaries <- create_borders(df = cs, voronoi = TRUE)
+buffered <- create_buffers(shp = boundaries, meters = -3000)
+plot(buffered, add = TRUE)
+```
+
+![](figures/unnamed-chunk-15-3.png)
+
+``` r
+
+# Create internal buffered tesselation borders with binary treatment status
+id_df <- cs %>% 
+  group_by(cluster) %>%
+  tally 
+id_df$id <- sample(1:2, nrow(id_df), replace = TRUE)
+cs <- left_join(cs, id_df)
+#> Joining, by = "cluster"
+cols2 <- c('darkblue', 'pink')
+plot(cs$x, cs$y, col = cols2[cs$id])
+boundaries <- create_borders(df = cs, voronoi = TRUE)
+buffered <- create_buffers(shp = boundaries, meters = -3000,
+                           ids = id_df$id)
+plot(buffered, add = TRUE)
+```
+
+![](figures/unnamed-chunk-15-4.png)
