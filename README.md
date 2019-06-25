@@ -1,4 +1,10 @@
 
+-   [bohemia: The R package of the Bohemia project](#bohemia-the-r-package-of-the-bohemia-project)
+    -   [Installation](#installation)
+    -   [Setting up data](#setting-up-data)
+    -   [Building the package](#building-the-package)
+    -   [Package utilities](#package-utilities)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 bohemia: The R package of the Bohemia project
 =============================================
@@ -52,7 +58,7 @@ library(bohemia)
 plot(bohemia::mozambique2)
 ```
 
-![](README-unnamed-chunk-2-1.png)
+![](figures/unnamed-chunk-2-1.png)
 
 ``` r
 
@@ -60,7 +66,7 @@ plot(bohemia::mozambique2)
 plot(bohemia::mozambique3, lwd = 0.2)
 ```
 
-![](README-unnamed-chunk-2-2.png)
+![](figures/unnamed-chunk-2-2.png)
 
 ``` r
 
@@ -68,7 +74,7 @@ plot(bohemia::mozambique3, lwd = 0.2)
 plot(bohemia::tanzania2)
 ```
 
-![](README-unnamed-chunk-2-3.png)
+![](figures/unnamed-chunk-2-3.png)
 
 ``` r
 
@@ -76,7 +82,7 @@ plot(bohemia::tanzania2)
 plot(bohemia::tanzania3, lwd = 0.2)
 ```
 
-![](README-unnamed-chunk-2-4.png)
+![](figures/unnamed-chunk-2-4.png)
 
 #### Study area polygonal data
 
@@ -84,26 +90,26 @@ plot(bohemia::tanzania3, lwd = 0.2)
 plot(bohemia::mopeia2)
 ```
 
-![](README-unnamed-chunk-3-1.png)
+![](figures/unnamed-chunk-3-1.png)
 
 ``` r
 plot(bohemia::mopeia3)
 ```
 
-![](README-unnamed-chunk-3-2.png)
+![](figures/unnamed-chunk-3-2.png)
 
 ``` r
 
 plot(bohemia::rufiji2)
 ```
 
-![](README-unnamed-chunk-3-3.png)
+![](figures/unnamed-chunk-3-3.png)
 
 ``` r
 plot(bohemia::rufiji3)
 ```
 
-![](README-unnamed-chunk-3-4.png)
+![](figures/unnamed-chunk-3-4.png)
 
 #### Study area road data
 
@@ -112,7 +118,7 @@ plot(bohemia::mopeia2)
 plot(bohemia::mopeia_roads, add = TRUE)
 ```
 
-![](README-unnamed-chunk-4-1.png)
+![](figures/unnamed-chunk-4-1.png)
 
 ``` r
 
@@ -120,7 +126,7 @@ plot(bohemia::rufiji2)
 plot(bohemia::rufiji_roads, add = TRUE)
 ```
 
-![](README-unnamed-chunk-4-2.png)
+![](figures/unnamed-chunk-4-2.png)
 
 #### Study area road data
 
@@ -129,7 +135,7 @@ plot(bohemia::mopeia2)
 plot(bohemia::mopeia_roads, add = TRUE)
 ```
 
-![](README-unnamed-chunk-5-1.png)
+![](figures/unnamed-chunk-5-1.png)
 
 ``` r
 
@@ -137,7 +143,7 @@ plot(bohemia::rufiji2)
 plot(bohemia::rufiji_roads, add = TRUE)
 ```
 
-![](README-unnamed-chunk-5-2.png)
+![](figures/unnamed-chunk-5-2.png)
 
 #### Study area water data
 
@@ -147,7 +153,7 @@ plot(bohemia::mopeia_water, add = TRUE)
 plot(bohemia::mopeia_waterways, add = TRUE)
 ```
 
-![](README-unnamed-chunk-6-1.png)
+![](figures/unnamed-chunk-6-1.png)
 
 ``` r
 
@@ -156,7 +162,7 @@ plot(bohemia::rufiji_water, add = TRUE)
 plot(bohemia::rufiji_waterways, add = TRUE)
 ```
 
-![](README-unnamed-chunk-6-2.png)
+![](figures/unnamed-chunk-6-2.png)
 
 ### Functions
 
@@ -188,7 +194,7 @@ fake <- generate_fake_locations(n = 1000,
 plot(fake$x, fake$y, col = rainbow(10)[fake$cluster])
 ```
 
-![](README-unnamed-chunk-7-1.png)
+![](figures/unnamed-chunk-7-1.png)
 
 ``` r
 # Generate boundaries from the point locations
@@ -199,7 +205,7 @@ plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
 ```
 
-![](README-unnamed-chunk-8-1.png)
+![](figures/unnamed-chunk-8-1.png)
 
 ``` r
 # Generate buffers from boundaries
@@ -210,7 +216,7 @@ plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
 plot(buffers, add = T)
 ```
 
-![](README-unnamed-chunk-9-1.png)
+![](figures/unnamed-chunk-9-1.png)
 
 As an alternative to the above approach, and so as to generate generealizable boundaries with no "holes", we can use voronoi tesselation as opposed to convex hulling.
 
@@ -222,7 +228,7 @@ plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
 ```
 
-![](README-unnamed-chunk-10-1.png)
+![](figures/unnamed-chunk-10-1.png)
 
 Just like with convex hull generated borders, we can add buffers to delauney triangles.
 
@@ -235,7 +241,7 @@ plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
 plot(buffers, add = T, col = adjustcolor(cols, alpha.f = 0.3))
 ```
 
-![](README-unnamed-chunk-11-1.png)
+![](figures/unnamed-chunk-11-1.png)
 
 In the above, we use *external* boundaries, which results in one areas borders bleeding into the core of another area. As an alternative to this, we can use *internal* boundaries.
 
@@ -249,7 +255,7 @@ plot(buffers, add = T, col = adjustcolor(cols, alpha.f = 0.5))
 points(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 ```
 
-![](README-unnamed-chunk-12-1.png)
+![](figures/unnamed-chunk-12-1.png)
 
 For the purposes of an intervention in which each area is assigned status A or B (ie, intervention or control), the need for buffers between areas of identical intervention status is redundant (and can unecessarily eliminate potential study participants).
 
@@ -269,4 +275,4 @@ plot(buffers, add = T, col = adjustcolor(cols2, alpha.f = 0.5))
 points(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 ```
 
-![](README-unnamed-chunk-13-1.png)
+![](figures/unnamed-chunk-13-1.png)

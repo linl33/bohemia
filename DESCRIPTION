@@ -1,21 +1,21 @@
 Package: bohemia
 Title: Utilities for the Bohemia project
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R:
     person(given = "Joe",
            family = "Brew",
            role = c("aut", "cre"),
            email = "joe@databrew.cc")
 Description: Some tools for analysis and data flows related to the Bohemia project.
-License: MIT + file LICENSE
+License: MIT
 Encoding: UTF-8
 LazyData: true
-Suggests: 
+Suggests:
     MASS,
     testthat
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.0
-Imports: 
+Imports:
     dplyr,
     ggplot2,
     ggthemes,
@@ -29,4 +29,7 @@ Imports:
     grDevices,
     grid,
     scales,
-    databrew
+    databrew,
+    rgeos,
+    maptools,
+    gpclib
