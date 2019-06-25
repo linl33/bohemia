@@ -4,14 +4,17 @@
 \alias{create_buffers}
 \title{Create buffers}
 \usage{
-create_buffers(shp, meters = 1000, crs = "+init=epsg:3347")
+create_buffers(shp, meters = 1000, crs = "+init=epsg:3347",
+  ids = NULL)
 }
 \arguments{
 \item{shp}{The spatialPolygonsDataFrame (projected in lat/long)}
 
 \item{meters}{The size of the buffer in meters}
 
-\item{crs}{}
+\item{crs}{The coordinate reference system for projecting the data}
+
+\item{ids}{A vector of ids (the same length as the number of rows of shp) with intervention status}
 }
 \value{
 A SpatialPolygonsDataFrame

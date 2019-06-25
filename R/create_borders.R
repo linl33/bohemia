@@ -2,18 +2,20 @@
 #' 
 #' Generate borders around clusters of points
 #' @param df A dataframe with variables named \code{x}, \code{y}, and \code{cluster}
+#' @param voronoi Create borders using voronoi tesselation rather than convex hull
 #' @return A SpatialPolygonsDataFrame
 #' @export
+#' @import dismo
 #' @import dplyr
 #' @import rgeos
 #' @import sp
 
-create_borders <- function(df){
+create_borders <- function(df, voronoi = FALSE){
   
   # # Delete the below; for testing only
   # library(dplyr);library(rgeos);library(sp)
   # source('generate_fake_locations.R')
-  # df <- generate_fake_locations(n = 100) 
+  # df <- generate_fake_locations(n = 100)
   
   # Ensure that the input data contains the required variables
   if(!'x' %in% names(df) |
@@ -34,7 +36,8 @@ create_borders <- function(df){
     this_sub_data <- df_sp[df_sp@data$cluster == this_cluster,]
     this_boundary <- rgeos::gConvexHull(spgeom = this_sub_data)
     # eval(parse(text = eval(expression(paste(pasted_slot_path, "<-", value)))))
-    slot(slot(this_boundary, "polygons")[[1]], "ID") <- as.character(this_cluster)
+
+      slot(slot(this_boundary, "polygons")[[1]], "ID") <- as.character(this_cluster)
     
     out_list[[i]] <- this_boundary
   }
@@ -43,5 +46,9 @@ create_borders <- function(df){
   # Turn the SpatialPolygons into a SpatialPolygonsDataFrame
   out <- SpatialPolygonsDataFrame(Sr = the_boundaries,
                                   data = data.frame(cluster = cluster_numbers))
+  if(voronoi){
+    out <- dismo::voronoi(xy = out)
+  }
+  
   return(out)
 }

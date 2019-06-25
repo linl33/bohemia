@@ -4,10 +4,12 @@
 \alias{create_borders}
 \title{Create borders}
 \usage{
-create_borders(df)
+create_borders(df, voronoi = FALSE)
 }
 \arguments{
 \item{df}{A dataframe with variables named \code{x}, \code{y}, and \code{cluster}}
+
+\item{voronoi}{Create borders using voronoi tesselation rather than convex hull}
 }
 \value{
 A SpatialPolygonsDataFrame
