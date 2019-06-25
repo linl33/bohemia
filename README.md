@@ -57,7 +57,7 @@ plot(bohemia::mozambique2)
 ``` r
 
 # Create a map of Mozambique at the tertiary administrative level (posto administrativo)
-plot(bohemia::mozambique3)
+plot(bohemia::mozambique3, lwd = 0.2)
 ```
 
 ![](README-unnamed-chunk-2-2.png)
@@ -263,31 +263,6 @@ cols <- cols2[ids]
 buffers <- create_buffers(shp = boundaries,
                                    meters = -5000,
                                    ids = ids)
-#> Warning in gpclibPermit(): support for gpclib will be withdrawn from
-#> maptools at the next major release
-#> Warning in `[<-`(`*tmp*`, i, value = gpc): implicit list embedding of S4
-#> objects is deprecated
-
-#> Warning in `[<-`(`*tmp*`, i, value = gpc): implicit list embedding of S4
-#> objects is deprecated
-
-#> Warning in `[<-`(`*tmp*`, i, value = gpc): implicit list embedding of S4
-#> objects is deprecated
-
-#> Warning in `[<-`(`*tmp*`, i, value = gpc): implicit list embedding of S4
-#> objects is deprecated
-
-#> Warning in `[<-`(`*tmp*`, i, value = gpc): implicit list embedding of S4
-#> objects is deprecated
-
-#> Warning in `[<-`(`*tmp*`, i, value = gpc): implicit list embedding of S4
-#> objects is deprecated
-
-#> Warning in `[<-`(`*tmp*`, i, value = gpc): implicit list embedding of S4
-#> objects is deprecated
-
-#> Warning in `[<-`(`*tmp*`, i, value = gpc): implicit list embedding of S4
-#> objects is deprecated
 plot(fake$x, fake$y, col = 'white', pch = 16, cex = 0.5)
 # plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.8))
 plot(buffers, add = T, col = adjustcolor(cols2, alpha.f = 0.5))

@@ -89,7 +89,7 @@ library(bohemia)
 plot(bohemia::mozambique2)
 
 # Create a map of Mozambique at the tertiary administrative level (posto administrativo)
-plot(bohemia::mozambique3)
+plot(bohemia::mozambique3, lwd = 0.2)
 
 # Create a map of Tanzania at the second administrative level (district)
 plot(bohemia::tanzania2)

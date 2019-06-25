@@ -34,10 +34,10 @@ create_buffers <- function(shp,
   
   # If there are ids, address accordingly
   if(!is.null(ids)){
-    gpclibPermit()
-    shp_projected <- unionSpatialPolygons(shp_projected, 
-                                          ids, 
-                                          avoidGEOS=TRUE)
+    suppressWarnings(gpclibPermit())
+    suppressWarnings(shp_projected <- unionSpatialPolygons(shp_projected, 
+                                                           ids, 
+                                                           avoidGEOS=TRUE))
   } else {
     shp_projected$data$id <- shp_projected@data$cluster
   }
