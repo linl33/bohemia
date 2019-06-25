@@ -14,12 +14,12 @@ create_buffers <- function(shp,
                            meters = 1000,
                            crs = "+init=epsg:3347"){
   
-  # Delete the below; for testing only
-  library(dplyr);library(rgeos);library(sp)
-  source('generate_fake_locations.R')
-  source('create_borders.R')
-  df <- generate_fake_locations()
-  shp <- create_borders(df = df)
+  # # Delete the below; for testing only
+  # library(dplyr);library(rgeos);library(sp)
+  # source('generate_fake_locations.R')
+  # source('create_borders.R')
+  # df <- generate_fake_locations()
+  # shp <- create_borders(df = df)
   
   # Project the shp
   crs_ll <- "+init=epsg:4326"

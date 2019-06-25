@@ -72,11 +72,31 @@ Some methods and analysis require "dummy" data in order to be tested. Functions 
 Here is a working example:
 
 ```{r}
+library(tidyverse)
+library(sp)
+library(bohemia)
 # Generate some fake data
 fake <- generate_fake_locations(n = 1000,
-                                n_clusters = 25,
+                                n_clusters = 10,
                                 sd = 0.05)
 # Plot the fake data
 plot(fake$x, fake$y, col = rainbow(10)[fake$cluster])
 ```
 
+```{r}
+# Generate boundaries from the point locations
+boundaries <- bohemia::create_borders(df = fake)
+# Plot the boundaries
+cols <- rainbow(10)[fake$cluster]
+plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
+plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
+```
+
+```{r}
+# Generate buffers from boundaries
+buffers <- bohemia::create_buffers(shp = boundaries,
+                                   meters = 5000)
+plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
+plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
+plot(buffers, add = T)
+```
