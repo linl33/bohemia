@@ -174,9 +174,7 @@ create_clusters <- function(cluster_size = 10,
                  col = c('blue', 'red', 'grey'),
                  border = FALSE,
                  bty = 'n')
-          title(main = paste0('Simulation number ', 
-                              # time, 
-                              '\n',
+          title(main = paste0('\n',
                               'Cluster number ', cluster))
           dev.off()
           setwd('..')
