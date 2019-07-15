@@ -189,7 +189,7 @@ ggplot() +
 ## Interactive plot
 
 The below generates an interactive plot. It’s available for viewing at
-[databrew.cc/rufiji.html](databrew.cc/rufiji.html).
+<http://databrew.cc/rufiji.html>.
 
 ``` r
 library(leaflet)
