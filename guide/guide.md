@@ -127,7 +127,7 @@ JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 <user username="data" password="data" roles="manager-gui" />
 ```
 - Restart the tomcat service: `sudo service tomcat8 restart`
-- Increase memory allocation to Tomcat: `sudo nano /etc/default/tomcat8` and replace  the line starting with `JAVA_OPTS=` with the following:
+- Increase memory allocation to Tomcat: `sudo nano /etc/default/tomcat8` and replace  the line starting with `JAVA_OPTS=` with the following (DO NOT RUN THIS. This is recommended per the OpenHDS guide, but it causes errors with starting the Tomcat service, so for now keeping memory small)
 ```
 JAVA_OPTS="-Djava.awt.headless=true -Xmx1024M -Xms1024M -XX:+UseConcMarkSweepGC"
 ```
@@ -163,9 +163,9 @@ sudo apt-get install -y openssh-server
 
 ### Getting and setting up openhds
 
-- Run the following to download openhds-server
+- On your _local_ machine, run the following to download openhds-server
 ```
-cd /home/ubuntu
+cd /home/ubuntu # change to any directory you prefer
 mkdir openhds
 cd openhds
 wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/openhds.war
@@ -180,5 +180,8 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 ```
 ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-3-17-72-248.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com -v
 ```
-
-sudo nano /etc/tomcat8/server.xml (changed 8080 to 8081)
+- In the (local) web browser, scroll down to the "Select WAR file to upload" section
+- Select the `openhds.war` file you downloaded a few minutes ago in the "Choose File" menu.
+- Click "Deploy" button (see below image)
+![](img/tomcat2.png)
+- Click the "start" button on the 'openhds' row of the 'Applications table'. The app is now running.
