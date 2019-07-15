@@ -5,12 +5,12 @@
 _The below should only be followed for the case of a remote server on AWS. In production, sites will use local servers, physically housed at the study sites._
 
 
--Log into the AWS console: aws.amazon.com
--Click the “Launch a virtual machine” option under “Build a solution”
--Select “Ubuntu Server 18.04 LTS (HVM)”
--To the far right select 64-bit (x86)
--Click “select”
--Choose the default instance type (General purpose, t2.micro, etc.)
+- Log into the AWS console: aws.amazon.com
+- Click the “Launch a virtual machine” option under “Build a solution”
+- Select “Ubuntu Server 18.04 LTS (HVM)”
+-To the far right select 64-bit (x86)  
+-Click “select”  
+-Choose the default instance type (General purpose, t2.micro, etc.)  
 -Click “Review and launch”
 -Click “Edit security groups”
 -Ensure that there is an SSH tyupe rule with source set to 0.0.0.0/0 to allow any address to SSH in.
