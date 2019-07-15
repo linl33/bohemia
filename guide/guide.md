@@ -2,7 +2,7 @@
 
 ## Spin up an EC2 instance on AWS
 
-_The below should only be followed for the case of a remote server on AWS. In production, sites will use local servers, physically housed at the study sites._
+_The below should only be followed for the case of a remote server on AWS. In production, sites will use local servers, physically housed at the study sites. In the latter case, skip to the [Setting up OpenHDS section](https://github.com/databrew/bohemia/blob/master/guide/guide.md#setting-up-openhds)_
 
 
 - Log into the AWS console: aws.amazon.com
@@ -56,3 +56,7 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 - Create a file named “authorized_+keys” in the `.ssh` dir and change permissions: `touch .ssh/authorized_keys; chmod 600 .ssh/authorized_keys`
 - Open whatever public key is going to be associated with this user (the .pub file) and paste the  content into the authorized_keys file (ie, open authorized_keys in nano first and then copy-paste from your local machine)
 Grant sudo access to the new users: `sudo usermod -a -G sudo benmbrew`
+
+## Setting up OpenHDS
+
+Here is some text.
