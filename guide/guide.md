@@ -59,4 +59,15 @@ Grant sudo access to the new users: `sudo usermod -a -G sudo benmbrew`
 
 ## Setting up OpenHDS
 
-Here is some text.
+### Setting up Ubuntu  
+
+- Install Ubuntu on the server. There are many online guides for doing this. This guide was written using the following version:
+```
+Description:	Ubuntu 18.04.2 LTS
+Release:	18.04
+Codename:	bionic
+```
+- Update the hostname of the machine to be `data-management.local`. You can check the hostname by running `hostnamectl` and examing the `Static hostname` parameter. To update the hostname, run the following:
+```
+sudo hostnamectl set-hostname data-management.local
+```
