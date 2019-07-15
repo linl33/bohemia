@@ -125,11 +125,11 @@ plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
 
 What follows below is a visualization of how the `create_buffers` algorithm works.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 fake <- generate_fake_locations(n = 1000,
                               n_clusters = 5,
                               sd = 0.1) %>% dplyr::select(-cluster)
-for(l in letters){
+for(l in letters[1:12]){
   set.seed(which(letters == l))
   message(l)
   cs <- create_clusters(cluster_size = 100,

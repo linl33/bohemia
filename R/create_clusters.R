@@ -191,10 +191,7 @@ create_clusters <- function(cluster_size = 10,
                  col = c('blue', 'red', 'grey'),
                  border = FALSE,
                  bty = 'n')
-          title(main = paste0('Simulation number ', 
-                              # time, 
-                              '\n',
-                              'Cluster number ', cluster))
+          title(main = paste0('Cluster number ', cluster))
           Sys.sleep(sleep)
         }
         

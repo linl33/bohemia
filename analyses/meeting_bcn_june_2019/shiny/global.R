@@ -4,7 +4,7 @@ library(ggplot2)
 library(dplyr)
 library(Hmisc)
 library(ggridges)
-
+library(broom)
 
 source('functions.R')
 # Read data
@@ -36,9 +36,15 @@ if(use_old){
            km_mopeia = make_numeric(km_mopeia))
   
   df <- df %>%
-    mutate(gps = ifelse(gps == 'Yes', 'Has a\nGPS watch',
-                        'Does not have\na GPS watch'))
+    mutate(gps = ifelse(gps == 'Yes', 'Has GPS watch',
+                        'No GPS watch'))
   
+  # Calculate average error as a percentage of true distance
+  df$error_rufiji <- ((df$km_rufiji - 6665) / 6665) * 100
+  df$error_mopeia <- ((df$km_mopeia - 7433) / 7433) * 100
+  df$error_rufiji_absolute <- abs(df$error_rufiji)
+  df$error_mopeia_absolute <- abs(df$error_mopeia)
+  df$avg_error_absolute <- (abs(df$error_rufiji) + abs(df$error_mopeia)) / 2
   
   save(df, file = 'df.RData')  
 }

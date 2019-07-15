@@ -53,6 +53,7 @@ This package contains several noteworthy tools. What follows is a walk-through o
 
 ``` r
 library(sp)
+#> Loading required package: methods
 library(bohemia)
 
 # Create a map of Mozambique at the second administrative level (district)
@@ -182,10 +183,8 @@ library(tidyverse)
 #> ✔ readr   1.3.1     ✔ stringr 1.4.0
 #> ✔ tibble  2.1.3     ✔ forcats 0.4.0
 #> ── Conflicts ───────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ dplyr::filter()  masks stats::filter()
-#> ✖ purrr::is_null() masks testthat::is_null()
-#> ✖ dplyr::lag()     masks stats::lag()
-#> ✖ dplyr::matches() masks testthat::matches()
+#> ✖ dplyr::filter() masks stats::filter()
+#> ✖ dplyr::lag()    masks stats::lag()
 library(sp)
 library(bohemia)
 # Generate some fake data
@@ -273,7 +272,7 @@ points(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 
 ### Generating "collapsed" tesselated internal buffers
 
-For the purposes of an intervention in which each area is assigned status A or B (ie, intervention or control), the need for buffers between areas of identical intervention status is redundant (and can unecessarily eliminate potential study participants).
+For the purposes of an intervention in which each area is assigned status A or B (ie, intervention or control), the need for buffers between areas of identical intervention status is redundant (and can unecessarily eliminate potential study participants). The below is an example of redundant buffers.
 
 ``` r
 # Define some ids 
@@ -285,6 +284,32 @@ cols <- cols2[ids]
 merger <- data.frame(cluster = boundaries@data$cluster,
                      id = ids)
 # Bring the ids into the point data
+old_fake <- fake
+fake <- left_join(fake, merger, by = 'cluster')
+
+# Generate buffers from boundaries
+buffers@data <- left_join(buffers@data, merger, by = 'cluster')
+plot(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
+# plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.8))
+plot(buffers, add = T, col = adjustcolor(cols2[buffers@data$id], alpha.f = 0.5))
+points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
+```
+
+![](figures/unnamed-chunk-13-1.png)
+
+The below collapses redundant borders.
+
+``` r
+# Define some ids 
+ids <- sample(1:2, nrow(boundaries), replace = TRUE)
+cols2 <- c('lightblue', 'orange')
+cols <- cols2[ids]
+
+# Create a dataframe for joining clusters to ids
+merger <- data.frame(cluster = boundaries@data$cluster,
+                     id = ids)
+# Bring the ids into the point data
+fake <- old_fake
 fake <- left_join(fake, merger, by = 'cluster')
 
 # Generate buffers from boundaries
@@ -297,7 +322,7 @@ plot(buffers, add = T, col = adjustcolor(cols2[buffers@data$id], alpha.f = 0.5))
 points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
 ```
 
-![](figures/unnamed-chunk-13-1.png)
+![](figures/unnamed-chunk-14-1.png)
 
 ### Generating village-agnostic clusters
 
@@ -310,7 +335,7 @@ fake <- generate_fake_locations(n = 1000,
 plot(fake$x, fake$y, pch = 16)
 ```
 
-![](figures/unnamed-chunk-14-1.png)
+![](figures/unnamed-chunk-15-1.png)
 
 ``` r
 cs <- create_clusters(cluster_size = 100,
@@ -320,7 +345,7 @@ rcols <- length(unique(cs$cluster))
 plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
 ```
 
-![](figures/unnamed-chunk-14-2.png)
+![](figures/unnamed-chunk-15-2.png)
 
 The data generated from `create_clusters` is compatible with the other functions herein described. Here are some usage examples:
 
@@ -339,7 +364,7 @@ boundaries <- create_borders(df = cs)
 plot(boundaries, add = T)
 ```
 
-![](figures/unnamed-chunk-15-1.png)
+![](figures/unnamed-chunk-16-1.png)
 
 ``` r
 
@@ -349,7 +374,7 @@ boundaries <- create_borders(df = cs, voronoi = TRUE)
 plot(boundaries, add = TRUE)
 ```
 
-![](figures/unnamed-chunk-15-2.png)
+![](figures/unnamed-chunk-16-2.png)
 
 ``` r
 
@@ -360,7 +385,7 @@ buffered <- create_buffers(shp = boundaries, meters = -3000)
 plot(buffered, add = TRUE)
 ```
 
-![](figures/unnamed-chunk-15-3.png)
+![](figures/unnamed-chunk-16-3.png)
 
 ``` r
 
@@ -379,7 +404,7 @@ buffered <- create_buffers(shp = boundaries, meters = -3000,
 plot(buffered, add = TRUE)
 ```
 
-![](figures/unnamed-chunk-15-4.png)
+![](figures/unnamed-chunk-16-4.png)
 
 What follows below is a visualization of how the `create_buffers` algorithm works.
 

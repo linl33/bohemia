@@ -25,14 +25,15 @@ bibliography: bibliography.bib
 #     includes:
 #       in_header: pdf/preamble.sty
 library(knitr)# Basic knitr options
+library(broom)
 opts_chunk$set(comment = NA, 
                echo = FALSE, 
                warning = FALSE, 
                message = FALSE, 
                error = TRUE, 
                cache = F,
-               fig.height = 3.5,
-               fig.width = 5)
+               fig.height = 2.8,
+               fig.width = 4)
 knit_engines$set(asis = function(options) {
   if (options$echo && options$eval) knit_child(text = options$code)
 })
@@ -41,8 +42,8 @@ library(extrafont)
 library(Rmisc)
 extrafont::loadfonts()
 source('functions.R')
-# df <- params$df
-load('df.RData')
+df <- params$df
+# load('df.RData') # for testing only
 
 make_authors <- function(
 
@@ -130,6 +131,8 @@ make_authors <- function(
 ```
 
 
+
+
 \begin{center}
 \begin{large}
 
@@ -150,7 +153,7 @@ make_authors()
 \begin{center}
 \begin{changemargin}{3cm}{3cm} 
 
-This paper provides new empirical evidence regarding the association between ownership of spatial locationing devices (wrist watches equipped with Global Positioning System, ie GPS) and accuracy in the perception of distance. Using groundbreakingly novel techniques, we show that...
+This paper provides new empirical evidence regarding the association between ownership of spatial locationing devices (wrist watches equipped with Global Positioning System, ie GPS) and accuracy in the perception of distance. We hypothesize that technology makes people stupid, and that owners of GPS watches will consequently be worse at estimating distances. 
 
 \end{changemargin}
 \end{center}
@@ -166,28 +169,29 @@ This paper provides new empirical evidence regarding the association between own
           \item This is probably the most significant scientific paper of the last decade or perhaps ever
         \end{itemize}
         \vspace{2mm}
+      \subsection*{Keywords}
+        \textbf{GPS; spatial; Trump; \#yolo; \#elvisisaliveandlivesinmopeia}
+        \vspace{2mm}
+
     }%
 }
 
-\vfill
-\null
+\vspace{5mm}
+<!-- \vfill -->
+<!-- \null -->
 
-\subsection*{Keywords}
-\textbf{GPS; spatial; Trump; \#yolo;}
 
-\vspace{3mm}
-
-\newpage
+<!-- \newpage -->
 
 # Introduction
 
-Does tech make people stupid or smart? Ah, the age-old question. Though conventional wisdom holds that the use of technology accelerates cognitive development [@Arellano2009], recent studies suggest that use of certain technologies may in fact result in people turning into boring vegetables [@Fink2015]. Though a great deal of literature exists on the cognitive effects of gameboys [@Lopez_Bernal_2016], shoes with flashy lights on them [@Bell2014, @Liu2010], and those nerdy hand-held miniature fans frequently used by Austrian tourists on Barcelona beaches [@Bennett_2017], no study to date has looked at the effect of GPS watches on humans' ability to correctly percetive distance [@Shretta_2017].
+Does tech make people stupid or smart? Ah, the age-old question. Though conventional wisdom holds that the use of technology accelerates cognitive development [@Chaccour2019] [@Arellano2009], recent studies suggest that use of certain technologies may in fact result in people turning into boring vegetables [@Imbahale_2019] [@Fink2015]. Though a great deal of literature exists on the cognitive effects of gameboys [@Lopez_Bernal_2016], shoes with flashy lights on them [@Bell2014] [@Liu2010], and those nerdy hand-held miniature fans frequently used by Austrian tourists on Barcelona beaches [@Bennett_2017], no study to date has looked at the effect of GPS watches on humans' ability to correctly percetive distance [@Shretta_2017].
 
 # Methods
 
-We cleverly collected data from `r nrow(df)` \st{unsuspecting victims} study participants. This is not unlike the method employed by Hien [@Hien2017], but also unlikely to be not not unlike it. We basically did what Lee did [@Lee2017], but better. We are better than them. Clearly.
+We cleverly collected data from `r nrow(df)` \st{unsuspecting victims} study participants. This is not unlike the method employed by Hien [@Hien2017], but also unlikely to be not not unlike it. We basically did what Lee did [@Lee2017], but better. We are better than them. 
 
-We asked \st{unsuspecting victims} participants to estimate the distance from Barcelona (pronounced "bar-ttthhuh-low-nuh") to two places in Africa: Rufiji, Tanzania and Mopeia, Mozambique. We used kilometers instead of miles so that people think we are smart. We than analysed (look, we used the British spelling of the word "analyse" to seem smart) the data using fancy-shmancy software [@R]. We calculated the average error (as a percentage of the correct) distance for both GPS watch owners and \st{luddites} those who don't have GPS watches, and quantified significance on the difference through a two-sample T-test (see Figure 1).
+We asked \st{unsuspecting victims} participants to estimate the distance from Barcelona (pronounced "bar-ttthhuh-low-nuh") to two places in Africa: Rufiji, Tanzania and Mopeia, Mozambique. We used kilometers instead of miles so that people think we are smart. We than analysed (look, we used the British spelling of the word "analyse" to seem smart) the data using fancy-shmancy software [@R]. We calculated the average error (as a percentage of the correct) distance for both GPS watch owners and \st{luddites} those who don't have GPS watches, and quantified significance on the difference, following Jones' approach [@Jones_2018], through a two-sample T-test (see Figure 1).
 
 \begin{figure}[h]
 \caption{Mr. T, inventor of the T-Test}
@@ -199,15 +203,6 @@ We asked \st{unsuspecting victims} participants to estimate the distance from Ba
 
 # Results
 
-
-```{r}
-# Calculate average error as a percentage of true distance
-df$error_rufiji <- ((df$km_rufiji - 6665) / 6665) * 100
-df$error_mopeia <- ((df$km_mopeia - 7433) / 7433) * 100
-df$error_rufiji_absolute <- abs(df$error_rufiji)
-df$error_mopeia_absolute <- abs(df$error_mopeia)
-df$avg_error_absolute <- (abs(df$error_rufiji) + abs(df$error_mopeia)) / 2
-```
 
 \st{Unsuspecting victims} Study participants' average perception of the distance from Barcelona to the two sites in question was off by approximately `r round(mean(df$avg_error_absolute, na.rm = TRUE))` percent (`r round(mean(df$error_rufiji_absolute, na.rm = TRUE))`% and `r round(mean(df$error_mopeia_absolute, na.rm = TRUE))`% for Rufiji and Mopeia, respectively). 
 
@@ -221,8 +216,17 @@ Rmisc::multiplot(g1, g2, cols = 2)
 
 
 ```{r}
-with_gps <- df$avg_error_absolute[df$gps == 'Has a\nGPS watch']
-without_gps <- df$avg_error_absolute[df$gps == 'Does not have\na GPS watch']
+with_gps <- df$avg_error_absolute[df$gps == 'Has GPS watch']
+without_gps <- df$avg_error_absolute[df$gps == 'No GPS watch']
+
+hypothesis_confirmed <- mean(with_gps, na.rm = TRUE) > mean(without_gps, na.rm = TRUE)
+hypothesis_text <- paste0(
+  'This difference ',
+  ifelse(hypothesis_confirmed, 'is in line with',
+         'appears to go against'),
+  ' our hypothesis that GPS watches make people stupid',
+  collapse = ''
+)
 tt <- t.test(x = with_gps,
              y = without_gps)
 is_significant <- tt$p.value < 0.05
@@ -231,7 +235,11 @@ significance_text <- ifelse(is_significant,
                            'does not reach the level of statistical significance')
 ```
 
-\textbf{Differences in spatial perception by GPS watch ownership:} On average, the error in spatial distance estimation among GPS watch-owners was `r round(mean(with_gps, na.rm = TRUE), digits = 2)`%, whereas among non-GOPS watch-owners it was `r round(mean(without_gps, na.rm = TRUE), digits = 2)`%.
+\newpage
+
+## Association of GPS watch ownership and spatial perception
+
+On average, the error in spatial distance estimation among GPS watch-owners was `r round(mean(with_gps, na.rm = TRUE), digits = 2)`%, whereas among non-GPS watch-owners it was `r round(mean(without_gps, na.rm = TRUE), digits = 2)`%. `r hypothesis_text`.
 
 With a p-value of `r round(tt$p.value, digits = 4)`, the difference in error in spatial perception between owners of GPS watches and those who do not own GPS watches `r significance_text`.  The below chart shows the distribution of responses
 
@@ -250,10 +258,44 @@ ggplot(data = df,
        y = 'Average error (%)')
 ```
 
+## Adjustment for confounders
+
+To account for confounders, we estimated via ordinary least squares the effect of GPS ownership on absolute error in distance estimation, accounting for both age and sex. The below table shows the results of this regression:
+
+```{r}
+fit <- lm(avg_error_absolute ~ gps + years + sex, 
+          data = df %>%
+            mutate(gps = gsub('\n', ' ', gps)))
+out <- broom::tidy(fit)
+new_p <- out$p.value[grepl('gps', tolower(out$term))]
+
+out <- out %>%
+  mutate(term = gsub('gps', '', term)) %>%
+  mutate(term = gsub('years', 'Age', term)) %>%
+  mutate(term = gsub('sexMale', 'Is a dude', term))
+names(out) <- Hmisc::capitalize(gsub('.', ' ', names(out), fixed = TRUE))
+knitr::kable(out)
+
+is_significant <- new_p < 0.05
+significance_text <- ifelse(is_significant,
+                           'reaches the level of statistical significance. Boom.',
+                           'does not reach the level of statistical significance. Bummer.')
+```
+
+With a P-value of `r round(new_p, digits = 4)`, this `r significance_text`. 
+
+
 # Conclusion
 
 This paper was so good that the results speak for themselves. No conclusion necessary. Mic drop.
 
+\newpage
+
+# Appendix
+
+```{r}
+knitr::kable(df)
+```
 
 # Bibliography
 

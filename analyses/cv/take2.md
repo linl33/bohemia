@@ -131,10 +131,31 @@ Two take-away points:
 
 2.  All of the data we've examined so far suggests that geographical variation in the incidence of malaria is actually *lower* in Mopeia than in Rufiji.
 
+Follow=up question from Carlos: mean annual incidence in Rufiji per PCD
+-----------------------------------------------------------------------
+
+``` r
+cases <- sum(ruf$cases) 
+person_years <- sum(ruf$population)
+cases / person_years
+```
+
+    [1] 0.6549497
+
+Let's do the same for Mopeia:
+
+``` r
+cases <- sum(mop$cases) 
+person_years <- sum(mop$person_years)
+cases / person_years
+```
+
+    [1] 0.3099884
+
 Technical details
 -----------------
 
-This document was produced on 2019-07-03 on a Linux machine (release 4.15.0-54-generic. To reproduce, one should take the following steps:
+This document was produced on 2019-07-04 on a Linux machine (release 4.15.0-54-generic. To reproduce, one should take the following steps:
 
 -   Clone the repository at <https://github.com/databrew/bohemia>
 

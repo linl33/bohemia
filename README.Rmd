@@ -230,7 +230,8 @@ points(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 
 ### Generating "collapsed" tesselated internal buffers
 
-For the purposes of an intervention in which each area is assigned status A or B (ie, intervention or control), the need for buffers between areas of identical intervention status is redundant (and can unecessarily eliminate potential study participants).
+For the purposes of an intervention in which each area is assigned status A or B (ie, intervention or control), the need for buffers between areas of identical intervention status is redundant (and can unecessarily eliminate potential study participants). The below is an example of redundant buffers.
+
 
 
 ```{r}
@@ -243,6 +244,31 @@ cols <- cols2[ids]
 merger <- data.frame(cluster = boundaries@data$cluster,
                      id = ids)
 # Bring the ids into the point data
+old_fake <- fake
+fake <- left_join(fake, merger, by = 'cluster')
+
+# Generate buffers from boundaries
+buffers@data <- left_join(buffers@data, merger, by = 'cluster')
+plot(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
+# plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.8))
+plot(buffers, add = T, col = adjustcolor(cols2[buffers@data$id], alpha.f = 0.5))
+points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
+```
+
+The below collapses redundant borders.
+
+
+```{r}
+# Define some ids 
+ids <- sample(1:2, nrow(boundaries), replace = TRUE)
+cols2 <- c('lightblue', 'orange')
+cols <- cols2[ids]
+
+# Create a dataframe for joining clusters to ids
+merger <- data.frame(cluster = boundaries@data$cluster,
+                     id = ids)
+# Bring the ids into the point data
+fake <- old_fake
 fake <- left_join(fake, merger, by = 'cluster')
 
 # Generate buffers from boundaries
