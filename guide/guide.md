@@ -138,7 +138,7 @@ JAVA_OPTS="-Djava.awt.headless=true -Xmx1024M -Xms1024M -XX:+UseConcMarkSweepGC"
 ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
 ```
 
-Then, on your local machine, open the following url in a web browser: http://localhost:8999/manage. You can now log-in as Username: `data` and Password: `data`. Once logged-in, the below will appear in the web browswer.
+Then, on your local machine, open the following url in a web browser: http://localhost:8999/manager. You can now log-in as Username: `data` and Password: `data`. Once logged-in, the below will appear in the web browswer.
 
 ![](img/tomcat.png)
 
