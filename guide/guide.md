@@ -323,3 +323,36 @@ ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-52-14-54-167.us-east-2.c
 ![](img/mirth7.png)
 - When finished your "Channels" menu should look like this:
 ![](img/mirth8.png)
+- Click on "Edit Global Scripts" under the "Channel Tasks" heading on the left
+- Click "Import scripts"
+- Select "Global Scripts.xml"
+- Make no changes (for now)
+- Click "Save scripts"
+- Click "Channels" in the left menu
+- Click "Edit Code Templates" under the "Channel Tasks" heading on the left
+- Click "Import Libraries" and select "Code Template Library.xml"
+- Click on "Alerts" in the left menu
+- Click "Import Alert" under the "Alert Tasks" heading to the left
+- Select "Events Connection Alert.xml"
+- Double click on "Events Connection Alert"
+- To the right, under the "Channels" heading, select "Baseline", "Baseline Households", "Update Events", and "Update Households"
+- Click "Enable"
+- Click "Save alert" to far left; ignore warning message.
+- Click "Channels" to far left
+- Double-click on "File Error CreateSend"
+- Select the "Destinations" tab
+- Fill out the menu as below
+![](img/mirth9.png)
+- Click "Save Changes" to the left
+- Email logging still doesn't work (the "Send Test Email" function still fails. This will be fixed at a later date)
+
+- In order for the above to work, you need to have two-factor authentication OFF for your gmail account.
+- To do this:
+  - Go to https://myaccount.google.com
+  - In the "Security" section, select 2-Step Verification.
+  - Select "Turn off"
+  - Below, in the "Less secure app access", ensure that it is set to "On"
+
+## Installing ODKAggregate
+
+ODKAggregate both (a) serves as a repository for electronic forms in data collection (to be syncronized with tablets) and (b) recipient and storage for completed forms which are submitted _from_ tablets
