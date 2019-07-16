@@ -1,5 +1,7 @@
 # Admin guide for setting up the Bohemia project data system (OpenHDS+)
 
+The below guide is a walk-through of setting up the Bohemia data infrastructure. It assumes you are running a cloud server on AWS (which will not be the case for local sites). For local servers, much of the ssh, tunneling, etc. sections can simply be ignored/altered.
+
 ## Spin up an EC2 instance on AWS
 
 _The below should only be followed for the case of a remote server on AWS. In production, sites will use local servers, physically housed at the study sites. In the latter case, skip to the [Setting up OpenHDS section](https://github.com/databrew/bohemia/blob/master/guide/guide.md#setting-up-openhds)_
@@ -355,6 +357,8 @@ ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-52-14-54-167.us-east-2.c
 
 ## Installing ODKAggregate
 
+### Configuring ODK Aggregate
+
 ODKAggregate both (a) serves as a repository for electronic forms in data collection (to be syncronized with tablets) and (b) recipient and storage for completed forms which are submitted _from_ tablets
 - From the remote server, run the following to create an odk directory:
 ```
@@ -369,3 +373,42 @@ wget https://github.com/opendatakit/aggregate/releases/download/v2.0.3/ODK-Aggre
 - Unzip: `unzip ODK-Aggregate-v2.0.3-Linux-x64.run.zip`
 - Adjust permissions: `chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run`
 - Run the installer: `./ODK-Aggregate-v2.0.3-Linux-x64.run`
+- You'll be prompted with lots of questions. Press 'Enter'/'y' to each until you get to the question about the parent directory for "ODK Aggregate"
+- For parent directory, write `~/ODK`
+- The next question is about database. Select 1 (MySQL)
+- Press 'Enter' for the next few items. Confirm that you do not have an SSL certificate
+- When asked about Port Configuration and internet-visible IP address, type "Y"
+- Keep Connector Port as 8080
+- For "Internet-visible IP address or DNS name", type: `data-management.local`
+- Skip through the Tomcat, MySQL, Apache, Java stuff (already done)
+- When prompted to "stop and restart your Apache webserver", run `sudo service tomcat8 restart` in a different terminal tab (might require ssh'ing into the server again)
+- For the database server settings section, type the defaults (port `3036` for the database port number and `127.0.0.1` for the server hostname)
+- For database username: set to `data`
+  - Same with database password
+- For database name, type: `odk_prod`
+- Name your instance as `odk_prod`
+- For ODK Aggregate Username: `odk_prod`
+- Confirm "Configure" at the end
+
+### Installing ODK Aggregate
+
+- There is now a folder called "ODKAggregate" in the `~/ODK` directory. Go there: ` cd ~/ODK/ODK\ Aggregate/`
+- Within that folder there is a file named `create_db_and_user.sql`. Run it:
+```
+sudo mysql -uroot -pdata create_db_and_user.sql
+```
+- If any problems with the above, copy and paste the code line by line into the sql cli after running `sudo mysql -uroot -pdata`
+- Now we need to run Tomcat manager. Create an SSH tunnel to port 8080 as below:
+```
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
+```
+- In your local browser, go to `http://localhost:8999/manager`
+- Note in the "Applications" table that ODKAggregate is not yet running
+- Copy the file created in configuration (`~/ODK/ODK\ Aggregate/create_db_and_user.sql`) from your remote to local machine, by running the below from the local machine
+```
+scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
+```
+- You now have a `.war` file on your local machine
+- In the web browser, go to the "WAR file to deploy" section of the page, select the recently downloaded `.war` and deploy
+- ODKAggregate should now show up in the "Applications" table in the Tomcat Web Application Manager
+- Navigate to http://localhost:8999/ODKAggregate/ in the browser. HAVING REDIRECT PROBLEMS HERE.
