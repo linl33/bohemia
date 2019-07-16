@@ -356,3 +356,16 @@ ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-52-14-54-167.us-east-2.c
 ## Installing ODKAggregate
 
 ODKAggregate both (a) serves as a repository for electronic forms in data collection (to be syncronized with tablets) and (b) recipient and storage for completed forms which are submitted _from_ tablets
+- From the remote server, run the following to create an odk directory:
+```
+cd /home/ubuntu
+mkdir odk
+cd odk
+```
+- Run the following to get the latest release of ODKAggregate
+```
+wget https://github.com/opendatakit/aggregate/releases/download/v2.0.3/ODK-Aggregate-v2.0.3-Linux-x64.run.zip
+```
+- Unzip: `unzip ODK-Aggregate-v2.0.3-Linux-x64.run.zip`
+- Adjust permissions: `chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run`
+- Run the installer: `./ODK-Aggregate-v2.0.3-Linux-x64.run`
