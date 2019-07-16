@@ -259,3 +259,26 @@ ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-3-17-72-248.us-east-2.co
 - Now open the following url in your local browser: `http://localhost:9000`
 - Sign in with the credentials `admin` (username) and `admin` (password)
 ![](img/mirth2.png)
+
+### Configure mirth to work with MySQL
+- By default, Mirth will use a Derby database; we must change this to MySQL. Do so as follows.
+- Get into mysql cli: `sudo mysql -uroot -pdata`
+- Run the following:
+```
+CREATE DATABASE mirthdb DEFAULT CHARACTER SET utf8;
+GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
+```
+- Run `sudo nano /usr/local/mirthconnect/conf/mirth.properties`
+- Replace the `database = derby` line with `database = mysql`
+- Replace the `database.url` line with `database.url = jdbc:mysql://localhost:3306/mirthdb` # (removed the following from the end of the line: ;create=true;upgrade=true)
+- Set values for `database.username` and `database.password` to `data` and `data`
+- Restart the mirth service: `sudo service mcservice restart`
+- You can now log into the Mirth Connect Administrator with the `data/data`. To do this, first make a tunnel:
+```
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-3-17-72-248.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com -v
+```
+- Go to `localhost:9000` in your local browser. Click "Launch Mirth Connect Administrator". This will download a `.jnlp` file, which you can then use `icedtea-netx` to run:
+```
+sudo apt-get intall icedtea-netx
+javaws webstart.jnlp
+```
