@@ -247,7 +247,7 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubun
 - When it asks which port (Web Start Port), type 8082 (since 8080 is already used by Tomcat)
 - When it asks for the Administrator Port, keep as default 8443 (press `Enter`)
 - For all password options, keep default (ie, press `Enter`)
-- For "Application data", type: `/usr/local/mirthconnect/data` # !!IMPORTANT, THIS SHOULD PERHAPS BE `apps`
+- For "Application data", type: `/usr/local/mirthconnect/data` # (Comment for self"!!IMPORTANT, THIS SHOULD PERHAPS BE `apps`)
 - For Logs, type: `/usr/local/mirthconnect/logs`
 - Install and run
 
@@ -270,7 +270,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 ```
 - Run `sudo nano /usr/local/mirthconnect/conf/mirth.properties`
 - Replace the `database = derby` line with `database = mysql`
-- Replace the `database.url` line with `database.url = jdbc:mysql://localhost:3306/mirthdb` # (removed the following from the end of the line: ;create=true;upgrade=true)
+- Replace the `database.url` line with `database.url = jdbc:mysql://localhost:3306/mirthdb`
 - Set values for `database.username` and `database.password` to `data` and `data`
 - Restart the mirth service: `sudo service mcservice restart`
 - You can now log into the Mirth Connect Administrator with the `admin/admin`. To do this, first make a tunnel:
@@ -298,6 +298,28 @@ ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-52-14-54-167.us-east-2.c
 - Click launch
 - Now the Mirth Connect Administrator will launch
 - Again set address to the ssh tunnel: `https://localhost:9000`
+![](img/mirth6.png)
 - The Mirth Connect Administrator will prompt you to register and change passwords. Keep password and user as `admin`.
 - Then right click on a user in the `Users` table and create a new user named `data` with password `data`
 ![](img/mirth5.png)
+- You now have a program on your local machine called "Mirth Connect Administrator Launcher". Search for it by clicking on the unity tab
+- Remember, to run it, you'll need to have an SSH tunnel set-up
+
+### Importing MirthConnect channels
+
+- Download the zip file at `https://github.com/SwissTPH/Mirth-Channels/releases/download/1%2C6/Mirth-Channels.zip` to your local machine
+- Unzip into the previously created `openhds` directory on your local machine
+- On your local machine, open the "Mirth Connect Administrator Launcher" program
+- Once Mirth Connect Administrator is up and running, click on the "Channels" menu on the left
+- Right click on a row in the "Channels" table and select "Import channel"
+- Import the following channels. If asked about version conversion, select "Yes". After each one click "Save Changes" on the left.
+  - `Baseline.xml`
+  - `Baseline Household.xml`
+  - `Update Events.xml`
+  - `Update Household.xml`
+  - `Database Error Writer.xml`
+  - `File Error CreateSend.xml`
+- On the last file, you may get an error which prevents it from being enabled. Proceed - it will be disabled for the time being (! NEED TO FIX)
+![](img/mirth7.png)
+- When finished your "Channels" menu should look like this:
+![](img/mirth8.png)
