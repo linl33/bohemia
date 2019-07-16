@@ -165,6 +165,7 @@ sudo apt-get install -y openssh-server
 
 - On your _local_ machine, run the following to download openhds-server
 ```
+sudo apt install unzip
 cd /home/ubuntu # change to any directory you prefer
 mkdir openhds
 cd openhds
@@ -185,3 +186,27 @@ ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-3-17-72-248.us-east-2.co
 - Click "Deploy" button (see below image)
 ![](img/tomcat2.png)
 - Click the "start" button on the 'openhds' row of the 'Applications table'. The app is now running.
+- Things should appear as below:
+![](img/tomcat3.png)
+
+### Setting up OpenHDS data requirements
+
+You now need to insert some data into the openhds-database. Take the following steps:
+- On the remote server, run the following so as to get the openhds files (you previously ran this on your local machine):
+```
+sudo apt install unzip
+cd /home/ubuntu # change to any directory you prefer
+mkdir openhds
+cd openhds
+wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/openhds.war
+```
+- Extract its contents: `unzip openhds.war`
+- In the location where its contents have been extracted, run the code in `WEB-INF/classes/openhds-required-data.sql` by executing the following:
+```
+mysql -udata -pdata openhds WEB-INF/classes/openhds-required-data.sql
+```
+
+### Confirm that everything is working so far
+
+- To confirm that everything is working at this point, on your local machine, visit `localhost:8999/openhds` in the browswer. A green log-in screen should appear.
+- If you want, change the language
