@@ -6,6 +6,7 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 
 
 - Log into the AWS console: aws.amazon.com
+- In the upper right hand corner select "Sign-into Console"
 - Click the “Launch a virtual machine” option under “Build a solution”
 - Select “Ubuntu Server 18.04 LTS (HVM)”
 -To the far right select 64-bit (x86)  
@@ -77,6 +78,8 @@ sudo hostnamectl set-hostname data-management.local
 ```
 - Then, open the /etc/cloud/cloud.cfg file by running `sudo nano /etc/cloud/cloud.cfg` and change the `preserve_hostname` parameter from `false` to `true`.
 
+- If the file is not writable run `sudo chmod /etc/cloud/cloud.cfg`
+
 ### Installing Java 8
 
 - Run the following to install Java 8: `sudo apt-get install openjdk-8-jre-headless`
@@ -92,6 +95,7 @@ OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode)
 
 - Run the following to install MySQL Server: `sudo apt-get install mysql-server`  
 - If prompted, set the password of the root user during installation to `data`
+(I was not prompted for password).
 
 #### Setting up MySQL Server
 
@@ -102,11 +106,14 @@ OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode)
 ```
 CREATE DATABASE IF NOT EXISTS 'openhds';
 CREATE DATABASE IF NOT EXISTS 'odk_prod';
+(I had an error if I used single quotes).
 ```
 - Grant access privileges to user:
 `GRANT ALL ON *.* TO 'data'@'%';`
 - Flush privileges: `flush privileges;`
+(Should we say to first exist the sql command line interface with '\q'?)
 - Grant outside access to MySQL (optional): Comment out the line starting with `Bind-Address` by adding a `#` prior to it in `/etc/mysql/my.cnf`, and then restart MySQL-service by running: `sudo service mysql restart`
+(I didnt have a line starting with `Bind-Address so i ignored this).
 
 ### Installing Tomcat 8
 
@@ -114,6 +121,7 @@ CREATE DATABASE IF NOT EXISTS 'odk_prod';
 - Run a package update: `sudo apt-get update`
 - Ensure tomcat is up and running: `sudo service tomcat8 start`
 - Set `JAVA_HOME` variable in `/etc/environment`: `sudo nano /etc/environment` and add line like `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`
+(I needed to run chmod 777 again)
 - Run `source /etc/environment`
 - If issues with `JAVA_HOME`, uncomment the `JAVA_HOME` line in `/etc/default/tomcat8/` and set it to the java installation folder. For example:
 ```
