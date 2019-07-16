@@ -13,7 +13,7 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 - Choose the default instance type (General purpose, t2.micro, etc.)  
 - Click “Review and launch”
 - Click “Edit security groups”
-- Ensure that there is an SSH tyupe rule with source set to `0.0.0.0/0` to allow any address to SSH in.
+- Ensure that there is an SSH type rule with source set to `0.0.0.0/0` to allow any address to SSH in (or all traffic on all ports).
 - Click “launch” in the bottom right
 - A modal will show up saying “Select an existing key pair or create a new key pair”
 - Select “Create a new key pair”
@@ -174,6 +174,7 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 - If you need to edit fields, do the below and then re-jar
   - Extract via: `unzip openhds.war`
   - Edit the fields in `WEB-INF/classes/database.properties` to ensure that `dbURL`, `dbUser` and `dbPass` are adequate (only if changed from this guide)
+  - If desired, edit values in `WEB-INF/classes/codes.properties` (and other documents in the same directory) to change parameters.
   - Put everything back in the .war file: `rm openhds.war; jar -cvf openhds.war *`
 
 ### Deploying OpenHDS in Tomcat
@@ -206,15 +207,18 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 cd WEB-INF/classes
 sudo mysql -udata -pdata openhds openhds-required-data.sql
 ```
+- If you get any errors, then take the following steps:
+  - On the remote server, open the mysql cli by running `sudo mysql -udata -pdata openhds`
+  - On the local machine, open `WEB-INF/classes/openhds-required-data.sql`
+  - Copy lines from local to remote, running 1 by 1. If errors found, debug.
+
 
 ### Confirm that everything is working so far
 
-- To confirm that everything is working at this point, on your local machine, visit `localhost:8999/openhds` in the browswer. A green log-in screen should appear.
+- To confirm that everything is working at this point, on your local machine, visit `localhost:8999/openhds` in the browser. A green log-in screen should appear.
 - If you want, change the language
-
-## Configuring OpenHDS
-
-(location level, etc. can't log-in)
+- Log in with credentials "admin" and "test"
+- Click on parameters in the far left and change if required (not yet)
 
 ## Installing Mirth
 - On your local machine go to https://www.nextgen.com/products-and-services/integration-engine
@@ -249,7 +253,9 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubun
 
 - To confirm that everything is working, serve the Mirth Connect Administrator to your local browser via an SSH tunnel:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-3-17-72-248.us-east-2.compute.amazonaws.com:8082 ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-3-17-72-248.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com -v
 ```
-- Now open the following url in your local browser: `http://localhost:8999`
-- Click on the `Access Secure Site` button
+
+- Now open the following url in your local browser: `http://localhost:9000`
+- Sign in with the credentials `admin` (username) and `admin` (password)
+![](img/mirth2.png)
