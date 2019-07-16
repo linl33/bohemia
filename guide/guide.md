@@ -203,10 +203,53 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 - Extract its contents: `unzip openhds.war`
 - In the location where its contents have been extracted, run the code in `WEB-INF/classes/openhds-required-data.sql` by executing the following:
 ```
-mysql -udata -pdata openhds WEB-INF/classes/openhds-required-data.sql
+cd WEB-INF/classes
+sudo mysql -udata -pdata openhds openhds-required-data.sql
 ```
 
 ### Confirm that everything is working so far
 
 - To confirm that everything is working at this point, on your local machine, visit `localhost:8999/openhds` in the browswer. A green log-in screen should appear.
 - If you want, change the language
+
+## Configuring OpenHDS
+
+(location level, etc. can't log-in)
+
+## Installing Mirth
+- On your local machine go to https://www.nextgen.com/products-and-services/integration-engine
+- Right click on the `Installer` link under "Nextgen Connect Integration Engine 3.80" and save the `.sh` file locally
+- On your remote server, run the following:
+```
+cd /home/ubuntu
+mkdir mirth
+cd mirth
+```
+- `cd` into the local directory where you downloaded the `.sh` file.
+- Now copy the downloaded `.tar.gz` file from your local to remote machine by running the following on your local machine as such (file names, paths, endpoint, etc. may vary):
+```
+scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
+```
+- Prior to installing the `.sh` file, you need to change some options in your java configuration:
+  - Run the following: `sudo nano /etc/java-8-openjdk/accessibility.properties`
+  - Comment out the line that says `assistive_technologies=org.GNOME.Accessibility.AtkWrapper`
+- From the remote machine, run `chmod a+x mirthconnect-3.8.0.b2464-unix.sh`
+- Run the installer: `sudo ./mirthconnect-3.8.0.b2464-unix.sh`
+- You'll need to press `Enter` and `1` a few times to confirm the license agreement
+- When it asks "Where should Mirth Connect be installed?", type `/usr/'local/mirthconnect'`
+- When it asks "Which components should be installed?", press `Enter`
+- When it asks "Create symlinks?", press `Enter` (ie, "Yes")
+- When it asks "Select the folder where you would like Mirth Connect to create symlinks", type `Enter` to confirm the local `/usr/local/bin`
+- When it asks which port (Web Start Port), type 8082 (since 8080 is already used by Tomcat)
+- When it asks for the Administrator Port, keep as default 8443 (press `Enter`)
+- For all password options, keep default (ie, press `Enter`)
+- For "Application data", type: `/usr/local/mirthconnect/data` # IMPORTANT, THIS SHOULD PERHAPS BE `apps`
+- For Logs, type: `/usr/local/mirthconnect/logs`
+- Install and run
+
+- To confirm that everything is working, serve the Mirth Connect Administrator to your local browser via an SSH tunnel:
+```
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-3-17-72-248.us-east-2.compute.amazonaws.com:8082 ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com -v
+```
+- Now open the following url in your local browser: `http://localhost:8999`
+- Click on the `Access Secure Site` button
