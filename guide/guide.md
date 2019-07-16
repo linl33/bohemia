@@ -40,7 +40,7 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 
 - In the “Instances” menu, click on “Connect” in the upper left
 - This will give instructions for connecting via an SSH client
-- It will be something very similar to the following: `ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com`
+- It will be something very similar to the following: `ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com`
 - Congratulations! You are now able to run linux commands on your new ubuntu server
 
 ### Managing users (ie, creating ssh keypairs for other users)
@@ -133,7 +133,7 @@ JAVA_OPTS="-Djava.awt.headless=true -Xmx1024M -Xms1024M -XX:+UseConcMarkSweepGC"
 ```
 - Ensure that everything is working up until now by ssh-tunneling. Something similar to the below code (with AWS endpoints and `.pem` file location adjusted appropriately):
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-3-17-72-248.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
 ```
 
 Then, on your local machine, open the following url in a web browser: http://localhost:8999/manage. You can now log-in as Username: `data` and Password: `data`. Once logged-in, the below will appear in the web browswer.
@@ -180,7 +180,7 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 ### Deploying OpenHDS in Tomcat
 - If running on a remote server (ie, AWS EC2), you'll need to tunnel. For example:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-3-17-72-248.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
 ```
 - In the (local) web browser, scroll down to the "Select WAR file to upload" section
 - Select the `openhds.war` file you downloaded a few minutes ago in the "Choose File" menu.
@@ -232,7 +232,7 @@ cd mirth
 - `cd` into the local directory where you downloaded the `.sh` file.
 - Now copy the downloaded `.tar.gz` file from your local to remote machine by running the following on your local machine as such (file names, paths, endpoint, etc. may vary):
 ```
-scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
+scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
 ```
 - Prior to installing the `.sh` file, you need to change some options in your java configuration:
   - Run the following: `sudo nano /etc/java-8-openjdk/accessibility.properties`
@@ -247,16 +247,16 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubun
 - When it asks which port (Web Start Port), type 8082 (since 8080 is already used by Tomcat)
 - When it asks for the Administrator Port, keep as default 8443 (press `Enter`)
 - For all password options, keep default (ie, press `Enter`)
-- For "Application data", type: `/usr/local/mirthconnect/data` # IMPORTANT, THIS SHOULD PERHAPS BE `apps`
+- For "Application data", type: `/usr/local/mirthconnect/data` # !!IMPORTANT, THIS SHOULD PERHAPS BE `apps`
 - For Logs, type: `/usr/local/mirthconnect/logs`
 - Install and run
 
 - To confirm that everything is working, serve the Mirth Connect Administrator to your local browser via an SSH tunnel:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-3-17-72-248.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
 ```
 
-- Now open the following url in your local browser: `http://localhost:9000`
+- Now open the following url in your local browser: `https://localhost:9000`
 - Sign in with the credentials `admin` (username) and `admin` (password)
 ![](img/mirth2.png)
 
@@ -273,12 +273,31 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Replace the `database.url` line with `database.url = jdbc:mysql://localhost:3306/mirthdb` # (removed the following from the end of the line: ;create=true;upgrade=true)
 - Set values for `database.username` and `database.password` to `data` and `data`
 - Restart the mirth service: `sudo service mcservice restart`
-- You can now log into the Mirth Connect Administrator with the `data/data`. To do this, first make a tunnel:
+- You can now log into the Mirth Connect Administrator with the `admin/admin`. To do this, first make a tunnel:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-3-17-72-248.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-3-17-72-248.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
 ```
-- Go to `localhost:9000` in your local browser. Click "Launch Mirth Connect Administrator". This will download a `.jnlp` file, which you can then use `icedtea-netx` to run:
-```
-sudo apt-get intall icedtea-netx
-javaws webstart.jnlp
-```
+- Go to `https://localhost:9000` in your local browser. You may get a warning about site security (since it's not https). Affirm.
+- Log in with `admin` as Username and `admin` as Password (just to ensure that it works)
+- Log out
+- I believe that the next step is unnecessary: Keeping here temporarily. Do not run:
+    - Click "Launch Mirth Connect Administrator". This will download a `.jnlp` file to your local machine, which you can then use `icedtea-netx` to run:
+    ```
+    sudo apt-get intall icedtea-netx
+    javaws webstart.jnlp
+    ```
+    (In the applet, go through and say "yes" to everything, checking "Remember this option" "For applet" for all options)
+
+- Click "Download the Administrator Launcher" in the bottom left
+- Give all the requested permissions
+- A file will be downloaded to your local machine
+- Make that file executable: `chmod +x mirth-administrator-launcher-1.1.0-unix.sh`
+- Execute the file: `sudo ./mirth-administrator-launcher-1.1.0-unix.sh`
+- Set the Address to the ssh tunnel: `https://localhost:9000`
+![](img/mirth3.png)
+- Click launch
+- Now the Mirth Connect Administrator will launch
+- Again set address to the ssh tunnel: `https://localhost:9000`
+- The Mirth Connect Administrator will prompt you to register and change passwords. Keep password and user as `admin`.
+- Then right click on a user in the `Users` table and create a new user named `data` with password `data`
+![](img/mirth5.png)
