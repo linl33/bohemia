@@ -387,16 +387,17 @@ wget https://github.com/opendatakit/aggregate/releases/download/v2.0.3/ODK-Aggre
 - Press 'Enter' for the next few items. Confirm that you do not have an SSL certificate
 - When asked about Port Configuration and internet-visible IP address, type "Y"
 - Keep Connector Port as 8080
-- For "Internet-visible IP address or DNS name", type: `data-management.local`
+- For "Internet-visible IP address or DNS name", type: `localhost` (!!! Important, per the official OpenHDS guide, this should be  `data-management.local`, but in order to run via ssh-tunneling, we need to do with localhost)
 - Skip through the Tomcat, MySQL, Apache, Java stuff (already done)
 - When prompted to "stop and restart your Apache webserver", run `sudo service tomcat8 restart` in a different terminal tab (might require ssh'ing into the server again)
-- For the database server settings section, type the defaults (port `3036` for the database port number and `127.0.0.1` for the server hostname)
+- For the database server settings section, type the defaults (port `3306` for the database port number and `127.0.0.1` for the server hostname)
 - For database username: set to `data`
   - Same with database password
 - For database name, type: `odk_prod`
 - Name your instance as `odk_prod`
 - For ODK Aggregate Username: `odk_prod`
 - Confirm "Configure" at the end
+
 
 ### Installing ODK Aggregate
 
@@ -419,4 +420,98 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-52-14-54-167.us-east-2.co
 - You now have a `.war` file on your local machine
 - In the web browser, go to the "WAR file to deploy" section of the page, select the recently downloaded `.war` and deploy
 - ODKAggregate should now show up in the "Applications" table in the Tomcat Web Application Manager
-- Navigate to http://localhost:8999/ODKAggregate/ in the browser. HAVING REDIRECT PROBLEMS HERE.
+- Navigate to http://localhost:8999/ODKAggregate/ in the browser.
+- You'll be reedirected to http://localhost:8999/ODKAggregate/Aggregate.html.
+- Click Log-in (button in upper right)
+- Click "Sign in with Aggregate password"
+- Sign-in with the credentials `odk_prod` (username) and `aggregate` (password)
+- Click on the "Site Admin" tab
+- Change the password for `odk_prod` user to `data`
+
+## Upload HDSS Core XLSForms
+
+_Note, prior to deployment of Bohemia, different xmls will be created, modified, etc._
+
+- On your local machine, clone Paulo Filimone's implementation of the OpenHDS tablet application: `git clone https://github.com/philimones-group/openhds-tablet`
+- Note, within this recently cloned repository, the `xforms` directory. This includes `.xml` files which were created from the Excel-formatted `.xls` forms at https://github.com/SwissTPH/openhds-tablet/releases/download/1.5/xlsforms.zip
+- In your local browser, with the tunnel running (see previous section), open `localhost:8999/ODKAggregate`.
+- Click on the "Form Management" tab
+- Click on "Add New Form"
+- Upload the following forms, one-by-one, from your local `openhds-tablet/xforms` directory (note, this sometimes causes spontaneous errors - keep trying):
+```
+baseline.xml
+change_hoh.xml
+death_registration.xml
+death_to_hoh.xml
+in_migration.xml
+location_registration.xml
+Membership.xml
+out_migration_registration.xml
+pregnancy_observation.xml
+pregnancy_outcome.xml
+Relationship.xml
+social_group_registration.xml
+visit_registration.xml
+```
+- Following successful upload, your view should look like this:
+![](img/odk.png)
+
+## Create data management database/views
+
+- On the remote server, open the mysql cli by running: `sudo mysql -uroot -pdata odk_prod`
+- Copy and paste the following to run:
+
+```
+CREATE TABLE `errors` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `CHANNEL` varchar(30) DEFAULT NULL,
+ `DATA` varchar(1000) DEFAULT NULL,
+ `ERROR` varchar(280) DEFAULT NULL,
+ `exported` int(1) DEFAULT '0',
+ `inserted_timestamp` timestamp DEFAULT CURRENT_TIMESTAMP,
+ `COMMENT` varchar(500) DEFAULT NULL,
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+#UPDATE ROUND VIEWS
+create view IN_MIGRATION_VIEW as select * from IN_MIGRATION_CORE where
+PROCESSED_BY_MIRTH=2;
+create view LOCATION_VIEW as select * from LOCATION_REGISTRATION_CORE where
+PROCESSED_BY_MIRTH=2;
+create view DEATH_VIEW as select * from DEATH_REGISTRATION_CORE where
+PROCESSED_BY_MIRTH=2;
+create view MEMBERSHIP_VIEW as select * from MEMBERSHIP_CORE where
+PROCESSED_BY_MIRTH=2;
+create view OUT_MIGRATION_VIEW as select * from
+OUT_MIGRATION_REGISTRATION_CORE where PROCESSED_BY_MIRTH=2;
+create view PREGNANCY_OBSERVATION_VIEW as select * from
+PREGNANCY_OBSERVATION_CORE where PROCESSED_BY_MIRTH=2;
+create view PREGNANCY_OUTCOME_VIEW as select * from PREGNANCY_OUTCOME_CORE
+where PROCESSED_BY_MIRTH=2;
+create view RELATIONSHIP_VIEW as select * from RELATIONSHIP_CORE where
+PROCESSED_BY_MIRTH=2;
+ create view SOCIALGROUP_VIEW as select * FROM SOCIAL_GROUP_REGISTRATION_CORE
+where PROCESSED_BY_MIRTH=2;
+CREATE VIEW DEATHTOHOH_VIEW AS SELECT * FROM DEATH_TO_HOH_CORE
+WHERE PROCESSED_BY_MIRTH =2;
+# BASELINE ROUND VIEW
+create view BASELINE_VIEW as select * from BASELINE_CORE where
+PROCESSED_BY_MIRTH=2;
+CREATE USER 'datamanager'@'%' IDENTIFIED BY 'dataODKmanager';
+GRANT SELECT, UPDATE ON DEATH_VIEW TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON errors TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON IN_MIGRATION_VIEW TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON LOCATION_VIEW TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON MEMBERSHIP_VIEW TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON OUT_MIGRATION_VIEW TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON PREGNANCY_OBSERVATION_VIEW TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON PREGNANCY_OUTCOME_VIEW TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON RELATIONSHIP_VIEW TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON SOCIALGROUP_VIEW TO 'datamanager'@'%';
+GRANT SELECT, UPDATE ON DEATHTOHOH_VIEW TO 'datamanager'@'%';
+# BASELINE ROUND PERMISSIONS
+GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
+```
+- The above creates a MySQL user named `datamanager` with password `dataODKmanager`.
+- This user can only access the error views and error table, modify/reset erroneous data (see "Error handling" section)
+
+NOW ON PAGE 27
