@@ -43,7 +43,12 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 
 - In the “Instances” menu, click on “Connect” in the upper left
 - This will give instructions for connecting via an SSH client
-- It will be something very similar to the following: `ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com`
+- It will be something very similar to the following:
+
+```
+ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-18-217-25-66.us-east-2.compute.amazonaws.com
+```
+
 - Congratulations! You are now able to run linux commands on your new ubuntu server
 
 ### Managing users (ie, creating ssh keypairs for other users)
@@ -143,7 +148,7 @@ JAVA_OPTS="-Djava.awt.headless=true -Xmx1024M -Xms1024M -XX:+UseConcMarkSweepGC"
 ```
 - Ensure that everything is working up until now by ssh-tunneling. Something similar to the below code (with AWS endpoints and `.pem` file location adjusted appropriately):
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-18-217-25-66.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-18-217-25-66.us-east-2.compute.amazonaws.com -v
 ```
 
 Then, on your local machine, open the following url in a web browser: http://localhost:8999/manager. You can now log-in as Username: `data` and Password: `data`. Once logged-in, the below will appear in the web browswer.
@@ -190,7 +195,7 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 ### Deploying OpenHDS in Tomcat
 - If running on a remote server (ie, AWS EC2), you'll need to tunnel. For example:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-18-217-25-66.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-18-217-25-66.us-east-2.compute.amazonaws.com -v
 ```
 - In the (local) web browser, scroll down to the "Select WAR file to upload" section
 - Select the `openhds.war` file you downloaded a few minutes ago in the "Choose File" menu.
@@ -242,7 +247,7 @@ cd mirth
 - `cd` into the local directory where you downloaded the `.sh` file.
 - Now copy the downloaded `.tar.gz` file from your local to remote machine by running the following on your local machine as such (file names, paths, endpoint, etc. may vary):
 ```
-scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
+scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubuntu@ec2-18-217-25-66.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
 ```
 - Prior to installing the `.sh` file, you need to change some options in your java configuration:
   - Run the following: `sudo nano /etc/java-8-openjdk/accessibility.properties`
@@ -263,7 +268,7 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubun
 
 - To confirm that everything is working, serve the Mirth Connect Administrator to your local browser via an SSH tunnel:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-18-217-25-66.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-18-217-25-66.us-east-2.compute.amazonaws.com -v
 ```
 
 - Now open the following url in your local browser: `https://localhost:9000`
@@ -285,7 +290,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Restart the mirth service: `sudo service mcservice restart`
 - You can now log into the Mirth Connect Administrator with the `admin/admin`. To do this, first make a tunnel:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-18-217-25-66.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-18-217-25-66.us-east-2.compute.amazonaws.com -v
 ```
 - Go to `https://localhost:9000` in your local browser. You may get a warning about site security (since it's not https). Affirm.
 - Log in with `admin` as Username and `admin` as Password (just to ensure that it works)
@@ -409,13 +414,13 @@ sudo mysql -uroot -pdata create_db_and_user.sql
 - If any problems with the above, copy and paste the code line by line into the sql cli after running `sudo mysql -uroot -pdata`
 - Now we need to run Tomcat manager. Create an SSH tunnel to port 8080 as below:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-52-14-54-167.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-18-217-25-66.us-east-2.compute.amazonaws.com:8080 ubuntu@ec2-18-217-25-66.us-east-2.compute.amazonaws.com -v
 ```
 - In your local browser, go to `http://localhost:8999/manager`
 - Note in the "Applications" table that ODKAggregate is not yet running
 - Copy the file created in configuration (`~/ODK/ODK\ Aggregate/create_db_and_user.sql`) from your remote to local machine, by running the below from the local machine
 ```
-scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-52-14-54-167.us-east-2.compute.amazonaws.com:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
+scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-18-217-25-66.us-east-2.compute.amazonaws.com:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
 ```
 - You now have a `.war` file on your local machine
 - In the web browser, go to the "WAR file to deploy" section of the page, select the recently downloaded `.war` and deploy
@@ -514,4 +519,39 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 - The above creates a MySQL user named `datamanager` with password `dataODKmanager`.
 - This user can only access the error views and error table, modify/reset erroneous data (see "Error handling" section)
 
-NOW ON PAGE 27
+## Customizing location hierarchy
+
+(Not doing for now)
+
+# Tablet set-up
+
+- Fetch an android device (phone/tablet)
+- On that android device, download Paulo Filimone's implementation of of the OpenHDS .apk by going to https://github.com/philimones-group/openhds-tablet/releases/download/1.6.2/openhds-tablet-1.6.2.apk
+- Download ODKCollect via Google Play
+- Install both OpenHDS and ODKCollect on the android device
+
+## Set up OpenHDS Mobile
+
+- Open OpenHDS Mobile
+- Tap "Preferences" in the upper-right
+- Click on the url under the heading "OpenHDS Server Location"
+- Enter the URL of the OpenHDS server and confirm your input with a click on "OK"
+
+## Set up ODKCollect
+
+- Open ODKCollect
+- Click the three dots in the upper-right hand corner
+- Select "General Settings"
+- Click "Server"
+- Change the server URL to http://data-management.local:8080/ODKAggregate
+- Set the credentials to `odk_prod` (user) and `data` (password)
+
+## Synchronizing OpenHDS Mobile
+
+- First, one must prepare the data on the server to be synced to the tablet:
+  - Take the following steps in the web interface of the OpenHDS server:
+    - Log in as admin to open OpenHDS Server
+    - Click on menu item "Utility Routines" - Round codes
+      - Create the round (0 = baseline, 1 = first follow-up, etc.)
+    - Click on the menu item "Utility" - Tasks
+      - In the field Round number, enter the number of the round just created and click on "Start Visit Task". Wait until you see that the task is ended
