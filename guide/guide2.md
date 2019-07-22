@@ -21,6 +21,7 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 - Create a second rule with "Type" set to "All traffic", the "Port Range" set to 0-65535, and the "Source" set to "Anywhere"
 - Create a third rule with "Type" set to "HTTP" and "Port Range" set to 80
 - Create a fourth rule with "Type" set to "HTTPS", Port Range set to 443
+- Create a fifth rule with Type "Custom TCP Rule", Port Range 8080, Source 0.0.0.0/0, ::/0
 - Click “launch” in the bottom right
 - A modal will show up saying “Select an existing key pair or create a new key pair”
 - Select “Create a new key pair”
@@ -80,20 +81,42 @@ Grant sudo access to the new users: `sudo usermod -a -G sudo benmbrew`
 - Go to the EC2 instance's public domain and ensure that it's working (for example, http://ec2-18-223-119-121.us-east-2.compute.amazonaws.com/)
 
 
-## Setting up OpenHDS
+### Setting up Linux  
 
-### Setting up Ubuntu  
+- This guide was written for, and assumes, Amazon Linux 2. Full details below:  NAME="Amazon Linux"
+VERSION="2"
+ID="amzn"
+ID_LIKE="centos rhel fedora"
+VERSION_ID="2"
+PRETTY_NAME="Amazon Linux 2"
+ANSI_COLOR="0;33"
+CPE_NAME="cpe:2.3:o:amazon:amazon_linux:2"
+HOME_URL="https://amazonlinux.com/"
+Amazon Linux release 2 (Karoo)
 
-- Install Ubuntu on the server. There are many online guides for doing this. This guide was written using the following version:
 ```
-Description:	Ubuntu 18.04.2 LTS
-Release:	18.04
-Codename:	bionic
+NAME="Amazon Linux"
+VERSION="2"
+ID="amzn"
+ID_LIKE="centos rhel fedora"
+VERSION_ID="2"
+PRETTY_NAME="Amazon Linux 2"
+ANSI_COLOR="0;33"
+CPE_NAME="cpe:2.3:o:amazon:amazon_linux:2"
+HOME_URL="https://amazonlinux.com/"
+Amazon Linux release 2 (Karoo)
 ```
 - Update the hostname of the machine to be `data-management.local`. You can check the hostname by running `hostnamectl` and examing the `Static hostname` parameter. To update the hostname, run the following:
 ```
 sudo hostnamectl set-hostname data-management.local
 ```
+- Then, make the hostname change persistent across sessions by running: `sudo nano /etc/cloud/cloud.cfg`
+- Add the below line to the bottom of the file:
+```
+preserve_hostname: true
+```
+- Ensure that the change worked. Run `sudo reboot`, wait a few seconds, ssh back into the instance and run `hostname`. It should show `data-management.local`
+
 - Then, open /etc/hosts by running `sudo nano /etc/hosts` and add the following line:
 ```
 127.0.0.1 data-management.local
@@ -104,99 +127,176 @@ sudo hostnamectl set-hostname data-management.local
 
 ### Installing Java 8
 
-- Run the following to install Java 8: `sudo apt-get install openjdk-8-jre-headless`
+- Run the following to install Java 8: `sudo yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel`
 - This guide was written with the following version (produced running `java -version`):
 
 ```
-openjdk version "1.8.0_212"
-OpenJDK Runtime Environment (build 1.8.0_212-8u212-b03-0ubuntu1.18.04.1-b03)
-OpenJDK 64-Bit Server VM (build 25.212-b03, mixed mode)
+openjdk version "1.8.0_201"
+OpenJDK Runtime Environment (build 1.8.0_201-b09)
+OpenJDK 64-Bit Server VM (build 25.201-b09, mixed mode)
 ```
 
 ### Installing MySQL Server
 
-- Run the following to install MySQL Server: `sudo apt-get install mysql-server`  
-- If prompted, set the password of the root user during installation to `data`
-(I was not prompted for password).
+- Run the following to install MySQL Server: `sudo apt-get install mysql-server`
+```
+sudo yum localinstall https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+sudo yum install mysql-community-server
+sudo systemctl start mysqld
+```
 
 #### Setting up MySQL Server
 
-- Log-in: `sudo mysql -uroot -pdata` (this opens the MySQL command line interface using the `root` user and `data` password)
+- Locate the temporary password for root: `sudo grep 'temporary password' /var/log/mysqld.log`
+- Set a new password by running `sudo mysql_secure_installation`
+  - Enter old password when prompted
+  - Enter new password: `A1b4exg!adlz8`
+  - Say "no" to all options except reloading the privilege tables
+
+- Log-in: `sudo mysql -uroot -p'A1b4exg!adlz8'` (this opens the MySQL command line interface using the `root` user)
+- To get a better password, we first have to lower the security level a bit. Run the following to see what can be modified:
+```
+SHOW VARIABLES LIKE 'validate_password%';
+```
+- Run:
+```
+SET GLOBAL validate_password.policy=LOW;
+SET GLOBAL validate_password.length=0;
+SET GLOBAL validate_password.mixed_case_count=0;
+SET GLOBAL validate_password.number_count=0;
+SET GLOBAL validate_password.special_char_count=0;
+```
+- Now rerun `sudo mysql_secure_installation`
+- Set password to `data`
+- Now log-in using the new password: `sudo mysql -uroot -pdata`
+
 - The following should now appear (indicating that you are succesfully in the MySQL CLI): `mysql>`
 - Create a user: `CREATE USER 'data'@'%' IDENTIFIED BY 'data';` (this will throw an error if run more than once)
 - Create databases:
 ```
-CREATE DATABASE IF NOT EXISTS 'openhds';
-CREATE DATABASE IF NOT EXISTS 'odk_prod';
-(I had an error if I used single quotes).
+CREATE DATABASE IF NOT EXISTS openhds;
+CREATE DATABASE IF NOT EXISTS odk_prod;
 ```
 - Grant access privileges to user:
 `GRANT ALL ON *.* TO 'data'@'%';`
+`GRANT ALL PRIVILEGES ON *.*`
 - Flush privileges: `flush privileges;`
-(Should we say to first exist the sql command line interface with '\q'?)
-- Grant outside access to MySQL (optional): Comment out the line starting with `Bind-Address` by adding a `#` prior to it in `/etc/mysql/my.cnf`, and then restart MySQL-service by running: `sudo service mysql restart`
-(I didnt have a line starting with `Bind-Address so i ignored this).
+- Exit MySQL cli (ctrl+d)  
+- Restart MySQL-service by running: `sudo systemctl stop mysqld; sudo systemctl start mysqld`
 
-### Installing Tomcat 8
+### Installing Tomcat
 
-- Run the following `sudo apt install tomcat8`
-- Run a package update: `sudo apt-get update`
-- Ensure tomcat is up and running: `sudo service tomcat8 start`
-- Set `JAVA_HOME` variable in `/etc/environment`: `sudo nano /etc/environment` and add line like `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`
-(I needed to run chmod 777 again)
-- Run `source /etc/environment`
-- If issues with `JAVA_HOME`, uncomment the `JAVA_HOME` line in `/etc/default/tomcat8/` and set it to the java installation folder. For example:
+- Run the following:
 ```
-JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+sudo groupadd tomcat
+sudo useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
+cd ~
+wget https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz
+sudo mkdir /opt/tomcat
+sudo tar xvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
 ```
-- Install tomcat8 admin: `sudo apt-get install tomcat8-admin`
-- Edit `etc/tomcat8/tomcat-users.xml` by running `sudo nano /etc/tomcat8/tomcat-users.xml`
+- Update permissions:
+```
+cd /opt/tomcat
+sudo chgrp -R tomcat /opt/tomcat
+sudo chmod -R g+r conf
+sudo chmod g+x conf
+sudo chown -R tomcat webapps/ work/ temp/ logs/
+```
+- Set up Systemd file:
+```
+sudo nano /etc/systemd/system/tomcat.service
+```
+- Paste the below into the new file:
+```
+# Systemd unit file for tomcat
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat
+Environment=CATALINA_BASE=/opt/tomcat
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+
+User=tomcat
+Group=tomcat
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+- Reload: `sudo systemctl daemon-reload`
+- Start tomcat: `sudo systemctl start tomcat`
+- Check the status: `sudo systemctl status tomcat`
+- Ensure that it runs on boot: `sudo systemctl enable tomcat`
+
+- Set `JAVA_HOME` variable
+  - `export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.201.b09-0.amzn2.x86_64`
+  - `sudo nano /etc/profile` and add line like `export JAVA_HOME="/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.201.b09-0.amzn2.x86_64"`
+
+- Create tomcat users: `sudo nano /opt/tomcat/conf/tomcat-users.xml`
 - In the `tomcat-users` section, create a new role by adding the following lines:
 ```
 <role rolename="manager-gui" />
 <user username="data" password="data" roles="manager-gui" />
 ```
-- Restart the tomcat service: `sudo service tomcat8 restart`
-- Increase memory allocation to Tomcat: `sudo nano /etc/default/tomcat8` and replace  the line starting with `JAVA_OPTS=` with the following (DO NOT RUN THIS. This is recommended per the OpenHDS guide, but it causes errors with starting the Tomcat service, so for now keeping memory small)
+- Run the following to allow Tomcat to be run on different machines:
 ```
-JAVA_OPTS="-Djava.awt.headless=true -Xmx1024M -Xms1024M -XX:+UseConcMarkSweepGC"
+sudo nano /opt/tomcat/webapps/manager/META-INF/context.xml
 ```
-- Ensure that everything is working up until now by ssh-tunneling. Something similar to the below code (with AWS endpoints and `.pem` file location adjusted appropriately):
+- And then comment out the `<Valve>` section. In other words, that area of the file should look like this:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-18-223-119-121.us-east-2.compute.amazonaws.com:8080 ec2-user@ec2-18-223-119-121.us-east-2.compute.amazonaws.com -v
+<Context antiResourceLocking="false" privileged="true" >
+<!--
+  <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+-->
+</Context>
 ```
-
-Then, on your local machine, open the following url in a web browser: http://localhost:8999/manager. You can now log-in as Username: `data` and Password: `data`. Once logged-in, the below will appear in the web browswer.
+- Restart the tomcat service: `sudo systemctl restart tomcat`
+- Increase memory allocation to Tomcat (not doing for now) in (`/etc/systemd/system/tomcat.service`): `CATALINA_OPTS="-Xms512M -Xmx1024M"`
+- Ensure that everything is working up by going to the following address in your local web browser: http://18.223.119.121:8080/manager/ (Replace the IP address with the address of your Ec2 instance)
+- You can now log-in as Username: `data` and Password: `data`. Once logged-in, the below will appear in the web browswer.
 
 ![](img/tomcat.png)
-
 
 ### Installing the MySQL-J Connector
 
 
-- Install the mysql lib package with `sudo apt-get install libmysql-java` which will put the MySQL connector into `/usr/share/java`
-- `cd` to `/usr/share/tomcat8/lib`
+- Install the mysql lib package with `sudo yum install mysql-connector-java` which will put the MySQL connector into `/usr/share/java`
+- `cd` to `/usr/share/tomcat/lib`
 - Create a symbolic link:
 ```
-sudo ln -s ../../java/mysql-connector-java-5.1.45.jar mysql-connector-java-5.1.45.jar
-sudo ln -s ../../java/mysql.jar mysql.jar
+sudo ln -s ../../java/mysql-connector-java.jar mysql-connector-java.jar
 ```
-- Restart the Tomcat service: `sudo service tomcat8 restart`
+- Restart the Tomcat service: `sudo systemctl stop tomcat; sudo systemctl start tomcat`
 
 ### Install SSH-server
 
 ```
-sudo apt-get install -y openssh-server
+sudo yum install -y openssh-server
 ```
+- Start it: `sudo service sshd start;`
 - Ensure it's up and running `sudo service ssh status`
-
+- Ensure it starts on boot: `sudo systemctl enable sshd` (not sure if this is working!)
 
 ### Getting and setting up openhds
 
 - On your _local_ machine, run the following to download openhds-server
 ```
 sudo apt install unzip
-cd /home/ubuntu # change to any directory you prefer
+cd ~/Documents # change to any directory you prefer
 mkdir openhds
 cd openhds
 wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/openhds.war
@@ -208,11 +308,14 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
   - Put everything back in the .war file: `rm openhds.war; jar -cvf openhds.war *`
 
 ### Deploying OpenHDS in Tomcat
+
+
 - If running on a remote server (ie, AWS EC2), you'll need to tunnel. For example:
 ```
 ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-18-223-119-121.us-east-2.compute.amazonaws.com:8080 ec2-user@ec2-18-223-119-121.us-east-2.compute.amazonaws.com -v
 ```
-- In the (local) web browser, scroll down to the "Select WAR file to upload" section
+- In the (local) web browser, go to http://18.223.119.121:8080/manager (replace IP address)
+- Scroll down to the "Select WAR file to upload" section
 - Select the `openhds.war` file you downloaded a few minutes ago in the "Choose File" menu.
 - Click "Deploy" button (see below image)
 ![](img/tomcat2.png)
