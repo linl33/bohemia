@@ -10,11 +10,10 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 - Log into the AWS console: aws.amazon.com
 - In the upper right hand corner select "Sign-into Console"
 - Click the “Launch a virtual machine” option under “Build a solution”
-- Select “Ubuntu Server 18.04 LTS (HVM)” # ALTERNATIVE !: Amazon Linux 2 AMI (HVM) SSD
+- Select "Amazon Linux 2 AMI (HVM) SSD"
 -To the far right select 64-bit (x86)  
 - Click “select”  
-- Choose the default instance type (General purpose, t2.micro, etc.)  
-- In the "Configure Instance" section, for the "Auto-assign Public IP" section, select "Enable"
+- Choose the default instance type (General purpose, t2.large, 2 vCPUs, 8 gb memory, etc.)  
 - Click “Review and launch”
 - Click “Edit security groups”
 - Ensure that there is an SSH type rule with source set to `0.0.0.0/0` to allow any address to SSH in. Set "Source" to "Anywhere"
@@ -51,7 +50,7 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 - It will be something very similar to the following:
 
 ```
-ssh -i "/home/joebrew/.ssh/openhdskey.pem" ec2-user@ec2-18-223-119-121.us-east-2.compute.amazonaws.com
+ssh -i "/home/joebrew/.ssh/openhdskey.pem" ec2-user@ec2-18-222-111-104.us-east-2.compute.amazonaws.com
 ```
 
 - Congratulations! You are now able to run linux commands on your new ubuntu server
@@ -78,7 +77,7 @@ Grant sudo access to the new users: `sudo usermod -a -G sudo benmbrew`
 - Ensure that httpd always runs on system reboot: `sudo chkconfig httpd on`
 - Go to this directory: `cd /var/www/html`
 - Get a dummy index.html to put there: `sudo wget https://raw.githubusercontent.com/databrew/bohemia/master/guide/misc/index.html .`
-- Go to the EC2 instance's public domain and ensure that it's working (for example, http://ec2-18-223-119-121.us-east-2.compute.amazonaws.com/)
+- Go to the EC2 instance's public domain and ensure that it's working (for example, http://ec2-18-222-111-104.us-east-2.compute.amazonaws.com/)
 
 
 ### Setting up Linux  
@@ -275,12 +274,12 @@ sudo nano /opt/tomcat/webapps/manager/META-INF/context.xml
 
 
 - Install the mysql lib package with `sudo yum install mysql-connector-java` which will put the MySQL connector into `/usr/share/java`
-- `cd` to `/usr/share/tomcat/lib`
+- `cd` to `/opt/tomcat/lib`
 - Create a symbolic link:
 ```
-sudo ln -s ../../java/mysql-connector-java.jar mysql-connector-java.jar
+sudo ln -s ../../../usr/share/java/mysql-connector-java.jar mysql-connector-java.jar
 ```
-- Restart the Tomcat service: `sudo systemctl stop tomcat; sudo systemctl start tomcat`
+- Restart the Tomcat service: `sudo systemctl restart tomcat`
 
 ### Install SSH-server
 
@@ -309,12 +308,7 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 
 ### Deploying OpenHDS in Tomcat
 
-
-- If running on a remote server (ie, AWS EC2), you'll need to tunnel. For example:
-```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-18-223-119-121.us-east-2.compute.amazonaws.com:8080 ec2-user@ec2-18-223-119-121.us-east-2.compute.amazonaws.com -v
-```
-- In the (local) web browser, go to http://18.223.119.121:8080/manager (replace IP address)
+- On your local machine, go to http://18.223.119.121:8080/manager/html (replace IP address if applicable)
 - Scroll down to the "Select WAR file to upload" section
 - Select the `openhds.war` file you downloaded a few minutes ago in the "Choose File" menu.
 - Click "Deploy" button (see below image)
@@ -365,7 +359,7 @@ cd mirth
 - `cd` into the local directory where you downloaded the `.sh` file.
 - Now copy the downloaded `.tar.gz` file from your local to remote machine by running the following on your local machine as such (file names, paths, endpoint, etc. may vary):
 ```
-scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ec2-user@ec2-18-223-119-121.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
+scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ec2-user@ec2-18-222-111-104.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
 ```
 - Prior to installing the `.sh` file, you need to change some options in your java configuration:
   - Run the following: `sudo nano /etc/java-8-openjdk/accessibility.properties`
@@ -386,7 +380,7 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ec2-
 
 - To confirm that everything is working, serve the Mirth Connect Administrator to your local browser via an SSH tunnel:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-18-223-119-121.us-east-2.compute.amazonaws.com:8443 ec2-user@ec2-18-223-119-121.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-18-222-111-104.us-east-2.compute.amazonaws.com:8443 ec2-user@ec2-18-222-111-104.us-east-2.compute.amazonaws.com -v
 ```
 
 - Now open the following url in your local browser: `https://localhost:9000`
@@ -408,7 +402,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Restart the mirth service: `sudo service mcservice restart`
 - You can now log into the Mirth Connect Administrator with the `admin/admin`. To do this, first make a tunnel:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-18-223-119-121.us-east-2.compute.amazonaws.com:8443 ec2-user@ec2-18-223-119-121.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-18-222-111-104.us-east-2.compute.amazonaws.com:8443 ec2-user@ec2-18-222-111-104.us-east-2.compute.amazonaws.com -v
 ```
 - Go to `https://localhost:9000` in your local browser. You may get a warning about site security (since it's not https). Affirm.
 - Log in with `admin` as Username and `admin` as Password (just to ensure that it works)
@@ -532,13 +526,13 @@ sudo mysql -uroot -pdata create_db_and_user.sql
 - If any problems with the above, copy and paste the code line by line into the sql cli after running `sudo mysql -uroot -pdata`
 - Now we need to run Tomcat manager. Create an SSH tunnel to port 8080 as below:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-18-223-119-121.us-east-2.compute.amazonaws.com:8080 ec2-user@ec2-18-223-119-121.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 8999:ec2-18-222-111-104.us-east-2.compute.amazonaws.com:8080 ec2-user@ec2-18-222-111-104.us-east-2.compute.amazonaws.com -v
 ```
 - In your local browser, go to `http://localhost:8999/manager`
 - Note in the "Applications" table that ODKAggregate is not yet running
 - Copy the file created in configuration (`~/ODK/ODK\ Aggregate/create_db_and_user.sql`) from your remote to local machine, by running the below from the local machine
 ```
-scp -i "/home/joebrew/.ssh/openhdskey.pem" "ec2-user@ec2-18-223-119-121.us-east-2.compute.amazonaws.com:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
+scp -i "/home/joebrew/.ssh/openhdskey.pem" "ec2-user@ec2-18-222-111-104.us-east-2.compute.amazonaws.com:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
 ```
 - You now have a `.war` file on your local machine
 - In the web browser, go to the "WAR file to deploy" section of the page, select the recently downloaded `.war` and deploy
