@@ -35,7 +35,7 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 - Click on the name of the instance (once launched)
 - This will bring you to the instances menu, where you can see things (in the “Description” tab below) like public IP address, etc.
 
-### Allocate an persistent IP
+### Allocate a persistent IP
 
 - So that your AWS instance's public IP address does not change at reboot, etc., you need to create an "Elastic IP address". To do this:
   - Go to the EC2 dashboard in aws
@@ -68,7 +68,7 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 - It will be something very similar to the following:
 
 ```
-ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-18-188-209-56.us-east-2.compute.amazonaws.com
+ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com
 ```
 
 - Congratulations! You are now able to run linux commands on your new ubuntu server
@@ -87,24 +87,19 @@ ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-18-188-209-56.us-east-2.co
 - Open whatever public key is going to be associated with this user (the .pub file) and paste the  content into the authorized_keys file (ie, open authorized_keys in nano first and then copy-paste from your local machine)
 Grant sudo access to the new users: `sudo usermod -a -G sudo benmbrew`
 
-## Getting the server set-up for hosting
-- Run the following after ssh'ing into the server: `sudo yum update`
-- Run the following after ssh'ing into the server: `sudo yum install httpd -y`
-- Start the httpd service: `sudo service httpd start`
-- Check the status: `sudo service httpd status`
-- Ensure that httpd always runs on system reboot: `sudo chkconfig httpd on`
-- Go to this directory: `cd /var/www/html`
-- Get a dummy index.html to put there: `sudo wget https://raw.githubusercontent.com/databrew/bohemia/master/guide/misc/index.html .`
-- Go to the EC2 instance's public domain and ensure that it's working (for example, http://ec2-18-188-209-56.us-east-2.compute.amazonaws.com/)
-
 
 ### Setting up Linux  
 
-- This guide was written for, and assumes, Linux Ubuntu 18.04. Details below:
+- This guide was written for, and assumes, Linux Ubuntu 16.04. Details below:
 ```
-Linux ip-172-31-15-22 4.15.0-1043-aws #45-Ubuntu SMP Mon Jun 24 14:07:03 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+Linux ip-172-31-5-87 4.4.0-1087-aws #98-Ubuntu SMP Wed Jun 26 05:50:53 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
+- SSH into the server:
+```
+ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com
+```
+- Run the following after ssh'ing into the server: `sudo apt-get update`
 - Update the hostname of the machine to be `data-management.local`. You can check the hostname by running `hostnamectl` and examining the `Static hostname` parameter. To update the hostname, run the following:
 ```
 sudo hostnamectl set-hostname data-management.local
@@ -136,6 +131,8 @@ sudo apt-get install openjdk-8-jre-headless
 ```
 sudo apt-get install mysql-server
 ```
+- If prompted, set the root user password to `data`
+
 #### Setting up MySQL Server
 
 - Log-in: `sudo mysql -uroot -pdata` (this opens the MySQL command line interface using the `root` user and `data` password)
@@ -175,7 +172,7 @@ JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 - Restart the tomcat service: `sudo service tomcat8 restart`
 - Not doing: increase memory allocation to Tomcat in CATALINA_OPTS
 
-- Ensure that everything is working up by going to the following address in your local web browser: ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8080/manager/ (Replace the IP address with the address of your Ec2 instance)
+- Ensure that everything is working up by going to the following address in your local web browser: ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/manager/ (Replace the IP address with the address of your Ec2 instance)
 - You can now log-in as Username: `data` and Password: `data`. Once logged-in, the below will appear in the web browswer.
 
 ![](img/tomcat.png)
@@ -210,7 +207,7 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 
 ### Deploying OpenHDS in Tomcat
 
-- On your local machine, go to ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8080/manager/html (replace IP address if applicable)
+- On your local machine, go to ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/manager/html (replace IP address if applicable)
 - Scroll down to the "Select WAR file to upload" section
 - Select the `openhds.war` file you downloaded a few minutes ago in the "Choose File" menu.
 - Click "Deploy" button
@@ -242,7 +239,7 @@ sudo mysql -udata -pdata openhds openhds-required-data.sql
 
 ### Confirm that everything is working so far
 
-- To confirm that everything is working at this point, on your local machine, visit http://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8080/openhds in the browser. A green log-in screen should appear.
+- To confirm that everything is working at this point, on your local machine, visit http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/openhds in the browser. A green log-in screen should appear.
 - If you want, change the language
 - Log in with credentials "admin" and "test"
 
@@ -258,7 +255,7 @@ cd mirth
 - On your local machine, `cd` into the local directory where you downloaded the `.sh` file.
 - Now copy the downloaded `.tar.gz` file from your local to remote machine by running the following on your local machine as such (file names, paths, endpoint, etc. may vary):
 ```
-scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubuntu@ec2-18-188-209-56.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
+scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
 ```
 - Prior to installing the `.sh` file, you need to change some options in your java configuration:
   - Run the following: `sudo nano /etc/java-8-openjdk/accessibility.properties`
@@ -279,10 +276,10 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubun
 
 - To confirm that everything is working, serve the Mirth Connect Administrator to your local browser via an SSH tunnel:
 ```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-18-188-209-56.us-east-2.compute.amazonaws.com -v
+ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com -v
 ```
 - Now open the following url in your local browser: `https://localhost:9000`
-- Or, as an alternative to the above, go to: https://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8443/ (without creating the ssh tunnel)
+- Or, as an alternative to the above, go to: https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443/ (without creating the ssh tunnel)
 
 - Sign in with the credentials `admin` (username) and `admin` (password)
 ![](img/mirth2.png)
@@ -300,7 +297,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Replace the `database.url` line with `database.url = jdbc:mysql://localhost:3306/mirthdb`
 - Set values for `database.username` and `database.password` to `data` and `data`
 - Restart the mirth service: `sudo service mcservice restart`
-- You can now log into the Mirth Connect Administrator with the `admin/admin`. Go to https://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8443. You may get a warning about site security (since it's not https). Affirm.
+- You can now log into the Mirth Connect Administrator with the `admin/admin`. Go to https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443. You may get a warning about site security (since it's not https). Affirm.
 - Log in with `admin` as Username and `admin` as Password (just to ensure that it works)
 - Log out
 - After log-out, click "Download the Administrator Launcher" in the bottom left
@@ -310,7 +307,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Agree to the items in the applet that comes up
 - Select "Run Mirth Connect Administrator Launcher" at the end of the license process
 - In the Mirth Connect Administrator Launcher, set the address of the machine
-- Set the Address to https://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8443  
+- Set the Address to https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443  
 ![](img/mirth3.png)
 - Click launch
 - When prompted by the applet, log in with the above url, and admin/admin as the credentials
@@ -400,7 +397,7 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 - Press 'Enter' for the next few items. Confirm that you do not have an SSL certificate
 - When asked about Port Configuration and internet-visible IP address, type "Y"
 - Keep Connector Port as 8080
-- For "Internet-visible IP address or DNS name", type: `ec2-18-188-209-56.us-east-2.compute.amazonaws.com` (!guide says `data-management.local`)
+- For "Internet-visible IP address or DNS name", type: `ec2-3-130-255-155.us-east-2.compute.amazonaws.com` (!guide says `data-management.local`)
 - Skip through the Tomcat, MySQL, Apache, Java stuff (already done)
 - When prompted to "stop and restart your Apache webserver", run `sudo service tomcat8 restart` in a different terminal tab (might require ssh'ing into the server again)
 - For the database server settings section, type the defaults (port `3306` for the database port number and `127.0.0.1` for the server hostname)
@@ -420,16 +417,16 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 sudo mysql -uroot -pdata create_db_and_user.sql
 ```
 - If any problems with the above, copy and paste the code line by line into the sql cli after running `sudo mysql -uroot -pdata` (you will get errors - need to run line by line)
-- Now we need to run Tomcat manager. Go to http://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8080/manager/html
+- Now we need to run Tomcat manager. Go to http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/manager/html
 - Note in the "Applications" table that ODKAggregate is not yet running
 - Copy the file created in configuration (`~/ODK/ODK\ Aggregate/create_db_and_user.sql`) from your remote to local machine, by running the below from the local machine
 ```
-scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-18-188-209-56.us-east-2.compute.amazonaws.com:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
+scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
 ```
 - You now have a `.war` file on your local machine
 - In the web browser, go to the "WAR file to deploy" section of the page, select the recently downloaded `.war` and deploy
 - ODKAggregate should now show up in the "Applications" table in the Tomcat Web Application Manager
-- Navigate to http://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8080/ODKAggregate/ in the browser.
+- Navigate to http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/ODKAggregate/ in the browser.
 - You'll be reedirected to http://localhost:8999/ODKAggregate/Aggregate.html.
 - Click Log-in (button in upper right)
 - Click "Sign in with Aggregate password"
@@ -443,7 +440,7 @@ _Note, prior to deployment of Bohemia, different xmls will be created, modified,
 
 - On your local machine, clone Paulo Filimone's implementation of the OpenHDS tablet application: `git clone https://github.com/philimones-group/openhds-tablet`
 - Note, within this recently cloned repository, the `xforms` directory. This includes `.xml` files which were created from the Excel-formatted `.xls` forms at https://github.com/SwissTPH/openhds-tablet/releases/download/1.5/xlsforms.zip
-- In your local browser, with the tunnel running (see previous section), open http://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8080/ODKAggregate/.
+- In your local browser, with the tunnel running (see previous section), open http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/ODKAggregate/.
 - Click on the "Form Management" tab
 - Click on "Add New Form"
 - Upload the following forms, one-by-one, from your local `openhds-tablet/xforms` directory (note, this sometimes causes spontaneous errors - keep trying):
@@ -539,7 +536,7 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 - Open OpenHDS Mobile
 - Tap "Preferences" in the upper-right
 - Click on the url under the heading "OpenHDS Server Location"
-- Enter the URL of the OpenHDS server: http://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8080/openhds
+- Enter the URL of the OpenHDS server: http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/openhds
 
 ## Set up ODKCollect
 
@@ -547,13 +544,13 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 - Click the three dots in the upper-right hand corner
 - Select "General Settings"
 - Click "Server"
-- Change the server URL to http://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8080/ODKAggregate
+- Change the server URL to http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/ODKAggregate
 - Set the credentials to `odk_prod` (user) and `data` (password)
 
 ## Synchronizing OpenHDS Mobile
 
 - First, one must prepare the data on the server to be synced to the tablet:
-  - Take the following steps in the web interface of the OpenHDS server at http://ec2-18-188-209-56.us-east-2.compute.amazonaws.com:8080/openhds
+  - Take the following steps in the web interface of the OpenHDS server at http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/openhds
     - Log in as admin/test to open OpenHDS Server
     - The next section may not be necessary:
         - Click on menu item "Configuration" - User management
