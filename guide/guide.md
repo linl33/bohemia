@@ -10,17 +10,19 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 - Log into the AWS console: aws.amazon.com
 - In the upper right hand corner select "Sign-into Console"
 - Click the “Launch a virtual machine” option under “Build a solution”
-- Select "Ubuntu Server 18.04 LTS (HVM), SSD Volume Type"
+- Select "Ubuntu Server 16.04 LTS (HVM), SSD Volume Type"
 -To the far right select 64-bit (x86)  
 - Click “select”  
 - Choose the instance type: General purpose, t2.large, 2 vCPUs, 8 gb memory, etc.
 - Click “Review and launch”
 - Click “Edit security groups”
 - Ensure that there is an SSH type rule with source set to `0.0.0.0/0` to allow any address to SSH in. Set "Source" to "Anywhere"
-- Create a second rule with "Type" set to "All traffic", the "Port Range" set to 0-65535, and the "Source" set to "Anywhere"
-- Create a third rule with "Type" set to "HTTP" and "Port Range" set to 80
-- Create a fourth rule with "Type" set to "HTTPS", Port Range set to 443
-- Create a fifth rule with Type "Custom TCP Rule", Port Range 8080, Source 0.0.0.0/0, ::/0
+- Create a second rule with "Type" set to "All traffic", the "Port Range" set to 0-65535. Set "Source" to "Anywhere"
+- Create a third rule with "Type" set to "HTTP" and "Port Range" set to 80. Set "Source" to "Anywhere"
+- Create a fourth rule with "Type" set to "HTTPS", Port Range set to 443. Set "Source" to "Anywhere"
+- Create a fifth rule with Type "Custom TCP Rule", Port Range 8080. Set "Source" to "Anywhere"
+- Your security configuration will look like this
+![](img/security.png)
 - Click “launch” in the bottom right
 - A modal will show up saying “Select an existing key pair or create a new key pair”
 - Select “Create a new key pair”
@@ -33,6 +35,22 @@ _The below should only be followed for the case of a remote server on AWS. In pr
 - Click on the name of the instance (once launched)
 - This will bring you to the instances menu, where you can see things (in the “Description” tab below) like public IP address, etc.
 
+### Allocate an persistent IP
+
+- So that your AWS instance's public IP address does not change at reboot, etc., you need to create an "Elastic IP address". To do this:
+  - Go to the EC2 dashboard in aws
+  - Click "Elastic IPs" under "Network & Security" in the left-most menu
+  - Click "Allocate new address"
+  - Select "Amazon pool"
+  - Click "Allocate"
+  - In the allocation menu, click "Associate address"
+  - Select the instance you just created
+  - Click "Associate"
+- Note, this guide is written with the below elastic id. You'll need to replace this with your own when necessary.
+
+```
+3.130.255.155
+```
 
 ### Setting up SSH keys
 
