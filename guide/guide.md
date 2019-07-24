@@ -137,14 +137,14 @@ sudo apt-get install mysql-server
 
 - Log-in: `sudo mysql -uroot -pdata` (this opens the MySQL command line interface using the `root` user and `data` password)
 - The following should now appear (indicating that you are succesfully in the MySQL CLI): `mysql>`
-- Create a user: `CREATE USER 'data'@'%' IDENTIFIED BY 'data';`
-- Create databases:
+- Create a user and databases, and grant permissions:
 ```
+CREATE USER 'data'@'%' IDENTIFIED BY 'data';
 CREATE DATABASE IF NOT EXISTS openhds;
 CREATE DATABASE IF NOT EXISTS odk_prod;
+GRANT ALL ON *.* TO 'data'@'%';
+flush privileges;
 ```
-- Grant access privileges to user: `GRANT ALL ON *.* TO 'data'@'%';`
-- Flush privileges: `flush privileges;`
 - Exit MySQL CLI: ctrl + d
 - Not running the below for now:
   - Grant outside access to MySQL (optional): Comment out the line starting with `Bind-Address` by adding a `#` prior to it in `/etc/mysql/my.cnf`
@@ -184,7 +184,7 @@ JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 - `cd` to `/usr/share/tomcat8/lib`
 - Create a symbolic link:
 ```
-sudo ln -s ../../java/mysql-connector-java-5.1.45.jar mysql-connector-java-5.1.45.jar
+sudo ln -s ../../java/mysql-connector-java-5.1.38.jar mysql-connector-java-5.1.38.jar
 sudo ln -s ../../java/mysql.jar mysql.jar
 ```
 - Restart the Tomcat service: `sudo service tomcat8 restart`
@@ -199,7 +199,8 @@ mkdir openhds
 cd openhds
 wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/openhds.war
 ```
-- If you need to edit fields, do the below and then re-jar
+- For now, since we're making no changes to the parameters / credentials, we can simply upload the recently download `.war` file as is.
+- However, if we wanted to make changes, we would need to unjar then rejar like this:
   - Extract via: `unzip openhds.war`
   - Edit the fields in `WEB-INF/classes/database.properties` to ensure that `dbURL`, `dbUser` and `dbPass` are adequate
   - If desired, edit values in `WEB-INF/classes/codes.properties` (and other documents in the same directory) to change parameters.
@@ -213,28 +214,71 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 - Click "Deploy" button
 - Things should appear as below:
 ![](img/tomcat3.png)
+- Reboot the machine and ssh back in to ensure that openhds is still runable after a reboot: `sudo reboot`
+
 
 ### Setting up OpenHDS data requirements
 
 You now need to insert some data into the openhds-database. Take the following steps:
-- On the remote server, run the following so as to get the openhds files (you previously ran this on your local machine):
+
+- Get into the MySQL command line interface:
 ```
-sudo apt install unzip
-cd /home/ubuntu # change to any directory you prefer
-mkdir openhds
-cd openhds
-wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/openhds.war
-unzip openhds.war
+sudo mysql -udata -pdata openhds
 ```
-- In the location where its contents have been extracted, run the code in `WEB-INF/classes/openhds-required-data.sql` by executing the following:
+- Run the below code
+
 ```
-cd WEB-INF/classes
-sudo mysql -udata -pdata openhds openhds-required-data.sql
+-- Defined core privileges
+INSERT INTO privilege VALUES ('PRIVILEGE1', 'CREATE_ENTITY');
+INSERT INTO privilege VALUES ('PRIVILEGE2', 'EDIT_ENTITY');
+INSERT INTO privilege VALUES ('PRIVILEGE3', 'DELETE_ENTITY');
+INSERT INTO privilege VALUES ('PRIVILEGE4', 'VIEW_ENTITY');
+INSERT INTO privilege VALUES ('PRIVILEGE5', 'CREATE_USER');
+INSERT INTO privilege VALUES ('PRIVILEGE6', 'DELETE_USER');
+INSERT INTO privilege VALUES ('PRIVILEGE7', 'ACCESS_BASELINE');
+INSERT INTO privilege VALUES ('PRIVILEGE8', 'ACCESS_UPDATE');
+INSERT INTO privilege VALUES ('PRIVILEGE9', 'ACCESS_AMENDMENT_FORMS');
+INSERT INTO privilege VALUES ('PRIVILEGE10', 'ACCESS_REPORTS');
+INSERT INTO privilege VALUES ('PRIVILEGE11', 'ACESSS_UTILITY_ROUTINES');
+INSERT INTO privilege VALUES ('PRIVILEGE12', 'ACESSS_CONFIGURATION');
+
+-- Defined  core roles
+INSERT INTO role (uuid, name, description, deleted) VALUES ('ROLE1', 'ADMINISTRATOR', 'Administrator of OpenHDS', false);
+INSERT INTO role (uuid, name, description, deleted) VALUES ('ROLE2', 'DATA CLERK', 'Data Clerk of OpenHDS', false);
+INSERT INTO role (uuid, name, description, deleted) VALUES ('ROLE3', 'DATA MANAGER', 'Data Manager of OpenHDS', false);
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE1');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE2');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE3');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE4');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE5');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE6');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE7');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE8');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE9');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE10');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE11');
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE1', 'PRIVILEGE12');
+
+INSERT INTO role_privileges (role_uuid, privilege_uuid) VALUES ('ROLE2', 'PRIVILEGE4');
+
+-- Defined Admin user
+INSERT INTO user (uuid, firstName, lastName, fullName, description, username, password, lastLoginTime, deleted) VALUES ('User 1', 'FirstName', 'LastName', 'Administrator', 'Administrator User', 'admin', 'test', 0, false);
+INSERT INTO user_roles (user_uuid, role_uuid) VALUES ('User 1', 'ROLE1');
+
+-- Location Hierarchy root
+INSERT INTO locationhierarchy(uuid,name,extId,level_uuid,parent_uuid) VALUES('hierarchy_root','', 'HIERARCHY_ROOT', NULL,NULL);
+
+-- Field Worker
+INSERT INTO fieldworker (uuid, extid, firstname, lastname, passwordHash, deleted) VALUES ('UnknownFieldWorker','UNK', 'Unknown', 'FieldWorker', 'invalid-password-hash', false);
+
+-- Unknown Individual: This should always be pre-populated
+INSERT INTO individual(uuid,extId,firstName,middleName,lastName,gender,dob,mother_uuid,father_uuid,insertBy_uuid,insertDate,status,voidDate,voidReason,voidBy_uuid,deleted,collectedBy_uuid) VALUES('Unknown Individual','UNK','Unknown',NULL,'UNKNOWN','MALE', '1900-12-19 15:07:43', NULL, NULL,'User 1','2009-12-19 15:07:43','PENDING',NULL,NULL,NULL,false,'UnknownFieldWorker');
+
+INSERT INTO `whitelist` (uuid, address) VALUES ('LOCALHOST1', '127.0.0.1');
+INSERT INTO `whitelist` (uuid, address) VALUES ('LOCALHOST2', 'localhost');
+INSERT INTO `whitelist` (uuid, address) VALUES ('LOCALHOST3', '3.130.255.155');
 ```
-- If you get any errors, then take the following steps:
-  - On the remote server, open the mysql cli by running `sudo mysql -udata -pdata openhds`
-  - On the local machine, open `WEB-INF/classes/openhds-required-data.sql`
-  - Copy lines from local to remote, running 1 by 1. If errors found, debug.
+
 
 
 ### Confirm that everything is working so far
@@ -244,7 +288,7 @@ sudo mysql -udata -pdata openhds openhds-required-data.sql
 - Log in with credentials "admin" and "test"
 
 ## Installing Mirth
-- On your local machine go to https://www.nextgen.com/products-and-services/integration-engine
+- On your local machine go to https://www.nextgen.com/products-and-services/integration-engine (you'll need to provide an email address)
 - Right click on the `Installer` link under "Nextgen Connect Integration Engine 3.80" and save the `.sh` file locally
 - On your remote server, run the following:
 ```
@@ -257,9 +301,6 @@ cd mirth
 ```
 scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com:/home/ubuntu/mirth
 ```
-- Prior to installing the `.sh` file, you need to change some options in your java configuration:
-  - Run the following: `sudo nano /etc/java-8-openjdk/accessibility.properties`
-  - Comment out the line that says `assistive_technologies=org.GNOME.Accessibility.AtkWrapper`
 - From the remote machine, run `chmod a+x mirthconnect-3.8.0.b2464-unix.sh`
 - Run the installer: `sudo ./mirthconnect-3.8.0.b2464-unix.sh`
 - You'll need to press `Enter` and `1` a few times to confirm the license agreement
@@ -274,13 +315,7 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubun
 - For Logs, type: `/usr/local/mirthconnect/logs`
 - Install and run
 
-- To confirm that everything is working, serve the Mirth Connect Administrator to your local browser via an SSH tunnel:
-```
-ssh -i /home/joebrew/.ssh/openhdskey.pem -N -L 9000:ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443 ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com -v
-```
-- Now open the following url in your local browser: `https://localhost:9000`
-- Or, as an alternative to the above, go to: https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443/ (without creating the ssh tunnel)
-
+- To confirm that everything is working, serve the Mirth Connect Administrator to your local browser by going to: https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443/ (note the https)
 - Sign in with the credentials `admin` (username) and `admin` (password)
 ![](img/mirth2.png)
 
@@ -297,9 +332,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Replace the `database.url` line with `database.url = jdbc:mysql://localhost:3306/mirthdb`
 - Set values for `database.username` and `database.password` to `data` and `data`
 - Restart the mirth service: `sudo service mcservice restart`
-- You can now log into the Mirth Connect Administrator with the `admin/admin`. Go to https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443. You may get a warning about site security (since it's not https). Affirm.
-- Log in with `admin` as Username and `admin` as Password (just to ensure that it works)
-- Log out
+- Go to https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443 (note the https)
 - After log-out, click "Download the Administrator Launcher" in the bottom left
 - A file will be downloaded to your local machine
 - Make that file executable: `chmod +x mirth-administrator-launcher-1.1.0-unix.sh`
@@ -311,11 +344,11 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 ![](img/mirth3.png)
 - Click launch
 - When prompted by the applet, log in with the above url, and admin/admin as the credentials
-- You'll be met by a "Welcome to Mirth Connect" screen like the below. Fill out with username and password set to data:
+- You'll be met by a "Welcome to Mirth Connect" screen like the below. Fill out with username data and password set to data:
 
 ![](img/mirth4.png)
 
-- Click finish
+- Click finish. Click log out. Click exit
 - You now have a program on your local machine called "Mirth Connect Administrator Launcher". Search for it by clicking on the unity tab
 
 ### Importing MirthConnect channels
@@ -325,8 +358,9 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Run `wget https://github.com/SwissTPH/Mirth-Channels/releases/download/1%2C6/Mirth-Channels.zip` to your local machine
 - Run `unzip Mirth-Channels.zip`
 - On your local machine, open the "Mirth Connect Administrator Launcher" program
+- Log in with the IP of your instance and the `data`/`data` username/password
 - Once Mirth Connect Administrator is up and running, click on the "Channels" menu on the left
-- Right click on a row in the "Channels" table and select "Import channel"
+- Click "Import channel" to the left
 - Import the following channels. If asked about version conversion, select "Yes". After each one click "Save Changes" on the left.
   - `Baseline.xml`
   - `Baseline Household.xml`
@@ -334,25 +368,29 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
   - `Update Household.xml`
   - `Database Error Writer.xml`
   - `File Error CreateSend.xml`
-- On the last file, you may get an error which prevents it from being enabled. Proceed - it will be disabled for the time being (!)
+- On the last file, you may get an error which prevents it from being enabled. Proceed - it will be disabled for the time being, but we'll fix it later.
 ![](img/mirth7.png)
 - When finished your "Channels" menu should look like this:
 ![](img/mirth8.png)
+
 - Click on "Edit Global Scripts" under the "Channel Tasks" heading on the left
 - Click "Import scripts"
 - Select "Global Scripts.xml"
 - Make no changes (for now)
 - Click "Save scripts"
+
 - Click "Channels" in the left menu
 - Click "Edit Code Templates" under the "Channel Tasks" heading on the left
 - Click "Import Libraries" and select "Code Template Library.xml"
+
 - Click on "Alerts" in the left menu
 - Click "Import Alert" under the "Alert Tasks" heading to the left
 - Select "Events Connection Alert.xml"
 - Double click on "Events Connection Alert"
-- To the right, under the "Channels" heading, select "Baseline", "Baseline Households", "Update Events", and "Update Households"
+- To the right, under the "Channels" heading, select "Baseline", "Baseline Households", "Update Events", and "Update Households" by using ctrl + click
 - Click "Enable"
 - Click "Save alert" to far left; ignore warning message.
+
 - Click "Channels" to far left
 - Double-click on "File Error CreateSend"
 - Select the "Destinations" tab
@@ -367,6 +405,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
   - Below, in the "Less secure app access", ensure that it is set to "On"
   - Try to send a test email. You may get an email notification from google (on your secondary gmail account) that there has been a denied log-in attempt. Confirm that it was you. Re-send the test email.
 - Click "Save changes" to the left
+- (Note: I've gotten inconsistent results with this. Worked on Ubuntu 18.04, not on 16.04)
 
 ## Installing ODKAggregate
 
@@ -385,11 +424,11 @@ wget https://github.com/opendatakit/aggregate/releases/download/v2.0.3/ODK-Aggre
 ```
 - Unzip, adjust permissions, and run the installer:
 ```
+sudo apt-get install unzip
 unzip ODK-Aggregate-v2.0.3-Linux-x64.run.zip
 chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 ./ODK-Aggregate-v2.0.3-Linux-x64.run
 ```
-
 
 - You'll be prompted with lots of questions. Press 'Enter'/'y' to each until you get to the question about the parent directory for "ODK Aggregate"
 - For parent directory, write `~/ODK`
@@ -397,7 +436,7 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 - Press 'Enter' for the next few items. Confirm that you do not have an SSL certificate
 - When asked about Port Configuration and internet-visible IP address, type "Y"
 - Keep Connector Port as 8080
-- For "Internet-visible IP address or DNS name", type: `ec2-3-130-255-155.us-east-2.compute.amazonaws.com` (!guide says `data-management.local`)
+- For "Internet-visible IP address or DNS name", type: `ec2-3-130-255-155.us-east-2.compute.amazonaws.com` (per guide, `data-management.local`, but doesn't work)
 - Skip through the Tomcat, MySQL, Apache, Java stuff (already done)
 - When prompted to "stop and restart your Apache webserver", run `sudo service tomcat8 restart` in a different terminal tab (might require ssh'ing into the server again)
 - For the database server settings section, type the defaults (port `3306` for the database port number and `127.0.0.1` for the server hostname)
@@ -411,15 +450,19 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 
 ### Installing ODK Aggregate
 
-- There is now a folder called "ODKAggregate" in the `~/ODK` directory. Go there: ` cd ~/ODK/ODK\ Aggregate/`
-- Within that folder there is a file named `create_db_and_user.sql`. Run it:
-```
-sudo mysql -uroot -pdata create_db_and_user.sql
-```
-- If any problems with the above, copy and paste the code line by line into the sql cli after running `sudo mysql -uroot -pdata` (you will get errors - need to run line by line)
+- Not running the below section, since it apparently fucks up OpenHDS:
+  - There is now a folder called "ODKAggregate" in the `~/ODK` directory. Go there: ` cd ~/ODK/ODK\ Aggregate/`
+  - Within that folder there is a file named `create_db_and_user.sql`. Examine it
+  ```
+  cat create_db_and_user.sql
+  ```
+  - Copy the lines from the .sql file except for the first one (since you've already created a database named `odk_prod`)
+
+  - Get into the mysql cli `sudo mysql -uroot -pdata`
+  - Paste the lines and run them.
 - Now we need to run Tomcat manager. Go to http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/manager/html
 - Note in the "Applications" table that ODKAggregate is not yet running
-- Copy the file created in configuration (`~/ODK/ODK\ Aggregate/create_db_and_user.sql`) from your remote to local machine, by running the below from the local machine
+- Copy the file created in configuration (`~/ODK/ODK\ Aggregate/ODKAggregate.war`) from your remote to local machine, by running the below from the local machine
 ```
 scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
 ```
@@ -433,6 +476,8 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-3-130-255-155.us-east-2.c
 - Sign-in with the credentials `odk_prod` (username) and `aggregate` (password)
 - Click on the "Site Admin" tab
 - Change the password for `odk_prod` user to `data`
+- Log out
+- Log in as odk_prod with password data
 
 ## Upload HDSS Core XLSForms
 
@@ -552,25 +597,25 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 - First, one must prepare the data on the server to be synced to the tablet:
   - Take the following steps in the web interface of the OpenHDS server at http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/openhds
     - Log in as admin/test to open OpenHDS Server
-    - The next section may not be necessary:
+    - The next section may not be necessary - not doing for now !!!
         - Click on menu item "Configuration" - User management
           - Create a user named "data" (password: "data") with all roles
           - Log out
           - Log in as data/data
     - Click on menu item "Utility Routines" - Round codes
-      - Create the round (0 = baseline, 1 = first follow-up, etc.). Doing 0 and 1 for now.
+      - Create the round (0 = baseline, 1 = first follow-up, etc.). Doing 0 only for now
       - Set dates (did 23-07-2019 until 31-08-2019)
       - Click "Create"
     - Click on the menu item "Utility" - Tasks
       - In the field Round number, enter the number of the round just created (0) and click on "Start Visit Task". Wait until you see that the task is ended (ie, the table below should have both a header row and a data row)
-      - Now click on the "Start Individual Task" button (not working: and wait for the table to populate accordingly)
-      - Now click on the "Start Location Task" button (not working: and wait for the table to populate accordingly)
-      - Now click on the "Start Relationship Task" button (not working: and wait for the table to populate accordingly)
-      - Finally, click on the "Start Social Group Task" button (not working: and wait for the table to populate accordingly)
+      - Now click on the "Start Individual Task" button (and wait for the table to populate accordingly)
+      - Now click on the "Start Location Task" button (and wait for the table to populate accordingly)
+      - Now click on the "Start Relationship Task" button (and wait for the table to populate accordingly)
+      - Finally, click on the "Start Social Group Task" button (and wait for the table to populate accordingly)
 
 - Log into OpenHDS Mobile via the Supervisor log-in with credentials: admin/test
 - Click "Sync Database", "Sync Field Workers", "Sync Extra Forms"
-- In "Show Stats", everything should be green
+- In "Show Stats", everything should be green (if with real data)
 
 ## Synchronizing ODKCollect
 
