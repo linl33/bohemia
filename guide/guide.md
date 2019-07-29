@@ -2,28 +2,67 @@
 
 The below guide is a walk-through of setting up the Bohemia data infrastructure. It assumes you are running a cloud server on AWS (which will not be the case for local sites). For local servers, much of the ssh, tunneling, etc. sections can simply be ignored/altered.
 
+## Buy a domain
+
+- Go to domains.google.com and buy a domain.
+- For the purposes of this guide, the domain being used is `www.papu.us`
+
 ## Spin up an EC2 instance on AWS
 
 _The below should only be followed for the case of a remote server on AWS. In production, sites will use local servers, physically housed at the study sites. In the latter case, skip to the [Setting up OpenHDS section](https://github.com/databrew/bohemia/blob/master/guide/guide.md#setting-up-openhds)_
 
-
+#### Create a VPC configuration
 - Log into the AWS console: aws.amazon.com
-- In the upper right hand corner select "Sign-into Console"
+- Go to the VPC dashboard: https://console.aws.amazon.com/vpc/home#dashboard
+- Click "Launch VPC Wizard"
+- Follow the wizard for the VPC with a Single Public Subnet configuration.
+- Enter aggregate-vpc (or your desired name) as the name and description.
+- Select the VPC you previously created.
+- Click on Create.
+- Click on the newly created security group from the list, click on the Inbound rules tab, the Edit rules.
+- Set the below rules:
+  - SSH: Anywhere
+  - HTTP: Anywhere
+  - HTTPS: Anywhere
+  - (For Mirth to work, you also need to add Anywhere access on HTTP and HTTPS for ports 8082 and 8443)
+- Save rules
+
+#### Create an IAM role
+- Go to the IAM - Roles tab (https://console.aws.amazon.com/iam/home#/roles)
+- Click "Create role"
+- Select "AWS service" and click "EC2"
+- Click "Next:Permissions"
+- Search for "AmazonEC2ReadOnlyAccess" and select it
+- Click "Next:Tags". Do nothing.
+- Click "Next: Review"
+- Enter "aggregate-role" as the name
+- Click "Create role"
+
+
+#### Create an EC2 machine
+- Go to the EC2 dashboard (https://console.aws.amazon.com/ec2/v2/home#Home)
 - Click the “Launch a virtual machine” option under “Build a solution”
-- Select "Ubuntu Server 16.04 LTS (HVM), SSD Volume Type"
+- Select "Ubuntu Server 18.04 LTS (HVM), SSD Volume Type"
 -To the far right select 64-bit (x86)  
 - Click “select”  
-- Choose the instance type: General purpose, t2.large, 2 vCPUs, 8 gb memory, etc.
-- Click “Review and launch”
-- Click “Edit security groups”
-- Ensure that there is an SSH type rule with source set to `0.0.0.0/0` to allow any address to SSH in. Set "Source" to "Anywhere"
-- Create a second rule with "Type" set to "All traffic", the "Port Range" set to 0-65535. Set "Source" to "Anywhere"
-- Create a third rule with "Type" set to "HTTP" and "Port Range" set to 80. Set "Source" to "Anywhere"
-- Create a fourth rule with "Type" set to "HTTPS", Port Range set to 443. Set "Source" to "Anywhere"
-- Create a fifth rule with Type "Custom TCP Rule", Port Range 8080. Set "Source" to "Anywhere"
-- Your security configuration will look like this
-![](img/security.png)
-- Click “launch” in the bottom right
+- Choose the instance type: General purpose, t2.small (or larger)
+- Click on Next: Configure Instance Details.
+- Select the VPC you previously created in the Network dropdown ("aggregate-vpc")
+- Select "Enable" in the Auto-assign Public IP dropdown.
+- Select the IAM role you previously created in the IAM role dropdown.
+- Toggle the Advanced Details section and copy and paste the contents of [this](https://raw.githubusercontent.com/opendatakit/aggregate/master/cloud-config/aws/cloud-config.yml) script
+- Click on Next: Add Storage and edit the storage settings. Set to a minimum of 30gb.
+- Click on Next: Add Tags.
+- Add `aggregate.hostname` key with the domain name as the value (e.g., `papu.us`). Important. You need to have purchased the hostname prior to doing this (ie, don't use your IP address, use an actual DNS)
+- Click on Next: Configure Security Group.
+- Select an existing security group and select the security group you previously created.
+- Click on Review and Launch and after review, click on Launch.
+- Select to use an existing keypair OR configure a key pair as per instructions (see more in next section if you don't yet have a keypair)
+- Click on Launch instances.
+
+
+#### Configuring a key pair  
+
 - A modal will show up saying “Select an existing key pair or create a new key pair”
 - Select “Create a new key pair”
 - Name it “openhdskey”
@@ -44,7 +83,7 @@ _The below should only be followed for the case of a remote server on AWS. In pr
   - Select "Amazon pool"
   - Click "Allocate"
   - In the allocation menu, click "Associate address"
-  - Select the instance you just created
+  - Select the instance you just created. Also select the corresponding "Private IP"
   - Click "Associate"
 - Note, this guide is written with the below elastic id. You'll need to replace this with your own when necessary.
 
@@ -73,6 +112,28 @@ ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-3-130-255-155.us-east-2.co
 
 - Congratulations! You are now able to run linux commands on your new ubuntu server
 
+### Setting up the domain
+
+- In domains.google.com, click on the purchased domain.
+- Click on "DNS" on the left
+- Go to "Custom resource records"
+- You're going to create two records:
+  1. Name: @; Type: A; TTL 1h; Data: 3.130.255.155
+  2. Name: www; Type: CNAME; TTL: 1h; Data: ec2-3-130-255-155.us-east-2.compute.amazonaws.com.
+
+
+### Setting up https
+
+- Run the following to get an https certificate set up:
+```
+sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d papu.us
+```
+- Note, replace "joebrew@gmail.com" and "papu.us" with your email and domain, respectively
+  - (As an alternative to the above, you can get a CDN on cloudflare, and in the "DNS" section of domains.google.com, set the "Name servers" to the 2 provided by Cloudfare (may take 1 hour or so to work))
+- As per the instructions in the terminal, run a test on the new site at: https://www.ssllabs.com/ssltest/analyze.html?d=papu.us
+
+
+
 ### Managing users (ie, creating ssh keypairs for other users)
 
 - Having ssh’ed into the server, run the following: `sudo adduser <username_of_new_user>`
@@ -90,15 +151,12 @@ Grant sudo access to the new users: `sudo usermod -a -G sudo benmbrew`
 
 ### Setting up Linux  
 
-- This guide was written for, and assumes, Linux Ubuntu 16.04. Details below:
-```
-Linux ip-172-31-5-87 4.4.0-1087-aws #98-Ubuntu SMP Wed Jun 26 05:50:53 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
-```
-
 - SSH into the server:
 ```
 ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-3-130-255-155.us-east-2.compute.amazonaws.com
 ```
+- You now have an up-and-running instance with some software already installed (stuff installed via the cloud config script)
+  - For example, postgres, tomcat, awscli, openjdk-8-jre-headless, etc. are already installed, etc.
 - Run the following after ssh'ing into the server: `sudo apt-get update`
 - Update the hostname of the machine to be `data-management.local`. You can check the hostname by running `hostnamectl` and examining the `Static hostname` parameter. To update the hostname, run the following:
 ```
@@ -109,21 +167,23 @@ sudo hostnamectl set-hostname data-management.local
 ```
 preserve_hostname: true
 ```
-- Ensure that the change worked. Run `sudo reboot`, wait a few seconds, ssh back into the instance and run `hostname`. It should show `data-management.local`
 
 - Then, open /etc/hosts by running `sudo nano /etc/hosts` and add the following line:
 ```
 127.0.0.1 data-management.local
 ```   
 
-### Installing Java 8
+### Setting up java
 
-- Run the following to install Java 8:
+- Java is already installed, but you need to set the `JAVA_HOME` environment variable. To do so:
+- `sudo nano /etc/environment`
+- Add line like `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`
+- Run `source /etc/environment`
+- In order for mirth to function correctly, you need to also deal with some security issues. Do the following:
 ```
-sudo apt-get update
-sudo apt-get install openjdk-8-jre-headless
+sudo nano /etc/java-8-openjdk/accessibility.properties
 ```
-
+- Comment out the line containing `assistive_technologies=org.GNOME.Accessibility.AtkWrapper`
 
 ### Installing MySQL Server
 
@@ -146,36 +206,8 @@ GRANT ALL ON *.* TO 'data'@'%';
 flush privileges;
 ```
 - Exit MySQL CLI: ctrl + d
-- Not running the below for now:
-  - Grant outside access to MySQL (optional): Comment out the line starting with `Bind-Address` by adding a `#` prior to it in `/etc/mysql/my.cnf`
-  - More info on this issue: https://stackoverflow.com/questions/26914543/remote-connections-mysql-ubuntu-bind-address-failed
 - Restart the mysql service: `sudo service mysql restart`
 
-### Installing Tomcat
-
-- Run the following `sudo apt install tomcat8`
-- Run a package update: `sudo apt-get update`
-- Ensure tomcat is up and running: `sudo service tomcat8 start`
-- Set `JAVA_HOME` variable in `/etc/environment`: `sudo nano /etc/environment` and add line like `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`
-- Run `source /etc/environment`
-- NOT DOING: If issues with `JAVA_HOME`, uncomment the `JAVA_HOME` line in `/etc/default/tomcat8/` and set it to the java installation folder. For example:
-```
-JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
-```
-- Install tomcat8 admin: `sudo apt-get install tomcat8-admin`
-- Edit `etc/tomcat8/tomcat-users.xml` by running `sudo nano /etc/tomcat8/tomcat-users.xml`
-- In the `tomcat-users` section, create a new role by adding the following lines:
-```
-<role rolename="manager-gui" />
-<user username="data" password="data" roles="manager-gui" />
-```
-- Restart the tomcat service: `sudo service tomcat8 restart`
-- Not doing: increase memory allocation to Tomcat in CATALINA_OPTS
-
-- Ensure that everything is working up by going to the following address in your local web browser: ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/manager/ (Replace the IP address with the address of your Ec2 instance)
-- You can now log-in as Username: `data` and Password: `data`. Once logged-in, the below will appear in the web browswer.
-
-![](img/tomcat.png)
 
 ### Installing the MySQL-J Connector
 
@@ -208,7 +240,16 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 
 ### Deploying OpenHDS in Tomcat
 
-- On your local machine, go to ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/manager/html (replace IP address if applicable)
+- Tomcat is already installed on the machine. But we still need to configure some stuff.
+- Run `sudo nano /etc/tomcat8/tomcat-users.xml`
+- In the `tomcat-users` section, create a new role by adding the following lines:
+```
+<role rolename="manager-gui" />
+<user username="data" password="data" roles="manager-gui" />
+```
+- Restart the tomcat service: `sudo service tomcat8 restart`
+- On your local machine, go to https://papu.us/manager  
+- Sign in with "data" and "data"
 - Scroll down to the "Select WAR file to upload" section
 - Select the `openhds.war` file you downloaded a few minutes ago in the "Choose File" menu.
 - Click "Deploy" button
@@ -279,11 +320,9 @@ INSERT INTO `whitelist` (uuid, address) VALUES ('LOCALHOST2', 'localhost');
 INSERT INTO `whitelist` (uuid, address) VALUES ('LOCALHOST3', '3.130.255.155');
 ```
 
-
-
 ### Confirm that everything is working so far
 
-- To confirm that everything is working at this point, on your local machine, visit http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/openhds in the browser. A green log-in screen should appear.
+- To confirm that everything is working at this point, on your local machine, visit https://papu.us/openhds in the browser. A green log-in screen should appear.
 - If you want, change the language
 - Log in with credentials "admin" and "test"
 
@@ -308,16 +347,14 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubun
 - When it asks "Which components should be installed?", press `Enter`
 - When it asks "Create symlinks?", press `Enter` (ie, "Yes")
 - When it asks "Select the folder where you would like Mirth Connect to create symlinks", type `Enter` to confirm the local `/usr/local/bin`
-- When it asks which port (Web Start Port), type 8082 (since 8080 is already used by Tomcat)
+- When it asks which port (Web Start Port), type 8083 (since 8080 is already used by Tomcat)
 - When it asks for the Administrator Port, keep as default 8443 (press `Enter`)
 - For all password options, keep default (ie, press `Enter`)
 - For "Application data", type: `/usr/local/mirthconnect/apps`
 - For Logs, type: `/usr/local/mirthconnect/logs`
 - Install and run
+- (Took a few minutes to run for some reason)
 
-- To confirm that everything is working, serve the Mirth Connect Administrator to your local browser by going to: https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443/ (note the https)
-- Sign in with the credentials `admin` (username) and `admin` (password)
-![](img/mirth2.png)
 
 ### Configure mirth to work with MySQL
 - By default, Mirth will use a Derby database; we must change this to MySQL. Do so as follows.
@@ -332,7 +369,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Replace the `database.url` line with `database.url = jdbc:mysql://localhost:3306/mirthdb`
 - Set values for `database.username` and `database.password` to `data` and `data`
 - Restart the mirth service: `sudo service mcservice restart`
-- Go to https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443 (note the https)
+- Go to https://papu.us:8443 (note the https). Log in with admin/admin credentials.
 - After log-out, click "Download the Administrator Launcher" in the bottom left
 - A file will be downloaded to your local machine
 - Make that file executable: `chmod +x mirth-administrator-launcher-1.1.0-unix.sh`
@@ -340,7 +377,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Agree to the items in the applet that comes up
 - Select "Run Mirth Connect Administrator Launcher" at the end of the license process
 - In the Mirth Connect Administrator Launcher, set the address of the machine
-- Set the Address to https://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8443  
+- Set the Address to https://papu.us:8443/ 
 ![](img/mirth3.png)
 - Click launch
 - When prompted by the applet, log in with the above url, and admin/admin as the credentials
@@ -615,7 +652,7 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 
 - Log into OpenHDS Mobile via the Supervisor log-in with credentials: admin/test
 - Click "Sync Database", "Sync Field Workers", "Sync Extra Forms"
-- In "Show Stats", everything should be green (if with real data)
+- In "Show Stats", everything should be green before going out to collect data(if with real data)
 
 ## Synchronizing ODKCollect
 
