@@ -493,7 +493,7 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
   - ~~Copy the lines from the .sql file except for the first one (since you've already created a database named `odk_prod`) and run it as follows~~
   - ~~Get into the mysql cli `sudo mysql -uroot -pdata`~~
   - ~~Paste the lines and run them.~~
-- Now we need to run Tomcat manager. Go to http://papu.us:8080/manager/html. Log in with credentials `data` and `data`
+- Now we need to run Tomcat manager. Go to http://papu.us/manager/. Log in with credentials `data` and `data`
 - Note in the "Applications" table that ODKAggregate is not yet running
 - Copy the file created in configuration (`~/ODK/ODK\ Aggregate/ODKAggregate.war`) from your remote to local machine, by running the below from the local machine
 ```
@@ -502,13 +502,13 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-3-130-255-155.us-east-2.c
 - You now have a `.war` file on your local machine
 - In the web browser, go to the "WAR file to deploy" section of the page, select the recently downloaded `.war` and deploy
 - ODKAggregate should now show up in the "Applications" table in the Tomcat Web Application Manager
-- Navigate to http://papu.us:8080/ODKAggregate/ in the browser.
-- You'll be reedirected to http://papu.us:8080/ODKAggregate/.
-- Click Log-in (button in upper right)
-- Click "Sign in with Aggregate password"
+- Navigate to http://papu.us/ODKAggregate/ in the browser.
+- You'll be reedirected to http://papu.us/ODKAggregate/Aggregate and prompted to log in.
 - Sign-in with the credentials `odk_prod` (username) and `aggregate` (password)
 - Click on the "Site Admin" tab
 - Change the password for `odk_prod` user to `data`
+- Check the "Data Collector" box for the `odk_prod` Username
+- Click "Save changes"
 - Log out
 - Log in as odk_prod with password data
 
@@ -518,10 +518,10 @@ _Note, prior to deployment of Bohemia, different xmls will be created, modified,
 
 - On your local machine, clone Paulo Filimone's implementation of the OpenHDS tablet application: `git clone https://github.com/philimones-group/openhds-tablet`
 - Note, within this recently cloned repository, the `xforms` directory. This includes `.xml` files which were created from the Excel-formatted `.xls` forms at https://github.com/SwissTPH/openhds-tablet/releases/download/1.5/xlsforms.zip
-- In your local browser, with the tunnel running (see previous section), open papu.us:8080/ODKAggregate/.
+- In your local browser, open https://papu.us/ODKAggregate/.
 - Click on the "Form Management" tab
 - Click on "Add New Form"
-- Upload the following forms, one-by-one, from your local `openhds-tablet/xforms` directory (note, this sometimes causes spontaneous errors - keep trying):
+- Upload the following forms, one-by-one, from your local `openhds-tablet/xforms` directory:
 ```
 baseline.xml
 change_hoh.xml
