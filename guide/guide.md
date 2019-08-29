@@ -470,12 +470,12 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 - You'll be prompted with lots of questions. Press 'Enter'/'y' to each until you get to the question about the parent directory for "ODK Aggregate"
 - For parent directory, write `~/ODK`
 - The next question is about database. Select 1 (MySQL)
-- Press 'Enter' for the next few items. Confirm that you do not have an SSL certificate
+- Press 'Enter' for the next few items. Confirm that you do not have an SSL certificate (1, the default)
 - When asked about Port Configuration and internet-visible IP address, type "Y"
 - Keep Connector Port as 8080
-- For "Internet-visible IP address or DNS name", type: `ec2-3-130-255-155.us-east-2.compute.amazonaws.com` (per guide, `data-management.local`, but doesn't work)
+- For "Internet-visible IP address or DNS name", type: `papu.us` (previously `ec2-3-130-255-155.us-east-2.compute.amazonaws.com`) (per guide, `data-management.local`, but doesn't work)
 - Skip through the Tomcat, MySQL, Apache, Java stuff (already done)
-- When prompted to "stop and restart your Apache webserver", run `sudo service tomcat8 restart` in a different terminal tab (might require ssh'ing into the server again)
+- When prompted to "stop and restart your Apache webserver", run `sudo service tomcat8 restart` in a different terminal tab (will require ssh'ing into the server again)
 - For the database server settings section, type the defaults (port `3306` for the database port number and `127.0.0.1` for the server hostname)
 - For database username: set to `data`
   - Same with database password
@@ -497,7 +497,7 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 
   - Get into the mysql cli `sudo mysql -uroot -pdata`
   - Paste the lines and run them.
-- Now we need to run Tomcat manager. Go to http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/manager/html
+- Now we need to run Tomcat manager. Go to http://papu.us:8080/manager/html. Log in with credentials `data` and `data`
 - Note in the "Applications" table that ODKAggregate is not yet running
 - Copy the file created in configuration (`~/ODK/ODK\ Aggregate/ODKAggregate.war`) from your remote to local machine, by running the below from the local machine
 ```
@@ -506,8 +506,8 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@ec2-3-130-255-155.us-east-2.c
 - You now have a `.war` file on your local machine
 - In the web browser, go to the "WAR file to deploy" section of the page, select the recently downloaded `.war` and deploy
 - ODKAggregate should now show up in the "Applications" table in the Tomcat Web Application Manager
-- Navigate to http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/ODKAggregate/ in the browser.
-- You'll be reedirected to http://localhost:8999/ODKAggregate/Aggregate.html.
+- Navigate to http://papu.us:8080/ODKAggregate/ in the browser.
+- You'll be reedirected to http://papu.us:8080/ODKAggregate/.
 - Click Log-in (button in upper right)
 - Click "Sign in with Aggregate password"
 - Sign-in with the credentials `odk_prod` (username) and `aggregate` (password)
@@ -522,7 +522,7 @@ _Note, prior to deployment of Bohemia, different xmls will be created, modified,
 
 - On your local machine, clone Paulo Filimone's implementation of the OpenHDS tablet application: `git clone https://github.com/philimones-group/openhds-tablet`
 - Note, within this recently cloned repository, the `xforms` directory. This includes `.xml` files which were created from the Excel-formatted `.xls` forms at https://github.com/SwissTPH/openhds-tablet/releases/download/1.5/xlsforms.zip
-- In your local browser, with the tunnel running (see previous section), open http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/ODKAggregate/.
+- In your local browser, with the tunnel running (see previous section), open papu.us:8080/ODKAggregate/.
 - Click on the "Form Management" tab
 - Click on "Add New Form"
 - Upload the following forms, one-by-one, from your local `openhds-tablet/xforms` directory (note, this sometimes causes spontaneous errors - keep trying):
