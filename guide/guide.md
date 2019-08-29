@@ -353,7 +353,7 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubun
 - For "Application data", type: `/usr/local/mirthconnect/apps`
 - For Logs, type: `/usr/local/mirthconnect/logs`
 - Install and run
-- (Took a few minutes to run for some reason)
+- (Took a few minutes before ports opened for some reason. May have something to do with running sudo /sbin/iptables -A INPUT -p tcp --dport 8443 -j ACCEPT).
 
 
 ### Configure mirth to work with MySQL
@@ -377,7 +377,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Agree to the items in the applet that comes up
 - Select "Run Mirth Connect Administrator Launcher" at the end of the license process
 - In the Mirth Connect Administrator Launcher, set the address of the machine
-- Set the Address to https://papu.us:8443/ 
+- Set the Address to https://papu.us:8443/
 ![](img/mirth3.png)
 - Click launch
 - When prompted by the applet, log in with the above url, and admin/admin as the credentials
