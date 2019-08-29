@@ -163,7 +163,7 @@ ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-3-130-255-155.us-east-2.co
 sudo hostnamectl set-hostname data-management.local
 ```
 - Then, make the hostname change persistent across sessions by running: `sudo nano /etc/cloud/cloud.cfg`
-- Add the below line to the bottom of the file:
+- Change the `preserve_hostname` field as below:
 ```
 preserve_hostname: true
 ```
@@ -343,7 +343,7 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" mirthconnect-3.8.0.b2464-unix.sh ubun
 - From the remote machine, run `chmod a+x mirthconnect-3.8.0.b2464-unix.sh`
 - Run the installer: `sudo ./mirthconnect-3.8.0.b2464-unix.sh`
 - You'll need to press `Enter` and `1` a few times to confirm the license agreement
-- When it asks "Where should Mirth Connect be installed?", type `/usr/'local/mirthconnect'` (default)
+- When it asks "Where should Mirth Connect be installed?", type `/usr/local/mirthconnect` (default)
 - When it asks "Which components should be installed?", press `Enter`
 - When it asks "Create symlinks?", press `Enter` (ie, "Yes")
 - When it asks "Select the folder where you would like Mirth Connect to create symlinks", type `Enter` to confirm the local `/usr/local/bin`
@@ -369,7 +369,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Replace the `database.url` line with `database.url = jdbc:mysql://localhost:3306/mirthdb`
 - Set values for `database.username` and `database.password` to `data` and `data`
 - Restart the mirth service: `sudo service mcservice restart`
-- Go to https://papu.us:8443 (note the https). Log in with admin/admin credentials.
+- Go to https://papu.us:8443 (note the https). You may have to approve a browser warning. Log in with admin/admin credentials. Then log out.
 - After log-out, click "Download the Administrator Launcher" in the bottom left
 - A file will be downloaded to your local machine
 - Make that file executable: `chmod +x mirth-administrator-launcher-1.1.0-unix.sh`
@@ -395,7 +395,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Run `wget https://github.com/SwissTPH/Mirth-Channels/releases/download/1%2C6/Mirth-Channels.zip` to your local machine
 - Run `unzip Mirth-Channels.zip`
 - On your local machine, open the "Mirth Connect Administrator Launcher" program
-- Log in with the IP of your instance and the `data`/`data` username/password
+- Log in with the https://papu.us:8443 Server and the `data`/`data` username/password
 - Once Mirth Connect Administrator is up and running, click on the "Channels" menu on the left
 - Click "Import channel" to the left
 - Import the following channels. If asked about version conversion, select "Yes". After each one click "Save Changes" on the left.
@@ -487,16 +487,12 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 
 ### Installing ODK Aggregate
 
-- Not running the below section, since it apparently fucks up OpenHDS:
-  - There is now a folder called "ODKAggregate" in the `~/ODK` directory. Go there: ` cd ~/ODK/ODK\ Aggregate/`
-  - Within that folder there is a file named `create_db_and_user.sql`. Examine it
-  ```
-  cat create_db_and_user.sql
-  ```
-  - Copy the lines from the .sql file except for the first one (since you've already created a database named `odk_prod`)
-
+- Not running the below section (causes OpenHDS to crash).
+  - ~~There is now a folder called "ODKAggregate" in the `~/ODK` directory (note all caps). Go there: ` cd ~/ODK/ODK\ Aggregate/`
+  - ~~Within that folder there is a file named `create_db_and_user.sql`. Examine it with `cat create_db_and_user.sql`.
+  - Copy the lines from the .sql file except for the first one (since you've already created a database named `odk_prod`) and run it as follows
   - Get into the mysql cli `sudo mysql -uroot -pdata`
-  - Paste the lines and run them.
+  - Paste the lines and run them.~~
 - Now we need to run Tomcat manager. Go to http://papu.us:8080/manager/html. Log in with credentials `data` and `data`
 - Note in the "Applications" table that ODKAggregate is not yet running
 - Copy the file created in configuration (`~/ODK/ODK\ Aggregate/ODKAggregate.war`) from your remote to local machine, by running the below from the local machine
@@ -618,7 +614,7 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 - Open OpenHDS Mobile
 - Tap "Preferences" in the upper-right
 - Click on the url under the heading "OpenHDS Server Location"
-- Enter the URL of the OpenHDS server: http://ec2-3-130-255-155.us-east-2.compute.amazonaws.com:8080/openhds
+- Enter the URL of the OpenHDS server: http://papu.us:8080/openhds
 
 ## Set up ODKCollect
 
