@@ -488,11 +488,11 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 ### Installing ODK Aggregate
 
 - Not running the below section (causes OpenHDS to crash).
-  - ~~There is now a folder called "ODKAggregate" in the `~/ODK` directory (note all caps). Go there: ` cd ~/ODK/ODK\ Aggregate/`
-  - ~~Within that folder there is a file named `create_db_and_user.sql`. Examine it with `cat create_db_and_user.sql`.
-  - Copy the lines from the .sql file except for the first one (since you've already created a database named `odk_prod`) and run it as follows
-  - Get into the mysql cli `sudo mysql -uroot -pdata`
-  - Paste the lines and run them.~~
+  - ~~There is now a folder called "ODKAggregate" in the `~/ODK` directory (note all caps). Go there: ` cd ~/ODK/ODK\ Aggregate/`~~
+  - ~~Within that folder there is a file named `create_db_and_user.sql`. Examine it with `cat create_db_and_user.sql`.~~
+  - ~~Copy the lines from the .sql file except for the first one (since you've already created a database named `odk_prod`) and run it as follows~~
+  - ~~Get into the mysql cli `sudo mysql -uroot -pdata`~~
+  - ~~Paste the lines and run them.~~
 - Now we need to run Tomcat manager. Go to http://papu.us:8080/manager/html. Log in with credentials `data` and `data`
 - Note in the "Applications" table that ODKAggregate is not yet running
 - Copy the file created in configuration (`~/ODK/ODK\ Aggregate/ODKAggregate.war`) from your remote to local machine, by running the below from the local machine
