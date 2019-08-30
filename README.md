@@ -9,10 +9,13 @@ Guides
 
 Several "how-to" guides are available for use by different Bohemia team members:
 
-## [Set up](guides/guide_admin_set_up.md)
+### [How to set up the system](guides/guide_admin_set_up.md)
 
-### [Briefcase](#guides/guide_briefcase.md)
+This is a step-by-step walkthrough showing how to set up the Bohemia data system from scratch. This includes everything from domain configuration, to security certificates, to server-side software prerequisites.  
 
+### [How to retrieve data using ODK Briefcase](#guides/guide_briefcase.md)
+
+This guide shows how to export data from the Bohemia system to a local machine, for the purpose of exploration or analysis. 
 
 R package
 ------------
@@ -23,3 +26,5 @@ The "bohemia" R package can be installed by running the below from within the R 
 if(!require(devtools)) install.packages("devtools")
 install_github('databrew/bohemia')
 ```
+
+For more details on the R package, including usage examples and how to build the package from scratch see the [guide](#guides/guide_r_package.md)
