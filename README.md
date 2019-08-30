@@ -9,8 +9,9 @@ Guides
 
 Several "how-to" guides are available for use by different Bohemia team members:
 
-  -   [Set up](guides/guide_admin_set_up.md)
-  -   [Briefcase](#guides/guide_briefcase.md)
+## [Set up](guides/guide_admin_set_up.md)
+
+### [Briefcase](#guides/guide_briefcase.md)
 
 
 R package
