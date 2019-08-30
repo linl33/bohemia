@@ -657,4 +657,4 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 
 # Field-worker instructions
 
-This is the end of the admin's guide. The fieldworker's guide is available at...
+This is the end of the admin's guide. The fieldworker's guide is available [HERE](guide_fieldworker.md).
