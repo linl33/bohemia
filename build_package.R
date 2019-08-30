@@ -20,7 +20,7 @@ make_it <- function(){
   document()
   # build
   install()
-  render('README.Rmd')
+  render('guides/guide_r_package.Rmd')
 }
 make_it()
 
