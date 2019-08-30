@@ -7,8 +7,10 @@ This repository contains utilities and guides created by DataBrew for use by the
 Guides
 ------------
 
-    -   [Set up](guides/guide_admin_set_up.md)
-    -   [Briefcase](#guides/guide_briefcase.md)
+Several "how-to" guides are available for use by different Bohemia team members:
+
+  -   [Set up](guides/guide_admin_set_up.md)
+  -   [Briefcase](#guides/guide_briefcase.md)
 
 
 R package
