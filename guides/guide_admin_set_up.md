@@ -306,13 +306,19 @@ sudo service tomcat8 restart
 ```
 psql -h localhost -d aggregate -U aggregate
 ```
+- When prompted for the password: `aggregate`
 - Run `\l` to see a list of all databases (there will be one named "aggregate") and `\dt` to see all of `aggregate`'s tables
 
 
-## Installing ODKAggregate
+## Configuring ODKAggregate
 
-Already installed / configured via the cloud-config script
-
+- ODKAggregate is already installed / configured via the cloud-config script
+- Go to https://papu.us where the aggregate server is running.
+- Click "log in" and then "Sign in with Aggregate password"
+- Sign in with credentials: administrator/aggregate -
+- Click "Site admin"
+- Add user "data" with all privileges and password "data"
+- Change the administrator's password to "data"
 
 # Field-worker instructions
 
