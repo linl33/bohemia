@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to Bohemia’s documentation! &mdash; Bohemia 0.0.1 documentation</title>
+  <title>Bohemia Data Management &mdash; Bohemia 0.0.1 documentation</title>
   
 
   
@@ -80,8 +80,19 @@
             
               <!-- Local TOC -->
               <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Welcome to Bohemia’s documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">Bohemia Data Management</a></li>
+<li><a class="reference internal" href="#guides">Guides</a><ul>
+<li><a class="reference internal" href="#how-to-set-up-the-system">1. How to set up the system</a><ul>
+<li><a class="reference internal" href="#how-to-create-forms">2. How to create forms</a></li>
+<li><a class="reference internal" href="#local-data-manager-guide">3. Local data manager guide</a></li>
+<li><a class="reference internal" href="#how-to-set-up-the-data-collection-device-tablet-phone">4. How to set up the data collection device (tablet/phone)</a></li>
+<li><a class="reference internal" href="#fieldworker-guide">5. Fieldworker guide</a></li>
+<li><a class="reference internal" href="#how-to-retrieve-data-using-odk-briefcase">6. How to retrieve data using ODK Briefcase</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#r-package">R package</a></li>
 </ul>
 </div>
             
@@ -127,13 +138,13 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li>Welcome to Bohemia’s documentation!</li>
+      <li>Bohemia Data Management</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/index.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -146,18 +157,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="welcome-to-bohemia-s-documentation">
-<h1>Welcome to Bohemia’s documentation!<a class="headerlink" href="#welcome-to-bohemia-s-documentation" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
+  <div class="section" id="bohemia-data-management">
+<h1>Bohemia Data Management<a class="headerlink" href="#bohemia-data-management" title="Permalink to this headline">¶</a></h1>
+<p>This repository contains utilities and guides created by DataBrew for use by the Bohemia research team. It is publicly available for the purposes of reproducibility and transparency.</p>
+</div>
+<div class="section" id="guides">
+<h1>Guides<a class="headerlink" href="#guides" title="Permalink to this headline">¶</a></h1>
+<p>Several “how-to” guides are available for use by different Bohemia team members:</p>
+<div class="section" id="how-to-set-up-the-system">
+<h2><a class="reference external" href="guides/guide_admin_set_up">1. How to set up the system</a><a class="headerlink" href="#how-to-set-up-the-system" title="Permalink to this headline">¶</a></h2>
+<p>This is a step-by-step walkthrough showing how to set up the Bohemia data system from scratch. This includes everything from domain configuration, to security certificates, to server-side software prerequisites.</p>
+<div class="section" id="how-to-create-forms">
+<h3><a class="reference external" href="guides/guide_forms">2. How to create forms</a><a class="headerlink" href="#how-to-create-forms" title="Permalink to this headline">¶</a></h3>
+<p>The Bohemia data system is built on the ODK framework, allowing for the creation and modification of survey forms specific to the Bohemia project’s different study components. This guide shows how to create and deploy a form.</p>
+</div>
+<div class="section" id="local-data-manager-guide">
+<h3><a class="reference external" href="guides/guide_local_data_manager">3. Local data manager guide</a><a class="headerlink" href="#local-data-manager-guide" title="Permalink to this headline">¶</a></h3>
+<p>This guide is intended for site-specific data managers. It assumes an up and running system with forms (guides 1 and 2) and details the creation of fieldworkers, data backups, etc.</p>
+</div>
+<div class="section" id="how-to-set-up-the-data-collection-device-tablet-phone">
+<h3><a class="reference external" href="guides/guide_data_collection">4. How to set up the data collection device (tablet/phone)</a><a class="headerlink" href="#how-to-set-up-the-data-collection-device-tablet-phone" title="Permalink to this headline">¶</a></h3>
+<p>Once the system has been deployed and forms have been created, data collection software needs to be installed on android devices (phone or tablet). This guide shows how.</p>
+</div>
+<div class="section" id="fieldworker-guide">
+<h3><a class="reference external" href="guides/guide_fieldworker">5. Fieldworker guide</a><a class="headerlink" href="#fieldworker-guide" title="Permalink to this headline">¶</a></h3>
+<p>This guide is meant for fieldworkers, and provides an overview of how to collect and upload data.</p>
+</div>
+<div class="section" id="how-to-retrieve-data-using-odk-briefcase">
+<h3><a class="reference external" href="#guides/guide_briefcase">6. How to retrieve data using ODK Briefcase</a><a class="headerlink" href="#how-to-retrieve-data-using-odk-briefcase" title="Permalink to this headline">¶</a></h3>
+<p>This guide shows how to export data from the Bohemia system to a local machine, for the purpose of exploration or analysis.</p>
 </div>
 </div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
+</div>
+<div class="section" id="r-package">
+<h1><a class="reference external" href="#guides/guide_r_package">R package</a><a class="headerlink" href="#r-package" title="Permalink to this headline">¶</a></h1>
+<p>The “bohemia” R package can be installed by running the below from within the R console.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">if</span><span class="p">(</span><span class="o">!</span><span class="nf">require</span><span class="p">(</span><span class="n">devtools</span><span class="p">))</span> <span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;devtools&quot;</span><span class="p">)</span>
+<span class="nf">install_github</span><span class="p">(</span><span class="s">&#39;databrew/bohemia&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more details on the R package, including usage examples and how to build the package from scratch see the <a class="reference external" href="#guides/guide_r_package">guide</a></p>
 </div>
 
 
