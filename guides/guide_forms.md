@@ -56,3 +56,8 @@ Password: data
 - Once done filling out the form, click "Save Form and Exit" in the app
 - Then on the main app page, click "Send Finalized Form"
 - Now, having sent the data to the server, you should be able to inspect results at https://papu.us under "Form Management" > "Submission Admin"
+
+## Helpful documentation
+
+- The ODK documentation on form styling, language, etc. is very helpful: https://docs.opendatakit.org/form-styling/
+- The XLSForm.org documentation is also very good: https://xlsform.org/en/
