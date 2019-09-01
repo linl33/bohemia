@@ -33,4 +33,6 @@ Imports:
     rgeos,
     maptools,
     gpclib,
-    dismo
+    dismo,
+    tidyr,
+    gsheet
