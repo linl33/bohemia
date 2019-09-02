@@ -2,3 +2,4 @@ data-raw/*
 *.httr-oauth
 analyses/meeting_bcn_june_2019/shiny/rsconnect/*
 analyses/clustering/animation*
+credentials/*
