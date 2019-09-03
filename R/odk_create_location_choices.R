@@ -6,7 +6,10 @@
 #' @import dplyr, gsheet, tidyr
 #' @export
 
-odk_create_location_choices <- function(country = NULL){
+odk_create_location_choices <- function(country = NULL, add_other = FALSE, add_ids = TRUE, other_word = 'Other'){
+  require(dplyr)
+  require(gsheet)
+  require(tidyr)
   # Define the url of the location hierachy spreadsheet (contains all locations for both sites)
   url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
   # Fetch the data
@@ -26,29 +29,34 @@ odk_create_location_choices <- function(country = NULL){
     print(pd %>% filter(n >1))
     stop('Stopped processing')
   }
-  # Add an "other" option for each level
+  # Define some helpers
   the_levels <- names(locations)
-  new_rows <- list()
   n_levels <- length(the_levels)
-  for(i in 1:(n_levels-1)){
-    this_level <- the_levels[i]
-    previous_levels <- the_levels[1:(i-1)]
-    next_levels <- the_levels[(i+1):length(the_levels)]
-    levels_til_here <- the_levels[1:i]
-    pd <- locations %>%
-      group_by(.dots = levels_til_here) %>%
-      tally %>% dplyr::select(-n)
-    if(i == 1){
-      pd <- bind_rows(pd, tibble(Country = 'Other'))
+  
+  if(add_other){
+    # Add an "other" option for each level
+    new_rows <- list()
+    for(i in 1:(n_levels-1)){
+      this_level <- the_levels[i]
+      previous_levels <- the_levels[1:(i-1)]
+      next_levels <- the_levels[(i+1):length(the_levels)]
+      levels_til_here <- the_levels[1:i]
+      pd <- locations %>%
+        group_by(.dots = levels_til_here) %>%
+        tally %>% dplyr::select(-n)
+      if(i == 1){
+        pd <- bind_rows(pd, tibble(Country = 'Other'))
+      }
+      for(j in 1:length(next_levels)){
+        pd[,next_levels[j]] <- other_word
+      }
+      new_rows[[i]] <- pd
     }
-    for(j in 1:length(next_levels)){
-      pd[,next_levels[j]] <- other_word
-    }
-    new_rows[[i]] <- pd
+    new_rows <- bind_rows(new_rows)
+    # Add the "other" options to the dataset
+    locations <- bind_rows(locations, new_rows)
   }
-  new_rows <- bind_rows(new_rows)
-  # Add the "other" options to the dataset
-  locations <- bind_rows(locations, new_rows)
+  
   # Put into correct format for choices
   choices_list <- list()
   counter <- 0
@@ -72,6 +80,21 @@ odk_create_location_choices <- function(country = NULL){
                 mutate(Region = NA, District = NA, Ward = NA, Village = NA)) 
   choices <- choices %>% dplyr::distinct(.keep_all = TRUE)
   
+  if(add_ids){
+    # Add id numbers for creating hhids
+    # Village: 3 digits
+    # Ward: 2 digits
+    # District: 1 digit
+    
+    ids <- choices %>%
+      dplyr::filter(!is.na(Village)) %>%
+      arrange(Country, Region, District, Ward, Village) %>%
+      dplyr::mutate(Hamlet = name)
+    ids$list_name <- 'id'
+    ids$name <- ids$label <-  add_zero(1:nrow(ids), nchar(nrow(ids)))
+    choices <- bind_rows(choices, ids)
+  }
+  
 
   # Create the survey portion
   survey <- tibble(type = paste0('select_one ', the_levels),
@@ -89,6 +112,7 @@ odk_create_location_choices <- function(country = NULL){
   names(out) <- c('survey', 'choices')
   return(out)
 }
-# x <- odk_create_location_choices()
-# write_csv(x$survey, '~/Desktop/1.csv', na = '')
-# write_csv(x$choices, '~/Desktop/2.csv')
+library(readr)
+x <- odk_create_location_choices()
+write_csv(x$survey, '~/Desktop/1.csv', na = '')
+write_csv(x$choices, '~/Desktop/2.csv')
