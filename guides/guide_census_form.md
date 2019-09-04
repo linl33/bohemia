@@ -27,7 +27,7 @@ Password: data
 ```
 - Go back to the main page of the ODK Collect android app
 - Select "Get Blank Form". The app will now connect to our server.
-- Select the form names "Census" and click "Get Selected".
+- Select the form names "Census1" and click "Get Selected".
 - If successful, you will be prompted by a pop-up titled "Downlaod Results" and it will confirm the connection was succesful. Select "OK" (This will bring you back to the Main page")
 - On the main page of the app, select "Fill Blank Form" and select your recently uploaded form (a brief window should pop-up "Loading form")
 - You may be prompted by the app to allow it to have access to your phone.
