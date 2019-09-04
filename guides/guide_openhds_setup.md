@@ -648,6 +648,19 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@bohemia.team:/home/ubuntu/ODK
 
 ## Upload HDSS Core XLSForms
 
+- The below steps only need to be taken once:
+    - Download the xlsforms base forms for OpenHDS from [here](https://github.com/SwissTPH/openhds-tablet/releases/download/1.5/xlsforms.zip).  
+    - Extract into the `xforms/openhds_original/xlsx` of the `bohemia` directory (cloned from https://github.com/databrew/bohemia)
+    - Modify `change_hoh.xlsx` so as to remove all references to the `earliestDate` field
+    - Modify as necessary (more details to go here later)
+    - Export each form as xml into `xforms/openhds_original/xml`
+      - To do this, use the [pyxform](https://github.com/XLSForm/pyxform/) library, installed into the `bohemia` virtual environment:
+    ```
+    workon bohemia
+    cd ~/Documents/bohemia/xforms/openhds_original
+    python convert_all.py
+    ```
+
 _Note, prior to deployment of Bohemia, different xmls will be created, modified, etc._
 
 - On your local machine, clone Paulo Filimone's implementation of the OpenHDS tablet application: `git clone https://github.com/philimones-group/openhds-tablet`
