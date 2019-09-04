@@ -5,7 +5,8 @@
 There are two ways to review the census form: (1) in a web browswer and (2) on your android device. The latter is better (since it more accurately reflects the experience of a fieldworker), but the former is quicker for a fast overview.
 
 ### 1. Review the census form in the web browswer
-- https://odk.enke.to/preview?form=https://xlsform.opendatakit.org/downloads/gwqh_2v5/census.xml
+- Use this link: https://odk.enke.to/preview?form=https://xlsform.opendatakit.org/downloads/ez2tx12r/census.xml
+- Note, this is only a rought approximation of how the survey will look. Better to use an android device.
 
 ### 2. Review the census form on your android device.
 
@@ -31,7 +32,7 @@ Password: data
 - If successful, you will be prompted by a pop-up titled "Downlaod Results" and it will confirm the connection was succesful. Select "OK" (This will bring you back to the Main page")
 - On the main page of the app, select "Fill Blank Form" and select your recently uploaded form (a brief window should pop-up "Loading form")
 - You may be prompted by the app to allow it to have access to your phone.
-- You will be brought to the first page of the form. To continue, swipe left. 
+- You will be brought to the first page of the form. To continue, swipe left.
 - You will not be able to continue the survey unless all required questions are answered (they are indicated).
 
 
