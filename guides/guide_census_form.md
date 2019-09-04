@@ -5,8 +5,9 @@
 There are two ways to review the census form: (1) in a web browswer and (2) on your android device. The latter is better (since it more accurately reflects the experience of a fieldworker), but the former is quicker for a fast overview.
 
 ### 1. Review the census form in the web browswer
-- Use this link: https://odk.enke.to/preview?form=https://xlsform.opendatakit.org/downloads/ez2tx12r/census.xml
-- Note, this is only a rought approximation of how the survey will look. Better to use an android device.
+- Use this link: https://odk.enke.to/preview?form=https://xlsform.opendatakit.org/downloads/yh4nxs_1/census.xml
+- Note: it will take a while (30 seconds) to load
+- Note: this is only a rough approximation of how the survey will look. Better to use an android device.
 
 ### 2. Review the census form on your android device.
 
