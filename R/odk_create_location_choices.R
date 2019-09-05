@@ -11,9 +11,15 @@ odk_create_location_choices <- function(country = NULL, add_other = FALSE, add_i
   require(gsheet)
   require(tidyr)
   # Define the url of the location hierachy spreadsheet (contains all locations for both sites)
-  url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
+    url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
   # Fetch the data
   locations <- gsheet::gsheet2tbl(url = url)
+  
+  # Views for openhds creation
+  moz <- locations %>%
+    filter(Country == 'Mozambique') %>%
+    group_by(Ward, Village, Hamlet) %>% tally
+  
   # Filter for country
   if(!is.null(country)){
     locations <- locations %>% filter(Country == country)
