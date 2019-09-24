@@ -40,14 +40,14 @@ Once the system has been deployed and forms have been created, data collection s
 
 # Fieldworker guide
 
-This is a guide intended for either (a) fieldworkers' direct use or (b) for use by those who are training fieldworkers. It assumes that the data pipeline is up and running, that tablets are configured, etc. For the purposes of this example, we'll assume that the fieldworker is named "John Doe", with user ID `FWJD1` and password `data` (for more details on creating fieldworkers, see the [guide_local_data_manager.md](Local data manager guide)).
+This is a guide intended for either (a) fieldworkers' direct use or (b) for use by those who are training fieldworkers. It assumes that the data pipeline is up and running, that tablets are configured, etc. For the purposes of this example, we'll assume that the fieldworker is named "data data", with user ID `FWDD1` and password `data` (for more details on creating fieldworkers, see the [guide_local_data_manager.md](Local data manager guide)).
 
 ## Logging in
 
 - Click on the "OpenHDS Mobile" icon in android.
 - Click "Language" to the right and select whichever language you would like for the interface (English, Portuguese, Swahili, and others are available).
 - In the "Field Worker Login" area, log in with the below credentials:
-  - FWJD1 (username)
+  - FWDD1 (username)
   - data (password)
 
 ## Collecting data
