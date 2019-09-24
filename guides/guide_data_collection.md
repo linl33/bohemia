@@ -1,7 +1,3 @@
-# Fieldworker guide
-
-This is a guide intended for either (a) fieldworkers' direct use or (b) for use by those who are training fieldworkers. It assumes that the data pipeline is up and running, that tablets are configured, etc. For the purposes of this example, we'll assume that the fieldworker is named "John Doe", with user ID `FWJD1` and password `data` (for more details on creating fieldworkers, see the [guide_local_data_manager.md](Local data manager guide)).
-
 
 # How to set up the data collection device (tablet/phone)
 
@@ -41,6 +37,10 @@ Once the system has been deployed and forms have been created, data collection s
 
 - In ODKCollect, select "Get Blank Form"
 - Select all the forms we want. Click "Get Selected"
+
+# Fieldworker guide
+
+This is a guide intended for either (a) fieldworkers' direct use or (b) for use by those who are training fieldworkers. It assumes that the data pipeline is up and running, that tablets are configured, etc. For the purposes of this example, we'll assume that the fieldworker is named "John Doe", with user ID `FWJD1` and password `data` (for more details on creating fieldworkers, see the [guide_local_data_manager.md](Local data manager guide)).
 
 ## Logging in
 
