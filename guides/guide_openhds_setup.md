@@ -780,6 +780,6 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
       - Finally, click on the "Start Social Group Task" button (and wait for the table to populate accordingly)
 - Reload the application via tomcat, and resync tablet database
 
-# Field-worker instructions
+# Data collection
 
-This is the end of the admin's guide. The fieldworker's guide is available [HERE](guide_fieldworker.md).
+This is the end of the admin's guide. The data collection guide is available [HERE](guide_data_collection.md).
