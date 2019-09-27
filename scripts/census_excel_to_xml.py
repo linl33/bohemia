@@ -11,9 +11,7 @@ sh = gc.open('census')
 wks = sh.sheet1
 
 #export as xls
-wks.export(pygsheets.ExportType.XLS, 'census.xlsx')
+wks.export(pygsheets.ExportType.XLS, 'census')
 
-# Convert to xml
-exec(open('xls2xform.py').read())
-
-os.system('python pyxform/xls2xform.py cenxus.xls census.xml')
+## Convert to xml
+os.system('xls2xform census.xls census.xml')
