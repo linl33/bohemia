@@ -310,8 +310,36 @@ There are some tools that help to both download the census excel from google doc
 - Get inside the virtual environment (`workon bohemia`) and intall python pacakges: `pip install -r requirements.txt`
 - From within the main `bohemia` directory, `cd` into `scripts` and run `python census_excel_to_xml.py`
 
-## Using external data
 
+# Setting up enketo
+
+- SSH into the server: `bohemia`
+- Having ssh’ed into the server, run the following: `sudo adduser enketo`. Give password `data`
+- Press “enter” for all options
+- Go into root mode: `sudo su`
+- Go to the `/home/enketo/` directory
+- Create a `.ssh` directory therein for the new user and change permissions:
+`mkdir .ssh; chmod 700 .ssh`. Cd into `.ssh`
+- Copy the authorized_keys file: `cp ../../ubuntu/.ssh/authorized_keys`
+- Grant sudo access to the new user: `sudo usermod -a -G sudo enketo`
+
+- Allow for password log-in by modifying the following file
+```
+nano /etc/ssh/sshd_config
+```
+-At the following line
+```
+PasswordAuthentication yes
+```
+- Restart the ssh service: `service ssh restart` (make sure to be in root mode)
+
+- Exit: `exit`
+- On your local machine, add the following line to `~/.bashrc` to create an alias:
+```
+alias enketo='ssh -i "/home/joebrew/.ssh/openhdskey.pem" enketo@bohemia.team'
+```
+- Run `source ~/.bashrc`
+- Ssh back in as enketo: `enketo` (you will be prompted for a password)
 
 # Data collection
 
