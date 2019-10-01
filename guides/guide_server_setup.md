@@ -337,9 +337,6 @@ There are some tools that help to both download the census excel from google doc
 alias enketo='ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@papu.us'
 ```
 
-
-
-
 ## Installing required software
 
 - Log in as the enketo user (see above) and run the following line by line:
@@ -438,7 +435,7 @@ cp ~/enketo-express/config/default-config.json ~/enketo-express/config/config.js
    "offline enabled": true,
    "linked form and data server": {
        "name": "Bohemia",
-       "server url": "",
+       "server url": "bohemia.team",
        "api key": "lpols3nboul",
        "legacy formhub": false,
        "authentication": {
@@ -529,7 +526,7 @@ npm start
 cd ~/enketo-express
 pm2 start app.js -n enketo
 pm2 save
-sudo pm2 startup ubuntu -u enketo
+sudo pm2 startup ubuntu -u enketo  # ? ubuntu
 ```
 
 - Ban rogue users:
@@ -550,243 +547,6 @@ sudo ufw status
 
 ## Final configuration
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-###################################################
-
-
-## Creating the enketo user
-
-- SSH into the server: `bohemia`
-- Having ssh’ed into the server, run the following: `sudo adduser enketo`. Give password `data`
-- Press “enter” for all options
-- Go into root mode: `sudo su`
-- Go to the `/home/enketo/` directory
-- Create a `.ssh` directory therein for the new user and change permissions:
-`mkdir .ssh; chmod 700 .ssh`. Cd into `.ssh`
-- Copy the authorized_keys file: `cp ../../ubuntu/.ssh/authorized_keys`
-- Grant sudo access to the new user: `sudo usermod -a -G sudo enketo`
-
-- Allow for password log-in by modifying the following file
-```
-nano /etc/ssh/sshd_config
-```
--At the following line
-```
-PasswordAuthentication yes
-```
-- Restart the ssh service: `service ssh restart` (make sure to be in root mode)
-
-- Exit: `exit`
-- On your local machine, add the following line to `~/.bashrc` to create an alias:
-```
-alias enketo='ssh -i "/home/joebrew/.ssh/openhdskey.pem" enketo@bohemia.team'
-```
-- Run `source ~/.bashrc`
-- Ssh back in as enketo: `enketo` (you will be prompted for a password)
-
-## Installing required software
-
-- Log in as the enketo user (see above) and run the following line by line:
-```
-sudo apt-get update
-sudo apt-get upgrade -y
-sudo apt-get autoremove -y
-sudo apt-get install -y git nginx htop build-essential redis-server checkinstall python
-```
-- Install NodeJS and global Node packages
-```
-curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
-sudo apt-get install -y nodejs
-sudo npm install -g pm2 npm
-```
-
--Let Ubuntu automatically install security updates (keep default values and select Yes when asked):
-```
-sudo dpkg-reconfigure -plow unattended-upgrades
-```
-
-## Installing Enketo Express and its dependencies
-
-- Run the following, line by line:
-```
-cd ~
-git clone https://github.com/enketo/enketo-express.git
-cd enketo-express
-npm install --production
-```
-- (The above takes a little while)
-
-## Configuring Enketo Express
-
-### First, make an enketo account
-
-- Go to https://accounts.enke.to/signup/plan/basic and make an account. In this case:
-  - joebrew
-  - joe@databrew.cc
-  - <password>
-
-### Database configuration
-
-First we stop and remove the default redis service:
-
-```
-sudo systemctl stop redis
-sudo systemctl disable redis
-sudo systemctl daemon-reload
-```
-
-Then, we configure 2 new redis instances for Enketo that run on different ports:
-
-```
-sudo mv /etc/redis/redis.conf /etc/redis/redis-origin.conf
-sudo cp ~/enketo-express/setup/redis/conf/redis-enketo-main.conf /etc/redis/
-sudo cp ~/enketo-express/setup/redis/conf/redis-enketo-cache.conf /etc/redis/
-sudo systemctl enable redis-server@enketo-main.service
-sudo systemctl enable redis-server@enketo-cache.service
-```
-
-Now, start the 2 Enketo redis instances:
-
-```
-sudo systemctl start redis-server@enketo-main.service
-sudo systemctl start redis-server@enketo-cache.service
-```
-
-Test: Cache database
-
-```
-redis-cli -p 6380
-ping
-exit
-```
-
-Test: Main database
-```
-redis-cli -p 6379
-ping
-exit
-```
-
-The response to both tests should be: “PONG”.
-
-- Create a configuration file:
-```
-cp ~/enketo-express/config/default-config.json ~/enketo-express/config/config.json
-```
-- Edit it:
-```
-
-{
-"app name": "Bohemia Enketo",
-   "port": "8006",
-   "offline enabled": true,
-   "linked form and data server": {
-       "name": "Bohemia",
-       "server url": "",
-       "api key": "lpols3nboul",
-       "legacy formhub": false,
-       "authentication": {
-           "type": "basic",
-           "allow insecure transport": "true"
-       }
-   },
-   "timeout": 300000,
-   "expiry for record cache": 30000,
-   "encryption key": "s0m3v3rys3cr3tk3y",
-   "less secure encryption key": "this $3cr3t key is crackable",
-   "default theme": "kobo",
-   "themes supported": [],
-   "base path": "enketo",
-   "log": {
-       "submissions": false
-   },
-   "support": {
-       "email": "support@kobotoolbox.org"
-   },
-
-"widgets": [
-        "note", "select-desktop", "select-mobile", "autocomplete", "geo", "textarea", "url",
-        "table", "radio", "date", "time", "datetime", "select-media", "file", "draw", "rank",
-        "likert", "range", "columns", "image-view", "comment", "image-map", "date-native", "date-nativ$
-        "date-mobile", "text-max"
-    ],
-    "analytics": "google",
-    "google": {
-        "analytics": {
-            "ua": "",
-            "domain": ""
-        },
-        "api key": ""
-    },
-    "piwik": {
-        "analytics": {
-            "tracker url": "",
-            "site id": ""
-        }
-    },
-    "maps": [ {
-        "name": "streets",
-        "tiles": [ "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
-        "attribution": "© <a href=\"http://openstreetmap.org\">OpenStreetMap</a> | <a href=\"www.opens$
-    } ],
-
-"query parameter to pass to submission": "",
-"redis": {
-    "main": {
-        "host": "127.0.0.1",
-        "port": "6379",
-        "password": null
-    },
-    "cache": {
-        "host": "127.0.0.1",
-        "port": "6380",
-        "password": null
-    }
-},
-"logo": {
-    "source": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET$
-    "href": ""
-},
-"disable save as draft": false,
-"repeat ordinals": false,
-"validate continuously": false,
-"validate page": true,
-"payload limit": "100kb",
-"text field character limit": 2000
-}
-
-```
-
-- Rebuild:
-```
-cd ~/enketo-express
-npm install --production
-```
-
-- Start enketo:
-```
-npm start
-```
-- Check that it's running at bohemia.team:8005
--Configure pm2 to make sure that the server automatically starts up upon reboot:
-```
-cd ~/enketo-express
-pm2 start app.js -n enketo
-pm2 save
-sudo pm2 startup ubuntu -u enketo
-```
 
 - Set up https
 ```
@@ -795,30 +555,6 @@ sudo apt install certbot
 sudo apt-get -y update
 sudo apt-get -y install python-certbot-nginx
 sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d papu.us
-```
-
-- Ban rogue users:
-```
-sudo apt-get install -y fail2ban
-sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
-sudo service fail2ban restart
-```
-- Set up firewall (NOT DOING FOR NOW):
-```
-sudo apt-get install ufw
-sudo ufw allow ssh
-sudo ufw allow 80
-sudo ufw allow 443
-sudo ufw enable
-sudo ufw status
-```
-
-## Final configuration
-
-- Go back to `~/enketo-express/config/config.json`. Edit lines if needed.
-- Rebuild the app:
-```
-npm install --production
 ```
 
 ## Create back-ups  
@@ -840,7 +576,7 @@ systemctl start redis-server@enketo-main.service
 - Go to https://accounts.enke.to/account/ to manage accounts
 - To delete a form, run the following:
 ```
-curl -X DELETE --user lpols3nboul: -d "server_url=https://bohemia.team&form_id=census" https://enke.to/api/v1/survey
+curl -X DELETE --user lpols3nboul: -d "server_url=https://bohemia.team&form_id=census" http://papu.us/api/v1/survey
 ```
 
 
