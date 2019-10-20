@@ -5,7 +5,7 @@ The below guide is a walk-through of setting up the Bohemia data infrastructure.
 ## Buy a domain
 
 - Go to domains.google.com and buy a domain.
-- For the purposes of this guide, the domain being used is `www.bohemia.team`
+- For the purposes of this guide, the domain being used is `www.datacat.cc`
 
 ## Spin up an EC2 instance on AWS
 
@@ -157,7 +157,7 @@ runcmd:
 ```
 - Click on Next: Add Storage and edit the storage settings. Set to a minimum of 30gb.
 - Click on Next: Add Tags.
-- Add `aggregate.hostname` key with the domain name as the value (e.g., `bohemia.team`). Important. You need to have purchased the hostname prior to doing this (ie, don't use your IP address, use an actual DNS)
+- Add `aggregate.hostname` key with the domain name as the value (e.g., `datacat.cc`). Important. You need to have purchased the hostname prior to doing this (ie, don't use your IP address, use an actual DNS)
 - Click on Next: Configure Security Group.
 - Select an existing security group and select the security group you previously created.
 - Click on Review and Launch and after review, click on Launch.
@@ -192,8 +192,19 @@ runcmd:
 - Note, this guide is written with the below elastic id. You'll need to replace this with your own when necessary.
 
 ```
-18.218.87.64
+18.190.57.240
 ```
+
+### Associate the domain and IP address
+
+- Go to domains.google.com
+- Select the purchased domain (ie, datacat.cc) and click "Manage"
+- Click "DNS"
+- Scroll down to "Custom resource records"
+- Create an @ / A entry with the IP address (18.190.57.240)
+- Create a www / CNAME entry with the public DNS (ec2-18-190-57-240.us-east-2.compute.amazonaws.com)
+
+
 
 ### Setting up SSH keys
 
@@ -211,26 +222,18 @@ runcmd:
 - It will be something very similar to the following:
 
 ```
-ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-18-218-87-64.us-east-2.compute.amazonaws.com
+ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-18-190-57-240.us-east-2.compute.amazonaws.com
 or
-ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@bohemia.team
+ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@datacat.cc
 ```
 
 - Congratulations! You are now able to run linux commands on your new ubuntu server
 - If you want, create an alias such as:
 ```
-alias gonow='ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@bohemia.team'
+alias openhds='ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@datacat.cc'
 ```
 - Add the above line to ~/.bashrc to persist
-
-### Setting up the domain
-
-- In domains.google.com, click on the purchased domain.
-- Click on "DNS" on the left
-- Go to "Custom resource records"
-- You're going to create two records:
-  1. Name: @; Type: A; TTL 1h; Data: 18.218.87.64
-  2. Name: www; Type: CNAME; TTL: 1h; Data: ec2-18-218-87-64.us-east-2.compute.amazonaws.com.
+- Run `source ~/.bashrc`
 
 
 ### Setting up https
@@ -238,11 +241,11 @@ alias gonow='ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@bohemia.team'
 - You may need to wait a few minutes after setting up the domain before obtaining an https certificate.
 - Run the following to get an https certificate set up:
 ```
-sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d bohemia.team
+sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d datacat.cc
 ```
-- Note, replace "joebrew@gmail.com" and "bohemia.team" with your email and domain, respectively
+- Note, replace "joebrew@gmail.com" and "datacat.cc" with your email and domain, respectively
   - (As an alternative to the above, you can get a CDN on cloudflare, and in the "DNS" section of domains.google.com, set the "Name servers" to the 2 provided by Cloudfare (may take 1 hour or so to work))
-- As per the instructions in the terminal, run a test on the new site at: https://www.ssllabs.com/ssltest/analyze.html?d=bohemia.team
+- As per the instructions in the terminal, run a test on the new site at: https://www.ssllabs.com/ssltest/analyze.html?d=datacat.cc
 
 
 
@@ -265,7 +268,11 @@ Grant sudo access to the new users: `sudo usermod -a -G sudo benmbrew`
 
 - SSH into the server:
 ```
-ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-18-218-87-64.us-east-2.compute.amazonaws.com
+ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@datacat.cc
+```
+or
+```
+openhds # if you set up the alias as per previous instructions
 ```
 - You now have an up-and-running instance with some software already installed (stuff installed via the cloud config script)
   - For example, postgres, tomcat, awscli, openjdk-8-jre-headless, etc. are already installed, etc.
@@ -369,7 +376,7 @@ wget https://github.com/SwissTPH/openhds-server/releases/download/openhds-1.6/op
 
 ### Deploying OpenHDS in Tomcat
 
-- On your local machine, go to https://bohemia.team/manager  
+- On your local machine, go to https://datacat.cc/manager  
 - Sign in with "data" and "data"
 - Scroll down to the "Select WAR file to upload" section
 - Select the `openhds.war` file you downloaded a few minutes ago in the "Choose File" menu.
@@ -438,12 +445,12 @@ INSERT INTO individual(uuid,extId,firstName,middleName,lastName,gender,dob,mothe
 
 INSERT INTO `whitelist` (uuid, address) VALUES ('LOCALHOST1', '127.0.0.1');
 INSERT INTO `whitelist` (uuid, address) VALUES ('LOCALHOST2', 'localhost');
-INSERT INTO `whitelist` (uuid, address) VALUES ('LOCALHOST3', '18.218.87.64');
+INSERT INTO `whitelist` (uuid, address) VALUES ('LOCALHOST3', '18.190.57.240');
 ```
 
 ### Confirm that everything is working so far
 
-- To confirm that everything is working at this point, on your local machine, visit https://bohemia.team/openhds in the browser. A green log-in screen should appear.
+- To confirm that everything is working at this point, on your local machine, visit https://datacat.cc/openhds in the browser. A green log-in screen should appear.
 - If you want, change the language
 - Log in with credentials "admin" and "test"
 
@@ -459,7 +466,7 @@ cd mirth
 - On your local machine, `cd` into the local directory where you downloaded the `.sh` file.
 - Now copy the downloaded `.tar.gz` file from your local to remote machine by running the following on your local machine as such (file names, paths, endpoint, etc. may vary):
 ```
-scp -i "/home/joebrew/.ssh/openhdskey.pem" ~/Documents/mirth/mirthconnect-3.8.0.b2464-unix.sh ubuntu@bohemia.team:/home/ubuntu/mirth
+scp -i "/home/joebrew/.ssh/openhdskey.pem" ~/Documents/mirth/mirthconnect-3.8.0.b2464-unix.sh ubuntu@datacat.cc:/home/ubuntu/mirth
 ```
 - From the remote machine, run `chmod a+x mirthconnect-3.8.0.b2464-unix.sh`
 - Run the installer: `sudo ./mirthconnect-3.8.0.b2464-unix.sh`
@@ -489,7 +496,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Replace the `database.url` line with `database.url = jdbc:mysql://localhost:3306/mirthdb`
 - Set values for `database.username` and `database.password` to `data` and `data`
 - Restart the mirth service: `sudo service mcservice restart`
-- Go to https://bohemia.team:8443 (note the https). You may have to approve a browser warning. Log in with admin/admin credentials. Then log out.
+- Go to https://datacat.cc:8443 (note the https). You may have to approve a browser warning. Log in with admin/admin credentials. Then log out.
 - After log-out, click "Download the Administrator Launcher" in the bottom left
 - A file will be downloaded to your local machine. Place it in `~/Documents/mirth`
 - Make that file executable: `chmod +x mirth-administrator-launcher-1.1.0-unix.sh`
@@ -497,7 +504,7 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 - Agree to the items in the applet that comes up
 - Select "Run Mirth Connect Administrator Launcher" at the end of the license process
 - In the Mirth Connect Administrator Launcher, set the address of the machine
-- Set the Address to https://bohemia.team:8443/
+- Set the Address to https://datacat.cc:8443/
 ![](img/mirth3.png)
 - Click launch
 - When prompted by the applet, log in with the above url, and admin/admin as the credentials
@@ -512,10 +519,11 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 
 - Create a directory on your local machine called `Mirth-Channels`
 - `cd` into that directory
-- Run `wget https://github.com/SwissTPH/Mirth-Channels/releases/download/1%2C6/Mirth-Channels.zip` to your local machine
-- Run `unzip Mirth-Channels.zip`
+- ~~Run `wget https://github.com/SwissTPH/Mirth-Channels/releases/download/1%2C6/Mirth-Channels.zip` to your local machine~~
+- ~~Run `unzip Mirth-Channels.zip`~~
+- On your local machine, open `bohemia/rufiji/forms`
 - On your local machine, open the "Mirth Connect Administrator Launcher" program
-- Log in with the https://bohemia.team:8443 Server and the `data`/`data` username/password
+- Log in with the https://datacat.cc:8443 Server and the `data`/`data` username/password
 - Once Mirth Connect Administrator is up and running, click on the "Channels" menu on the left
 - Click "Import channel" to the left
 - Import the following channels. If asked about version conversion, select "Yes". After each one click "Save Changes" on the left.
@@ -571,8 +579,8 @@ The `cloud-config` script previously run installs ODKAggregate. However, because
 ### Uninstall ODKAggregate
 
 - ODK Aggregate is installed with the cloud config script. this means there are two ODK Aggregate instances:
-  - Default (cloud-config) at bohemia.team (autoredirect) (administrator / aggregate)
-  - The OpenHDS compatible one at bohemia.team/ODKAggregate (odk_prod / aggregate)
+  - Default (cloud-config) at datacat.cc (autoredirect) (administrator / aggregate)
+  - The OpenHDS compatible one at datacat.cc/ODKAggregate (odk_prod / aggregate)
 
 ### Configuring ODK Aggregate
 
@@ -601,7 +609,7 @@ chmod 777 ODK-Aggregate-v2.0.3-Linux-x64.run
 - Press 'Enter' for the next few items. Confirm that you do not have an SSL certificate (1, the default)
 - When asked about Port Configuration and internet-visible IP address, type "Y"
 - Keep Connector Port as 8080
-- For "Internet-visible IP address or DNS name", type: `bohemia.team`
+- For "Internet-visible IP address or DNS name", type: `datacat.cc`
 - Skip through the Tomcat, MySQL, Apache, Java stuff (already done)
 - When prompted to "stop and restart your Apache webserver", run `sudo service tomcat8 restart` in a different terminal tab (will require ssh'ing into the server again)
 - For the database server settings section, type the defaults (port `3306` for the database port number and `127.0.0.1` for the server hostname)
@@ -629,18 +637,18 @@ GRANT ALL ON odk_prod.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
   - ~~Granting permissions not necessary because already done~~
 
 
-- Now we need to run Tomcat manager. Go to http://bohemia.team/manager/. Log in with credentials `data` and `data`
+- Now we need to run Tomcat manager. Go to http://datacat.cc/manager/. Log in with credentials `data` and `data`
 - Note in the "Applications" table that ODKAggregate is not yet running
 - Copy the file created in configuration (`~/ODK/ODK\ Aggregate/ODKAggregate.war`) from your remote to local machine, by running the below from the local machine
 ```
-scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@bohemia.team:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
+scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@datacat.cc:/home/ubuntu/ODK/ODK\ Aggregate/ODKAggregate.war" .
 ```
 - You now have a `.war` file on your local machine
 - In the web browser, go to the "WAR file to deploy" section of the page, select the recently downloaded `.war` and deploy
  - (Reboot the machine to ensure that everything is still working)  
 - ODKAggregate should now show up in the "Applications" table in the Tomcat Web Application Manager
-- Navigate to http://bohemia.team/ODKAggregate/ in the browser.
-- You'll be reedirected to http://bohemia.team/ODKAggregate/Aggregate and prompted to log in.
+- Navigate to http://datacat.cc/ODKAggregate/ in the browser.
+- You'll be reedirected to http://datacat.cc/ODKAggregate/Aggregate and prompted to log in.
 - Sign-in with the credentials `odk_prod` (username) and `aggregate` (password)
 - Click on the "Site Admin" tab
 - Change the password for `odk_prod` user to `data`
@@ -667,7 +675,7 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@bohemia.team:/home/ubuntu/ODK
     ```
 - ~~On your local machine, clone Paulo Filimone's implementation of the OpenHDS tablet application: `git clone https://github.com/philimones-group/openhds-tablet`~~
 
-- In your local browser, open https://bohemia.team/ODKAggregate/.
+- In your local browser, open https://datacat.cc/ODKAggregate/.
 - Click on the "Form Management" tab
 - Click on "Add New Form"
 - Upload the following forms, one-by-one, from your local `openhds-tablet/xforms` directory:
@@ -749,7 +757,7 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 
 ## Customizing location hierarchy
 
-- Creating the location hierarchy can be done in the web app by going to https://bohemia.team/openhds (login with admin/test), then clicking on "Configuration" -> "Location Levels", setting levels to  Country, District, Ward, Village, Hamlet (levels 1-5)
+- Creating the location hierarchy can be done in the web app by going to https://datacat.cc/openhds (login with admin/test), then clicking on "Configuration" -> "Location Levels", setting levels to  Country, District, Ward, Village, Hamlet (levels 1-5)
 - Next, one could go to "Utility Routines" -> "Location Hierarchy" and build the hierachy on [this spreadsheet]('https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing') manually. However, this is very time-consuming.
 - Instead, we can run the following script in sql: `mysql -updata -pdata openhds`. Note, this script was generated by the code in `bohemia/R/openhds_create_location_hierachies.R`. Script at https://github.com/databrew/bohemia/blob/master/scripts/create_location_hierarchies.sql.
 
@@ -759,7 +767,7 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 #### Preparing to synchronize OpenHDS Mobile
 
 - First, one must prepare the data on the server to be synced to the tablet:
-  - Take the following steps in the web interface of the OpenHDS server at https://bohemia.team/openhds
+  - Take the following steps in the web interface of the OpenHDS server at https://datacat.cc/openhds
     - Log in as admin/test to open OpenHDS Server
         - Click on menu item "Configuration" - User management
           - Create a user named "data" (password: "data") with all roles

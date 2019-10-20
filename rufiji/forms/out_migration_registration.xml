@@ -1,0 +1,519 @@
+<?xml version="1.0"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>Out migration registration</h:title>
+    <model>
+      <itext>
+        <translation default="true()" lang="Swahili">
+          <text id="/out_migration_registration/maritalChange/WID:label">
+            <value>Kufiwa</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange:label">
+            <value>Mabadiliko ya ndoa ya aina gani?</value>
+          </text>
+          <text id="/out_migration_registration/dateOfMigration:label">
+            <value>Tarehe ya Kuhama</value>
+          </text>
+          <text id="/out_migration_registration/outofdss:label">
+            <value>Wapi?</value>
+          </text>
+          <text id="/out_migration_registration/withinDSS:label">
+            <value>kaya imehama ndani ya eneo la DSS?</value>
+          </text>
+          <text id="/out_migration_registration/processedByMirth:label">
+            <value>processed</value>
+          </text>
+          <text id="/out_migration_registration/zone/99:label">
+            <value>sehemu nyingine Rufiji</value>
+          </text>
+          <text id="/out_migration_registration/withinDSS/2:label">
+            <value>Hapana</value>
+          </text>
+          <text id="/out_migration_registration/openhds:label">
+            <value>-</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange:hint">
+            <value>Mabadiliko ya ndoa ya aina gani?</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/OTHER:label">
+            <value>NYINGINE</value>
+          </text>
+          <text id="/out_migration_registration/openhds/visitId:label">
+            <value>Nambari ya Hudhurio</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration:label">
+            <value>Sababu ya Kuhama</value>
+          </text>
+          <text id="/out_migration_registration/zone/1:label">
+            <value>Rufiji Mjini</value>
+          </text>
+          <text id="/out_migration_registration/openhds/lastName:label">
+            <value>Jina la mwisho</value>
+          </text>
+          <text id="/out_migration_registration/shortlongterm/2:label">
+            <value>Muda mrefu</value>
+          </text>
+          <text id="/out_migration_registration/withinDSS/1:label">
+            <value>Ndio</value>
+          </text>
+          <text id="/out_migration_registration/outofdss/Other:label">
+            <value>Nyingine</value>
+          </text>
+          <text id="/out_migration_registration/openhds/individualId:label">
+            <value>Nambari ya Mwanakaya</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/REC:label">
+            <value>Kupatana</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/FISHING:label">
+            <value>Uvuvi</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/MAR:label">
+            <value>Ndoa</value>
+          </text>
+          <text id="/out_migration_registration/villagezone:label">
+            <value>Kijini gani?</value>
+          </text>
+          <text id="/out_migration_registration/shortlongterm/1:label">
+            <value>Muda mfupi (up to a year)</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/WORK:label">
+            <value>KAZI</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/GONEWITHRELATIVES:label">
+            <value>Ameondoka na Ndugu</value>
+          </text>
+          <text id="/out_migration_registration/openhds/firstName:label">
+            <value>Jina la kwanza</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/DIV:label">
+            <value>Talaka</value>
+          </text>
+          <text id="/out_migration_registration/shortlongterm:label">
+            <value>Je mtu huyu amekaa hapa kwa muda mrefu au mfupi?</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/SEP:label">
+            <value>Kutengana</value>
+          </text>
+          <text id="/out_migration_registration/openhds/fieldWorkerId:label">
+            <value>Nambari ya Mhojaji</value>
+          </text>
+          <text id="/out_migration_registration/nameOfDestination:label">
+            <value>Jina Eneo Alikohamia</value>
+          </text>
+          <text id="/out_migration_registration/shortlongterm/3:label">
+            <value>haijulikani</value>
+          </text>
+          <text id="/out_migration_registration/zone/2:label">
+            <value>Rufiji Kijijini</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/MARITAL_CHANGE:label">
+            <value>KUBADILIKA KWA HALI YA NDOA</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/888:label">
+            <value>Haihusiki</value>
+          </text>
+          <text id="/out_migration_registration/villagezone/BUNGU_A:label">
+            <value>BUNGU A</value>
+          </text>
+          <text id="/out_migration_registration/earliestDate:label">
+            <value>-</value>
+          </text>
+          <text id="/out_migration_registration/otherplace:label">
+            <value>Sehemu nyingine</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/EDUCATION/SCHOOL:label">
+            <value>ELIMU/SHULE</value>
+          </text>
+          <text id="/out_migration_registration/villagezone/BUNGU_B:label">
+            <value>BUNGU B</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigrationOther:label">
+            <value>Sababu ya Kuhama(Nyingine)</value>
+          </text>
+          <text id="/out_migration_registration/zone:label">
+            <value>Zone ipi?</value>
+          </text>
+          <text id="/out_migration_registration/urbanzone/Urban:label">
+            <value>Hakuna Rufiji Mjini, Rudi nyuma chagua Rufiji kijijini</value>
+          </text>
+          <text id="/out_migration_registration/urbanzone:label">
+            <value>Kijiji gani?</value>
+          </text>
+          <text id="/out_migration_registration/villagezone/BUMBA:label">
+            <value>BUMBA</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/MOVEDTONEWHOUSE:label">
+            <value>Amehamia kwenye nyumba mpya</value>
+          </text>
+        </translation>
+        <translation lang="English">
+          <text id="/out_migration_registration/maritalChange/WID:label">
+            <value>Widowed</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange:label">
+            <value>Change in marital status</value>
+          </text>
+          <text id="/out_migration_registration/dateOfMigration:label">
+            <value>Date of Migration</value>
+          </text>
+          <text id="/out_migration_registration/villagezone:label">
+            <value>Which village?</value>
+          </text>
+          <text id="/out_migration_registration/withinDSS:label">
+            <value>Household migrated Within DSS?</value>
+          </text>
+          <text id="/out_migration_registration/processedByMirth:label">
+            <value>processed</value>
+          </text>
+          <text id="/out_migration_registration/zone/99:label">
+            <value>Other location within Rufiji</value>
+          </text>
+          <text id="/out_migration_registration/withinDSS/2:label">
+            <value>No</value>
+          </text>
+          <text id="/out_migration_registration/openhds:label">
+            <value>OpenHDS preloaded info</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange:hint">
+            <value>-</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/OTHER:label">
+            <value>OTHER</value>
+          </text>
+          <text id="/out_migration_registration/openhds/visitId:label">
+            <value>Visit Id</value>
+          </text>
+          <text id="/out_migration_registration/outofdss:label">
+            <value>Where?</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration:label">
+            <value>Reason for Out Migration</value>
+          </text>
+          <text id="/out_migration_registration/zone/1:label">
+            <value>Rufiji Urban</value>
+          </text>
+          <text id="/out_migration_registration/openhds/lastName:label">
+            <value>Last name</value>
+          </text>
+          <text id="/out_migration_registration/shortlongterm/2:label">
+            <value>Long term</value>
+          </text>
+          <text id="/out_migration_registration/withinDSS/1:label">
+            <value>Yes</value>
+          </text>
+          <text id="/out_migration_registration/outofdss/Other:label">
+            <value>Other</value>
+          </text>
+          <text id="/out_migration_registration/openhds/individualId:label">
+            <value>Individual Id</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/REC:label">
+            <value>Reconciliation</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/FISHING:label">
+            <value>FISHING</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/MAR:label">
+            <value>Marriage</value>
+          </text>
+          <text id="/out_migration_registration/villagezone/BUMBA:label">
+            <value>BUMBA</value>
+          </text>
+          <text id="/out_migration_registration/shortlongterm/1:label">
+            <value>Short term (up to a year)</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/WORK:label">
+            <value>WORK</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/GONEWITHRELATIVES:label">
+            <value>GONE WITH RELATIVE(S)</value>
+          </text>
+          <text id="/out_migration_registration/openhds/firstName:label">
+            <value>First name</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/DIV:label">
+            <value>Divorce</value>
+          </text>
+          <text id="/out_migration_registration/shortlongterm:label">
+            <value>Has the person in question stayed here long term or short term?</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/SEP:label">
+            <value>Separation</value>
+          </text>
+          <text id="/out_migration_registration/openhds/fieldWorkerId:label">
+            <value>Field Worker Id</value>
+          </text>
+          <text id="/out_migration_registration/nameOfDestination:label">
+            <value>Name of Destination</value>
+          </text>
+          <text id="/out_migration_registration/shortlongterm/3:label">
+            <value>Unknown</value>
+          </text>
+          <text id="/out_migration_registration/zone/2:label">
+            <value>Rufiji Rural</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/MARITAL_CHANGE:label">
+            <value>MARITAL CHANGE</value>
+          </text>
+          <text id="/out_migration_registration/maritalChange/888:label">
+            <value>None of the above</value>
+          </text>
+          <text id="/out_migration_registration/villagezone/BUNGU_A:label">
+            <value>BUNGU A</value>
+          </text>
+          <text id="/out_migration_registration/earliestDate:label">
+            <value>Earliest migration date</value>
+          </text>
+          <text id="/out_migration_registration/otherplace:label">
+            <value>Other place</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/EDUCATION/SCHOOL:label">
+            <value>EDUCATION/SCHOOL</value>
+          </text>
+          <text id="/out_migration_registration/villagezone/BUNGU_B:label">
+            <value>BUNGU B</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigrationOther:label">
+            <value>Reason for Out Migration (Other)</value>
+          </text>
+          <text id="/out_migration_registration/zone:label">
+            <value>What zone?</value>
+          </text>
+          <text id="/out_migration_registration/urbanzone/Urban:label">
+            <value>No Rufiji urban, go back and select Rufiji  Rural</value>
+          </text>
+          <text id="/out_migration_registration/urbanzone:label">
+            <value>Which village?</value>
+          </text>
+          <text id="/out_migration_registration/reasonForOutMigration/MOVEDTONEWHOUSE:label">
+            <value>MOVED TO NEW HOUSE</value>
+          </text>
+        </translation>
+      </itext>
+      <instance>
+        <out_migration_registration id="out_migration_registration">
+          <start/>
+          <end/>
+          <deviceid/>
+          <earliestDate/>
+          <openhds>
+            <fieldWorkerId/>
+            <visitId/>
+            <individualId/>
+            <firstName/>
+            <lastName/>
+          </openhds>
+          <dateOfMigration/>
+          <withinDSS/>
+          <zone/>
+          <urbanzone/>
+          <villagezone/>
+          <otherplace/>
+          <outofdss/>
+          <nameOfDestination/>
+          <reasonForOutMigration/>
+          <maritalChange/>
+          <reasonForOutMigrationOther/>
+          <shortlongterm/>
+          <processedByMirth/>
+          <meta>
+            <instanceID/>
+            <instanceName/>
+          </meta>
+        </out_migration_registration>
+      </instance>
+      <bind jr:preload="timestamp" jr:preloadParams="start" nodeset="/out_migration_registration/start" type="dateTime"/>
+      <bind jr:preload="timestamp" jr:preloadParams="end" nodeset="/out_migration_registration/end" type="dateTime"/>
+      <bind jr:preload="property" jr:preloadParams="deviceid" nodeset="/out_migration_registration/deviceid" type="string"/>
+      <bind nodeset="/out_migration_registration/earliestDate" readonly="true()" type="date"/>
+      <bind nodeset="/out_migration_registration/openhds/fieldWorkerId" readonly="true()" required="true()" type="string"/>
+      <bind nodeset="/out_migration_registration/openhds/visitId" readonly="true()" required="true()" type="string"/>
+      <bind nodeset="/out_migration_registration/openhds/individualId" readonly="true()" required="true()" type="string"/>
+      <bind nodeset="/out_migration_registration/openhds/firstName" readonly="true()" required="true()" type="string"/>
+      <bind nodeset="/out_migration_registration/openhds/lastName" readonly="true()" required="true()" type="string"/>
+      <bind constraint="(.&lt;=today() and . &gt; /out_migration_registration/earliestDate )" jr:constraintMsg="Date of migration can not be in the future or before the start of the study" nodeset="/out_migration_registration/dateOfMigration" required="true()" type="date"/>
+      <bind nodeset="/out_migration_registration/withinDSS" required="true()" type="select1"/>
+      <bind nodeset="/out_migration_registration/zone" relevant="../withinDSS='1'" required="true()" type="select1"/>
+      <bind nodeset="/out_migration_registration/urbanzone" relevant="selected( /out_migration_registration/zone , '1')" type="select1"/>
+      <bind nodeset="/out_migration_registration/villagezone" relevant="selected( /out_migration_registration/zone , '2')" type="select1"/>
+      <bind nodeset="/out_migration_registration/otherplace" relevant="selected( /out_migration_registration/zone , '99')" type="string"/>
+      <bind nodeset="/out_migration_registration/outofdss" relevant="../withinDSS='2'" required="true()" type="select1"/>
+      <bind calculate="if(../withinDSS='1', /out_migration_registration/villagezone , /out_migration_registration/outofdss )" nodeset="/out_migration_registration/nameOfDestination" required="true()" type="string"/>
+      <bind nodeset="/out_migration_registration/reasonForOutMigration" required="true()" type="select1"/>
+      <bind nodeset="/out_migration_registration/maritalChange" relevant="../reasonForOutMigration = 'MARITAL_CHANGE'" required="true()" type="select1"/>
+      <bind nodeset="/out_migration_registration/reasonForOutMigrationOther" relevant="../reasonForOutMigration = 'OTHER'" required="true()" type="string"/>
+      <bind nodeset="/out_migration_registration/shortlongterm" required="true()" type="select1"/>
+      <bind nodeset="/out_migration_registration/processedByMirth" readonly="true()" type="int"/>
+      <bind calculate="concat('uuid:', uuid())" nodeset="/out_migration_registration/meta/instanceID" readonly="true()" type="string"/>
+      <bind calculate="concat( /out_migration_registration/openhds/individualId ,'_OMG_', /out_migration_registration/openhds/fieldWorkerId )" nodeset="/out_migration_registration/meta/instanceName" type="string"/>
+    </model>
+  </h:head>
+  <h:body>
+    <input appearance="no-calendar" ref="/out_migration_registration/earliestDate">
+      <label ref="jr:itext('/out_migration_registration/earliestDate:label')"/>
+    </input>
+    <group appearance="field-list" ref="/out_migration_registration/openhds">
+      <label ref="jr:itext('/out_migration_registration/openhds:label')"/>
+      <input ref="/out_migration_registration/openhds/fieldWorkerId">
+        <label ref="jr:itext('/out_migration_registration/openhds/fieldWorkerId:label')"/>
+      </input>
+      <input ref="/out_migration_registration/openhds/visitId">
+        <label ref="jr:itext('/out_migration_registration/openhds/visitId:label')"/>
+      </input>
+      <input ref="/out_migration_registration/openhds/individualId">
+        <label ref="jr:itext('/out_migration_registration/openhds/individualId:label')"/>
+      </input>
+      <input ref="/out_migration_registration/openhds/firstName">
+        <label ref="jr:itext('/out_migration_registration/openhds/firstName:label')"/>
+      </input>
+      <input ref="/out_migration_registration/openhds/lastName">
+        <label ref="jr:itext('/out_migration_registration/openhds/lastName:label')"/>
+      </input>
+    </group>
+    <input appearance="no-calendar" ref="/out_migration_registration/dateOfMigration">
+      <label ref="jr:itext('/out_migration_registration/dateOfMigration:label')"/>
+    </input>
+    <select1 ref="/out_migration_registration/withinDSS">
+      <label ref="jr:itext('/out_migration_registration/withinDSS:label')"/>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/withinDSS/1:label')"/>
+        <value>1</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/withinDSS/2:label')"/>
+        <value>2</value>
+      </item>
+    </select1>
+    <select1 ref="/out_migration_registration/zone">
+      <label ref="jr:itext('/out_migration_registration/zone:label')"/>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/zone/1:label')"/>
+        <value>1</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/zone/2:label')"/>
+        <value>2</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/zone/99:label')"/>
+        <value>99</value>
+      </item>
+    </select1>
+    <select1 ref="/out_migration_registration/urbanzone">
+      <label ref="jr:itext('/out_migration_registration/urbanzone:label')"/>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/urbanzone/Urban:label')"/>
+        <value>Urban</value>
+      </item>
+    </select1>
+    <select1 ref="/out_migration_registration/villagezone">
+      <label ref="jr:itext('/out_migration_registration/villagezone:label')"/>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/villagezone/BUMBA:label')"/>
+        <value>BUMBA</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/villagezone/BUNGU_A:label')"/>
+        <value>BUNGU_A</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/villagezone/BUNGU_B:label')"/>
+        <value>BUNGU_B</value>
+      </item>
+    </select1>
+    <input ref="/out_migration_registration/otherplace">
+      <label ref="jr:itext('/out_migration_registration/otherplace:label')"/>
+    </input>
+    <select1 ref="/out_migration_registration/outofdss">
+      <label ref="jr:itext('/out_migration_registration/outofdss:label')"/>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/outofdss/Other:label')"/>
+        <value>Other</value>
+      </item>
+    </select1>
+    <input ref="/out_migration_registration/nameOfDestination">
+      <label ref="jr:itext('/out_migration_registration/nameOfDestination:label')"/>
+    </input>
+    <select1 ref="/out_migration_registration/reasonForOutMigration">
+      <label ref="jr:itext('/out_migration_registration/reasonForOutMigration:label')"/>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/reasonForOutMigration/FISHING:label')"/>
+        <value>FISHING</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/reasonForOutMigration/GONEWITHRELATIVES:label')"/>
+        <value>GONEWITHRELATIVES</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/reasonForOutMigration/MARITAL_CHANGE:label')"/>
+        <value>MARITAL_CHANGE</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/reasonForOutMigration/MOVEDTONEWHOUSE:label')"/>
+        <value>MOVEDTONEWHOUSE</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/reasonForOutMigration/EDUCATION/SCHOOL:label')"/>
+        <value>EDUCATION/SCHOOL</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/reasonForOutMigration/WORK:label')"/>
+        <value>WORK</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/reasonForOutMigration/OTHER:label')"/>
+        <value>OTHER</value>
+      </item>
+    </select1>
+    <select1 ref="/out_migration_registration/maritalChange">
+      <label ref="jr:itext('/out_migration_registration/maritalChange:label')"/>
+      <hint ref="jr:itext('/out_migration_registration/maritalChange:hint')"/>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/maritalChange/MAR:label')"/>
+        <value>MAR</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/maritalChange/DIV:label')"/>
+        <value>DIV</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/maritalChange/SEP:label')"/>
+        <value>SEP</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/maritalChange/WID:label')"/>
+        <value>WID</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/maritalChange/REC:label')"/>
+        <value>REC</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/maritalChange/888:label')"/>
+        <value>888</value>
+      </item>
+    </select1>
+    <input ref="/out_migration_registration/reasonForOutMigrationOther">
+      <label ref="jr:itext('/out_migration_registration/reasonForOutMigrationOther:label')"/>
+    </input>
+    <select1 ref="/out_migration_registration/shortlongterm">
+      <label ref="jr:itext('/out_migration_registration/shortlongterm:label')"/>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/shortlongterm/1:label')"/>
+        <value>1</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/shortlongterm/2:label')"/>
+        <value>2</value>
+      </item>
+      <item>
+        <label ref="jr:itext('/out_migration_registration/shortlongterm/3:label')"/>
+        <value>3</value>
+      </item>
+    </select1>
+    <input ref="/out_migration_registration/processedByMirth">
+      <label ref="jr:itext('/out_migration_registration/processedByMirth:label')"/>
+    </input>
+  </h:body>
+</h:html>
