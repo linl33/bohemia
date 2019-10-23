@@ -1,13 +1,13 @@
 #' Create location hierarchy
 #' 
-#' Generate cascading options for location hierarchy for insertion into openhds database. This assumes that location levels have been configured in the openhds web app under "Configuration"->"Location Levels", and have been set to the following: Country, District, Ward, Village, Hamlet (1-5).
-#' @param output_file Where to write the file
-#' @return SQL code
-#' @import dplyr, gsheet, tidyr
+#' Generate cascading options for location hierarchy for insertion into openhds database and the ODK "choices" sheet. This assumes that location levels have been configured in the openhds web app under "Configuration"->"Location Levels", and have been set to the following: Country, District, Ward, Village, Hamlet (1-5).
+#' @param output_file Where to write the file (.sql and .csv will be appended)
+#' @return SQL code (in a .sql file) and tabular data (in a .csv file). The sql code is meant to be run on the OpenHDS database, and the .csv file is meant to be copy-pasted into the census choices
+#' @import dplyr, gsheet, tidyr, readr
 #' @export
 
-openhds_create_location_hierarchy <- function(output_file = "../scripts/create_location_hierarchies.sql"){
-  require(dplyr); require(gsheet); require(tidyr)
+openhds_create_location_hierarchy <- function(output_file = "../scripts/locations"){
+  require(dplyr); require(gsheet); require(tidyr); require(readr)
   # Define the url of the location hierachy spreadsheet (contains all locations for both sites)
   url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
   # Fetch the data
@@ -24,6 +24,7 @@ openhds_create_location_hierarchy <- function(output_file = "../scripts/create_l
                       key = NA,
                       value = NA)
   key_table <- key_table[0,]
+  odk_list <- list(); odk_counter <- 0
   for(i in 1:length(the_levels)){
     
     # Get a unique list of the values of this level (with associated hierarchy)
@@ -47,7 +48,9 @@ openhds_create_location_hierarchy <- function(output_file = "../scripts/create_l
     # Generate into table
     inner_list <- list()
     for(j in 1:nrow(pd)){
+      odk_counter <- odk_counter + 1
       this_row <- pd[j,]
+      odk_list[[odk_counter]] <- this_row
       this_value <- as.character(unlist(this_row[,i]))
       parent_value <- as.character(unlist(this_row[,i-1]))
       parent_key <- previous_levels[length(previous_levels)]
@@ -64,7 +67,7 @@ openhds_create_location_hierarchy <- function(output_file = "../scripts/create_l
     out_list[[i]] <- out
   }  
   done <- bind_rows(out_list)
-  
+  odk <- bind_rows(odk_list)
   # Generate uuids
   done$uuid <- paste0('hierarchy', 1:nrow(done))
   
@@ -101,7 +104,11 @@ openhds_create_location_hierarchy <- function(output_file = "../scripts/create_l
   }
   
   x <- done
-  x <- openhds_create_location_hierarchy()
+  # Bring the IDs into the ODK table too
+  odk$extId <- x$extId
+  odk <- odk %>% dplyr::select(extId, Country, District, Ward, Village, Hamlet)
+  
+
   # Convert to SQL insert commands
   the_lines <- c()
   for (i in 1:nrow(x)){
@@ -117,8 +124,15 @@ openhds_create_location_hierarchy <- function(output_file = "../scripts/create_l
       )
     the_lines[i] <- this_text
   }
-  fileConn<-file(output_file, encoding='UTF-8')
+  
+  sql_file <- paste0(output_file, '.sql')
+  csv_file <- paste0(output_file, '.csv')
+
+  message('Writing sql code to ', sql_file)
+  fileConn<-file(sql_file, encoding='UTF-8')
   writeLines(the_lines, fileConn)
   close(fileConn)
   
+  message('Writing tabular data to ', csv_file)
+  write_csv(odk, csv_file)
 }

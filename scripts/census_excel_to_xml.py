@@ -7,11 +7,11 @@ import os
 gc = pygsheets.authorize('../credentials/gsheets_oauth.json')
 
 # Open spreadsheet and then workseet
-sh = gc.open('census')
+sh = gc.open('censusopenhds')
 wks = sh.sheet1
 
 #export as xls
-wks.export(pygsheets.ExportType.XLS, 'census')
+wks.export(pygsheets.ExportType.XLS, 'censusopenhds')
 
 ## Convert to xml
-os.system('xls2xform census.xls census.xml')
+os.system('xls2xform censusopenhds.xls censusopenhds.xml')

@@ -16,7 +16,7 @@ Once the system has been deployed and forms have been created, data collection s
 - Open OpenHDS Mobile
 - Tap "Preferences" in the upper-right
 - Click on the url under the heading "OpenHDS Server Location"
-- Enter the URL of the OpenHDS server: https://bohemia.team/openhds
+- Enter the URL of the OpenHDS server: https://datacat.cc/openhds
 
 ### Set up ODKCollect
 
@@ -24,7 +24,7 @@ Once the system has been deployed and forms have been created, data collection s
 - Click the three dots in the upper-right hand corner
 - Select "General Settings"
 - Click "Server"
-- Change the server URL to https://bohemia.team/ODKAggregate
+- Change the server URL to https://datacat.cc/ODKAggregate
 - Set the credentials to `data` (user) and `data` (password)
 
 ### Synchronizing OpenHDS Mobile
