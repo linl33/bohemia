@@ -767,6 +767,11 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 
 - Go to datacat.cc/openhds
 - Select "Utlity routines" -> "ODK Forms"
+- Select the name of the form, set to "active" and apply to "all" genders. Click create.
+- Go to datacat.cc/manager. Log in as data/data. Click "reload" for OpenHDS.
+- Log in as `admin/test` on the OpenHDS android app. Sync everything.
+- On ODKCollect, click "Get Blank Form". Get the new extra form.
+- Log in as a fieldworker on OpenHDS android app (FWDD1/data). Fill out data for a person.
 
 
 

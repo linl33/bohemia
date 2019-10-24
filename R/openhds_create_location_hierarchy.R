@@ -7,6 +7,7 @@
 #' @export
 
 openhds_create_location_hierarchy <- function(output_file = "../scripts/locations"){
+  set.seed(1)
   require(dplyr); require(gsheet); require(tidyr); require(readr)
   # Define the url of the location hierachy spreadsheet (contains all locations for both sites)
   url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
