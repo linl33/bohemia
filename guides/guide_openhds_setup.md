@@ -763,6 +763,25 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 - Additionally, we need to download `locations.csv`. This should be uploaded as a separate, metadata file with the census form: https://github.com/databrew/bohemia/blob/master/scripts/locations.sql
 - Resync tablets
 
+## Setting up local python tools
+
+There are some tools that help to both download the census excel from google docs as well as convert it to xml. This can all be done in the `scripts/census_excelt_xml.py` script. To prepare your system to run it:
+
+- Clone the bohemia github repo: `git clone https://github.com/databrew/bohemia`
+- Create a virtual environment to be used with python's package manager. Follow [these steps](https://itnext.io/virtualenv-with-virtualenvwrapper-on-ubuntu-18-04-goran-aviani-d7b712d906d5).  Then `mkvirtualenv bohemia`
+- Get inside the virtual environment (`workon bohemia`) and intall python pacakges: `pip install -r requirements.txt`
+- From within the main `bohemia` directory, `cd` into `scripts` and run `python census_excel_to_xml.py`
+
+
+#### Setting up the census forms
+
+- There are two census forms:
+  1. ["censushouse"](https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit?urp=gmail_link#gid=141178862)
+  2. ["censusmember"](https://docs.google.com/spreadsheets/d/1Z1nQ7RvbiP_YBOth62AoOUDVB9WcMDsIu3jJEnaSNbo/edit?urp=gmail_link#gid=141178862)
+- These forms must be downloaded as `.xml` files, converted to `.xml` files and then uploaded with the accompanying `locations.csv` (see previous section) to ODKAggregate
+- The above can be done manually, or by using the `scripts/census_excel_to_xml.py` python script.
+- Once done, the forms need to be integrated into OpenHDS
+
 #### Setting up the extra forms
 
 - Go to datacat.cc/openhds
