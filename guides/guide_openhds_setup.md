@@ -517,11 +517,8 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 
 ### Importing MirthConnect channels
 
-- Create a directory on your local machine called `Mirth-Channels`
-- `cd` into that directory
-- Run `wget https://github.com/SwissTPH/Mirth-Channels/releases/download/1%2C6/Mirth-Channels.zip` to your local machine
-- Run `unzip Mirth-Channels.zip`
-- ~~On your local machine, open `bohemia/rufiji/forms`~~
+- Go to `bohemia/Mirth-Channels` on your local machine
+  - Note, these channels were downloaded via: `wget https://github.com/SwissTPH/Mirth-Channels/releases/download/1%2C6/Mirth-Channels.zip` to your local machine
 - On your local machine, open the "Mirth Connect Administrator Launcher" program
 - Log in with the https://datacat.cc:8443 Server and the `data`/`data` username/password
 - Once Mirth Connect Administrator is up and running, click on the "Channels" menu on the left
@@ -533,6 +530,16 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
   - `Update Household.xml`
   - `Database Error Writer.xml`
   - `File Error CreateSend.xml`
+~~Adding these channels (experimental):~~
+```
+├── ExtraFormCreationChannel.xml
+├── ExtraFormGroupCreate.xml
+├── ExtraFormGroupSendSubmissions.xml
+├── ExtraFormSendDataChannel.xml
+├── Global Scripts.xml
+├── MigrationChannel.xml
+```
+
 - On the last file, you may get an error which prevents it from being enabled. Proceed - it will be disabled for the time being, but we'll fix it later.
 ![](img/mirth7.png)
 - When finished your "Channels" menu should look like this:
@@ -659,13 +666,24 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@datacat.cc:/home/ubuntu/ODK/O
 - Log out
 - Log in as odk_prod with password data
 
+## Setting up local python tools
+
+There are some tools that help to both download the census excel from google docs as well as convert it to xml. This can all be done in the `scripts/census_excel_to_xml.py` script. To prepare your system to run it:
+
+- Clone the bohemia github repo: `git clone https://github.com/databrew/bohemia`
+- Create a virtual environment to be used with python's package manager. Follow [these steps](https://itnext.io/virtualenv-with-virtualenvwrapper-on-ubuntu-18-04-goran-aviani-d7b712d906d5).  Then `mkvirtualenv bohemia`
+- Get inside the virtual environment (`workon bohemia`) and intall python pacakges: `pip install -r requirements.txt`
+- From within the main `bohemia` directory, `cd` into `scripts` and run `python census_excel_to_xml.py`
+
+
 ## Upload HDSS Core XLSForms
 
 - The below steps only need to be taken once:
     - Download the xlsforms base forms for OpenHDS from [here](https://github.com/SwissTPH/openhds-tablet/releases/download/1.5/xlsforms.zip).  
     - Extract into the `xforms/openhds_original/xlsx` of the `bohemia` directory (cloned from https://github.com/databrew/bohemia)
-    - Modify `change_hoh.xlsx` so as to remove all references to the `earliestDate` field
-    - Modify as necessary (more details to go here later)
+    - Copy all to the `xforms/openhds_modified/xlsx`
+    - Make the following changes manually:  
+      - Modify `change_hoh.xlsx` so as to remove all references to the `earliestDate` field (this field was causing errors)
     - Export each form as xml into `xforms/openhds_original/xml`
       - To do this, use the [pyxform](https://github.com/XLSForm/pyxform/) library, installed into the `bohemia` virtual environment:
     ```
@@ -673,9 +691,8 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" "ubuntu@datacat.cc:/home/ubuntu/ODK/O
     cd ~/Documents/bohemia/xforms/openhds_original
     python convert_all.py
     ```
-- ~~On your local machine, clone Paulo Filimone's implementation of the OpenHDS tablet application: `git clone https://github.com/philimones-group/openhds-tablet`~~
 
-- In your local browser, open https://datacat.cc/ODKAggregate/.
+- In your local browser, open https://datacat.cc/ODKAggregate/. Log in as data/data
 - Click on the "Form Management" tab
 - Click on "Add New Form"
 - Upload the following forms, one-by-one, from your local `xforms/openhds_modified` directory:
@@ -758,19 +775,9 @@ GRANT SELECT, UPDATE ON BASELINE_VIEW TO 'datamanager'@'%';
 ## Customizing location hierarchy
 
 - Creating the location hierarchy can be done in the web app by going to https://datacat.cc/openhds (login with admin/test), then clicking on "Configuration" -> "Location Levels", setting levels to  Country, District, Ward, Village, Hamlet (levels 1-5)
-- Next, one could go to "Utility Routines" -> "Location Hierarchy" and build the hierachy on [this spreadsheet]('https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing') manually. However, this is very time-consuming.
+- ~~Next, one could go to "Utility Routines" -> "Location Hierarchy" and build the hierachy on [this spreadsheet]('https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing') manually. However, this is very time-consuming.~~
 - Instead, we can run the following script in sql: `mysql -udata -pdata openhds`. Note, this script was generated by the code in `bohemia/R/openhds_create_location_hierachies.R`. Script at https://github.com/databrew/bohemia/blob/master/scripts/locations.sql.
-- Additionally, we need to download `locations.csv`. This should be uploaded as a separate, metadata file with the census form: https://github.com/databrew/bohemia/blob/master/scripts/locations.sql
-- Resync tablets
-
-## Setting up local python tools
-
-There are some tools that help to both download the census excel from google docs as well as convert it to xml. This can all be done in the `scripts/census_excelt_xml.py` script. To prepare your system to run it:
-
-- Clone the bohemia github repo: `git clone https://github.com/databrew/bohemia`
-- Create a virtual environment to be used with python's package manager. Follow [these steps](https://itnext.io/virtualenv-with-virtualenvwrapper-on-ubuntu-18-04-goran-aviani-d7b712d906d5).  Then `mkvirtualenv bohemia`
-- Get inside the virtual environment (`workon bohemia`) and intall python pacakges: `pip install -r requirements.txt`
-- From within the main `bohemia` directory, `cd` into `scripts` and run `python census_excel_to_xml.py`
+- Additionally, we need to download `locations.csv` into `bohemia/scripts`. This should be uploaded as a separate, metadata file with the census form: https://github.com/databrew/bohemia/blob/master/scripts/locations.sql
 
 
 #### Setting up the census forms
@@ -779,19 +786,25 @@ There are some tools that help to both download the census excel from google doc
   1. ["censushouse"](https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit?urp=gmail_link#gid=141178862)
   2. ["censusmember"](https://docs.google.com/spreadsheets/d/1Z1nQ7RvbiP_YBOth62AoOUDVB9WcMDsIu3jJEnaSNbo/edit?urp=gmail_link#gid=141178862)
 - These forms must be downloaded as `.xml` files, converted to `.xml` files and then uploaded with the accompanying `locations.csv` (see previous section) to ODKAggregate
-- The above can be done manually, or by using the `scripts/census_excel_to_xml.py` python script.
-- Once done, the forms need to be integrated into OpenHDS
+- The above can be done manually, or by using the `scripts/census_excel_to_xml.py` python script as such:
+```
+cd ~/Documents/bohemia # (wherever you have the bohemia repo cloned)
+workon bohemia
+cd scripts
+python census_excel_to_xml.py
+```
+- The above (i) fetches our census forms from google docs and downloads them locally as `.xls` files, and (ii) converts them to `.xml`
 
-#### Setting up the extra forms
+**Now we need to ODK/OpenHDS to use the census as extraforms**
 
 - Go to datacat.cc/openhds
 - Select "Utlity routines" -> "ODK Forms"
-- Select the name of the form, set to "active" and apply to "all" genders. Click create.
-- Go to datacat.cc/manager. Log in as data/data. Click "reload" for OpenHDS.
-- Log in as `admin/test` on the OpenHDS android app. Sync everything.
-- On ODKCollect, click "Get Blank Form". Get the new extra form.
-- Log in as a fieldworker on OpenHDS android app (FWDD1/data). Fill out data for a person.
+- Type the name of the form, "censusmember", set to "active" and apply to "all" genders. Click create.
+- Do the same for "censushouse"
 
+- Go to datacat.cc/ODKAggregate
+- Click on "Form Management"
+- Click "Add New Form". Upload the "censushouse.xml" form with "locations.csv" as a media file
 
 
 #### Preparing to synchronize OpenHDS Mobile
@@ -804,7 +817,7 @@ There are some tools that help to both download the census excel from google doc
           - Log out
           - Log in as data/data
     - Click on menu item "Utility Routines" - Field Workers
-      - Create a worker named data/data with credentials data/data
+      - Create a worker named data/data with credentials data/data. This will generate a worker with ID "FWDD1"
     - Click on menu item "Utility Routines" - Round codes
       - Create the round (0 = baseline, 1 = first follow-up, etc.). Doing 0 only for now
       - Set dates
@@ -816,8 +829,9 @@ There are some tools that help to both download the census excel from google doc
       - Now click on the "Start Location Task" button (and wait for the table to populate accordingly)
       - Now click on the "Start Relationship Task" button (and wait for the table to populate accordingly)
       - Finally, click on the "Start Social Group Task" button (and wait for the table to populate accordingly)
-- Reload the application via tomcat (datacat.cc/manager), and resync tablet database
+  - Go to datacat.cc/manager. Log in as data/data. Click "reload" for OpenHDS.
 
 # Data collection
 
-This is the end of the admin's guide. The data collection guide is available [HERE](guide_data_collection.md).
+- The server is up and ready to run. Now it's time to get the tablets set up for data collection.  
+- The data collection guide is available [HERE](guide_data_collection.md).
