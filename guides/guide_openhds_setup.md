@@ -536,7 +536,6 @@ GRANT ALL ON mirthdb.* TO data@'%' IDENTIFIED BY 'data' WITH GRANT OPTION;
 ├── ExtraFormGroupCreate.xml
 ├── ExtraFormGroupSendSubmissions.xml
 ├── ExtraFormSendDataChannel.xml
-├── Global Scripts.xml
 ├── MigrationChannel.xml
 ```
 
@@ -823,7 +822,7 @@ python census_excel_to_xml.py
       - Set dates
       - Click "Create"
     - Click on the menu item "Utility Routines" - Tasks
-    - Repeat the below for both 0 and 1:
+    - Repeat the below for round 0:
       - In the field Round number, enter the number of the round just created (0 or 1) and click on "Start Visit Task". Wait until you see that the task is ended (ie, the table below should have both a header row and a data row)
       - Now click on the "Start Individual Task" button (and wait for the table to populate accordingly)
       - Now click on the "Start Location Task" button (and wait for the table to populate accordingly)
