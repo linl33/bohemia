@@ -88,5 +88,5 @@ get_users <- function(){
              connection_object = co)
 }
 users <- get_users()
-users <- users %>% arrange(last_name)
+users <- users %>% arrange(first_name)
 
