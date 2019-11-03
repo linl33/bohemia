@@ -55,11 +55,30 @@ check_password <- function(user, password, the_users){
 }
 
 # Function for adding new user
-add_user <- function(user, password){
-  message('Account just created with the following credentials')
-  message('---User: ', user)
-  message('---Password: ', password)
-  # Add code here to add user to database
+add_user <- function(user, password, first_name, last_name, position, institution, users){
+  if(user %in% users$email){
+    x <- paste0('An account for ', user, ' already exists.')
+  } else {
+    message('Account just created with the following credentials')
+    message('---User: ', user)
+    message('---Password: ', password)
+    # Add code here to add user to database
+    df <- tibble(first_name,
+                 last_name,
+                 position, institution,
+                 email = user, tags = NA,
+                 admin = FALSE,
+                 password)
+    dbWriteTable(conn = co, 
+                 name = 'users', 
+                 value = df, 
+                 row.names = FALSE,
+                 overwrite = FALSE,
+                 append = TRUE)
+    x <- paste0('Just created an account for user: ',
+                user, ', with password: ', password)
+  }
+  return(x)
 }
 
 
@@ -67,5 +86,3 @@ add_user <- function(user, password){
 users <- dbGetQuery(conn = co,statement = 'SELECT * FROM users',
                     connection_object = co)
 
-# Add an id
-users$id <- 1:nrow(users)

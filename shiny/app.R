@@ -24,8 +24,9 @@ body <- dashboardBody(
       fluidPage(
         fluidRow(h3('Instructions')),
         fluidRow(column(6,
-                        p('Once you have selected people, click below to send htem an email'), 
-                        uiOutput('ui_send_email')),
+                        p('Once you have selected people, click below to send them an email'), 
+                        uiOutput('ui_send_email'),
+                        uiOutput('ui_create_account')),
                  uiOutput('edit_text')),
         fluidRow(DT::dataTableOutput('edit_table'))
       )
@@ -138,8 +139,8 @@ server <- function(input, output, session) {
   
   output$modal_ui <- renderUI({
     
-    # Capture the modal text.
-    mt <- modal_text()
+    # Capture the log-in text
+    lit <- mt <- log_in_text()
     # See if we're in account creation vs log in mode
     account_creation <- create_account()
     if(account_creation){
@@ -150,14 +151,19 @@ server <- function(input, output, session) {
                  actionButton('back',
                               'Back'))
         ),
-        h3(textInput('create_user', 'Create username'),
-           textInput('create_password', 'Create password')),
+        h3(textInput('create_user', 'Email'),
+           textInput('create_password', 'Create password'),
+           textInput('create_first_name', 'First name'),
+           textInput('create_last_name', 'Last name'),
+           textInput('create_position', 'Position'),
+           textInput('create_institution', 'Institution')
+        ),
         fluidRow(
-          column(12, align = 'right',
+          column(6, align = 'left', p(lit)),
+          column(6, align = 'right',
                  actionButton('submit_create_account',
                               'Create account'))
-        ),
-        fluidRow(recaptcha_ui("test", language = 'en', sitekey = captcha$site_key))
+        )
       )
     } else {
       fluidPage(
@@ -178,25 +184,40 @@ server <- function(input, output, session) {
   
   # Observe account creation
   observeEvent(input$submit_create_account,{
-    add_user(user = input$create_user,
-             password = input$create_password)
+    x <- add_user(user = input$create_user,
+             password = input$create_password,
+             first_name = input$create_first_name,
+             last_name = input$create_last_name,
+             position = input$create_position,
+             institution = input$create_institution,
+             users = data$users)
+    message('x is ', x)
+    log_in_text(x)
   })
   
   output$edit_table <- DT::renderDataTable({
     li <- logged_in()
+    addy <- is_admin()
+    if(addy){
+      eddy <- list(target = 'cell', disable = list(columns = c(5)))
+    } else {
+      eddy <- FALSE
+    }
     if(li){
       df <- data$users
       df <- df %>% dplyr::select(first_name, last_name,
                                  position, institution, email,
-                                 tags, id)
-      addy <- is_admin()
-      DT::datatable(df, editable = ifelse(addy, 'row', FALSE),
-                    colnames = c('First' = 'first_name',
-                                 'Last' = 'last_name',
-                                 'Position' = 'position', 
-                                 'Institution' = 'institution',
-                                 'Email' = 'email',
-                                 'Tags' = 'tags'))
+                                 tags)
+      names(df) <- c('First', 'Last', 'Position', 'Institution',
+                     'Emails', 'Tags')
+      df <- df %>% arrange(Last)
+      DT::datatable(df, editable = eddy)#,
+                    # colnames = c('First' = 'first_name',
+                    #              'Last' = 'last_name',
+                    #              'Position' = 'position', 
+                    #              'Institution' = 'institution',
+                    #              'Email' = 'email',
+                    #              'Tags' = 'tags'))
     } else {
       NULL
     }
@@ -248,6 +269,63 @@ server <- function(input, output, session) {
     data$users <- x
   })
   
+  output$ui_create_account <- renderUI({
+    
+    addy <- is_admin()
+    li <- logged_in()
+    selected_rows <- input$edit_table_rows_selected
+    any_selected <- length(selected_rows) > 0
+    if(li & addy){
+      if(any_selected){
+        fluidPage(
+          column(6,
+                 actionButton('new_entry',
+                              'Add new entry',icon = icon('face'))),
+          column(6,
+                 actionButton('delete_entry',
+                              'Delete selected entries',icon = icon('face')))
+        )
+      } else {
+        fluidPage(
+          column(6,
+                 actionButton('new_entry',
+                              'Add new entry',icon = icon('face'))),
+          column(6)
+        )
+      }
+      
+    }
+  })
+  observeEvent(input$new_entry,{
+    create_account(TRUE)
+    log_in_text('')
+    showModal(
+      modalDialog(
+        uiOutput('new_entry_ui'),
+        easyClose = TRUE
+      )
+    )
+  })
+  
+  output$new_entry_ui <- renderUI({
+    lit <- log_in_text()
+      fluidPage(
+        h3(textInput('create_user', 'Email'),
+           textInput('create_password', 'Create password'),
+           textInput('create_first_name', 'First name'),
+           textInput('create_last_name', 'Last name'),
+           textInput('create_position', 'Position'),
+           textInput('create_institution', 'Institution')
+        ),
+        fluidRow(
+          column(6, align = 'left', p(lit)),
+          column(6, align = 'right',
+                 actionButton('submit_create_account',
+                              'Create account'))
+        )
+      )
+  })
+  
   # Capture the selected rows
   observeEvent(input$edit_table_rows_selected,{
     selected_rows <- input$edit_table_rows_selected
@@ -271,6 +349,34 @@ server <- function(input, output, session) {
       column(6,
              p('Hold ctrl + click to select people.'),
              p('Type any name, institution, "tag", etc. to filter people.'))
+    }
+  })
+  
+  observeEvent(input$delete_entry, {
+    selected_rows <- input$edit_table_rows_selected
+    df <- data$users
+    df <- df[selected_rows,]
+    emails <- sort(unique(df$email[!is.na(df$email)]))
+    showModal(modalDialog(
+      title = 'Confirm deletion',
+      fluidPage(
+        paste0('Are you sure you want to delete the entries for ',
+               paste0(emails, collapse = ', '), '?'),
+        actionButton('sure', 'Yes', icon = icon('check'))
+      )
+    ))
+  })
+  observeEvent(input$sure,{
+    selected_rows <- input$edit_table_rows_selected
+    df <- data$users
+    df <- df[selected_rows,]
+    emails <- sort(unique(df$email[!is.na(df$email)]))
+    for(i in 1:length(emails)){
+      this_email <- emails[i]
+      message('Deleting entry for ', this_email)
+      dbSendQuery(conn = co,
+                  paste0("delete from users where email = '",
+                         this_email, "'"))
     }
   })
 }
