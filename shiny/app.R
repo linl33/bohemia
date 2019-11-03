@@ -247,7 +247,6 @@ server <- function(input, output, session) {
   # Capture edits to data and store them
   proxy = dataTableProxy('edit_table')
   observeEvent(input$edit_table_cell_edit, {
-    save.image('temp.RData')
     x <- data$users
     x <- x %>% arrange(first_name)
     info = input$edit_table_cell_edit

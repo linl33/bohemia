@@ -168,7 +168,17 @@ cd Documents
 git clone https://github.com/databrew/bohemia
 cd /home/rstudio/ShinyApps
 sudo cp -r /home/ubuntu/Documents/bohemia/shiny .
+cd shiny
+```
 
+- To keep the repo up to date later:
+```
+cd /home/ubuntu/Documents/bohemia
+git pull
+cd /home/rstudio/ShinyApps/shiny
+sudo cp /home/ubuntu/Documents/bohemia/shiny/app.R /home/rstudio/ShinyApps/shiny/app.R
+sudo cp /home/ubuntu/Documents/bohemia/shiny/set_up_database.R /home/rstudio/ShinyApps/shiny/set_up_database.R
+sudo cp /home/ubuntu/Documents/bohemia/shiny/global.R /home/rstudio/ShinyApps/shiny/global.R
 ```
 
 ## Set up RStudio for the browser
@@ -176,7 +186,7 @@ sudo cp -r /home/ubuntu/Documents/bohemia/shiny .
 - Click on "Security Groups" in the AWS web console
 - Click on the one associated with the AMI image
 - Configure the Security Group to allow inbound HTTP (port 80) traffic
-- Configure to allow all IP inbound traffic on port 3838
+- Configure to allow all IP inbound/outbound traffic on port 3838
 - Go back to the EC2 dashboard
 - Copy and paste the instance ID into the web browser: ec2-18-218-87-64.us-east-2.compute.amazonaws.com
 - Sign in with username rstudio and the password (instance id - get it from the EC2 instance menu)
@@ -189,7 +199,21 @@ sudo -i -u postgres
 createuser --interactive
 - name of role: ubuntu
 - superuser: y
+createuser --interactive
+- name of role: rstudio
+- superuser: y
+createuser --interactive
+- name of role: shiny
+- superuser: y
 createdb ubuntu
+createdb rstudio
+createdb shiny
+exit
+psql
+create database directory;
+
+sudo -u postgres psql
+grant all privileges on database directory to shiny
 ```
 
 ## Copy private files from local machine to remote machine
@@ -212,7 +236,28 @@ sudo cp /home/ubuntu/database.xlsx /home/rstudio/ShinyApps/shiny/data/database.x
 sudo cp -r /home/ubuntu/credentials /home/rstudio/ShinyApps/shiny/credentials
 ```
 
+## Get the app data set up
+
+```
+cd /home/rstudio/ShinyApps/shiny
+R
+sudo su - -c "R -e \"install.packages('readxl')\""
+sudo su - -c "R -e \"devtools::install_github('rstudio/DT')\""
+sudo su - -c "R -e \"install.packages('shinydashboard')\""
+sudo su - -c "R -e \"install.packages('shiny')\""
+sudo su - -c "R -e \"install.packages('RPostgreSQL')\""
+sudo su - -c "R -e \"install.packages('devtools')\""
+sudo su - -c "R -e \"install.packages('tidyverse')\""
+
+Rscript set_up_database.R
+```
+
 ## Set up shiny server
+
+- Copy our app to the deploy zone:
+```
+sudo cp -r /home/rstudio/ShinyApps/shiny /srv/shiny-server/
+```
 
 - Launch a sample app:
 ```
@@ -222,4 +267,16 @@ sudo /opt/shiny-server/bin/deploy-example default
 - Copy our app to the launch zone:
 ```
 sudo cp -r /home/rstudio/ShinyApps/shiny /srv/shiny-server/sample-apps/
+sudo cp -r /home/rstudio/ShinyApps/shiny /srv/shiny-server/
+sudo systemctl restart shiny-server
 ```
+
+- Ensure permissions are okay:
+```
+sudo ufw allow 3838/tcp
+cd /srv/shiny-server
+chmod 555 shiny
+sudo systemctl restart shiny-server
+```
+
+# The website is now live at http://bohemia.team:3838/shiny/
