@@ -26,7 +26,7 @@ if(local){
 co <- credentials_connect(options_list = credentials)
 
 # Read in the original source data
-data <- read_excel("data/BOHEMIA stakeholder's database.xlsx")
+data <- read_excel("data/database.xlsx")
 # Change names
 names(data) <- c('first_name', 'last_name',
                  'position', 'institution', 'email')

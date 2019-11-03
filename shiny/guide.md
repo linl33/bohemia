@@ -162,7 +162,12 @@ sudo apt-get -y install \
 
 ```
 sudo apt install git
+cd /home/ubuntu/
+mkdir Documents
+cd Documents
+git clone https://github.com/databrew/bohemia
 cd /home/rstudio/ShinyApps
+sudo cp -r /home/ubuntu/Documents/bohemia/shiny .
 
 ```
 
@@ -171,6 +176,50 @@ cd /home/rstudio/ShinyApps
 - Click on "Security Groups" in the AWS web console
 - Click on the one associated with the AMI image
 - Configure the Security Group to allow inbound HTTP (port 80) traffic
+- Configure to allow all IP inbound traffic on port 3838
 - Go back to the EC2 dashboard
 - Copy and paste the instance ID into the web browser: ec2-18-218-87-64.us-east-2.compute.amazonaws.com
 - Sign in with username rstudio and the password (instance id - get it from the EC2 instance menu)
+
+## Set up postgresql database
+
+```
+sudo apt install postgresql-10
+sudo -i -u postgres
+createuser --interactive
+- name of role: ubuntu
+- superuser: y
+createdb ubuntu
+```
+
+## Copy private files from local machine to remote machine
+
+Remote machine:
+```
+sudo mkdir /home/rstudio/ShinyApps/shiny/data/
+sudo mkdir /home/rstudio/ShinyApps/shiny/credentials/
+```
+Local machine:
+```
+scp -i "/home/joebrew/.ssh/openhdskey.pem" /home/joebrew/Documents/bohemia/shiny/data/database.xlsx ubuntu@bohemia.team:/home/ubuntu/database.xlsx
+
+scp -r -i "/home/joebrew/.ssh/openhdskey.pem" /home/joebrew/Documents/bohemia/shiny/credentials ubuntu@bohemia.team:/home/ubuntu/credentials
+```
+Remote machine:
+```
+sudo cp /home/ubuntu/database.xlsx /home/rstudio/ShinyApps/shiny/data/database.xlsx
+
+sudo cp -r /home/ubuntu/credentials /home/rstudio/ShinyApps/shiny/credentials
+```
+
+## Set up shiny server
+
+- Launch a sample app:
+```
+sudo /opt/shiny-server/bin/deploy-example default
+```
+
+- Copy our app to the launch zone:
+```
+sudo cp -r /home/rstudio/ShinyApps/shiny /srv/shiny-server/sample-apps/
+```
