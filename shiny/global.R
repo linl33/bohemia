@@ -83,6 +83,10 @@ add_user <- function(user, password, first_name, last_name, position, institutio
 
 
 # Read in the users data from the database
-users <- dbGetQuery(conn = co,statement = 'SELECT * FROM users',
-                    connection_object = co)
+get_users <- function(){
+  dbGetQuery(conn = co,statement = 'SELECT * FROM users',
+             connection_object = co)
+}
+users <- get_users()
+users <- users %>% arrange(last_name)
 

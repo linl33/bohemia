@@ -77,6 +77,8 @@ server <- function(input, output, session) {
     addy <- is_admin()
     message('this user - ', this_user_data$email, ' - ',
             ifelse(addy, 'is an admin', 'is not an admin'))
+    li <- logged_in()
+    if(li){removeModal()}
   })
   
   # Log in modal
@@ -193,6 +195,8 @@ server <- function(input, output, session) {
              users = data$users)
     message('x is ', x)
     log_in_text(x)
+    data$users <- dbGetQuery(conn = co,statement = 'SELECT * FROM users',
+                             connection_object = co)
   })
   
   output$edit_table <- DT::renderDataTable({
@@ -378,6 +382,10 @@ server <- function(input, output, session) {
                   paste0("delete from users where email = '",
                          this_email, "'"))
     }
+    
+    # Update the in-memory data
+    df <- data$users <- get_users()
+    removeModal()
   })
 }
 onStop(function() {
