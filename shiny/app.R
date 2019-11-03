@@ -214,7 +214,7 @@ server <- function(input, output, session) {
                                  tags)
       names(df) <- c('First', 'Last', 'Position', 'Institution',
                      'Emails', 'Tags')
-      df <- df %>% arrange(Last)
+      df <- df %>% arrange(First)
       DT::datatable(df, editable = eddy)#,
                     # colnames = c('First' = 'first_name',
                     #              'Last' = 'last_name',
@@ -237,7 +237,7 @@ server <- function(input, output, session) {
       if(et != ''){
         out <- fluidPage(
           HTML(
-            "<a href=\"mailto:", et, "?subject=Bohemia\">Click HERE to send email to the selected ", n_text, ".</a>")
+            "<a href=\"mailto:", et, "?subject=Bohemia\" target=\"_blank\">Click HERE to send email to the selected ", n_text, ".</a>")
         )
       }
     }
@@ -247,7 +247,9 @@ server <- function(input, output, session) {
   # Capture edits to data and store them
   proxy = dataTableProxy('edit_table')
   observeEvent(input$edit_table_cell_edit, {
+    save.image('temp.RData')
     x <- data$users
+    x <- x %>% arrange(first_name)
     info = input$edit_table_cell_edit
     i = info$row
     j = info$col
@@ -339,6 +341,8 @@ server <- function(input, output, session) {
     df <- data$users
     df <- df[selected_rows,]
     emails <- sort(unique(df$email[!is.na(df$email)]))
+    message('selected emails are')
+    print(emails)
     email_people(emails)
     email_text(paste0(emails, collapse = ', '))
   })
