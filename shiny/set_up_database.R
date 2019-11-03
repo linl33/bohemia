@@ -33,13 +33,13 @@ names(data) <- c('first_name', 'last_name',
 data$tags <- 'ivermectin'
 data$admin <- FALSE
 data$password <- 'password'
-admins <- tibble(first_name = c('Sònia', 'Mary', 'Carlos', 'Elena', 'Joe', 'Ben'),
-                 last_name = c('Tomàs', 'Mael', 'Chaccour', 'Moreno', 'Brew', 'Brew'),
-                 position = c('Project manager', 'Project assistant' , 'Assistant research professor', 'Projet manager', 'Data scientist', 'Data scientist'),
-                 institution = c('ISGlobal', 'ISGlobal', 'ISGlobal', 'ISGlobal', 'DataBrew', 'DataBrew'),
-                 email = c('sonia.tomas@isglobal.org', 'mary.mael@isglobal.org', 'carlos.chaccour@isglobal.org', 'elena.moreno@isglobal.org', 'joe@databrew.cc', 'ben@databrew.cc'),
+admins <- tibble(first_name = c('Sònia', 'Mary', 'Carlos', 'Elena', 'Joe', 'Ben', 'John', 'Jane'),
+                 last_name = c('Tomàs', 'Mael', 'Chaccour', 'Moreno', 'Brew', 'Brew', 'Doe', 'Doe'),
+                 position = c('Project manager', 'Project assistant' , 'Assistant research professor', 'Projet manager', 'Data scientist', 'Data scientist', 'Fake person', 'Fake person'),
+                 institution = c('ISGlobal', 'ISGlobal', 'ISGlobal', 'ISGlobal', 'DataBrew', 'DataBrew', 'Acme', 'Acme'),
+                 email = c('sonia.tomas@isglobal.org', 'mary.mael@isglobal.org', 'carlos.chaccour@isglobal.org', 'elena.moreno@isglobal.org', 'joe@databrew.cc', 'ben@databrew.cc', 'john@mail.com', 'jane@mail.com'),
                  tags = 'ivermectin',
-                 admin = TRUE,
+                 admin = c(rep(TRUE, 6), FALSE, TRUE),
                  password = 'password')
 
 # Create tables

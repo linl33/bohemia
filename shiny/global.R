@@ -66,3 +66,6 @@ add_user <- function(user, password){
 # Read in the users data from the database
 users <- dbGetQuery(conn = co,statement = 'SELECT * FROM users',
                     connection_object = co)
+
+# Add an id
+users$id <- 1:nrow(users)

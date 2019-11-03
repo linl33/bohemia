@@ -1,6 +1,6 @@
 source('global.R')
 
-header <- dashboardHeader(title="App title")
+header <- dashboardHeader(title="Ivermectin directory")
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem(
@@ -22,16 +22,13 @@ body <- dashboardBody(
     tabItem(
       tabName="directory",
       fluidPage(
-        fluidRow(h1('Ivermectin directory')),
         fluidRow(h3('Instructions')),
         fluidRow(column(6,
                         p('Once you have selected people, click below to send htem an email'), 
                         uiOutput('ui_send_email')),
-                 column(6,
-                        p('Hold ctrl + click to select people. Double click a cell to edit it.'),
-                        p('Type any name, institution, "tag", etc. to filter people.'))),
+                 uiOutput('edit_text')),
         fluidRow(DT::dataTableOutput('edit_table'))
-        )
+      )
     ),
     tabItem(
       tabName = 'about',
@@ -65,21 +62,22 @@ server <- function(input, output, session) {
                          users = users)
   log_in_text <- reactiveVal('')
   email_text <- reactiveVal('')
+  email_people <- reactiveVal('')
+  logged_in <- reactiveVal(value = FALSE)
+  modal_text <- reactiveVal(value = '')
+  is_admin <- reactiveVal(value = FALSE)
   
   # observe log in and get data from database
   observeEvent(input$submit, {
-    data$user_data <- 
-      # dbReadTable(conn = co, 
-      #             name = 'table1')
-      dbGetQuery(conn = co, 
-                 statement = paste0("SELECT * FROM users WHERE email='", 
-                                    input$user, #input$user, 
-                                    "'"))
+    this_user_data <- dbGetQuery(conn = co, 
+                                 statement = paste0("SELECT * FROM users WHERE email='", input$user, "'"))
+    data$user_data <- this_user_data
+    is_admin(this_user_data$admin)
+    addy <- is_admin()
+    message('this user - ', this_user_data$email, ' - ',
+            ifelse(addy, 'is an admin', 'is not an admin'))
   })
   
-  # Reactive values
-  logged_in <- reactiveVal(value = FALSE)
-  modal_text <- reactiveVal(value = '')
   # Log in modal
   showModal(
     modalDialog(
@@ -185,21 +183,39 @@ server <- function(input, output, session) {
   })
   
   output$edit_table <- DT::renderDataTable({
-    df <- data$users
-    DT::datatable(df, editable = TRUE)
+    li <- logged_in()
+    if(li){
+      df <- data$users
+      df <- df %>% dplyr::select(first_name, last_name,
+                                 position, institution, email,
+                                 tags, id)
+      addy <- is_admin()
+      DT::datatable(df, editable = ifelse(addy, 'row', FALSE),
+                    colnames = c('First' = 'first_name',
+                                 'Last' = 'last_name',
+                                 'Position' = 'position', 
+                                 'Institution' = 'institution',
+                                 'Email' = 'email',
+                                 'Tags' = 'tags'))
+    } else {
+      NULL
+    }
   })
   
   output$ui_send_email <- renderUI({
-      et <- email_text()
-      out <- NULL
-      if(!is.na(et)){
-        if(et != ''){
-          out <- fluidPage(
-            HTML(
-              "<a href=\"mailto:", et, "?subject=Bohemia\">Click HERE to send email.</a>"),
-          )
-        }
+    et <- email_text()
+    n <- length(email_people())
+    n_text <- ifelse(n == 1, '1 person',
+                     paste0(n, ' people', collapse = ''))
+    out <- NULL
+    if(!is.na(et)){
+      if(et != ''){
+        out <- fluidPage(
+          HTML(
+            "<a href=\"mailto:", et, "?subject=Bohemia\">Click HERE to send email to the selected ", n_text, ".</a>")
+        )
       }
+    }
     return(out)
   })
   
@@ -208,20 +224,26 @@ server <- function(input, output, session) {
   observeEvent(input$edit_table_cell_edit, {
     x <- data$users
     info = input$edit_table_cell_edit
-    str(info)
     i = info$row
     j = info$col
     v = info$value
+    old_vals <- x[i,]
+    id <- x$id[i]
     x[i, j] <- DT::coerceValue(v, x[i, j])
     replaceData(proxy, x, resetPaging = FALSE, rownames = FALSE)
     # Overwrite the database too
+    old_email <- old_vals$email
+    message('Deleting old row')
     dbSendQuery(conn = co,
-                'delete from users')
+                paste0("delete from users where email = '",
+                       old_email, "'"))
+    message('Replacing with updated row')
     dbWriteTable(conn = co, 
                  name = 'users', 
-                 value = x, 
+                 value = x[i,], 
                  row.names = FALSE,
-                 overwrite = TRUE)
+                 overwrite = FALSE,
+                 append = TRUE)
     # Update the in-memory object
     data$users <- x
   })
@@ -235,12 +257,25 @@ server <- function(input, output, session) {
     df <- data$users
     df <- df[selected_rows,]
     emails <- sort(unique(df$email[!is.na(df$email)]))
+    email_people(emails)
     email_text(paste0(emails, collapse = ', '))
   })
   
-  
+  output$edit_text <- renderUI({
+    addy <- is_admin()
+    if(addy){
+      column(6,
+             p('Hold ctrl + click to select people. Double click a cell to edit it.'),
+             p('Type any name, institution, "tag", etc. to filter people.'))
+    } else {
+      column(6,
+             p('Hold ctrl + click to select people.'),
+             p('Type any name, institution, "tag", etc. to filter people.'))
+    }
+  })
 }
-  
-  
-
+onStop(function() {
+  message('Disconnecting from database')
+  dbDisconnect(co)
+})
 shinyApp(ui, server)
