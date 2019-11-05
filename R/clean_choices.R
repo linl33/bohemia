@@ -43,13 +43,13 @@ clean_choices <- function(url_survey = 'https://docs.google.com/spreadsheets/d/1
   return(choices)
 }
 
-library(readr)
-x = clean_choices(url_survey = 'https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit#gid=141178862',
-                  url_choices = 'https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit#gid=286602728')
-write_csv(x, '~/Desktop/censushouse_choices.csv')
-
-x = clean_choices(url_survey = 'https://docs.google.com/spreadsheets/d/1Z1nQ7RvbiP_YBOth62AoOUDVB9WcMDsIu3jJEnaSNbo/edit#gid=141178862',
-                  url_choices = 'https://docs.google.com/spreadsheets/d/1Z1nQ7RvbiP_YBOth62AoOUDVB9WcMDsIu3jJEnaSNbo/edit#gid=286602728')
-write_csv(x, '~/Desktop/censusmember_choices.csv')
+# library(readr)
+# x = clean_choices(url_survey = 'https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit#gid=141178862',
+#                   url_choices = 'https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit#gid=286602728')
+# write_csv(x, '~/Desktop/censushouse_choices.csv')
+# 
+# x = clean_choices(url_survey = 'https://docs.google.com/spreadsheets/d/1Z1nQ7RvbiP_YBOth62AoOUDVB9WcMDsIu3jJEnaSNbo/edit#gid=141178862',
+#                   url_choices = 'https://docs.google.com/spreadsheets/d/1Z1nQ7RvbiP_YBOth62AoOUDVB9WcMDsIu3jJEnaSNbo/edit#gid=286602728')
+# write_csv(x, '~/Desktop/censusmember_choices.csv')
 
 
