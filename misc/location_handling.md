@@ -52,7 +52,7 @@ The fieldworker-specific household ids will be stored in a table with the below 
 - Eac household will get a QR code sticker which will be placed in a visible location (above door, for example) next to the painted household ID
 - The QR code will allow for (a) rapid loading of location information (b) confirmation of the correct location
 - The QR code will look like the below:
-![img/qrcode.png]
+![](img/qrcode.png)
 - In addition to its usefulness for later data retrieval, automation, and error-reduction, the use of QR codes has another benefit: it provides a _physical_ ledger of IDs so as to ensure that duplicate IDs are not issued (ie, a fieldworker will never issue an ID without a QR, and if an ID has already been issued, so too will its QR have been issued)
 
 
