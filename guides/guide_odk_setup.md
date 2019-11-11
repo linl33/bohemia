@@ -369,14 +369,6 @@ npm install --production
 ```
 - (The above takes a little while)
 
-## Configuring Enketo Express
-
-### First, make an enketo account
-
-- Go to https://accounts.enke.to/signup/plan/basic and make an account. In this case:
-  - joebrew
-  - joe@databrew.cc
-  - <password>
 
 ### Database configuration
 
@@ -424,7 +416,7 @@ The response to both tests should be: “PONG”.
 
 - Create a configuration file:
 ```
-cp ~/enketo-express/config/default-config.json ~/enketo-express/config/config.json
+nano ~/enketo-express/config/default-config.json
 ```
 - Edit it:
 ```
@@ -454,7 +446,7 @@ cp ~/enketo-express/config/default-config.json ~/enketo-express/config/config.js
        "submissions": false
    },
    "support": {
-       "email": "support@kobotoolbox.org"
+       "email": "info@databrew.cc"
    },
 
 "widgets": [
