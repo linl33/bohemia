@@ -7,7 +7,8 @@ import os
 gc = pygsheets.authorize('../credentials/gsheets_oauth.json')
 
 # Define the documents
-docs = ['censushouse', 'censusmember']
+# docs = ['censushouse', 'censusmember']
+docs = ['census']
 for doc in docs:
     # Open spreadsheet and then workseet
     sh = gc.open(doc)
