@@ -416,7 +416,7 @@ The response to both tests should be: “PONG”.
 
 - Create a configuration file:
 ```
-nano ~/enketo-express/config/default-config.json
+nano ~/enketo-express/config/default-config.json ~/enketo-express/config/config.json
 ```
 - Edit it:
 ```
@@ -563,9 +563,16 @@ scp -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@papu.us:/var/lib/redis/enketo-
 systemctl start redis-server@enketo-main.service
 ```
 
+## Pointing ODK to the right place
+
+- Go to bohemia.systems and click on Site Admin -> Preferences
+- Fill out the credentials as per below  
+
+![](img/enketo.png)
+
 ## Managing forms
 
-- Go to https://accounts.enke.to/account/ to manage accounts
+
 - To delete a form, run the following:
 ```
 curl -X DELETE --user lpols3nboul: -d "server_url=https://bohemia.systems&form_id=census" http://papu.us/api/v1/survey
