@@ -18,7 +18,7 @@ Once the system has been deployed and forms have been created, data collection s
 - Click the three dots in the upper-right hand corner
 - Select "General Settings"
 - Click "Server"
-- Change the server URL to https://bohemia.systems/Aggregate
+- Change the server URL to https://bohemia.systems
 - Set the credentials to `data` (user) and `data` (password)
 
 ### Synchronizing ODKCollect
