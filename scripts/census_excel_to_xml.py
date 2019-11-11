@@ -8,14 +8,25 @@ gc = pygsheets.authorize('../credentials/gsheets_oauth.json')
 
 # Define the documents
 # docs = ['censushouse', 'censusmember']
-docs = ['census']
-for doc in docs:
+#for doc in docs:
     # Open spreadsheet and then workseet
-    sh = gc.open(doc)
-    wks = sh.sheet1
+#    sh = gc.open(doc)
+#    wks = sh.sheet1
 
     #export as xls
-    wks.export(pygsheets.ExportType.XLS, doc)
+#    wks.export(pygsheets.ExportType.XLS, doc)
 
     ## Convert to xml
-    os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
+#    os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
+
+doc = 'census'
+sh = gc.open(doc)
+wks = sh.sheet1
+
+#export as xls
+wks.export(pygsheets.ExportType.XLS, doc)
+
+## Convert to xml
+os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
+
+print("Successfully created the following documents:\n---" + doc + '.xls\n---' + doc +'.xml')
