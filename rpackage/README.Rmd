@@ -21,13 +21,10 @@ This package contains utilities used by the Bohemia research team. It is publicl
 
 ## Installation
 
-To install this package, run the below from within the R console.
-
-
-```r
-if(!require(devtools)) install.packages("devtools")
-install_github('databrew/bohemia')
-```
+To install this package:
+- Clone the parent repo: `git clone https://github.com/databrew/bohemia`
+- `cd` into `rpackage`
+- Run `Rscript build_package.R`
 
 
 ```{r setup, include=FALSE, message=FALSE}
