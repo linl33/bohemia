@@ -12,7 +12,7 @@
 
 render_qr_pdf <- function(ids = NULL,
                            output_dir = NULL,
-                           output_file = 'paper.pdf'){
+                           output_file = 'qrs.pdf'){
 
   # If no output directory, make current wd
   if(is.null(output_dir)){

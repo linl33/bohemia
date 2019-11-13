@@ -4,8 +4,7 @@
 \alias{render_qr_pdf}
 \title{Render QR pdf}
 \usage{
-render_qr_pdf(ids = NULL, output_dir = NULL,
-  output_file = "paper.pdf")
+render_qr_pdf(ids = NULL, output_dir = NULL, output_file = "qrs.pdf")
 }
 \arguments{
 \item{ids}{A character vector of ID numbers. If \code{NULL} (the

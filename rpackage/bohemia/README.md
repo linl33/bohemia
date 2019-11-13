@@ -5,6 +5,7 @@
     -   [Building the package](#building-the-package)
     -   [Package utilities](#package-utilities)
     -   [Functions](#functions)
+    -   [QR Codes](#qr-codes)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 bohemia: The R package of the Bohemia project
@@ -416,3 +417,6 @@ setwd('..')
 ```
 
 ![](animation/result.gif)
+
+QR Codes
+--------
