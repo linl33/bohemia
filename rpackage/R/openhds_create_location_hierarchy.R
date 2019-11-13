@@ -3,7 +3,10 @@
 #' Generate cascading options for location hierarchy for insertion into openhds database and the ODK "choices" sheet. This assumes that location levels have been configured in the openhds web app under "Configuration"->"Location Levels", and have been set to the following: Country, District, Ward, Village, Hamlet (1-5).
 #' @param output_file Where to write the file (.sql and .csv will be appended)
 #' @return SQL code (in a .sql file) and tabular data (in a .csv file). The sql code is meant to be run on the OpenHDS database, and the .csv file is meant to be copy-pasted into the census choices
-#' @import dplyr, gsheet, tidyr, readr
+#' @import dplyr
+#' @import gsheet
+#' @import tidyr
+#' @import readr
 #' @export
 
 openhds_create_location_hierarchy <- function(output_file = "../scripts/locations"){

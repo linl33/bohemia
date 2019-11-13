@@ -3,7 +3,9 @@
 #' Generate cascading options for location choices appropriate for the correct location hierarchy in ODK
 #' @param country Which country to use. If \code{NULL} (the default), both will be used.
 #' @return A list of two tables named "survey" and "choices"
-#' @import dplyr, gsheet, tidyr
+#' @import dplyr
+#' @import gsheet
+#' @import tidyr
 #' @export
 
 odk_create_location_choices <- function(country = NULL, add_other = FALSE, add_ids = TRUE, other_word = 'Other'){

@@ -4,7 +4,9 @@
 #' @param url The url of the document
 #' @return A dataframe
 #' @export
-#' @import dplyr, gsheet, tidyr
+#' @import dplyr
+#' @import gsheet
+#' @import tidyr
 
 
 clean_choices <- function(url_survey = 'https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit#gid=141178862',

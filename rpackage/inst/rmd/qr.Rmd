@@ -1,0 +1,53 @@
+---
+output: pdf_document
+fig_width: 4
+fig_height: 4
+graphics: yes
+params:
+  ids: !r sample(1000:5000, 4)
+---
+
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE, comment = NA, error= FALSE, cache = FALSE}
+
+# Packages
+library(tidyverse)
+library(knitr)
+library(Hmisc)
+library(brew)
+library(RColorBrewer)
+library(kableExtra)
+library(bohemia)
+library(qrcode)
+## Global options
+opts_chunk$set(echo=FALSE,
+	             cache=FALSE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+# ids <- params$ids
+ids <- as.character(c(1000, 2000, 3000))
+```
+
+```{r}
+ids <- as.character(ids)
+chunks <- paste0('\n# ', ids, '\n\n',
+                 '```{r}\n',
+                 'create_qr("', ids, '")\n```\n\\newpage\n')
+chunks <- paste0(chunks, collapse = '\n')
+
+file_connection <- file('children.Rmd')
+writeLines(paste0('---\noutput: pdf_document\n---\n\n', 
+                  chunks), 
+           file_connection)
+close(file_connection)
+
+```
+
+
+```{r child='children.Rmd'}
+```
+
+```{r, results='hide'}
+file.remove('children.Rmd')
+```
