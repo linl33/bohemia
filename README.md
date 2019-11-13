@@ -37,11 +37,4 @@ This guide shows how to export data from the Bohemia system to a local machine, 
 [R package](#guides/guide_r_package.md)
 ------------
 
-The "bohemia" R package can be installed by running the below from within the R console.
-
-``` r
-if(!require(devtools)) install.packages("devtools")
-install_github('databrew/bohemia')
-```
-
-For more details on the R package, including usage examples and how to build the package from scratch see the [guide](#guides/guide_r_package.md)
+For documentation on the "bohemia" R package, including usage examples and how to build the package from scratch see the [the package page](#rpackage/README.md)

@@ -1,0 +1,13 @@
+^LICENSE\.md$
+^data-raw$
+^data-raw/*$
+^analyses$
+^analyses/*$
+^misc
+^misc/*$
+^credentials
+^credentials/*$
+^inst
+^inst/*$
+
+
