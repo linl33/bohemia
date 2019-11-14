@@ -134,6 +134,12 @@ select * from households;
   - 1 row in the `workers` table of the `ids` database with the worker information
   - 1000 rows in the `households` table of the `ids` database. These are the household ids assigned to this worker
 
+## Install latex (for printing QR codes)
+
+```
+sudo apt-get install texlive-latex-base
+```
+
 ## Generate QR codes
 
 - To generate QR codes for the household IDs assigned to the worker, run the following in R:

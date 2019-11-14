@@ -60,8 +60,8 @@ print_worker_qrs <- function(wid = 1,
       restrict <- as.character(restrict)
     }
     hids <- hids %>%
-      filter(!subid %in% restrict,
-             !hhid %in% restrict)
+      filter(subid %in% restrict | 
+             hhid %in% restrict)
   }
   
   # Get the ids
