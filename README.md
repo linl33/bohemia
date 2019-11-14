@@ -30,18 +30,18 @@ Once the system has been deployed and forms have been created, data collection s
 This guide is meant for fieldworkers, and provides an overview of how to collect and upload data.
 
 
-### [6. How to retrieve data using ODK Briefcase](#guides/guide_briefcase.md)
+### [6. How to retrieve data using ODK Briefcase](guides/guide_briefcase.md)
 
 This guide shows how to export data from the Bohemia system to a local machine, for the purpose of exploration or analysis.
 
-### [7. Automate backups](#guides/guide_backups.md)
+### [7. Automate backups](guides/guide_backups.md)
 
 
 
-### [R package](#guides/guide_r_package.md)
+### [R package](guides/guide_r_package.md)
 
 There is a stand-alone R package which has some tools and utilities for working with Bohemia data as well as the above pipeline.
 
 ------------
 
-For documentation on the "bohemia" R package, including usage examples and how to build the package from scratch see the [the package page](#rpackage/README.md)
+For documentation on the "bohemia" R package, including usage examples and how to build the package from scratch see the [the package page](rpackage/bohemia/README.md)
