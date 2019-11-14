@@ -53,6 +53,12 @@ print_worker_qrs <- function(wid = 1,
   
   # Filter if relevant
   if(!is.null(restrict)){
+    # Reformat restrict
+    if(max(nchar(restrict)) <= 3){
+      restrict <- add_zero(restrict, 3)
+    } else {
+      restrict <- as.character(restrict)
+    }
     hids <- hids %>%
       filter(!subid %in% restrict,
              !hhid %in% restrict)

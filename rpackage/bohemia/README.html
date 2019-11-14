@@ -155,7 +155,6 @@ buffers &lt;-<span class="st"> </span>bohemia<span class="op">::</span><span cla
 <h3 id="generating-buffers-based-on-tesselation">Generating buffers based on tesselation</h3>
 <p>As an alternative to the above approach, and so as to generate generealizable boundaries with no &quot;holes&quot;, we can use voronoi tesselation as opposed to convex hulling.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">boundaries &lt;-<span class="st"> </span><span class="kw">create_borders</span>(<span class="dt">df =</span> fake, <span class="dt">voronoi =</span> <span class="ot">TRUE</span>)
-<span class="co">#&gt; Loading required namespace: deldir</span>
 <span class="co"># Plot the boundaries</span>
 <span class="kw">plot</span>(fake<span class="op">$</span>x, fake<span class="op">$</span>y, <span class="dt">col =</span> cols, <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">cex =</span> <span class="fl">0.5</span>)
 <span class="kw">plot</span>(boundaries, <span class="dt">add =</span> T, <span class="dt">col =</span> <span class="kw">adjustcolor</span>(cols, <span class="dt">alpha.f =</span> <span class="fl">0.3</span>))</code></pre></div>

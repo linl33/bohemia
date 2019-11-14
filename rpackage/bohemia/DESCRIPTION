@@ -42,4 +42,7 @@ Imports:
     RPostgres,
     qrcode,
     readr,
-    rmarkdown
+    rmarkdown,
+    rgdal,
+    deldir,
+    kableExtra

@@ -78,17 +78,20 @@ sudo su - -c "R -e \"install.packages('leaflet')\"";
 sudo su - -c "R -e \"install.packages('maps')\"";
 sudo su - -c "R -e \"install.packages('Hmisc')\"";
 sudo su - -c "R -e \"install.packages('extrafont')\"";
-
+sudo su - -c "R -e \"install.packages('rgdal')\"";
+sudo su - -c "R -e \"install.packages('deldir')\"";
+sudo su - -c "R -e \"install.packages('kableExtra')\"";
 ```
 
 ## Install the Bohemia R package
 
 ```
+sudo chmod a+rwx /usr/local/lib/R/site-library
 cd bohemia/rpackage/bohemia
 Rscript build_package.R
 ```
 
-## Set up postgresql database
+## Set up postgresql
 
 (Postgresql was already installed via `sudo apt install postgresql-10`)
 
@@ -99,4 +102,43 @@ createuser --interactive
 - superuser: y
 createdb ubuntu
 exit
+```
+
+## Set up the tables/database
+
+- Run the following scrip to set up the `ids` database:
+```
+cd /home/ubuntu/Documents/bohemia/scripts
+./set_up_ids.sh
+```
+
+## Enroll a worker
+
+- To enroll a worker, you need to have the following information:
+  - First name
+  - Last name
+  - Location (Mozambique or Tanzania)
+- Get into the R console: `R`
+- Run the following to enroll, for example, John Doe from Tanzania:
+```
+library(bohemia)
+enroll_worker(name_first='John', name_last='Doe', location='Tanzania')
+```
+- Confirm that the worker has been enrolled by leaving the R session and running the following:
+```
+psql ids #get into psql session
+select * from workers;
+select * from households;
+```
+- There is now:
+  - 1 row in the `workers` table of the `ids` database with the worker information
+  - 1000 rows in the `households` table of the `ids` database. These are the household ids assigned to this worker
+
+## Generate QR codes
+
+- To generate QR codes for the household IDs assigned to the worker, run the following in R:
+```
+library(bohemia)
+# Assuming worker ID = 001
+print_worker_qrs(wid='001', restrict = 1:3)
 ```

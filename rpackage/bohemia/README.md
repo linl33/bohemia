@@ -226,7 +226,6 @@ As an alternative to the above approach, and so as to generate generealizable bo
 
 ``` r
 boundaries <- create_borders(df = fake, voronoi = TRUE)
-#> Loading required namespace: deldir
 # Plot the boundaries
 plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))

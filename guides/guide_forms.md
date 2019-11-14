@@ -56,7 +56,7 @@ Password: data
 ## Sending data to the server
 - Once done filling out the form, click "Save Form and Exit" in the app
 - Then on the main app page, click "Send Finalized Form"
-- Now, having sent the data to the server, you should be able to inspect results at https://papu.us under "Form Management" > "Submission Admin"
+- Now, having sent the data to the server, you should be able to inspect results at https://bohemia.systems under "Form Management" > "Submission Admin"
 
 ## Helpful documentation
 
