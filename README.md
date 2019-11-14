@@ -40,8 +40,8 @@ This guide shows how to export data from the Bohemia system to a local machine, 
 
 ### [R package](guides/guide_r_package.md)
 
-There is a stand-alone R package which has some tools and utilities for working with Bohemia data as well as the above pipeline.
+There is a stand-alone R package which has some tools and utilities for working with Bohemia data as well as the above pipeline. For documentation on the "bohemia" R package, including usage examples and how to build the package from scratch see the [the package page](rpackage/bohemia/README.md)
 
 ------------
 
-For documentation on the "bohemia" R package, including usage examples and how to build the package from scratch see the [the package page](rpackage/bohemia/README.md)
+Questions? info@databrew.cc
