@@ -137,7 +137,7 @@ select * from households;
 ## Install latex (for printing QR codes)
 
 ```
-sudo apt-get install texlive-latex-base
+sudo apt-get install texlive-full
 ```
 
 ## Generate QR codes
@@ -147,4 +147,9 @@ sudo apt-get install texlive-latex-base
 library(bohemia)
 # Assuming worker ID = 001
 print_worker_qrs(wid='001', restrict = 1:3)
+```
+
+- Once the pdf document has been rendered, copy locally so as to print:
+```
+scp -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@bohemia.systems:/home/ubuntu/Documents/bohemia/qrs.pdf qrs.pdf
 ```
