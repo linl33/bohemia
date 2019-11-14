@@ -16,7 +16,7 @@ default), all IDs will be used}
 \item{output_file}{The name of the file to be written.}
 }
 \value{
-An html will be written
+A pdf will be written
 }
 \description{
 Render a pdf of QR codes
