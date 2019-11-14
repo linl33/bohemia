@@ -17,7 +17,7 @@ This is a step-by-step walkthrough showing how to set up the Bohemia data system
 
 The Bohemia data system is built on the ODK framework, allowing for the creation and modification of survey forms specific to the Bohemia project's different study components. This guide shows how to create and deploy a form.
 
-### [3. Enroll workers](guides/enroll_workers.md)
+### [3. Enroll workers](guides/guide_enroll_workers.md)
 
 This guide is intended for site-specific data managers. It assumes an up and running system with forms (guides 1 and 2).
 
