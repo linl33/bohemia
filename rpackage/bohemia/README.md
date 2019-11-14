@@ -420,3 +420,25 @@ setwd('..')
 
 QR Codes
 --------
+
+The Bohemia project uses QR codes for the purpose of quickly reading in and confirming household ID numbers. These can be printed easily using the `create_qr()` function in the `bohemia` r package. Here is an example of its use:
+
+``` r
+# Example id number: 1234567
+id <- 1234567
+create_qr(id)
+#> Loading required package: qrcode
+```
+
+![](figures/unnamed-chunk-18-1.png)
+
+If many ids need to be printed at once, there is a pdf functionality for printing multiple IDs. To use this, run:
+
+``` r
+# Example ids: 5566778, 7654321, 1234567
+ids <- c(5566778, 7654321, 1234567)
+render_qr_pdf(ids = ids,
+              output_file = 'qrs.pdf')
+```
+
+The above will generate a pdf in the working directory named `qrs.pdf` with one page per qr code.

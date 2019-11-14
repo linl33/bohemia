@@ -29,12 +29,12 @@ The fieldworker-specific household ids will be stored in a table with the below 
 
 |fieldworker_id |household_id |
 |:--------------|:------------|
-|561            |0000         |
-|561            |0001         |
-|561            |0002         |
-|561            |0003         |
+|561            |000         |
+|561            |001         |
+|561            |002         |
+|561            |003         |
 
-- So, when fieldworker "Joe" (id 561) begins censing housheholds, the first house he does is number 5610000. The next house he does is number 5610001. Etc.
+- So, when fieldworker "Joe" (id 561) begins censing housheholds, the first house he does is number 561000. The next house he does is number 561001. Etc.
 - Zeroes are never removed.
 - If a mistake is made, a number can be skipped/deleted.
 
@@ -62,11 +62,11 @@ The fieldworker-specific household ids will be stored in a table with the below 
 - The entire indivdual ID consists of the concatenation of the location ID and the letter.
 - For example, an ID could be:
 ```
-3150152D
+315015D
 ```
 - In the above...
   - `315` is the fieldworker ID
-  - `0152` means that this was the 152nd house censed by fieldworker number `315`
+  - `015` means that this was the 15th house censed by fieldworker number `315`
   - `D` means that it was the fourth person censed at that house
 - In the rare case of a household having more than 26 members, letters will duplicate: `AA`, `BB`, etc.
 - We do not foresee any houses having more than 52 members

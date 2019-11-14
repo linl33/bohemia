@@ -7,7 +7,5 @@
 ^misc/*$
 ^credentials
 ^credentials/*$
-^inst
-^inst/*$
 
 

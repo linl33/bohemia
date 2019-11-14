@@ -5,3 +5,4 @@ analyses/clustering/animation*
 credentials/*
 scripts/sheets.googleapis.com-python.json
 scripts/census.*
+rpackage/bohemia/inst/rmd/children.Rmd

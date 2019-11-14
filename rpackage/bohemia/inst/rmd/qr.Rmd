@@ -25,8 +25,7 @@ opts_chunk$set(echo=FALSE,
                comment=NA,
                message=FALSE,
                warning=FALSE)
-# ids <- params$ids
-ids <- as.character(c(1000, 2000, 3000))
+ids <- params$ids
 ```
 
 ```{r}
