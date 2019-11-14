@@ -29,7 +29,6 @@ Imports:
     grDevices,
     grid,
     scales,
-    databrew,
     rgeos,
     maptools,
     gpclib,
