@@ -4,8 +4,7 @@
 \alias{create_buffers}
 \title{Create buffers}
 \usage{
-create_buffers(shp, meters = 1000, crs = "+init=epsg:3347",
-  ids = NULL)
+create_buffers(shp, meters = 1000, crs = "+init=epsg:3347", ids = NULL)
 }
 \arguments{
 \item{shp}{The spatialPolygonsDataFrame (projected in lat/long)}

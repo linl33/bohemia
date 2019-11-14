@@ -12,10 +12,6 @@ add_zero(x, n)
 \item{x}{The vector to be modified}
 
 \item{n}{The number of characters that the resulting vector should have}
-
-\item{x}{The vector to be modified}
-
-\item{n}{The number of characters that the resulting vector should have}
 }
 \value{
 A character vector of identical length to \code{x} in which all elements have n characters (or more, for those which already had more prior to processing)

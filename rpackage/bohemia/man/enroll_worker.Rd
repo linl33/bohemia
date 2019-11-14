@@ -4,8 +4,7 @@
 \alias{enroll_worker}
 \title{Enroll worker}
 \usage{
-enroll_worker(name_first = "John", name_last = "Doe",
-  location = "Mozambique")
+enroll_worker(name_first = "John", name_last = "Doe", location = "Mozambique")
 }
 \arguments{
 \item{name_first}{First name of the worker}

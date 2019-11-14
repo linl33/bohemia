@@ -4,9 +4,12 @@
 \alias{clean_choices}
 \title{Clean choices}
 \usage{
-
-  clean_choices(url_survey = "https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit#gid=141178862",
-  url_choices = "https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit#gid=286602728")
+clean_choices(
+ 
+    url_survey = "https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit#gid=141178862",
+ 
+    url_choices = "https://docs.google.com/spreadsheets/d/1uB2a2Lr7D32Bh2vZsP88-mp4borI8mA6Nct-SkQSNyQ/edit#gid=286602728"
+)
 }
 \arguments{
 \item{url}{The url of the document}

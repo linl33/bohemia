@@ -14,7 +14,7 @@ Suggests:
     MASS,
     testthat
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0
 Imports:
     dplyr,
     ggplot2,
@@ -35,4 +35,12 @@ Imports:
     gpclib,
     dismo,
     tidyr,
-    gsheet
+    gsheet,
+    readxl,
+    RPostgreSQL,
+    devtools,
+    DBI,
+    RPostgres,
+    qrcode,
+    readr,
+    rmarkdown

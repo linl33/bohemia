@@ -4,9 +4,17 @@
 \alias{create_clusters}
 \title{Optimization of cluster formation}
 \usage{
-create_clusters(cluster_size = 10, plot_map = FALSE, sleep = 0,
-  locations, shp = NULL, start = "close", rest = "close",
-  messaging = FALSE, save = NULL)
+create_clusters(
+  cluster_size = 10,
+  plot_map = FALSE,
+  sleep = 0,
+  locations,
+  shp = NULL,
+  start = "close",
+  rest = "close",
+  messaging = FALSE,
+  save = NULL
+)
 }
 \arguments{
 \item{cluster_size}{The size of each cluster}
@@ -15,7 +23,7 @@ create_clusters(cluster_size = 10, plot_map = FALSE, sleep = 0,
 
 \item{sleep}{How many seconds to sleep between plots}
 
-\item{locations}{a SpatialPointsDataFrame containing 3 columns: id, lat, and lon}
+\item{locations}{locations}
 
 \item{shp}{The shapefile to plot (only if plot_map is TRUE)}
 
@@ -26,8 +34,6 @@ create_clusters(cluster_size = 10, plot_map = FALSE, sleep = 0,
 \item{messaging}{Whether to message or not, boolean}
 
 \item{save}{Where to save pngs (if null, no saving)}
-
-\item{locations}{locations}
 }
 \value{
 A dataframe of size \code{times} times the number of points in \code{locations}, with columns indicating each \code{simulation_number}

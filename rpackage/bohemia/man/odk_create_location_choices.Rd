@@ -4,8 +4,12 @@
 \alias{odk_create_location_choices}
 \title{Create location choices}
 \usage{
-odk_create_location_choices(country = NULL, add_other = FALSE,
-  add_ids = TRUE, other_word = "Other")
+odk_create_location_choices(
+  country = NULL,
+  add_other = FALSE,
+  add_ids = TRUE,
+  other_word = "Other"
+)
 }
 \arguments{
 \item{country}{Which country to use. If \code{NULL} (the default), both will be used.}

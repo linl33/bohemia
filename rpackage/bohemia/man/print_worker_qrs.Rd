@@ -4,8 +4,12 @@
 \alias{print_worker_qrs}
 \title{Print worker QRs}
 \usage{
-print_worker_qrs(wid = 1, restrict = NULL, output_dir = NULL,
-  output_file = "qrs.pdf")
+print_worker_qrs(
+  wid = 1,
+  restrict = NULL,
+  output_dir = NULL,
+  output_file = "qrs.pdf"
+)
 }
 \arguments{
 \item{wid}{The 3 digit id of the worker}
