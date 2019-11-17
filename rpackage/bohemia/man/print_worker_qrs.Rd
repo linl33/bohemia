@@ -6,6 +6,7 @@
 \usage{
 print_worker_qrs(
   wid = 1,
+  worker = FALSE,
   restrict = NULL,
   output_dir = NULL,
   output_file = "qrs.pdf"
@@ -13,6 +14,8 @@ print_worker_qrs(
 }
 \arguments{
 \item{wid}{The 3 digit id of the worker}
+
+\item{worker}{Whether to print the worker ID (just 1 page) or the household IDs (multiple pages). Default is \code{FALSE}, ie, print households ids}
 
 \item{restrict}{Restrict to only some ids. If
 \code{NULL} (the default), all 1000 ids assigned to the worker will be used. Otherwise, this should be a vector of either (a) the three character subids to be kept or (b) the 7 character hhids to be kept (3 digits, dash, 3 digits)}

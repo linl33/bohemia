@@ -2,13 +2,21 @@
 #' 
 #' Generate cascading options for location choices appropriate for the correct location hierarchy in ODK
 #' @param country Which country to use. If \code{NULL} (the default), both will be used.
+#' @param add_other Whether to add an "other" option
+#' @param add_ids Whether to add an ID section
+#' @param other_word The name of the word to be used to mark "Other"
+#' @param other_only_levels Whether the other option should be applied only to certain geographical levels. If \code{NULL}, all levels get an "other" option. Otherwise, only the named vector.
 #' @return A list of two tables named "survey" and "choices"
 #' @import dplyr
 #' @import gsheet
 #' @import tidyr
 #' @export
 
-odk_create_location_choices <- function(country = NULL, add_other = FALSE, add_ids = TRUE, other_word = 'Other'){
+odk_create_location_choices <- function(country = NULL, add_other = TRUE, add_ids = FALSE, other_word = 'Other',
+                                        other_only_levels = c('Village', 'Hamlet')){
+  
+  # country = NULL; add_other = TRUE; add_ids = FALSE; other_word = 'Other';
+  # other_only_levels = c('Village', 'Hamlet')
   require(dplyr)
   require(gsheet)
   require(tidyr)
@@ -63,6 +71,48 @@ odk_create_location_choices <- function(country = NULL, add_other = FALSE, add_i
     new_rows <- bind_rows(new_rows)
     # Add the "other" options to the dataset
     locations <- bind_rows(locations, new_rows)
+    
+    # Filter for other levels
+    if(!is.null(other_only_levels)){
+      which_indices <- which(!names(locations) %in% other_only_levels)
+      for(j in which_indices){
+        locations <- locations[locations[,j] != other_word,]
+      }
+    }
+    # Make sure that the "other" ones are ordered last
+    is_other <- function(x){x == 'Other'}
+    
+    # Hamlet
+    other_hamlets <- locations[is_other(locations$Hamlet),]
+    locations <- locations[!is_other(locations$Hamlet),]
+    # Village
+    other_villages <- locations[is_other(locations$Village),]
+    locations <- locations[!is_other(locations$Village),]
+    # Ward
+    other_wards <- locations[is_other(locations$Ward),]
+    locations <- locations[!is_other(locations$Ward),]
+    # District
+    other_districts <- locations[is_other(locations$District),]
+    locations <- locations[!is_other(locations$District),]
+   
+    # Combine locations with the (ordered) others:
+    locations <- bind_rows(
+      locations,
+      other_hamlets,
+      other_wards,
+      other_villages,
+      other_districts
+    )
+    
+    # Make factor
+    other_factor <- function(x){factor(x, levels = c(sort(unique(x[x !=  'Other'])), 'Other'))}
+    locations <- locations %>%
+      mutate(Country  = other_factor(Country),
+             District = other_factor(District),
+             Ward = other_factor(Ward),
+             Village = other_factor(Village),
+             Hamlet = other_factor(Hamlet))
+      
   }
   
   # Put into correct format for choices
@@ -87,6 +137,8 @@ odk_create_location_choices <- function(country = NULL, add_other = FALSE, add_i
                      label = sort(unique(locations$Country))) %>%
                 mutate(Region = NA, District = NA, Ward = NA, Village = NA)) 
   choices <- choices %>% dplyr::distinct(.keep_all = TRUE)
+  
+
   
   if(add_ids){
     # Add id numbers for creating hhids
@@ -120,7 +172,7 @@ odk_create_location_choices <- function(country = NULL, add_other = FALSE, add_i
   names(out) <- c('survey', 'choices')
   return(out)
 }
-# library(readr)
-# x <- odk_create_location_choices()
-# write_csv(x$survey, '~/Desktop/1.csv', na = '')
-# write_csv(x$choices, '~/Desktop/2.csv')
+library(readr)
+x <- odk_create_location_choices()
+write_csv(x$survey, '~/Desktop/1.csv', na = '')
+write_csv(x$choices, '~/Desktop/2.csv')

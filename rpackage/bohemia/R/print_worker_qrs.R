@@ -2,6 +2,7 @@
 #'
 #' Render a document of pds for a worker
 #' @param wid The 3 digit id of the worker
+#' @param worker Whether to print the worker ID (just 1 page) or the household IDs (multiple pages). Default is \code{FALSE}, ie, print households ids
 #' @param restrict Restrict to only some ids. If
 #' \code{NULL} (the default), all 1000 ids assigned to the worker will be used. Otherwise, this should be a vector of either (a) the three character subids to be kept or (b) the 7 character hhids to be kept (3 digits, dash, 3 digits)
 #' @param output_dir The directory to which the file should be written. If
@@ -15,6 +16,7 @@
 #' @export
 
 print_worker_qrs <- function(wid = 1,
+                             worker = FALSE,
                              restrict = NULL,
                            output_dir = NULL,
                            output_file = 'qrs.pdf'){
@@ -41,31 +43,40 @@ print_worker_qrs <- function(wid = 1,
   }
   
   # Get the row for the worker
-  previous <- previous %>% filter(wid == the_wid)
+  previous <- previous %>% filter(wid == the_wid)  
   
-  # Get the rows of the hids
-  hids <- dbGetQuery(conn = con,
-                     paste0("SELECT * FROM households WHERE wid ='",
-                            the_wid, "'"))
-  if(nrow(previous) <1){
-    stop('There are no entries in the households table of the id database for this worker. Stopping.')
-  }
-  
-  # Filter if relevant
-  if(!is.null(restrict)){
-    # Reformat restrict
-    if(max(nchar(restrict)) <= 3){
-      restrict <- add_zero(restrict, 3)
-    } else {
-      restrict <- as.character(restrict)
+  if(worker){
+    # Printing only the worker ID
+    ids <- add_zero(wid, 3)
+    
+  } else {
+    # Printing household Ids
+
+    
+    # Get the rows of the hids
+    hids <- dbGetQuery(conn = con,
+                       paste0("SELECT * FROM households WHERE wid ='",
+                              the_wid, "'"))
+    if(nrow(previous) <1){
+      stop('There are no entries in the households table of the id database for this worker. Stopping.')
     }
-    hids <- hids %>%
-      filter(subid %in% restrict | 
-             hhid %in% restrict)
+    
+    # Filter if relevant
+    if(!is.null(restrict)){
+      # Reformat restrict
+      if(max(nchar(restrict)) <= 3){
+        restrict <- add_zero(restrict, 3)
+      } else {
+        restrict <- as.character(restrict)
+      }
+      hids <- hids %>%
+        filter(subid %in% restrict | 
+                 hhid %in% restrict)
+    }
+    
+    # Get the ids
+    ids <- hids$hhid
   }
-  
-  # Get the ids
-  ids <- hids$hhid
   
   # Pass them on to the pdf generator
   render_qr_pdf(ids = ids,
