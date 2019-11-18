@@ -6,13 +6,22 @@
 \usage{
 odk_create_location_choices(
   country = NULL,
-  add_other = FALSE,
-  add_ids = TRUE,
-  other_word = "Other"
+  add_other = TRUE,
+  add_ids = FALSE,
+  other_word = "Other",
+  other_only_levels = c("Village", "Hamlet")
 )
 }
 \arguments{
 \item{country}{Which country to use. If \code{NULL} (the default), both will be used.}
+
+\item{add_other}{Whether to add an "other" option}
+
+\item{add_ids}{Whether to add an ID section}
+
+\item{other_word}{The name of the word to be used to mark "Other"}
+
+\item{other_only_levels}{Whether the other option should be applied only to certain geographical levels. If \code{NULL}, all levels get an "other" option. Otherwise, only the named vector.}
 }
 \value{
 A list of two tables named "survey" and "choices"

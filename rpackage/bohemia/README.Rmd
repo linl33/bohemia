@@ -359,7 +359,7 @@ The Bohemia project uses QR codes for the purpose of quickly reading in and conf
 
 ```{r}
 # Example id number: 1234567
-id <- 1234567
+id <- ('111-222')
 create_qr(id)
 ```
 
@@ -367,9 +367,25 @@ If many ids need to be printed at once, there is a pdf functionality for printin
 
 ```{r, eval = FALSE}
 # Example ids: 5566778, 7654321, 1234567
-ids <- c(5566778, 7654321, 1234567)
+ids <- c('123-456', '654-321', '999-888', '777-666')
 render_qr_pdf(ids = ids,
               output_file = 'qrs.pdf')
 ```
 
-The above will generate a pdf in the working directory named `qrs.pdf` with one page per qr code.
+The above will generate a pdf in the working directory named `qrs.pdf` with all of the above QRs.
+
+In order to generate _worker ID_ QRs, once can run something like the following:
+
+```{r, eval = FALSE}
+print_worker_qrs(wid = '001', worker = TRUE, n = 12)
+```
+
+The above will generate 12 ID QRs for worker '001'.
+
+In order to generate household-specific QRs for a given worker, do something like below: 
+
+```{r, eval = FALSE}
+print_worker_qrs(wid = '001', restrict = 20:30)
+```
+
+The above will generate ids for house numbers 20 through 30 for worker ID 001 (ie, '001-020', '001-021', etc.). Remove the `restrict` argument to generate IDs for all 1000 houses assigned to the worker.

@@ -3,8 +3,13 @@ output: pdf_document
 fig_width: 4
 fig_height: 4
 graphics: yes
+geometry: margin=1cm
+header-includes: 
+  - \pagenumbering{gobble}
 params:
-  ids: !r sample(1000:5000, 4)
+  ids: !r sample(1000:5000, 20)
+  size: 2
+  n: 1
 ---
 
 
@@ -26,23 +31,37 @@ opts_chunk$set(echo=FALSE,
                message=FALSE,
                warning=FALSE)
 ids <- params$ids
+size <- params$size
+n <- params$n
 ```
+
 
 ```{r}
 ids <- as.character(ids)
-chunks <- paste0('\n# ', ids, '\n\n',
-                 '```{r}\n',
-                 'create_qr("', ids, '")\n```\n\\newpage\n')
+chunk_list <- list()
+chunk_list[[1]] <- "\\twocolumn"
+for(i in 1:length(ids)){
+  np <- i %% 6 == 0
+    this_id <- ids[i]
+    chunks <- paste0('\n\n\n', this_id, '\n\n',
+                 '```{r, fig.width=', size, '}\n',
+                 'create_qr("', this_id, '")\n```\n\n\\vspace{1mm}\\hrule\\vspace{1mm}
+\n', ifelse(np, '\n\\newpage\n', ''))
+    chunks <- rep(chunks, n)
+    # chunks <- c(chunks, '\n\n\\newpage\n\n')
+    chunk_list[[i+1]] <- chunks
+}
+
+chunks <- unlist(chunk_list)
 chunks <- paste0(chunks, collapse = '\n')
+
 
 file_connection <- file('children.Rmd')
 writeLines(paste0('---\noutput: pdf_document\n---\n\n', 
                   chunks), 
            file_connection)
 close(file_connection)
-
 ```
-
 
 ```{r child='children.Rmd'}
 ```

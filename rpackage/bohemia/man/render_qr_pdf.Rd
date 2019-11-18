@@ -4,11 +4,24 @@
 \alias{render_qr_pdf}
 \title{Render QR pdf}
 \usage{
-render_qr_pdf(ids = NULL, output_dir = NULL, output_file = "qrs.pdf")
+render_qr_pdf(
+  ids = NULL,
+  worker = FALSE,
+  size = 2,
+  n = 1,
+  output_dir = NULL,
+  output_file = "qrs.pdf"
+)
 }
 \arguments{
 \item{ids}{A character vector of ID numbers. If \code{NULL} (the
 default), all IDs will be used}
+
+\item{worker}{Whether the pdf to be rendered is for a worker ID (alternative is household ID)}
+
+\item{size}{The size (in inches) of the image.}
+
+\item{n}{The number of images per ID}
 
 \item{output_dir}{The directory to which the file should be written. If
 \code{NULL} (the default), the current working directory will be used.}

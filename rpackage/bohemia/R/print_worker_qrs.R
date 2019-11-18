@@ -1,10 +1,12 @@
 #' Print worker QRs
 #'
 #' Render a document of pds for a worker
-#' @param wid The 3 digit id of the worker
+#' @param wid The 3 digit id of the worker (or a vector of IDs)
 #' @param worker Whether to print the worker ID (just 1 page) or the household IDs (multiple pages). Default is \code{FALSE}, ie, print households ids
 #' @param restrict Restrict to only some ids. If
 #' \code{NULL} (the default), all 1000 ids assigned to the worker will be used. Otherwise, this should be a vector of either (a) the three character subids to be kept or (b) the 7 character hhids to be kept (3 digits, dash, 3 digits)
+#' @param size The size of the image
+#' @param n The number of images per QR
 #' @param output_dir The directory to which the file should be written. If
 #' \code{NULL} (the default), the current working directory will be used.
 #' @param output_file The name of the file to be written.
@@ -15,9 +17,11 @@
 #' @importFrom rmarkdown render
 #' @export
 
-print_worker_qrs <- function(wid = 1,
+print_worker_qrs <- function(wid = seq(0, 999, 1),
                              worker = FALSE,
                              restrict = NULL,
+                             size = 2,
+                             n = 1,
                            output_dir = NULL,
                            output_file = 'qrs.pdf'){
 
@@ -80,6 +84,9 @@ print_worker_qrs <- function(wid = 1,
   
   # Pass them on to the pdf generator
   render_qr_pdf(ids = ids,
+                worker = worker,
+                size = size,
+                n = n,
                 output_dir = output_dir,
                 output_file = output_file)
 }

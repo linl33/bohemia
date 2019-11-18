@@ -10,9 +10,9 @@
 #' @import DBI
 #' @export
 
-enroll_worker <- function(name_first = 'John',
+enroll_worker <- function(name_first = 'Jane',
                           name_last = 'Doe',
-                          location = 'Mozambique'){
+                          location = 'Tanzania'){
   
   # Connect to the db
   con <- dbConnect(RPostgres::Postgres(), 
@@ -35,10 +35,10 @@ enroll_worker <- function(name_first = 'John',
   # If the name does not already exist, move forward with creating it
   # Define the highest id so far
   suppressWarnings({
-    high_id <- max(as.character(already_exists$wid), na.rm = TRUE)
+    high_id <-max(as.numeric(as.character(previous$wid)), na.rm = TRUE)
   })
   if(is.na(high_id)){
-    high_id <- 0
+    high_id <- -1
   }
   # Create a new id
   new_id <- high_id + 1
