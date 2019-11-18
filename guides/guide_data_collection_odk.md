@@ -6,7 +6,7 @@ Once the system has been deployed and forms have been created, data collection s
 ## Software installation
 
 - Fetch an android device (phone/tablet)
-- Download/Install ODKCollect via Google Play
+- Download/Install [ODKCollect via Google Play](https://play.google.com/store/apps/details?id=org.odk.collect.android&hl=en)
 
 # Setting up fieldworker credentials  
 
@@ -28,4 +28,20 @@ Once the system has been deployed and forms have been created, data collection s
 ### Synchronizing ODKCollect
 
 - In ODKCollect, select "Get Blank Form"
-- Select all the forms we want. Click "Get Selected"
+- Select all the forms:
+  -Census
+  -VA Form
+-Click "Get Selected"
+
+### Filling out a form
+- In ODKCollect, on the main page, click the top button ("Fill Blank Form")
+- Select the form you wish to fill out (for example, "VA Form")
+- Begin filling out form
+- To switch language, click the three dots in the upper right
+- Go question by question filling out the form
+- To advance to the next page or go back, swipe left or right
+- On the last page, click the "Save Form and Exit" button
+
+### Sending data
+- With an internet connection, from the main page of ODKCollect, click "Send Finalized Form"
+- Select all and "Send"
