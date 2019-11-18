@@ -34,7 +34,7 @@ The fieldworker-specific household ids will be stored in a table with the below 
 |561            |002         |
 |561            |003         |
 
-- So, when fieldworker "Joe" (id 561) begins censing housheholds, the first house he does is number 561000. The next house he does is number 561001. Etc.
+- So, when fieldworker "Joe" (id 561) begins censing housheholds, the first house he does is number 561-000. The next house he does is number 561-001. Etc.
 - Zeroes are never removed.
 - If a mistake is made, a number can be skipped/deleted.
 
@@ -55,25 +55,36 @@ The fieldworker-specific household ids will be stored in a table with the below 
 ![](img/qrcode.png)
 - In addition to its usefulness for later data retrieval, automation, and error-reduction, the use of QR codes has another benefit: it provides a _physical_ ledger of IDs so as to ensure that duplicate IDs are not issued (ie, a fieldworker will never issue an ID without a QR, and if an ID has already been issued, so too will its QR have been issued)
 
+## Utilities for printing QR codes
+
+- The `bohemia` R package contains different utilities for printing both:
+  - Worker ID QR codes (to be laminated and carried in the worker's wallet)
+  - Household ID QR codes (to be distributed to workers prior to data collection for in the field assignation and deployment)
+
 
 ## Individual IDs
 
-- An individual ID consists of a simple letter: A through Z
-- The entire indivdual ID consists of the concatenation of the location ID and the letter.
+- An individual ID (aka, within-house person ID) consists of a simple number, starting at 0 (the default for the household head) and going up.
+- The entire "permID" consists of the concatenation of the location ID and the within-house person ID.
 - For example, an ID could be:
 ```
-315015D
+315-015-4
 ```
 - In the above...
   - `315` is the fieldworker ID
   - `015` means that this was the 15th house censed by fieldworker number `315`
-  - `D` means that it was the fourth person censed at that house
-- In the rare case of a household having more than 26 members, letters will duplicate: `AA`, `BB`, etc.
-- We do not foresee any houses having more than 52 members
+  - `4` means that it was the fourth person censed at that house (not including the household head)
+
+- Individual IDs are assigned at the moment of data entry in the census form. They are automatically generated as a function of the sequence of data collection.
+- An option exists to "override" automatic assignation (ie, assign number "5" to someone who was automatically going to receive number "1"). This is only applicable to cases of (a) interrupted visits requiring a device shut-down/exit or (b) a return/follow-up visit.
 
 ## Permanence and mutability
 
 - All IDs are permanent.
 - Fieldworkers: A fieldworker ID will be issued to only one person, once. If that person leaves the project, that number will never be used again
-- Households: Each fieldworker has a unique set of 10,000 household IDs. Each household ID will be issued only once. If a household disappears, its ID will never be used
+- Households: Each fieldworker has a unique set of 1,000 household IDs. Each household ID will be issued only once. If a household disappears, its ID will never be used
 - Individuals: Each individual is issued a letter. Generally speaking "A" will be the head of household, but this can change. In the case of migration, birth, or death, new letters are issued. In no case will a letter for a household be re-issued to someone new
+
+## Example QR codes
+
+- Example QR codes are viewable at www.databrew.cc/qrs.pdf
