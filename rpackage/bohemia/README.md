@@ -174,11 +174,11 @@ Here is a working example:
 ``` r
 set.seed(1)
 library(tidyverse)
-#> ── Attaching packages ───────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+#> ── Attaching packages ─────────────────────────────────── tidyverse 1.2.1 ──
 #> ✔ tibble  2.1.3     ✔ purrr   0.3.3
 #> ✔ readr   1.3.1     ✔ stringr 1.4.0
 #> ✔ tibble  2.1.3     ✔ forcats 0.4.0
-#> ── Conflicts ──────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──
 #> ✖ dplyr::filter() masks stats::filter()
 #> ✖ dplyr::lag()    masks stats::lag()
 library(sp)
@@ -451,8 +451,8 @@ create_qr(id)
 
 ![](figures/unnamed-chunk-18-1.png)<!-- -->
 
-If many ids need to be printed at once, there is a pdf functionality for
-printing multiple IDs. To use this, run:
+If many ids need to be printed at once, there is a .pdf functionality
+for printing multiple IDs. To use this, run the following:
 
 ``` r
 # Example ids: 5566778, 7654321, 1234567
@@ -471,7 +471,7 @@ following:
 print_worker_qrs(wid = '001', worker = TRUE, n = 12)
 ```
 
-The above will generate 12 ID QRs for worker ‘001’.
+The above will generate 12 ID QRs for worker with ID number ‘001’.
 
 In order to generate household-specific QRs for a given worker, do
 something like below:

@@ -363,7 +363,7 @@ id <- ('111-222')
 create_qr(id)
 ```
 
-If many ids need to be printed at once, there is a pdf functionality for printing multiple IDs. To use this, run:
+If many ids need to be printed at once, there is a .pdf functionality for printing multiple IDs. To use this, run the following:
 
 ```{r, eval = FALSE}
 # Example ids: 5566778, 7654321, 1234567
@@ -380,7 +380,7 @@ In order to generate _worker ID_ QRs, once can run something like the following:
 print_worker_qrs(wid = '001', worker = TRUE, n = 12)
 ```
 
-The above will generate 12 ID QRs for worker '001'.
+The above will generate 12 ID QRs for worker with ID number '001'.
 
 In order to generate household-specific QRs for a given worker, do something like below: 
 
