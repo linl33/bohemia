@@ -1,3 +1,0 @@
-# Fieldworker guide
-
-(In progress)

@@ -45,3 +45,10 @@ Once the system has been deployed and forms have been created, data collection s
 ### Sending data
 - With an internet connection, from the main page of ODKCollect, click "Send Finalized Form"
 - Select all and "Send"
+
+### Syncronizing
+- When you have an internet connection, you should also syncronize with the main server
+- In order to do this, you need to go to the main page of ODK and select "Get Blank Form"
+- Then, select the census form (its updated version) and get it
+
+
