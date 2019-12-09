@@ -14,7 +14,7 @@ Suggests:
     MASS,
     testthat
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.0
+RoxygenNote: 7.0.2
 Imports:
     dplyr,
     ggplot2,

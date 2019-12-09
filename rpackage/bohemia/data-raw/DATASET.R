@@ -1,6 +1,3 @@
-## code to prepare `DATASET` dataset goes here
-
-# Set up geofabrik data
 # library(devtools)
 library(usethis)
 library(raster)
@@ -14,6 +11,34 @@ library(sf)
 # # Initiate the raw-data into package session
 # usethis::use_data_raw()
 
+# Previous Mopeia census
+cen1 <- read_csv('mopeia_census_cost/Census_2016.csv')
+cen1 <- cen1 %>% mutate(
+  ap = administrative_post_final,
+  locality = locality_Final,
+  village = village_final,
+  lng = gpc_lng,
+  lat = gpc_lat
+) %>% dplyr::select(ap, locality, village, lng, lat)
+cen2 <- read_csv('mopeia_census_cost/COST_Censo2017_Core.1.4.2019.csv')
+cen2 <- cen2 %>%
+  mutate(
+    ap = ADMINISTRATIVE_POST,
+    locality = LOCALITY,
+    village = LOCAL_VILLAGENAME,
+    lng = LOCALITY_GPS_LNG,
+    lat = LOCALITY_GPS_LAT
+  ) %>% dplyr::select(ap, locality, village, lng, lat) %>%
+  # overwrite the numeric ap/locality
+  mutate(ap = as.character(NA),
+         locality = as.character(NA))
+# Combine
+cen <- bind_rows(cen1, cen2) %>%
+  mutate(locality = toupper(locality),
+         ap = toupper(ap),
+         village = toupper(village))
+# Deal with the overwrites
+x = cen1 %>% group_by(village) %>% summarise(n = n(), localities = length(unique(locality)), ll = paste0(sort(unique(locality)), collapse = ';'))
 # Health facility locations
 library(readxl)
 rufiji_health_facilities <- read_excel('health_facilities/Health Facilities in Kibiti and Rufiji - Bohemia_iirema_08Dec2019.xlsx') %>%
@@ -24,21 +49,43 @@ rufiji_health_facilities <- read_excel('health_facilities/Health Facilities in K
   mutate(details = paste0(Ownership)) %>%
   mutate(district = 'Rufiji') %>%
   dplyr::select(name, lng, lat, facility_number, details, district)
-mopeia_health_facilities <- read_csv('health_facilities/mopeia_health_facilities.csv') %>%
-  dplyr::rename(lng = gpc_lng,
-                lat = gpc_lat,
-                name = health_facility) %>%
-  mutate(name = gsub('CENTRO DE SAUDE', '', name)) %>% 
-  mutate(name = trimws(name, which = 'both')) %>%
-  mutate(name = gsub('DE', '', name)) %>% 
-  mutate(name = trimws(name, which = 'both')) %>%
+# mopeia_health_facilities <- read_csv('health_facilities/mopeia_health_facilities.csv') %>%
+#   dplyr::rename(lng = gpc_lng,
+#                 lat = gpc_lat,
+#                 name = health_facility) %>%
+#   mutate(name = gsub('CENTRO DE SAUDE', '', name)) %>% 
+#   mutate(name = trimws(name, which = 'both')) %>%
+#   mutate(name = gsub('DE', '', name)) %>% 
+#   mutate(name = trimws(name, which = 'both')) %>%
+#   mutate(district = 'Mopeia') %>%
+#   mutate(facility_number = NA) %>%
+#   mutate(details = paste0(`Posto Administrativo`, ', ', Localidade)) %>%
+#   dplyr::select(name, lng, lat, facility_number, details, district) %>%
+#   mutate(name = Hmisc::capitalize(tolower(name)))
+mopeia_health_facilities <- read_csv('health_facilities/Mopeia_HealthFacilities_gps_EE.csv') %>%
+  dplyr::rename(name = hf_name,
+                facility_number = hf_id,
+                lng = `_hf_gps_longitude`,
+                lat = `_hf_gps_latitude`) %>%
   mutate(district = 'Mopeia') %>%
-  mutate(facility_number = NA) %>%
-  mutate(details = paste0(`Posto Administrativo`, ', ', Localidade)) %>%
-  dplyr::select(name, lng, lat, facility_number, details, district) %>%
-  mutate(name = Hmisc::capitalize(tolower(name)))
-  
-usethis::use_data(tza3, overwrite = TRUE)
+  mutate(details = NA) %>%
+  mutate(facility_number = as.character(facility_number)) %>%
+  dplyr::select(name, lng, lat, facility_number, details, district)
+health_facilities <- bind_rows(mopeia_health_facilities,
+                               rufiji_health_facilities)
+usethis::use_data(health_facilities,
+                  mopeia_health_facilities,
+                  rufiji_health_facilities, 
+                  overwrite = TRUE)
+
+# Read in the location hierachy
+library(gsheet)
+url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
+# Fetch the data
+locations <- gsheet::gsheet2tbl(url = url)
+location_hierarchy <- locations
+usethis::use_data(locations, location_hierarchy,
+                  overwrite = TRUE)
 
 # Creating osm files is time-consuming. Only set to TRUE if a change is needed
 redo_osm <- FALSE
