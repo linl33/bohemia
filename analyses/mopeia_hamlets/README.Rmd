@@ -24,6 +24,8 @@ library(tidyverse)
 library(bohemia)
 ```
 
+The below map shows the (estimated) borders of Mopeia hamlets based on the COST study. This map was produced using [this code](https://github.com/databrew/bohemia/blob/master/rpackage/bohemia/data-raw/create_data_files.R#L14), run on the raw census data from the COST trial. It uses an automated error detection algorithm to identify suspect incorrect households and remove them, and then employs tesselation to estimate borders.
+
 ```{r}
 cols <- rainbow(nrow(mopeia_hamlets))
 cols <- sample(cols, length(cols))
