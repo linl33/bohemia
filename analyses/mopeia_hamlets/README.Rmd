@@ -1,0 +1,44 @@
+---
+title: 'Location of Mopeia hamlets'
+output: html_document
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(tidyverse)
+library(bohemia)
+```
+
+```{r}
+cols <- rainbow(nrow(mopeia_hamlets))
+cols <- sample(cols, length(cols))
+cols <- sample(cols, length(cols))
+
+library(leaflet)
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = mopeia_hamlets,
+              color = cols,
+              popup = paste0(mopeia_hamlets$id,
+                             ', Village: ',
+                             mopeia_hamlets$village,
+                             ', Locality:',
+                             mopeia_hamlets$locality),
+              weight = 1)
+
+```
