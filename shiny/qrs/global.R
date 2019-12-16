@@ -2,6 +2,7 @@ library(leaflet)
 library(sp)
 library(raster)
 library(deldir)
+library(rgeos)
 # library(leaflet.providers)
 # library(leaflet.extras)
 
