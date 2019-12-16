@@ -1,6 +1,8 @@
 library(shiny)
 library(shinydashboard)
 library(dplyr)
+library(DT)
+library(leaflet)
 source('global.R')
 
 header <- dashboardHeader(title="QR example app")

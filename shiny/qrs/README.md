@@ -1,7 +1,8 @@
 To deploy:
 
 sudo su - -c "R -e \"install.packages('shinydashboard')\""
-sudo su - -c "R -e \"install.packages('sp')\""
+sudo su - -c "R -e \"install.packages('packagenme', repos = 'http://cran.rstudio.com/',dependencies =TRUE)\""
+
 
 sudo systemctl restart shiny-server
 

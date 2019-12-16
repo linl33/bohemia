@@ -3,6 +3,7 @@ library(sp)
 library(raster)
 library(deldir)
 library(rgeos)
+library(maptools)
 # library(leaflet.providers)
 # library(leaflet.extras)
 
@@ -25,10 +26,16 @@ library(rgeos)
 # load('data/mopeia_health_facilities.rda')
 # load('data/rufiji_health_facilities.rda')
 
-# Get a fake polygon
-polygon <- getData(name = 'GADM',
-                   country = 'ESP',
-                   level = 4)
+if('preloaded.RData' %in% dir()){
+  load('preloaded.RData')
+} else {
+  # Get a fake polygon
+  polygon <- getData(name = 'GADM',
+                     country = 'ESP',
+                     level = 4)
+  save(polygon, file = 'preloaded.RData')
+}
+
 polygon <- polygon[polygon@data$NAME_2 == 'Navarra',]
 halven <- function(p, fun = mean){
   bbp <- bbox(p)
