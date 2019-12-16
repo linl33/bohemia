@@ -61,6 +61,11 @@ The fieldworker-specific household ids will be stored in a table with the below 
   - Worker ID QR codes (to be laminated and carried in the worker's wallet)
   - Household ID QR codes (to be distributed to workers prior to data collection for in the field assignation and deployment)
 
+## How QR codes fit into the overall flow
+
+- QR codes should be printed _a priori_ per the below flow:
+![](img/pipeline.png)
+
 
 ## Individual IDs
 
