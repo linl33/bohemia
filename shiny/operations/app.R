@@ -6,19 +6,23 @@ source('global.R')
 
 header <- dashboardHeader(title="Bohemia Operations Helper App")
 sidebar <- dashboardSidebar(
+  
   sidebarMenu(id = 'tabs',
-    menuItem(
-      text="Overview map",
-      tabName="main",
-      icon=icon("eye")),
-    menuItem(
-      text="Hamlet explorer",
-      tabName="hamlet_explorer",
-      icon=icon("home")),
-    menuItem(
-      text = 'About',
-      tabName = 'about',
-      icon = icon("cog", lib = "glyphicon"))
+              
+              menuItem(
+                text="Hamlet explorer",
+                tabName="hamlet_explorer",
+                icon=icon("home")),
+              
+              menuItem(
+                text="Overview map",
+                tabName="main",
+                icon=icon("eye")),
+              
+              menuItem(
+                text = 'About',
+                tabName = 'about',
+                icon = icon("cog", lib = "glyphicon"))
   )
 )
 
@@ -27,29 +31,7 @@ body <- dashboardBody(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
   ),
   tabItems(
-    tabItem(
-      tabName="main",
-      fluidPage(
-        column(3,
-               selectInput('location',
-                           'Location',
-                           choices = c('Mopeia',
-                                       'Rufiji')),
-               checkboxInput('hf',
-                             'Show health posts',
-                             value = TRUE),
-               checkboxInput('borders',
-                             'Show borders',
-                             value = TRUE),
-               checkboxInput('extras',
-                             'Show extras',
-                              value = FALSE),
-               helpText(textOutput('ht'))),
-        column(9,
-               leafletOutput('l'))
-
-      )
-    ),
+    
     tabItem(
       tabName="hamlet_explorer",
       fluidPage(
@@ -99,6 +81,31 @@ body <- dashboardBody(
                         DT::dataTableOutput('qualy_table')))
       )
     ),
+    
+    tabItem(
+      tabName="main",
+      fluidPage(
+        column(3,
+               selectInput('location',
+                           'Location',
+                           choices = c('Mopeia',
+                                       'Rufiji')),
+               checkboxInput('hf',
+                             'Show health posts',
+                             value = TRUE),
+               checkboxInput('borders',
+                             'Show borders',
+                             value = TRUE),
+               checkboxInput('extras',
+                             'Show extras',
+                             value = FALSE),
+               helpText(textOutput('ht'))),
+        column(9,
+               leafletOutput('l'))
+        
+      )
+    ),
+    
     tabItem(
       tabName = 'about',
       fluidPage(
@@ -605,10 +612,25 @@ server <- function(input, output) {
                   options = list(dom = 't',
                                  pageLength = 5), 
                   rownames = FALSE)
-    
   })
   
+  observeEvent(input$print_report,{
+    showModal(modalDialog(
+      title = "Under construction",
+      "This functionality is currently under development.",
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  })
   
+  observeEvent(input$print_directions,{
+    showModal(modalDialog(
+      title = "Under construction",
+      "This functionality is currently under development.",
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  })
 }
 
 
