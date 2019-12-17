@@ -22,32 +22,32 @@ load('data/rufiji2.rda')
 load('data/mopeia_health_facilities.rda')
 load('data/rufiji_health_facilities.rda')
 
-# Load the location hierarchy
-if(!'locations.RData' %in% dir('data')){
-  locations <- bohemia::locations
-  save(locations, file = 'data/locations.RData')
-} else {
-  load('data/locations.RData')
-}
-
-# Load the spatial data
-
-# Mopeia (needs cleaning up)
-if(!'mopeia_hamlets.RData' %in% dir('data')){
-  mopeia_hamlets <- bohemia::mopeia_hamlets
-  save(mopeia_hamlets, file = 'data/mopeia_hamlets.RData')
-} else {
-  load('data/mopeia_hamlets.RData')
-}
-
-# Rufiji (doesn't yet exist!)
-if(!'rufiji_hamlets.RData' %in% dir('data')){
-  # rufiji_hamlets <- bohemia::rufiji_hamlets
-  rufiji_hamlets <- bohemia::rufiji3
-  save(rufiji_hamlets, file = 'data/rufiji_hamlets.RData')
-} else {
-  load('data/rufiji_hamlets.RData')
-}
+# # Load the location hierarchy
+# if(!'locations.RData' %in% dir('data')){
+#   locations <- bohemia::locations
+#   save(locations, file = 'data/locations.RData')
+# } else {
+#   load('data/locations.RData')
+# }
+# 
+# # Load the spatial data
+# 
+# # Mopeia (needs cleaning up)
+# if(!'mopeia_hamlets.RData' %in% dir('data')){
+#   mopeia_hamlets <- bohemia::mopeia_hamlets
+#   save(mopeia_hamlets, file = 'data/mopeia_hamlets.RData')
+# } else {
+#   load('data/mopeia_hamlets.RData')
+# }
+# 
+# # Rufiji (doesn't yet exist!)
+# if(!'rufiji_hamlets.RData' %in% dir('data')){
+#   # rufiji_hamlets <- bohemia::rufiji_hamlets
+#   rufiji_hamlets <- bohemia::rufiji3
+#   save(rufiji_hamlets, file = 'data/rufiji_hamlets.RData')
+# } else {
+#   load('data/rufiji_hamlets.RData')
+# }
 
 
 

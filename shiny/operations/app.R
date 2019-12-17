@@ -6,7 +6,7 @@ source('global.R')
 
 header <- dashboardHeader(title="Bohemia Operations Helper App")
 sidebar <- dashboardSidebar(
-  sidebarMenu(
+  sidebarMenu(id = 'tabs',
     menuItem(
       text="Overview map",
       tabName="main",
@@ -397,7 +397,9 @@ server <- function(input, output) {
   observeEvent(c(input$borders_ll,
                  input$hamlet_borders_ll,
                  input$country,
-                 input$this_hamlet),{
+                 input$this_hamlet,
+                 input$tabs,
+                 input$hamlet),{
     ok <- FALSE
     bords <- input$borders_ll
     location <- input$country
@@ -456,6 +458,10 @@ server <- function(input, output) {
       leafletProxy("ll") %>%
         addPolygons(data = hamlet, 
                     fillColor = 'red',
+                    fillOpacity = 0.8,
+                    stroke = TRUE,
+                    weight = 1,
+                    color = 'black',
                     popup = hamlet$village,
                     label = hamlet$village)
     }
