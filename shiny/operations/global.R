@@ -21,7 +21,9 @@ load('data/mopeia2.rda')
 load('data/rufiji2.rda')
 load('data/mopeia_health_facilities.rda')
 load('data/rufiji_health_facilities.rda')
-
+load('data/locations.RData')
+load('data/mopeia_hamlets.RData')
+load('data/rufiji_hamlets.RData')
 # # Load the location hierarchy
 # if(!'locations.RData' %in% dir('data')){
 #   locations <- bohemia::locations
