@@ -1,6 +1,6 @@
 #' Google to ODK
 #'
-#' Fetch an xlsform from google docs, convert to xml, and push to an ODK Aggregate server. The google sheet must have been "published to the web" via the file menu in the upper-left. Note, before running this script, one should have installed ODK Briefcase per the instructions at https://github.com/databrew/bohemia/blob/master/guides/guide_briefcase.md
+#' Fetch an xlsform from google docs, convert to xml, and push to an ODK Aggregate server. The google sheet must have been "published to the web" via the file menu in the upper-left. Note, before running this script, one should have installed ODK Briefcase per the instructions at https://github.com/databrew/bohemia/blob/master/guides/guide_briefcase.md. Note, this is unstable, and proper functioning still requires manually deleting form definitions from the Aggregate server.
 #' @param url The url of the google sheet
 #' @param briefcase Location on the local machine of the briefcase jar file
 #' @param aggregate Location of the ODK Aggregate server
@@ -42,7 +42,7 @@ google_to_odk <- function(url = 'https://docs.google.com/spreadsheets/d/16_drw-3
   system(paste0('xls2xform ',
                 download_as, ' ',
                 convert_to))
-  
+
   # Remove the old version
   to_location <- paste0(storage_directory, '/ODK Briefcase Storage/forms/', form_title, '/', form_title, '.xml')
   file.remove(to_location)

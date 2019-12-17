@@ -33,5 +33,5 @@ google_to_odk(
 Nothing
 }
 \description{
-Fetch an xlsform from google docs, convert to xml, and push to an ODK Aggregate server. The google sheet must have been "published to the web" via the file menu in the upper-left. Note, before running this script, one should have installed ODK Briefcase per the instructions at https://github.com/databrew/bohemia/blob/master/guides/guide_briefcase.md
+Fetch an xlsform from google docs, convert to xml, and push to an ODK Aggregate server. The google sheet must have been "published to the web" via the file menu in the upper-left. Note, before running this script, one should have installed ODK Briefcase per the instructions at https://github.com/databrew/bohemia/blob/master/guides/guide_briefcase.md. Note, this is unstable, and proper functioning still requires manually deleting form definitions from the Aggregate server.
 }
