@@ -21,6 +21,31 @@ correct <- read_csv('mopeia_census_cost/COST_SprayStatus_by_Village_Id_10.12.201
                 village = VILLAGE_NAME,
                 population = POPULATION) %>%
   mutate(locality = bohemia::update_mopeia_locality_names(locality))
+correct <- correct %>% filter(!is.na(id))
+
+# Create an object for the R package
+mopeia_hamlet_details <- correct %>%
+  dplyr::rename(Hamlet = village,
+                Village = locality,
+                Ward = administrative_post)
+
+mopeia_hamlet_details$Village <- gsub('/', '/ ', mopeia_hamlet_details$Village, fixed = TRUE)
+# Fix capitalization
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
+mopeia_hamlet_details$Village <- sapply(tolower(mopeia_hamlet_details$Village), simpleCap)
+mopeia_hamlet_details$Village <- gsub('/ ', '/', mopeia_hamlet_details$Village, fixed = TRUE)
+
+mopeia_hamlet_details <- 
+  mopeia_hamlet_details %>%
+  mutate(Village = recode(Village,
+                          'Mopeia Sede' = 'Mopeia Sede/Cuacua'))
+mopeia_hamlet_details <- mopeia_hamlet_details %>% arrange(id)
+usethis::use_data(mopeia_hamlet_details,
+                  overwrite = TRUE)
 
 
 cen1 <- read_csv('mopeia_census_cost/Census_2016_10-12-2019.csv')
@@ -30,8 +55,10 @@ cen1 <- cen1 %>% mutate(
   # locality = locality_Final,
   # village = village_final,
   lng = gpc_lng,
-  lat = gpc_lat
-) %>% dplyr::select(id, lng, lat)
+  lat = gpc_lat,
+  hid = houseno_Final_1,
+) %>% dplyr::select(id, lng, lat, hid) %>%
+  mutate(hid = unlist(lapply(strsplit(hid, '-'), function(x){paste0(x[2], '-', x[1])})))
 cen2 <- read_csv('mopeia_census_cost/COST_Censo2017_Core.10.12.2019.csv')
 cen2 <- cen2 %>%
   mutate(
@@ -40,18 +67,29 @@ cen2 <- cen2 %>%
     # locality = LOCALITY,
     # village = LOCAL_VILLAGENAME,
     lng = LOCALITY_GPS_LNG,
-    lat = LOCALITY_GPS_LAT
+    lat = LOCALITY_GPS_LAT,
+    hid = FAMILY_ID
   ) %>% dplyr::select(id, 
                       # administrative_post, locality, village, 
-                      lng, lat) %>%
+                      lng, lat,hid) %>%
   mutate(id = as.numeric(as.character(id)))
 # Combine
-cen <- bind_rows(cen1, 
-                 cen2) %>% 
+cen <- bind_rows(cen1 %>% mutate(round = 1), 
+                 cen2 %>% mutate(round = 2)) %>% 
   left_join(correct) %>%
   mutate(locality = toupper(locality),
          administrative_post = toupper(administrative_post),
          village = toupper(village))
+
+# Save for using as basis of correction
+mopeia_households <- cen %>%
+  dplyr::select(id, lng, lat, round, hid) %>%
+  mutate(x = lng, y = lat) %>%
+  filter(id != 7067) %>% # only 2, and not in the mopeia_hamlet_details file
+  dplyr::distinct(lng, lat, .keep_all = TRUE)
+# Add a joe_id
+mopeia_households$joe_id <- 1:nrow(mopeia_households)
+save(mopeia_households, file = 'mopeia_households_uncorrected.RData')
 
 # # For eldo to correct:
 # sort(unique(cen$id[!cen$id %in% correct$id]))
@@ -63,8 +101,10 @@ df <- cen %>% mutate(x = lng, y = lat)
 df <- df %>% filter(!is.na(id))
 # Make spatial
 coordinates(df) <- ~x+y
-
 proj4string(df) <- CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+
+# Save this for manual correction
+
 
 # Filter out the suspicious ones
 df@data$idx <- 1:nrow(df)

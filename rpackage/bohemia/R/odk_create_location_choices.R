@@ -172,7 +172,7 @@ odk_create_location_choices <- function(country = NULL, add_other = TRUE, add_id
   names(out) <- c('survey', 'choices')
   return(out)
 }
-library(readr)
-x <- odk_create_location_choices()
-write_csv(x$survey, '~/Desktop/1.csv', na = '')
-write_csv(x$choices, '~/Desktop/2.csv')
+# library(readr)
+# x <- odk_create_location_choices()
+# write_csv(x$survey, '~/Desktop/1.csv', na = '')
+# write_csv(x$choices, '~/Desktop/2.csv')
