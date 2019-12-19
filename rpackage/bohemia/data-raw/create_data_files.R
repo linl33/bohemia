@@ -307,6 +307,8 @@ library(gsheet)
 url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
 # Fetch the data
 locations <- gsheet::gsheet2tbl(url = url)
+# locations <- generate_location_codes(locations)
+# locations$degrees <- NULL
 location_hierarchy <- locations
 usethis::use_data(locations, location_hierarchy,
                   overwrite = TRUE)
