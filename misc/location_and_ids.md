@@ -1,3 +1,5 @@
+## THIS DOCUMENT IS NO LONGER VALID. IT IS SAVED HERE FOR RECORD-KEEPING PURPOSES, BUT ITS CONTENTS ARE NO LONGER APPLICABLE.
+
 # Location handling
 
 This document gives an overview of the Bohemia project's approach to handling location data.
