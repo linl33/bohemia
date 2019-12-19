@@ -3,6 +3,12 @@ library(sp)
 # library(leaflet.providers)
 library(leaflet.extras)
 
+rdir <- '../../rpackage/bohemia/R/'
+funs <- dir(rdir)
+for(i in 1:length(funs)){
+  source(paste0(rdir, funs[i]))
+}
+
 # at the time of writing, version 1.8.0
 # pd <- providers_default()
 

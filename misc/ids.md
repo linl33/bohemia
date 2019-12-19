@@ -35,16 +35,24 @@ Non-resident household members are assigned an ID beginning at number 901 and in
 
 ## How to assign household IDs
 
-There are two methods for household "enumeration" (ie, the assignation of IDs to households). 
+There are two methods for household "enumeration" (ie, the assignation of IDs to households). It is our current understanding that Mozambique will use method 1 and Tanzania will use method 2.
 
+### Method 1: A priori
 
-## Permanence and mutability
+The "a priori" method means assigning a number to every household in a hamlet/village _prior_ to collecting data from any of those households. The advantage of this method is that it decreases the likelihood of duplication and saves the data collectors time.
 
-- All IDs are permanent.
-- Fieldworkers: A fieldworker ID will be issued to only one person, once. If that person leaves the project, that number will never be used again
-- Households: Each fieldworker has a unique set of 1,000 household IDs. Each household ID will be issued only once. If a household disappears, its ID will never be used
-- Individuals: Each individual is issued a letter. Generally speaking "A" will be the head of household, but this can change. In the case of migration, birth, or death, new letters are issued. In no case will a letter for a household be re-issued to someone new
+#### Steps
 
-## Example QR codes
+- Go to www.databrew.cc/bohemiaops and enter the location of the hamlet/bairro to be enumerated by the pre-census enumeration team
+- In the far right of the page, under "Utilities", click on "Print enumeration lists"
+- Enter (a) estimated number of households and (b) the number of teams which will enumerate the hamlet/bairro (normally there is just one)
+- The web application will generate printable lists in which there is one page for each team
+- Deploy the enumeration team(s) to the field with their list. They should then manually cross off each household ID number as it is assigned/painted.
 
-- Example QR codes are viewable at www.databrew.cc/qrs.pdf
+### Method 2: On the fly
+
+The "on the fly" method means assigning a number to each household at the same time as the census data collection visit. The advantage of this method is that it does not require two separate visits to a household.
+
+#### Steps
+
+(To be continued)

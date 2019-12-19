@@ -64,6 +64,10 @@ body <- dashboardBody(
                         checkboxInput('this_hamlet',
                                       'Highlight this hamlet',
                                       value = FALSE),
+                        br(), br(),
+                        actionButton('print_enumeration',
+                                     'Print enumeration lists',
+                                     icon = icon('print')),
                              br(), br(),
                              actionButton('print_report',
                                           'Print hamlet report',
@@ -81,6 +85,7 @@ body <- dashboardBody(
                         DT::dataTableOutput('qualy_table')))
       )
     ),
+
     
     tabItem(
       tabName="main",
@@ -132,6 +137,26 @@ ui <- dashboardPage(header, sidebar, body, skin="blue")
 
 # Server
 server <- function(input, output) {
+  
+  # Get the location code based on the input hierarchy
+  location_code <- reactive({
+    country = input$country
+    region = input$region
+    district = input$district
+    ward = input$ward
+    village = input$village
+    hamlet = input$hamlet
+    
+    glc <- get_location_code(country = country,
+                      region = region,
+                      district = district,
+                      ward = ward,
+                      village = village,
+                      hamlet = hamlet)
+    
+    print(glc)
+    glc
+  })
   
   filtered_locations <- reactive({
     ok <- FALSE
@@ -631,6 +656,54 @@ server <- function(input, output) {
       footer = NULL
     ))
   })
+  
+  observeEvent(input$print_enumeration,{
+    showModal(modalDialog(
+      title = "Enumeration list generator",
+      fluidPage(
+        fluidRow(
+          column(6,
+                 textInput('enumeration_n_hh',
+                           'Estimated number of households'),
+                 helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration).')),
+          column(6,
+                 textInput('enumeration_n_teams',
+                           'Number of teams'),
+                 helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'))
+        ),
+        fluidRow(
+          column(12, align = 'center',
+                 downloadButton('render_enumeration_list',
+                              'Generate list(s)'))
+        )
+      ),
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  })
+  
+  output$render_enumeration_list <-
+    downloadHandler(filename = "list.pdf",
+                    content = function(file){
+                      
+                      # Get the location code
+                      lc <- location_code()
+                      data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
+                                         n_teams = as.numeric(as.character(input$enumeration_n_teams)))
+                      # generate html
+                      rmarkdown::render('rmds/list.Rmd',
+                                        params = list(data = data,
+                                                      loc_id = lc))
+                      
+                      # copy html to 'file'
+                      file.copy("rmds/list.pdf", file)
+                      
+                      # # delete folder with plots
+                      # unlink("figure", recursive = TRUE)
+                    },
+                    contentType = "application/pdf"
+    )
+  
 }
 
 
