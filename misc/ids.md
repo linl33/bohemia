@@ -51,8 +51,8 @@ The "a priori" method means assigning a number to every household in a hamlet/vi
 
 ### Method 2: On the fly
 
-The "on the fly" method means assigning a number to each household at the same time as the census data collection visit. The advantage of this method is that it does not require two separate visits to a household.
+The "on the fly" method means assigning a number to each household at the same time as the census data collection visit. The advantage of this method is that it does not require two separate visits to a household. The disadvantage is the possibility of ID duplications - that is, because houses are being assigned IDs in the same village simultaneously, there is a risk that two houses will get the same ID number.
 
 #### Steps
 
-(To be continued)
+- (Pending confirmation that Tanzania will indeed use this method, and details re: number of fieldworkers per hamlet)
