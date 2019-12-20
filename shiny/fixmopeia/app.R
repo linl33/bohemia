@@ -229,7 +229,7 @@ server <- function(input, output, session) {
         in_csv_bh <- in_csv_bh$id
         in_memory_bh <- sort(unique(in_memory_bh))
         in_csv_bh <- sort(unique(in_csv_bh))
-        if(all(in_memory_bh == in_csv_bh)){
+        if(identical(in_memory_bh, in_csv_bh)){
             warning_value(FALSE)
         } else {
             warning_value(TRUE)
