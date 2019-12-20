@@ -31,3 +31,5 @@ The tool should be used by someone familiar with Mopeia hamlets (ie, Eldo). Thou
 ![](mopeia_location_corrections/a.png)
 
 There are many cases where the distinction between correct and erroneous is not so clear (see below):
+
+![](mopeia_location_corrections/b.png)
