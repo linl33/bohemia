@@ -2,6 +2,8 @@ library(dplyr)
 library(leaflet)
 library(readr)
 library(rgeos)
+library(DBI)
+library(RPostgres)
 
 # Get mopeia raw (imperfect) data
 # library(bohemia)
@@ -20,8 +22,9 @@ load('data/mopeia2.RData')
 # Define ids
 ids <- sort(unique(mopeia_hamlet_details$id))
 
-# # Get the starting bad houses
-# out <- tibble(id = c(1234567890))
-# write_csv(out, 'data/bh.csv')
-starting_bad_houses <- readr::read_csv('data/bh.csv')
+# Read in the bad houses
+con <- dbConnect(drv = RPostgres::Postgres(),
+                 dbname = 'fixmopeia')
+starting_bad_houses <- dbReadTable(conn = con, name = 'starting_bad_houses')
+
 starting_bad_houses <- starting_bad_houses$id

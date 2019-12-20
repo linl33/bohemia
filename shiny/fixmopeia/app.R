@@ -1,4 +1,5 @@
 library(shiny)
+library(DBI)
 source('global.R')
 
 # Define UI for application that draws a histogram
@@ -209,23 +210,24 @@ server <- function(input, output, session) {
         paste0(sort(unique(out$hid)), collapse = ', ')
     })
     
-    # Observe the submission and write a csv
+    # Observe the submission and write to db
     observeEvent(input$submit,{
-        message('Writing csv')
-        # Read in the old ones
-        old_bh <- readr::read_csv('data/bh.csv')
-        # Combine with the new ones
+        message('Writing to db')
         bh <- bad_houses()
-        new_bh <- sort(unique(c(bh, old_bh$id)))
+        db_bh <- dbReadTable(conn = con, name = 'starting_bad_houses')
+        bh <- bh[!bh %in% db_bh$id]
         # Make new dataframe
-        out <- tibble(id = new_bh)
-        readr::write_csv(out, 'data/bh.csv')
+        out <- tibble(id = bh)
+        dbWriteTable(conn = con,
+                    name = 'starting_bad_houses',
+                    value = out,
+                    append = TRUE)
     })
     
     warning_value <- reactiveVal(value = FALSE)
     observeEvent(c(bad_houses(),input$submit), {
         in_memory_bh <- bad_houses()
-        in_csv_bh <- read_csv('data/bh.csv')
+        in_csv_bh <- dbReadTable(conn = con, name = 'starting_bad_houses')
         in_csv_bh <- in_csv_bh$id
         in_memory_bh <- sort(unique(in_memory_bh))
         in_csv_bh <- sort(unique(in_csv_bh))
@@ -259,4 +261,7 @@ server <- function(input, output, session) {
 }
 
 # Run the application 
+onStop(function() {
+    dbDisconnect(con)
+})
 shinyApp(ui = ui, server = server)
