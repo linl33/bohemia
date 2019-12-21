@@ -1,5 +1,6 @@
 To deploy:
 
+sudo apt-get install libxml2-dev
 sudo su - -c "R -e \"install.packages('leaflet.extras')\""
 sudo su - -c "R -e \"install.packages('shinydashboard')\""
 sudo su - -c "R -e \"install.packages('sp')\""
