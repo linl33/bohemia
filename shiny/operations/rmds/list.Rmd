@@ -39,6 +39,10 @@ for (i in 1:length(params)){
 }
 ```
 
+## Enumeration lists for `r loc_id`
+
+\newpage
+
 ```{r}
 lc <- loc_id
 n_hh <- as.numeric(data$n_hh)

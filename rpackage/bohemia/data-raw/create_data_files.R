@@ -304,14 +304,43 @@ usethis::use_data(health_facilities,
 
 # Read in the location hierachy
 library(gsheet)
+library(dplyr)
 url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
 # Fetch the data
 locations <- gsheet::gsheet2tbl(url = url)
-# locations <- generate_location_codes(locations)
+
+# # Fix the incorrect localities
+# locations$code <- NULL
+# 
+# # Replace villages
+# locations$Village <- bohemia::update_mopeia_locality_names(locations$Village)
+# 
+# locations$Village <- gsub('/', '/ ', locations$Village, fixed = TRUE)
+# # Fix capitalization
+# simpleCap <- function(x) {
+#   s <- strsplit(x, " ")[[1]]
+#   paste(toupper(substring(s, 1,1)), substring(s, 2),
+#         sep="", collapse=" ")
+# }
+# locations$Village <- sapply(tolower(locations$Village), simpleCap)
+# locations$Village <- gsub('/ ', '/', locations$Village, fixed = TRUE)
+# 
+# # # Arrange by hamlet name and generate location codes
+# locations <- locations %>% dplyr::arrange(Hamlet)
+# locations <- bohemia::generate_location_codes(locations)
 # locations$degrees <- NULL
+locations <- locations %>% arrange(Country, Region, District, Ward, Village, Hamlet)
+# Make sure there are no duplicates
+locations <- locations %>%
+  dplyr::distinct(Country, Region, District, Ward, Village, Hamlet, 
+                  .keep_all = TRUE)
+
 location_hierarchy <- locations
 usethis::use_data(locations, location_hierarchy,
                   overwrite = TRUE)
+# Also re-write the csv to google sheet
+# readr::write_csv(locations, '~/Desktop/locations.csv')
+
 
 # Creating osm files is time-consuming. Only set to TRUE if a change is needed
 redo_osm <- FALSE

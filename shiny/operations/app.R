@@ -46,7 +46,9 @@ body <- dashboardBody(
                         uiOutput('district_ui'),
                         uiOutput('ward_ui'),
                         uiOutput('village_ui'),
-                        uiOutput('hamlet_ui')),
+                        uiOutput('hamlet_ui'),
+                        h4('Location code:'),
+                        textOutput('location_code_text')),
                  column(6,
                         h3('Map'),
                         leafletOutput('ll')),
@@ -139,32 +141,32 @@ ui <- dashboardPage(header, sidebar, body, skin="blue")
 server <- function(input, output) {
   
   # Get the location code based on the input hierarchy
-  location_code <- reactive({
-    country = input$country
-    region = input$region
-    district = input$district
-    ward = input$ward
-    village = input$village
-    hamlet = input$hamlet
-    
-    glc <- get_location_code(country = country,
-                      region = region,
-                      district = district,
-                      ward = ward,
-                      village = village,
-                      hamlet = hamlet)
-    
-    print(glc)
-    glc
-  })
+  location_code <- reactiveVal(value = NULL)
+  observeEvent(c(input$country,
+                 input$region,
+                 input$district,
+                 input$ward,
+                 input$village,
+                 input$hamlet), {
+                   country = input$country
+                   region = input$region
+                   district = input$district
+                   ward = input$ward
+                   village = input$village
+                   hamlet = input$hamlet
+                   
+                   glc <- get_location_code(country = country,
+                                            region = region,
+                                            district = district,
+                                            ward = ward,
+                                            village = village,
+                                            hamlet = hamlet)
+                   location_code(glc)
+                 })
   
-  filtered_locations <- reactive({
-    ok <- FALSE
-    search <- input$search
-    locations %>%
-      mutate(combined = paste0(Country, Region, District, Ward, Village, Hamlet, collapse = NULL)) %>%
-      filter(grepl(tolower(search), tolower(combined), fixed = TRUE)) %>%
-      dplyr::select(-combined)
+  output$location_code_text <- renderText({
+    lc <- location_code()
+    lc
   })
   
   output$locations_table <- DT::renderDataTable({
@@ -178,24 +180,7 @@ server <- function(input, output) {
   })
   
   location <- reactiveValues(data = data.frame())
-  
-  # Capture the click on the datatable
-  observeEvent(c(input$locations_table_cells_selected), {
-    selected_cells <- input$locations_table_cells_selected
-    message('selected cells are:')
-    print(selected_cells)
-    if(nrow(selected_cells) > 0){
-      fl <- filtered_locations()
-      selected_location <- fl[selected_cells[1,1],
-                              selected_cells[1,2] + 1]
-      message('selected location is')
-      print(selected_location)
-      location$data <- selected_location
-    } else {
-      location$data <- data.frame()
-    }
-    
-  })
+ 
   
   output$ll <- renderLeaflet({
     location <- input$country

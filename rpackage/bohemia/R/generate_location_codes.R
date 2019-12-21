@@ -9,7 +9,7 @@
 generate_location_codes <- function(locations){
   out <- locations
   clean_up <- function(x){
-    gsub("'", "", gsub('-', '', gsub('/', '', gsub(' ', '', x), fixed = TRUE), fixed = TRUE), fixed = TRUE)
+    gsub('[[:digit:]]+', '', gsub("'", "", gsub('-', '', gsub('/', '', gsub(' ', '', x), fixed = TRUE), fixed = TRUE), fixed = TRUE))
   }
   first_try <- substr(clean_up(out$Hamlet),
                       start = 1,

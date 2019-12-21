@@ -2,12 +2,13 @@ library(leaflet)
 library(sp)
 # library(leaflet.providers)
 library(leaflet.extras)
+library(bohemia)
 
-rdir <- '../../rpackage/bohemia/R/'
-funs <- dir(rdir)
-for(i in 1:length(funs)){
-  source(paste0(rdir, funs[i]))
-}
+# rdir <- '../../rpackage/bohemia/R/'
+# funs <- dir(rdir)
+# for(i in 1:length(funs)){
+#   source(paste0(rdir, funs[i]))
+# }
 
 # at the time of writing, version 1.8.0
 # pd <- providers_default()
@@ -18,6 +19,8 @@ for(i in 1:length(funs)){
 # rufiji2 <- bohemia::rufiji2
 # mopeia_health_facilities <- bohemia::mopeia_health_facilities
 # rufiji_health_facilities <- bohemia::rufiji_health_facilities
+# locations <- bohemia::locations
+# save(locations, file = 'data/locations.RData')
 # save(mopeia2, file = 'data/mopeia2.rda')
 # save(rufiji2, file = 'data/rufiji2.rda')
 # save(mopeia_health_facilities, file = 'data/mopeia_health_facilities.rda')
