@@ -15,7 +15,12 @@ sidebar <- dashboardSidebar(
                 icon=icon("home")),
               
               menuItem(
-                text="Overview map",
+                text="Location codes",
+                tabName="locations_tab",
+                icon=icon("code")),
+              
+              menuItem(
+                text="Satellite map",
                 tabName="main",
                 icon=icon("eye")),
               
@@ -35,11 +40,6 @@ body <- dashboardBody(
     tabItem(
       tabName="hamlet_explorer",
       fluidPage(
-        # fluidRow(column(3,
-        #                 textInput('search', 'Search (for a village, ward, localidade, etc.)',
-        #                           placeholder = 'For example: 4 de julho, posto campo, etc.')),
-        #          column(9,
-        #                 DT::dataTableOutput('locations_table')))
         fluidRow(column(3,
                         radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
                         uiOutput('region_ui'),
@@ -88,6 +88,19 @@ body <- dashboardBody(
       )
     ),
 
+    tabItem(
+      tabName = 'locations_tab',
+      fluidPage(
+        fluidRow(column(3,
+                        textInput('search', 'Search (for a village, ward, localidade, code, etc.)',
+                                  placeholder = 'For example: 4 de julho, posto campo, etc.'),
+                        helpText('Click below to download the locations hierarchy with associated codes'),
+                        downloadButton('download_locations', 
+                                       'Download')),
+                 column(9,
+                        DT::dataTableOutput('locations_table')))
+      )
+    ),
     
     tabItem(
       tabName="main",
@@ -139,6 +152,35 @@ ui <- dashboardPage(header, sidebar, body, skin="blue")
 
 # Server
 server <- function(input, output) {
+  
+  output$download_locations <- downloadHandler(
+    filename = function() {
+      paste("locations-", Sys.Date(), ".csv", sep="")
+    },
+    content = function(file) {
+      data <- locations
+      write.csv(data, file)
+    }
+  )
+  
+  filtered_locations <- reactive({
+    ok <- FALSE
+    search <- input$search
+    locations %>%
+      mutate(combined = paste0(Country, Region, District, Ward, Village, Hamlet, collapse = NULL)) %>%
+      filter(grepl(tolower(search), tolower(combined), fixed = TRUE)) %>%
+      dplyr::select(-combined)
+  })
+  
+  output$locations_table <- DT::renderDataTable({
+    fl <- filtered_locations()
+    DT::datatable(fl, 
+                  extensions = 'Select', 
+                  selection = list(target = "cell"),
+                  options = list(dom = 't',
+                                 pageLength = 5), 
+                  rownames = FALSE)
+  })
   
   # Get the location code based on the input hierarchy
   location_code <- reactiveVal(value = NULL)
@@ -200,61 +242,61 @@ server <- function(input, output) {
       addPolylines(data = district_borders, weight = 0) 
 
     
-      mydrawPolylineOptions <- 
-          function(allowIntersection = TRUE, 
-                   drawError = list(color = "#b00b00", timeout = 2500), 
-                   guidelineDistance = 20, 
-                   metric = TRUE, 
-                   feet = FALSE, 
-                   zIndexOffset = 2000, 
-                   shapeOptions = drawShapeOptions(fill = FALSE), 
-                   repeatMode = FALSE) {
-            leaflet::filterNULL(list(allowIntersection = allowIntersection, 
-                                     drawError = drawError, 
-                                     uidelineDistance = guidelineDistance, 
-                                     metric = metric, 
-                                     feet = feet, 
-                                     zIndexOffset = zIndexOffset,
-                                     shapeOptions = shapeOptions,  
-                                     repeatMode = repeatMode)) }
-        
-        out <- out %>% 
-          # addProviderTiles(providers$OpenTopoMap)  %>%
-          addProviderTiles(providers$Esri.WorldImagery,
-                           group = 'Satellite', options = providerTileOptions(zIndex = 3)) %>%
-          addProviderTiles(providers$OpenStreetMap,
-                           group = 'OSM', options = providerTileOptions(zIndex = 1000)
-          ) %>%
-          addProviderTiles(providers$Hydda.RoadsAndLabels, group = 'Places and names', options = providerTileOptions(zIndex = 10000)) %>%
-          
-          addDrawToolbar(
-            polylineOptions = mydrawPolylineOptions(metric=TRUE, feet=FALSE),
-            editOptions=editToolbarOptions(edit = FALSE,
-                                           remove = TRUE,
-                                           selectedPathOptions=selectedPathOptions()),
-            polygonOptions = FALSE,
-            circleOptions = FALSE,
-            rectangleOptions = FALSE,
-            markerOptions = FALSE,
-            circleMarkerOptions = FALSE) %>%
-          addResetMapButton() %>%
-          
-          addLayersControl(
-            baseGroups = c('ESRI WSM', 
-                           'Satellite',
-                           'OSM'),
-            overlayGroups = c(
-              'Places and names'
-            ),
-            position = 'bottomright') %>%
-          addScaleBar(position = 'topright') %>%
-          addMiniMap(
-            tiles = providers$Esri.WorldStreetMap,
-            toggleDisplay = TRUE) %>%
-          addEasyButton(easyButton(
-            icon="fa-crosshairs", title="Locate Me",
-            onClick=JS("function(btn, map){ map.locate({setView: true}); }")))
-
+    mydrawPolylineOptions <- 
+      function(allowIntersection = TRUE, 
+               drawError = list(color = "#b00b00", timeout = 2500), 
+               guidelineDistance = 20, 
+               metric = TRUE, 
+               feet = FALSE, 
+               zIndexOffset = 2000, 
+               shapeOptions = drawShapeOptions(fill = FALSE), 
+               repeatMode = FALSE) {
+        leaflet::filterNULL(list(allowIntersection = allowIntersection, 
+                                 drawError = drawError, 
+                                 uidelineDistance = guidelineDistance, 
+                                 metric = metric, 
+                                 feet = feet, 
+                                 zIndexOffset = zIndexOffset,
+                                 shapeOptions = shapeOptions,  
+                                 repeatMode = repeatMode)) }
+    
+    out <- out %>% 
+      # addProviderTiles(providers$OpenTopoMap)  %>%
+      addProviderTiles(providers$Esri.WorldImagery,
+                       group = 'Satellite', options = providerTileOptions(zIndex = 3)) %>%
+      addProviderTiles(providers$OpenStreetMap,
+                       group = 'OSM', options = providerTileOptions(zIndex = 1000)
+      ) %>%
+      addProviderTiles(providers$Hydda.RoadsAndLabels, group = 'Places and names', options = providerTileOptions(zIndex = 10000)) %>%
+      
+      addDrawToolbar(
+        polylineOptions = mydrawPolylineOptions(metric=TRUE, feet=FALSE),
+        editOptions=editToolbarOptions(edit = FALSE,
+                                       remove = TRUE,
+                                       selectedPathOptions=selectedPathOptions()),
+        polygonOptions = FALSE,
+        circleOptions = FALSE,
+        rectangleOptions = FALSE,
+        markerOptions = FALSE,
+        circleMarkerOptions = FALSE) %>%
+      addResetMapButton() %>%
+      
+      addLayersControl(
+        baseGroups = c('ESRI WSM', 
+                       'Satellite',
+                       'OSM'),
+        overlayGroups = c(
+          'Places and names'
+        ),
+        position = 'bottomright') %>%
+      addScaleBar(position = 'topright') %>%
+      addMiniMap(
+        tiles = providers$Esri.WorldStreetMap,
+        toggleDisplay = TRUE) %>%
+      addEasyButton(easyButton(
+        icon="fa-crosshairs", title="Locate Me",
+        onClick=JS("function(btn, map){ map.locate({setView: true}); }")))
+    
   })
   
   output$l <- renderLeaflet({
@@ -297,7 +339,7 @@ server <- function(input, output) {
           # addProviderTiles(providers$OpenTopoMap)  %>%
           addProviderTiles(providers$OpenStreetMap,
                            group = 'OSM', options = providerTileOptions(zIndex = 1000)
-                           ) %>%
+          ) %>%
           addProviderTiles(providers$Hydda.RoadsAndLabels, group = 'Places and names', options = providerTileOptions(zIndex = 10000)) %>%
           
           addDrawToolbar(
@@ -326,7 +368,7 @@ server <- function(input, output) {
           addEasyButton(easyButton(
             icon="fa-crosshairs", title="Locate Me",
             onClick=JS("function(btn, map){ map.locate({setView: true}); }")))
-          
+        
       }
     }
     out
@@ -351,10 +393,10 @@ server <- function(input, output) {
         clearMarkers()  %>%
         addMarkers(data = hf,
                    popup = ~name) 
-      } else {
-        leafletProxy("l") %>%
-          clearMarkers() 
-      }
+    } else {
+      leafletProxy("l") %>%
+        clearMarkers() 
+    }
   })
   
   observeEvent(c(input$borders, input$extras, input$location),{
@@ -378,7 +420,7 @@ server <- function(input, output) {
                      color = 'white',
                      weight = 2,
                      group = 'District borders') 
-        
+      
     } else {
       leafletProxy("l") %>%
         clearShapes()
@@ -417,74 +459,74 @@ server <- function(input, output) {
                  input$this_hamlet,
                  input$tabs,
                  input$hamlet),{
-    ok <- FALSE
-    bords <- input$borders_ll
-    location <- input$country
-    shp <- shp_reactive()
-    
-    if(location == 'Tanzania'){
-      district_borders <- rufiji2
-    } else {
-      district_borders <- mopeia2
-    }
-    if(!is.null(bords)){
-      if(bords){
-        ok <- TRUE
-      }
-    }
-    ok_hamlet_borders <- FALSE
-    bords <- input$hamlet_borders_ll
-    if(!is.null(bords)){
-      if(bords){
-        ok_hamlet_borders <- TRUE
-      }
-    }
-    ok_this_hamlet <- FALSE
-    bords <- input$this_hamlet
-    if(!is.null(bords)){
-      if(bords){
-        hamlet <- shp_hamlet()
-        if(!is.null(hamlet)){
-          if(nrow(hamlet) > 0){
-            ok_this_hamlet <- TRUE
-          }
-        }
-      }
-    }
-    
-    # Clear first
-    leafletProxy("ll") %>%
-      clearShapes()
-    
-    if(ok){
-      leafletProxy("ll") %>%
-        addPolylines(data = district_borders,
-                     color = 'black',
-                     weight = 2,
-                     group = 'District borders') 
-      
-    } 
-    if(ok_hamlet_borders){
-      leafletProxy("ll") %>%
-        addPolylines(data = shp,
-                     color = 'red',
-                     weight = 1,
-                     group = 'Hamlet borders') 
-    }
-    if(ok_this_hamlet){
-      leafletProxy("ll") %>%
-        addPolygons(data = hamlet, 
-                    fillColor = 'red',
-                    fillOpacity = 0.8,
-                    stroke = TRUE,
-                    weight = 1,
-                    color = 'black',
-                    popup = hamlet$village,
-                    label = hamlet$village)
-    }
-    
-  })
-
+                   ok <- FALSE
+                   bords <- input$borders_ll
+                   location <- input$country
+                   shp <- shp_reactive()
+                   
+                   if(location == 'Tanzania'){
+                     district_borders <- rufiji2
+                   } else {
+                     district_borders <- mopeia2
+                   }
+                   if(!is.null(bords)){
+                     if(bords){
+                       ok <- TRUE
+                     }
+                   }
+                   ok_hamlet_borders <- FALSE
+                   bords <- input$hamlet_borders_ll
+                   if(!is.null(bords)){
+                     if(bords){
+                       ok_hamlet_borders <- TRUE
+                     }
+                   }
+                   ok_this_hamlet <- FALSE
+                   bords <- input$this_hamlet
+                   if(!is.null(bords)){
+                     if(bords){
+                       hamlet <- shp_hamlet()
+                       if(!is.null(hamlet)){
+                         if(nrow(hamlet) > 0){
+                           ok_this_hamlet <- TRUE
+                         }
+                       }
+                     }
+                   }
+                   
+                   # Clear first
+                   leafletProxy("ll") %>%
+                     clearShapes()
+                   
+                   if(ok){
+                     leafletProxy("ll") %>%
+                       addPolylines(data = district_borders,
+                                    color = 'black',
+                                    weight = 2,
+                                    group = 'District borders') 
+                     
+                   } 
+                   if(ok_hamlet_borders){
+                     leafletProxy("ll") %>%
+                       addPolylines(data = shp,
+                                    color = 'red',
+                                    weight = 1,
+                                    group = 'Hamlet borders') 
+                   }
+                   if(ok_this_hamlet){
+                     leafletProxy("ll") %>%
+                       addPolygons(data = hamlet, 
+                                   fillColor = 'red',
+                                   fillOpacity = 0.8,
+                                   stroke = TRUE,
+                                   weight = 1,
+                                   color = 'black',
+                                   popup = hamlet$village,
+                                   label = hamlet$village)
+                   }
+                   
+                 })
+  
   output$ht <- renderText({
     out <- NULL
     extras <- input$extras
@@ -497,7 +539,7 @@ server <- function(input, output) {
   
   output$region_ui <- renderUI({
     sub_locations <- filter_locations(locations = locations,
-                                     country = input$country)
+                                      country = input$country)
     choices <- sort(unique(sub_locations$Region))
     selectInput('region', 'Region', choices = choices)
   })
@@ -580,8 +622,8 @@ server <- function(input, output) {
   
   output$qualy_table <- DT::renderDataTable({
     out <- data.frame(a = c('No data available yet',
-                     'Qualitative data to be collected during census reconnaissance activities',
-                     '(Jan-Feb)'))
+                            'Qualitative data to be collected during census reconnaissance activities',
+                            '(Jan-Feb)'))
     names(out) <- ' '
     DT::datatable(out, 
                   options = list(dom = 't',
@@ -611,8 +653,8 @@ server <- function(input, output) {
       }
       # Calculate distance
       dist <- geosphere::distm(hq,
-                              loc,
-                              fun = distHaversine)
+                               loc,
+                               fun = distHaversine)
       out <- hamlet@data[1,] %>% dplyr::select(village, population) %>%
         mutate(`KMs to HQ` = round(as.numeric(dist)/1000, digits = 2))
     }
@@ -659,7 +701,7 @@ server <- function(input, output) {
         fluidRow(
           column(12, align = 'center',
                  downloadButton('render_enumeration_list',
-                              'Generate list(s)'))
+                                'Generate list(s)'))
         )
       ),
       easyClose = TRUE,
@@ -690,6 +732,5 @@ server <- function(input, output) {
     )
   
 }
-
 
 shinyApp(ui, server)
