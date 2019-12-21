@@ -16,6 +16,12 @@ The Bohemia household ID is a six-character alphanumeric code consisting of (i) 
 
 The three-character location code which forms the first half of the location ID will be similar in name to the location which it represents (ie, `ASA` for Asante). That said, there are cases in which multiple locations beginning with the same 3 letters (for example, "Asante" and "Asambogo"). For this reason, the 3-letter codes are generated _a priori_ and are built into the Bohemia Census form (as well as available via web application). When assigning IDs, fieldworkers should use DataBrew tools (the census form or web app) so as to ensure that they are using the correct codes; they should not create codes _ad hoc_.
 
+There are three ways to get the "official" location ID for a given hamlet.  
+
+1. Location IDs are viewable [in this spreadsheet](https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit#gid=1134589765).
+2. They are also retrievable using the DataBrew Bohemia R package funtion `get_location_code()`.
+3. Finally, one can view location IDs in the operation helper app at http://bohemia.team:3838/operations/
+
 ### Person ID nomenclature
 
 The person ID is a simple extension of the household ID at which the person was first censed. It consists of (i) the 6-character household ID followed by (ii) a 3 digit ID-specific to that person. For example, the head of household at the aforementioned house (`ASA536`) might have an ID like `ASA536001`. This person's ID is "permanent" in the sense that (s)he would retain that ID number even in the case of (a) moving to a new house, (b) dying, (c) remaining in the house but being replaced as head of household, (d) emigrating, or (e) being lost to follow-up. In other words, a 9-character person ID is issued only once, to only one person, and that person is never issued more than one ID.
