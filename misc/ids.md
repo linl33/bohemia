@@ -49,7 +49,7 @@ The "a priori" method means assigning a number to every household in a hamlet/vi
 
 #### Steps
 
-- Go to www.databrew.cc/bohemiaops and enter the location of the hamlet/bairro to be enumerated by the pre-census enumeration team
+- Go to http://bohemia.team:3838/operations and enter the location of the hamlet/bairro to be enumerated by the pre-census enumeration team
 - In the far right of the page, under "Utilities", click on "Print enumeration lists"
 - Enter (a) estimated number of households and (b) the number of teams which will enumerate the hamlet/bairro (normally there is just one)
 - The web application will generate printable lists in which there is one page for each team
