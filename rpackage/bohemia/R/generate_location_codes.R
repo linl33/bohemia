@@ -2,12 +2,22 @@
 #' 
 #' Generate unique 3 letter location given a locations hierarchy
 #' @param locations A dataframe in the format of the locations hierarchy (ie, the bohemia::locations object, with the following 6 columns: Country, region, District, Ward, Village, Hamlet)
+#' @param number Whether to use a number for Mozambique (defaults to false)
 #' @return A dataframe in the input format, but with an additional "code" column, and columns indicating the degrees of change required
 #' @import dplyr
 #' @export
 
-generate_location_codes <- function(locations){
+generate_location_codes <- function(locations, number = FALSE){
   out <- locations
+  out <- out %>% arrange(Country, Region, District, Ward, Village)
+  
+  if(number){
+    # Keep only Tanzania for the non-typical naming
+    out <- out %>% filter(Country == 'Tanzania')
+  }
+  
+  
+  
   clean_up <- function(x){
     gsub('[[:digit:]]+', '', gsub("'", "", gsub('-', '', gsub('/', '', gsub(' ', '', x), fixed = TRUE), fixed = TRUE), fixed = TRUE))
   }
@@ -61,5 +71,17 @@ generate_location_codes <- function(locations){
       out$code[i] <- new_code
     }
   }
+  
+  # Add in Mozambique if numerical
+  if(number){
+    other <- locations %>% filter(Country == 'Mozambique')
+    other$code <- add_zero(1:nrow(other), 3)
+    out <- bind_rows(out, other)
+    # Add a leading apostrophe to trick excel to not using screwed 
+    # up leading zeros (need to remove manually)
+    out$code <- sapply(out$code, function(x) paste0("'", x))
+
+  }
+  
   return(out)
 }
