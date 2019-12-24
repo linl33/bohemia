@@ -10,16 +10,18 @@ The census portion of the Bohemia research project requires that each household 
 
 ### Household ID nomenclature
 
-The Bohemia household ID is a six-character alphanumeric code consisting of (i) a three-letter code indicating the hamlet/bairro followed by (ii) a 3 number code. For example, for a house in the imaginary village of "Asante", its code might be `ASA536` whereby `ASA` indicates that the house is located in the hamlet/bairro of Asante, and 536 is the sequential number assigned to that house at the time of enumeration.  
+The Bohemia household ID is a six-character alphanumeric code consisting of (i) a three-character code indicating the hamlet/bairro followed by (ii) a 3 number code. In the case of Tanzania, the initial three-character code is made up of letters (for example, "ABC"); in the case of Mozambique, the initial three-character code is made up of numbers (for example, "123"). For example, for a house in the imaginary village of "Asante", its code might be `ASA536` whereby `ASA` indicates that the house is located in the hamlet/bairro of Asante, and 536 is the sequential number assigned to that house at the time of enumeration.  
 
 #### A note on the 3-character bairro/hamlet code
 
-The three-character location code which forms the first half of the location ID will be similar in name to the location which it represents (ie, `ASA` for Asante). That said, there are cases in which multiple locations beginning with the same 3 letters (for example, "Asante" and "Asambogo"). For this reason, the 3-letter codes are generated _a priori_ and are built into the Bohemia Census form (as well as available via web application). When assigning IDs, fieldworkers should use DataBrew tools (the census form or web app) so as to ensure that they are using the correct codes; they should not create codes _ad hoc_.
+For areas using the letter naming system (Tanzania), the three-character location code which forms the first half of the location ID will be similar in name to the location which it represents (ie, `ASA` for Asante). That said, there are cases in which multiple locations beginning with the same 3 letters (for example, "Asante" and "Asambogo"). For this reason, the 3-letter codes are generated _a priori_ and are built into the Bohemia Census form (as well as available via web application). When assigning IDs, fieldworkers should use DataBrew tools (the census form or web app) so as to ensure that they are using the correct codes; they should not create codes _ad hoc_.
+
+#### How to get codes
 
 There are three ways to get the "official" location ID for a given hamlet.  
 
 1. Location IDs are viewable [in this spreadsheet](https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit#gid=1134589765).
-2. They are also retrievable using the DataBrew Bohemia R package funtion `get_location_code()`.
+2. They are also retrievable using the DataBrew Bohemia R package function `get_location_code()`, or in the `locations` object in the same package
 3. Finally, one can view location IDs in the operation helper app at http://bohemia.team:3838/operations/
 
 ### Person ID nomenclature
