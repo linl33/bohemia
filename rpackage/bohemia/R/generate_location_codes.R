@@ -8,6 +8,10 @@
 #' @export
 
 generate_location_codes <- function(locations, number = FALSE){
+  # Make sure its unique
+  locations <- locations %>%
+    dplyr::distinct(Country, Region, District, Ward, Village, Hamlet,
+                    .keep_all = TRUE)
   out <- locations
   out <- out %>% arrange(Country, Region, District, Ward, Village)
   
@@ -80,8 +84,8 @@ generate_location_codes <- function(locations, number = FALSE){
     # Add a leading apostrophe to trick excel to not using screwed 
     # up leading zeros (need to remove manually)
     out$code <- sapply(out$code, function(x) paste0("'", x))
-
   }
+  
   
   return(out)
 }

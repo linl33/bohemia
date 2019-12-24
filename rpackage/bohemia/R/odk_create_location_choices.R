@@ -3,7 +3,8 @@
 #' Generate cascading options for location choices appropriate for the correct location hierarchy in ODK
 #' @param country Which country to use. If \code{NULL} (the default), both will be used.
 #' @param add_other Whether to add an "other" option
-#' @param add_ids Whether to add an ID section
+#' @param add_ids Whether to add an ID section. Defunct. Keep as FALSE
+#' @param add_codes Whether to add the hamlet code. TRUE as default
 #' @param other_word The name of the word to be used to mark "Other"
 #' @param other_only_levels Whether the other option should be applied only to certain geographical levels. If \code{NULL}, all levels get an "other" option. Otherwise, only the named vector.
 #' @return A list of two tables named "survey" and "choices"
@@ -12,28 +13,28 @@
 #' @import tidyr
 #' @export
 
-odk_create_location_choices <- function(country = NULL, add_other = TRUE, add_ids = FALSE, other_word = 'Other',
+odk_create_location_choices <- function(country = NULL, 
+                                        add_other = TRUE, 
+                                        add_ids = FALSE, 
+                                        add_codes = TRUE,
+                                        other_word = 'Other',
                                         other_only_levels = c('Village', 'Hamlet')){
   
   # country = NULL; add_other = TRUE; add_ids = FALSE; other_word = 'Other';
   # other_only_levels = c('Village', 'Hamlet')
-  require(dplyr)
-  require(gsheet)
-  require(tidyr)
+  # require(dplyr)
+  # require(gsheet)
+  # require(tidyr)
   # Define the url of the location hierachy spreadsheet (contains all locations for both sites)
     url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
   # Fetch the data
   locations <- gsheet::gsheet2tbl(url = url)
   
-  # Views for openhds creation
-  moz <- locations %>%
-    filter(Country == 'Mozambique') %>%
-    group_by(Ward, Village, Hamlet) %>% tally
-  
   # Filter for country
   if(!is.null(country)){
     locations <- locations %>% filter(Country == country)
   }
+  
   # Ensure no duplicates
   pd <- locations %>%
     group_by(Country, Region, District, Ward, Village, Hamlet) %>%
@@ -153,6 +154,21 @@ odk_create_location_choices <- function(country = NULL, add_other = TRUE, add_id
     ids$list_name <- 'id'
     ids$name <- ids$label <-  add_zero(1:nrow(ids), nchar(nrow(ids)))
     choices <- bind_rows(choices, ids)
+  }
+  
+  if(add_codes){
+    glc <- bohemia::get_location_code
+    glc <- Vectorize(glc)
+    sub_choices <- choices %>% filter(!is.na(Hamlet))
+    x <- glc(country = sub_choices$Country,
+             region = sub_choices$Region,
+             district = sub_choices$District,
+             ward = sub_choices$Ward,
+             village = sub_choices$Village,
+             hamlet = sub_choices$Hamlet)
+    x <- unlist(x)
+    sub_choices$code <- x
+    choices <- left_join(choices, sub_choices)  
   }
   
 

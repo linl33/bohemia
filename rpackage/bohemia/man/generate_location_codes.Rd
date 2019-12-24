@@ -4,10 +4,12 @@
 \alias{generate_location_codes}
 \title{Generate location codes}
 \usage{
-generate_location_codes(locations)
+generate_location_codes(locations, number = FALSE)
 }
 \arguments{
 \item{locations}{A dataframe in the format of the locations hierarchy (ie, the bohemia::locations object, with the following 6 columns: Country, region, District, Ward, Village, Hamlet)}
+
+\item{number}{Whether to use a number for Mozambique (defaults to false)}
 }
 \value{
 A dataframe in the input format, but with an additional "code" column, and columns indicating the degrees of change required

@@ -8,6 +8,7 @@ odk_create_location_choices(
   country = NULL,
   add_other = TRUE,
   add_ids = FALSE,
+  add_codes = TRUE,
   other_word = "Other",
   other_only_levels = c("Village", "Hamlet")
 )
@@ -17,7 +18,9 @@ odk_create_location_choices(
 
 \item{add_other}{Whether to add an "other" option}
 
-\item{add_ids}{Whether to add an ID section}
+\item{add_ids}{Whether to add an ID section. Defunct. Keep as FALSE}
+
+\item{add_codes}{Whether to add the hamlet code. TRUE as default}
 
 \item{other_word}{The name of the word to be used to mark "Other"}
 
