@@ -571,7 +571,7 @@ systemctl start redis-server@enketo-main.service
 ![](img/enketo.png)
 
 ## Managing forms
-
+- See API documentation here: https://apidocs.enketo.org/v1
 
 - To delete a form, run the following:
 ```
