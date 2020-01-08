@@ -151,6 +151,10 @@ sudo apt-get -y install \
     libxml2-dev \
     libxt-dev \
     libv8-dev
+sudo apt-get update
+sudo apt-get install default-jre
+sudo apt-get install default-jdk
+sudo R CMD javareconf
 ```
 
 ## Install R, shiny, and RStudio server
@@ -190,6 +194,8 @@ sudo cp /home/ubuntu/Documents/bohemia/shiny/global.R /home/rstudio/ShinyApps/sh
 - Go back to the EC2 dashboard
 - Copy and paste the instance ID into the web browser: ec2-18-218-87-64.us-east-2.compute.amazonaws.com
 - Sign in with username rstudio and the password (instance id - get it from the EC2 instance menu)
+- To remove it: sudo apt-get remove --purge rstudio-server
+
 
 ## Set up postgresql database
 
@@ -248,6 +254,7 @@ sudo su - -c "R -e \"install.packages('shiny')\""
 sudo su - -c "R -e \"install.packages('RPostgreSQL')\""
 sudo su - -c "R -e \"install.packages('devtools')\""
 sudo su - -c "R -e \"install.packages('tidyverse')\""
+sudo su - -c "R -e \"install.packages('xlsx')\""
 
 Rscript set_up_database.R
 ```
@@ -274,6 +281,7 @@ sudo systemctl restart shiny-server
 - Ensure permissions are okay:
 ```
 sudo ufw allow 3838/tcp
+sudo ufw allow 80/tcp
 cd /srv/shiny-server
 chmod 555 shiny
 sudo systemctl restart shiny-server

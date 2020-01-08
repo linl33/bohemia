@@ -186,8 +186,14 @@ server <- function(input, output, session) {
   
   # Observe account creation
   observeEvent(input$submit_create_account,{
+    pp <- input$create_password
+    if(is.null(pp)){
+      pout <- 'password'
+    } else {
+      pout <- pp
+    }
     x <- add_user(user = input$create_user,
-             password = input$create_password,
+             password = pout,
              first_name = input$create_first_name,
              last_name = input$create_last_name,
              position = input$create_position,
@@ -211,9 +217,9 @@ server <- function(input, output, session) {
       df <- data$users
       df <- df %>% dplyr::select(first_name, last_name,
                                  position, institution, email,
-                                 tags)
+                                 tags, contact_added)
       names(df) <- c('First', 'Last', 'Position', 'Institution',
-                     'Emails', 'Tags')
+                     'Emails', 'Tags', 'Contact added')
       df <- df %>% arrange(First)
       DT::datatable(df, editable = eddy)#,
                     # colnames = c('First' = 'first_name',
@@ -253,6 +259,10 @@ server <- function(input, output, session) {
     i = info$row
     j = info$col
     v = info$value
+    message('selected cell info:')
+    message('--row: ', i)
+    message('--column: ', j)
+    message('--value: ', v)
     old_vals <- x[i,]
     id <- x$id[i]
     x[i, j] <- DT::coerceValue(v, x[i, j])
@@ -283,19 +293,30 @@ server <- function(input, output, session) {
     if(li & addy){
       if(any_selected){
         fluidPage(
-          column(6,
+          column(3,
                  actionButton('new_entry',
                               'Add new entry',icon = icon('face'))),
-          column(6,
+          column(3,
                  actionButton('delete_entry',
-                              'Delete selected entries',icon = icon('face')))
+                              'Delete selected entries',icon = icon('face'))),
+          column(3,
+                 actionButton('download',
+                                'Download to excel', icon = icon('download'))),
+          column(3,
+                 actionButton('download_csv',
+                              'Download Mailchimp CSV', icon = icon('download')))
         )
       } else {
         fluidPage(
-          column(6,
+          column(4,
                  actionButton('new_entry',
                               'Add new entry',icon = icon('face'))),
-          column(6)
+          column(4,
+                 actionButton('download',
+                                'Download to excel', icon = icon('download'))),
+          column(4,
+                 actionButton('download_csv',
+                              'Download Mailchimp CSV', icon = icon('download')))
         )
       }
       
@@ -312,11 +333,13 @@ server <- function(input, output, session) {
     )
   })
   
+
+  
   output$new_entry_ui <- renderUI({
     lit <- log_in_text()
       fluidPage(
         h3(textInput('create_user', 'Email'),
-           textInput('create_password', 'Create password'),
+           # textInput('create_password', 'Create password', value = 'password'),
            textInput('create_first_name', 'First name'),
            textInput('create_last_name', 'Last name'),
            textInput('create_position', 'Position'),
@@ -330,6 +353,97 @@ server <- function(input, output, session) {
         )
       )
   })
+  
+  observeEvent(input$download,{
+    showModal(
+      modalDialog(
+        uiOutput('download_ui'),
+        easyClose = TRUE
+      )
+    )
+  })
+  
+  observeEvent(input$download_csv,{
+    showModal(
+      modalDialog(
+        uiOutput('download_csv_ui'),
+        easyClose = TRUE
+      )
+    )
+  })
+  
+  output$download_ui <- renderUI({
+    fluidPage(
+      fluidRow(
+        h4('Which data would you like to download?')
+      ),
+      fluidRow(
+        selectInput('which_download', ' ',
+                    choices = c('All data',
+                                'Only selected rows'))
+      ),
+      fluidRow(
+        downloadButton('download_confirm')
+      )
+    )
+  })
+  
+  output$download_csv_ui <- renderUI({
+    fluidPage(
+      fluidRow(
+        h4('Which data would you like to download?')
+      ),
+      fluidRow(
+        selectInput('which_download_csv', ' ',
+                    choices = c('All data',
+                                'Only selected rows'))
+      ),
+      fluidRow(
+        downloadButton('download_csv_confirm')
+      )
+    )
+  })
+  
+  
+  
+  output$download_confirm <- downloadHandler(
+    filename = function() {
+      paste("data-", Sys.Date(), ".xlsx", sep="")
+    },
+    content = function(file) {
+      df <- data$users
+      df <- df %>% dplyr::select(email, first_name, last_name) %>%
+        dplyr::rename(`First name` = first_name,
+                      `Last name` = last_name,
+                      `Email address` = email)
+      if(input$which_download != 'All data'){
+        selected_rows <- input$edit_table_rows_selected
+        df <- df[selected_rows,]
+        print(head(df))
+      } 
+      xlsx::write.xlsx(df, file, row.names = FALSE)
+    }
+  )
+  
+  output$download_csv_confirm <- downloadHandler(
+    filename = function() {
+      paste("data-", Sys.Date(), ".csv", sep="")
+    },
+    content = function(file) {
+      df <- data$users
+      df <- df %>% dplyr::select(email, first_name, last_name) %>%
+        dplyr::rename(`First name` = first_name,
+                      `Last name` = last_name,
+                      `Email address` = email)
+      if(input$which_download_csv != 'All data'){
+        selected_rows <- input$edit_table_rows_selected
+        df <- df[selected_rows,]
+        print(head(df))
+      } 
+      readr::write_csv(df, file)
+    }
+  )
+  
   
   # Capture the selected rows
   observeEvent(input$edit_table_rows_selected,{

@@ -68,7 +68,8 @@ add_user <- function(user, password, first_name, last_name, position, institutio
                  position, institution,
                  email = user, tags = NA,
                  admin = FALSE,
-                 password)
+                 password,
+                 contact_added = Sys.Date())
     dbWriteTable(conn = co, 
                  name = 'users', 
                  value = df, 

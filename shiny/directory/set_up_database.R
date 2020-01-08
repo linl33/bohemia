@@ -27,9 +27,11 @@ co <- credentials_connect(options_list = credentials)
 
 # Read in the original source data
 data <- read_excel("data/database.xlsx")
+data$tags <- NA
+data$contact_added = Sys.Date()
 # Change names
 names(data) <- c('first_name', 'last_name',
-                 'position', 'institution', 'email')
+                 'position', 'institution', 'email', 'tags', 'contact_added')
 data$tags <- 'ivermectin'
 data$admin <- FALSE
 data$password <- 'password'
@@ -39,11 +41,13 @@ admins <- tibble(first_name = c('Sònia', 'Mary', 'Carlos', 'Elena', 'Joe', 'Ben
                  institution = c('ISGlobal', 'ISGlobal', 'ISGlobal', 'ISGlobal', 'DataBrew', 'DataBrew', 'Acme', 'Acme'),
                  email = c('sonia.tomas@isglobal.org', 'mary.mael@isglobal.org', 'carlos.chaccour@isglobal.org', 'elena.moreno@isglobal.org', 'joe@databrew.cc', 'ben@databrew.cc', 'john@mail.com', 'jane@mail.com'),
                  tags = 'ivermectin',
+                 contact_added = Sys.Date(),
                  admin = c(rep(TRUE, 6), FALSE, TRUE),
                  password = 'password')
 
 # Create tables
 users <- data %>% bind_rows(admins)
+
 
 
 # write to the table to the database to which we are connected
