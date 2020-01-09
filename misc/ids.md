@@ -57,10 +57,10 @@ The "a priori" method means assigning a number to every household in a hamlet/vi
 #### Steps
 
 - Go to http://bohemia.team:3838/operations and enter into the drop down menus the location of the hamlet/bairro to be enumerated by the pre-census enumeration team:
-![](img/locationsdrop.png =150x)
+![](img/locationsdrop.png)
 - In the far right of the page, under "Utilities", click on "Print enumeration lists" button.
 - Enter (a) estimated number of households and (b) the number of teams which will enumerate the hamlet/bairro (normally there is just one):
-![](img/enumeration1.png = 100x)
+![](img/enumeration1.png)
 - The web application will generate printable lists in which there is one page for each team
 - Deploy the enumeration team(s) to the field with their list. They should then manually cross off each household ID number as it is assigned/painted.
 
@@ -72,10 +72,10 @@ In order to eliminate the risk of duplicates, the "on the fly" method uses the s
 
 #### Steps
 - Go to http://bohemia.team:3838/operations and enter into the drop down menus the location of the hamlet/bairro to be enumerated and censed simultaneously:
-![](img/locationsdrop.png =150x)
+![](img/locationsdrop.png)
 - In the far right of the page, under "Utilities", click on "Print enumeration lists" button.
 - Enter (a) estimated number of households and (b) the number of workers which will cense the hamlet/bairro (there will often be multiple):
-![](img/enumeration1.png = 100x)
+![](img/enumeration1.png)
 - The web application will generate printable lists in which there is one page for each worker
 - Deploy the workers to the field with their list. They should then manually cross off each household ID number as it is assigned/painted.
 
