@@ -12,12 +12,10 @@
 
 ## ID generation and management
 
-The [Location handling](location_and_ids.md) document should be read in detail regarding the generation and management of location and individual ID numbers/codes.
+The [IDs](ids.md) document should be read in detail regarding the generation and management of location and individual ID numbers/codes.
 
 ## Overall flow
 
 The below schema gives an overall picture of data flow.
 
-![](img/pipeline.png)
-
-
+![](img/pipelinenoqr.png)
