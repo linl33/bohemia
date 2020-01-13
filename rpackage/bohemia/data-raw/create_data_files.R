@@ -264,8 +264,9 @@ library(rgdal)
 ####
 # Health facility locations
 ####
+library(tidyverse)
 library(readxl)
-rufiji_health_facilities <- read_excel('health_facilities/Health Facilities in Kibiti and Rufiji - Bohemia_iirema_08Dec2019.xlsx') %>%
+rufiji_health_facilities <- read_excel('health_facilities/Health Facilities in Kibiti and Rufiji - Bohemia_iirema_13Jan2020.xlsx', skip = 1) %>%
   dplyr::rename(name = `Facility Name`,
                 lng = Longitude,
                 lat = Latitude,
