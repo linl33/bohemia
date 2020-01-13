@@ -26,9 +26,11 @@ odk_create_location_choices <- function(country = NULL,
   # require(gsheet)
   # require(tidyr)
   # Define the url of the location hierachy spreadsheet (contains all locations for both sites)
-    url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
+  url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
   # Fetch the data
-  locations <- gsheet::gsheet2tbl(url = url)
+  locations <- locations_original <-  gsheet::gsheet2tbl(url = url)
+  locations$clinical_trial <- NULL
+  locations$code <- NULL
   
   # Filter for country
   if(!is.null(country)){
@@ -48,6 +50,7 @@ odk_create_location_choices <- function(country = NULL,
   }
   # Define some helpers
   the_levels <- names(locations)
+  the_levels <- the_levels[the_levels != 'code']
   n_levels <- length(the_levels)
   
   if(add_other){
@@ -69,15 +72,17 @@ odk_create_location_choices <- function(country = NULL,
       }
       new_rows[[i]] <- pd
     }
-    new_rows <- bind_rows(new_rows)
+    new_rows <- bind_rows(new_rows) #%>% mutate(code = NA)
     # Add the "other" options to the dataset
     locations <- bind_rows(locations, new_rows)
     
     # Filter for other levels
     if(!is.null(other_only_levels)){
-      which_indices <- which(!names(locations) %in% other_only_levels)
+      which_indices <- which(!names(locations) %in% c(other_only_levels))
       for(j in which_indices){
-        locations <- locations[locations[,j] != other_word,]
+        keep_these <- as.logical(unlist(locations[,j]) != other_word)
+        message(j, ': keeping ', length(which(keep_these)), ' of ', nrow(locations))
+        locations <- locations[keep_these,]
       }
     }
     # Make sure that the "other" ones are ordered last
@@ -156,20 +161,33 @@ odk_create_location_choices <- function(country = NULL,
     choices <- bind_rows(choices, ids)
   }
   
+  # Add more rows for the code. 
+  # Unlike the location hierarchy (which does not include hamlet), this DOES
   if(add_codes){
-    glc <- bohemia::get_location_code
+    glc <- get_location_code
     glc <- Vectorize(glc)
-    sub_choices <- choices %>% filter(!is.na(Hamlet))
+    sub_choices <- choices %>% filter(list_name == 'Hamlet',
+                                      name != 'Other') %>%
+      dplyr::mutate(Hamlet = name) %>%
+      mutate(list_name = 'code')
     x <- glc(country = sub_choices$Country,
              region = sub_choices$Region,
              district = sub_choices$District,
              ward = sub_choices$Ward,
              village = sub_choices$Village,
              hamlet = sub_choices$Hamlet)
-    x <- unlist(x)
-    sub_choices$code <- x
-    choices <- left_join(choices, sub_choices)  
+    xout <- c(); for(i in 1:length(x)){xout[i] <- ifelse(is.null(x[[i]]), NA, x[[i]])}
+    sub_choices$code <- sub_choices$name <- sub_choices$label <- xout
+    choices <- bind_rows(choices %>% mutate(Hamlet = NA), sub_choices)  
   }
+  
+  # Reformat to match the columns in census
+  choices <- choices %>%
+    mutate(`label::English` = label,
+           `label::Portuguese` = label,
+           `label::Swahili` = label) %>%
+    dplyr::select(list_name, name, `label::English`, `label::Portuguese`, `label::Swahili`, Country,
+                  Region, District, Ward, Village, Hamlet, code)
   
 
   # Create the survey portion
@@ -183,6 +201,8 @@ odk_create_location_choices <- function(country = NULL,
     the_filters <- paste0(previous_levels, '=${',previous_levels, '}', collapse = ' and ')
     survey$choice_filter[j] <- the_filters
   }
+  
+  
   
   out <- list(survey, choices)
   names(out) <- c('survey', 'choices')

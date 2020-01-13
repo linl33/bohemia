@@ -8,8 +8,15 @@ library(RColorBrewer)
 library(raster)
 library(sf)
 
-# # Initiate the raw-data into package session
-# usethis::use_data_raw()
+
+# list.files('tza_wards/', pattern='\\.shp$')
+# s <- shapefile('tza_wards/TZwards.shp')
+# tza_wards <- st_read('tza_wards/TZwards.shp')
+# setwd('tza_wards/')
+# tza_wards <- readOGR('.', 'TZwards.shp')
+# setwd('..')
+# # # Initiate the raw-data into package session
+# # usethis::use_data_raw()
 
 # Previous Mopeia census
 # The ID number is correct, the village names, etc. are sometimes wrong
@@ -89,7 +96,19 @@ mopeia_households <- cen %>%
   dplyr::distinct(lng, lat, .keep_all = TRUE)
 # Add a joe_id
 mopeia_households$joe_id <- 1:nrow(mopeia_households)
-save(mopeia_households, file = 'mopeia_households_uncorrected.RData')
+# save(mopeia_households, file = 'mopeia_households_uncorrected.RData')
+
+# Eldo has now corrected. So we load the old stuff, and remove the
+# bad stuff, from his corrections
+load('mopeia_households_uncorrected.RData') # mopeia_households
+bad_ids <- read_csv('fixmop.csv', col_names = FALSE) # made through the 'fixmopeia' shiny application
+names(bad_ids) <- 'id'
+# Now remove the bad ones
+
+library(tidylog)
+mopeia_households <- mopeia_households %>%
+  filter(!joe_id %in% bad_ids$id)
+
 
 # # For eldo to correct:
 # sort(unique(cen$id[!cen$id %in% correct$id]))
@@ -103,8 +122,6 @@ df <- df %>% filter(!is.na(id))
 coordinates(df) <- ~x+y
 proj4string(df) <- CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
 
-# Save this for manual correction
-
 
 # Filter out the suspicious ones
 df@data$idx <- 1:nrow(df)
@@ -114,6 +131,7 @@ bairros <- data_frame(id = sort(unique(df$id)))
 # Remove form our household data, those points which 
 # are suspiciously far from others
 for (i in 1:nrow(bairros)){
+  message(i)
   # Get info just for this bairro
   this_bairro <- bairros$id[i]
   sub_df <- df[df@data$id == this_bairro,]
@@ -235,6 +253,11 @@ out <- SpatialPolygonsDataFrame(out, bairros, match.ID = TRUE)
 mopeia_hamlets <- out
 usethis::use_data(mopeia_hamlets, overwrite = TRUE)
 
+# Also make TZA wards (#Decided not to - not more granular than what we already had)
+tza_wards <- readOGR('tza_wards/2012 Wards Shapefiles/', 'TZwards')
+tza_wards <- spTransform(tza_wards,  CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+keep <- tza_wards[tza_wards@data$District_N %in% c('Kibiti', 'Rufiji'),]
+# Keep only those in Rufiji/Kibiti
 # cols <- rainbow(nrow(mopeia_hamlets))
 # cols <- sample(cols, length(cols))
 # cols <- sample(cols, length(cols))
@@ -306,30 +329,31 @@ usethis::use_data(health_facilities,
 # Read in the location hierachy
 library(gsheet)
 library(dplyr)
+# Note: the below url was created by manually copy-pasting data sent from site teams
 url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
 # Fetch the data
 locations <- gsheet::gsheet2tbl(url = url)
 
-# # Fix the incorrect localities
-# locations$code <- NULL
-# 
-# # Replace villages
-# locations$Village <- bohemia::update_mopeia_locality_names(locations$Village)
-# 
-# locations$Village <- gsub('/', '/ ', locations$Village, fixed = TRUE)
-# # Fix capitalization
-# simpleCap <- function(x) {
-#   s <- strsplit(x, " ")[[1]]
-#   paste(toupper(substring(s, 1,1)), substring(s, 2),
-#         sep="", collapse=" ")
-# }
-# locations$Village <- sapply(tolower(locations$Village), simpleCap)
-# locations$Village <- gsub('/ ', '/', locations$Village, fixed = TRUE)
+# Fix the incorrect localities
+locations$code <- NULL
+
+# Replace villages
+locations$Village <- bohemia::update_mopeia_locality_names(locations$Village)
+
+locations$Village <- gsub('/', '/ ', locations$Village, fixed = TRUE)
+# Fix capitalization
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
+locations$Village <- sapply(tolower(locations$Village), simpleCap)
+locations$Village <- gsub('/ ', '/', locations$Village, fixed = TRUE)
 # 
 # # # Arrange by hamlet name and generate location codes
-# locations <- locations %>% dplyr::arrange(Hamlet)
-# locations <- bohemia::generate_location_codes(locations)
-# locations$degrees <- NULL
+locations <- locations %>% dplyr::arrange(Hamlet)
+locations <- bohemia::generate_location_codes(locations)
+locations$degrees <- NULL
 locations <- locations %>% arrange(Country, Region, District, Ward, Village, Hamlet)
 # Make sure there are no duplicates
 locations <- locations %>%

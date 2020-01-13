@@ -19,7 +19,7 @@ get_location_code <- function(country,
                               hamlet){
   
   locs <- bohemia::locations
-  
+
   if(is.null(country) |
      is.null(region) |
      is.null(district) |
@@ -28,7 +28,7 @@ get_location_code <- function(country,
      is.null(hamlet)){
     return(NULL)
   }
-  
+
   out <- locs %>%
     filter(Country == country,
            Region == region,
@@ -36,7 +36,7 @@ get_location_code <- function(country,
            Ward == ward,
            Village == village,
            Hamlet == hamlet)
-  
+
   if(nrow(out) == 1){
     out <- out$code
     return(out)

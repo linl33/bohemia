@@ -592,9 +592,9 @@ server <- function(input, output) {
     }
     if(ok){
       if(country == 'Mozambique'){
-        out <- mopeia_hamlets
+        out <- mopeia_hamlets[!is.na(mopeia_hamlets@data$village),]
       } else {
-        out <- rufiji_hamlets
+        out <- rufiji_hamlets[!is.na(rufiji_hamlets@data$village),]
       }
     }
     return(out)
@@ -604,6 +604,7 @@ server <- function(input, output) {
     shp <- shp_reactive()
     ih <- input$hamlet
     ok <- FALSE
+    save(shp, ih, ok, file = 'temp.RData')
     if(!is.null(shp)){
       if(!is.null(ih)){
         if(nrow(shp) > 0){

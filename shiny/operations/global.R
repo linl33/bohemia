@@ -26,13 +26,13 @@ library(bohemia)
 # save(mopeia_health_facilities, file = 'data/mopeia_health_facilities.rda')
 # save(rufiji_health_facilities, file = 'data/rufiji_health_facilities.rda')
 
-load('data/mopeia2.rda')
-load('data/rufiji2.rda')
-load('data/mopeia_health_facilities.rda')
-load('data/rufiji_health_facilities.rda')
-load('data/locations.RData')
-load('data/mopeia_hamlets.RData')
-load('data/rufiji_hamlets.RData')
+# load('data/mopeia2.rda')
+# load('data/rufiji2.rda')
+# load('data/mopeia_health_facilities.rda')
+# load('data/rufiji_health_facilities.rda')
+# load('data/locations.RData')
+# load('data/mopeia_hamlets.RData')
+# load('data/rufiji_hamlets.RData')
 # # Load the location hierarchy
 # if(!'locations.RData' %in% dir('data')){
 #   locations <- bohemia::locations
@@ -59,8 +59,7 @@ load('data/rufiji_hamlets.RData')
 # } else {
 #   load('data/rufiji_hamlets.RData')
 # }
-
-
+rufiji_hamlets <- bohemia::rufiji3
 
 # Define function for filtering locations based on inputs
 filter_locations <- function(locations,
