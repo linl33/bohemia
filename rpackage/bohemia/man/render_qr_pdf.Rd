@@ -6,7 +6,6 @@
 \usage{
 render_qr_pdf(
   ids = NULL,
-  worker = FALSE,
   size = 2,
   n = 1,
   output_dir = NULL,
@@ -16,8 +15,6 @@ render_qr_pdf(
 \arguments{
 \item{ids}{A character vector of ID numbers. If \code{NULL} (the
 default), all IDs will be used}
-
-\item{worker}{Whether the pdf to be rendered is for a worker ID (alternative is household ID)}
 
 \item{size}{The size (in inches) of the image.}
 

@@ -61,24 +61,28 @@ body <- dashboardBody(
                                            'Show district borders',
                                            value = FALSE),
                         checkboxInput('hamlet_borders_ll',
-                                      'Show hamlet borders',
+                                      'Show bairro/ward borders',
                                       value = FALSE),
                         checkboxInput('this_hamlet',
-                                      'Highlight this hamlet',
+                                      'Highlight this bairro/ward',
                                       value = FALSE),
                         br(), br(),
                         actionButton('print_enumeration',
                                      'Print enumeration lists',
                                      icon = icon('print')),
-                             br(), br(),
-                             actionButton('print_report',
-                                          'Print hamlet report',
-                                          icon = icon('print')),
-                             br(), br(),
-                             actionButton('print_directions',
-                                          'Print travel directions',
-                                          icon = icon('print'))
-                           )),
+                        br(), br(),
+                        actionButton('print_qrs',
+                                     'Print worker QR codes',
+                                     icon = icon('print')),
+                        br(), br(),
+                        actionButton('print_report',
+                                     'Print hamlet report',
+                                     icon = icon('print')),
+                        br(), br(),
+                        actionButton('print_directions',
+                                     'Print travel directions',
+                                     icon = icon('print'))
+                 )),
         fluidRow(column(6,
                         h3('Hamlet quantitative data'),
                         DT::dataTableOutput('quant_table')),
@@ -508,21 +512,28 @@ server <- function(input, output) {
                    } 
                    if(ok_hamlet_borders){
                      leafletProxy("ll") %>%
-                       addPolylines(data = shp,
-                                    color = 'red',
+                       addPolygons(data = shp,
+                                    color = 'purple',
                                     weight = 1,
+                                   fillOpacity = 0,
+                                    label = shp$village,
                                     group = 'Hamlet borders') 
                    }
                    if(ok_this_hamlet){
+                     bb <- bbox(hamlet)
                      leafletProxy("ll") %>%
                        addPolygons(data = hamlet, 
                                    fillColor = 'red',
-                                   fillOpacity = 0.8,
+                                   fillOpacity = 0.5,
                                    stroke = TRUE,
-                                   weight = 1,
-                                   color = 'black',
+                                   weight = 3,
+                                   color = 'red',
                                    popup = hamlet$village,
-                                   label = hamlet$village)
+                                   label = hamlet$village) %>%
+                       flyToBounds(lng1 = bb[1,1],
+                                   lng2 = bb[1,2],
+                                   lat1 = bb[2,1],
+                                   lat2 = bb[2,2])
                    }
                    
                  })
@@ -602,9 +613,17 @@ server <- function(input, output) {
   
   shp_hamlet <- reactive({
     shp <- shp_reactive()
-    ih <- input$hamlet
+    
+    # For TZA, we only have spatial data down to the ward level
+    country <- input$country
+    if(country == 'Mozambique'){
+      ih <- input$hamlet
+      ix <- input$village
+    } else {
+      ih <- input$ward
+    }
+    
     ok <- FALSE
-    save(shp, ih, ok, file = 'temp.RData')
     if(!is.null(shp)){
       if(!is.null(ih)){
         if(nrow(shp) > 0){
@@ -616,7 +635,13 @@ server <- function(input, output) {
     if(!ok){
       out <- NULL
     } else {
-      out <- shp[shp@data$village == ih,]
+      if(country == 'Mozambique'){
+        out <- shp[shp@data$village == ih &
+                     toupper(shp@data$locality) == toupper(ix),]
+      } else {
+        out <- shp[shp@data$village == ih,]
+      }
+      
     }
     return(out)
   })
@@ -685,6 +710,24 @@ server <- function(input, output) {
     ))
   })
   
+  observeEvent(input$print_qrs,{
+    showModal(modalDialog(
+      title = "Print worker QRS",
+      fluidPage(
+        fluidRow(sliderInput('qrs', label = 'ID numbers',
+                             min = 1, max = 1000, value = c(1:10), step = 1)),
+        fluidRow(
+          column(12, align = 'center',
+                 downloadButton('render_qrs',
+                                'Generate QR codes for printing'))
+        ),
+        fluidRow(helpText('Warning: if you are generating many QR codes, it can take a few minutes to process. After clicking the button, do not close the app.'))
+      ),
+      easyClose = TRUE,
+      footer = NULL
+    ))
+  })
+  
   observeEvent(input$print_enumeration,{
     showModal(modalDialog(
       title = "Enumeration list generator",
@@ -710,6 +753,28 @@ server <- function(input, output) {
     ))
   })
   
+  output$render_qrs <- 
+    downloadHandler(filename = "list.pdf",
+                    content = function(file){
+                      
+                      # Get the qrs to be printed
+                      ids <- input$qrs
+                      ids <- seq(min(ids),
+                                 max(ids),
+                                 by = 1)
+                      
+                      # Generate
+                      print_worker_qrs(wid = ids)
+
+                      # copy html to 'file'
+                      file.copy("qrs.pdf", file)
+                      
+                      # # delete folder with plots
+                      # unlink("figure", recursive = TRUE)
+                    },
+                    contentType = "application/pdf"
+    )
+  
   output$render_enumeration_list <-
     downloadHandler(filename = "list.pdf",
                     content = function(file){
@@ -731,7 +796,6 @@ server <- function(input, output) {
                     },
                     contentType = "application/pdf"
     )
-  
 }
 
 shinyApp(ui, server)

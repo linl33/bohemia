@@ -60,6 +60,8 @@ library(bohemia)
 #   load('data/rufiji_hamlets.RData')
 # }
 rufiji_hamlets <- bohemia::rufiji3
+rufiji_hamlets@data$village <- rufiji_hamlets@data$NAME_3
+rufiji_hamlets@data$population <- 'Unknown'
 
 # Define function for filtering locations based on inputs
 filter_locations <- function(locations,

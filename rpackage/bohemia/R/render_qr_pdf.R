@@ -3,7 +3,6 @@
 #' Render a pdf of QR codes
 #' @param ids A character vector of ID numbers. If \code{NULL} (the
 #' default), all IDs will be used
-#' @param worker Whether the pdf to be rendered is for a worker ID (alternative is household ID)
 #' @param size The size (in inches) of the image. 
 #' @param n The number of images per ID
 #' @param output_dir The directory to which the file should be written. If
@@ -14,7 +13,6 @@
 #' @export
 
 render_qr_pdf <- function(ids = NULL,
-                          worker = FALSE,
                           size = 2,
                           n = 1,
                           output_dir = NULL,
