@@ -37,7 +37,7 @@ make_it <- function(){
   document()
   # build
   install()
-  render('README.Rmd')
+  # render('README.Rmd')
 }
 make_it()
 
