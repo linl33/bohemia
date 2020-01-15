@@ -156,34 +156,50 @@ plot(bohemia::rufiji_waterways, add = TRUE)
 
 The `bohemia` package has a series of tools meant for assisting with the automated retrieval of data from the ODK Aggregate server. Below is a basic walk-through with examples.
 
+First define some basic parameters (this will vary depending on your system).
+
 ```{r}
-# First define some basic parameters (this will vary depending on your system)
 odk_agg_url <- 'https://bohemia.systems'
 user <- 'data'
 password <- 'data'
 form_name <- 'Recon'
+```
 
-# Retrieve a list of forms from the server
+Retrieve a list of forms from the server:
+
+```{r}
 fl <- odk_list_forms(url = odk_agg_url)
 kable(fl)
+```
 
-# Fetch the ID for the form in question
+Fetch the ID for the form in question:
+
+```{r}
 id <- fl %>% filter(name == form_name) %>% .$id
 id
+```
 
-# Get the secondary id of the form in question
+Get the secondary id of the form in question:
+
+```{r}
 # (in most cases this will be identical)
 id2 <- odk_get_secondary_id(url = odk_agg_url, id = id)
 id2
+```
 
-# Get a list of submissions for that form
+Get a list of submissions for that form:
+
+```{r}
 submissions <- odk_list_submissions(url = odk_agg_url,
                                     id = id,
                                     user = user,
                                     password = password)
 kable(submissions)
+```
 
-# Retrieve the data for an individual submission (the first one, for example)
+Retrieve the data for an individual submission (the first one, for example):
+
+```{r}
 submission <- odk_get_submission(url = odk_agg_url,
                                  id = id,
                                  id2 = id2,
@@ -191,13 +207,15 @@ submission <- odk_get_submission(url = odk_agg_url,
                                  user = user,
                                  password = password)
 
-# What has been retrieved is a response for an http request in xml format:
-submission
-
+# # What has been retrieved is a response for an http request in xml format:
+# submission
 # To take a better look at it, try:
 # xmlview::xml_view(read_xml(submission))
+```
 
-# To parse this submission, we'll run the below:
+To parse this submission, we'll run the below:
+
+```{r}
 parsed <- odk_parse_submission(xml = submission)
 kable(parsed)
 ```
