@@ -26,7 +26,11 @@ wks = sh.sheet1
 #export as xls
 wks.export(pygsheets.ExportType.XLS, doc)
 
-## Convert to xml
-os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
+# Rename
+os.rename(doc + '.xls' ,'recon.xls')
 
-print("Successfully created the following documents:\n---" + doc + '.xls\n---' + doc +'.xml')
+
+## Convert to xml
+os.system('xls2xform ' + 'recon' + '.xls ' + 'recon' +'.xml')
+
+print("Successfully created the following documents:\n---" + 'recon' + '.xls\n---' + 'recon' +'.xml')

@@ -45,4 +45,6 @@ Imports:
     rmarkdown,
     rgdal,
     deldir,
-    kableExtra
+    kableExtra,
+    xml2,
+    httr

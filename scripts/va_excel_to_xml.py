@@ -13,7 +13,10 @@ wks = sh.sheet1
 #export as xls
 wks.export(pygsheets.ExportType.XLS, doc)
 
-## Convert to xml
-os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
+os.rename(doc + '.xls' ,'va.xls')
 
-print("Successfully created the following documents:\n---" + doc + '.xls\n---' + doc +'.xml')
+
+## Convert to xml
+os.system('xls2xform ' + 'va' + '.xls ' + 'va' +'.xml')
+
+print("Successfully created the following documents:\n---" + 'va' + '.xls\n---' + 'va' +'.xml')

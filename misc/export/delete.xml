@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<submission xmlns="http://opendatakit.org/submissions" xmlns:orx="http://openrosa.org/xforms">
+  <data>
+    <recon id="recon" instanceID="uuid:93a2eb54-f2aa-43d1-a18c-2e5d67f9ed6f" submissionDate="2020-01-15T08:33:56.868Z" isComplete="true" markedAsCompleteDate="2020-01-15T08:33:56.868Z">
+      <sub_section_location>
+        <device_id>papu.us:cqFegDHmowa21neC</device_id>
+        <start_time>2020-01-15T09:33:50.841+01:00</start_time>
+        <end_time>2020-01-15T09:34:36.022+01:00</end_time>
+        <todays_date>2020-01-15</todays_date>
+        <Country>Mozambique</Country>
+        <Region>Zambezia</Region>
+        <District>Mopeia</District>
+        <Ward>Posto Campo</Ward>
+        <Village>Luala</Village>
+        <village_other/>
+        <Hamlet>1 de Maio</Hamlet>
+        <hamlet_other/>
+        <hamlet_code>DEE</hamlet_code>
+        <hamlet_alternative>Don't know</hamlet_alternative>
+        <hamlet_alternative_name/>
+        <religion/>
+        <religion_add_comment/>
+        <religion_comments/>
+        <location/>
+      </sub_section_location>
+      <note_chief/>
+      <repeat_chief>
+        <group_chief>
+          <chief_name/>
+          <chief_role/>
+          <chief_role_other/>
+          <chief_contact/>
+        </group_chief>
+      </repeat_chief>
+      <group_general>
+        <note_general/>
+        <name_nearest_hf/>
+        <type_nearest_hf/>
+        <type_nearest_hf_other/>
+        <distance_nearest_hf/>
+        <time_nearest_hf/>
+        <number_hh/>
+        <electricity/>
+        <telecom_have_voice/>
+        <telecom_have_data/>
+        <telecom_best_voice/>
+        <telecom_best_data/>
+        <accessibility/>
+        <accessibility_types/>
+        <accessibility_types_other/>
+        <accessibility_details/>
+      </group_general>
+      <orx:meta>
+        <orx:instanceID>uuid:93a2eb54-f2aa-43d1-a18c-2e5d67f9ed6f</orx:instanceID>
+        <orx:instanceName>recon_2020-01-15T09:33:50.841+01:00</orx:instanceName>
+      </orx:meta>
+    </recon>
+  </data>
+</submission>

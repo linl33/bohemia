@@ -41,6 +41,9 @@ body {
 <p>This package contains utilities used by the Bohemia research team. It is publicly available for the purposes of reproducibility and transparency.</p>
 <h2 id="installation">Installation</h2>
 <p>To install this package: - Clone the parent repo: <code>git clone https://github.com/databrew/bohemia</code> - <code>cd</code> into <code>rpackage</code> - Run <code>Rscript build_package.R</code></p>
+<p>Alternatively, one can install directly from github:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">'databrew/bohemia'</span>, <span class="dt">subdir =</span> <span class="st">'rpackage/bohemia'</span>, <span class="dt">dependencies =</span> <span class="ot">TRUE</span>, <span class="dt">force =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>To remove the package (for example, so as to re-install for an update), simply run: `remove.packages('bohemia')</p>
 <h2 id="setting-up-data">Setting up data</h2>
 <p>The package includes both tools (functions) as well as data. In order to set up the package's datasets, the following steps should be taken:</p>
 <h4 id="download-osm-data">Download OSM data</h4>
@@ -113,6 +116,451 @@ body {
 <span class="kw">plot</span>(bohemia<span class="op">::</span>rufiji_waterways, <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYAAAAGACAMAAACTGUWNAAADAFBMVEUAAAABAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAhISEiIiIjIyMkJCQlJSUmJiYnJycoKCgpKSkqKiorKyssLCwtLS0uLi4vLy8wMDAxMTEyMjIzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dISEhJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBRUVFSUlJTU1NUVFRVVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFycnJzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp7e3t8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OEhISFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqanp6eoqKipqamqqqqrq6usrKytra2urq6vr6+wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTFxcXGxsbHx8fIyMjJycnKysrLy8vMzMzNzc3Ozs7Pz8/Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3Nzd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vLz8/P09PT19fX29vb39/f4+Pj5+fn6+vr7+/v8/Pz9/f3+/v7////isF19AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAdKUlEQVR4nO2dd0BTxx/A74UwBUIIUzYqoiKiDAXcWrdYqyhaVNyjtu7VWgfuOmv1h1tx4azbota9Z7VSN6LWPRCqKBDI/V4CMuSFhDfyDXifPyB543LJJ7l378b3ECaAgqAz8KVDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBABDBGD8+g3gixMBhwOsLAbBvfyXLuBHW9mODynmH8Ay8AULeD68cXuXgKOv6YedA59B5eLLFPDs1ylehta9/th2N0v1PHt4aAZQVr5IASMlUUPPFfrEs9v0VcDk5YsUYHO/yKbUWtV/eaLm8M3Bgf12XUk98kqIvHyRAur/WXSb4mAfuwTGo2/Z7zw7p1lVU/vAHxfyn5cvUsDEbxk3x7j/V3Rj9rGKk1QP3svnj7ThPy8gAn4dnAjxsnm8r9mb8d6rnvWUwhsUaxrZ+OV/7VMreb3jOy8AArKG+A6q/lT3r1uA1EHOyQybM8+aKj6qHp0ePCqJ/jcsaNvjggdkd621YORBXrOiewE3GnyVnDHK9ajOX7gQnWKYtmY7WllG/bJkTRfHPgOddp9oU73ID2Vno+F2p/jMiK4FKGbZ/qase2+2j32r45fOR35+ru1Vxj1Pkh6N+LZ5y4GpGP/WOHBBOtMxe10H3eEvLzoW8KRd8KOcRwf8HOc+hLn7iXWs0Zf589eObePE/BnQrYCTjj/nf+ZbvhZXeKTTl88h0fYvjikclmXxkhMluhSQ9ZPL3sIbukfr8OU/Macr1xRar+AjHznoUMC7lo1efrZpn0kfrU/PSE5LfplIk5z85rny+YsX2R+fvH7z96VLly4/SE1O/MSbp3/+k/zo9DXV4+TEpORHZw5depL/nXW7xPGNZFnx2HSnOwGpoX2K/nD/tb6u6bwbC9tVcJM6VDKTmssc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" /></p>
 <h2 id="functions">Functions</h2>
+<h3 id="retrieving-data-from-odk-aggregate">Retrieving data from ODK aggregate</h3>
+<p>The <code>bohemia</code> package has a series of tools meant for assisting with the automated retrieval of data from the ODK Aggregate server. Below is a basic walk-through with examples.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># First define some basic parameters (this will vary depending on your system)</span>
+odk_agg_url &lt;-<span class="st"> 'https://bohemia.systems'</span>
+user &lt;-<span class="st"> 'data'</span>
+password &lt;-<span class="st"> 'data'</span>
+form_name &lt;-<span class="st"> 'Recon'</span>
+
+<span class="co"># Retrieve a list of forms from the server</span>
+fl &lt;-<span class="st"> </span><span class="kw">odk_list_forms</span>(<span class="dt">url =</span> odk_agg_url)
+<span class="co">#&gt; OK (HTTP 200).</span>
+<span class="kw">kable</span>(fl)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:left;">
+id
+</th>
+<th style="text-align:left;">
+url
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+VA
+</td>
+<td style="text-align:left;">
+va
+</td>
+<td style="text-align:left;">
+<https: bohemia.systems formXml?formId="va">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Census
+</td>
+<td style="text-align:left;">
+census
+</td>
+<td style="text-align:left;">
+<https: bohemia.systems formXml?formId="census">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Recon
+</td>
+<td style="text-align:left;">
+recon
+</td>
+<td style="text-align:left;">
+<https: bohemia.systems formXml?formId="recon">
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Fetch the ID for the form in question</span>
+id &lt;-<span class="st"> </span>fl <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(name <span class="op">==</span><span class="st"> </span>form_name) <span class="op">%&gt;%</span><span class="st"> </span>.<span class="op">$</span>id
+id
+<span class="co">#&gt; [1] &quot;recon&quot;</span>
+
+<span class="co"># Get the secondary id of the form in question</span>
+<span class="co"># (in most cases this will be identical)</span>
+id2 &lt;-<span class="st"> </span><span class="kw">odk_get_secondary_id</span>(<span class="dt">url =</span> odk_agg_url, <span class="dt">id =</span> id)
+<span class="co">#&gt; OK (HTTP 200).</span>
+id2
+<span class="co">#&gt; [1] &quot;recon&quot;</span>
+
+<span class="co"># Get a list of submissions for that form</span>
+submissions &lt;-<span class="st"> </span><span class="kw">odk_list_submissions</span>(<span class="dt">url =</span> odk_agg_url,
+                                    <span class="dt">id =</span> id,
+                                    <span class="dt">user =</span> user,
+                                    <span class="dt">password =</span> password)
+<span class="co">#&gt; OK (HTTP 200).</span>
+<span class="kw">kable</span>(submissions)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+x
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+uuid:ed8f30ea-be8d-4a1b-832b-885393a8d9d3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+uuid:a6929c84-92ca-4965-853e-763922d86b1a
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+uuid:3258d748-9aad-4f98-b824-3a2baf4fd35e
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+<span class="co"># Retrieve the data for an individual submission (the first one, for example)</span>
+submission &lt;-<span class="st"> </span><span class="kw">odk_get_submission</span>(<span class="dt">url =</span> odk_agg_url,
+                                 <span class="dt">id =</span> id,
+                                 <span class="dt">id2 =</span> id2,
+                                 <span class="dt">uuid =</span> submissions[<span class="dv">1</span>],
+                                 <span class="dt">user =</span> user,
+                                 <span class="dt">password =</span> password)
+<span class="co">#&gt; OK (HTTP 200).</span>
+
+<span class="co"># What has been retrieved is a response for an http request in xml format:</span>
+submission
+<span class="co">#&gt; Response [https://bohemia.systems/view/downloadSubmission?formId=recon%5B@version=null%20and%20@uiVersion=null%5D/recon%5B@key=uuid:ed8f30ea-be8d-4a1b-832b-885393a8d9d3%5D]</span>
+<span class="co">#&gt;   Date: 2020-01-15 13:18</span>
+<span class="co">#&gt;   Status: 200</span>
+<span class="co">#&gt;   Content-Type: text/xml;charset=utf-8</span>
+<span class="co">#&gt;   Size: 2.85 kB</span>
+<span class="co">#&gt; &lt;submission xmlns=&quot;http://opendatakit.org/submissions&quot; xmlns:orx=&quot;http://open...</span>
+
+<span class="co"># To take a better look at it, try:</span>
+<span class="co"># xmlview::xml_view(read_xml(submission))</span>
+
+<span class="co"># To parse this submission, we'll run the below:</span>
+parsed &lt;-<span class="st"> </span><span class="kw">odk_parse_submission</span>(<span class="dt">xml =</span> submission)
+<span class="kw">kable</span>(parsed)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+key
+</th>
+<th style="text-align:left;">
+value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+device\_id
+</td>
+<td style="text-align:left;">
+C0:BD:C8:8F:85:75
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+start\_time
+</td>
+<td style="text-align:left;">
+2020-01-15T11:21:00.401+01:00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+end\_time
+</td>
+<td style="text-align:left;">
+2020-01-15T11:25:03.131+01:00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+todays\_date
+</td>
+<td style="text-align:left;">
+2020-01-15
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Country
+</td>
+<td style="text-align:left;">
+Tanzania
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Region
+</td>
+<td style="text-align:left;">
+Pwani
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+District
+</td>
+<td style="text-align:left;">
+Rufiji DC
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ward
+</td>
+<td style="text-align:left;">
+Ikwiriri
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Village
+</td>
+<td style="text-align:left;">
+Ikwiriri Kati
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+village\_other
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hamlet
+</td>
+<td style="text-align:left;">
+Msikitini
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hamlet\_other
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hamlet\_code
+</td>
+<td style="text-align:left;">
+MSN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hamlet\_alternative
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hamlet\_alternative\_name
+</td>
+<td style="text-align:left;">
+Altyalaix
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+religion
+</td>
+<td style="text-align:left;">
+Other
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+religion\_add\_comment
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+religion\_comments
+</td>
+<td style="text-align:left;">
+Ydndksjdndjdjdn
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+location
+</td>
+<td style="text-align:left;">
+41.5319358000 1.3852065000 776.7999877930 43.5000000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+note\_chief
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+repeat\_chief
+</td>
+<td style="text-align:left;">
+JoeVillage Executive Officer12374
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+repeat\_chief
+</td>
+<td style="text-align:left;">
+BenMtaa Executive Officer84747
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+note\_general
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+name\_nearest\_hf
+</td>
+<td style="text-align:left;">
+Hospy
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+type\_nearest\_hf
+</td>
+<td style="text-align:left;">
+Hospital
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+type\_nearest\_hf\_other
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+distance\_nearest\_hf
+</td>
+<td style="text-align:left;">
+0.5000000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+time\_nearest\_hf
+</td>
+<td style="text-align:left;">
+20
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+number\_hh
+</td>
+<td style="text-align:left;">
+150
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+electricity
+</td>
+<td style="text-align:left;">
+Yes
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+group\_voice
+</td>
+<td style="text-align:left;">
+YesVodacomYesNoDon't knowNo
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+group\_data
+</td>
+<td style="text-align:left;">
+YesHalotelNoYesNoDon't know
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+accessibility
+</td>
+<td style="text-align:left;">
+No
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+accessibility\_types
+</td>
+<td style="text-align:left;">
+Bicycle
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+accessibility\_types\_other
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+accessibility\_details
+</td>
+<td style="text-align:left;">
+No comments
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+instanceID
+</td>
+<td style="text-align:left;">
+uuid:ed8f30ea-be8d-4a1b-832b-885393a8d9d3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+instanceName
+</td>
+<td style="text-align:left;">
+recon\_2020-01-15
+</td>
+</tr>
+</tbody>
+</table>
 <h3 id="generating-fake-data">Generating fake data</h3>
 <p>Some methods and analysis require &quot;dummy&quot; data in order to be tested. Functions which generate dummy data begin with the prefix <code>generate_fake</code>. For example, <code>generate_fake_locations</code> creates a dataframe of <code>n</code> locations, grouped into <code>n_clusters</code> clusters, which is useful for testing algorithms related to clustering, buferring, etc.</p>
 <p>Here is a working example:</p>
