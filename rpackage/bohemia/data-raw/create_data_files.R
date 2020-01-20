@@ -8,6 +8,28 @@ library(RColorBrewer)
 library(raster)
 library(sf)
 
+# Get country shapefiles
+moz0 <- getData(country = 'MOZ', level = 0)
+moz1 <- getData(country = 'MOZ', level = 1)
+moz2 <- getData(country = 'MOZ', level = 2)
+moz3 <- getData(country = 'MOZ', level = 3)
+
+tza0 <- getData(country = 'TZA', level = 0)
+tza1 <- getData(country = 'TZA', level = 1)
+tza2 <- getData(country = 'TZA', level = 2)
+tza3 <- getData(country = 'TZA', level = 3)
+
+usethis::use_data(moz0, moz1, moz2, moz3,
+                  tza0, tza1, tza2, tza3,
+                  overwrite = TRUE)
+
+# # Write a list of all provinces / districts
+# ps <- moz2@data %>% dplyr::select(NAME_0, NAME_1, NAME_2) %>%
+#   bind_rows(
+#     tza2@data %>% dplyr::select(NAME_0, NAME_1, NAME_2)
+#   ) %>%
+#   mutate(province_district = paste0(NAME_1, ', ', NAME_2))
+# write_csv(ps, '~/Desktop/ps.csv')
 
 # list.files('tza_wards/', pattern='\\.shp$')
 # s <- shapefile('tza_wards/TZwards.shp')

@@ -44,7 +44,7 @@ The below guide is a walk-through of setting up the Bohemia data infrastructure.
 - Select "Ubuntu Server 18.04 LTS (HVM), SSD Volume Type"
 -To the far right select 64-bit (x86)  
 - Click “select”  
-- Choose the instance type: General purpose, t2.small (or larger)
+- Choose the instance type: General purpose, t2.small
 - Click on Next: Configure Instance Details.
 - Select the VPC you previously created in the Network dropdown ("aggregate-vpc")
 - Select "Enable" in the Auto-assign Public IP dropdown.
@@ -363,11 +363,15 @@ sudo dpkg-reconfigure -plow unattended-upgrades
 - Run the following, line by line:
 ```
 cd ~
-git clone https://github.com/enketo/enketo-express.git
+sudo git clone https://github.com/enketo/enketo-express.git
 cd enketo-express
-npm install --production
+sudo chown -R 1000:1000 "/home/ubuntu/.npm"
+npm config set unsafe-perm=true
+sudo chown -R $USER:$(id -gn $USER) /home/ubuntu/.config
+sudo chmod -R 777 /home/ubuntu/enketo-express/node_modules
+sudo npm install --production
 ```
-- (The above takes a little while)
+- (The above takes a while)
 
 
 ### Database configuration
@@ -412,108 +416,34 @@ ping
 exit
 ```
 
+
 The response to both tests should be: “PONG”.
 
-- Create a configuration file:
+- ~~Create a configuration file: nano ~/enketo-express/config/default-config.json ~/enketo-express/config/config.json~~
+
+- Bring the creation file from local machine to remote:
 ```
-nano ~/enketo-express/config/default-config.json ~/enketo-express/config/config.json
-```
-- Edit it:
+scp -i "/home/joebrew/.ssh/openhdskey.pem" /home/joebrew/Documents/bohemia/misc/enketo-default-config.json ubuntu@papu.us:/home/ubuntu/
 ```
 
-{
-"app name": "Bohemia Enketo",
-   "port": "8005",
-   "offline enabled": true,
-   "linked form and data server": {
-       "name": "Bohemia",
-       "server url": "bohemia.systems",
-       "api key": "lpols3nboul",
-       "legacy formhub": false,
-       "authentication": {
-           "type": "basic",
-           "allow insecure transport": "true"
-       }
-   },
-   "timeout": 300000,
-   "expiry for record cache": 30000,
-   "encryption key": "s0m3v3rys3cr3tk3y",
-   "less secure encryption key": "this $3cr3t key is crackable",
-   "default theme": "kobo",
-   "themes supported": [],
-   "base path": "enketo",
-   "log": {
-       "submissions": false
-   },
-   "support": {
-       "email": "info@databrew.cc"
-   },
-
-"widgets": [
-        "note", "select-desktop", "select-mobile", "autocomplete", "geo", "textarea", "url",
-        "table", "radio", "date", "time", "datetime", "select-media", "file", "draw", "rank",
-        "likert", "range", "columns", "image-view", "comment", "image-map", "date-native", "date-nativ$
-        "date-mobile", "text-max"
-    ],
-    "analytics": "google",
-    "google": {
-        "analytics": {
-            "ua": "",
-            "domain": ""
-        },
-        "api key": ""
-    },
-    "piwik": {
-        "analytics": {
-            "tracker url": "",
-            "site id": ""
-        }
-    },
-    "maps": [ {
-        "name": "streets",
-        "tiles": [ "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" ],
-        "attribution": "© <a href=\"http://openstreetmap.org\">OpenStreetMap</a> | <a href=\"www.opens$
-    } ],
-
-"query parameter to pass to submission": "",
-"redis": {
-    "main": {
-        "host": "127.0.0.1",
-        "port": "6379",
-        "password": null
-    },
-    "cache": {
-        "host": "127.0.0.1",
-        "port": "6380",
-        "password": null
-    }
-},
-"logo": {
-    "source": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPCFET$
-    "href": ""
-},
-"disable save as draft": false,
-"repeat ordinals": false,
-"validate continuously": false,
-"validate page": true,
-"payload limit": "100kb",
-"text field character limit": 2000
-}
-
+- Then, on remote machine, move to the right place:
+```
+sudo cp ~/enketo-default-config.json ~/enketo-express/config/config.json
 ```
 
 - Rebuild:
 ```
 cd ~/enketo-express
-npm install --production
+sudo npm install --production
 ```
 
 - Start enketo:
 ```
+pm2 kill
 npm start
 ```
 - Check that it's running at papu.us:8005
--Configure pm2 to make sure that the server automatically starts up upon reboot:
+- Configure pm2 to make sure that the server automatically starts up upon reboot:
 ```
 cd ~/enketo-express
 pm2 start app.js -n enketo
@@ -521,7 +451,7 @@ pm2 save
 sudo pm2 startup ubuntu -u enketo  # ? ubuntu
 ```
 
-- Ban rogue users:
+- Ban rogue users (NOT DOING FOR NOW):
 ```
 sudo apt-get install -y fail2ban
 sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
@@ -537,16 +467,56 @@ sudo ufw enable
 sudo ufw status
 ```
 
+Activate the new configuration:
+```
+sudo rm /etc/nginx/sites-enabled/default
+sudo ln -s /etc/nginx/sites-available/enketo /etc/nginx/sites-enabled/enketo
+sudo service nginx restart
+```
+
+
+## NGINX
+
+Create a webserver configuration as follows:
+```
+sudo nano /etc/nginx/sites-available/enketo
+```
+
+Paste the below:
+```
+server {
+    listen 80;
+    server_name papu.us;
+    location / {
+        proxy_pass  http://127.0.0.1:8005;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for ;
+        proxy_set_header X-Forwarded-Proto https ;
+    }
+
+    client_max_body_size 100M;
+
+    add_header Strict-Transport-Security max-age=63072000;
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+}
+```
+
+
 ## Final configuration
 
 
 - Set up https
 ```
-sudo add-apt-repository -y ppa:certbot/certbot
-sudo apt install certbot
-sudo apt-get -y update
-sudo apt-get -y install python-certbot-nginx
-sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d papu.us
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install python-certbot-nginx
+
+sudo certbot --nginx
 ```
 
 ## Create back-ups  
@@ -577,6 +547,10 @@ systemctl start redis-server@enketo-main.service
 ```
 curl -X DELETE --user lpols3nboul: -d "server_url=https://bohemia.systems&form_id=census" http://papu.us/api/v1/survey
 ```
+
+## Alternative to enketo
+
+https://kobo.humanitarianresponse.info/
 
 
 # Data collection
