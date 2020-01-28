@@ -201,8 +201,7 @@ server <- function(input, output, session) {
              users = data$users)
     message('x is ', x)
     log_in_text(x)
-    data$users <- dbGetQuery(conn = co,statement = 'SELECT * FROM users',
-                             connection_object = co)
+    data$users <- get_users() %>% arrange(first_name)
   })
   
   output$edit_table <- DT::renderDataTable({
@@ -214,6 +213,7 @@ server <- function(input, output, session) {
       eddy <- FALSE
     }
     if(li){
+      message('capturing data$users...')
       df <- data$users
       df <- df %>% dplyr::select(first_name, last_name,
                                  position, institution, email,
@@ -281,7 +281,7 @@ server <- function(input, output, session) {
                  overwrite = FALSE,
                  append = TRUE)
     # Update the in-memory object
-    data$users <- x
+    data$users <- x %>% arrange(first_name)
   })
   
   output$ui_create_account <- renderUI({
@@ -411,7 +411,7 @@ server <- function(input, output, session) {
       paste("data-", Sys.Date(), ".xlsx", sep="")
     },
     content = function(file) {
-      df <- data$users
+      df <- data$users %>% arrange(first_name)
       df <- df %>% dplyr::select(email, first_name, last_name) %>%
         dplyr::rename(`First name` = first_name,
                       `Last name` = last_name,
@@ -430,7 +430,7 @@ server <- function(input, output, session) {
       paste("data-", Sys.Date(), ".csv", sep="")
     },
     content = function(file) {
-      df <- data$users
+      df <- data$users %>% arrange(first_name)
       df <- df %>% dplyr::select(email, first_name, last_name) %>%
         dplyr::rename(`First name` = first_name,
                       `Last name` = last_name,
@@ -446,12 +446,13 @@ server <- function(input, output, session) {
   
   
   # Capture the selected rows
-  observeEvent(input$edit_table_rows_selected,{
+  observeEvent(c(input$edit_table_rows_selected, is.null(input$edit_table_rows_selected)),{
     selected_rows <- input$edit_table_rows_selected
     message('selected rows are')
     print(selected_rows)
     # emails
     df <- data$users
+    df <- df %>% arrange(first_name)
     df <- df[selected_rows,]
     emails <- sort(unique(df$email[!is.na(df$email)]))
     message('selected emails are')
@@ -476,6 +477,8 @@ server <- function(input, output, session) {
   observeEvent(input$delete_entry, {
     selected_rows <- input$edit_table_rows_selected
     df <- data$users
+    df <- df %>% arrange(first_name)
+    
     df <- df[selected_rows,]
     emails <- sort(unique(df$email[!is.na(df$email)]))
     showModal(modalDialog(
@@ -490,6 +493,8 @@ server <- function(input, output, session) {
   observeEvent(input$sure,{
     selected_rows <- input$edit_table_rows_selected
     df <- data$users
+    df <- df %>% arrange(first_name)
+    
     df <- df[selected_rows,]
     emails <- sort(unique(df$email[!is.na(df$email)]))
     for(i in 1:length(emails)){
@@ -501,7 +506,8 @@ server <- function(input, output, session) {
     }
     
     # Update the in-memory data
-    df <- data$users <- get_users()
+    message('Updating the in-memory data$users object following deletion.')
+    df <- data$users <- get_users() %>% arrange(first_name)
     removeModal()
   })
 }
