@@ -19,6 +19,7 @@ sidebar <- dashboardSidebar(
 )
 
 body <- dashboardBody(
+  shinyjs::useShinyjs(),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
   ),
@@ -38,7 +39,23 @@ body <- dashboardBody(
     tabItem(
       tabName = 'upload',
       fluidPage(
-        includeMarkdown('upload_instructions.md')
+        fluidRow(includeMarkdown('upload_instructions.md')),
+        fluidRow(
+          column(12, 
+                 downloadButton('download_template',
+                                'Download template spreadsheet for bulk upload', icon = icon('download')))
+        ),
+        fluidRow(includeMarkdown('upload_instructions2.md')),
+        fluidRow(
+          column(12, 
+                 fileInput("file1", "Select a file for bulk upload",
+                           multiple = FALSE,
+                           accept = c(".xlsx"))),
+          
+        )
+      ),
+      fluidRow(
+        uiOutput('bulk_ui')
       )
     ),
     
@@ -63,6 +80,7 @@ body <- dashboardBody(
   )
 )
 
+
 # UI
 ui <- dashboardPage(header, sidebar, body, skin="blue")
 
@@ -71,13 +89,24 @@ server <- function(input, output, session) {
   
   # Reactive values
   data <- reactiveValues(user_data = data.frame(),
-                         users = users)
+                         users = users,
+                         bulk_data = data.frame())
   log_in_text <- reactiveVal('')
   email_text <- reactiveVal('')
   email_people <- reactiveVal('')
   logged_in <- reactiveVal(value = FALSE)
   modal_text <- reactiveVal(value = '')
   is_admin <- reactiveVal(value = FALSE)
+  
+  
+  # Observe the bulk upload and act accordingly
+  observeEvent(input$file1, {
+    inFile <- input$file1
+    file.rename(inFile$datapath,
+                paste(inFile$datapath, ".xlsx", sep=""))
+    pd <- read_excel(paste(inFile$datapath, ".xlsx", sep=""), 1)
+    data$bulk_data <- pd
+  })
   
   # observe log in and get data from database
   observeEvent(input$submit, {
@@ -204,14 +233,18 @@ server <- function(input, output, session) {
       pout <- pp
     }
     x <- add_user(user = input$create_user,
-             password = pout,
-             first_name = input$create_first_name,
-             last_name = input$create_last_name,
-             position = input$create_position,
-             institution = input$create_institution,
-             users = data$users)
-    message('x is ', x)
-    log_in_text(x)
+                  password = pout,
+                  first_name = input$create_first_name,
+                  last_name = input$create_last_name,
+                  position = input$create_position,
+                  institution = input$create_institution,
+                  users = data$users)
+    if(x){
+      y <- 'Account successfully created'
+    } else {
+      y <- paste0('Did not create an account because one already exists for ', input$create_user)
+    }
+    log_in_text(y)
     data$users <- get_users() %>% arrange(first_name)
   })
   
@@ -233,12 +266,12 @@ server <- function(input, output, session) {
                      'Emails', 'Tags', 'Contact added')
       df <- df %>% arrange(First)
       DT::datatable(df, editable = eddy)#,
-                    # colnames = c('First' = 'first_name',
-                    #              'Last' = 'last_name',
-                    #              'Position' = 'position', 
-                    #              'Institution' = 'institution',
-                    #              'Email' = 'email',
-                    #              'Tags' = 'tags'))
+      # colnames = c('First' = 'first_name',
+      #              'Last' = 'last_name',
+      #              'Position' = 'position', 
+      #              'Institution' = 'institution',
+      #              'Email' = 'email',
+      #              'Tags' = 'tags'))
     } else {
       NULL
     }
@@ -327,7 +360,7 @@ server <- function(input, output, session) {
                               'Add new entry',icon = icon('face'))),
           column(4,
                  actionButton('download',
-                                'Download to excel', icon = icon('download'))),
+                              'Download to excel', icon = icon('download'))),
           column(4,
                  actionButton('download_csv',
                               'Download Mailchimp CSV', icon = icon('download')))
@@ -347,25 +380,25 @@ server <- function(input, output, session) {
     )
   })
   
-
+  
   
   output$new_entry_ui <- renderUI({
     lit <- log_in_text()
-      fluidPage(
-        h3(textInput('create_user', 'Email'),
-           # textInput('create_password', 'Create password', value = 'password'),
-           textInput('create_first_name', 'First name'),
-           textInput('create_last_name', 'Last name'),
-           textInput('create_position', 'Position'),
-           textInput('create_institution', 'Institution')
-        ),
-        fluidRow(
-          column(6, align = 'left', p(lit)),
-          column(6, align = 'right',
-                 actionButton('submit_create_account',
-                              'Create account'))
-        )
+    fluidPage(
+      h3(textInput('create_user', 'Email'),
+         # textInput('create_password', 'Create password', value = 'password'),
+         textInput('create_first_name', 'First name'),
+         textInput('create_last_name', 'Last name'),
+         textInput('create_position', 'Position'),
+         textInput('create_institution', 'Institution')
+      ),
+      fluidRow(
+        column(6, align = 'left', p(lit)),
+        column(6, align = 'right',
+               actionButton('submit_create_account',
+                            'Create account'))
       )
+    )
   })
   
   observeEvent(input$download,{
@@ -385,6 +418,16 @@ server <- function(input, output, session) {
       )
     )
   })
+  
+  output$download_template <- 
+    downloadHandler(
+      filename = function() {
+        paste("bulk_upload_template.xlsx", sep="")
+      },
+      content = function(file) {
+        xlsx::write.xlsx(upload_csv, file, row.names = FALSE)
+      }
+    )
   
   output$download_ui <- renderUI({
     fluidPage(
@@ -486,6 +529,83 @@ server <- function(input, output, session) {
              p('Hold ctrl + click to select people.'),
              p('Type any name, institution, "tag", etc. to filter people.'))
     }
+  })
+  
+  
+  # Bulk table output
+  output$bulk_ui <- renderUI({
+    pd <- data$bulk_data
+    ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        ok <- TRUE
+      }
+    }
+    if(ok){
+      fluidPage(
+        fluidRow(column(6,
+                        p('Now inspect the below table. If everything looks okay, confirm the bulk upload by clicking the "Confirm bulk upload button"')),
+                 column(6,
+                        actionButton('confirm_bulk_upload', 'Confirm bulk upload', icon = icon('upload')))),
+        verbatimTextOutput("text"),
+        fluidRow(DT::dataTableOutput('bulk_table'))
+      )
+    } else {
+      NULL
+    }
+  })
+  
+  output$bulk_table <- DT::renderDataTable({
+    
+    pd <- data$bulk_data
+    ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd
+      }
+    }
+  })
+  
+  observeEvent(input$confirm_bulk_upload, {
+    withCallingHandlers({
+      shinyjs::html("text", "")
+      
+      # Loop through each person in the upload data and try to add to database
+      pd <- data$bulk_data
+      ok <- FALSE
+      if(!is.null(pd)){
+        if(nrow(pd) > 0){
+          ok <- TRUE
+        }
+      }
+      if(ok){
+        pd <- pd %>% dplyr::distinct(Email, .keep_all = TRUE)
+        message('Starting the bulk upload of ', nrow(pd), ' new people:')
+        added <- rep(NA, nrow(pd))
+        for(i in 1:nrow(pd)){
+          added[i] <- add_user(user = pd$Email[i],
+                   password = 'password', 
+                   first_name = pd$`First name`[i], 
+                   last_name = pd$`Last name`[i], 
+                   position = pd$Position[i], 
+                   institution = pd$Institution[i], 
+                   users = data$users)
+          Sys.sleep(0.2)
+        }
+        n_added <- length(which(added))
+        n_not_added <- length(which(!added))
+        message('Successfully added ', n_added, ' new entries to the database')
+        if(n_not_added > 0){
+          message('Did not add the following people to the database because there are already entries with their email addresses:')
+          message(paste0('.....', pd$Email[!added], collapse = '\n'))
+        }
+        # Upload the in-session users data
+        data$users <- get_users() %>% arrange(first_name)
+      }
+    },
+    message = function(m) {
+      shinyjs::html(id = "text", html = m$message, add = TRUE)
+    })
   })
   
   observeEvent(input$delete_entry, {
