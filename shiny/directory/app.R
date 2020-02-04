@@ -8,6 +8,10 @@ sidebar <- dashboardSidebar(
       tabName="directory",
       icon=icon("eye")),
     menuItem(
+      text="Bulk Upload",
+      tabName="upload",
+      icon=icon("upload")),
+    menuItem(
       text = 'About',
       tabName = 'about',
       icon = icon("cog", lib = "glyphicon"))
@@ -31,6 +35,13 @@ body <- dashboardBody(
         fluidRow(DT::dataTableOutput('edit_table'))
       )
     ),
+    tabItem(
+      tabName = 'upload',
+      fluidPage(
+        includeMarkdown('upload_instructions.md')
+      )
+    ),
+    
     tabItem(
       tabName = 'about',
       fluidPage(
@@ -164,7 +175,7 @@ server <- function(input, output, session) {
           column(6, align = 'left', p(lit)),
           column(6, align = 'right',
                  actionButton('submit_create_account',
-                              'Create account'))
+                              'Add person'))
         )
       )
     } else {
@@ -293,18 +304,21 @@ server <- function(input, output, session) {
     if(li & addy){
       if(any_selected){
         fluidPage(
-          column(3,
-                 actionButton('new_entry',
-                              'Add new entry',icon = icon('face'))),
-          column(3,
-                 actionButton('delete_entry',
-                              'Delete selected entries',icon = icon('face'))),
-          column(3,
-                 actionButton('download',
+          fluidRow(
+            column(4,
+                   actionButton('new_entry',
+                                'Add new entry',icon = icon('face'))),
+            column(4,
+                   actionButton('download',
                                 'Download to excel', icon = icon('download'))),
-          column(3,
-                 actionButton('download_csv',
-                              'Download Mailchimp CSV', icon = icon('download')))
+            column(4,
+                   actionButton('download_csv',
+                                'Download Mailchimp CSV', icon = icon('download')))),
+          fluidRow(
+            column(4,
+                   actionButton('delete_entry',
+                                'Delete selected entries',icon = icon('face')))
+          )
         )
       } else {
         fluidPage(

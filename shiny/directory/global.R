@@ -82,6 +82,14 @@ add_user <- function(user, password, first_name, last_name, position, institutio
   return(x)
 }
 
+# Define an empty csv for upload
+upload_csv <- tibble(Email = '',
+                     `First name` = '',
+                     `Last name` = '',
+                     `Position` = '',
+                     Institution = '')
+upload_csv <- upload_csv[0,]
+
 
 # Read in the users data from the database
 get_users <- function(){
@@ -90,4 +98,5 @@ get_users <- function(){
 }
 users <- get_users()
 users <- users %>% arrange(first_name)
+
 
