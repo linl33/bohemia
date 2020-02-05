@@ -309,12 +309,12 @@ The `cloud-config` script previously run installs ODKAggregate. However, because
 
 ## Setting up python tools
 
-There are some tools that help to both download the census excel from google docs as well as convert it to xml. This can all be done in the `scripts/pk_excel_xml.py` script. To prepare your system to run it:
+There are some tools that help to both download the PK excel files from google docs as well as convert them to xml. This can all be done in the `scripts/pk_excel_xml.py` script. To prepare your system to run it:
 
 - Clone the bohemia github repo: `git clone https://github.com/databrew/bohemia`
 - Create a virtual environment to be used with python's package manager. Follow [these steps](https://itnext.io/virtualenv-with-virtualenvwrapper-on-ubuntu-18-04-goran-aviani-d7b712d906d5).  Then `mkvirtualenv bohemia`
 - Get inside the virtual environment (`workon bohemia`) and intall python pacakges: `pip install -r requirements.txt`
-- From within the main `bohemia` directory, `cd` into `scripts` and run `python census_excel_to_xml.py`
+- From within the main `bohemia` directory, `cd` into `scripts` and run `python census_pk_to_xml.py`
 
 # enketo
 
