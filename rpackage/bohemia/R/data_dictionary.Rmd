@@ -1,0 +1,76 @@
+---
+title: "Data dictionary"
+author: "Ben Brew"
+date: "06/02/2020"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(kableExtra)
+library(readxl)
+
+
+# function that takes the census excel sheet and generates a data dictionary using kableExtra.
+generate_data_dictionary <- function(){
+  # read in .xlsx form generated from python script
+  census <- readxl::read_xlsx('../../../scripts/census.xlsx', sheet = 'survey')
+  choices <- readxl::read_xlsx('../../../scripts/census.xlsx', sheet = 'choices')
+  
+  # remove unneeded columns from data 
+  census <- census[, c('type', 'name')]
+  choices <- choices[, c('list_name', 'name')]
+  
+  # rename 'name' in choices to choices
+  names(choices)[names(choices) == 'name'] <- 'choices'
+  
+  # create variable to identify variable type
+  census$variable_type <- unlist(lapply(strsplit(census$type, split = ' '), function(x) x[1]))
+    
+  # extract choices name from 'type' in census
+  census$list_name <- unlist(lapply(strsplit(census$type, split = ' '), function(x) x[2]))
+  census$type <- NULL
+  
+  # remove rows that contain begin, deviceid, start, end, today, username, note, calculate, image, begin_repeat,
+  # NA, end repeat.
+  census <- census[!is.na(census$variable_type),]
+  remove_string <- 'begin|deviceid|start|end|today|username|note|calculate|image|begin_repeat|end_repeat'
+  census <- census[!grepl(remove_string, census$variable_type),]
+  
+  # recode variable type 
+  census$variable_type <- gsub('select_one_external', replacement = 'select_one', census$variable_type)
+  census$variable_type <- gsub('_', ' ', census$variable_type)
+  
+  # join data by list name
+  dat <- left_join(census, choices, by = 'list_name')
+  dat$list_name <- NULL
+  
+  # get counts to identify variables that have text, integer, geocode, etc
+  dat <- dat %>% 
+    group_by(name, variable_type, choices) %>% 
+    summarise(counts = n())
+  dat$choices <- ifelse(dat$counts > 1, dat$variable_type, dat$choices)
+
+  # fix concst issue for household member 
+  dat$choices <- ifelse(grepl('concat', dat$choices), 'Choose household member', dat$choices)
+  
+  # rearrange columns
+  dat$counts <- NULL
+  dat <- dat[, c('name', 'choices', 'variable_type')]
+  names(dat) <- c('Variable name', 'Variable choices', 'Variable type')
+  return(dat)
+  
+}
+
+data_dict <- generate_data_dictionary()
+
+```
+
+```{r, echo=FALSE, eval=TRUE}
+knitr::kable(data_dict, format = 'html') %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+
+```
