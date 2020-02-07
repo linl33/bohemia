@@ -338,33 +338,37 @@ server <- function(input, output, session) {
       if(any_selected){
         fluidPage(
           fluidRow(
-            column(4,
+            column(6,
                    actionButton('new_entry',
                                 'Add new entry',icon = icon('face'))),
-            column(4,
+            column(6,
+                   actionButton('delete_entry',
+                                'Delete selected entries',icon = icon('face')))),
+          br(),
+          fluidRow(
+            column(6,
                    actionButton('download',
                                 'Download to excel', icon = icon('download'))),
-            column(4,
+            column(6,
                    actionButton('download_csv',
-                                'Download Mailchimp CSV', icon = icon('download')))),
-          fluidRow(
-            column(4,
-                   actionButton('delete_entry',
-                                'Delete selected entries',icon = icon('face')))
+                                'Download Mailchimp CSV', icon = icon('download')))
           )
         )
       } else {
         fluidPage(
-          column(4,
+          fluidRow(
+          column(12,
                  actionButton('new_entry',
-                              'Add new entry',icon = icon('face'))),
+                              'Add new entry',icon = icon('face')))),
+          br(),
+          fluidRow(
           column(4,
                  actionButton('download',
                               'Download to excel', icon = icon('download'))),
           column(4,
                  actionButton('download_csv',
                               'Download Mailchimp CSV', icon = icon('download')))
-        )
+        ))
       }
       
     }
