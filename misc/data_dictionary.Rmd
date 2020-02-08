@@ -14,63 +14,104 @@ library(kableExtra)
 library(readxl)
 
 
+#   
+# 
 # function that takes the census excel sheet and generates a data dictionary using kableExtra.
-generate_data_dictionary <- function(){
+# path_to_file = '../scripts/census.xlsx'
+# sheet_name_1 = 'survey'
+# sheet_name_2 = 'choices'
+# language = 'english'
+# show_ids = FALSE
+# show_location = FALSE
+# show_hamlet_code = FALSE
+generate_data_dictionary <- function(path_to_file, 
+                                     sheet_name_1, 
+                                     sheet_name_2, 
+                                     language, 
+                                     show_ids = FALSE, 
+                                     show_location = FALSE, 
+                                     show_hamlet_code = FALSE){
   # read in .xlsx form generated from python script
-  census <- readxl::read_xlsx('../../../scripts/census.xlsx', sheet = 'survey')
-  choices <- readxl::read_xlsx('../../../scripts/census.xlsx', sheet = 'choices')
+  census <- readxl::read_xlsx(path_to_file, sheet = sheet_name_1)
+  choices <- readxl::read_xlsx(path_to_file, sheet = sheet_name_2)
   
+  if(language == 'english'){
+    column_name = 'label::English'
+  } else if (language == 'portuguese'){
+    column_name = 'label::Portuguese'
+  } else {
+    column_name == 'label::Swahili'
+  }
   # remove unneeded columns from data 
-  census <- census[, c('type', 'name')]
-  choices <- choices[, c('list_name', 'name')]
+  census <- census[, c('type', 'name', column_name)]
+  choices <- choices[, c('list_name', column_name)]
+  names(choices)[names(choices) == column_name] <- 'choices'
   
-  # rename 'name' in choices to choices
-  names(choices)[names(choices) == 'name'] <- 'choices'
+  # condition for removing id variables
+  if(!show_ids){
+    id_q <- 'hh_head_id|hh_sub_id|hh_animals_responsible_cattle|hh_animals_responsible_sell_cattle|hh_animals_responsile_pigs|hh_animals_responsible_sell_pigs|hh_health_who|id_ill_15|id_snake_bitten|id_health_fac_15|id_hh_health_worker_15_days|idv_id_permid_label|idv_iden_respondent_id'
+    if(any(grepl(id_q, census$name))){
+      census <- census[!grepl(id_q, census$name),]
+    }
+  }
   
-  # create variable to identify variable type
-  census$variable_type <- unlist(lapply(strsplit(census$type, split = ' '), function(x) x[1]))
-    
-  # extract choices name from 'type' in census
-  census$list_name <- unlist(lapply(strsplit(census$type, split = ' '), function(x) x[2]))
-  census$type <- NULL
+  # condition for removing location variables
+  if(!show_location){
+    location_q <- 'hh_iden_region|hh_iden_district|hh_iden_ward|hh_iden_village|hh_iden_village_other|hh_iden_hamlet|hh_iden_hamlet_other'
+    if(any(grepl(location_q, census$name))){
+      census <- census[!grepl(location_q, census$name),]
+    }
+  }
   
-  # remove rows that contain begin, deviceid, start, end, today, username, note, calculate, image, begin_repeat,
-  # NA, end repeat.
-  census <- census[!is.na(census$variable_type),]
-  remove_string <- 'begin|deviceid|start|end|today|username|note|calculate|image|begin_repeat|end_repeat'
-  census <- census[!grepl(remove_string, census$variable_type),]
+  # condition for remove hamlet code
+  if(!show_hamlet_code){
+    code_q <- 'hh_iden_hamlet_code'
+    if(any(grepl(code_q, census$name))){
+      census <- census[!grepl(code_q, census$name),]
+    }
+  }
   
-  # recode variable type 
-  census$variable_type <- gsub('select_one_external', replacement = 'select_one', census$variable_type)
-  census$variable_type <- gsub('_', ' ', census$variable_type)
-  
-  # join data by list name
-  dat <- left_join(census, choices, by = 'list_name')
-  dat$list_name <- NULL
-  
-  # get counts to identify variables that have text, integer, geocode, etc
-  dat <- dat %>% 
-    group_by(name, variable_type, choices) %>% 
-    summarise(counts = n())
-  dat$choices <- ifelse(dat$counts > 1, dat$variable_type, dat$choices)
+  # get unique variables and loop through them
+  variable_names <- unique(census$name)
+  variable_names <- variable_names[!is.na(variable_names)]
+  result_list <- list()
+  string_ok <- 'select_one|select_multiple|integer|text|geopoint|dateTime|date|geopoint|barcode'
 
-  # fix concst issue for household member 
-  dat$choices <- ifelse(grepl('concat', dat$choices), 'Choose household member', dat$choices)
-  
-  # rearrange columns
-  dat$counts <- NULL
-  dat <- dat[, c('name', 'choices', 'variable_type')]
-  names(dat) <- c('Variable name', 'Variable choices', 'Variable type')
+  for(i in 1:length(variable_names)){
+    var_name = variable_names[i]
+    sub_var <- census %>% filter(name == var_name)
+    if(grepl(string_ok, sub_var$type)){
+      # create variable to identify variable type
+      sub_var$variable_type <- unlist(lapply(strsplit(sub_var$type, split = ' '), function(x) x[1]))
+      sub_var$list_name <- unlist(lapply(strsplit(sub_var$type, split = ' '), function(x) x[2]))
+      sub_var$type <- NULL
+      sub_var <- sub_var %>% filter(!is.na(sub_var$variable_type))
+      sub_var <- left_join(sub_var, choices, by = 'list_name')
+      sub_var$list_name <- NULL
+      sub_var$name[duplicated(sub_var$name)] <- NA
+      sub_var$`label::English`[duplicated(sub_var$`label::English`)] <- NA
+      sub_var$variable_type[duplicated(sub_var$variable_type)] <- NA
+      result_list[[i]] <- sub_var
+    }
+  }
+  dat <- do.call('rbind', result_list)
+  dat <- dat[apply(dat,1,function(x)any(!is.na(x))),]
+
+  names(dat) <- c('Variable name', 'Question', 'Variable type', 'Variable choices')
   return(dat)
   
 }
-
-data_dict <- generate_data_dictionary()
+data_dict <- generate_data_dictionary(path_to_file = '../scripts/census.xlsx',
+                                      sheet_name_1 = 'survey',
+                                      sheet_name_2 = 'choices',
+                                      language = 'english',
+                                      show_ids = FALSE,
+                                      show_location = FALSE,
+                                      show_hamlet_code = FALSE)
 
 ```
 
 ```{r, echo=FALSE, eval=TRUE}
-knitr::kable(data_dict, format = 'html') %>%
-  kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+knitr::kable(data_dict, format = 'html') 
 
 ```
