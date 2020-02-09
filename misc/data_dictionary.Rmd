@@ -20,14 +20,13 @@ opts_chunk$set(comment = NA,
 
 ```{r}
 library(bohemia)
-library(kableExtra)
 ```
 
 ```{r}
 data_dict <- generate_data_dictionary(path = '../forms/xls/census.xls')
 ```
 
-```{r, echo=FALSE, eval=TRUE}
+```{r, results = 'asis'}
 knitr::kable(data_dict)
 # data_dict
 ```
