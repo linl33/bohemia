@@ -1,116 +1,33 @@
 ---
 title: "Data dictionary"
-author: "Ben Brew"
-date: "06/02/2020"
-output:
-  html_document:
-    df_print: paged
-  pdf_document: default
+output: github_document
 ---
 
-```{r echo=FALSE, warning=FALSE, message=FALSE}
-library(tidyverse)
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+library(bohemia)
 library(kableExtra)
-library(readxl)
+```
 
-
-#   
-# 
-# function that takes the census excel sheet and generates a data dictionary using kableExtra.
-# path_to_file = '../scripts/census.xlsx'
-# sheet_name_1 = 'survey'
-# sheet_name_2 = 'choices'
-# language = 'english'
-# show_ids = FALSE
-# show_location = FALSE
-# show_hamlet_code = FALSE
-generate_data_dictionary <- function(path_to_file, 
-                                     sheet_name_1, 
-                                     sheet_name_2, 
-                                     language, 
-                                     show_ids = FALSE, 
-                                     show_location = FALSE, 
-                                     show_hamlet_code = FALSE){
-  # read in .xlsx form generated from python script
-  census <- readxl::read_xlsx(path_to_file, sheet = sheet_name_1)
-  choices <- readxl::read_xlsx(path_to_file, sheet = sheet_name_2)
-  
-  if(language == 'english'){
-    column_name = 'label::English'
-  } else if (language == 'portuguese'){
-    column_name = 'label::Portuguese'
-  } else {
-    column_name == 'label::Swahili'
-  }
-  # remove unneeded columns from data 
-  census <- census[, c('type', 'name', column_name)]
-  choices <- choices[, c('list_name', column_name)]
-  names(choices)[names(choices) == column_name] <- 'choices'
-  
-  # condition for removing id variables
-  if(!show_ids){
-    id_q <- 'hh_head_id|hh_sub_id|hh_animals_responsible_cattle|hh_animals_responsible_sell_cattle|hh_animals_responsile_pigs|hh_animals_responsible_sell_pigs|hh_health_who|id_ill_15|id_snake_bitten|id_health_fac_15|id_hh_health_worker_15_days|idv_id_permid_label|idv_iden_respondent_id'
-    if(any(grepl(id_q, census$name))){
-      census <- census[!grepl(id_q, census$name),]
-    }
-  }
-  
-  # condition for removing location variables
-  if(!show_location){
-    location_q <- 'hh_iden_region|hh_iden_district|hh_iden_ward|hh_iden_village|hh_iden_village_other|hh_iden_hamlet|hh_iden_hamlet_other'
-    if(any(grepl(location_q, census$name))){
-      census <- census[!grepl(location_q, census$name),]
-    }
-  }
-  
-  # condition for remove hamlet code
-  if(!show_hamlet_code){
-    code_q <- 'hh_iden_hamlet_code'
-    if(any(grepl(code_q, census$name))){
-      census <- census[!grepl(code_q, census$name),]
-    }
-  }
-  
-  # get unique variables and loop through them
-  variable_names <- unique(census$name)
-  variable_names <- variable_names[!is.na(variable_names)]
-  result_list <- list()
-  string_ok <- 'select_one|select_multiple|integer|text|geopoint|dateTime|date|geopoint|barcode'
-
-  for(i in 1:length(variable_names)){
-    var_name = variable_names[i]
-    sub_var <- census %>% filter(name == var_name)
-    if(grepl(string_ok, sub_var$type)){
-      # create variable to identify variable type
-      sub_var$variable_type <- unlist(lapply(strsplit(sub_var$type, split = ' '), function(x) x[1]))
-      sub_var$list_name <- unlist(lapply(strsplit(sub_var$type, split = ' '), function(x) x[2]))
-      sub_var$type <- NULL
-      sub_var <- sub_var %>% filter(!is.na(sub_var$variable_type))
-      sub_var <- left_join(sub_var, choices, by = 'list_name')
-      sub_var$list_name <- NULL
-      sub_var$name[duplicated(sub_var$name)] <- NA
-      sub_var$`label::English`[duplicated(sub_var$`label::English`)] <- NA
-      sub_var$variable_type[duplicated(sub_var$variable_type)] <- NA
-      result_list[[i]] <- sub_var
-    }
-  }
-  dat <- do.call('rbind', result_list)
-  dat <- dat[apply(dat,1,function(x)any(!is.na(x))),]
-
-  names(dat) <- c('Variable name', 'Question', 'Variable type', 'Variable choices')
-  return(dat)
-  
-}
-data_dict <- generate_data_dictionary(path_to_file = "../forms/xls/census.xls",
-                                      sheet_name_1 = 'survey',
-                                      sheet_name_2 = 'choices',
-                                      language = 'english',
-                                      show_ids = FALSE,
-                                      show_location = FALSE,
-                                      show_hamlet_code = FALSE)
-
+```{r}
+data_dict <- generate_data_dictionary(path = '../forms/xls/census.xls')
 ```
 
 ```{r, echo=FALSE, eval=TRUE}
-knitr::kable(data_dict, format = 'html') 
+knitr::kable(data_dict)
+# data_dict
 ```
