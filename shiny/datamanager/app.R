@@ -1,6 +1,7 @@
 library(shiny)
 library(shinydashboard)
-library(dplyr)
+
+source('global.R')
 
 header <- dashboardHeader(title = tags$a(href='http://databrew.cc',
                                          tags$img(src='logo.png',height='32',width='36', alt = 'DataBrew')))
