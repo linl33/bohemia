@@ -23,6 +23,10 @@ sidebar <- dashboardSidebar(
                 text="Satellite map",
                 tabName="main",
                 icon=icon("eye")),
+              menuItem(
+                text="QR code generator",
+                tabName="qr",
+                icon=icon("qrcode")),
               
               menuItem(
                 text = 'About',
@@ -129,7 +133,18 @@ body <- dashboardBody(
         
       )
     ),
-    
+    tabItem(
+      tabName = 'qr',
+      fluidPage(
+        fluidRow(
+          column(4,
+                 textInput('qr_text', 'Enter number/code here (> 2 characters)')),
+          column(8,
+                 uiOutput('qr_ui'),
+                 plotOutput('qr_plot'))
+        )
+      )
+    ),
     tabItem(
       tabName = 'about',
       fluidPage(
@@ -174,6 +189,31 @@ server <- function(input, output) {
       mutate(combined = paste0(Country, Region, District, Ward, Village, Hamlet, collapse = NULL)) %>%
       filter(grepl(tolower(search), tolower(combined), fixed = TRUE)) %>%
       dplyr::select(-combined)
+  })
+  
+  output$qr_plot <- renderPlot({
+    qrt <- input$qr_text
+    if(!is.null(qrt)){
+      if(nchar(qrt) > 2){
+        create_qr(qrt)
+      } else {
+        NULL
+      }
+    }
+    
+  })
+  
+  output$qr_ui <- renderUI({
+    qrt <- input$qr_text
+    if(!is.null(qrt)){
+      if(nchar(qrt) > 2){
+        h3(qrt)
+      } else {
+        p('Enter > 2 characters in the box to the left.')
+      }
+    }
+    
+    
   })
   
   output$locations_table <- DT::renderDataTable({
