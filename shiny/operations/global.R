@@ -3,6 +3,8 @@ library(sp)
 # library(leaflet.providers)
 library(leaflet.extras)
 library(bohemia)
+library(knitr)
+library(kableExtra)
 
 # rdir <- '../../rpackage/bohemia/R/'
 # funs <- dir(rdir)

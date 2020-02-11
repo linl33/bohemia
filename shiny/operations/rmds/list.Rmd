@@ -1,8 +1,13 @@
 ---
 params:
-  data: !r data.frame(n_hh = 100, n_teams = 1) # data on the hamlet
+  data: !r data.frame(n_hh = 400, n_teams = 2) # data on the hamlet
   loc_id: 'ABC'
-output: pdf_document
+output:
+  pdf_document:
+    keep_tex: yes
+    includes:
+      in_header: preamble.sty
+tables: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -31,6 +36,8 @@ opts_chunk$set(comment = NA,
 
 ```{r}
 library(dplyr)
+options(kableExtra.latex.load_packages = FALSE)
+library(kableExtra)
 # Specify paramaters
 for (i in 1:length(params)){
   assign(names(params)[i],
@@ -57,7 +64,7 @@ while(length(team_numbers) > n_hh){
   team_numbers <- team_numbers[1:n_hh]
 }
 
-out <- tibble(id = paste0(lc, bohemia::add_zero(1:n_hh, n = 3)),
+out <- tibble(id = paste0(lc, '-', bohemia::add_zero(1:n_hh, n = 3)),
               team = team_numbers)
 ```
 
@@ -66,7 +73,7 @@ chunk_list <- list()
 for(i in 1:n_teams){
   chunk_list[[i]] <-
     paste0("## Team ", i, "\n\n\n```{r}\n",
-           "out %>% filter(team == ", i, ") %>% data.frame\n```\n\\newpage\n")
+           "kable(out %>% filter(team == ", i, ") %>% data.frame %>% dplyr::select(-team) %>% dplyr::mutate(`Status` = ' ', Comments = ' '), 'latex', longtable = T, caption = 'Team ", i,"')  %>% kable_styling(latex_options = c('striped', 'repeat_header', full_width = TRUE)) %>% column_spec(3, width = '8cm') \n```\n\\newpage\n")
 }
 chunks <- unlist(chunk_list)
 chunks <- paste0(chunks, collapse = '\n')
