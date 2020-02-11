@@ -184,6 +184,10 @@ createuser --interactive
 - name of role: ubuntu
 - superuser: y
 createdb ubuntu
+createuser --interactive
+- name of role: shiny
+- superuser: y
+createdb shiny
 ```
 
 
@@ -227,8 +231,6 @@ sudo add-apt-repository ppa:marutter/c2d4u3.5
 sudo apt update
 sudo apt install r-cran-dplyr
 sudo su - -c "R -e \"install.packages('devtools')\"";
-sudo su - -c "R -e \"devtools::install_github('databrew/bohemia')\"";
-sudo su - -c "R -e \"devtools::install_github('databrew/databrew')\"";
 sudo su - -c "R -e \"install.packages('broom')\"";
 sudo su - -c "R -e \"install.packages('broomExtra')\"";
 sudo su - -c "R -e \"install.packages('dbplyr')\""
@@ -300,6 +302,12 @@ sudo su - -c "R -e \"install.packages('xlsx')\"";
 sudo su - -c "R -e \"install.packages('xtable')\"";
 sudo su - -c "R -e \"install.packages('yaml')\"";
 sudo su - -c "R -e \"devtools::install_github('rstudio/DT')\""
+sudo su - -c "R -e \"install.packages('gpclib')\"";
+sudo su - -c "R -e \"install.packages('qrcode')\"";
+sudo su - -c "R -e \"install.packages('rgdal')\"";
+sudo su - -c "R -e \"install.packages('kableExtra')\"";
+sudo su - -c "R -e \"install.packages('googlesheets')\"";
+sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia', dependencies = TRUE, force = TRUE)\""
 
 ```
 
@@ -317,9 +325,30 @@ sudo groupadd shiny-apps
 sudo usermod -aG shiny-apps ubuntu
 sudo usermod -aG shiny-apps shiny
 cd /srv/shiny-server
-sudo chown -R dean:shiny-apps .
+sudo chown -R ubuntu:shiny-apps .
 sudo chmod g+w .
 sudo chmod g+s .
+```
+
+Get the bohemia repo locally
+```
+cd /home/ubuntu
+git clone https://github.com/databrew/bohemia
+cd bohemia/rpackage/bohemia
+Rscript build_package
+cd /home/ubuntu/bohemia/shiny/directory
+mkdir credentials
+```
+
+Move things to the serving area
+
+```
+cp -r bohemia/shiny/operations /srv/shiny-server
+cp -r bohemia/shiny/directory /srv/shiny-server
+cp -r bohemia/shiny/datamanager /srv/shiny-server
+
+sudo systemctl restart shiny-server
+
 ```
 
 

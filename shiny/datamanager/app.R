@@ -12,18 +12,6 @@ sidebar <- dashboardSidebar(
             tabName="main",
             icon=icon("archway")),
         menuItem(
-            text="Alerts",
-            tabName="alerts",
-            icon=icon("bell")),
-        menuItem(
-            text="Performance",
-            tabName="performance",
-            icon=icon("poll")),
-        menuItem(
-            text="Actions",
-            tabName="actions",
-            icon=icon("list")),
-        menuItem(
             text = 'About',
             tabName = 'about',
             icon = icon("cog", lib = "glyphicon"))
@@ -37,35 +25,7 @@ body <- dashboardBody(
     tabItems(
         tabItem(
             tabName="main",
-            fluidPage(
-                fluidRow(
-                    
-                )
-            )
-        ),
-        tabItem(
-            tabName="alerts",
-            fluidPage(
-                fluidRow(
-                    
-                )
-            )
-        ),
-        tabItem(
-            tabName="performance",
-            fluidPage(
-                fluidRow(
-                    
-                )
-            )
-        ),
-        tabItem(
-            tabName="actions",
-            fluidPage(
-                fluidRow(
-                    
-                )
-            )
+            uiOutput('ui_main')
         ),
         tabItem(
             tabName = 'about',
@@ -92,7 +52,38 @@ body <- dashboardBody(
 ui <- dashboardPage(header, sidebar, body, skin="blue")
 
 # Server
-server <- function(input, output) {
+server <- function(input, output, session) {
+    
+    # Reactive object for seeing if logged in or not
+    # (Joe will build log-in functionality later
+    session_data <- reactiveValues(logged_in = FALSE)
+    
+    output$ui_main <- renderUI({
+        # See if the user is logged in
+        li <- session_data$logged_in
+        
+        # UI if the user is logged in
+        if(li){
+            fluidPage(h3('This is the logged-in UI'),
+                      actionButton('log_out_button',
+                                   'Click here to log out',
+                                   icon = icon('wave')))
+        } else {
+            #UI if the user is not logged in
+            fluidPage(h3('Log in to see cool stuff'),
+                      actionButton('log_in_button',
+                                   'Click here to log in',
+                                   icon = icon('door')))
+        }
+    })
+    
+    # Observe the log-in / log-out buttons and update the session data
+    observeEvent(input$log_in_button, {
+        session_data$logged_in <- TRUE
+    })
+    observeEvent(input$log_out_button, {
+        session_data$logged_in <- FALSE
+    })
     
    
 }
