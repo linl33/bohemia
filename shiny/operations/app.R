@@ -243,7 +243,12 @@ server <- function(input, output) {
       addProviderTiles(providers$Esri.WorldStreetMap,
                        group = 'ESRI WSM', options = providerTileOptions(zIndex = 2)) %>%
       addFullscreenControl() %>%
-      addPolylines(data = district_borders, weight = 0) 
+      addPolylines(data = district_borders, weight = 0) %>%
+      addControlGPS(options = gpsOptions(position = "topleft", activate = TRUE, 
+                                              autoCenter = TRUE, maxZoom = 10, 
+                                              setView = TRUE))
+    activateGPS(out)
+    
 
     
     mydrawPolylineOptions <- 
@@ -316,7 +321,11 @@ server <- function(input, output) {
       addProviderTiles(providers$Esri.WorldImagery,
                        group = 'Satellite', options = providerTileOptions(zIndex = 3)) %>%
       addPolylines(data = district_borders, weight = 0) %>%
-      addFullscreenControl()
+      addFullscreenControl() %>%
+      addControlGPS(options = gpsOptions(position = "topleft", activate = TRUE, 
+                                         autoCenter = TRUE, maxZoom = 10, 
+                                         setView = TRUE))
+    activateGPS(out)
     
     extras <- input$extras
     if(!is.null(extras)){
