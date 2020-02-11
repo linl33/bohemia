@@ -48,12 +48,14 @@ admins <- tibble(first_name = c('Sònia', 'Mary', 'Carlos', 'Elena', 'Joe', 'Ben
 # Create tables
 users <- data %>% bind_rows(admins)
 
-# Read in the updated data from Mary
-data2 <- read_csv('directory_backup.csv', col_names = FALSE)
-names(data2) <- names(data)
-# Combine
-users <- bind_rows(data2, users) %>%
+# # Read in the updated data from Mary
+# data2 <- read_csv('directory_backup.csv', col_names = FALSE)
+# names(data2) <- names(data)
+# # Combine
+# users <- bind_rows(data2, users) %>%
+users <- users %>%
   dplyr::distinct(email, .keep_all = TRUE)
+
 
 # write to the table to the database to which we are connected
 dbWriteTable(conn = co, 
