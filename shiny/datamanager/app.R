@@ -12,6 +12,10 @@ sidebar <- dashboardSidebar(
             tabName="main",
             icon=icon("archway")),
         menuItem(
+            text="Server status",
+            tabName="server_status",
+            icon=icon("server")),
+        menuItem(
             text = 'About',
             tabName = 'about',
             icon = icon("cog", lib = "glyphicon"))
@@ -25,7 +29,91 @@ body <- dashboardBody(
     tabItems(
         tabItem(
             tabName="main",
-            uiOutput('ui_main')
+            uiOutput('ui_main'),
+            fluidPage( 
+                
+                fluidRow(
+                    column(6,
+                           h3('Geography'))
+                ),
+                fluidRow(
+                    column(6,
+                           selectInput('geo',
+                                       'Select a Geography level',
+                                       choices = c('Country', 'Region', 'District', 'Ward', 'Village', 'Hamlet'),
+                                       selected = 'Country')),
+                    column(6,
+                           # uioutputs to depend on what level the user specifies
+                           uiOutput('geo_region'),
+                           uiOutput('geo_district'),
+                           uiOutput('geo_ward'),
+                           uiOutput('geo_village'),
+                           uiOutput('geo_hamlet')),
+                ),
+                br(), br(),
+                fluidRow(
+                    column(3,
+                           box(id = 'questionnaire',
+                               title = 'Questionnaires completed',
+                               status = 'primary', 
+                               solidHeader = TRUE, 
+                               width = 12)),
+                    column(3,
+                           box(id = 'num_fw',
+                               title = 'Number of active fieldworkers',
+                               status = 'success', 
+                               solidHeader = TRUE, 
+                               width = 12)),
+                    column(3,
+                           box(id = 'other_1',
+                               title = 'Other stats',
+                               status = 'info', 
+                               solidHeader = TRUE, 
+                               width = 12)
+                    ),
+                    column(3,
+                           box(id = 'other_2',
+                               title = 'Other stats',
+                               status = 'warning', 
+                               solidHeader = TRUE, 
+                               width = 12))
+                    
+                ), 
+                br(),
+                fluidRow(
+                    column(6,
+                           h3('Field workers'))
+                ),
+                br(), br(),
+                fluidRow(
+                    column(6,
+                           selectInput('field_worker',
+                                       'Select Field worker ID',
+                                       choices = c('011', '235', '813', '213'),
+                                       selected = '011'))
+                ),
+                br(),
+                fluidRow(
+                    column(6, 
+                           dataTableOutput('fw_performance')),
+                    column(6,
+                           leafletOutput('fw_map'))
+                ),
+                br(), br(),
+                fluidRow(
+                    column(6,
+                           box(id = 'alerts',
+                               title = 'Alerts',
+                               status = 'danger',
+                               footer = 'Errors and discrepancies')),
+                    column(6,
+                           box(id = 'actions',
+                               title = 'Action items',
+                               status = 'danger')),
+                    
+                )
+            )
+            
         ),
         tabItem(
             tabName = 'about',
@@ -85,7 +173,26 @@ server <- function(input, output, session) {
         session_data$logged_in <- FALSE
     })
     
-   
+    # placehold for mozambique field worker table 
+    output$fw_performance <- DT::renderDataTable({
+        fake_data <- data_frame('fw_id' = c('012', '034', '054'),
+                                'Number of houses surveyed' = c(3, 1, 5),
+                                'Number of houses to go' = c(6, 6, 8),
+                                'Average duration of interviews (minutes)' = c(40, 34.5, 56.4))
+        datatable(fake_data)
+        
+    })
+    # placeholder for mozambique map 
+    output$fw_map <- renderLeaflet({
+        library(leaflet)
+        moz <- getData(country = 'MOZ', level = 0)
+        
+        
+        leaflet() %>%
+            addProviderTiles("Esri.WorldImagery") %>%
+            addPolygons(data = moz)
+    })
+    
 }
 
 shinyApp(ui, server)#
