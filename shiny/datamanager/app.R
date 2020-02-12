@@ -4,7 +4,7 @@ library(shinydashboard)
 source('global.R')
 
 header <- dashboardHeader(title = tags$a(href='http://databrew.cc',
-                                         tags$img(src='logo.png',height='32',width='36', alt = 'DataBrew')))
+                                         tags$img(src='db_boh_logo.png', height='36px', width='136px', alt = 'DataBrew')))
 sidebar <- dashboardSidebar(
     sidebarMenu(
         menuItem(
@@ -48,7 +48,7 @@ body <- dashboardBody(
                            uiOutput('geo_district'),
                            uiOutput('geo_ward'),
                            uiOutput('geo_village'),
-                           uiOutput('geo_hamlet')),
+                           uiOutput('geo_hamlet'))
                 ),
                 br(), br(),
                 fluidRow(
@@ -82,21 +82,23 @@ body <- dashboardBody(
                 br(),
                 fluidRow(
                     column(6,
-                           h3('Field workers'))
+                           h3('Fieldworkers'))
                 ),
                 br(), br(),
                 fluidRow(
                     column(6,
                            selectInput('field_worker',
-                                       'Select Field worker ID',
+                                       'Select Fieldworker by ID',
                                        choices = c('011', '235', '813', '213'),
                                        selected = '011'))
                 ),
                 br(),
                 fluidRow(
                     column(6, 
+                           h4('Fieldworker Performance'),
                            dataTableOutput('fw_performance')),
                     column(6,
+                           h4('Map of Households Visited'),
                            leafletOutput('fw_map'))
                 ),
                 br(), br(),
@@ -109,7 +111,7 @@ body <- dashboardBody(
                     column(6,
                            box(id = 'actions',
                                title = 'Action items',
-                               status = 'danger')),
+                               status = 'danger'))
                     
                 )
             )
