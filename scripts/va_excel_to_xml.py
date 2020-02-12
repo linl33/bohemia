@@ -19,4 +19,8 @@ os.rename(doc + '.xls' ,'va.xls')
 ## Convert to xml
 os.system('xls2xform ' + 'va' + '.xls ' + 'va' +'.xml')
 
+# Move
+shutil.move('va.xls', "../forms/va/va.xls")
+shutil.move('va.xml', "../forms/va/va.xml")
+
 print("Successfully created the following documents:\n---" + 'va' + '.xls\n---' + 'va' +'.xml')

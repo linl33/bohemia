@@ -31,8 +31,8 @@ wks.export(pygsheets.ExportType.XLS, doc)
 os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
 
 # Move
-shutil.move(doc + '.xls', "../forms/xls/" + doc + '.xls')
-shutil.move(doc + '.xml', "../forms/xml/" + doc + '.xml')
-shutil.move('itemsets.csv', '../forms/xml/itemsets.csv')
+shutil.move(doc + '.xls', "../forms/census/" + doc + '.xls')
+shutil.move(doc + '.xml', "../forms/census/" + doc + '.xml')
+shutil.move('itemsets.csv', '../forms/census/itemsets.csv')
 
-print('Done. Docs in forms/xml and forms/xls')
+print('Done. Docs in forms/census.')
