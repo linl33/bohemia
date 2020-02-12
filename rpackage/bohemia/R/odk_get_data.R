@@ -1,4 +1,4 @@
-#' ODK retrieve data
+#' ODK get data
 #' 
 #' Retrieve data from the ODK server, parse, organize, and return as dataframes
 #' @param url The URL of the ODK Aggregate server, default being https://bohemia.systems, without a trailing dash
@@ -16,7 +16,7 @@
 #' @export
 
 
-odk_retrieve_data <- function(url = 'https://bohemia.systems',
+odk_get_data <- function(url = 'https://bohemia.systems',
                               id = 'recon',
                               id2 = NULL,
                               unknown_id2 = FALSE,
@@ -57,74 +57,55 @@ odk_retrieve_data <- function(url = 'https://bohemia.systems',
   if(length(submissions) == 0){
     message('No submissions are available for the form with id: ', id, ' at ', url, '.\nReturning an empty vector')
     return(c())
-  }
+  } 
   
   # If there are submissions, we need to conform them to the list of given uuids and exclude_uuids
-
-  #' # Get a list of the submissions for the form in question
-  #' 
-  #' # Capture an individual submission
-  #' submission <- odk_get_submission(url = 'https://bohemia.systems', id = recon$id, id2 = id2, uuid = submissions[1], user = 'data', password = 'data')
-  #' # Parse the submission into R format
-  #' odk_parse_submission(xml = submission)
+  if(!is.null(uuids)){
+    submissions <- submissions[submissions %in% uuids]
+  }
+  # If no remaining submissions, stop
+  if(length(submissions) == 0){
+    message('After filtering the uuids to keep only those supplied in the uuids argument, there were none remaining.\nConsider re-running with the uuids argument set to NULL.\nReturning an empty vector...')
+    return(c())
+  } 
+  if(!is.null(exclude_uuids)){
+    submissions <- submissions[!submissions %in% exclude_uuids]
+  }
+  if(length(submissions) == 0){
+    message('After filtering the uuids to remove those in the exclude_uuids argument, there were no remaining submissions. Consider re-running with the exclude_uuids argument set to NULL.\nReturning an empty vector...')
+    return(c())
+  } 
   
-  # Get the content
-  contingut <- content(xml)
-
-  # Ensure that it is indeed a submission
-  xname <- xml_name(contingut)
-  if(xname != 'submission'){
-    stop('Something went wrong. Tried to fetch a submission, but instead got ', xname)
+  # Now loop through each uuid and get the data
+  data_list <- list()
+  for(i in 1:length(submissions)){
+    message('working on retrieving submission ', i, ' of ', length(submissions))
+    this_uuid <- submissions[i]
+    # Capture the data for this uuid
+    submission <- odk_get_submission(url = url, 
+                                     id = id,
+                                     id2 = id2,
+                                     uuid = this_uuid, 
+                                     user = user, 
+                                     password = password)
+    # Parse the submission into R format
+    parsed <- odk_parse_submission(xml = submission)
+    
+    # Add uuid
+    parsed$repeats$uuid <- parsed$non_repeats$uuid <- this_uuid
+    
+    # Pop reformatted data into list
+    data_list[[i]] <- parsed
   }
   
-  # Get down to the data node
-  xnen <- xml_child(contingut)
-  xdata <- xml_children(xnen)
-  child <- xml_children(xdata)
-  children <- xml_children(child)
+  # Combine all of the data into one dataframe
+  combined <- list()
+  combined$repeats <- bind_rows(lapply(data_list, function(x){x$repeats}))
+  combined$non_repeats <- bind_rows(lapply(data_list, function(x){x$non_repeats}))
+ 
+  # Return
+  return(combined)
   
-  # Get the names and values
-  keys <- xml_name(children)
-  values <- xml_text(children)
-  
-  # Combine into a dataframe
-  df <- tibble(key = keys,
-               value = values)
-  
-  # Return the dataframe
-  return(df)
-  
-  
-  # # Define function to loop through xml children and extract content
-  # xloop <- function(child){
-  #   out_list <- list()
-  #   for(i in 1:length(child)){
-  #     this_sub_child <- xml_child(child[i])
-  #     has_children <- length(xml_children(this_sub_child)) > 0
-  #     if(has_children){
-  #       message('More!')
-  #       x <- xloop(this_sub_child)
-  #       counter <- length(out_list) + 1
-  #       out_list[[counter]] <- x
-  #     } else {
-  #       message('No more, here it is:')
-  #       the_name <- xml_name(this_sub_child)
-  #       the_value <- xml_text(this_sub_child)
-  #       message('---', the_name)
-  #       message('---', the_value)
-  #       df <- tibble(key = the_name,
-  #                    value = the_value)
-  #       counter <- length(out_list) +1
-  #       out_list[[counter]] <- df
-  #     }
-  #   }
-  #   out <- bind_rows(out_list)
-  #   return(out)
-  # }
-  # 
-  # # Run and return
-  # out <- xloop(child)
-  # return(out)
 }
 
 
