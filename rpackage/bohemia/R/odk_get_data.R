@@ -79,7 +79,7 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   # Now loop through each uuid and get the data
   data_list <- list()
   for(i in 1:length(submissions)){
-    message('working on retrieving submission ', i, ' of ', length(submissions))
+    message('| Working on retrieving submission ', i, ' of ', length(submissions))
     this_uuid <- submissions[i]
     # Capture the data for this uuid
     submission <- odk_get_submission(url = url, 
