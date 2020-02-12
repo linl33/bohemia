@@ -57,7 +57,7 @@ check_password <- function(user, password, the_users){
 }
 
 # Function for adding new user
-add_user <- function(user, password, first_name, last_name, position, institution, users){
+add_user <- function(user, password, first_name, last_name, position, institution, tags = NA, users){
   if(user %in% users$email){
     x <- FALSE
     message(paste0('---A database entry for ', user, ' already exists. Skipping.'))
@@ -67,7 +67,7 @@ add_user <- function(user, password, first_name, last_name, position, institutio
     df <- tibble(first_name,
                  last_name,
                  position, institution,
-                 email = user, tags = NA,
+                 email = user, tags,
                  admin = FALSE,
                  password,
                  contact_added = Sys.Date())
@@ -89,7 +89,8 @@ upload_csv <- tibble(Email = '',
                      `First name` = '',
                      `Last name` = '',
                      `Position` = '',
-                     Institution = '')
+                     Institution = '',
+                     tags = '')
 # upload_csv <- upload_csv[0,]
 # write_csv(upload_csv, 'upload_csv.csv')
 

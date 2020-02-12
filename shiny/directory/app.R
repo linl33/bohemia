@@ -593,6 +593,7 @@ server <- function(input, output, session) {
                    last_name = pd$`Last name`[i], 
                    position = pd$Position[i], 
                    institution = pd$Institution[i], 
+                   tags = pd$tags[i],
                    users = data$users)
           Sys.sleep(0.2)
         }
