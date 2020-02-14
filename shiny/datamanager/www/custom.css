@@ -1,12 +1,25 @@
+@font-face {
+  font-family: 'Konnect-Light';
+  src: url('/fonts/KonnectLight/Konnect-Light.eot');
+  src: url('/fonts/KonnectLight/Konnect-Light.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/KonnectLight/Konnect-Light.svg#Konnect-Light') format('svg'),
+       url('/fonts/KonnectLight/Konnect-Light.ttf') format('truetype'),
+       url('/fonts/KonnectLight/Konnect-Light.woff') format('woff'),
+       url('/fonts/KonnectLight/Konnect-Light.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 body {
-  font-family: Arial, Helvetica, Lato, sans-serif;
+  font-family: 'Konnect-Light', sans-serif;
 }
 /*! * AdminLTE v2.3.11 * Author: Almsaeed Studio * Website: Almsaeed Studio <http: //almsaeedstudio.com> * License: Open source - MIT * Please visit http: //opensource.org/licenses/MIT for more information!*/body,html {
     height: 100%}
 .layout-boxed body,.layout-boxed html {
     height: 100%}
 body {
-    font-family: 'Helvetica', sans-serif;
+    font-family: 'Konnect-Light';
     font-weight: 400;
     font-size: 16px;
     overflow-x: hidden;
@@ -86,7 +99,7 @@ body.hold-transition .content-wrapper,body.hold-transition .left-side,body.hold-
     padding-left: 15px;
     padding-right: 15px}
 .h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6 {
-    font-family: 'Lato', sans-serif;
+    font-family: 'Konnect-Light';
 }
 a {
     color: #494A4B}
@@ -150,7 +163,8 @@ a:active,a:focus,a:hover {
     background-color: transparent;
     background-image: none;
     padding: 15px 15px;
-    font-family: fontAwesome}
+    font-family: 'fontAwesome'
+}
 .main-header .sidebar-toggle:before {
     content: "\f0c9"}
 .main-header .sidebar-toggle:hover {
@@ -180,7 +194,7 @@ a:active,a:focus,a:hover {
     line-height: 50px;
     text-align: center;
     width: 230px;
-    font-family: "Arial",sans-serif;
+    font-family: 'Konnect-Light';
     padding: 0 15px;
     font-weight: 400;
     overflow: hidden}
@@ -341,7 +355,7 @@ a:active,a:focus,a:hover {
     margin-right: 3px}
 .sidebar-menu {
     font-size: 16px;
-    font-family: Arial;
+    font-family: 'Konnect-Light';
     list-style: none;
     margin: 0;
     padding: 0}
@@ -445,7 +459,7 @@ a:active,a:focus,a:hover {
     display: none!important;
     -webkit-transform: translateZ(0)}
 .sidebar-mini.sidebar-collapse .main-header .logo {
-    font-family: Arial;
+    font-family: 'Konnect-Light';
     width: 50px}
 .sidebar-mini.sidebar-collapse .main-header .logo>.logo-mini {
     display: block;
@@ -3282,7 +3296,7 @@ BLUE: rgb(0, 149, 219) */
 
 /* main sidebar */
 .skin-blue .main-sidebar {
-                      background-color: rgb(88, 88, 88);
+                      background-color: #fff;
                       }
 
 /* active selected tab in the sidebarmenu */
@@ -3303,7 +3317,8 @@ BLUE: rgb(0, 149, 219) */
                       }
 /* toggle button when hovered  */
  .skin-blue .main-header .navbar .sidebar-toggle:hover{
-                      background-color:  #707372;
+                      background-color: rgb(205, 22, 25); 
+                      color: #707372;
                       }
 /* background */
 /* body */
