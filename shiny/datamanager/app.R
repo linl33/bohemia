@@ -4,7 +4,7 @@ library(shinydashboard)
 source('global.R')
 
 header <- dashboardHeader(title = tags$a(href='http://databrew.cc',
-                                         tags$img(src='db_boh_logo.png', height='36px', width='136px', alt = 'DataBrew')))
+                                         tags$img(src='logo.png',height='32',width='36', alt = 'DataBrew')))
 sidebar <- dashboardSidebar(
     sidebarMenu(
         menuItem(
@@ -29,93 +29,7 @@ body <- dashboardBody(
     tabItems(
         tabItem(
             tabName="main",
-            uiOutput('ui_main'),
-            fluidPage( 
-                
-                fluidRow(
-                    column(6,
-                           h3('Geography'))
-                ),
-                fluidRow(
-                    column(6,
-                           selectInput('geo',
-                                       'Select a Geography level',
-                                       choices = c('Country', 'Region', 'District', 'Ward', 'Village', 'Hamlet'),
-                                       selected = 'Country')),
-                    column(6,
-                           # uioutputs to depend on what level the user specifies
-                           uiOutput('geo_region'),
-                           uiOutput('geo_district'),
-                           uiOutput('geo_ward'),
-                           uiOutput('geo_village'),
-                           uiOutput('geo_hamlet'))
-                ),
-                br(), br(),
-                fluidRow(
-                    column(3,
-                           box(id = 'questionnaire',
-                               title = 'Questionnaires completed',
-                               status = 'primary', 
-                               solidHeader = TRUE, 
-                               width = 12)),
-                    column(3,
-                           box(id = 'num_fw',
-                               title = 'Number of active fieldworkers',
-                               status = 'success', 
-                               solidHeader = TRUE, 
-                               width = 12)),
-                    column(3,
-                           box(id = 'other_1',
-                               title = 'Other stats',
-                               status = 'info', 
-                               solidHeader = TRUE, 
-                               width = 12)
-                    ),
-                    column(3,
-                           box(id = 'other_2',
-                               title = 'Other stats',
-                               status = 'warning', 
-                               solidHeader = TRUE, 
-                               width = 12))
-                    
-                ), 
-                br(),
-                fluidRow(
-                    column(6,
-                           h3('Fieldworkers'))
-                ),
-                br(), br(),
-                fluidRow(
-                    column(6,
-                           selectInput('field_worker',
-                                       'Select Fieldworker by ID',
-                                       choices = c('011', '235', '813', '213'),
-                                       selected = '011'))
-                ),
-                br(),
-                fluidRow(
-                    column(6, 
-                           h4('Fieldworker Performance'),
-                           dataTableOutput('fw_performance')),
-                    column(6,
-                           h4('Map of Households Visited'),
-                           leafletOutput('fw_map'))
-                ),
-                br(), br(),
-                fluidRow(
-                    column(6,
-                           box(id = 'alerts',
-                               title = 'Alerts',
-                               status = 'danger',
-                               footer = 'Errors and discrepancies')),
-                    column(6,
-                           box(id = 'actions',
-                               title = 'Action items',
-                               status = 'danger'))
-                    
-                )
-            )
-            
+            uiOutput('ui_main')
         ),
         tabItem(
             tabName = 'about',
@@ -157,7 +71,89 @@ server <- function(input, output, session) {
             fluidPage(h3('This is the logged-in UI'),
                       actionButton('log_out_button',
                                    'Click here to log out',
-                                   icon = icon('wave')))
+                                   icon = icon('wave')),
+                      
+                      fluidRow(
+                          column(6,
+                                 h3('Geography'))
+                      ),
+                      fluidRow(
+                          column(6,
+                                 selectInput('geo',
+                                             'Select a Geography level',
+                                             choices = c('Country', 'Region', 'District', 'Ward', 'Village', 'Hamlet'),
+                                             selected = 'Country')),
+                          column(6,
+                                 # uioutputs to depend on what level the user specifies
+                                 uiOutput('geo_region'),
+                                 uiOutput('geo_district'),
+                                 uiOutput('geo_ward'),
+                                 uiOutput('geo_village'),
+                                 uiOutput('geo_hamlet')),
+                      ),
+                      br(), br(),
+                      fluidRow(
+                          column(3,
+                                 box(id = 'questionnaire',
+                                     title = 'Questionnaires completed',
+                                     status = 'primary', 
+                                     solidHeader = TRUE, 
+                                     width = 12)),
+                          column(3,
+                                 box(id = 'num_fw',
+                                     title = 'Number of active fieldworkers',
+                                     status = 'success', 
+                                     solidHeader = TRUE, 
+                                     width = 12)),
+                          column(3,
+                                 box(id = 'other_1',
+                                     title = 'Other stats',
+                                     status = 'info', 
+                                     solidHeader = TRUE, 
+                                     width = 12)
+                          ),
+                          column(3,
+                                 box(id = 'other_2',
+                                     title = 'Other stats',
+                                     status = 'warning', 
+                                     solidHeader = TRUE, 
+                                     width = 12))
+                          
+                      ), 
+                      br(),
+                      fluidRow(
+                          column(6,
+                                 h3('Field workers'))
+                      ),
+                      br(), br(),
+                      fluidRow(
+                          column(6,
+                                 selectInput('field_worker',
+                                             'Select Field worker ID',
+                                             choices = c('011', '235', '813', '213'),
+                                             selected = '011'))
+                      ),
+                      br(),
+                      fluidRow(
+                          column(6, 
+                                 dataTableOutput('fw_performance')),
+                          column(6,
+                                 leafletOutput('fw_map'))
+                      ),
+                      br(), br(),
+                      fluidRow(
+                          column(6,
+                                 box(id = 'alerts',
+                                     title = 'Alerts',
+                                     status = 'danger',
+                                     footer = 'Errors and discrepancies')),
+                          column(6,
+                                 box(id = 'actions',
+                                     title = 'Action items',
+                                     status = 'danger')),
+                          
+                      )
+            )
         } else {
             #UI if the user is not logged in
             fluidPage(h3('Log in to see cool stuff'),
