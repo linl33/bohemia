@@ -1,12 +1,13 @@
 import pygsheets
 import xlrd
 import os
+import shutil
 #import numpy as np
 
 # Authorize by using this: https://pygsheets.readthedocs.io/en/latest/authorization.html
 gc = pygsheets.authorize('../credentials/gsheets_oauth.json')
 
-doc = 'who_va_odk'
+doc = 'va'
 sh = gc.open(doc)
 wks = sh.sheet1
 
