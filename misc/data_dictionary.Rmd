@@ -23,7 +23,7 @@ library(bohemia)
 ```
 
 ```{r}
-data_dict <- generate_data_dictionary(path = '../forms/xls/census.xls')
+data_dict <- generate_data_dictionary(path = '../forms/census/census.xls')
 ```
 
 ```{r, results = 'asis'}
