@@ -175,24 +175,33 @@ server <- function(input, output, session) {
     
     # placehold for mozambique field worker table 
     output$fw_performance <- DT::renderDataTable({
-        fake_data <- data_frame('fw_id' = c('012', '034', '054'),
-                                'Number of houses surveyed' = c(3, 1, 5),
-                                'Number of houses to go' = c(6, 6, 8),
-                                'Average duration of interviews (minutes)' = c(40, 34.5, 56.4))
-        datatable(fake_data)
-        
+        # check if user is logged in
+        li <- session_data$logged_in
+        # if logged in, show table
+        if(li){
+            fake_data <- data_frame('fw_id' = c('012', '034', '054'),
+                                    'Number of houses surveyed' = c(3, 1, 5),
+                                    'Number of houses to go' = c(6, 6, 8),
+                                    'Average duration of interviews (minutes)' = c(40, 34.5, 56.4))
+            datatable(fake_data)
+        } else {
+            NULL
+        }
     })
     # placeholder for mozambique map 
     output$fw_map <- renderLeaflet({
-        library(leaflet)
-        moz <- getData(country = 'MOZ', level = 0)
-        
-        
-        leaflet() %>%
-            addProviderTiles("Esri.WorldImagery") %>%
-            addPolygons(data = moz)
+        # check if user is logged in
+        li <- session_data$logged_in
+        # if logged in, show map
+        if(li){
+            moz <- getData(country = 'MOZ', level = 0)
+            leaflet() %>%
+                addProviderTiles("Esri.WorldImagery") %>%
+                addPolygons(data = moz)
+        } else {
+            NULL
+        }
     })
-    
 }
 
 shinyApp(ui, server)#
