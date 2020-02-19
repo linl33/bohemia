@@ -3,17 +3,23 @@
 #' Generate a data dictionary from a XLSform
 #' @param path
 #' @param language Language (default English)
+#' @param include_variable_names Whether to include variable names
+#' @param include_relevant Whether to include relevance
+#' @param shorten_many At what number of choices should "etc" appear (instead of further choices)
+#' @param choices_names_too Whether to include choice names too
 #' @return A data dictionary
 #' @import readxl
 #' @import dplyr
+#' @import stringr
 #' @export
 
 
 
 
-generate_data_dictionary <- function(path, language = 'English'){
+generate_data_dictionary <- function(path, language = 'English', include_variable_names = FALSE, include_relevant = TRUE, shorten_many = 15, choice_names_too = FALSE){
   # library(readxl)
   # library(dplyr)
+  # library(stringr)
   # path = '../../../forms/xls/census.xls'
   
   # Read in the data
@@ -50,6 +56,11 @@ generate_data_dictionary <- function(path, language = 'English'){
     unlist(lapply(strsplit(x, ' '), function(y){y[1]}))
   }
   
+  # Define function for rewording relevance
+  relevance_reworder <- function(input_string){
+    return(paste0('`', input_string, '`'))
+  }
+  
   # Get the type of each var
   survey$variable_type <- NA
   for(i in 1:nrow(survey)){
@@ -63,7 +74,7 @@ generate_data_dictionary <- function(path, language = 'English'){
   survey$question <- unlist(survey[,paste0('label::', language)])
   survey$hint <- unlist(survey[,paste0('hint::', language)])
   choices$choice <- unlist(choices[,paste0('label::', language)])
-  
+  external_choices$choice <- unlist(external_choices[,paste0('label::', language)])
   # Loop
   counter <- 0
   out_list <- list()
@@ -73,11 +84,21 @@ generate_data_dictionary <- function(path, language = 'English'){
     if(!is.na(this_row$type_label)){
       message(i)
       counter <- counter + 1
+      
+      # relevance
+      if(is.na(this_row$relevant)){
+        relevance <- ' '
+      } else {
+        relevance <- this_row$relevant
+        relevance <- relevance_reworder(relevance)
+      }
+      
       out <- tibble(
         `Variable name` = this_row$name,
         `Variable type` = this_row$type_label,
           Question = this_row$question,
-          Options = ' '
+          Options = ' ',
+        Relevance = relevance
       )
       if(this_row$variable_type %in% c('select_one', 'select_one_external', 'select_multiple')){
         
@@ -97,13 +118,21 @@ generate_data_dictionary <- function(path, language = 'English'){
           the_choice_levels <- choices %>% dplyr::filter(list_name == choice_name) %>% .$name
         }
         # Now concatenate
-        combined_choices <-
-          ifelse(the_choice_levels == the_choices,
-                 the_choice_levels,
-                 paste0(the_choice_levels, 
-                        ' (',
-                        the_choices, ')'))
-        the_choices <- paste0(combined_choices, collapse = ' | ')
+        if(length(the_choices) > shorten_many){
+          the_choices <- c(the_choices[1:shorten_many], '...')
+          the_choice_levels <- c(the_choice_levels[1:shorten_many], ', continued')
+        }
+        if(choice_names_too){
+          the_choices <-
+            ifelse(the_choice_levels == the_choices,
+                   the_choice_levels,
+                   paste0(the_choice_levels, 
+                          ' (',
+                          the_choices, ')'))
+        } 
+        the_choices <- paste0(the_choices, collapse = ' | ')
+        
+        
         out$Options <- the_choices
       }
       out_list[[counter]] <- out
@@ -117,15 +146,23 @@ generate_data_dictionary <- function(path, language = 'English'){
     names(out) <- c("Jina linaloweza kutekelezwa",
                     "Aina inayobadilika",
                     "Swali",
-                    "Chaguzi")
+                    "Chaguzi",
+                    'Relevance')
   }
   if(language == 'Portuguese'){
     names(out) <- c("Nome variável",
                     "Tipo variável",
                     "Questão",
-                    'Opções')
+                    'Opções',
+                    'Relevance')
   }
 
+  if(!include_variable_names){
+    out <- out[,2:5]
+  }
+  if(!include_relevant){
+    out <- out[,1:(ncol(out)-1)]
+  }
   return(out)
 }
 

@@ -1,6 +1,6 @@
 ---
-title: "Data dictionary"
-output: html_document
+title: "Census"
+output: pdf_document
 ---
 
 
@@ -23,7 +23,17 @@ library(bohemia)
 ```
 
 ```{r}
-data_dict <- generate_data_dictionary(path = '../forms/census/census.xls')
+source('../rpackage/bohemia/R/generate_data_dictionary.R')
+library(readxl)
+library(dplyr)
+library(knitr)
+library(stringr)
+data_dict <- generate_data_dictionary(path = '../forms/census/census.xls',
+                                      language = 'Swahili', 
+                                      include_variable_names = FALSE, 
+                                      include_relevant = FALSE, 
+                                      shorten_many = 15, 
+                                      choice_names_too = FALSE)
 ```
 
 ```{r, results = 'asis'}
