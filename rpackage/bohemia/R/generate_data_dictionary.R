@@ -78,10 +78,11 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
   # Loop
   counter <- 0
   out_list <- list()
+  the_choices <- ' '
   for(i in 1:nrow(survey)){
     this_row <- survey[i,]
     
-    if(!is.na(this_row$type_label)){
+    if(!is.na(this_row$type_label) & !is.na(this_row$question)){
       message(i)
       counter <- counter + 1
       
@@ -93,13 +94,8 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
         relevance <- relevance_reworder(relevance)
       }
       
-      out <- tibble(
-        `Variable name` = this_row$name,
-        `Variable type` = this_row$type_label,
-          Question = this_row$question,
-          Options = ' ',
-        Relevance = relevance
-      )
+      the_choices <- ' '
+      
       if(this_row$variable_type %in% c('select_one', 'select_one_external', 'select_multiple')){
         
         external <- FALSE
@@ -111,11 +107,14 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
           choice_name <- unlist(lapply(strsplit(this_row$type, ' '), function(x){x[2]}))
         }
         if(external){
-          the_choices <- external_choices %>% dplyr::filter(list_name == choice_name) %>% .$choice
-          the_choice_levels <- external_choices %>% dplyr::filter(list_name == choice_name) %>% .$name
+          the_choices <- external_choices %>% dplyr::filter(list_name == choice_name)  %>% dplyr::filter(!duplicated(choice)) %>% .$choice
+          the_choice_levels <- external_choices %>% dplyr::filter(list_name == choice_name)  %>% dplyr::filter(!duplicated(choice)) %>% .$name
         } else {
-          the_choices <- choices %>% dplyr::filter(list_name == choice_name)  %>% .$choice
-          the_choice_levels <- choices %>% dplyr::filter(list_name == choice_name) %>% .$name
+          the_choices <- choices %>% dplyr::filter(list_name == choice_name)  %>% dplyr::filter(!duplicated(choice)) %>% .$choice
+          the_choice_levels <- choices %>% dplyr::filter(list_name == choice_name)  %>% dplyr::filter(!duplicated(choice)) %>% .$name
+          if(choice_name == 'household_members'){
+            the_choices <- the_choice_levels <- '(Drop-down of household members)'
+          } 
         }
         # Now concatenate
         if(length(the_choices) > shorten_many){
@@ -130,11 +129,18 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
                           ' (',
                           the_choices, ')'))
         } 
-        the_choices <- paste0(the_choices, collapse = ' | ')
+        # the_choices <- paste0(the_choices, collapse = ' | ')
         
         
-        out$Options <- the_choices
       }
+      out <- tibble(
+        `Variable name` = this_row$name,
+        `Variable type` = this_row$type_label,
+        Question = this_row$question,
+        Options = the_choices,
+        Relevance = relevance
+      )
+      
       out_list[[counter]] <- out
     }
   }
@@ -163,6 +169,7 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
   if(!include_relevant){
     out <- out[,1:(ncol(out)-1)]
   }
+  
   return(out)
 }
 
