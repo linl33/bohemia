@@ -1,6 +1,8 @@
 ---
 title: "Census"
-output: pdf_document
+output:
+  pdf_document:
+    latex_engine: xelatex
 ---
 
 
@@ -22,21 +24,102 @@ opts_chunk$set(comment = NA,
 library(bohemia)
 ```
 
+
+(... = list of options continues)
+
 ```{r}
 source('../rpackage/bohemia/R/generate_data_dictionary.R')
 library(readxl)
 library(dplyr)
 library(knitr)
 library(stringr)
+library(kableExtra)
 data_dict <- generate_data_dictionary(path = '../forms/census/census.xls',
-                                      language = 'Swahili', 
+                                      language = 'English', 
                                       include_variable_names = FALSE, 
                                       include_relevant = FALSE, 
                                       shorten_many = 15, 
                                       choice_names_too = FALSE)
+# Identify which are 
 ```
 
-```{r, results = 'asis'}
-knitr::kable(data_dict)
+```{r}
+
+# dt_lb <- data.frame(
+# Item = c("Hello\nWorld", "This\nis a cat"),
+# Value = c(10, 100)
+# )
+# dt_lb %>%
+# mutate_all(linebreak) %>%
+# kable("latex", booktabs = T, escape = F,
+# col.names = linebreak(c("Item\n(Name)", "Value\n(Number)"), align = "c"))
+
+# Get rid of repeat rows
+deletesa <-  rep(FALSE, nrow(data_dict))
+for(i in 2:nrow(data_dict)){
+  # message(i)
+  samea <- as.character(unlist(data_dict[i,1])) == as.character(unlist(data_dict[i-1,1]))
+      sameb <- as.character(unlist(data_dict[i,2])) == as.character(unlist(data_dict[i-1,2]))
+
+  if(!is.na(samea) & !is.na(sameb)){
+    if(samea & sameb){
+    deletesa[i] <- TRUE
+  }
+  }
+}
+
+data_dict[deletesa,1] <- ' '
+data_dict[deletesa,2] <- ' '
+
+# Deal with line breaks
+line_breaker <- function(x,n = 10){
+  gsub(paste0('(.{1,',n,'})(\\s|$)'), '\\1\n', x)
+}
+nn <- 50
+for(i in 1:nrow(data_dict)){
+  for(j in 2){
+    # message(i)
+    val <- as.character(unlist(data_dict[i,j]))
+    if(!is.na(val)){
+      if(nchar(val) > nn){
+      data_dict[i,j] <- line_breaker(val, nn)
+    }
+    }
+  }
+}
+
+# removes <- which(grepl('_', data_dict$Swali, fixed = T))
+# dd <- data_dict[!1:nrow(data_dict) %in% removes,]
+
+dd <- data_dict
+trim.trailing <- function (x) sub("\\n+$", "", x)
+dd[,2] <- trim.trailing(gsub('_', ' ', gsub('$', '', as.character(unlist(dd[,2])), fixed = TRUE), fixed = TRUE))
+
+
+dd %>%
+  mutate_all(linebreak) %>%
+  kable("latex", escape=F, longtable = TRUE,
+        linesep = "",
+        booktabs = T) %>%
+  kable_styling(font_size = 9,
+                full_width = T,
+                latex_options = c('repeat_header')) %>%
+   column_spec(2, width = "7cm")
+#%>%
+#   kable_styling(full_width = T,
+#                 font_size = 9,
+#                 latex_options = 
+#                   c("striped",
+#                     "repeat_header")) %>%
+  #%>%
+  # kable_styling()
+  # collapse_rows(2)
+             # booktabs = T,
+             # escape = FALSE, col.names = linebreak(names(data_dict)), align = "c")
+
+
+  # kable_styling(latex_options = c("repeat_header", full_width = T)) %>%
+  # collapse_rows(columns = 1:2, latex_hline = "major", valign = "middle")
+# kable_styling(latex_options = "striped")
 # data_dict
 ```
