@@ -58,7 +58,8 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
   
   # Define function for rewording relevance
   relevance_reworder <- function(input_string){
-    return(paste0('`', input_string, '`'))
+    # return(paste0('`', input_string, '`'))
+    return(input_string)
   }
   
   # Get the type of each var
@@ -164,7 +165,7 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
   }
 
   if(!include_variable_names){
-    out <- out[,2:5]
+    out <- out[,!names(out) %in% names(out)[1]]
   }
   if(!include_relevant){
     out <- out[,1:(ncol(out)-1)]
