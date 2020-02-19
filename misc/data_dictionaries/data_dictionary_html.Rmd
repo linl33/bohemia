@@ -1,0 +1,103 @@
+---
+title: "Census"
+output: html_document
+params:
+    language: 'English'
+    relevant: TRUE
+    include_variable_names: TRUE
+    choice_names_too: TRUE
+    invisibilize: TRUE
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+library(bohemia)
+```
+
+
+(... = list of options continues)
+
+```{r}
+source('../../rpackage/bohemia/R/generate_data_dictionary.R')
+library(readxl)
+library(dplyr)
+library(knitr)
+library(stringr)
+library(kableExtra)
+lang <- params$language
+rel <- params$relevant
+var <- params$include_variable_names
+cn <- params$choice_names_too
+invis <- params$invisibilize
+data_dict <- generate_data_dictionary(path = '../../forms/census/census.xls',
+                                      language = lang, 
+                                      include_variable_names = var, 
+                                      include_relevant = rel, 
+                                      shorten_many = 15, 
+                                      choice_names_too = cn,
+                                      invisibilize = invis)
+```
+
+```{r}
+dd <- data_dict
+trim.trailing <- function (x) sub("\\n+$", "", x)
+
+clean_up <- function(zz){
+  return(as.character(unlist(zz)))
+  # trim.trailing(
+  #   gsub(']', '', 
+  #        gsub('[', '',
+  #   gsub('_', ' ', 
+  #        gsub('$', '', as.character(unlist(zz)), fixed = TRUE), fixed = TRUE),
+  #   fixed = TRUE), fixed = TRUE))
+}
+
+make_codey <- function(zz){
+  # if(nchar(gsub(' ', '', as.character(zz))) > 0){
+  #   out <- paste0('`', zz, '`')
+  # } else {
+  #   out <- zz
+  # }
+  return(zz)
+}
+make_codey <- Vectorize(make_codey)
+
+question_var <- which(names(dd) %in% c('Questão', 'Swali', 'Question'))[1]
+dd[,question_var] <- clean_up(dd[,question_var])
+if(rel){
+  rel_var <- which(names(dd) %in% c('Relevance'))[1]
+  dd[,rel_var] <- make_codey(clean_up(dd[,rel_var]))
+}
+if(var){
+  var_var <- which(names(dd) %in% c('Variable name',
+                                    "Nome variável",
+                                    "Jina linaloweza kutekelezwa"))[1]
+  dd[,var_var] <- make_codey(clean_up(dd[,var_var]))
+}
+
+
+# Define hlines after
+hlas <- which(trimws(as.character(unlist(dd[,1]))) != '')
+
+out <- dd %>%
+  kable("html") %>%
+  # kable_styling(fixed_thead = T,
+  #               bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  row_spec(hlas, color = "white", background = "#484848")
+
+out
+```

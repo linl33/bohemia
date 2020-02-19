@@ -10,7 +10,8 @@ generate_data_dictionary(
   include_variable_names = FALSE,
   include_relevant = TRUE,
   shorten_many = 15,
-  choice_names_too = FALSE
+  choice_names_too = FALSE,
+  invisibilize = FALSE
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ generate_data_dictionary(
 \item{include_relevant}{Whether to include relevance}
 
 \item{shorten_many}{At what number of choices should "etc" appear (instead of further choices)}
+
+\item{invisibilize}{Whethr to invisiblize repeated rows in the question/type columns}
 
 \item{choices_names_too}{Whether to include choice names too}
 }

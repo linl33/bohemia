@@ -7,6 +7,7 @@
 #' @param include_relevant Whether to include relevance
 #' @param shorten_many At what number of choices should "etc" appear (instead of further choices)
 #' @param choices_names_too Whether to include choice names too
+#' @param invisibilize Whethr to invisiblize repeated rows in the question/type columns
 #' @return A data dictionary
 #' @import readxl
 #' @import dplyr
@@ -16,7 +17,8 @@
 
 
 
-generate_data_dictionary <- function(path, language = 'English', include_variable_names = FALSE, include_relevant = TRUE, shorten_many = 15, choice_names_too = FALSE){
+generate_data_dictionary <- function(path, language = 'English', include_variable_names = FALSE, include_relevant = TRUE, shorten_many = 15, choice_names_too = FALSE,
+                                     invisibilize = FALSE){
   # library(readxl)
   # library(dplyr)
   # library(stringr)
@@ -169,6 +171,44 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
   }
   if(!include_relevant){
     out <- out[,1:(ncol(out)-1)]
+  }
+  
+  if(invisibilize){
+    if(include_variable_names){
+      col_numbers <- 1:3
+    } else {
+      col_numbers <-1:2
+    }
+    if(include_relevant){
+      col_numbers <- c(col_numbers, ncol(out))
+    }
+    deletesa <-  rep(FALSE, nrow(out))
+    for(i in 2:nrow(out)){
+      # message(i)
+      samea <- as.character(unlist(out[i,col_numbers[1]])) == as.character(unlist(out[i-1,col_numbers[1]]))
+      sameb <- as.character(unlist(out[i,col_numbers[2]])) == as.character(unlist(out[i-1,col_numbers[2]]))
+      if(length(col_numbers) == 3){
+        samec <- as.character(unlist(out[i,col_numbers[3]])) == as.character(unlist(out[i-1,col_numbers[3]]))
+      }
+      if(length(col_numbers) == 4){
+        samec <- as.character(unlist(out[i,col_numbers[4]])) == as.character(unlist(out[i-1,col_numbers[4]]))
+      }
+      
+      if(!is.na(samea) & !is.na(sameb)){
+        if(samea & sameb){
+          deletesa[i] <- TRUE
+        }
+      }
+    }
+    
+    out[deletesa,1] <- ' '
+    out[deletesa,2] <- ' '
+    if(length(col_numbers) == 3){
+      out[deletesa,3] <- ' '
+    }
+    if(length(col_numbers) == 4){
+      out[deletesa,4] <- ' '
+    }
   }
   
   return(out)
