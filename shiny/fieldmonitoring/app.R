@@ -29,7 +29,10 @@ body <- dashboardBody(
     tabItems(
         tabItem(
             tabName="main",
-            uiOutput('ui_main')
+            uiOutput('ui_main')),
+        tabItem(
+            tabName = 'server_status',
+            uiOutput('ui_server_status')
         ),
         tabItem(
             tabName = 'about',
@@ -163,6 +166,27 @@ server <- function(input, output, session) {
         }
     })
     
+    output$ui_server_status <- renderUI({
+        # See if the user is logged in
+        li <- session_data$logged_in
+        
+        # UI if the user is logged in
+        if(li){
+            
+            
+            
+            fluidRow(
+                column(12, 
+                       dataTableOutput('server_activity'))
+            )
+            
+            
+        } else {
+            #UI if the user is not logged in
+            fluidPage(h3('Log in on main page to access content'))
+        }
+    })
+    
     # Observe the log-in / log-out buttons and update the session data
     observeEvent(input$log_in_button, {
         session_data$logged_in <- TRUE
@@ -196,6 +220,21 @@ server <- function(input, output, session) {
             leaflet() %>%
                 addProviderTiles("Esri.WorldImagery") %>%
                 addPolygons(data = moz)
+        } else {
+            NULL
+        }
+    })
+    
+    # table for server activity
+    output$server_activity <- DT::renderDataTable({
+        # check if user is logged in
+        li <- session_data$logged_in
+        # if logged in, show table
+        if(li){
+            fake_data <- data_frame('Server' = c('Spain', 'Moz', 'TZ'),
+                                    'Total memory (TB)' = c(10.5, 10.5, 25),
+                                    'Memory in use (TB)' = c(4.5, 3.2, 7.9))
+            datatable(fake_data)
         } else {
             NULL
         }
