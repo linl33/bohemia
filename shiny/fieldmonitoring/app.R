@@ -3,8 +3,7 @@ library(shinydashboard)
 
 source('global.R')
 
-header <- dashboardHeader(title = tags$a(href='http://databrew.cc',
-                                         tags$img(src='logo.png',height='32',width='36', alt = 'DataBrew')))
+header <- dashboardHeader(title = tags$a(tags$img(src='logo.png',height='32',width='36', alt = 'DataBrew')))
 sidebar <- dashboardSidebar(
     sidebarMenu(
         menuItem(
@@ -56,7 +55,7 @@ body <- dashboardBody(
 )
 
 # UI
-ui <- dashboardPage(header, sidebar, body, skin="blue")
+ui <- dashboardPage(header, sidebar, body, skin="blue", title = 'databrew')
 
 # Server
 server <- function(input, output, session) {
