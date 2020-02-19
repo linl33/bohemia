@@ -1,2 +1,7 @@
 library(dplyr)
-library(bohemia)
+library(DT)
+library(leaflet)
+library(ggmap)
+library(raster)
+
+# library(bohemia)
