@@ -724,7 +724,6 @@ server <- function(input, output) {
   output$quant_table <- DT::renderDataTable({
     ok_this_hamlet <- FALSE
     hamlet <- shp_hamlet()
-    # save(hamlet, file = 'hamlet.RData')
     if(!is.null(hamlet)){
       if(nrow(hamlet) > 0){
         ok_this_hamlet <- TRUE
