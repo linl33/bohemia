@@ -73,8 +73,7 @@ mopeia_hamlet_details <-
   mutate(Village = recode(Village,
                           'Mopeia Sede' = 'Mopeia Sede/Cuacua'))
 mopeia_hamlet_details <- mopeia_hamlet_details %>% arrange(id)
-usethis::use_data(mopeia_hamlet_details,
-                  overwrite = TRUE)
+
 
 
 cen1 <- read_csv('mopeia_census_cost/Census_2016_10-12-2019.csv')
@@ -131,6 +130,11 @@ library(tidylog)
 mopeia_households <- mopeia_households %>%
   filter(!joe_id %in% bad_ids$id)
 
+# get number of households by hamlet
+hhn <- mopeia_households %>% group_by(id) %>% summarise(households = n())
+mopeia_hamlet_details <- left_join(mopeia_hamlet_details, hhn)
+usethis::use_data(mopeia_hamlet_details,
+                  overwrite = TRUE)
 
 # # For eldo to correct:
 # sort(unique(cen$id[!cen$id %in% correct$id]))
@@ -273,6 +277,7 @@ out <- SpatialPolygonsDataFrame(out, bairros, match.ID = TRUE)
 
 # Save
 mopeia_hamlets <- out
+mopeia_hamlets@data <- left_join(mopeia_hamlets@data, hhn)
 usethis::use_data(mopeia_hamlets, overwrite = TRUE)
 
 # Also make TZA wards (#Decided not to - not more granular than what we already had)

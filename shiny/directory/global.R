@@ -4,6 +4,8 @@ library(ggplot2)
 library(tidyverse)
 library(RPostgreSQL)
 library(DT) # devtools::install_github('rstudio/DT')
+library(readxl)
+library(shinyjs)
 
 # # source scripts
 source('credentials_connect.R')
@@ -55,18 +57,17 @@ check_password <- function(user, password, the_users){
 }
 
 # Function for adding new user
-add_user <- function(user, password, first_name, last_name, position, institution, users){
+add_user <- function(user, password, first_name, last_name, position, institution, tags = NA, users){
   if(user %in% users$email){
-    x <- paste0('An account for ', user, ' already exists.')
+    x <- FALSE
+    message(paste0('---A database entry for ', user, ' already exists. Skipping.'))
   } else {
-    message('Account just created with the following credentials')
-    message('---User: ', user)
-    message('---Password: ', password)
+    message('---A database entry has just been created for ', user)
     # Add code here to add user to database
     df <- tibble(first_name,
                  last_name,
                  position, institution,
-                 email = user, tags = NA,
+                 email = user, tags,
                  admin = FALSE,
                  password,
                  contact_added = Sys.Date())
@@ -76,11 +77,22 @@ add_user <- function(user, password, first_name, last_name, position, institutio
                  row.names = FALSE,
                  overwrite = FALSE,
                  append = TRUE)
-    x <- paste0('Just created an account for user: ',
-                user, ', with password: ', password)
+    x <- TRUE
+    # x <- paste0('Just created an account for user: ',
+    #             user, ', with password: ', password)
   }
   return(x)
 }
+
+# Define an empty csv for upload
+upload_csv <- tibble(Email = '',
+                     `First name` = '',
+                     `Last name` = '',
+                     `Position` = '',
+                     Institution = '',
+                     tags = '')
+# upload_csv <- upload_csv[0,]
+# write_csv(upload_csv, 'upload_csv.csv')
 
 
 # Read in the users data from the database
@@ -90,4 +102,5 @@ get_users <- function(){
 }
 users <- get_users()
 users <- users %>% arrange(first_name)
+
 

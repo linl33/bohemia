@@ -1,6 +1,7 @@
 import pygsheets
 import xlrd
 import os
+import shutil
 #import numpy as np
 
 # Authorize by using this: https://pygsheets.readthedocs.io/en/latest/authorization.html
@@ -29,4 +30,9 @@ wks.export(pygsheets.ExportType.XLS, doc)
 ## Convert to xml
 os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
 
-print("Successfully created the following documents:\n---" + doc + '.xls\n---' + doc +'.xml')
+# Move
+shutil.move(doc + '.xls', "../forms/census/" + doc + '.xls')
+shutil.move(doc + '.xml', "../forms/census/" + doc + '.xml')
+shutil.move('itemsets.csv', '../forms/census/itemsets.csv')
+
+print('Done. Docs in forms/census.')

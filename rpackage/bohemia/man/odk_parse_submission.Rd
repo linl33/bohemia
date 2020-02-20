@@ -15,6 +15,7 @@ Convert the xml data from an ODK form submission to a dataframe
 \examples{
 # Get a list of forms
 fl <- odk_list_forms()
+# # Keep only the one named "Recon"
 recon <- fl \%>\% filter(name == 'Recon')
 # Capture its secondary idea (slow)
 id2 <- odk_get_secondary_id(id = recon$id)
@@ -22,6 +23,6 @@ id2 <- odk_get_secondary_id(id = recon$id)
 submissions <- odk_list_submissions(url = 'https://bohemia.systems', id = 'recon', user = 'data', password = 'data')
 # Capture an individual submission
 submission <- odk_get_submission(url = 'https://bohemia.systems', id = recon$id, id2 = id2, uuid = submissions[1], user = 'data', password = 'data')
-# Parse the submission into R format
-odk_parse_submission(xml = submission)
+#' # Parse the submission into R format
+#' odk_parse_submission(xml = submission)
 }

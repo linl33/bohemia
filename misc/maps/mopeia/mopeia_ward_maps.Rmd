@@ -1,0 +1,262 @@
+---
+title: "Mopeia wrd maps"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.path = 'figures/')
+```
+
+```{r}
+library(tidyverse)
+library(bohemia)
+library(sp)
+library(ggrepel)
+library(ggthemes)
+library(databrew)
+library(extrafont)
+library(leaflet)
+library(webshot)
+# # install_github("wch/webshot")
+library(htmltools)
+library(rgeos)
+# library(mapview)
+
+# Get health facilities
+hf <- bohemia::health_facilities
+
+# Get polygon
+shp <- shp_poly <- bohemia::mopeia_hamlets
+
+shp@data$id <- 1:nrow(shp)
+shp <- fortify(shp)
+shp_poly@data$id <- as.character(1:nrow(shp_poly))
+shp <- left_join(shp, shp_poly@data %>% dplyr::select(id, village))
+# Keep only Mopeia
+hf <- hf %>%
+  filter(district == 'Mopeia')
+
+# Get roads, water, etc.
+roads <- roads_shp <- bohemia::mopeia_roads
+water <- water_shp <- bohemia::mopeia_water
+waterways <- waterways_shp <- bohemia::mopeia_waterways
+roads <- fortify(roads)
+water <- fortify(water)
+waterways <- fortify(waterways)
+water <- bind_rows(water, waterways)
+```
+
+```{r}
+hf$long <- hf$lng
+chunk_list <- list()
+for(i in 1:nrow(shp_poly)){
+  this_shp_poly <- shp_poly[i,]
+  this_id <- this_shp_poly$village
+  this_shp <- shp %>% filter(village == this_id)
+  this_hf <- hf %>% filter(!is.na(lng))
+  coordinates(this_hf) <- ~lng+lat
+  proj4string(this_hf) <- proj4string(this_shp_poly)
+  this_hf <- this_hf[!is.na(over(this_hf, polygons(this_shp_poly))),]
+  if(nrow(this_hf) > 0){
+    this_hf <- data.frame(this_hf) %>%
+      mutate(long = lng)
+  } 
+  
+  this_water <- water_shp[!is.na(over(water_shp, polygons(this_shp_poly))),]
+  this_water <- fortify(this_water)
+  # these_roads <- intersect(roads_shp, this_shp_poly)
+  # these_roads <- rgeos::gIntersects(spgeom1 = roads_shp, polygons(this_shp_poly))
+  these_roads <- roads_shp[!is.na(over(roads_shp, polygons(this_shp_poly))),]
+  these_roads <- fortify(these_roads)
+  
+  if(nrow(this_water) == 0){
+    coords <- coordinates(this_shp_poly)
+    this_water <- data.frame(long = coords[1],
+                             lat = coords[2],
+                             group  = 1)
+      
+  }
+  if(nrow(these_roads) == 0){
+    coords <- coordinates(this_shp_poly)
+    these_roads <- data.frame(long = coords[1],
+                             lat = coords[2],
+                             group  = 1)
+  }
+  if(nrow(this_hf) == 0){
+    coords <- coordinates(this_shp_poly)
+    this_hf <- data.frame(long = coords[1],
+                          lng = coords[1],
+                             lat = coords[2],
+                             group  = 1)
+  }
+  
+  # Assign
+  assign(paste0('this_shp_poly', i),
+         this_shp_poly)
+  assign(paste0('this_hf', i),
+         this_hf)
+  
+  
+  # Make maps
+  assign(paste0('ga', i), {
+    ggplot() +
+    geom_polygon(data = this_shp,
+               aes(x = long,
+                   y = lat,
+                   group = group),
+               color = 'white',
+               fill = 'grey') +
+  geom_point(data = this_hf,
+             aes(x = lng,
+                 y = lat),
+             size = 0.6,
+             alpha = 0.6) +
+  coord_map() +
+  databrew::theme_simple() +
+  labs(x = 'Longitude',
+       y = 'Latitude',
+       title = this_id,
+       subtitle = paste0('(', nrow(this_hf), ' health facilities)'))
+  })
+  
+  assign(paste0('gb', i), {
+    ggplot() +
+      geom_polygon(data = shp,
+               aes(x = long,
+                   y = lat,
+                   group = group),
+               color = 'white',
+               fill = 'grey') +
+    geom_polygon(data = this_shp,
+               aes(x = long,
+                   y = lat,
+                   group = group),
+               color = 'white',
+               fill = 'darkred',
+               alpha = 0.6) +
+  # geom_point(data = hf,
+  #            aes(x = lng,
+  #                y = lat),
+  #            size = 0.3,
+  #            alpha = 0.6) +
+  coord_map() +
+  databrew::theme_simple() +
+  labs(x = 'Longitude',
+       y = 'Latitude',
+       title = paste0(this_id, ' (location in district)'))
+  })
+  
+   assign(paste0('gc', i), {
+    ggplot() +
+    geom_polygon(data = this_shp,
+               aes(x = long,
+                   y = lat,
+                   group = group),
+               color = 'white',
+               fill = 'grey') +
+  geom_point(data = this_hf,
+             aes(x = lng,
+                 y = lat),
+             size = 0.6,
+             alpha = 0.6) +
+       geom_path(data = this_water,
+                 aes(x = long,
+                     y = lat,
+                     group = group),
+                 color = 'blue') +
+       geom_path(data = these_roads,
+                 aes(x = long,
+                     y = lat,
+                     group = group),
+                 color = 'brown') +
+  coord_map() +
+  databrew::theme_simple() +
+  labs(x = 'Longitude',
+       y = 'Latitude',
+       title = paste0(this_id, ' (with connecting roads/rivers)'),
+       subtitle = paste0('Blue = water; darkred = roads'))
+  })
+   
+   this_chunk <- 
+    paste0(
+      '\n\n## ', 
+      this_id,
+      '\n\n',
+      '```{r}\n',
+      "leaflet() %>%
+        addProviderTiles(providers$OpenStreetMap) %>% 
+    addPolygons(data = shp_poly,
+              # fillColor = NA,
+              fillOpacity = 0,
+              stroke = 0.8,
+              weight = 0.8,
+              color = 'black') %>%
+        addPolygons(data = this_shp_poly", i, ",
+              # fillColor = NA,
+              fillOpacity = 0.5,
+              fillColor = 'red',
+              stroke = 0.2,
+              color = 'black',
+              weight = 1)\n"
+      ,
+    '```\n',
+      '```{r}\n',
+      'ga', i, '\ngb', i, '\ngc', i, '\n```\n\n```{r}\n',
+      "leaflet() %>%
+        addProviderTiles(providers$Esri.WorldImagery) %>% 
+        addPolygons(data =  this_shp_poly", i, ",
+              # fillColor = NA,
+              fillOpacity = 0,
+              stroke = 0.2,
+              color = 'white') %>%
+  addCircleMarkers(data = this_hf", i, ",
+  lng = this_hf", i, "$long,
+  lat = this_hf", i, "$lat,
+                   fillOpacity = 1,
+                   color = 'red',
+                   radius = 1)\n"
+      ,
+  
+      '```'
+    )
+   chunk_list[[i]] <- this_chunk
+}
+chunks <- do.call('c', chunk_list)
+```
+
+
+```{r}
+# chunks <- paste0("\n\n```{r}\n```\n")
+chunks <- paste0(chunks, collapse = '\n')
+
+# Write our order / child-calls to a doc
+file_connection <- file('children.Rmd')
+writeLines(paste0('---\noutput: html_document\n---\n\n', 
+                  chunks), 
+           file_connection)
+close(file_connection)
+```
+
+
+```{r child='children.Rmd', echo = FALSE, eval = TRUE}
+```
+
+```{r, results='hide', echo = FALSE}
+file.remove('children.Rmd')
+```
+
+
+
+
+
+
+
+

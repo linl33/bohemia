@@ -1,3 +1,18 @@
+## Quick deploy
+
+
+```
+# Local machine
+scp -r -i "/home/joebrew/.ssh/openhdskey.pem" /home/joebrew/Documents/bohemia/shiny/directory/ ubuntu@bohemia.team:/home/ubuntu/Documents
+
+# Remote machine
+sudo rm -r /srv/shiny-server/directory
+sudo cp -r /home/ubuntu/Documents/directory /srv/shiny-server/directory
+cd /srv/shiny-server
+sudo chmod 555 directory
+sudo systemctl restart shiny-server
+```
+
 # Admin guide for setting up the Bohemia directory shiny application
 
 The below guide is a walk-through of setting up the Bohemia directory shiny web application. Note, this guide was influenced by some of the steps [here](https://abndistro.com/post/2019/07/06/deploying-a-shiny-app-with-shiny-server-on-an-aws-ec2-instance/).
