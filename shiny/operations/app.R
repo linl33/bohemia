@@ -652,6 +652,7 @@ server <- function(input, output) {
     }
     if(ok){
       num_houses <- (mop_houses %>% filter(Hamlet %in% hamlet_name) %>% .$households)*1.25
+      num_houses <- round(num_houses)
     }
     return(num_houses)
   })
