@@ -25,18 +25,15 @@ make_ui <- function(li = FALSE,
 }
 
 # Generate the log-in UI
-make_log_in_ui <- function(li = FALSE){
+make_log_in_button <- function(li = FALSE){
   if(li){
-    fluidPage(h3('This is the logged-in UI'),
-              actionButton('log_out_button',
+    actionButton('log_out_button',
                            'Click here to log out',
-                           icon = icon('wave')))
+                           icon = icon('wave'))
   } else {
-    #UI if the user is not logged in
-    fluidPage(h3('Log in to see cool stuff'),
-              actionButton('log_in_button',
+    actionButton('log_in_button',
                            'Click here to log in',
-                           icon = icon('door')))
+                           icon = icon('door'))
   }
 }
 

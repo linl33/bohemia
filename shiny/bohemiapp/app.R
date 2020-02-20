@@ -6,7 +6,11 @@ source('global.R')
 ###########################################################################
 # HEADER
 ###########################################################################
-header <- dashboardHeader(title = tags$a(tags$img(src='logo.png',height='32',width='36', alt = 'BohemiApp')))
+header <- dashboardHeader(title = tags$a(tags$img(src='logo.png',height='32',width='36', alt = 'BohemiApp')),
+                          tags$li(class = 'dropdown',
+                                  tags$style(type='text/css', "#log_ui {margin-right: 10px; margin-left: 10px; font-size:80%; margin-top: 10px; margin-bottom: -12px;}"),
+                                  tags$li(class = 'dropdown',
+                                          uiOutput('log_ui'))))
 
 ###########################################################################
 # SIDEBAR
@@ -133,21 +137,35 @@ server <- function(input, output, session) {
     
     # Observe the log-in / log-out buttons and update the session data
     observeEvent(input$log_in_button, {
-        session_info$logged_in <- TRUE
+            showModal(modalDialog(
+                title = NULL,
+                easyClose = TRUE,
+                footer = NULL,
+                fade = TRUE,
+                fluidPage(actionButton('confirm_log_in',
+                                       'Log in'))
+            ))
     })
+    observeEvent(input$confirm_log_in,{
+        session_info$logged_in <- TRUE
+        removeModal()
+    })
+    
     observeEvent(input$log_out_button, {
         session_info$logged_in <- FALSE
+        removeModal()
     })
+  
     
     ###########################################################################
     # LOG-IN
     ###########################################################################
-    observeEvent(session_info$logged_in,{
-        li <- session_info$logged_in
-        if(li){
-            removeModal()
-        }
-    })
+    # observeEvent(session_info$logged_in,{
+    #     li <- session_info$logged_in
+    #     if(li){
+    #         removeModal()
+    #     }
+    # })
     
     ###########################################################################
     # UIs
@@ -155,17 +173,7 @@ server <- function(input, output, session) {
     
     # Main UI ##########################################################
     output$ui_main <- renderUI({
-        # See if the user is logged in
         li <- session_info$logged_in
-        if(!li){
-            showModal(modalDialog(
-                title = NULL,
-                easyClose = TRUE,
-                footer = NULL,
-                fade = TRUE,
-                make_log_in_ui(li)
-            ))
-        }
         placeholder(li)
                 
     })
@@ -327,7 +335,16 @@ server <- function(input, output, session) {
     # UI ELEMENTS
     ###########################################################################
     
+    # Meta UI elements (ie, those that go across tabs) ####################
+    
+    # Log in / out button in the upper right
+    output$log_ui <- renderUI({
+        li <- session_info$logged_in
+        make_log_in_button(li)
+    })
+    
     # Main UI elements ####################################################
+    
 
     # Field monitoring UI elements ########################################
     
