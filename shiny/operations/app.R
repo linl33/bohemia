@@ -640,6 +640,20 @@ server <- function(input, output) {
                                       village = input$village)
     choices <- sort(unique(sub_locations$Hamlet))
     selectInput('hamlet', 'Hamlet', choices = choices)
+
+  })
+  
+  # Get number of households for hamlet selected
+  hamlet_num_hh <- reactive({
+    ok <- FALSE
+    hamlet_name <- input$hamlet
+    if(!is.null(hamlet)){
+      ok <- TRUE
+    }
+    if(ok){
+      num_houses <- (mop_houses %>% filter(Hamlet %in% hamlet_name) %>% .$households)*1.25
+    }
+    return(num_houses)
   })
   
   # Get the spatial data (polygons of lowest level available)
@@ -709,6 +723,7 @@ server <- function(input, output) {
   output$quant_table <- DT::renderDataTable({
     ok_this_hamlet <- FALSE
     hamlet <- shp_hamlet()
+    # save(hamlet, file = 'hamlet.RData')
     if(!is.null(hamlet)){
       if(nrow(hamlet) > 0){
         ok_this_hamlet <- TRUE
@@ -778,28 +793,37 @@ server <- function(input, output) {
   })
   
   observeEvent(input$print_enumeration,{
-    showModal(modalDialog(
-      title = "Enumeration list generator",
-      fluidPage(
-        fluidRow(
-          column(6,
-                 textInput('enumeration_n_hh',
-                           'Estimated number of households'),
-                 helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration).')),
-          column(6,
-                 textInput('enumeration_n_teams',
-                           'Number of teams'),
-                 helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'))
+    ok <- FALSE
+    num_houses <- hamlet_num_hh()
+    if(!is.null(num_houses)){
+      ok <- TRUE
+    }
+    if(ok){
+      showModal(modalDialog(
+        title = "Enumeration list generator",
+        fluidPage(
+          fluidRow(
+            column(6,
+                   textInput('enumeration_n_hh',
+                             'Estimated number of households',
+                             value = num_houses),
+                   helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration).')),
+            column(6,
+                   textInput('enumeration_n_teams',
+                             'Number of teams'),
+                   helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'))
+          ),
+          fluidRow(
+            column(12, align = 'center',
+                   downloadButton('render_enumeration_list',
+                                  'Generate list(s)'))
+          )
         ),
-        fluidRow(
-          column(12, align = 'center',
-                 downloadButton('render_enumeration_list',
-                                'Generate list(s)'))
-        )
-      ),
-      easyClose = TRUE,
-      footer = NULL
-    ))
+        easyClose = TRUE,
+        footer = NULL
+      ))
+    }
+   
   })
   
   output$render_qrs <- 
