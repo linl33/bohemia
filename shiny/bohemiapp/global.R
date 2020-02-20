@@ -1,4 +1,6 @@
 library(dplyr)
 library(DT)
 library(leaflet)
+library(bohemia)
+library(sp)
 source('functions.R')
