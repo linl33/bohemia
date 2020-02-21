@@ -22,7 +22,9 @@ make_ui <- function(li = FALSE,
     }
   } else {
     fluidPage(h3('Please log-in to view this page'),
-              p('To log-in, click the button in the upper right corner.'))
+              p('To log-in, click the button in the upper right corner or below.'),
+              actionButton('alternative_log_in',
+                           'Log in'))
   }
 }
 
@@ -155,3 +157,18 @@ fake_map <- function(tile = 'Stamen.Watercolor',
   }
   return(l)
 }
+
+ui_main <- fluidPage(
+  fluidRow(column(12, align = 'center',
+                  h1('BohemiApp'))),
+  fluidRow(column(12, align = 'center',
+                  h3('The Bohemia Data Portal'))),
+  fluidRow(column(12, align = 'center',
+                  selectInput('geo',
+                              'Choose your geography',
+                              choices = c('Rufiji',
+                                          'Mopeia',
+                                          'Both')))),
+  fluidRow(column(12, align = 'center',
+                  plotOutput('main_plot'))),
+)

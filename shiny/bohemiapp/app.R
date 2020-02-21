@@ -84,7 +84,7 @@ body <- dashboardBody(
   tabItems(
     tabItem(
       tabName="main",
-      uiOutput('ui_main')),
+      ui_main),
     tabItem(
       tabName="field_monitoring",
       uiOutput('ui_field_monitoring')),
@@ -146,7 +146,7 @@ server <- function(input, output, session) {
   reactive_log_in_text <- reactiveVal(value = '')
   
   # Observe the corner log-in / log-out buttons
-  observeEvent(input$log_in_button, {
+  observeEvent({input$log_in_button; input$alternative_log_in}, {
     # See if there was an incorrect user/password combo
     info_text <- reactive_log_in_text()
     make_log_in_modal(info_text = info_text)
@@ -194,30 +194,7 @@ server <- function(input, output, session) {
   # UIs
   ###########################################################################
   
-  # Main UI ##########################################################
-  output$ui_main <- renderUI({
-    si <- session_info
-    li <- si$logged_in
-    ac <- 'field_monitoring' %in% si$access
-    make_ui(li = li,
-            ac = ac,
-            ok = {
-              fluidPage(
-                fluidRow(column(12, align = 'center',
-                                h1('BohemiApp'))),
-                fluidRow(column(12, align = 'center',
-                                h3('The Bohemia Data Portal'))),
-                fluidRow(column(12, align = 'center',
-                                selectInput('geo',
-                                            'Choose your geography',
-                                            choices = c('Rufiji',
-                                                        'Mopeia',
-                                                        'Both')))),
-                fluidRow(column(12, align = 'center',
-                                plotOutput('main_plot'))),
-              )
-            })
-  })
+  # # Main UI ##########################################################
   
   output$main_plot <- renderPlot({
     shp <- bohemia::mop2
@@ -228,9 +205,11 @@ server <- function(input, output, session) {
     if(geo == 'Both'){
       shp = rbind(ruf2, mop2)
       coords <- coordinates(shp)
-      plot(shp, col = 'black')
-      points(coords, col = 'red', pch = 16)
-      lines(coords, col = 'red')
+      afr <- rbind(moz0, tza0)
+      plot(afr, col = adjustcolor('black', alpha.f = 1), border = NA)
+      plot(shp, col = 'red', add = T)
+      # points(coords, col = 'red', pch = 16)
+      lines(coords, col = 'red', lty =2)
     } else {
       plot(shp, col = 'black')
     }
