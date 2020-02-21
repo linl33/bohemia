@@ -647,7 +647,7 @@ server <- function(input, output) {
   hamlet_num_hh <- reactive({
     ok <- FALSE
     hamlet_name <- input$hamlet
-    if(!is.null(hamlet)){
+    if(!is.null(hamlet_name)){
       ok <- TRUE
     }
     if(ok){
