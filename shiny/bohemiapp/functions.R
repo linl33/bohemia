@@ -9,6 +9,7 @@ placeholder <- function(li = FALSE,
   }
 }
 
+
 # Function to conditionally handle UI generation based on (a) logged-in status and (b) access level
 make_ui <- function(li = FALSE,
                     ac = FALSE,
@@ -20,21 +21,63 @@ make_ui <- function(li = FALSE,
       h3('You do not have not been authorized to view this page. If you require access, please email info@databrew.cc.')
     }
   } else {
-    fluidPage(h3('Please log-in to view this page'))
+    fluidPage(h3('Please log-in to view this page'),
+              p('To log-in, click the button in the upper right corner.'))
   }
 }
+
+# Define function for checking whether logged in, etc.
 
 # Generate the log-in UI
 make_log_in_button <- function(li = FALSE){
   if(li){
     actionButton('log_out_button',
-                           'Click here to log out',
+                           'Log out',
                            icon = icon('wave'))
   } else {
     actionButton('log_in_button',
                            'Click here to log in',
                            icon = icon('door'))
   }
+}
+
+# Log in modal
+make_log_in_modal <- function(info_text = NULL){
+  showModal(modalDialog(
+    title = NULL,
+    easyClose = TRUE,
+    footer = NULL,
+    fade = TRUE,
+    fluidPage(
+      fluidRow(column(12,
+                      align = 'center',
+                      h2('Log-in'))),
+      fluidRow(column(6,
+                      textInput('log_in_user',
+                                'Email',
+                                placeholder = 'info@databrew.cc')),
+               column(6,
+                      passwordInput('log_in_password',
+                                    'Password',
+                                    placeholder = 'password'))),
+      fluidRow(column(12, align = 'center',
+                      actionButton('confirm_log_in',
+                                   'Log in'))),
+      fluidRow(column(12, align = 'center',
+                      p(info_text))),
+      fluidRow(column(12, align = 'center',
+                      p('Note: This application is currently under development. As of this time, you can log-in with any Email/Password combination. In the future (when this app is exhibiting real data), log-in will be restricted to authorized users only.')))
+    )
+  ))
+}
+
+# Check credentials
+credentials_check <- function(user = NULL,
+                              password = NULL){
+  # This is a placeholder function; later, it will contain the code to test
+  # the validity of a user/password combination
+  message('Checking user/password combo (dummy).')
+  return(TRUE)
 }
 
 # Function for generating the about page
