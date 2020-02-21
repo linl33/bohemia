@@ -4,10 +4,14 @@
 \alias{odk_list_forms}
 \title{List the forms on an ODK server}
 \usage{
-odk_list_forms(url = "https://bohemia.systems")
+odk_list_forms(url = "https://bohemia.systems", user = NULL, password = NULL)
 }
 \arguments{
 \item{url}{The URL of the ODK Aggregate server, default being https://bohemia.systems, without a trailing dash}
+
+\item{user}{The ODK Aggregate username}
+
+\item{password}{The ODK Aggregate password}
 }
 \value{
 A tibble with columns name, id, and url
