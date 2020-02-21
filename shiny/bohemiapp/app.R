@@ -140,13 +140,14 @@ server <- function(input, output, session) {
   # Create some reactive data
   session_data <- reactiveValues(aggregate_table = default_aggregate_table,
                                  action = default_action_table,
-                                 fieldworkers = default_fieldworkers)
+                                 fieldworkers = default_fieldworkers,
+                                 notifications = default_notifications)
   
   # Text for incorrect log-in, etc.
   reactive_log_in_text <- reactiveVal(value = '')
   
   # Observe the corner log-in / log-out buttons
-  observeEvent({input$log_in_button; input$alternative_log_in}, {
+  observeEvent(input$log_in_button, {
     # See if there was an incorrect user/password combo
     info_text <- reactive_log_in_text()
     make_log_in_modal(info_text = info_text)
@@ -246,7 +247,7 @@ server <- function(input, output, session) {
                                box(width = 3,
                                    fluidPage(
                                      fluidRow(
-                                       p('Select a row (or rows) and then click one of the below:')
+                                       p('Select a row and then click one of the below:')
                                      ),
                                      fluidRow(
                                        
@@ -264,9 +265,17 @@ server <- function(input, output, session) {
                              br(),
                              fluidRow(h3('Notifications')),
                              fluidRow(
-                               infoBox(icon = icon('table'),
-                                       color = 'purple',
-                                       h3('Some content here.'))
+                               box(width = 9,
+                                   color = 'purple',
+                                   DT::dataTableOutput('notifications_table')),
+                               box(width = 3,
+                                   fluidPage(
+                                     fluidRow(
+                                       p('Select a row and then click the below:')
+                                     ),
+                                     fluidRow(actionButton('discard_notification',
+                                                           'Discard notification'))
+                                   ))
                              )
                            )),
                   tabPanel('Aggregate data',
@@ -380,6 +389,9 @@ server <- function(input, output, session) {
   
   # Observe the fix submission
   observeEvent(input$submit_fix,{
+    sr <- input$action_table_rows_selected
+    action <- session_data$action
+    this_row <- action[sr,]
     
     showModal(
       modalDialog(
@@ -399,6 +411,17 @@ server <- function(input, output, session) {
         )
       )
     )
+  })
+  
+  # Observe the notification disregard
+  observeEvent(input$discard_notification,{
+    sr <- input$notifications_table_rows_selected
+    notifications <- session_data$notifications
+    message('sr is ', sr)
+    vals <- 1:nrow(notifications)
+    vals <- vals[!vals %in% sr]
+    notifications <- notifications[vals,]
+    session_data$notifications <- notifications
   })
   
   # Confirm a fix send
@@ -562,9 +585,15 @@ server <- function(input, output, session) {
   # Action table
   output$action_table <- DT::renderDataTable({
     action <- session_data$action
-    print(action)
     DT::datatable(action)
   })
+  
+  # Notifications table
+  output$notifications_table <- DT::renderDataTable({
+    notifications <- session_data$notifications
+    DT::datatable(notifications)
+  })
+  
   
   # Map of all forms filled out
   output$field_monitoring_map_forms <- 

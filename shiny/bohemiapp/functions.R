@@ -22,9 +22,7 @@ make_ui <- function(li = FALSE,
     }
   } else {
     fluidPage(h3('Please log-in to view this page'),
-              p('To log-in, click the button in the upper right corner or below.'),
-              actionButton('alternative_log_in',
-                           'Log in'))
+              p('To log-in, click the button in the upper right corner.'))
   }
 }
 

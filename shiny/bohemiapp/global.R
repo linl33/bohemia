@@ -32,3 +32,11 @@ default_fieldworkers <- tibble(id = sort(sample(1:300, size = 10)),
                                         'Anabel García',
                                         'Camille de la Croix',
                                         'Raquel Manhiça'))
+
+# Define a default notificaitons table
+default_notifications <- 
+  tibble(ID = c(101, 144, 149),
+         Type = c('Individual', 'Aggregate', 'Individual'),
+         Description = c('Worker 167: 4 days without submissions',
+                         'Overall: 12 hours with no submissions',
+                         'Worker 003: > 15% missingness on form 20920101'))
