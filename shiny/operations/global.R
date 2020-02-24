@@ -5,6 +5,7 @@ library(leaflet.extras)
 library(bohemia)
 library(knitr)
 library(kableExtra)
+library(tidyverse)
 
 # rdir <- '../../rpackage/bohemia/R/'
 # funs <- dir(rdir)
@@ -64,6 +65,12 @@ library(kableExtra)
 
 # get mopeia hamlet number of houses
 mop_houses <- bohemia::mopeia_hamlet_details
+
+# sort by number of houses and remove duplicates
+mop_houses <- mop_houses %>% 
+  group_by(Hamlet) %>% 
+  summarise(households = max(households, na.rm = TRUE))
+  
 
 # get rufiji hamlets
 rufiji_hamlets <- bohemia::rufiji3
