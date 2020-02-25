@@ -35,6 +35,10 @@ names(data) <- c('first_name', 'last_name',
 data$tags <- 'ivermectin'
 data$admin <- FALSE
 data$password <- 'password'
+
+# Add two columns
+data$country <- data$organization_type <- as.character(NA)
+
 admins <- tibble(first_name = c('Sònia', 'Mary', 'Carlos', 'Elena', 'Joe', 'Ben', 'John', 'Jane'),
                  last_name = c('Tomàs', 'Mael', 'Chaccour', 'Moreno', 'Brew', 'Brew', 'Doe', 'Doe'),
                  position = c('Project manager', 'Project assistant' , 'Assistant research professor', 'Projet manager', 'Data scientist', 'Data scientist', 'Fake person', 'Fake person'),
@@ -56,6 +60,8 @@ users <- data %>% bind_rows(admins)
 users <- users %>%
   dplyr::distinct(email, .keep_all = TRUE)
 
+
+users = users %>% dplyr::select(first_name, last_name, position, institution, email, tags, contact_added, country, organization_type, admin, password)
 
 # write to the table to the database to which we are connected
 dbWriteTable(conn = co, 

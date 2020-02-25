@@ -198,7 +198,9 @@ server <- function(input, output, session) {
            textInput('create_first_name', 'First name'),
            textInput('create_last_name', 'Last name'),
            textInput('create_position', 'Position'),
-           textInput('create_institution', 'Institution')
+           textInput('create_institution', 'Institution'),
+           textInput('create_country', 'Country'),
+           textInput('create_organization_type', 'Organization type')
         ),
         fluidRow(
           column(6, align = 'left', p(lit)),
@@ -238,6 +240,8 @@ server <- function(input, output, session) {
                   last_name = input$create_last_name,
                   position = input$create_position,
                   institution = input$create_institution,
+                  country = input$create_country,
+                  organization_type = input$create_organization_type,
                   users = data$users)
     if(x){
       y <- 'Account successfully created'
@@ -261,9 +265,9 @@ server <- function(input, output, session) {
       df <- data$users
       df <- df %>% dplyr::select(first_name, last_name,
                                  position, institution, email,
-                                 tags, contact_added)
+                                 tags, contact_added, country, organization_type)
       names(df) <- c('First', 'Last', 'Position', 'Institution',
-                     'Emails', 'Tags', 'Contact added')
+                     'Emails', 'Tags', 'Contact added', 'Country', 'Organization type')
       df <- df %>% arrange(First)
       DT::datatable(df, editable = eddy)#,
       # colnames = c('First' = 'first_name',
@@ -282,7 +286,9 @@ server <- function(input, output, session) {
     n <- length(email_people())
     n_text <- ifelse(n == 1, '1 person',
                      paste0(n, ' people', collapse = ''))
-    out <- NULL
+    out <- fluidPage(
+      HTML('Select one or more rows below in order to send an email.')
+    )
     if(!is.na(et)){
       if(et != ''){
         out <- fluidPage(
@@ -303,6 +309,7 @@ server <- function(input, output, session) {
     i = info$row
     j = info$col
     v = info$value
+    # save(x, info, i, j, v, file = 'temp.RData')
     message('selected cell info:')
     message('--row: ', i)
     message('--column: ', j)
@@ -394,7 +401,9 @@ server <- function(input, output, session) {
          textInput('create_first_name', 'First name'),
          textInput('create_last_name', 'Last name'),
          textInput('create_position', 'Position'),
-         textInput('create_institution', 'Institution')
+         textInput('create_institution', 'Institution'),
+         textInput('create_country', 'Country'),
+         textInput('create_organization_type', 'Organization type')
       ),
       fluidRow(
         column(6, align = 'left', p(lit)),
@@ -594,6 +603,8 @@ server <- function(input, output, session) {
                    position = pd$Position[i], 
                    institution = pd$Institution[i], 
                    tags = pd$tags[i],
+                   country = pd$Country[i],
+                   organization_type = pd$`Organization type`[i],
                    users = data$users)
           Sys.sleep(0.2)
         }
