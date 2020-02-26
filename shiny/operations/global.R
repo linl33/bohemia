@@ -5,6 +5,7 @@ library(leaflet.extras)
 library(bohemia)
 library(knitr)
 library(kableExtra)
+library(tidyverse)
 
 # rdir <- '../../rpackage/bohemia/R/'
 # funs <- dir(rdir)
@@ -61,6 +62,17 @@ library(kableExtra)
 # } else {
 #   load('data/rufiji_hamlets.RData')
 # }
+
+# get mopeia hamlet number of houses
+mop_houses <- bohemia::mopeia_hamlet_details
+
+# sort by number of houses and remove duplicates
+mop_houses <- mop_houses %>% 
+  group_by(Hamlet) %>% 
+  summarise(households = max(households, na.rm = TRUE))
+  
+
+# get rufiji hamlets
 rufiji_hamlets <- bohemia::rufiji3
 rufiji_hamlets@data$village <- rufiji_hamlets@data$NAME_3
 rufiji_hamlets@data$population <- 'Unknown'
@@ -107,6 +119,7 @@ filter_locations <- function(locations,
   }
   return(out)
 }
+
 
 # add_nothing <- function(x){c('', x)}
 add_nothing <- function(x){x}
