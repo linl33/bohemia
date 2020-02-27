@@ -87,3 +87,7 @@
 - This will bring you back to the main menu.
 - Select "Send Finalized Form".
 - Make sure the box to the right of the form name is "checked" and the select "Send Selected" to upload a finished form.
+
+## What happens after geocoding
+
+- When a separate geocoding form is submitted (as per the above), the server-side data "pipeline" will automatically link the geocoded locations and meta-information with the missing/skipped fields from the original census questionnaire.
