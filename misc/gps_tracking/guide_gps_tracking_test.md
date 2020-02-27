@@ -37,7 +37,7 @@ You have been selected to help test the GPS tracking system. Please carry out th
   - Megan: `611`
   - Joe 2: `612`
   - Joe 3: `613`
-- Set the address of the server URL: `bohemia.fun`
+- Set the address of the server URL: `http://bohemia.fun`
 - Set the Frequency field to: `60`
 - Set location accuracy to: `high`
 - Do not change the Distance or Angles fields
