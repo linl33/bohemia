@@ -42,7 +42,7 @@ You have been selected to help test the GPS tracking system. Please carry out th
 - Set location accuracy to: `high`
 - Do not change the Distance or Angles fields
 - At the top set "Service status" to on/running
-- Optional: Click on "Status" in the upper right to ensure that everything is working and data is sent correctly
+- Optional: Click on "Status" in the upper right to ensure that everything is working and data is sent correctly; It should show "Location update"; if it shows anything with the word "failure", email joe@databrew.cc
 
 ### Use
 
