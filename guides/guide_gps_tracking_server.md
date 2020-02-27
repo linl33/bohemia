@@ -1,0 +1,256 @@
+# GPS tracking
+
+## Context
+
+- During the census phase of the Bohemia project, the location of data capture devices (tablets) will be tracked. The purpose of this tracking is to both:
+  - Help with recovery in the case of device loss or theft
+  - Enable, over time, the identification of travel routes through the aggregation of the GPS tracks/paths taken by each tablet, and the subsequent generation of travel route planning tools and maps
+- This guide details the technical set-up of the device tracking system
+
+### Services used
+
+- Device-side: Devices will use Traccar Client, and Android application downloadable via the [Google Play Store](https://play.google.com/store/apps/details?id=org.traccar.client).
+- Server-side: The server will run Traccar Server, downloadable from Traccar's [website](https://github.com/traccar/traccar/releases/download/v4.8/traccar-linux-64-4.8.zip)
+
+## Steps
+
+### On tablets
+
+
+Please visit the [GPS tracking Android page](guide_gps_tracking_android.md) for details on configuring the tablets for location collection.
+
+
+### On server
+
+
+(Note: some of this came from [TracCar official documentation](https://www.traccar.org/documentation/))
+
+
+#### Buy a domain
+
+- Go to domains.google.com and buy a domain.
+- For the purposes of this guide, the domain being used is `www.bohemia.fun`
+
+#### Spin up an EC2 instance on AWS
+
+- AMI: Ubuntu Server 18.04 LTS
+- Instance type: t2.micro
+- Configure instance:
+  - All default except:
+    - Auto-Assign Public IP: Enable
+- Add Storage: Default (8gb)
+- Add Tags: Skip
+- Configure Security Group:
+  - Create new: name it traccar
+  - Type: All traffic
+  - Source: Anywhere
+- launch (associate with keypair already created)
+
+
+#### Allocate a persistent IP
+
+- So that your AWS instance's public IP address does not change at reboot, etc., you need to create an "Elastic IP address". To do this:
+  - Go to the EC2 dashboard in aws
+  - Click "Elastic IPs" under "Network & Security" in the left-most menu
+  - Click "Allocate new address"
+  - Select "Amazon pool"
+  - Click "Allocate"
+  - In the allocation menu, click "Associate address"
+  - Select the instance you just created. Also select the corresponding "Private IP"
+  - Click "Associate"
+- Note, this guide is written with the below elastic id. You'll need to replace this with your own when necessary.
+
+```
+3.21.67.128
+```
+
+- Go to instances menu
+- Name the newly spun-up server "traccar"
+
+#### Connect to the server
+
+- In the “Instances” menu, click on “Connect” in the upper left
+- This will give instructions for connecting via an SSH client
+- It will be something very similar to the following:
+
+```
+ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-3-21-67-128.us-east-2.compute.amazonaws.com
+```
+
+- Create an alias
+```
+alias traccar='ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@bohemia.fun'
+```
+- Add the above line to ~/.bashrc to persist
+
+#### Setting up the domain
+
+- In domains.google.com, click on the purchased domain.
+- Click on "DNS" on the left
+- Go to "Custom resource records"
+- You're going to create two records:
+  1. Name: @; Type: A; TTL 1h; Data: 3.21.67.128
+  2. Name: www; Type: CNAME; TTL: 1h; Data: ec2-3-21-67-128.us-east-2.compute.amazonaws.com.
+
+#### Setting up Linux  
+
+- SSH into the server:
+```
+ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-3-21-67-128.us-east-2.compute.amazonaws.com
+```
+
+- Install some software:
+```
+sudo apt-get update
+sudo apt-get install openjdk-8-jdk-headless
+sudo apt-get install zip
+sudo apt-get install unzip
+sudo apt-get install wget
+sudo apt-get install curl
+sudo apt-get install postgresql-10
+sudo apt-get -y update
+sudo apt-get install nginx
+sudo apt-get install software-properties-common
+```
+
+
+#### Setting up java
+
+- Java is already installed, but you need to set the `JAVA_HOME` environment variable. To do so:
+- `sudo nano /etc/environment`
+- Add line like `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`
+- Run `source /etc/environment`
+
+#### Installing Traccar
+
+- Install the zip file [here](https://github.com/traccar/traccar/releases/download/v4.8/traccar-linux-64-4.8.zip) by running:
+```
+mkdir traccar
+cd traccar
+wget https://github.com/traccar/traccar/releases/download/v4.8/traccar-linux-64-4.8.zip
+```
+- Extract the contents:
+```
+unzip traccar-linux-64-4.8.zip
+```
+- Run the executable:
+```
+sudo ./traccar.run
+```
+- Start the service:
+```
+sudo systemctl start traccar.service
+```
+- Open web interface by navigating to http://localhost:8082/ (on local machine) or bohemia.fun (if you have already configured the below) or bohemia.fun:8082
+- Log in as `admin` / `admin`
+
+#### Deal with ports, nginx, etc.
+
+- Open the nginx config file: `sudo nano /usr/local/etc/nginx/nginx.conf`
+```
+
+```
+
+```
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/bohemia.fun
+sudo nano /etc/nginx/sites-available/bohemia.fun
+```
+- Make it as follows:
+```
+server_name bohemia.fun;
+
+       location / {
+               proxy_pass http://127.0.0.1:8082;
+       }
+
+```
+
+- Make a symlink as per below:
+```
+sudo ln -s /etc/nginx/sites-available/bohemia.fun /etc/nginx/sites-enabled/
+```
+- Edit a file: `sudo nano /etc/nginx/nginx.conf` and remove the `#` before `server_names_hash_bucket_size 64;`
+- Remove the default nginx file: `sudo rm /etc/nginx/sites-enabled/default`
+- Check to make sure there are no syntax errors:
+```
+sudo nginx -t
+```
+- Restart:
+```
+sudo systemctl restart nginx
+```
+
+- Run `sudo nginx -s reload`
+- Run `sudo systemctl start traccar.service`
+
+### Add users/devices
+
+- For each user/tablet, do the following:
+  - Click the "plus" icon in the upper left of the web interface
+  - Add the name and worker ID for each user
+
+~~### Set up postgres database
+```
+sudo su postgres
+createuser --interactive
+- name of role: ubuntu
+- superuser: y
+createdb ubuntu
+createdb traccar
+exit
+psql
+create database traccar;
+```
+
+
+
+### Configure
+
+#### Postgres configuration
+
+- Edit the [configuration file](https://www.traccar.org/configuration-file/) by running:
+```
+sudo nano /opt/traccar/conf/traccar.xml
+```
+
+Replace the below lines:
+
+```
+<entry key='database.driver'>org.h2.Driver</entry>
+<entry key='database.url'>jdbc:h2:/home/user/Documents/traccar/target/database</entry>
+<entry key='database.user'>sa</entry>
+<entry key='database.password'></entry>
+```
+With:
+```
+<entry key='database.driver'>org.postgresql.Driver</entry>
+<entry key='database.url'>jdbc:postgresql://127.0.0.1:5432/traccar</entry>
+<entry key='database.user'>ubuntu</entry>
+<entry key='database.password'></entry>~~
+```
+
+#### Reverse geocoding configuration
+
+- Edit the [configuration file](https://www.traccar.org/configuration-file/) by running:
+```
+sudo nano /opt/traccar/conf/traccar.xml
+```
+
+- Add the following lines in the `<properties>` block:
+```
+<entry key='geocoder.enable'>true</entry>
+<entry key='geocoder.type'>nominatim</entry>
+<entry key='geocoder.url'>https://nominatim.openstreetmap.org/reverse</entry>
+```
+
+### Restart
+```
+sudo systemctl stop traccar
+sudo systemctl restart postgresql
+sudo systemctl start traccar
+sudo systemctl start traccar.service
+```
+
+### Troubleshooting and logs
+- See logs at `/opt/traccar/logs`
+- See more details on the [troubleshooting page](https://www.traccar.org/troubleshooting/)
