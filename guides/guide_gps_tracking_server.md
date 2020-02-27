@@ -146,11 +146,7 @@ sudo systemctl start traccar.service
 
 #### Deal with ports, nginx, etc.
 
-- Open the nginx config file: `sudo nano /usr/local/etc/nginx/nginx.conf`
-```
-
-```
-
+- Run the below:
 ```
 sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/bohemia.fun
 sudo nano /etc/nginx/sites-available/bohemia.fun
@@ -189,24 +185,23 @@ sudo systemctl restart nginx
   - Click the "plus" icon in the upper left of the web interface
   - Add the name and worker ID for each user
 
-~~### Set up postgres database
+### Set up mysql database
+
+#### Install MySQL
 ```
-sudo su postgres
-createuser --interactive
-- name of role: ubuntu
-- superuser: y
-createdb ubuntu
-createdb traccar
-exit
-psql
-create database traccar;
+sudo apt install mysql-server
+# NOT RUNNING: sudo mysql_secure_installation
+sudo mysql
+CREATE USER 'traccaruser'@'localhost' IDENTIFIED BY 'traccarpass';
+GRANT ALL PRIVILEGES ON * . * TO 'traccaruser'@'localhost';
+FLUSH PRIVILEGES;
+ctrl + d
+mysql -u traccaruser -p
+<enter password>
+CREATE DATABASE traccardb;
 ```
 
-
-
-### Configure
-
-#### Postgres configuration
+#### Configure Traccar for MySQL
 
 - Edit the [configuration file](https://www.traccar.org/configuration-file/) by running:
 ```
@@ -223,10 +218,32 @@ Replace the below lines:
 ```
 With:
 ```
-<entry key='database.driver'>org.postgresql.Driver</entry>
-<entry key='database.url'>jdbc:postgresql://127.0.0.1:5432/traccar</entry>
-<entry key='database.user'>ubuntu</entry>
-<entry key='database.password'></entry>~~
+<entry key='database.driver'>com.mysql.jdbc.Driver</entry>
+<entry key='database.url'>jdbc:mysql://localhost:3306/traccardb?serverTimezone=UTC&amp;useSSL=false&amp;allowMultiQueries=true&amp;autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;sessionVariables=sql_mode=''</entry>
+<entry key='database.user'>traccaruser</entry>
+<entry key='database.password'>traccarpass</entry>
+```
+
+#### Optimize MySQL
+
+```
+sudo nano /etc/mysql/mysql.conf.d/custom.cnf
+```
+- Add the following lines (adjusting the first line so that it is less than 75% of total memory)
+
+```
+[mysqld]
+innodb_buffer_pool_size = 2G
+innodb_log_file_size = 512M
+innodb_flush_method = O_DIRECT
+innodb_flush_log_at_trx_commit = 0
+```
+
+- Restart stuff:
+```
+sudo systemctl stop traccar
+sudo systemctl restart mysql
+sudo systemctl start traccar
 ```
 
 #### Reverse geocoding configuration
@@ -243,14 +260,82 @@ sudo nano /opt/traccar/conf/traccar.xml
 <entry key='geocoder.url'>https://nominatim.openstreetmap.org/reverse</entry>
 ```
 
+- To set an explicit number of days before deleting, add the following (for 60 days, for example):
+```
+<entry key='database.positionsHistoryDays'>60</entry>
+```
+
 ### Restart
 ```
-sudo systemctl stop traccar
-sudo systemctl restart postgresql
-sudo systemctl start traccar
+sudo systemctl daemon-reload
 sudo systemctl start traccar.service
 ```
 
+
+### Data extraction
+
+- The [API](https://www.traccar.org/api-reference/) should be used for data extraction
+
+- Get a list of devices:
+```
+http://bohemia.fun/api/devices
+```
+etc.
+
+- The database can be accessed directly:
+```
+mysql traccardb -u traccaruser -p
+<traccarpass>
+show tables;
+select * from tc_positions;
+```
+
+```
++------------------------+
+| Tables_in_traccardb    |
++------------------------+
+| DATABASECHANGELOG      |
+| DATABASECHANGELOGLOCK  |
+| tc_attributes          |
+| tc_calendars           |
+| tc_commands            |
+| tc_device_attribute    |
+| tc_device_command      |
+| tc_device_driver       |
+| tc_device_geofence     |
+| tc_device_maintenance  |
+| tc_device_notification |
+| tc_devices             |
+| tc_drivers             |
+| tc_events              |
+| tc_geofences           |
+| tc_group_attribute     |
+| tc_group_command       |
+| tc_group_driver        |
+| tc_group_geofence      |
+| tc_group_maintenance   |
+| tc_group_notification  |
+| tc_groups              |
+| tc_maintenances        |
+| tc_notifications       |
+| tc_positions           |
+| tc_servers             |
+| tc_statistics          |
+| tc_user_attribute      |
+| tc_user_calendar       |
+| tc_user_command        |
+| tc_user_device         |
+| tc_user_driver         |
+| tc_user_geofence       |
+| tc_user_group          |
+| tc_user_maintenance    |
+| tc_user_notification   |
+| tc_user_user           |
+| tc_users               |
++------------------------+
+
+```
+
 ### Troubleshooting and logs
-- See logs at `/opt/traccar/logs`
+- See logs at `/opt/traccar/logs/tracker-server.log`
 - See more details on the [troubleshooting page](https://www.traccar.org/troubleshooting/)
