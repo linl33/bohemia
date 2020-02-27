@@ -18,8 +18,8 @@ You have been selected to help test the GPS tracking system. Please carry out th
 
 <table style="width:100%">
   <tr>
-    <td><img src="apple.png" /></td>
-    <td><img src="android.png" /></td>
+    <td><img src="apple.png" height="250"/></td>
+    <td><img src="android.png" height="250"/></td>
   </tr>
 </table>
 
