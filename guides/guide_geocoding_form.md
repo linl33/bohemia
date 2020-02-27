@@ -20,6 +20,9 @@
 - Server automatically identifies the skipped field(s)
 - Data manager is automatically notified of the skipped field(s) and the relevant meta-information (household number and location, fieldworker in question)
 - Data manager deploys a geocoding team/individual to fill out the geocoding form (below)
+- Geocoding team goes to site in question, speaks with household head, goes to each location needing to be geocoded, and fills out form.
+- The geocoding form can be filled one (or MORE) times for one site.
+  - Example: if young cattle and adult cattle graze in two different locations, the form should be filled out for both locations
 
 ## Accessing the form
 
@@ -32,12 +35,12 @@
 
 - To change the language, select the 3 dots in the upper right hand corner.
 
-<img src="img/first_page_swahili.jpg" height="240">
+<img src="img/first_page_swahili.jpg" height="400">
 
 
 - Select the language of choice.
 
-<img src="img/language.jpg" height="240">
+<img src="img/language.jpg" height="400">
 
 
 - If you answer "No" to the first question, you will be prompted with an additional question that reads: "Manually write your 3 digit worker ID here".
@@ -48,7 +51,7 @@
 
 - Go to the area that should be geocoded and select the "Start GeoPoint" field.
 
-<img src="img/geo.jpg" height="240">
+<img src="img/geo.jpg" height="400">
 
 
 - You may be prompted to allow ODK to access your devices GPS functionality.
@@ -59,7 +62,7 @@
 - For example, the image below indicates that this location is where Adult cattle graze, young cattle sleep, adult pigs graze, and young pigs sleep during the dry season.
  - It also indicates this is not where young cattle graze, adult pigs sleep and young pigs graze during the dry season, and that the respondent wasn't sure if Adult cattle sleep in this area during the dry season.
 
- <img src="img/dry_season.jpg" height="240">
+ <img src="img/dry_season.jpg" height="400">
 
 
 - Once you've completed this swipe to the next page.
@@ -78,7 +81,7 @@
 
 - Select the "Save Form and Exit" field
 
- <img src="img/save.jpg" height="240">
+ <img src="img/save.jpg" height="400">
 
 
 - This will bring you back to the main menu.
