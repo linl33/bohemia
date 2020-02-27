@@ -32,23 +32,23 @@
 
 - To change the language, select the 3 dots in the upper right hand corner.
 
-<img src="img/first_page_swahili.jpg" height="24">
+<img src="img/first_page_swahili.jpg" height="240">
 
 
 - Select the language of choice.
 
-<img src="img/language.jpg" height="24">
+<img src="img/language.jpg" height="240">
 
 
 - If you answer "No" to the first question, you will be prompted with an additional question that reads: "Manually write your 3 digit worker ID here".
 - The 6-character household ID must be of the format "ABC-123"
-- The red asterisk indicates a question is manatory before moving forward.
+- The red asterisk indicates a question is mandatory before moving forward.
 
 ### Geocoding
 
 - Go to the area that should be geocoded and select the "Start GeoPoint" field.
 
-<img src="img/geo.jpg" height="24">
+<img src="img/geo.jpg" height="240">
 
 
 - You may be prompted to allow ODK to access your devices GPS functionality.
@@ -59,7 +59,7 @@
 - For example, the image below indicates that this location is where Adult cattle graze, young cattle sleep, adult pigs graze, and young pigs sleep during the dry season.
  - It also indicates this is not where young cattle graze, adult pigs sleep and young pigs graze during the dry season, and that the respondent wasn't sure if Adult cattle sleep in this area during the dry season.
 
- <img src="img/dry_season.jpg" height="24">
+ <img src="img/dry_season.jpg" height="240">
 
 
 - Once you've completed this swipe to the next page.
@@ -78,7 +78,7 @@
 
 - Select the "Save Form and Exit" field
 
- <img src="img/save.jpg" height="24">
+ <img src="img/save.jpg" height="240">
 
 
 - This will bring you back to the main menu.
