@@ -34,11 +34,11 @@ Please visit the [GPS tracking Android page](guide_gps_tracking_android.md) for 
 #### Spin up an EC2 instance on AWS
 
 - AMI: Ubuntu Server 18.04 LTS
-- Instance type: t2.micro
+- Instance type: t2.medium
 - Configure instance:
   - All default except:
     - Auto-Assign Public IP: Enable
-- Add Storage: Default (8gb)
+- Add Storage: (50gb)
 - Add Tags: Skip
 - Configure Security Group:
   - Create new: name it traccar
@@ -107,10 +107,12 @@ sudo apt-get install zip
 sudo apt-get install unzip
 sudo apt-get install wget
 sudo apt-get install curl
-sudo apt-get install postgresql-10
+#sudo apt-get install postgresql-10
 sudo apt-get -y update
 sudo apt-get install nginx
 sudo apt-get install software-properties-common
+sudo apt install mysql-server
+# NOT RUNNING: sudo mysql_secure_installation
 ```
 
 
@@ -174,10 +176,9 @@ sudo nginx -t
 - Restart:
 ```
 sudo systemctl restart nginx
+sudo nginx -s reload
+sudo systemctl start traccar.service
 ```
-
-- Run `sudo nginx -s reload`
-- Run `sudo systemctl start traccar.service`
 
 ### Add users/devices
 
@@ -187,10 +188,7 @@ sudo systemctl restart nginx
 
 ### Set up mysql database
 
-#### Install MySQL
 ```
-sudo apt install mysql-server
-# NOT RUNNING: sudo mysql_secure_installation
 sudo mysql
 CREATE USER 'traccaruser'@'localhost' IDENTIFIED BY 'traccarpass';
 GRANT ALL PRIVILEGES ON * . * TO 'traccaruser'@'localhost';
@@ -219,10 +217,12 @@ Replace the below lines:
 With:
 ```
 <entry key='database.driver'>com.mysql.jdbc.Driver</entry>
-<entry key='database.url'>jdbc:mysql://localhost:3306/traccardb?serverTimezone=UTC&amp;useSSL=false&amp;allowMultiQueries=true&amp;autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;sessionVariables=sql_mode=''</entry>
+<entry key='database.url'>jdbc:mysql://3.21.67.128:3306/traccardb?serverTimezone=UTC&amp;useSSL=false&amp;allowMultiQueries=true&amp;autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;sessionVariables=sql_mode=''</entry>
 <entry key='database.user'>traccaruser</entry>
 <entry key='database.password'>traccarpass</entry>
 ```
+
+- Note in the above that the `3.21.67.128` is the server IP.
 
 #### Optimize MySQL
 
@@ -248,12 +248,13 @@ sudo systemctl start traccar
 
 #### Reverse geocoding configuration
 
-- Edit the [configuration file](https://www.traccar.org/configuration-file/) by running:
+- DO NOT DO THIS FOR NOW; causes positions to not be recorded
+~~- Edit the [configuration file](https://www.traccar.org/configuration-file/) by running:~~
 ```
 sudo nano /opt/traccar/conf/traccar.xml
 ```
 
-- Add the following lines in the `<properties>` block:
+~~- Add the following lines in the `<properties>` block:~~
 ```
 <entry key='geocoder.enable'>true</entry>
 <entry key='geocoder.type'>nominatim</entry>
@@ -276,14 +277,11 @@ sudo systemctl start traccar.service
 ```
 sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
-- Change this line from:
+- Comment out this line
 ```
 bind-address            = 127.0.0.1
 ```
-to:
-```
-bind-address            = 0.0.0.0
-```
+
 - Restart mysql:
 ```
 sudo systemctl restart mysql
@@ -292,8 +290,10 @@ sudo systemctl restart mysql
 ```
 sudo mysql
 CREATE USER 'traccarremoteuser'@'%' IDENTIFIED BY 'traccarremotepass';
+CREATE USER 'traccaruser'@'%' IDENTIFIED BY 'traccarpass';
 FLUSH PRIVILEGES;
 GRANT ALL PRIVILEGES ON traccardb.* TO 'traccarremoteuser'@'%';
+GRANT ALL PRIVILEGES ON traccardb.* TO 'traccaruser'@'%';
 FLUSH PRIVILEGES;
 <ctrl +d>
 ```
@@ -326,52 +326,6 @@ mysql traccardb -u traccaruser -p
 <traccarpass>
 show tables;
 select * from tc_positions;
-```
-
-```
-+------------------------+
-| Tables_in_traccardb    |
-+------------------------+
-| DATABASECHANGELOG      |
-| DATABASECHANGELOGLOCK  |
-| tc_attributes          |
-| tc_calendars           |
-| tc_commands            |
-| tc_device_attribute    |
-| tc_device_command      |
-| tc_device_driver       |
-| tc_device_geofence     |
-| tc_device_maintenance  |
-| tc_device_notification |
-| tc_devices             |
-| tc_drivers             |
-| tc_events              |
-| tc_geofences           |
-| tc_group_attribute     |
-| tc_group_command       |
-| tc_group_driver        |
-| tc_group_geofence      |
-| tc_group_maintenance   |
-| tc_group_notification  |
-| tc_groups              |
-| tc_maintenances        |
-| tc_notifications       |
-| tc_positions           |
-| tc_servers             |
-| tc_statistics          |
-| tc_user_attribute      |
-| tc_user_calendar       |
-| tc_user_command        |
-| tc_user_device         |
-| tc_user_driver         |
-| tc_user_geofence       |
-| tc_user_group          |
-| tc_user_maintenance    |
-| tc_user_notification   |
-| tc_user_user           |
-| tc_users               |
-+------------------------+
-
 ```
 
 ### Troubleshooting and logs
