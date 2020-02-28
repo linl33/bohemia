@@ -1,10 +1,10 @@
 ---
-title: "Census"
+title: "Recon"
 output:
   pdf_document:
     latex_engine: xelatex
 params:
-    language: 'English'
+    language: 'Portuguese'
     relevant: FALSE
     include_variable_names: FALSE
     choice_names_too: FALSE
@@ -43,7 +43,7 @@ lang <- params$language
 rel <- params$relevant
 var <- params$include_variable_names
 cn <- params$choice_names_too
-data_dict <- generate_data_dictionary(path = '../../forms/census/census.xls',
+data_dict <- generate_data_dictionary(path = '../../forms/recon/recon.xls',
                                       language = lang, 
                                       include_variable_names = var, 
                                       include_relevant = rel, 
