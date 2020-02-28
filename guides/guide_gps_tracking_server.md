@@ -271,6 +271,44 @@ sudo systemctl daemon-reload
 sudo systemctl start traccar.service
 ```
 
+### Allow for remote access to database
+
+```
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+```
+- Change this line from:
+```
+bind-address            = 127.0.0.1
+```
+to:
+```
+bind-address            = 0.0.0.0
+```
+- Restart mysql:
+```
+sudo systemctl restart mysql
+```
+- Create remote user and grant privileges
+```
+sudo mysql
+CREATE USER 'traccarremoteuser'@'%' IDENTIFIED BY 'traccarremotepass';
+FLUSH PRIVILEGES;
+GRANT ALL PRIVILEGES ON traccardb.* TO 'traccarremoteuser'@'%';
+FLUSH PRIVILEGES;
+<ctrl +d>
+```
+
+- Restart stuff:
+```
+sudo systemctl stop traccar
+sudo systemctl restart mysql
+sudo systemctl start traccar
+```
+- Test the remote connection (from another box):
+```
+mysql -h 3.21.67.128 -u traccarremoteuser -p
+<traccarremotepass>
+```
 
 ### Data extraction
 
