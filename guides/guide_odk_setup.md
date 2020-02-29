@@ -49,113 +49,7 @@ The below guide is a walk-through of setting up the Bohemia data infrastructure.
 - Select the VPC you previously created in the Network dropdown ("aggregate-vpc")
 - Select "Enable" in the Auto-assign Public IP dropdown.
 - Select the IAM role you previously created in the IAM role dropdown.
-- Toggle the Advanced Details section and copy and paste the below (based on [this](https://raw.githubusercontent.com/opendatakit/aggregate/master/cloud-config/aws/cloud-config.yml) script:
-
-```
-#cloud-config
-
-packages:
-  - zip
-  - unzip
-  - wget
-  - curl
-  - tomcat8
-  - tomcat8-common
-  - tomcat8-admin
-  - tomcat8-user
-  - postgresql-10
-  - openjdk-8-jdk-headless
-  - nginx
-  - software-properties-common
-  - awscli
-
-write_files:
-  - path: /root/aggregate-config.json
-    content: |
-      {
-        "home": "/root",
-        "jdbc": {
-          "host": "127.0.0.1",
-          "port": 5432,
-          "db": "aggregate",
-          "schema": "aggregate",
-          "user": "aggregate",
-          "password": "aggregate"
-        },
-        "security": {
-          "hostname": "foo.bar",
-          "forceHttpsLinks": true,
-          "port": 80,
-          "securePort": 443,
-          "checkHostnames": false
-        },
-        "tomcat": {
-          "uid": "tomcat8",
-          "gid": "tomcat8",
-          "webappsPath": "/var/lib/tomcat8/webapps"
-        }
-      }
-  - path: /tmp/nginx-aggregate
-    content: |
-      server {
-          client_max_body_size 100m;
-          server_name foo.bar;
-
-          location / {
-              proxy_pass http://127.0.0.1:8080;
-          }
-      }
-  - path: /usr/local/bin/download-aggregate-cli
-    permissions: '0755'
-    content: |
-      #!/bin/sh
-      curl -sS https://api.github.com/repos/opendatakit/aggregate-cli/releases/latest \
-      | grep "aggregate-cli.zip" \
-      | cut -d: -f 2,3 \
-      | tr -d \" \
-      | wget -O /tmp/aggregate-cli.zip -qi -
-
-      unzip /tmp/aggregate-cli.zip -d /usr/local/bin
-      chmod +x /usr/local/bin/aggregate-cli
-  - path: /root/.aws/config
-    permissions: '0644'
-    content: |
-      [default]
-      region = foobar
-      output = text
-
-runcmd:
-  - download-aggregate-cli
-
-  - unattended-upgrades
-  - apt-get -y autoremove
-
-  - rm /etc/nginx/sites-enabled/default
-  - mv /tmp/nginx-aggregate /etc/nginx/sites-enabled/aggregate
-
-  - add-apt-repository -y universe
-  - add-apt-repository -y ppa:certbot/certbot
-  - apt-get -y update
-  - apt-get -y install python-certbot-nginx
-  - (crontab -l 2>/dev/null; echo "0 0 1 * * /usr/bin/certbot renew > /var/log/letsencrypt/letsencrypt.log") | crontab -
-
-  - su postgres -c "psql -c \"CREATE ROLE aggregate WITH LOGIN PASSWORD 'aggregate'\""
-  - su postgres -c "psql -c \"CREATE DATABASE aggregate WITH OWNER aggregate\""
-  - su postgres -c "psql -c \"GRANT ALL PRIVILEGES ON DATABASE aggregate TO aggregate\""
-  - su postgres -c "psql -c \"CREATE SCHEMA aggregate\" aggregate"
-  - su postgres -c "psql -c \"ALTER SCHEMA aggregate OWNER TO aggregate\" aggregate"
-  - su postgres -c "psql -c \"GRANT ALL PRIVILEGES ON SCHEMA aggregate TO aggregate\" aggregate"
-
-  - sed -i -e 's/foobar/'"$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone/ | sed 's/.$//')"'/' /root/.aws/config
-  - aws ec2 describe-tags | grep "aggregate.hostname" | grep "$(curl -s http://169.254.169.254/latest/meta-data/instance-id)" | awk -F' ' '{print $5}' > /tmp/domain-name
-  - sed -i -e 's/foo\.bar/'"$(cat /tmp/domain-name)"'/' /root/aggregate-config.json
-  - sed -i -e 's/foo\.bar/'"$(cat /tmp/domain-name)"'/' /etc/nginx/sites-enabled/aggregate
-
-  - aggregate-cli -i -y -c /root/aggregate-config.json
-
-  - service nginx restart
-```
-- Click on Next: Add Storage and edit the storage settings. Set to a minimum of 30gb.
+- Click on Next: Add Storage and edit the storage settings. Set to 200gb
 - Click on Next: Add Tags.
 - Add `aggregate.hostname` key with the domain name as the value (e.g., `bohemia.systems`). Important. You need to have purchased the hostname prior to doing this (ie, don't use your IP address, use an actual DNS)
 - Click on Next: Configure Security Group.
@@ -172,7 +66,7 @@ runcmd:
 - Name it “openhdskey”
 - Download the `.pem` file into your `/home/<username>/.ssh/id_rsa` directory
 - If that directory does not exist, run the steps in the next section (“Setting up SSH keys”)
-- Run the following to change permissions on your key: `chmod 400 ~/.ssh/openhdskey.pem`
+- Run the following to change permissions on your key: `chmod 400 ~/.ssh/odkkey.pem`
 - Click “Launch instances”
 - Wait a few minutes for the system to launch (check the "launch log" if you’re impatient)
 - Click on the name of the instance (once launched)
@@ -233,20 +127,185 @@ alias odk='ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@bohemia.systems'
   2. Name: www; Type: CNAME; TTL: 1h; Data: ec2-18-218-151-100.us-east-2.compute.amazonaws.com.
 
 
-### Setting up https
+# Install software
 
-- You may need to wait a few minutes after setting up the domain before obtaining an https certificate.
-- Run the following to get an https certificate set up:
 ```
-sudo add-apt-repository -y ppa:certbot/certbot
 sudo apt-get update
-sudo apt install certbot
-sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d bohemia.systems
 ```
-- Note, replace "joebrew@gmail.com" and "bohemia.systems" with your email and domain, respectively
-  - (As an alternative to the above, you can get a CDN on cloudflare, and in the "DNS" section of domains.google.com, set the "Name servers" to the 2 provided by Cloudfare (may take 1 hour or so to work))
-- As per the instructions in the terminal, run a test on the new site at: https://www.ssllabs.com/ssltest/analyze.html?d=bohemia.systems
 
+## Install Java
+
+```
+sudo apt install openjdk-8-jdk openjdk-8-jre
+# Verify installation
+java -version
+```
+
+### Setting up java
+
+- Java is already installed, but you need to set the `JAVA_HOME` environment variable. To do so:
+- `sudo nano /etc/environment`
+- Add line like `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`
+- Run `source /etc/environment`
+
+### Install tomcat
+
+```
+sudo apt-get install tomcat8 tomcat8-common tomcat8-user tomcat8-admin
+```
+
+### Other packages
+
+```
+sudo apt-get install zip
+sudo apt-get install unzip
+sudo apt-get install wget
+sudo apt-get install curl
+```
+
+### PostgreSQL
+
+#### Ubuntu 18
+
+```
+sudo apt-get install postgresql-10
+```
+
+#### Ubuntu 16
+
+```
+# on Ubuntu 16, this requires more than just the above. See: https://www.liquidweb.com/kb/install-and-connect-to-postgresql-10-on-ubuntu-16-04/:
+# Ubuntu 16 only:
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -sc)-pgdg main" > /etc/apt/sources.list.d/PostgreSQL.list'
+sudo apt-get -y update
+sudo apt-get install postgresql-10
+sudo apt-get install nginx
+sudo apt-get install software-properties-common
+```
+
+## Write some configuration write files
+
+- `touch /root/aggregate-config.json`
+- `sudo nano /root/aggregate-config.json`
+- Paste the following content:
+```
+{
+  "home": "/root",
+  "jdbc": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "db": "aggregate",
+    "schema": "aggregate",
+    "user": "aggregate",
+    "password": "aggregate"
+  },
+  "security": {
+    "hostname": "bohemia.systems",
+    "forceHttpsLinks": true,
+    "port": 80,
+    "securePort": 443,
+    "checkHostnames": false
+  },
+  "tomcat": {
+    "uid": "tomcat8",
+    "gid": "tomcat8",
+    "webappsPath": "/var/lib/tomcat8/webapps"
+  }
+}
+```
+
+- `sudo touch /tmp/nginx-aggregate`
+- `sudo nano /tmp/nginx-aggregate`
+- Add the following content:
+```
+server {
+    client_max_body_size 100m;
+    server_name foo.bar;
+
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+    }
+}
+```
+
+- `sudo touch /usr/local/bin/download-aggregate-cli`
+- `sudo chmod 0755 /usr/local/bin/download-aggregate-cli`
+- `sudo nano /usr/local/bin/download-aggregate-cli`
+- Paste the following content
+```
+#!/bin/sh
+curl -sS https://api.github.com/repos/opendatakit/aggregate-cli/releases/latest \
+| grep "aggregate-cli.zip" \
+| cut -d: -f 2,3 \
+| tr -d \" \
+| wget -O /tmp/aggregate-cli.zip -qi -
+
+unzip /tmp/aggregate-cli.zip -d /usr/local/bin
+chmod +x /usr/local/bin/aggregate-cli
+```
+
+- `sudo mkdir /root/.aws`
+- `sudo touch /root/.aws/config`
+- `sudo nano /root/.aws/config`
+- Paste the following:
+```
+[default]
+region = foobar
+output = text
+```
+
+- Run the following:
+
+```
+sudo download-aggregate-cli
+sudo unattended-upgrades
+sudo apt-get -y autoremove
+sudo rm /etc/nginx/sites-enabled/default
+sudo mv /tmp/nginx-aggregate /etc/nginx/sites-enabled/aggregate
+sudo add-apt-repository -y universe
+sudo add-apt-repository -y ppa:certbot/certbot
+sudo apt-get -y update
+sudo apt-get -y install python-certbot-nginx
+(crontab -l 2>/dev/null; echo "0 0 1 * * /usr/bin/certbot renew > /var/log/letsencrypt/letsencrypt.log") | crontab -
+
+# Get into postgres user
+sudo su postgres
+psql -c "CREATE ROLE aggregate WITH LOGIN PASSWORD 'aggregate'"
+psql -c "CREATE DATABASE aggregate WITH OWNER aggregate"
+psql -c "GRANT ALL PRIVILEGES ON DATABASE aggregate TO aggregate"
+psql -c "CREATE SCHEMA aggregate" aggregate
+psql -c "ALTER SCHEMA aggregate OWNER TO aggregate" aggregate
+psql -c "GRANT ALL PRIVILEGES ON SCHEMA aggregate TO aggregate" aggregate
+# Get out of postgres user
+ctrl + d
+```
+
+- Open the following file and change "foo.bar" to the correct dns
+```
+sudo nano /etc/nginx/sites-enabled/aggregate
+```
+- The file should look like this:
+
+```
+server {
+          client_max_body_size 100m;
+          server_name bohemia.systems;
+
+          location / {
+              proxy_pass http://127.0.0.1:8080;
+          }
+      }
+```
+- Run the following to configure/install ODK Aggregate:
+```
+sudo aggregate-cli -i -y -c /root/aggregate-config.json
+```
+
+- Restart nginx:
+```
+sudo service nginx restart
+```
 
 
 ### Managing users (ie, creating ssh keypairs for other users)
@@ -263,28 +322,7 @@ sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --re
 - Open whatever public key is going to be associated with this user (the .pub file) and paste the  content into the authorized_keys file (ie, open authorized_keys in nano first and then copy-paste from your local machine)
 Grant sudo access to the new users: `sudo usermod -a -G sudo benmbrew`
 
-
-### Setting up Linux  
-
-- SSH into the server:
-```
-ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@ec2-18-218-151-100.us-east-2.compute.amazonaws.com
-```
-- You now have an up-and-running instance with some software already installed (stuff installed via the cloud config script)
-  - For example, postgres, tomcat, awscli, openjdk-8-jre-headless, etc. are already installed, etc.
-- Run the following after ssh'ing into the server: `sudo apt-get update`
-
-
-### Setting up java
-
-- Java is already installed, but you need to set the `JAVA_HOME` environment variable. To do so:
-- `sudo nano /etc/environment`
-- Add line like `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`
-- Run `source /etc/environment`
-
 ## Setting up ODKAggregate
-
-The `cloud-config` script previously run installs ODKAggregate. However, because we need to do some configuration
 
 - Navigate to http://bohemia.systems/ in the browser.
 - You'll be reedirected to http://bohemia.systems/Aggregate and prompted to log in.
