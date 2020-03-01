@@ -32,33 +32,47 @@ sudo apt-get install awscli
 ### Creating buckets
 
 #### Create a bucket via IAM Console
-- If you create a bucket via the IAM console, you must select the same region you specified when running `aws configure`. In all cases, the sub region must be specified (example: us-west-1 is equivalent to us-west).
+
+- Though it is possible to create buckets via the command line (next section), it's recommended to use the IAM console interface for more functionality (namely creating sub folders within a bucket).
+- Navigate to the `Services` tab and select `S3`.
+![](img/servies.png)
+- Click the `Create buckets` button.
+![]('img/create_1.png')
+- Name the bucket and specify the region. You have an option to import settings from other buckets.
+![]('img/create_bucket_2.png')
+- Specify settings, if not imported from existing bucket. Nothing to specify for this test.
+![]('img/create_bucket_3.png')
+- Set permissions (currently uncheck "Block all public access" for this test)
+![]('img/create_bucket_.png')
+- Then review and select `Create bucket`
+![](img/create_bucket_5.png)
 - To create a folder within a bucket: 
 ![](img/aws_3.png)
-#### Create a bucket via command line
+
+#### Create a bucket via command line 
 - To view all the buckets on your account type:
 `aws s3 ls`
 - You can either create a bucket on your IAM console or do it directly from the command line by typing 
-`aws s3 mb s3://bucket-name`
+`aws s3 mb s3://test-bucket-bohemia`
 - If a bucket already exists, you can view its contents by typing:
-`aws s3 ls s3://bucket-name`
+`aws s3 ls s3://test-bucket-bohemia`
 - To create a new folder (though it's recommended to do this in the IAM console), you can make use of the cp command: 
 `aws s3 cp <file_name> s3://<bucket_name>/<folder_name>/<file_name>` 
 
 
 ### Removing buckets
 - To remove a bucket, type: 
-`aws s3 rb s3://bucket-name`
+`aws s3 rb s3://test-bucket-bohemia`
 - If the bucket is not empty, type: 
-`aws s3 rb s3://bucket-name --force`
+`aws s3 rb s3://test-bucket-bohemia --force`
+- This can also be done from the IAM dashboard by selecting the bucket and deleting it.
 
 ### Using buckets
-
 - moving files from local (server) to s3:
-`aws s3 cp file.txt s3://bohemiabucket`
+`aws s3 cp file.txt s3://test-bucket-bohemia`
 
 - moving files from s3 to local (server)
-`aws s3 cp s3://bohemiabucket/file.txt ./`
+`aws s3 cp s3://test-bucket-bohemia/file.txt ./`
 
 ## Automatically backing up files to s3 bucket
 
@@ -67,7 +81,7 @@ sudo apt-get install awscli
 - open the file and copy and paste the below information: 
 `#!/bin/bash
 file=data.RData
-bucket=bohemiabucket
+bucket=test-bucket-bohemia
 resource="/${bucket}/${file}"
 contentType="testupload"
 dateValue=`date -R`
@@ -84,7 +98,7 @@ curl -X PUT -T "${file}" \
 
 - When this file is run, it will replicate the awscli code written in the command line previously.
 
-### Use crontab to automate backing up files to the s3 bucket `bohemiabucket`
+### Use crontab to automate backing up files to the s3 bucket `test-bucket-bohemia`
 
 #### Crontab basics
 - To edit a crontab: `crontab -e`
