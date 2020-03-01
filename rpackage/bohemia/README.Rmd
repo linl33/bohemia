@@ -159,47 +159,113 @@ The `bohemia` package has a series of tools meant for assisting with the automat
 First define some basic parameters (this will vary depending on your system).
 
 ```{r}
+library(bohemia)
+library(knitr)
+library(dplyr)
 odk_agg_url <- 'https://bohemia.systems'
 user <- 'data'
 password <- 'data'
 form_name <- 'Recon'
 ```
 
+```{r, echo = FALSE}
+# To not have to ping the server every time (and to avoid including real data in this)
+# The below chunks on data retrieval were run once and then saved as 
+# retrieved_data.RData
+file_name <- 'retrieved_data.RData'
+if(file_name %in% dir()){
+  load(file_name)
+} else {
+  fl <- odk_list_forms(url = odk_agg_url, user = user, password = password)
+  id <- fl %>% filter(name == form_name) %>% .$id
+  # (in most cases this will be identical)
+  id2 <- odk_get_secondary_id(url = odk_agg_url, id = id)
+  submissions <- odk_list_submissions(url = odk_agg_url,
+                                      id = id,
+                                      user = user,
+                                      password = password)
+  submission <- odk_get_submission(url = odk_agg_url,
+                                   id = id,
+                                   id2 = id2,
+                                   uuid = submissions[1],
+                                   user = user,
+                                   password = password)
+  parsed <- odk_parse_submission(xml = submission)
+  wide <- odk_make_wide(long_list = parsed)
+  # Run the function
+  recon <- odk_get_data(
+    url = odk_agg_url,
+    id = id,
+    id2 = id2,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = NULL,
+    user = user,
+    password = password
+  )
+  save(fl, id, id2, submissions, submission, parsed, wide, recon,
+       file = file_name)
+}
+```
+
 Retrieve a list of forms from the server:
 
+```{r, eval = FALSE}
+fl <- odk_list_forms(url = odk_agg_url, user = user, password = password)
+```
+
+Let's have a look at the content:
+
 ```{r}
-fl <- odk_list_forms(url = odk_agg_url)
 kable(fl)
 ```
 
 Fetch the ID for the form in question:
 
-```{r}
+```{r, eval = FALSE}
 id <- fl %>% filter(name == form_name) %>% .$id
+```
+
+Let's have a look at the content:
+
+```{r}
 id
 ```
 
+
+
 Get the secondary id of the form in question:
 
-```{r}
+```{r, eval = FALSE}
 # (in most cases this will be identical)
 id2 <- odk_get_secondary_id(url = odk_agg_url, id = id)
+```
+
+Let's have a look at the content:
+
+```{r}
 id2
 ```
 
 Get a list of submissions for that form:
 
-```{r}
+```{r, eval = FALSE}
 submissions <- odk_list_submissions(url = odk_agg_url,
                                     id = id,
                                     user = user,
                                     password = password)
+```
+
+Let's have a look at the content:
+
+```{r}
 kable(submissions)
 ```
 
+
 Retrieve the data for an individual submission (the first one, for example):
 
-```{r}
+```{r, eval = FALSE}
 submission <- odk_get_submission(url = odk_agg_url,
                                  id = id,
                                  id2 = id2,
@@ -210,15 +276,65 @@ submission <- odk_get_submission(url = odk_agg_url,
 # # What has been retrieved is a response for an http request in xml format:
 # submission
 # To take a better look at it, try:
+# library(xml2)
 # xmlview::xml_view(read_xml(submission))
 ```
 
-To parse this submission, we'll run the below:
+To parse this submission, we'll run the `odk_parse_submission`. This takes the xml response from the server and generates a list with two elements: `non_repeats` data and `repeats` data.
+
+```{r, eval = FALSE}
+parsed <- odk_parse_submission(xml = submission)
+```
+
+What is the above? It's a list made up of two tables. The first one (`parsed$non_repeats`) is essentially the "core" form data. The `key` is the variable/question, the `value` is the response, and the `instanceID` is the unique identifier of that particular form. This is what those data look like:
 
 ```{r}
-parsed <- odk_parse_submission(xml = submission)
-kable(parsed)
+kable(head(parsed$non_repeats))
 ```
+
+The second element of the list (`parsed$repeats`) is the data for those elements which were repeated. It also has `key`, `value`, and `instanceID`. But it has two additional columns: the `repeat_name` (essentially, the table to which the field in question belongs) and the `repeated_id`, which helps to associate different `key`-`value` pairs with one another.
+
+```{r}
+kable(head(parsed$repeats))
+```
+
+
+The parsed data is in _"long"_ format, with "key" being the variable name and "value" being the response. To get the data into _"wide"_ format, one should use the `odk_make_wide` function as such:
+
+```{r}
+wide <- odk_make_wide(long_list = parsed)
+```
+
+What is the above? It's just liked `parsed`, but with wide format data rather than long. Let's have a look. Non-repeats:
+
+```{r}
+kable(head(wide$non_repeats))
+```
+
+And repeats:
+
+```{r}
+kable(head(wide$repeats))
+```
+
+All of the above describes the process for getting data for one submission. But in the pipeline (ie, real-life use), we need to be able to retrieve lots of data. This is where `odk_get_data` comes in. `odk_get_data` is essentially a "wrapper" for the above process, and allows for the retrieval of multiple submissions. Here's how to use it.
+
+```{r, eval = FALSE}
+# Run the function
+recon <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = NULL,
+  user = user,
+  password = password
+)
+```
+
+As with the above functions, this will return two lists.
+
 
 ### Generating fake data
 
