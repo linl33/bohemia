@@ -9,6 +9,7 @@
 #' @param exclude_uuids The uuid(s) to exclude from retrieval. If NULL (the default), no uuids will be excluded
 #' @param user The ODK Aggregate username
 #' @param password The ODK Aggregate password
+#' @param widen Whether to widen
 #' @import httr
 #' @import xml2
 #' @import dplyr
@@ -23,7 +24,8 @@ odk_get_data <- function(url = 'https://bohemia.systems',
                               uuids = NULL,
                               exclude_uuids = NULL,
                               user = NULL,
-                              password = NULL){
+                              password = NULL,
+                              widen = TRUE){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){
@@ -32,7 +34,7 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   
   # Get the forms available at the url given
   message('---Fetching the forms list at ', url)
-  fl <- odk_list_forms(url = url)
+  fl <- odk_list_forms(url = url, user = user, password = password)
   # If the requested id is not available, stop
   if(!id %in% fl$id){
     message('The form with id "', id, '" is not listed at ', url, '.\nThe listed form ids are:\n')
@@ -90,19 +92,24 @@ odk_get_data <- function(url = 'https://bohemia.systems',
                                      password = password)
     # Parse the submission into R format
     parsed <- odk_parse_submission(xml = submission)
-    
-    # Add uuid
-    parsed$repeats$uuid <- parsed$non_repeats$uuid <- this_uuid
-    
+   
     # Pop reformatted data into list
     data_list[[i]] <- parsed
   }
   
-  # Combine all of the data into one dataframe
+  # Combine all of the data into respective dataframes
+  repeats <- bind_rows(lapply(data_list, function(x){x$repeats}))
+  non_repeats <- bind_rows(lapply(data_list, function(x){x$non_repeats}))
+  # Combine into one list
   combined <- list()
-  combined$repeats <- bind_rows(lapply(data_list, function(x){x$repeats}))
-  combined$non_repeats <- bind_rows(lapply(data_list, function(x){x$non_repeats}))
- 
+  combined$repeats <- repeats
+  combined$non_repeats <- non_repeats
+  
+  # Widen
+  if(widen){
+    combined <- odk_make_wide(long_list = combined)
+  }
+  
   # Return
   return(combined)
   

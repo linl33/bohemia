@@ -140,6 +140,7 @@ usethis::use_data(mopeia_hamlet_details,
 # sort(unique(cen$id[!cen$id %in% correct$id]))
 
 # Now use the cen object to create shapefiles
+# Create at hamlet/bairro level
 library(rgeos)
 library(geosphere)
 df <- cen %>% mutate(x = lng, y = lat)
@@ -279,6 +280,14 @@ out <- SpatialPolygonsDataFrame(out, bairros, match.ID = TRUE)
 mopeia_hamlets <- out
 mopeia_hamlets@data <- left_join(mopeia_hamlets@data, hhn)
 usethis::use_data(mopeia_hamlets, overwrite = TRUE)
+
+# Create at villag level too
+library(maptools)
+mopeia_villages <- unionSpatialPolygons(SpP = mopeia_hamlets, ID = mopeia_hamlets@data$locality)
+mopeia_villages <- SpatialPolygonsDataFrame(Sr = mopeia_villages,
+                                            data = data.frame(village = names(mopeia_villages)),
+                                            match.ID = FALSE)
+usethis::use_data(mopeia_villages, overwrite = TRUE)
 
 # Also make TZA wards (#Decided not to - not more granular than what we already had)
 tza_wards <- readOGR('tza_wards/2012 Wards Shapefiles/', 'TZwards')

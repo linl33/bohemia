@@ -12,7 +12,8 @@ odk_get_data(
   uuids = NULL,
   exclude_uuids = NULL,
   user = NULL,
-  password = NULL
+  password = NULL,
+  widen = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ odk_get_data(
 \item{user}{The ODK Aggregate username}
 
 \item{password}{The ODK Aggregate password}
+
+\item{widen}{Whether to widen}
 }
 \value{
 A list of dataframes
