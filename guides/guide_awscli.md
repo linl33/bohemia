@@ -86,8 +86,8 @@ resource="/${bucket}/${file}"
 contentType="testupload"
 dateValue=`date -R`
 stringToSign="PUT\n\n${contentType}\n${dateValue}\n${resource}"
-s3Key=AKIAQCHDFJQLYQFAB726
-s3Secret=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
+s3Key=XXXXXXXXXXX
+s3Secret=XXXXXXXXXXXXXXXXXXXX
 signature=`echo -en ${stringToSign} | openssl sha1 -hmac ${s3Secret} -binary | base64`
 curl -X PUT -T "${file}" \
   -H "Host: ${bucket}.s3.amazonaws.com" \
