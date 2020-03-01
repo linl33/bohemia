@@ -355,10 +355,26 @@ repeats:
 kable(head(wide$repeats))
 ```
 
+<table class="kable_wrapper">
+
+<tbody>
+
+<tr>
+
+<td>
+
 | repeat\_name  | repeated\_id | instanceID                                | chief\_contact | chief\_contact\_alt | chief\_name | chief\_role       | chief\_role\_other\_role |
 | :------------ | -----------: | :---------------------------------------- | -------------: | ------------------: | :---------- | :---------------- | :----------------------- |
 | repeat\_chief |            1 | uuid:e8832376-55e0-4382-aeb6-1d9746ff629a |       13412342 |                  NA | Ben Brew    | Village secretary | NA                       |
 | repeat\_chief |            2 | uuid:e8832376-55e0-4382-aeb6-1d9746ff629a |       13413412 |            34634224 | Xing Brew   | Informal chief    | NA                       |
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 All of the above describes the process for getting data for one
 submission. But in the pipeline (ie, real-life use), we need to be able
@@ -367,9 +383,8 @@ to retrieve lots of data. This is where `odk_get_data` comes in.
 allows for the retrieval of multiple submissions. Here’s how to use it.
 
 ``` r
-# Run the function
 recon <- odk_get_data(
-  url = url,
+  url = odk_agg_url,
   id = id,
   id2 = id2,
   unknown_id2 = FALSE,
@@ -380,7 +395,49 @@ recon <- odk_get_data(
 )
 ```
 
-As with the above functions, this will return two lists.
+As with the above functions, this will return two lists: `repeats` and
+`non_repeats`.
+
+All of the above examples used the `recon` form, which has only one
+repeat. For a form with more than one repeat, the `odk_get_data` and
+`odk_make_wide` functions will still generate a list of length 2, but
+the element of that list named `repeats` may have more than one element
+within it (ie, `repeats` will be a nested list). Here’s an example:
+
+``` r
+url <- 'https://bohemia.systems'
+id = 'census_training'
+id2 = NULL
+user = 'data'
+password = 'data'
+census_training <- odk_get_data(
+  url = odk_agg_url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = NULL,
+  user = user,
+  password = password
+)
+```
+
+Note that the length of `census_training$repeats` is greater than 1:
+
+``` r
+kable(names(census_training$repeats))
+```
+
+| x                                       |
+| :-------------------------------------- |
+| repeat\_begin\_ill\_15\_days            |
+| repeat\_death\_info                     |
+| repeat\_health\_facility\_visits        |
+| repeat\_hh\_sub                         |
+| repeat\_household\_members\_enumeration |
+| repeat\_individual\_household\_member   |
+| repeat\_mosquito\_net                   |
+| repeat\_water                           |
 
 ### Generating fake data
 
@@ -412,7 +469,7 @@ fake <- generate_fake_locations(n = 1000,
 plot(fake$x, fake$y, col = rainbow(10)[fake$cluster])
 ```
 
-![](figures/unnamed-chunk-26-1.png)<!-- -->
+![](figures/unnamed-chunk-28-1.png)<!-- -->
 
 ### Generating village boundaries
 
@@ -427,7 +484,7 @@ plot(boundaries, add = T, col = adjustcolor(cols10, alpha.f = 0.3),
      border = NA)
 ```
 
-![](figures/unnamed-chunk-27-1.png)<!-- -->
+![](figures/unnamed-chunk-29-1.png)<!-- -->
 
 ### Generating external buffers
 
@@ -440,7 +497,7 @@ plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
 plot(buffers, add = T)
 ```
 
-![](figures/unnamed-chunk-28-1.png)<!-- -->
+![](figures/unnamed-chunk-30-1.png)<!-- -->
 
 ### Generating buffers based on tesselation
 
@@ -455,7 +512,7 @@ plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
 ```
 
-![](figures/unnamed-chunk-29-1.png)<!-- -->
+![](figures/unnamed-chunk-31-1.png)<!-- -->
 
 ### Generating tesselated buffers
 
@@ -471,7 +528,7 @@ plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3), border = NA)
 plot(buffers, add = T, col = adjustcolor(cols10, alpha.f = 0.3))
 ```
 
-![](figures/unnamed-chunk-30-1.png)<!-- -->
+![](figures/unnamed-chunk-32-1.png)<!-- -->
 
 ### Generating tesselated internal buffers
 
@@ -489,7 +546,7 @@ plot(buffers, add = T, col = adjustcolor(cols10, alpha.f = 0.4))
 points(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
 ```
 
-![](figures/unnamed-chunk-31-1.png)<!-- -->
+![](figures/unnamed-chunk-33-1.png)<!-- -->
 
 ### Generating “collapsed” tesselated internal buffers
 
@@ -520,7 +577,7 @@ plot(buffers, add = T, col = adjustcolor(cols2[buffers@data$id], alpha.f = 0.5))
 points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
 ```
 
-![](figures/unnamed-chunk-32-1.png)<!-- -->
+![](figures/unnamed-chunk-34-1.png)<!-- -->
 
 The below collapses redundant borders.
 
@@ -547,7 +604,7 @@ plot(buffers, add = T, col = adjustcolor(cols2[buffers@data$id], alpha.f = 0.5))
 points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
 ```
 
-![](figures/unnamed-chunk-33-1.png)<!-- -->
+![](figures/unnamed-chunk-35-1.png)<!-- -->
 
 ### Generating village-agnostic clusters
 
@@ -564,7 +621,7 @@ fake <- generate_fake_locations(n = 1000,
 plot(fake$x, fake$y, pch = 16)
 ```
 
-![](figures/unnamed-chunk-34-1.png)<!-- -->
+![](figures/unnamed-chunk-36-1.png)<!-- -->
 
 ``` r
 cs <- create_clusters(cluster_size = 100,
@@ -574,7 +631,7 @@ rcols <- length(unique(cs$cluster))
 plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
 ```
 
-![](figures/unnamed-chunk-34-2.png)<!-- -->
+![](figures/unnamed-chunk-36-2.png)<!-- -->
 
 The data generated from `create_clusters` is compatible with the other
 functions herein described. Here are some usage examples:
@@ -594,7 +651,7 @@ boundaries <- create_borders(df = cs)
 plot(boundaries, add = T)
 ```
 
-![](figures/unnamed-chunk-35-1.png)<!-- -->
+![](figures/unnamed-chunk-37-1.png)<!-- -->
 
 ``` r
 
@@ -604,7 +661,7 @@ boundaries <- create_borders(df = cs, voronoi = TRUE)
 plot(boundaries, add = TRUE)
 ```
 
-![](figures/unnamed-chunk-35-2.png)<!-- -->
+![](figures/unnamed-chunk-37-2.png)<!-- -->
 
 ``` r
 
@@ -615,7 +672,7 @@ buffered <- create_buffers(shp = boundaries, meters = -3000)
 plot(buffered, add = TRUE)
 ```
 
-![](figures/unnamed-chunk-35-3.png)<!-- -->
+![](figures/unnamed-chunk-37-3.png)<!-- -->
 
 ``` r
 
@@ -634,7 +691,7 @@ buffered <- create_buffers(shp = boundaries, meters = -3000,
 plot(buffered, add = TRUE)
 ```
 
-![](figures/unnamed-chunk-35-4.png)<!-- -->
+![](figures/unnamed-chunk-37-4.png)<!-- -->
 
 What follows below is a visualization of how the `create_buffers`
 algorithm works.
@@ -669,7 +726,7 @@ create_qr(id)
 #> Loading required package: qrcode
 ```
 
-![](figures/unnamed-chunk-37-1.png)<!-- -->
+![](figures/unnamed-chunk-39-1.png)<!-- -->
 
 If many ids need to be printed at once, there is a .pdf functionality
 for printing multiple IDs. To use this, run the following:

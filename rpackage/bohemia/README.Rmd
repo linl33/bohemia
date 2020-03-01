@@ -320,9 +320,8 @@ kable(head(wide$repeats))
 All of the above describes the process for getting data for one submission. But in the pipeline (ie, real-life use), we need to be able to retrieve lots of data. This is where `odk_get_data` comes in. `odk_get_data` is essentially a "wrapper" for the above process, and allows for the retrieval of multiple submissions. Here's how to use it.
 
 ```{r, eval = FALSE}
-# Run the function
 recon <- odk_get_data(
-  url = url,
+  url = odk_agg_url,
   id = id,
   id2 = id2,
   unknown_id2 = FALSE,
@@ -333,8 +332,44 @@ recon <- odk_get_data(
 )
 ```
 
-As with the above functions, this will return two lists.
+As with the above functions, this will return two lists: `repeats` and `non_repeats`.
 
+All of the above examples used the `recon` form, which has only one repeat. For a form with more than one repeat, the `odk_get_data` and `odk_make_wide` functions will still generate a list of length 2, but the element of that list named `repeats` may have more than one element within it (ie, `repeats` will be a nested list). Here's an example:
+
+```{r, eval = FALSE}
+url <- 'https://bohemia.systems'
+id = 'census_training'
+id2 = NULL
+user = 'data'
+password = 'data'
+census_training <- odk_get_data(
+  url = odk_agg_url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = NULL,
+  user = user,
+  password = password
+)
+```
+
+Note that the length of `census_training$repeats` is greater than 1:
+
+```{r, eval = FALSE}
+kable(names(census_training$repeats))
+```
+
+|x                                    |
+|:------------------------------------|
+|repeat_begin_ill_15_days             |
+|repeat_death_info                    |
+|repeat_health_facility_visits        |
+|repeat_hh_sub                        |
+|repeat_household_members_enumeration |
+|repeat_individual_household_member   |
+|repeat_mosquito_net                  |
+|repeat_water                         |
 
 ### Generating fake data
 

@@ -147,8 +147,10 @@ odk_parse_submission <- function(xml){
     out_repeats$repeated_id <- get_repeat_count(out_repeats$key)
     # Get the instanceID of the parent form
     out_repeats$instanceID <- instance_id
+    # Remove the _count repeats, since these are just indicating the number of times # !!!
+    out_repeats$repeat_name <- gsub('_count', '', out_repeats$repeat_name)
     # Arrange by the repeated_id
-    out_repeats <- out_repeats %>% arrange(repeated_id)
+    out_repeats <- out_repeats %>% arrange(repeat_name, repeated_id)
 
   }
 

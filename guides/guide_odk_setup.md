@@ -297,6 +297,7 @@ server {
           }
       }
 ```
+
 - Run the following to configure/install ODK Aggregate:
 ```
 sudo aggregate-cli -i -y -c /root/aggregate-config.json
