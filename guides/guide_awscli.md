@@ -110,7 +110,7 @@ curl -X PUT -T "${file}" \
 
 #### Back up our data using crontab 
 - Use the edit functionality of crontab: `crontab -e`
-- To back up every minute, copy and paste the following.
+- To back up every minute, copy and use the following.
 ![](img/crontab.png)
 - For everyday replace `* * * * *` with `0 0 * * *`. 
 
