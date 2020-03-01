@@ -21,7 +21,7 @@ sudo apt-get install awscli
 
 ### Configure awscli
 - Open a terminal and run `aws configure`. 
-![]('img/aws_1')
+![]('img/aws_1.png')
 - Add in the access key ID and secret access key form the credentials file. 
 - then select the default region name and format.
 aws_2
