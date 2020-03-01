@@ -53,26 +53,26 @@ sudo apt-get install awscli
 - To view all the buckets on your account type:
 `aws s3 ls`
 - You can either create a bucket on your IAM console or do it directly from the command line by typing 
-`aws s3 mb s3://test-bucket-bohemia`
+`aws s3 mb s3://<name-of-bucket>`
 - If a bucket already exists, you can view its contents by typing:
-`aws s3 ls s3://test-bucket-bohemia`
+`aws s3 ls s3://<name-of-bucket>`
 - To create a new folder (though it's recommended to do this in the IAM console), you can make use of the cp command: 
-`aws s3 cp <file_name> s3://<bucket_name>/<folder_name>/<file_name>` 
+`aws s3 cp <file_name> s3://<name-of-bucket>/<folder_name>/<file_name>` 
 
 
 ### Removing buckets
 - To remove a bucket, type: 
-`aws s3 rb s3://test-bucket-bohemia`
+`aws s3 rb s3://<name-of-bucket>`
 - If the bucket is not empty, type: 
-`aws s3 rb s3://test-bucket-bohemia --force`
+`aws s3 rb s3://<name-of-bucket> --force`
 - This can also be done from the IAM dashboard by selecting the bucket and deleting it.
 
 ### Using buckets
 - moving files from local (server) to s3:
-`aws s3 cp file.txt s3://test-bucket-bohemia`
+`aws s3 cp file.txt s3://<name-of-bucket>`
 
 - moving files from s3 to local (server)
-`aws s3 cp s3://test-bucket-bohemia/file.txt ./`
+`aws s3 cp s3://<name-of-bucket>/file.txt ./`
 
 ## Automatically backing up files to s3 bucket
 
@@ -80,8 +80,8 @@ sudo apt-get install awscli
 - create a `backup.sh` script in the `/home/ubuntu/` directory on the bohemia server. 
 - open the file and copy and paste the below information: 
 `#!/bin/bash
-file=data.RData
-bucket=test-bucket-bohemia
+file=<name-of-file>
+bucket=<name-of-bucket>
 resource="/${bucket}/${file}"
 contentType="testupload"
 dateValue=`date -R`
@@ -98,7 +98,7 @@ curl -X PUT -T "${file}" \
 
 - When this file is run, it will replicate the awscli code written in the command line previously.
 
-### Use crontab to automate backing up files to the s3 bucket `test-bucket-bohemia`
+### Use crontab to automate backing up files to the s3 bucket
 
 #### Crontab basics
 - To edit a crontab: `crontab -e`
