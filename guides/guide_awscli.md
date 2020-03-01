@@ -38,9 +38,9 @@ sudo apt-get install awscli
 ![](img/servies.png)
 - Click the `Create buckets` button.
 ![]('img/create_1.png')
-- Name the bucket and specify the region. You have an option to import settings from other buckets.
+- Name the bucket and specify the region.
 ![]('img/create_bucket_2.png')
-- Specify settings, if not imported from existing bucket. Nothing to specify for this test.
+- . You have an option to import settings from other buckets. If not imported from existing bucket, specify settings(Nothing to specify for this test case).
 ![]('img/create_bucket_3.png')
 - Set permissions (currently uncheck "Block all public access" for this test)
 ![]('img/create_bucket_.png')
@@ -109,6 +109,7 @@ curl -X PUT -T "${file}" \
 - To remove the crontab of another user: `sudo crontab -r -u <user-name>`
 
 #### Back up our data using crontab 
+- Log onto the server.
 - Use the edit functionality of crontab: `crontab -e`
 - To back up every minute, copy and use the following.
 ![](img/crontab.png)
