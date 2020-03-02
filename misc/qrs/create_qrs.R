@@ -10,7 +10,7 @@ loadfonts()
 dims <- c(10, 6)
 # dims <- dims * 3
 dims <- dims * 0.5
-numbers <- 1:600
+numbers <- 1:650
 numbers <- add_zero(numbers, 3)
 
 ggqrcode <- function(text, color="black", alpha=1) {
@@ -45,18 +45,17 @@ for(i in 1:length(numbers)){
          caption = 'www.bohemia.team/qr')+
     theme(plot.title = element_text(hjust = 0.5, size = 36),
           plot.subtitle = element_text(hjust = 0.5, size = 12),
-          plot.caption = element_text(hjust = 1, size = 7))
+          plot.caption = element_text(size = 7, hjust = 0.5))
   gl <- ggqrcode(this_number)
-  x <- ggarrange(
-    marg,
-    ggarrange(marg, gl, a, marg, 
-              widths = c(15, 15, 38.4, 2),
-              heights = c(2, 10, 2),
-              # widths = c(5, 20, 30, 2),
-              # heights = c(3, 50, 2, 2),
-              nrow = 1),
-    marg,
-    ncol = 1)
+
+  x <- ggarrange(marg, 
+           ggarrange(a, gl, marg, nrow = 1,
+                     widths = c(4,4,0.2)),
+           marg,
+           ncol = 1,
+           heights = c(1,10,1))
+  
+  
   ggexport(x,
            filename = paste0('pdfs/', this_number, '.pdf'),
            width = dims[1], height = dims[2])
@@ -65,7 +64,31 @@ for(i in 1:length(numbers)){
 # system('pdftk *.pdf cat output all.pdf')
 # setwd('..')
 
-
+# Combine to 12 per page
 setwd('pdfs')
-system('pdfjam 001.pdf 002.pdf 003.pdf 004.pdf 005.pdf 006.pdf 007.pdf 008.pdf 009.pdf 010.pdf 011.pdf 012.pdf --nup 3x4 --landscape --outfile 001-004.pdf')
+dir.create('to_print')
+n <- length(numbers)
+ends <- (1:n)[1:n %% 12 == 0]
+starts <- ends - 11
+
+for(i in 1:length(starts)){
+  this_start <- starts[i]
+  this_end <- ends[i]
+  these_numbers <- this_start:this_end
+  these_numbers <- add_zero(these_numbers, 3)
+  these_files <- paste0(these_numbers, '.pdf')
+  file_string <- paste0(these_files, collapse = ' ')
+  out_file <- paste0('to_print/', add_zero(this_start, 3), '-',
+                     add_zero(this_end, 3), '.pdf')
+  command_string <- paste0('pdfjam ', file_string,
+                           ' --nup 3x4 --landscape --outfile ',
+                           out_file)
+  system(command_string)
+}
+setwd('to_print')
+system('pdftk *.pdf cat output all.pdf')
 setwd('..')
+setwd('..')
+# 
+# system('pdfjam 001.pdf 002.pdf 003.pdf 004.pdf 005.pdf 006.pdf 007.pdf 008.pdf 009.pdf 010.pdf 011.pdf 012.pdf --nup 3x4 --landscape --outfile 001-004.pdf')
+# setwd('..')
