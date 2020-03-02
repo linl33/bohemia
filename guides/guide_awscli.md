@@ -12,7 +12,7 @@ sudo apt-get install awscli
 
 ### Credential file settings
 
-- The AWS CLI stores the credentials that you specify with `aws configure` in a local file named `credentials`, in a folder named `.aws` in your home directory. 
+- The AWS CLI stores the credentials that you specify with `aws configure` in a local file named `credentials`, in a folder named `.aws` in your home directory.
 - To generate these access keys create an IAM user account on aws and navigate to IAM console at `https://console.aws.amazon.com/iam/`.
 - In the navigation pane, choose `Users`
 - Choose the name of the user whose access keys you want to create, and then choose the Security credentials tab.
@@ -21,9 +21,9 @@ sudo apt-get install awscli
 ![](img/credentials.png)
 
 ### Configure awscli
-- Open a terminal and run `aws configure`. 
+- Open a terminal and run `aws configure`.
 ![](img/aws_1.png)
-- Add in the access key ID and secret access key form the credentials file. 
+- Add in the access key ID and secret access key form the credentials file.
 - then select the default region name and format.
 ![](img/aws_2.png)
 
@@ -46,24 +46,24 @@ sudo apt-get install awscli
 ![]('img/create_bucket_.png')
 - Then review and select `Create bucket`
 ![](img/create_bucket_5.png)
-- To create a folder within a bucket: 
+- To create a folder within a bucket:
 ![](img/aws_3.png)
 
-#### Create a bucket via command line 
+#### Create a bucket via command line
 - To view all the buckets on your account type:
 `aws s3 ls`
-- You can either create a bucket on your IAM console or do it directly from the command line by typing 
+- You can either create a bucket on your IAM console or do it directly from the command line by typing
 `aws s3 mb s3://<name-of-bucket>`
 - If a bucket already exists, you can view its contents by typing:
 `aws s3 ls s3://<name-of-bucket>`
-- To create a new folder (though it's recommended to do this in the IAM console), you can make use of the cp command: 
-`aws s3 cp <file_name> s3://<name-of-bucket>/<folder_name>/<file_name>` 
+- To create a new folder (though it's recommended to do this in the IAM console), you can make use of the cp command:
+`aws s3 cp <file_name> s3://<name-of-bucket>/<folder_name>/<file_name>`
 
 
 ### Removing buckets
-- To remove a bucket, type: 
+- To remove a bucket, type:
 `aws s3 rb s3://<name-of-bucket>`
-- If the bucket is not empty, type: 
+- If the bucket is not empty, type:
 `aws s3 rb s3://<name-of-bucket> --force`
 - This can also be done from the IAM dashboard by selecting the bucket and deleting it.
 
@@ -77,9 +77,11 @@ sudo apt-get install awscli
 ## Automatically backing up files to s3 bucket
 
 ### Create bash script to automate aws cli commands
-- create a `backup.sh` script in the `/home/ubuntu/` directory on the bohemia server. 
-- open the file and copy and paste the below information: 
-`#!/bin/bash
+- create a `backup.sh` script in the `/home/ubuntu/` directory on the bohemia server.
+- open the file and copy and paste the below information:
+
+```
+#!/bin/bash
 file=<name-of-file>
 bucket=<name-of-bucket>
 resource="/${bucket}/${file}"
@@ -94,7 +96,8 @@ curl -X PUT -T "${file}" \
   -H "Date: ${dateValue}" \
   -H "Content-Type: ${contentType}" \
   -H "Authorization: AWS ${s3Key}:${signature}" \
-  https://${bucket}.s3.amazonaws.com/${file}`
+  https://${bucket}.s3.amazonaws.com/${file}
+  ```
 
 - When this file is run, it will replicate the awscli code written in the command line previously.
 
@@ -108,12 +111,9 @@ curl -X PUT -T "${file}" \
 - To "list" the contents of another user's crontab: `suod crontab -l -u <user-name>`
 - To remove the crontab of another user: `sudo crontab -r -u <user-name>`
 
-#### Back up our data using crontab 
+#### Back up our data using crontab
 - Log onto the server.
 - Use the edit functionality of crontab: `crontab -e`
 - To back up every minute, copy and use the following.
 ![](img/crontab.png)
-- For everyday replace `* * * * *` with `0 0 * * *`. 
-
-
-
+- For everyday replace `* * * * *` with `0 0 * * *`.
