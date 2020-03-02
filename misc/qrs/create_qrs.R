@@ -9,8 +9,7 @@ loadfonts()
 # dimensions: Format 10 x 6 aprox
 dims <- c(10, 6)
 # dims <- dims * 3
-dims <- dims * 0.393701
-
+dims <- dims * 0.5
 numbers <- 1:600
 numbers <- add_zero(numbers, 3)
 
@@ -42,7 +41,7 @@ for(i in 1:length(numbers)){
     databrew::theme_simple() +
     labs(title = this_number,
          # y = 'www.databrew.cc/qr',
-         subtitle = 'Bohemia\nID card',
+         subtitle = 'Bohemia ID card',
          caption = 'www.bohemia.team/qr')+
     theme(plot.title = element_text(hjust = 0.5, size = 36),
           plot.subtitle = element_text(hjust = 0.5, size = 12),
@@ -50,13 +49,23 @@ for(i in 1:length(numbers)){
   gl <- ggqrcode(this_number)
   x <- ggarrange(
     marg,
-    ggarrange(marg, gl, a, marg, widths = c(2, 57.6, 38.4, 2), nrow = 1),
+    ggarrange(marg, gl, a, marg, 
+              widths = c(15, 15, 38.4, 2),
+              heights = c(2, 10, 2),
+              # widths = c(5, 20, 30, 2),
+              # heights = c(3, 50, 2, 2),
+              nrow = 1),
     marg,
-    heights = c(2, 96, 2), ncol = 1)
+    ncol = 1)
   ggexport(x,
            filename = paste0('pdfs/', this_number, '.pdf'),
            width = dims[1], height = dims[2])
 }
+# setwd('pdfs')
+# system('pdftk *.pdf cat output all.pdf')
+# setwd('..')
+
+
 setwd('pdfs')
-system('pdftk *.pdf cat output all.pdf')
+system('pdfjam 001.pdf 002.pdf 003.pdf 004.pdf 005.pdf 006.pdf 007.pdf 008.pdf 009.pdf 010.pdf 011.pdf 012.pdf --nup 3x4 --landscape --outfile 001-004.pdf')
 setwd('..')
