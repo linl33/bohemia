@@ -36,6 +36,10 @@ traccar_mysql_local_user: traccaruser
 traccar_mysql_local_pass: traccarpass
 traccar_mysql_local_host: 127.0.0.1
 shiny_server: https://bohemia.team
+
+aws_access_key_id: xxx
+aws_secret_access_key: xxx
+aws_default_region_name: eu-west-3
 ```
 
 - Henceforth, references in this guide wrapped in `<>` refer to variables from this credentials file.
