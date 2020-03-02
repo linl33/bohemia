@@ -107,10 +107,13 @@ local   all             postgres                                trust
 /etc/init.d/postgresql reload
 ```
 
+##### On the ODK Aggregate server
+
 - On the server, create a folder for dumps:
 ```
 mkdir ~/Documents
-mkdir ~/Documents/
+cd ~/Documents
+mkdir dumps/
 sudo chmod -R 775 dumps/  
 ```
 - In that folder, create a `backup.sh` file and make it executable:
@@ -118,16 +121,18 @@ sudo chmod -R 775 dumps/
 touch ~/Documents/dumps/backup.sh
 sudo chmod +x  ~/Documents/dumps/backup.sh
 ```
-- Open the file and copy and paste the below information:
+- Open the file and copy and paste the below information (changing the `server` variable to one of `bohemiasystems`, `ihi`, or `cism`):
 
 ```
+#!/bin/bash
+
+server=bohemiasystems
 bucket=databrewbohemia
 folder=aggregate
 dateValue=`(date --iso-8601=seconds)`
 file=${dateValue}.gz
-resource="/${bucket}/${folder}/${file}"
+resource="/${bucket}/${server}/${folder}/${file}"
 
-#!/bin/bash
 # Stop running tomcat
 sudo service tomcat8 stop
 
@@ -144,6 +149,44 @@ sudo service tomcat8 start
 aws s3 cp ${file} s3:/${resource}
 rm ${file}
 ```
+
+##### On the traccar server (bohemia.fun)
+
+- On the server, create a folder for dumps:
+```
+mkdir ~/Documents
+cd ~/Documents
+mkdir dumps
+sudo chmod -R 775 dumps/  
+```
+- In that folder, create a `backup.sh` file and make it executable:
+```
+touch ~/Documents/dumps/backup.sh
+sudo chmod +x  ~/Documents/dumps/backup.sh
+```
+- Open the file and copy and paste the below information (replacing the text within `<>` with the appropriate user and password for the `traccardb` database):
+
+
+```
+#!/bin/bash
+
+server=bohemiafun
+bucket=databrewbohemia
+folder=traccardb
+dateValue=`(date --iso-8601=seconds)`
+file=${dateValue}.gz
+resource="/${bucket}/${server}/${folder}/${file}"
+
+# Run the dump
+mysqldump -u <traccar_mysql_local_user> -p<traccar_mysql_local_pass> traccardb | gzip > ${file}
+
+aws s3 cp ${file} s3:/${resource}
+rm ${file}
+```
+
+
+
+
 
 #### Use crontab to automate the above
 

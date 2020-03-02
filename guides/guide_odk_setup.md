@@ -353,6 +353,10 @@ There are some tools that help to both download the census excel from google doc
 - Get inside the virtual environment (`workon bohemia`) and intall python pacakges: `pip install -r requirements.txt`
 - From within the main `bohemia` directory, `cd` into `scripts` and run `python census_excel_to_xml.py`
 
+# Backups
+
+See the [Backups guide](guide_backups.md) for details on generating automatated backups.
+
 # enketo
 
 For viewing forms on the web, check out the enketo guide [HERE](guide_enketo.md).

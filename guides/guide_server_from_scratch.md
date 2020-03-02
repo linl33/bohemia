@@ -287,6 +287,10 @@ sudo certbot run --nginx --non-interactive --agree-tos -m imaniirema@gmail.com -
 - Save
 - Create users
 
+# Backups
+
+See the [Backups guide](guide_backups.md) for details on generating automatated backups.
+
 
 # Data collection
 

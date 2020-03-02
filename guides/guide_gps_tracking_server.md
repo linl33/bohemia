@@ -331,3 +331,7 @@ select * from tc_positions;
 ### Troubleshooting and logs
 - See logs at `/opt/traccar/logs/tracker-server.log`
 - See more details on the [troubleshooting page](https://www.traccar.org/troubleshooting/)
+
+# Backups
+
+See the [Backups guide](guide_backups.md) for details on generating automatated backups.
