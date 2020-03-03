@@ -28,6 +28,7 @@
 
 ### Configuration
 
+- On the android device, make sure location (in settings > privacy) is enabled, AND that the locating method is as high as possible (GPS and Wi-Fi)
 - Open the Traccar app
 - Set the address of the server URL: `http://bohemia.fun`
 - Set the Frequency field to: `60`

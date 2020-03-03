@@ -1,6 +1,6 @@
 # Admin guide for setting up the back-end for the PK Trial
 
-The below guide is a walk-through of setting up the PK Trial data infrastructure. It assumes you are running a cloud server on AWS (which will not be the case, but is documented here for reproducibility). In the case of a local server, you can skip much of the first section.
+The below guide is a walk-through of setting up the PK Trial data infrastructure. It assumes you are running a cloud server on AWS. In the case of a local server, you can skip much of the first section, and/or refer to this [guide for local physical servers](guide_server_from_scratch.md).
 
 This guide assumes a public-facing url (bohemia.systems) and very clear usernames and passwords (generally `data` and `data`); obviously, these should be changed for the real deploy.
 
