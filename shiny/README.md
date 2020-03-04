@@ -309,6 +309,7 @@ sudo su - -c "R -e \"install.packages('kableExtra')\"";
 sudo su - -c "R -e \"install.packages('googlesheets')\"";
 sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia', dependencies = TRUE, force = TRUE)\""
 
+sudo su - -c "R -e \"install.packages('shinydashboardPlus')\"";
 ```
 
 Test:
