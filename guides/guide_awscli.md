@@ -20,6 +20,13 @@ sudo apt-get install awscli
 - To download the key pair, choose Download .csv file. Store the keys in a secure location. You will not have access to the secret access key again after this dialog box closes. Store this file in a safe area.
 ![](img/credentials.png)
 
+### Verify IAM user has full s3 permissions.
+- Click on `Users` in under `Access management` in your IAM console.
+- Click on `Add permissions` 
+![](img/permissions_1.png)
+- Click on `Attach existing policies directly`. 
+- Search `AmazonS3FullAccess` and add it to your permissions. 
+
 ### Configure awscli
 - Open a terminal and run `aws configure`.
 ![](img/aws_1.png)
