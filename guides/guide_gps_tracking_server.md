@@ -224,6 +224,27 @@ With:
 
 - Note in the above that the `3.21.67.128` is the server IP.
 
+- Also, add some filtering to ensure that we don't capture too much jumpiness:
+```
+<entry key='distance.enable'>true</entry>
+
+<entry key='filter.enable'>true</entry>
+<entry key='filter.distance'>40</entry>
+<entry key='filter.maxSpeed'>25000</entry>
+<entry key='filter.invalid'>true</entry>
+<entry key='filter.accuracy'>40</entry>
+<entry key='filter.duplicate'>true</entry>
+<entry key='filter.skipLimit'>1800</entry>
+<entry key='filter.future'>600</entry>
+<entry key='filter.zero'>true</entry>
+
+
+
+<entry key='report.trip.minimalTripDuration'>250</entry>
+<entry key='report.trip.minimalTripDistance'>300</entry>
+<entry key='report.trip.minimalParkingDuration'>300</entry>
+```
+
 #### Optimize MySQL
 
 ```
