@@ -21,7 +21,7 @@ sudo apt-get install awscli
 ![](img/credentials.png)
 
 ### Verify IAM user has full s3 permissions.
-- Click on `Users` in under `Access management` in your IAM console.
+- Click on `Users` under `Access management` in your IAM console.
 - Click on `Add permissions` 
 ![](img/permissions_1.png)
 - Click on `Attach existing policies directly`. 
