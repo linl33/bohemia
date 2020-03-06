@@ -238,8 +238,6 @@ With:
 <entry key='filter.future'>600</entry>
 <entry key='filter.zero'>true</entry>
 
-
-
 <entry key='report.trip.minimalTripDuration'>250</entry>
 <entry key='report.trip.minimalTripDistance'>300</entry>
 <entry key='report.trip.minimalParkingDuration'>300</entry>
