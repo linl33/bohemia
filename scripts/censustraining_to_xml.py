@@ -1,6 +1,7 @@
 import pygsheets
 import xlrd
 import os
+import shutil
 #import numpy as np
 
 # Authorize by using this: https://pygsheets.readthedocs.io/en/latest/authorization.html
@@ -19,7 +20,7 @@ gc = pygsheets.authorize('../credentials/gsheets_oauth.json')
     ## Convert to xml
 #    os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
 
-doc = 'censusx'
+doc = 'censustraining'
 sh = gc.open(doc)
 wks = sh.sheet1
 
@@ -29,4 +30,9 @@ wks.export(pygsheets.ExportType.XLS, doc)
 ## Convert to xml
 os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
 
-print("Successfully created the following documents:\n---" + doc + '.xls\n---' + doc +'.xml')
+# Move
+shutil.move(doc + '.xls', "../forms/censustraining/" + doc + '.xls')
+shutil.move(doc + '.xml', "../forms/censustraining/" + doc + '.xml')
+shutil.move('itemsets.csv', '../forms/censustraining/itemsets.csv')
+
+print('Done. Docs in forms/censustraining.')
