@@ -11,30 +11,32 @@ To use the Bohemia data access tools, it is advisable to first:
 ```
 country: MOZ # or TZA
 moz_odk_server: https://bohemia.systems # will change
-moz_odk_user: data
-moz_odk_pass: data
+moz_odk_user: data # will change
+moz_odk_pass: data # will change
 
 tza_odk_server: https://bohemia.ihi.or.tz
-tza_odk_user: data
-tza_odk_pass: data
+tza_odk_user: data # will change
+tza_odk_pass: data # will change
 
-databrew_odk_server: https://bohemia.systems
-databrew_odk_user: data
-databrew_odk_pass: data
+databrew_odk_server: https://bohemia.systems # will change
+databrew_odk_user: data # will change
+databrew_odk_pass: data # will change
 
 odk_database: aggregate
+odk_database_host: <request from databrew>
 odk_database_user: aggregate
 odk_database_pass: aggregate
 odk_database_schema: aggregate
 
 traccar_server: https://bohemia.fun
 traccar_db: traccardb
-traccar_mysql_remote_user: traccarremoteuser
-traccar_mysql_remote_pass: traccarremotepass
-traccar_mysql_remote_host: 3.21.67.128
-traccar_mysql_local_user: traccaruser
-traccar_mysql_local_pass: traccarpass
-traccar_mysql_local_host: 127.0.0.1
+traccar_mysql_remote_user: <request from databrew>
+traccar_mysql_remote_pass: <request from databrew>
+traccar_mysql_remote_host: <request from databrew>
+traccar_mysql_local_user: <request from databrew>
+traccar_mysql_local_pass: <request from databrew>
+traccar_mysql_local_host: <request from databrew>
+
 shiny_server: https://bohemia.team
 
 aws_access_key_id: xxx
