@@ -20,7 +20,7 @@ gc = pygsheets.authorize('../credentials/gsheets_oauth.json')
     ## Convert to xml
 #    os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
 
-doc = 'census_training'
+doc = 'censustraining'
 sh = gc.open(doc)
 wks = sh.sheet1
 
