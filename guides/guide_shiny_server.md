@@ -181,6 +181,10 @@ sudo systemctl restart nginx
 ```
 sudo su - -c "R -e \"install.packages('tinytex')\""
 sudo su - -c "R -e \"tinytex::install_tinytex()\""
+#sudo apt-get install texlive-latex-base
+# sudo apt install texlive-xetex
+sudo su - shiny
+R -e 'tinytex::install_tinytex()'
 ```
 
 - "Fool" apt-get into not installing more latex packages:
@@ -341,6 +345,9 @@ sudo chmod g+s .
 ```
 sudo su - -c "R -e \"remove.packages('bohemia')\""
 sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia', dependencies = TRUE, force = TRUE)\""
+# Need to make the location of the package writeable
+sudo chmod -R 777 /usr/local/lib/R/site-library/bohemia/shiny/operations  # identify this by running system.file('shiny/operations', package = 'bohemia')
+
 
 # Run the below once only
 mkdir /srv/shiny-server/operations

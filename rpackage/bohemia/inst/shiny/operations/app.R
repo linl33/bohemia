@@ -857,11 +857,10 @@ server <- function(input, output) {
                       data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
                                          n_teams = as.numeric(as.character(input$enumeration_n_teams)))
                       # generate html
-                      out_file <- paste0(getwd(), '/list.pdf')
+                      out_file <- paste0(system.file('shiny/operations/rmds', package = 'bohemia'), '/list.pdf')
                       rmarkdown::render(paste0(system.file('shiny/operations/rmds', package = 'bohemia'), '/list.Rmd'),
                                         params = list(data = data,
-                                                      loc_id = lc),
-                                        output_file = out_file)
+                                                      loc_id = lc))
                       
                       # copy html to 'file'
                       file.copy(out_file, file)
