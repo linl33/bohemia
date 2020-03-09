@@ -98,6 +98,7 @@ sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get update
 sudo apt-get install certbot python-certbot-nginx
 sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d bohemia.team
+sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d datacat.cc
 ```
 
 ### Set up proxy, certificate, etc.
@@ -128,12 +129,14 @@ sudo nano /etc/nginx/sites-available/bohemia.team
 In /etc/nginx/sites-available/bohemia.team, add the following:
 
 ```
+# redirect from http to https for bohemia.team
 server {
    listen 80 default_server;
    listen [::]:80 default_server ipv6only=on;
    server_name bohemia.team www.bohemia.team;
    return 301 https://$server_name$request_uri;
 }
+
 server {
    listen 443 ssl;
    server_name bohemia.team www.bohemia.team;
@@ -143,6 +146,9 @@ server {
    ssl_prefer_server_ciphers on;
    ssl_ciphers AES256+EECDH:AES256+EDH:!aNULL;
 
+
+# anything that does not match the above location blocks (if there are any)
+# will get directed to 3838
    location / {
        proxy_pass http://18.218.87.64:3838/;
        proxy_redirect http://18.218.87.64:3838/ https://$host/;
@@ -222,6 +228,7 @@ sudo apt-get -y install \
     libxt-dev \
     libv8-dev
 sudo apt-get update
+sudo apt-get install libmagick++-dev
 ```
 
 - Install some R packages
@@ -310,7 +317,10 @@ sudo su - -c "R -e \"install.packages('kableExtra')\"";
 sudo su - -c "R -e \"install.packages('googlesheets')\"";
 sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia', dependencies = TRUE, force = TRUE)\""
 sudo su - -c "R -e \"install.packages('shinydashboardPlus')\"";
+sudo su - -c "R -e \"devtools::install_github('aoles/shinyURL')\""
+
 ```
+
 
 
 
