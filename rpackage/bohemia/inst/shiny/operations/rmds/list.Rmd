@@ -1,0 +1,93 @@
+---
+params:
+  data: !r data.frame(n_hh = 400, n_teams = 2) # data on the hamlet
+  loc_id: 'ABC'
+output:
+  pdf_document:
+    keep_tex: yes
+    includes:
+      in_header: preamble.sty
+tables: yes
+---
+
+```{r setup, include=FALSE}
+# output: 
+#   pdf_document:
+#     latex_engine: xelatex
+#      pandoc_args: [
+#      "-V", "classoption=twocolumn"
+#    ]
+#     template: pdf/layout.tex
+#     includes:
+#       in_header: pdf/preamble.sty
+library(knitr)# Basic knitr options
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = F,
+               fig.height = 6)
+# knit_engines$set(asis = function(options) {
+#   if (options$echo && options$eval) knit_child(text = options$code)
+# })
+```
+
+
+```{r}
+library(dplyr)
+options(kableExtra.latex.load_packages = FALSE)
+library(kableExtra)
+# Specify paramaters
+for (i in 1:length(params)){
+  assign(names(params)[i],
+         params[[i]],
+         env = .GlobalEnv)
+}
+```
+
+## Enumeration lists for `r loc_id`
+
+\newpage
+
+```{r}
+lc <- loc_id
+n_hh <- as.numeric(data$n_hh)
+n_teams <- as.numeric(data$n_teams)
+
+team_numbers <- rep(1:n_teams, each = round(n_hh / n_teams))
+while(length(team_numbers) < n_hh){
+  team_numbers <- c(team_numbers, team_numbers[length(team_numbers)])
+}
+
+while(length(team_numbers) > n_hh){
+  team_numbers <- team_numbers[1:n_hh]
+}
+
+out <- tibble(id = paste0(lc, '-', bohemia::add_zero(1:n_hh, n = 3)),
+              team = team_numbers)
+```
+
+```{r}
+chunk_list <- list()
+for(i in 1:n_teams){
+  chunk_list[[i]] <-
+    paste0("## Team ", i, "\n\n\n```{r}\n",
+           "kable(out %>% filter(team == ", i, ") %>% data.frame %>% dplyr::select(-team) %>% dplyr::mutate(`Status` = ' ', Comments = ' '), 'latex', longtable = T, caption = 'Team ", i,"')  %>% kable_styling(latex_options = c('striped', 'repeat_header', full_width = TRUE)) %>% column_spec(3, width = '8cm') \n```\n\\newpage\n")
+}
+chunks <- unlist(chunk_list)
+chunks <- paste0(chunks, collapse = '\n')
+
+file_connection <- file('children.Rmd')
+writeLines(paste0('---\noutput: pdf_document\n---\n\n', 
+                  chunks), 
+           file_connection)
+close(file_connection)
+```
+
+```{r child='children.Rmd'}
+```
+
+```{r, results='hide'}
+file.remove('children.Rmd')
+```
