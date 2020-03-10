@@ -131,8 +131,8 @@ In /etc/nginx/sites-available/bohemia.team, add the following:
 ```
 # redirect from http to https for bohemia.team
 server {
-   listen 80 default_server;
-   listen [::]:80 default_server ipv6only=on;
+  listen 80;
+  listen [::]:80;
    server_name bohemia.team www.bohemia.team;
    return 301 https://$server_name$request_uri;
 }
@@ -159,6 +159,49 @@ server {
    }
 }
 ```
+
+
+
+Do the same for any other domain being hosted on the same server (for example, datacat.cc)
+
+```
+sudo nano /etc/nginx/sites-available/datacat.cc
+```
+
+In /etc/nginx/sites-available/datacat.cc, add the following:
+
+```
+# redirect from http to https for datacat.cc
+server {
+   listen 80;
+   listen [::]:80;
+   server_name datacat.cc www.datacat.cc;
+   return 301 https://$server_name$request_uri;
+}
+
+server {
+   listen 443 ssl;
+   server_name datacat.cc www.datacat.cc;
+   ssl_certificate /etc/letsencrypt/live/datacat.cc/fullchain.pem;
+   ssl_certificate_key /etc/letsencrypt/live/datacat.cc/privkey.pem;
+   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+   ssl_prefer_server_ciphers on;
+   ssl_ciphers AES256+EECDH:AES256+EDH:!aNULL;
+
+
+# anything that does not match the above location blocks (if there are any)
+# will get directed to 3838
+   location / {
+       proxy_pass http://18.218.87.64:3838/;
+       proxy_redirect http://18.218.87.64:3838/ https://$host/;
+       proxy_http_version 1.1;
+       proxy_set_header Upgrade $http_upgrade;
+       proxy_set_header Connection $connection_upgrade;
+       proxy_read_timeout 20d;
+   }
+}
+```
+
 
 # Enable the new block by creating a symlink
 
