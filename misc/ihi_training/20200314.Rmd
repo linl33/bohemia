@@ -1,0 +1,280 @@
+---
+title: "Bohemia insights, IHI Training"
+author: "Databrew LLC"
+date: "`r Sys.Date()`"
+output:
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = TRUE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+## Context
+
+In the context of training of census fieldworkers at IHI, (practice) data entry with the census form has begun. Since fieldworkers have already entered and uploaded data, Imani (Data Manager, IHI) requested the following from Databrew on Friday, March 13:
+
+1. Average start and end time for the form
+
+2. Tables and graphs of some useful data
+
+3. Maps of the visited households and grazing areas and water bodies
+
+This report addresses these requests. It includes both the outputs as well as the input code, for purposes of training and reproducibility.
+
+## Data retrieval
+
+```{r}
+# In order for the below to function, you'll need to have correctly populated
+# a credentials.yaml file, as per directions sent by Joe Brew in early March 2020
+# Load libraries
+library(bohemia)
+library(dplyr)
+library(leaflet)
+library(ggplot2)
+library(lubridate)
+library(yaml)
+
+# Get credentials
+creds <- yaml.load_file('../../credentials/credentials.yaml')
+url = creds$tza_odk_server
+user = creds$tza_odk_user
+pass = creds$tza_odk_pass
+
+# Get form list
+fl <- odk_list_forms(url = url,
+                     user = user, 
+                     pass = pass)
+# Display
+fl
+
+# Extract the id of the form
+id <- fl$id[fl$name == 'Census']
+
+# Get all data for form in question (cache so as to not have to overping the server)
+file_name <- 'cache.RData'
+if(!file_name %in% dir()){
+  
+    # Get a list of the submissions for the form in question
+  submissions <- odk_list_submissions(url = url,
+                                      id = id,
+                                      user = user, 
+                                      password = pass)
+  # View
+  submissions
+
+  # Get all the submissions
+  data_list = odk_get_data(url = url, id = id, user = user, pass = pass)
+
+  save(data_list, file = file_name)
+} else {
+  load(file_name)
+}
+
+# There is now an object called data_list, with a slot for repeats and non repeats
+
+```
+
+## 1. Time for form completion
+
+```{r}
+# Process the data
+# We'll take the difference between start time and end time to get average
+pd <- data_list$non_repeats
+pd$start_time <- lubridate::as_datetime(pd$start_time)
+pd$end_time <- lubridate::as_datetime(pd$end_time)
+pd$time_diff <- as.numeric(difftime(pd$end_time, pd$start_time, units = 'mins'))
+```
+
+
+```{r}
+# Average start and end time
+mean(pd$start_time)
+
+mean(pd$end_time)
+
+paste0(mean(pd$time_diff), ' minutes')
+```
+
+
+```{r}
+# Visualize the data
+
+# Distribution of time to finish
+ggplot(data = pd,
+       aes(x = time_diff)) +
+  geom_density() +
+  databrew::theme_simple() +
+  # add a line at the average time
+  geom_vline(xintercept = mean(pd$time_diff), lty = 2) +
+  labs(title = 'Time to complete census form')
+```
+
+
+```{r}
+# Distribution of start time
+ggplot(data = pd,
+       aes(x = start_time)) +
+  geom_histogram(fill = 'beige', color = 'grey') +
+  databrew::theme_simple() +
+  # add a line at the average time
+  geom_vline(xintercept = mean(pd$start_time), lty = 2) +
+  labs(title = 'Start time',
+       labs = 'Time',
+       y = 'Count')
+```
+
+```{r}
+# Distribution of end time
+ggplot(data = pd,
+       aes(x = end_time)) +
+  geom_histogram(fill = 'beige', color = 'grey') +
+  databrew::theme_simple() +
+  # add a line at the average time
+  geom_vline(xintercept = mean(pd$end_time), lty = 2) +
+  labs(title = 'End time',
+       labs = 'Time',
+       y = 'Count')
+```
+
+```{r}
+# Copmbined distribution
+x = pd 
+x <- x %>% arrange(start_time)
+x$wid <- factor(x$wid, levels = x$wid)
+ggplot(data = x,
+       aes(x = (wid),
+           y = end_time)) +
+  geom_segment(aes(yend = start_time,
+           xend = (wid))) +
+  geom_point() +
+  geom_point(aes(y = start_time)) +
+  databrew::theme_simple() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 8)) +
+  labs(y = 'Time of day',
+       x = 'Worker ID',
+       title = 'Time to finish form by worker ID')
+```
+
+```{r}
+# Time to finish by fieldworker
+x = pd %>%
+  group_by(wid = as.character(wid)) %>%
+  summarise(n_forms = n(),
+            avg_time = mean(time_diff))
+x <- x %>% arrange(desc(avg_time))
+x$wid <- factor(x$wid, levels = x$wid)
+ggplot(data = x,
+       aes(x = wid,
+           y = avg_time)) +
+  geom_bar(stat = 'identity', fill = NA, color = 'black') +
+  databrew::theme_simple() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 8)) +
+  labs(y = 'Minutes',
+       x = 'Worker ID',
+       title = 'Time to finish form by worker ID')
+
+```
+
+
+
+## 2. Tables and graphs of some useful data
+
+(Skipping for now due to time constraints)
+
+## 3. Maps of the visited households and grazing areas and water bodies
+
+#### Visited households
+
+```{r}
+# Prepare data
+pd <- data_list$non_repeats
+
+# Define function for extracting lng/lat
+extract_geo <- function(x, give_back = c('lng', 'lat')){
+  xs <- lapply(strsplit(x, ' '), function(z){tibble(lng = z[2], lat = z[1])})
+  xs <- bind_rows(xs)
+  xs$lng <- as.numeric(xs$lng)
+  xs$lat <- as.numeric(xs$lat)
+  if(length(give_back) == 2){
+    return(xs)
+  } else {
+  return(unlist(xs[,give_back]))
+  }
+  
+}
+pd$lng <- extract_geo(pd$hh_geo_location, 'lng')
+pd$lat <- extract_geo(pd$hh_geo_location, 'lat')
+```
+
+```{r}
+# Simple map
+library(sp)
+plot(bohemia::ruf3)
+points(pd$lng, pd$lat, col = 'red')
+```
+
+```{r}
+# Zoomed in map
+xy <- pd[,c('lng', 'lat')]
+xy <- xy[!is.na(xy$lng),]
+coordinates(xy) <- ~lng+lat
+proj4string(xy) <- proj4string(ruf3)
+keep <- sort(unique(sp::over(xy, polygons(bohemia::ruf3))))
+sub_area <- ruf3[keep,]
+plot(sub_area)
+points(pd$lng, pd$lat, col = 'red')
+```
+
+```{r}
+# Zoomed in with added details
+plot(sub_area)
+plot(rufiji_water, col = 'blue', add = T)
+plot(rufiji_waterways, col = 'blue', add = T)
+plot(rufiji_roads, col = 'black', add = T)
+points(pd$lng, pd$lat, col = 'red', pch = '.')
+```
+
+```{r}
+# Interactive
+leaflet() %>%
+  addProviderTiles('Esri.WorldImagery') %>%
+  addMarkers(lng = pd$lng,
+             lat = pd$lat,
+             popup = paste0('Worker ID: ', pd$wid, ' | Form ID: ', pd$instanceID))
+```
+
+#### Grazing areas
+
+(Nothing geocoded)
+
+
+
+```{r}
+gr <- data_list$repeats$repeat_water
+gr$lng <- extract_geo(gr$water_bodies_geo, 'lng')
+gr$lat <- extract_geo(gr$water_bodies_geo, 'lat')
+
+leaflet() %>%
+  addProviderTiles('Esri.WorldImagery') %>%
+  addCircleMarkers(lng = gr$lng,
+             lat = gr$lat,
+             popup = paste0(gr$water_bodies_type, ' | Form ID: ', pd$instanceID))
+```
+
+
+#### Bodies of water
