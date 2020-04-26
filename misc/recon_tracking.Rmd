@@ -15,7 +15,7 @@ library(leaflet)
 library(kableExtra)
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
 # read in credentials
 creds <- read_yaml('../credentials/credentials.yaml')
 form_name_mz <- 'recon'
