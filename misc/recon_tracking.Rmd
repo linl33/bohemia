@@ -181,8 +181,8 @@ ggplot(plot_data, aes(Country, percent_geo_coded)) + geom_bar(stat = 'identity',
  m <- leaflet() %>%
         addTiles()  
  m <- addCircleMarkers(map = m, 
-                              lng=plot_data$lat, 
-                              lat=plot_data$lon,
+                              lng=recon_data$lat, 
+                              lat=recon_data$lon,
                               radius = 4, 
                               opacity = 1) 
  
