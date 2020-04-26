@@ -51,7 +51,7 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   }
   
   # Get the list of submissions
-  submissions <- odk_list_submissions(url = 'https://bohemia.systems',
+  submissions <- odk_list_submissions(url = url,
                                       id = id,
                                       user = user,
                                       password = password)

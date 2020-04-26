@@ -1,0 +1,197 @@
+---
+title: "recon_tracking"
+author: "Ben Brew"
+date: "26/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE,echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(bohemia)
+library(tidyverse)
+library(yaml)
+library(databrew)
+library(leaflet)
+library(kableExtra)
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+# read in credentials
+creds <- read_yaml('../credentials/credentials.yaml')
+form_name_mz <- 'recon'
+form_name_tz <- 'recon_geo'
+
+
+# read in moz data
+recon_mz <- odk_get_data(
+  url = creds$moz_odk_server,
+  id = form_name_mz,
+  id2 = NULL,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = NULL,
+  user = creds$moz_odk_user,
+  password = creds$moz_odk_pass
+)
+
+# get non repeat data
+recon_mz <- recon_mz[[2]]
+recon_mz$lon <- as.numeric(unlist(lapply(strsplit(recon_mz$location, ' '), function(x) x[1])))
+recon_mz$lat <- as.numeric(unlist(lapply(strsplit(recon_mz$location, ' '), function(x) x[2])))
+
+
+# read in tz data
+recon_tz <- odk_get_data(
+  url = creds$tza_odk_server,
+  id = 'recon',
+  id2 = NULL,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = NULL,
+  user = creds$tza_odk_user,
+  password = creds$tza_odk_pass
+)
+
+# get non repeat data
+recon_tz <- recon_tz[[2]]
+# extract the first two digits from location to get lat long
+recon_tz$lon <- as.numeric(unlist(lapply(strsplit(recon_tz$location, ' '), function(x) x[1])))
+recon_tz$lat <- as.numeric(unlist(lapply(strsplit(recon_tz$location, ' '), function(x) x[2])))
+
+
+# change device id to numeric
+recon_tz$device_id <- as.character(recon_tz$device_id)
+
+
+# join tz and mz data 
+recon_data <- bind_rows(recon_tz, recon_mz)
+
+# rm(recon_tz, recon_mz)
+
+# get data data 
+recon_data$date <- as.Date(strftime(recon_data$start_time, format = "%Y-%m-%d"))
+
+
+# get indicator for if location has been geocoded
+recon_data$geo_coded <- ifelse(!is.na(recon_data$lon) | !is.na(recon_data$lat), TRUE, FALSE)
+
+```
+
+
+# Table submitted forms for both countries
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+kableExtra::kable(recon_data,format = 'html', align = "lccrr") %>%
+    kable_styling() %>%
+    scroll_box(width = "1000px", height = "500px")
+
+```
+
+# Total forms submitted by country to data and over time
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# get submissions over time and plot
+plot_data <- recon_data %>% group_by(Country,date) %>% summarise(counts = n()) 
+plot_data$cum_sum <- cumsum(plot_data$counts)
+ggplot(plot_data, aes(date, cum_sum, color = Country)) + 
+  geom_line() +
+  labs(x = 'Date',
+       y = 'Cumulative recon forms submitted',
+       title = 'Cumulative forms over time') +
+  theme_databrew()
+  
+# get total submissions
+ggplot(recon_data %>% group_by(Country) %>% summarise(counts = n()), aes(Country, counts)) +
+  geom_bar(stat = 'identity', alpha = 0.7) +
+  labs(x = '', 
+       y = '# forms submitted',
+       title = 'Total forms submitted') + 
+  theme_databrew()
+  
+```
+
+
+# Total forms submitted by country, region, distric, ward, village, hamlet to data and over time
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# get mz locations
+plot_data <- recon_data %>% group_by(Country,Region, District, Ward, Village, Hamlet) %>% 
+  summarise(counts = n())
+
+# by region
+ggplot(plot_data, aes(Region, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
+  labs(x = '', 
+       y = '# forms submitted',
+       title = 'Total forms submitted') + 
+  theme_databrew()
+
+# by district
+ggplot(plot_data, aes(District, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
+  labs(x = '', 
+       y = '# forms submitted',
+       title = 'Total forms submitted') + 
+  theme_databrew()
+
+# by ward
+ggplot(plot_data, aes(Ward, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
+  labs(x = '', 
+       y = '# forms submitted',
+       title = 'Total forms submitted') + 
+  theme_databrew() +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.7)) 
+
+# by ward
+ggplot(plot_data, aes(Village, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
+  labs(x = '', 
+       y = '# forms submitted',
+       title = 'Total forms submitted') + 
+  theme_databrew() +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.7, size =7)) 
+
+# by ward
+ggplot(plot_data, aes(Hamlet, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
+  labs(x = '', 
+       y = '# forms submitted',
+       title = 'Total forms submitted') + 
+  theme_databrew() +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.7, size =7)) 
+
+ 
+```
+
+# Percent of forms geocoded in each country
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+
+# percent of locations with geo code
+plot_data <- recon_data %>% group_by(Country)  %>% summarise(counts = n(),
+                                                            num_geo_coded = sum(geo_coded == TRUE),
+                                                            percent_geo_coded = round((num_geo_coded/counts)*100, 2))
+
+ggplot(plot_data, aes(Country, percent_geo_coded)) + geom_bar(stat = 'identity',alpha = 0.7) +
+  labs(x = '', 
+       y = '% of forms',
+       title = 'Percent of forms submitted with geocoding') + 
+  theme_databrew() 
+
+```
+
+# Map of locations that were geocoded
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+ # BECAUSE HERE THERE IS A LAT OF -122 IN PALO ALTO.
+ map_data <- recon_data %>% filter(lat > 0)
+ m <- leaflet() %>%
+        addTiles()  
+ m <- addCircleMarkers(map = m, 
+                              lng=map_data$lat, 
+                              lat=map_data$lon,
+                              popup = paste0(recon_data$lat, ' ', recon_data$lon),
+                              radius = 4, 
+                              opacity = 1) 
+ 
+m
+```
+
