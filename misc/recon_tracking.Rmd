@@ -1,18 +1,31 @@
 ---
-title: "recon_tracking"
-author: "Ben Brew"
-date: "26/04/2020"
+title: "Reconnaissance tracking"
 output: html_document
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+  fig.path = "figures/",
+  out.width = "100%"
+)
+```
+
 ```{r setup, include=FALSE,echo=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
 library(bohemia)
 library(tidyverse)
 library(yaml)
 library(databrew)
 library(leaflet)
 library(kableExtra)
+library(ggplot2)
+theme_set(theme_simple())
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -21,40 +34,48 @@ creds <- read_yaml('../credentials/credentials.yaml')
 form_name_mz <- 'recon'
 form_name_tz <- 'recon_geo'
 
-# read in moz data
-recon_mz <- odk_get_data(
-  url = creds$moz_odk_server,
-  id = form_name_mz,
-  id2 = NULL,
-  unknown_id2 = FALSE,
-  uuids = NULL,
-  exclude_uuids = NULL,
-  user = creds$moz_odk_user,
-  password = creds$moz_odk_pass
-)
+data_file <- 'data.RData'
 
-# get non repeat data
-recon_mz <- recon_mz[[2]]
-
-# read in tz data
-recon_tz <- odk_get_data(
-  url = creds$tza_odk_server,
-  id = 'recon',
-  id2 = NULL,
-  unknown_id2 = FALSE,
-  uuids = NULL,
-  exclude_uuids = NULL,
-  user = creds$tza_odk_user,
-  password = creds$tza_odk_pass
-)
-
-# get non repeat data
-recon_tz <- recon_tz[[2]]
-
+if(data_file %in% dir()){
+  load(data_file)
+} else {
+  # read in moz data
+  recon_mz <- odk_get_data(
+    url = creds$moz_odk_server,
+    id = form_name_mz,
+    id2 = NULL,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = NULL,
+    user = creds$moz_odk_user,
+    password = creds$moz_odk_pass
+  )
+  
+  # get non repeat data
+  recon_mz <- recon_mz[[2]]
+  
+  # read in tz data
+  recon_tz <- odk_get_data(
+    url = creds$tza_odk_server,
+    id = 'recon',
+    id2 = NULL,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = NULL,
+    user = creds$tza_odk_user,
+    password = creds$tza_odk_pass
+  )
+  
+  # get non repeat data
+  recon_tz <- recon_tz[[2]]
+  
+  save(recon_tz,
+       recon_mz,
+       file = data_file)
+}
 
 # change device id to numeric
 recon_tz$device_id <- as.character(recon_tz$device_id)
-
 
 # join tz and mz data 
 recon_data <- bind_rows(recon_tz, recon_mz)
@@ -74,29 +95,137 @@ recon_data$geo_coded <- ifelse(!is.na(recon_data$lon) | !is.na(recon_data$lat), 
 ```
 
 
-# Table submitted forms for both countries
+# Total number of submitted forms by geographic level
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
-kableExtra::kable(recon_data,format = 'html', align = "lccrr") %>%
-    kable_styling() %>%
-    scroll_box(width = "1000px", height = "500px")
+### By country
+
+```{r}
+recon_data %>%
+  group_by(Country) %>%
+  summarise(Total = n()) %>% databrew::prettify()
+```
+
+### By district
+
+```{r}
+recon_data %>%
+  group_by(District) %>%
+  summarise(Total = n()) %>% databrew::prettify()
+```
+
+
+### By village
+
+```{r}
+recon_data %>%
+  group_by(Village) %>%
+  summarise(Total = n()) %>% databrew::prettify()
+```
+
+### By hamlet
+
+```{r}
+recon_data %>%
+  group_by(Country, District, Village, Hamlet) %>%
+  summarise(Total = n()) %>% databrew::prettify()
+```
+
+# Pending forms
+
+The below table shows the total number of hamlets by country:
+
+```{r}
+right <- locations %>% group_by(Country) %>% summarise(Total = n())
+databrew::prettify(right)
+```
+
+### Pending forms by Country
+
+```{r}
+recon_data %>% group_by(Country) %>%
+  summarise(Done = n()) %>% left_join(right) %>%
+  mutate(`Percent finished` = round(Done / Total * 100, digits = 2)) %>% databrew::prettify()
+```
+
+### Pending forms by District
+
+```{r}
+right <- locations %>% group_by(Country, District) %>% summarise(Total = n())
+recon_data %>% group_by(Country, District) %>%
+  summarise(Done = n()) %>% left_join(right) %>%
+  mutate(`Percent finished` = round(Done / Total * 100, digits = 2)) %>% databrew::prettify()
+```
+
+### Pending forms by Village
+
+```{r}
+right <- locations %>% group_by(Country, District, Village) %>% summarise(Total = n())
+recon_data %>% group_by(Country, District, Village) %>%
+  summarise(Done = n()) %>% left_join(right) %>%
+  mutate(`Percent finished` = round(Done / Total * 100, digits = 2)) %>% databrew::prettify()
+```
+
+# List of all hamlets with status
+
+```{r}
+right <- locations %>% group_by(Country, District, Village, Hamlet) %>% summarise(Total = n())
+recon_data %>% group_by(Country, District, Village) %>%
+  summarise(Done = n()) %>% left_join(right) %>%
+  mutate(`Status` = ifelse(Done >= Total, 'Done', 'Not done')) %>% 
+  dplyr::select(-Done, -Total) %>%
+  dplyr::select(Status, Hamlet, Village, District, Country) %>%
+  databrew::prettify()
+```
+
+# Number of forms by FW
+
+```{r}
+file_name <- 'fids.RData'
+if(file_name %in% dir()){
+  load(file_name)
+} else {
+  registered_workers_tza <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0")
+    registered_workers_moz <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130")
+    registered_workers_other <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=179257508")
+    fids <- bind_rows(registered_workers_tza,
+                      registered_workers_moz %>% dplyr::select(-tablet_id),
+                      registered_workers_other)
+    save(fids, file = file_name)
+}
+
+pd <- recon_data %>%
+  group_by(bohemia_id = wid) %>%
+  summarise(`Forms filled` = n()) %>%
+  ungroup %>%
+  left_join(fids) %>% dplyr::select(bohemia_id, First = first_name, Last = last_name,
+                                    `Forms filled`) %>%
+  mutate(Location = ifelse(bohemia_id <= 300, 'TZA', ifelse(bohemia_id <= 600, 'MOZ', 'Not-identified')))
+databrew::prettify(pd)
 
 ```
 
-# Total forms submitted by country to data and over time
+
+# Total forms submitted over time
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 # get submissions over time and plot
 plot_data <- recon_data %>% group_by(Country,date) %>% summarise(counts = n()) 
 plot_data$cum_sum <- cumsum(plot_data$counts)
+
 ggplot(plot_data, aes(date, cum_sum, color = Country)) + 
   geom_line() +
   labs(x = 'Date',
        y = 'Cumulative recon forms submitted',
        title = 'Cumulative forms over time') +
   theme_databrew()
-  
+```
+
+# Total forms submitted by geography
+
+### By country
+
+```{r}
 # get total submissions
 ggplot(recon_data %>% group_by(Country) %>% summarise(counts = n()), aes(Country, counts)) +
   geom_bar(stat = 'identity', alpha = 0.7) +
@@ -108,54 +237,44 @@ ggplot(recon_data %>% group_by(Country) %>% summarise(counts = n()), aes(Country
 ```
 
 
-# Total forms submitted by country, region, distric, ward, village, hamlet to data and over time
-
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
-
-# get mz locations
 plot_data <- recon_data %>% group_by(Country,Region, District, Ward, Village, Hamlet) %>% 
   summarise(counts = n())
+```
 
-# by region
+### By region
+
+```{r}
 ggplot(plot_data, aes(Region, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
   labs(x = '', 
        y = '# forms submitted',
        title = 'Total forms submitted') + 
   theme_databrew()
+```
 
-# by district
+
+### By district
+
+```{r}
 ggplot(plot_data, aes(District, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
   labs(x = '', 
        y = '# forms submitted',
        title = 'Total forms submitted') + 
   theme_databrew()
+```
 
-# by ward
+### By ward
+
+```{r}
+
 ggplot(plot_data, aes(Ward, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
   labs(x = '', 
        y = '# forms submitted',
        title = 'Total forms submitted') + 
   theme_databrew() +
     theme(axis.text.x = element_text(angle = 90, vjust = 0.7)) 
-
-# by ward
-ggplot(plot_data, aes(Village, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
-  labs(x = '', 
-       y = '# forms submitted',
-       title = 'Total forms submitted') + 
-  theme_databrew() +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.7, size =7)) 
-
-# by ward
-ggplot(plot_data, aes(Hamlet, counts, fill = Country)) + geom_bar(stat = 'identity',alpha = 0.7) +
-  labs(x = '', 
-       y = '# forms submitted',
-       title = 'Total forms submitted') + 
-  theme_databrew() +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.7, size =7)) 
-
- 
 ```
+
 
 # Percent of forms geocoded in each country
 
@@ -189,3 +308,12 @@ ggplot(plot_data, aes(Country, percent_geo_coded)) + geom_bar(stat = 'identity',
 m
 ```
 
+
+# Table of all submitted forms for both countries
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+kableExtra::kable(recon_data,format = 'html', align = "lccrr") %>%
+    kable_styling() %>%
+    scroll_box(width = "1000px", height = "500px")
+
+```

@@ -27,7 +27,18 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
   # Read in the data
   survey <- readxl::read_xlsx(path, sheet = 'survey') %>% filter(!is.na(type))
   choices <- readxl::read_xlsx(path, sheet = 'choices') %>% filter(!is.na(name))
-  external_choices <- readxl::read_xlsx(path, sheet = 'external_choices') %>% filter(!is.na(name))
+  try({
+    external_choices <- readxl::read_xlsx(path, sheet = 'external_choices') %>% filter(!is.na(name))
+  }, silent = TRUE)
+  has_external_choices <- FALSE
+  if(exists('external_choices')){
+    has_external_choices <- TRUE
+  }
+  has_languages <- FALSE
+  if(any(grepl('::', names(survey)))){
+    has_languages <- TRUE
+  }
+  
   
   # Define a types dictionary
   dict_types <- tibble(variable_type = c('barcode',
@@ -74,10 +85,23 @@ generate_data_dictionary <- function(path, language = 'English', include_variabl
   survey <- left_join(survey, dict_types, by = 'variable_type')
   
   # Deal with language
-  survey$question <- unlist(survey[,paste0('label::', language)])
-  survey$hint <- unlist(survey[,paste0('hint::', language)])
-  choices$choice <- unlist(choices[,paste0('label::', language)])
-  external_choices$choice <- unlist(external_choices[,paste0('label::', language)])
+  if(has_languages){
+    survey$question <- unlist(survey[,paste0('label::', language)])
+    survey$hint <- unlist(survey[,paste0('hint::', language)])
+    choices$choice <- unlist(choices[,paste0('label::', language)])
+    if(has_external_choices){
+      external_choices$choice <- unlist(external_choices[,paste0('label::', language)])
+    }
+    
+  } else {
+    survey$question <- survey$label
+    # survey$hint <- survey$hint
+    choices$choice <- choices$label
+    if(has_external_choices){
+      external_choices$choice <- external_choices$label
+    }
+  }
+
   # Loop
   counter <- 0
   out_list <- list()

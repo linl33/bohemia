@@ -39,7 +39,7 @@ enketo     ALL=(ALL) NOPASSWD:ALL
 
 On local machine, add this to ~/.bashrc
 ```
-alias enketo='ssh -i "/home/joebrew/.ssh/openhdskey.pem" enketo@papu.us'
+alias enketo='ssh -i "/home/joebrew/.ssh/odkkey.pem" enketo@papu.us'
 ```
 
 Then run:
@@ -130,8 +130,8 @@ sudo mkdir /home/enketo/Documents
 cd /home/enketo
 sudo chmod 777 Documents
 #local
-scp -i ~/.ssh/openhdskey.pem ~/Documents/bohemia/misc/img/logo.png enketo@papu.us:/home/enketo/Documents/logo.png
-scp -i ~/.ssh/openhdskey.pem /home/joebrew/Documents/bohemia/misc/enketo-config.json enketo@papu.us:/home/enketo/Documents/enketo-config.json
+scp -i ~/.ssh/odkkey.pem ~/Documents/bohemia/misc/img/logo.png enketo@papu.us:/home/enketo/Documents/logo.png
+scp -i ~/.ssh/odkkey.pem /home/joebrew/Documents/bohemia/misc/enketo-config.json enketo@papu.us:/home/enketo/Documents/enketo-config.json
 sudo cp /home/enketo/Documents/enketo-config.json /home/enketo/enketo-express/config/config.json
 sudo cp /home/enketo/Documents/logo.png /home/enketo/enketo-express/public/images/logo.png
 ```

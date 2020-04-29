@@ -37,12 +37,13 @@ odk_get_submission <- function(url = 'https://bohemia.systems',
   }
   
   # Create the url for the request
+  # https://github.com/opendatakit/opendatakit/wiki/Briefcase-Aggregate-API#get-viewdownloadsubmission
   rurl <- paste0(url,
                  "/view/downloadSubmission?formId=",
                 id,
                 "%5B@version=null%20and%20@uiVersion=null%5D/",
-                # ifelse(id == 'census', 'data', id2),
-                id2, # this works for recon, but not for census
+                ifelse(id == 'census', 'data', id2),
+                # id2, # this works for recon, but not for census
                 # 'data', # this works for census (online converted) but not odk
                 "%5B@key=",
                 uuid,

@@ -1,10 +1,10 @@
 ---
-title: "Enumerations"
+title: "Dictionary"
 output:
   pdf_document:
     latex_engine: xelatex
 params:
-    language: 'Portuguese'
+    language: 'Spanish'
     relevant: FALSE
     include_variable_names: FALSE
     choice_names_too: FALSE
@@ -18,7 +18,7 @@ opts_chunk$set(comment = NA,
                echo = FALSE, 
                warning = FALSE, 
                message = FALSE, 
-               error = TRUE, 
+               error = FALSE, 
                cache = FALSE,
                fig.width = 8.64,
                fig.height = 4.86,
@@ -43,7 +43,7 @@ lang <- params$language
 rel <- params$relevant
 var <- params$include_variable_names
 cn <- params$choice_names_too
-data_dict <- generate_data_dictionary(path = '../../forms/enumerations/enumerations.xls',
+data_dict <- generate_data_dictionary(path = '../../../../Desktop/SAINT.xlsx',
                                       language = lang, 
                                       include_variable_names = var, 
                                       include_relevant = rel, 

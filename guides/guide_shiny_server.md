@@ -206,7 +206,9 @@ server {
 # Enable the new block by creating a symlink
 
 ```
-sudo ln -s /etc/nginx/sites-available/bohemia.team /etc/nginx/sites-enabled/bohemia.team
+sudo ln -s /etc/nginx/sites-available/bohemia.team /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/datacat.cc /etc/nginx/sites-enabled/
+
 ```
 
 Disable the default block since our server now handles all incoming traffic
