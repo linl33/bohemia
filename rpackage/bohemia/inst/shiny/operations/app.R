@@ -4,6 +4,8 @@ library(dplyr)
 library(geosphere)
 source('global.R')
 
+
+
 header <- dashboardHeader(title="Bohemia Operations Helper App")
 sidebar <- dashboardSidebar(
   
@@ -13,6 +15,11 @@ sidebar <- dashboardSidebar(
                 text="Hamlet explorer",
                 tabName="hamlet_explorer",
                 icon=icon("home")),
+              
+              menuItem(
+                text="Recon progress",
+                tabName="recon_progress",
+                icon=icon("chart-bar")),
               
               menuItem(
                 text="Location codes",
@@ -94,6 +101,35 @@ body <- dashboardBody(
                         h3('Hamlet qualitative data'),
                         DT::dataTableOutput('qualy_table')))
       )
+    ),
+    
+    tabItem(
+      tabName = 'recon_progress',
+      fluidPage(h2('Recon progress'),
+                fluidRow(
+                  column(4,
+                         selectInput('recon_level',
+                                     'Geography level',
+                                     choices = c('Country','Region','District','Ward','Village'))),
+                  column(8,
+                         plotOutput('recon_plot'))
+                ),
+                fluidRow(
+                  column(6,
+                         h3('Pending forms by country'),
+                         DT::dataTableOutput('recon_table_1')),
+                  column(6,
+                         h3('Pending forms by district'),
+                         DT::dataTableOutput('recon_table_2'))
+                ),
+                fluidRow(
+                  column(6,
+                         h3('Pending forms by village'),
+                         DT::dataTableOutput('recon_table_3')),
+                  column(6,
+                         h3('All hamlets with form status'),
+                         DT::dataTableOutput('recon_table_4'))
+                ))
     ),
 
     tabItem(
@@ -224,6 +260,64 @@ server <- function(input, output) {
                   options = list(dom = 't',
                                  pageLength = 5), 
                   rownames = FALSE)
+  })
+  
+  output$recon_plot <- renderPlot({
+    input_levels <- rev(c('Hamlet', 'Village', 'Ward', 'District', 'Region', 'Country'))
+    # Get input level
+    input_level <- input$recon_level
+    if(is.null(input_level)){
+      input_level <- 'Country'
+    }
+    this_index <- which(input_levels == input_level)
+    these_groupers <- input_levels[1:this_index]
+    pd <- recon_data %>%
+      group_by_at(these_groupers) %>%
+      tally
+    xvar <- names(pd)[ncol(pd)-1]
+    pd$xvar <- as.character(unlist(pd[,xvar]))
+    ggplot(data = pd,
+           aes(x = xvar,
+               y = n)) +
+      geom_point() +
+      labs(x = input_level,
+           y = 'Forms submitted') +
+      theme_bw() +
+      theme(axis.text.x = element_text(angle = 90,
+                                       hjust = 0.5,
+                                       vjust = 1)) 
+  })
+  
+  output$recon_table_1 <- DT::renderDataTable({
+    right <- locations %>% group_by(Country) %>% summarise(Total = n())
+    
+    recon_data %>% group_by(Country) %>%
+      summarise(Done = n()) %>% left_join(right) %>%
+      mutate(`Percent finished` = round(Done / Total * 100, digits = 2)) %>% databrew::prettify()
+  })
+  
+  output$recon_table_2 <- DT::renderDataTable({
+    right <- locations %>% group_by(Country, District) %>% summarise(Total = n())
+    recon_data %>% group_by(Country, District) %>%
+      summarise(Done = n()) %>% left_join(right) %>%
+      mutate(`Percent finished` = round(Done / Total * 100, digits = 2)) %>% databrew::prettify()
+  })
+  
+  output$recon_table_3 <- DT::renderDataTable({
+    right <- locations %>% group_by(Country, District, Village) %>% summarise(Total = n())
+    recon_data %>% group_by(Country, District, Village) %>%
+      summarise(Done = n()) %>% left_join(right) %>%
+      mutate(`Percent finished` = round(Done / Total * 100, digits = 2)) %>% databrew::prettify()
+  })
+  
+  output$recon_table_4 <- DT::renderDataTable({
+    right <- locations %>% group_by(Country, District, Village, Hamlet) %>% summarise(Total = n())
+    recon_data %>% group_by(Country, District, Village) %>%
+      summarise(Done = n()) %>% left_join(right) %>%
+      mutate(`Status` = ifelse(Done >= Total, 'Done', 'Not done')) %>% 
+      dplyr::select(-Done, -Total) %>%
+      dplyr::select(Status, Hamlet, Village, District, Country) %>%
+      databrew::prettify()
   })
   
   # Get the location code based on the input hierarchy
@@ -711,13 +805,75 @@ server <- function(input, output) {
   })
   
   output$qualy_table <- DT::renderDataTable({
-    out <- data.frame(a = c('No data available yet',
-                            'Qualitative data to be collected during census reconnaissance activities',
-                            '(Jan-Feb)'))
-    names(out) <- ' '
+
+    
+    # Get the location code
+    lc <- location_code()
+
+    
+    ok <- FALSE
+    if(!is.null(lc)){
+      # See if it's in recon data or not
+      is_in <- as.character(lc) %in% recon_data$hamlet_code & !is.na(lc)
+      if(!is.null(is_in)){
+        if(!is.na(is_in)){
+          if(is_in){
+            ok <- TRUE
+          }
+        }
+      }
+    }
+
+    if(ok){
+      # Get a table of relevant info
+      sub_data <- recon_data %>% dplyr::filter(hamlet_code == lc)
+      sub_data <- sub_data[1,]
+      sub_chiefs <- chiefs %>% filter(instanceID %in% sub_data$instanceID)
+      message('sub_chiefs')
+      print(sub_chiefs)
+      out_list <- list()
+      for(i in 1:nrow(sub_chiefs)){
+        x <- 
+          sub_chiefs %>% 
+          mutate(chief_role = ifelse(chief_role == 'Other', chief_role_other_role, chief_role)) %>%
+          dplyr::select(id = repeated_id, contact = chief_contact, 
+                        contact_alternative = chief_contact_alt,
+                        name = chief_name,
+                        role = chief_role)
+        x <- x %>%
+          gather(Key, Value, names(x)[2:ncol(x)])
+        if(max(x$id) > 1){
+          x$Key <- paste0(x$Key, ' ', x$id)
+        }
+        x$Key <- paste0('Chief ', x$Key)
+        out_list[[i]] <- x
+      }
+      chief_data <- bind_rows(out_list) %>%
+        dplyr::select(-id) %>%
+        dplyr::rename(Question = Key)
+      
+      sub_data <- sub_data %>%
+        gather(Key, Value, names(sub_data)) %>%
+        left_join(recon_xls,
+                  by = c('Key'='name')) %>%
+        dplyr::filter(!is.na(question),
+                      !is.na(Value))
+      
+      out <- sub_data %>%
+        dplyr::select(Question= question,
+                      Value) %>%
+        bind_rows(chief_data)
+    } else {
+      out <- data.frame(a = c('No data available yet',
+                              'Qualitative data to be collected during census reconnaissance activities',
+                              '(Jan-Feb)'))
+      names(out) <- ' '
+      }
+    
+    
     DT::datatable(out, 
                   options = list(dom = 't',
-                                 pageLength = 5), 
+                                 pageLength = nrow(out)), 
                   rownames = FALSE)
   })
   

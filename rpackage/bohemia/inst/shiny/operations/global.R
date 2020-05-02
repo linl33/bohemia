@@ -6,6 +6,8 @@ library(bohemia)
 library(knitr)
 library(kableExtra)
 library(tidyverse)
+library(yaml)
+library(gsheet)
 
 # rdir <- '../../rpackage/bohemia/R/'
 # funs <- dir(rdir)
@@ -70,7 +72,7 @@ mop_houses <- bohemia::mopeia_hamlet_details
 mop_houses <- mop_houses %>% 
   group_by(Hamlet) %>% 
   summarise(households = max(households, na.rm = TRUE))
-  
+
 
 # get rufiji hamlets
 rufiji_hamlets <- bohemia::rufiji3
@@ -123,3 +125,87 @@ filter_locations <- function(locations,
 
 # add_nothing <- function(x){c('', x)}
 add_nothing <- function(x){x}
+
+# Get ODK data for recon form
+refresh_data <- FALSE
+data_file <- 'recon.RData'
+
+if(refresh_data){
+  # read in credentials
+  creds <- read_yaml('credentials.yaml')
+  form_name_mz <- 'recon'
+  form_name_tz <- 'recon_geo'
+  
+  
+  # read in moz data
+  recon_mz <- odk_get_data(
+    url = creds$moz_odk_server,
+    id = form_name_mz,
+    id2 = NULL,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = NULL,
+    user = creds$moz_odk_user,
+    password = creds$moz_odk_pass
+  )
+  
+  # get non repeat data
+  recon_mz_rep <- recon_mz[[1]]
+  recon_mz <- recon_mz[[2]]
+  
+  # read in tz data
+  recon_tz <- odk_get_data(
+    url = creds$tza_odk_server,
+    id = 'recon',
+    id2 = NULL,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = NULL,
+    user = creds$tza_odk_user,
+    password = creds$tza_odk_pass
+  )
+  
+  # get non repeat data
+  recon_tz_rep <- recon_tz[[1]]
+  recon_tz <- recon_tz[[2]]
+  
+  
+  # change device id to numeric
+  recon_tz$device_id <- as.character(recon_tz$device_id)
+  
+  # join tz and mz data 
+  recon_data <- bind_rows(recon_tz, recon_mz)
+  
+  # rm(recon_tz, recon_mz)
+  
+  # get data data 
+  recon_data$date <- as.Date(strftime(recon_data$start_time, format = "%Y-%m-%d"))
+  
+  # extract lat long
+  recon_data$lon <- as.numeric(unlist(lapply(strsplit(recon_data$location, ' '), function(x) x[1])))
+  recon_data$lat <- as.numeric(unlist(lapply(strsplit(recon_data$location, ' '), function(x) x[2])))
+  
+  # get indicator for if location has been geocoded
+  recon_data$geo_coded <- ifelse(!is.na(recon_data$lon) | !is.na(recon_data$lat), TRUE, FALSE)
+  
+  
+  
+  # Read in the recon data xls in order to get variable names
+  recon_xls <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1xe8WrTGAUsf57InDQPIQPfnKXc7FwjpHy1aZKiA-SLw/edit?usp=drive_web&ouid=117219419132871344734')
+  recon_xls <- recon_xls %>%
+    dplyr::select(name, question = `label::English`)
+  
+  save(recon_tz,
+       recon_tz_rep,
+       recon_mz_rep,
+       recon_xls,
+       recon_mz,
+       file = data_file)
+
+} else {
+  load(data_file)
+}
+
+chiefs <- bind_rows(recon_tz_rep[[1]],
+                    recon_mz_rep[[1]])
+
