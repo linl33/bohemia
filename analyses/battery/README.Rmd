@@ -7,7 +7,7 @@ output: github_document
 # Basic knitr options
 library(knitr)
 opts_chunk$set(comment = NA, 
-               echo = FALSE, 
+               echo = TRUE, 
                warning = FALSE, 
                message = FALSE, 
                error = TRUE, 
