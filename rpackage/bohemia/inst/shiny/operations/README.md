@@ -20,7 +20,7 @@ sudo systemctl restart shiny-server
 
 ### On local machine
 
-scp -r -i "/home/joebrew/.ssh/openhdskey.pem" /home/joebrew/Documents/bohemia/shiny/operations ubuntu@bohemia.team:/home/ubuntu/Documents
+scp -r -i "/home/joebrew/.ssh/odkkey.pem" /home/joebrew/Documents/bohemia/rpackage/bohemia/inst/shiny/operations ubuntu@bohemia.team:/home/ubuntu/Documents
 
 
 ### On remote machine

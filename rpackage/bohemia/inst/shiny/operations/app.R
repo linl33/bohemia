@@ -2,6 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(dplyr)
 library(geosphere)
+library(lubridate)
 source('global.R')
 
 
@@ -20,6 +21,11 @@ sidebar <- dashboardSidebar(
                 text="Recon progress",
                 tabName="recon_progress",
                 icon=icon("chart-bar")),
+              
+              menuItem(
+                text="Recon performance",
+                tabName="recon_performance",
+                icon=icon("thumbs-up")),
               
               menuItem(
                 text="Location codes",
@@ -115,21 +121,29 @@ body <- dashboardBody(
                          plotOutput('recon_plot'))
                 ),
                 fluidRow(
-                  column(6,
+                  column(12,
                          h3('Pending forms by country'),
-                         DT::dataTableOutput('recon_table_1')),
-                  column(6,
+                         DT::dataTableOutput('recon_table_1'))),
+                fluidRow(column(12,
                          h3('Pending forms by district'),
                          DT::dataTableOutput('recon_table_2'))
                 ),
                 fluidRow(
-                  column(6,
+                  column(12,
                          h3('Pending forms by village'),
-                         DT::dataTableOutput('recon_table_3')),
-                  column(6,
+                         DT::dataTableOutput('recon_table_3'))),
+                  fluidRow(column(12,
                          h3('All hamlets with form status'),
                          DT::dataTableOutput('recon_table_4'))
                 ))
+    ),
+    
+    tabItem(
+      tabName = 'recon_performance',
+      fluidPage(
+        textInput('password', 'Password', value = ''),
+        DT::dataTableOutput('recon_performance_table')
+      )
     ),
 
     tabItem(
@@ -248,9 +262,22 @@ server <- function(input, output) {
         p('Enter > 2 characters in the box to the left.')
       }
     }
-    
-    
   })
+  
+  output$recon_performance_table <- DT::renderDataTable({
+    out <- recon_data %>%
+      left_join(fids %>% dplyr::rename(wid = bohemia_id)) %>%
+      group_by(wid) %>%
+      summarise(Forms = n(),
+                `Median minutes` = median(as.double(as_datetime(end_time) - as_datetime(start_time), units = 'mins')),
+                name = dplyr::first(paste0(first_name, ' ', last_name)),
+                       phone = dplyr::first(phone))
+    ok <- input$password == 'b0h3mI@'
+    if(!ok){
+      out$name <- out$phone <-  'Hidden'
+    }
+    databrew::prettify(out, nrows = nrow(out), download_options = TRUE)
+    })
   
   output$locations_table <- DT::renderDataTable({
     fl <- filtered_locations()
@@ -291,33 +318,53 @@ server <- function(input, output) {
   output$recon_table_1 <- DT::renderDataTable({
     right <- locations %>% group_by(Country) %>% summarise(Total = n())
     
-    recon_data %>% group_by(Country) %>%
+    out <- recon_data %>% group_by(Country) %>%
       summarise(Done = n()) %>% left_join(right) %>%
-      mutate(`Percent finished` = round(Done / Total * 100, digits = 2)) %>% databrew::prettify()
+      mutate(`Percent finished` = round(Done / Total * 100, digits = 2))
+    databrew::prettify(out, 
+                       # nrows = nrow(out), 
+                       download_options = T)
   })
   
   output$recon_table_2 <- DT::renderDataTable({
-    right <- locations %>% group_by(Country, District) %>% summarise(Total = n())
-    recon_data %>% group_by(Country, District) %>%
-      summarise(Done = n()) %>% left_join(right) %>%
-      mutate(`Percent finished` = round(Done / Total * 100, digits = 2)) %>% databrew::prettify()
+    x <- locations %>% group_by(Country, District) %>% summarise(Total = n())
+    y <- recon_data %>% group_by(Country, District) %>%
+      summarise(Done = n()) 
+    out <- x %>% left_join(y) %>%
+      mutate(Done = ifelse(is.na(Done), 0, Done)) %>%
+      mutate(`Status` = ifelse(Done >= Total, 'Done', 'Not done')) %>% 
+      dplyr::select(Status, District, Country, Done, Total) 
+    databrew::prettify(out, 
+                       # nrows = nrow(out), 
+                       download_options = T)
+    
   })
   
   output$recon_table_3 <- DT::renderDataTable({
-    right <- locations %>% group_by(Country, District, Village) %>% summarise(Total = n())
-    recon_data %>% group_by(Country, District, Village) %>%
-      summarise(Done = n()) %>% left_join(right) %>%
-      mutate(`Percent finished` = round(Done / Total * 100, digits = 2)) %>% databrew::prettify()
+    x <- locations %>% group_by(Country, District, Village) %>% summarise(Total = n())
+    y <- recon_data %>% group_by(Country, District, Village) %>%
+      summarise(Done = n()) 
+    out <- x %>% left_join(y) %>%
+      mutate(Done = ifelse(is.na(Done), 0, Done)) %>%
+      mutate(`Status` = ifelse(Done >= Total, 'Done', 'Not done')) %>% 
+      dplyr::select(Status,  Village, District, Country, Done, Total) 
+    databrew::prettify(out, 
+                       # nrows = nrow(out), 
+                       download_options = T)    
   })
   
   output$recon_table_4 <- DT::renderDataTable({
-    right <- locations %>% group_by(Country, District, Village, Hamlet) %>% summarise(Total = n())
-    recon_data %>% group_by(Country, District, Village) %>%
-      summarise(Done = n()) %>% left_join(right) %>%
+    x <- locations %>% group_by(Country, District, Village, Hamlet) %>% summarise(Total = n())
+    y <- recon_data %>% group_by(Country, District, Village, Hamlet) %>%
+      summarise(Done = n()) 
+    out <- x %>% left_join(y) %>%
+      mutate(Done = ifelse(is.na(Done), 0, Done)) %>%
       mutate(`Status` = ifelse(Done >= Total, 'Done', 'Not done')) %>% 
       dplyr::select(-Done, -Total) %>%
-      dplyr::select(Status, Hamlet, Village, District, Country) %>%
-      databrew::prettify()
+      dplyr::select(Status, Hamlet, Village, District, Country)
+    databrew::prettify(out, 
+                       # nrows = nrow(out), 
+                       download_options = T)    
   })
   
   # Get the location code based on the input hierarchy

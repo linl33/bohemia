@@ -1,10 +1,10 @@
 ---
-title: "Dictionary"
+title: "Bohemia Enumerations"
 output:
   pdf_document:
     latex_engine: xelatex
 params:
-    language: 'Spanish'
+    language: 'English'
     relevant: FALSE
     include_variable_names: FALSE
     choice_names_too: FALSE
@@ -30,6 +30,8 @@ library(bohemia)
 ```
 
 
+2020-05-07. Version 1
+
 (... = list of options continues)
 
 ```{r}
@@ -43,11 +45,11 @@ lang <- params$language
 rel <- params$relevant
 var <- params$include_variable_names
 cn <- params$choice_names_too
-data_dict <- generate_data_dictionary(path = '../../../../Desktop/SAINT.xlsx',
+data_dict <- generate_data_dictionary(path = '../../forms/enumerations/enumerations.xls',
                                       language = lang, 
                                       include_variable_names = var, 
                                       include_relevant = rel, 
-                                      shorten_many = 15, 
+                                      shorten_many = 10, 
                                       choice_names_too = cn)
 # Identify which are 
 ```
@@ -150,8 +152,7 @@ out
 #   out <- out %>%
 #     row_spec(i, hline_after = TRUE)
 # }
-out
-  
+
 #%>%
 #   kable_styling(full_width = T,
 #                 font_size = 9,

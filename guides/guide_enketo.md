@@ -4,16 +4,21 @@
 - (Much of the following is based on [this guide](https://blog.enketo.org/install-enketo-production-ubuntu/), but with some modifications for our server and use-case)
 - Important configuration details at https://enketo.github.io/enketo-express/tutorial-10-configure.html
 
+
 ## Launch an instance
 
 -Follow the steps in the [ODK set up guide](guide_odk_setup.md). Small, 15 gb, open security.
 -For this example, we'll use the domain papu.us
 
+## Set up with domain
+
+- Via domains.google.com
+
 ## Set up the enketo user
 
 -SSH into the machine:
 ```
-ssh -i "/home/joebrew/.ssh/openhdskey.pem" ubuntu@papu.us
+ssh -i "/home/joebrew/.ssh/odkkey.pem" ubuntu@papu.us
 ```
 
 ```
@@ -26,11 +31,34 @@ sudo chmod 600 /home/enketo/.ssh/authorized_keys;
 sudo usermod -a -G sudo enketo;
 ```
 
-
 Now type `sudo visudo` and add the following line to the end of the file
 ```
 enketo     ALL=(ALL) NOPASSWD:ALL
 ```
+
+
+# NOT DOING
+~~~
+Run the following:
+```
+sudo nano /etc/ssh/sshd_config
+```
+And make sure the following values are set:
+```
+PermitRootLogin no
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+UsePAM no
+```
+
+Restart ssh
+```
+sudo service ssh restart
+exit
+```
+~~~
+
+
 
 
 
@@ -51,7 +79,7 @@ Log out, then log in again by simply typing `enketo`
 
 ## Installing required software
 
-- Log in as the enketo user (see above) and run the following line by line:
+- Log in as the enketo user (see above) and run the following LINE BY LINE:
 ```
 sudo apt-get update;
 sudo apt-get upgrade -y;
@@ -61,7 +89,7 @@ sudo apt-get install -y gconf-service libasound2 libatk1.0-0 libatk-bridge2.0-0 
 ```
 - Install NodeJS and global Node packages
 ```
-curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo npm install -g pm2 npm
 ```
@@ -130,9 +158,12 @@ sudo mkdir /home/enketo/Documents
 cd /home/enketo
 sudo chmod 777 Documents
 #local
-scp -i ~/.ssh/odkkey.pem ~/Documents/bohemia/misc/img/logo.png enketo@papu.us:/home/enketo/Documents/logo.png
-scp -i ~/.ssh/odkkey.pem /home/joebrew/Documents/bohemia/misc/enketo-config.json enketo@papu.us:/home/enketo/Documents/enketo-config.json
+scp -i ~/.ssh/odkkey.pem ~/Documents/bohemia/misc/img/logo.png enketo@18.190.57.240:/home/enketo/Documents/logo.png
+scp -i ~/.ssh/odkkey.pem /home/joebrew/Documents/bohemia/misc/enketo-config.json enketo@18.190.57.240:/home/enketo/Documents/enketo-config.json
+scp -i ~/.ssh/odkkey.pem /home/joebrew/Documents/bohemia/misc/enketo-config.json enketo@18.190.57.240:/home/enketo/Documents/enketo-config.json
+# remote
 sudo cp /home/enketo/Documents/enketo-config.json /home/enketo/enketo-express/config/config.json
+sudo cp /home/enketo/Documents/enketo-config.json /home/enketo/enketo-express/config/default-config.json # this is strange, but apparently matters - need to overwrite the default
 sudo cp /home/enketo/Documents/logo.png /home/enketo/enketo-express/public/images/logo.png
 ```
 
@@ -165,6 +196,8 @@ sudo pm2 startup ubuntu -u enketo
 
 ![](img/enketo.png)
 
+API URL: http://papu.us:8005/api/v1
+API TOKEN: lpols3nboul
 
 
 Test that it's working (ie, that we get a 201 response for this query) (won't work until configuring ODK agg server):
@@ -172,6 +205,8 @@ Test that it's working (ie, that we get a 201 response for this query) (won't wo
 curl --user lpols3nboul: -d "server_url=https://bohemia.systems&form_id=census" http://papu.us:8005/api/v1/survey
 
 ```
+
+curl --user lpols3nboul: -d "server_url=https://bohemia.systems/Aggregate.html&form_id=census" http://papu.us:8005/api/v1/survey
 
 
 

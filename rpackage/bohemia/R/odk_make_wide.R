@@ -22,17 +22,22 @@ odk_make_wide <- function(long_list){
   repeats <- long_list$repeats
   repeats_list <- list()
   repeat_names <- sort(unique(repeats$repeat_name))
-  for(i in 1:length(repeat_names)){
-    this_repeat_name <- repeat_names[i]
-    this_data <- repeats %>% filter(repeat_name == this_repeat_name)
-    this_repeat_wide <- tidyr::spread(data = this_data,
-                                      key = key,
-                                      value = value,
-                                      convert = TRUE)
-    repeats_list[[i]] <- this_repeat_wide
-    names(repeats_list)[i] <- this_repeat_name
+  if(length(repeat_names) > 0){
+    for(i in 1:length(repeat_names)){
+      this_repeat_name <- repeat_names[i]
+      this_data <- repeats %>% filter(repeat_name == this_repeat_name)
+      this_repeat_wide <- tidyr::spread(data = this_data,
+                                        key = key,
+                                        value = value,
+                                        convert = TRUE)
+      repeats_list[[i]] <- this_repeat_wide
+      names(repeats_list)[i] <- this_repeat_name
+    }
+    repeats_wide <- repeats_list
+  } else {
+    repeats_wide <- data.frame()
   }
-  repeats_wide <- repeats_list
+  
   
   # All ok, widen non repeats
   non_repeats <- long_list$non_repeats

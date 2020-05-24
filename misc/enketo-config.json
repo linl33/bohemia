@@ -2,15 +2,14 @@
     "app name": "Databrew Enketo",
     "port": "8005",
     "offline enabled": true,
-    "id length": 8,
     "linked form and data server": {
-        "name": "Databrew Enketo",
-        "server url": "bohemia.systems",
-        "api key": "lpols3nboul",
+      "name": "DatabrewEnketo",
+      "server url": "bohemia.systems",
+      "api key": "lpols3nboul",
         "legacy formhub": false,
         "authentication": {
             "type": "basic",
-            "allow insecure transport": "false"
+            "allow insecure transport": "true"
         }
     },
     "timeout": 300000,
@@ -24,16 +23,15 @@
         "submissions": false
     },
     "support": {
-        "email": "info@databrew.cc"
+        "email": "joe@databrew.cc"
     },
     "widgets": [
         "note", "select-desktop", "select-mobile", "autocomplete", "geo", "textarea", "url",
         "table", "radio", "date", "time", "datetime", "select-media", "file", "draw", "rank",
-        "likert", "range", "columns", "image-view", "comment", "image-map", "date-native", "date-nativ$
+        "likert", "range", "columns", "image-view", "comment", "image-map", "date-native", "date-native-ios",
         "date-mobile", "text-max", "text-print", "rating", "thousands-sep"
     ],
     "analytics": "google",
-
     "google": {
         "analytics": {
             "ua": "",
@@ -76,6 +74,6 @@
     "repeat ordinals": false,
     "validate continuously": false,
     "validate page": true,
-    "payload limit": "1000kb",
+    "payload limit": "100kb",
     "text field character limit": 2000
 }

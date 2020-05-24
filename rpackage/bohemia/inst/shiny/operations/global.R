@@ -127,7 +127,7 @@ filter_locations <- function(locations,
 add_nothing <- function(x){x}
 
 # Get ODK data for recon form
-refresh_data <- FALSE
+refresh_data <- F
 data_file <- 'recon.RData'
 
 if(refresh_data){
@@ -137,7 +137,7 @@ if(refresh_data){
   form_name_tz <- 'recon_geo'
   
   
-  # read in moz data
+  # read in moz data  
   recon_mz <- odk_get_data(
     url = creds$moz_odk_server,
     id = form_name_mz,
@@ -176,8 +176,6 @@ if(refresh_data){
   # join tz and mz data 
   recon_data <- bind_rows(recon_tz, recon_mz)
   
-  # rm(recon_tz, recon_mz)
-  
   # get data data 
   recon_data$date <- as.Date(strftime(recon_data$start_time, format = "%Y-%m-%d"))
   
@@ -188,18 +186,47 @@ if(refresh_data){
   # get indicator for if location has been geocoded
   recon_data$geo_coded <- ifelse(!is.na(recon_data$lon) | !is.na(recon_data$lat), TRUE, FALSE)
   
-  
-  
   # Read in the recon data xls in order to get variable names
   recon_xls <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1xe8WrTGAUsf57InDQPIQPfnKXc7FwjpHy1aZKiA-SLw/edit?usp=drive_web&ouid=117219419132871344734')
   recon_xls <- recon_xls %>%
     dplyr::select(name, question = `label::English`)
   
+  # Read in the fieldworker ids
+  registered_workers_tza <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0")
+  registered_workers_moz <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130")
+  registered_workers_other <- gsheet::gsheet2tbl("https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=179257508")
+  fids <- bind_rows(registered_workers_tza %>% mutate(phone = as.character(phone)),
+                    registered_workers_moz %>% mutate(phone = as.character(phone)) %>% dplyr::select(-tablet_id),
+                    registered_workers_other %>% mutate(phone = as.character(phone)))
+  
+  # Add manual corrections as per Imani's email
+  replace_wid <- function(df, instance, new_id){
+    df$wid[df$instanceName == instance] <- new_id
+    return(df)
+  }
+  recon_data <- recon_data %>%
+    replace_wid('recon-Tangimoja-2020-04-24', 58) %>%
+    replace_wid('recon-SIDO-2020-04-25', 58) %>%
+    replace_wid('recon-Kikibu-2020-04-26', 58) %>%
+    replace_wid('recon-Mwembe Muhoro-2020-04-22', 62) %>%
+    replace_wid('recon-Ngasinda-2020-04-24', 62) %>%
+    replace_wid('recon-Kilombero-2020-04-30', 27) %>%
+    replace_wid('recon-Kariakoo-2020-05-05', 51) %>%
+    replace_wid('recon-Mkongoni-2020-04-28', 51) %>%
+    replace_wid('recon-Mkole-2020-04-30', 51) %>%
+    replace_wid('recon-Mapinduzi-2020-04-28', 51) %>%
+    replace_wid('recon-Ngungule-2020-04-28', 51) %>%
+    replace_wid("recon-Mikwang'ombe-2020-05-05", 51) %>%
+    replace_wid('recon-Genju-2020-05-05', 51) %>%
+    replace_wid('recon-Nyamikamba-2020-04-29', 27)
+  
   save(recon_tz,
+       recon_data,
        recon_tz_rep,
        recon_mz_rep,
        recon_xls,
        recon_mz,
+       fids,
        file = data_file)
 
 } else {

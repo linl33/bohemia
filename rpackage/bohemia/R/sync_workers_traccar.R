@@ -34,17 +34,16 @@ sync_workers_traccar <- function(credentials = NULL,
   } 
   
   # Get users data already registered on the traccar server
-  registered_workers_tza <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0')
-  registered_workers_moz <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130')
-  registered_workers_other <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=179257508')
+  registered_workers_tza <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0') %>% dplyr::select(-tablet_id)  %>% mutate(phone = as.character(phone))
+  registered_workers_moz <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130') %>% dplyr::select(-tablet_id)  %>% mutate(phone = as.character(phone))
+  registered_workers_other <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=179257508') %>% dplyr::select(-tablet_id)  %>% mutate(phone = as.character(phone))
   
   registered_workers <- bind_rows(registered_workers_tza,
                                   registered_workers_moz,
                                   registered_workers_other)
   registered_workers <- registered_workers %>%
     filter(!is.na(first_name),
-           !is.na(last_name),
-           !is.na(start_date))
+           !is.na(last_name))
   
   # Get users who have registered on the shiny app
   in_traccar <- get_traccar_data(url = credentials$traccar_server,
