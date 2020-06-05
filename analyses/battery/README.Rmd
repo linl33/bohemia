@@ -84,12 +84,37 @@ out$battery <- extract_battery(out$valid)
 out <- out %>%
   left_join(keep %>% dplyr::rename(deviceId = id))
 
+# Get last time at which battery was at 100
+out <- out %>%
+  arrange(fixTime) %>%
+  group_by(Interval) %>%
+  # calculate the first moment at which there is a decrease
+  mutate(power = battery - dplyr::lag(battery, 1)) %>%
+  filter(power <0 ) %>%
+  ungroup %>%
+  group_by(Interval) %>%
+  mutate(relative_time = deviceTime - min(deviceTime)) %>%
+  mutate(start_point = max(battery)) %>%
+  ungroup %>%
+  mutate(adjustor = 100 - start_point) %>%
+  mutate(battery = battery + adjustor)
+out <- out %>%
+  group_by(Interval) %>%
+  mutate(obs = n()) %>%
+  ungroup %>% filter(obs > 2)
+
 # Plot
+library(RColorBrewer)
 ggplot(data = out,
-       aes(x = deviceTime,
+       aes(x = relative_time,
            y = battery,
            color = factor(Interval))) +
-  geom_line()
+  geom_line(size = 2) +
+  scale_color_manual(name = 'Interval',
+                     values = colorRampPalette(brewer.pal(n = 9, 'Spectral'))(length(unique(out$Interval)))) +
+  labs(x = 'Seconds since unplug',
+       y = 'Battery life',
+       title = 'Battery life and ping interval')
 ```
 
 # Technical details
