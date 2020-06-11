@@ -204,6 +204,7 @@ if(refresh_data){
     df$wid[df$instanceName == instance] <- new_id
     return(df)
   }
+  
   recon_data <- recon_data %>%
     replace_wid('recon-Tangimoja-2020-04-24', 58) %>%
     replace_wid('recon-SIDO-2020-04-25', 58) %>%
@@ -219,6 +220,20 @@ if(refresh_data){
     replace_wid("recon-Mikwang'ombe-2020-05-05", 51) %>%
     replace_wid('recon-Genju-2020-05-05', 51) %>%
     replace_wid('recon-Nyamikamba-2020-04-29', 27)
+  
+  # Add manual changes to number of households, per Imani's June 10 2020 email
+  replace_number_hh <- function(df, instance, new_number){
+    df$number_hh[df$instanceID == instance] <- new_number
+    return(df)
+  }
+  recon_data <- recon_data %>%
+    replace_number_hh('uuid:2d0f2d7a-dc3a-4b26-934d-72181cd99e3a', 130) %>%
+    replace_number_hh('uuid:67180c96-b354-402c-8cab-f4e0ee8c2c7a', 103) %>%
+    replace_number_hh('uuid:a7efe521-9bc6-4fb2-9eae-b63deda3884b', 203) %>%
+    replace_number_hh('uuid:95756e85-349f-49ef-8803-c2f5a72a6250', 310) %>%
+    replace_number_hh('uuid:a31bced6-a53c-4d25-bae3-372282c464ff', 258) %>%
+    replace_number_hh('uuid:fb16a021-700c-4971-8bfc-32b746f93c3c', 152)
+  
   
   save(recon_tz,
        recon_data,

@@ -875,29 +875,35 @@ server <- function(input, output) {
       # Get a table of relevant info
       sub_data <- recon_data %>% dplyr::filter(hamlet_code == lc)
       sub_data <- sub_data[1,]
+      save(sub_data, file = '/tmp/sub_data.RData')
       sub_chiefs <- chiefs %>% filter(instanceID %in% sub_data$instanceID)
       message('sub_chiefs')
       print(sub_chiefs)
       out_list <- list()
-      for(i in 1:nrow(sub_chiefs)){
-        x <- 
-          sub_chiefs %>% 
-          mutate(chief_role = ifelse(chief_role == 'Other', chief_role_other_role, chief_role)) %>%
-          dplyr::select(id = repeated_id, contact = chief_contact, 
-                        contact_alternative = chief_contact_alt,
-                        name = chief_name,
-                        role = chief_role)
-        x <- x %>%
-          gather(Key, Value, names(x)[2:ncol(x)])
-        if(max(x$id) > 1){
-          x$Key <- paste0(x$Key, ' ', x$id)
+      if(nrow(sub_chiefs) > 0){
+        for(i in 1:nrow(sub_chiefs)){
+          x <- 
+            sub_chiefs %>% 
+            mutate(chief_role = ifelse(chief_role == 'Other', chief_role_other_role, chief_role)) %>%
+            dplyr::select(id = repeated_id, contact = chief_contact, 
+                          contact_alternative = chief_contact_alt,
+                          name = chief_name,
+                          role = chief_role)
+          x <- x %>%
+            gather(Key, Value, names(x)[2:ncol(x)])
+          if(max(x$id) > 1){
+            x$Key <- paste0(x$Key, ' ', x$id)
+          }
+          x$Key <- paste0('Chief ', x$Key)
+          out_list[[i]] <- x
         }
-        x$Key <- paste0('Chief ', x$Key)
-        out_list[[i]] <- x
+        chief_data <- bind_rows(out_list) %>%
+          dplyr::select(-id) %>%
+          dplyr::rename(Question = Key)
+      } else {
+        chief_data <- tibble(Question = 'Chief',
+                             Value = 'No data available')
       }
-      chief_data <- bind_rows(out_list) %>%
-        dplyr::select(-id) %>%
-        dplyr::rename(Question = Key)
       
       sub_data <- sub_data %>%
         gather(Key, Value, names(sub_data)) %>%
