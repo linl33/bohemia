@@ -234,13 +234,35 @@ if(refresh_data){
     replace_number_hh('uuid:a31bced6-a53c-4d25-bae3-372282c464ff', 258) %>%
     replace_number_hh('uuid:fb16a021-700c-4971-8bfc-32b746f93c3c', 152)
   
+  # Add further manual changes from Imani
+  recon_data$wid <- ifelse(recon_data$wid == 301, 108, recon_data$wid)
+  recon_data$wid <- ifelse(recon_data$wid == 302, 108, recon_data$wid)
+  # Drop duplicates
+  bad_ids <- c("uuid:b6b28300-1b0b-43d3-9b0b-3ce21353d5fc",
+               "uuid:387ad05d-aa9e-4009-b351-89527237cd9e",
+               "uuid:55d6d8d0-3e9c-41dd-be95-a6124c512378",
+               "uuid:e230358d-3e51-4df9-bdb1-2defb261983d",
+               "uuid:43ef137d-558f-49df-9804-4f1c9dec3697",
+               "uuid:7b64159c-29a7-4da4-8bb2-99cce28e58d0",
+               "uuid:bb23ee5c-cbd8-4e1c-8085-587b9f16382e",
+               "uuid:f25d3a3a-a7b2-48cc-8e3e-d2ec08ad0584",
+               "uuid:1ae6260f-32c4-4f34-af15-8c047b6d166a",
+               "uuid:da49d73c-d370-4747-b530-1d3cabd83c27",
+               "uuid:bb276094-f5d0-406c-bcd1-c55cde178d93")
+  recon_data <- recon_data %>%
+    filter(!instanceID %in% bad_ids)
+  # Drop if no chief
+  recon_data$drop <- recon_data$Country == 'Tanzania' &
+    !recon_data$instanceID %in% recon_tz_rep$repeat_chief$instanceID
+  recon_data <- recon_data %>% filter(!drop)
+
+  chiefs <- bind_rows(recon_tz_rep[[1]],
+                      recon_mz_rep[[1]])
+  chiefs <- chiefs %>% filter(!instanceID %in% bad_ids)
   
-  save(recon_tz,
-       recon_data,
-       recon_tz_rep,
-       recon_mz_rep,
+  save(recon_data,
        recon_xls,
-       recon_mz,
+       chiefs,
        fids,
        file = data_file)
 
@@ -248,6 +270,5 @@ if(refresh_data){
   load(data_file)
 }
 
-chiefs <- bind_rows(recon_tz_rep[[1]],
-                    recon_mz_rep[[1]])
+
 
