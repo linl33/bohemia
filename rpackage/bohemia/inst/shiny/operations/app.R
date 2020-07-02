@@ -285,7 +285,7 @@ server <- function(input, output) {
                   extensions = 'Select', 
                   selection = list(target = "cell"),
                   options = list(dom = 't',
-                                 pageLength = 5), 
+                                 pageLength = nrow(fl)), 
                   rownames = FALSE)
   })
   
@@ -322,7 +322,7 @@ server <- function(input, output) {
       summarise(Done = n()) %>% left_join(right) %>%
       mutate(`Percent finished` = round(Done / Total * 100, digits = 2))
     databrew::prettify(out, 
-                       # nrows = nrow(out), 
+                       nrows = nrow(out),
                        download_options = T)
   })
   
@@ -335,7 +335,7 @@ server <- function(input, output) {
       mutate(`Status` = ifelse(Done >= Total, 'Done', 'Not done')) %>% 
       dplyr::select(Status, District, Country, Done, Total) 
     databrew::prettify(out, 
-                       # nrows = nrow(out), 
+                       nrows = nrow(out),
                        download_options = T)
     
   })
@@ -349,7 +349,7 @@ server <- function(input, output) {
       mutate(`Status` = ifelse(Done >= Total, 'Done', 'Not done')) %>% 
       dplyr::select(Status,  Village, District, Country, Done, Total) 
     databrew::prettify(out, 
-                       # nrows = nrow(out), 
+                       nrows = nrow(out),
                        download_options = T)    
   })
   
@@ -363,7 +363,7 @@ server <- function(input, output) {
       dplyr::select(-Done, -Total) %>%
       dplyr::select(Status, Hamlet, Village, District, Country)
     databrew::prettify(out, 
-                       # nrows = nrow(out), 
+                       nrows = nrow(out),
                        download_options = T)    
   })
   
@@ -402,7 +402,7 @@ server <- function(input, output) {
                   extensions = 'Select', 
                   selection = list(target = "cell"),
                   options = list(dom = 't',
-                                     pageLength = 5), 
+                                     pageLength = nrow(fl)), 
                   rownames = FALSE)
   })
   
@@ -961,7 +961,7 @@ server <- function(input, output) {
     
     DT::datatable(out, 
                   options = list(dom = 't',
-                                 pageLength = 5), 
+                                 pageLength = nrow(out)), 
                   rownames = FALSE)
   })
   
