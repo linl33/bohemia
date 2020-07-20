@@ -1,10 +1,10 @@
 ---
-title: "Recon"
+title: "Animal annex"
 output:
   pdf_document:
     latex_engine: xelatex
 params:
-    language: 'Portuguese'
+    language: 'Swahili'
     relevant: FALSE
     include_variable_names: FALSE
     choice_names_too: FALSE
@@ -30,7 +30,7 @@ library(bohemia)
 ```
 
 
-2020-04-04. Version 4.
+2020-05-07. Version 1
 
 (... = list of options continues)
 
@@ -45,7 +45,7 @@ lang <- params$language
 rel <- params$relevant
 var <- params$include_variable_names
 cn <- params$choice_names_too
-data_dict <- generate_data_dictionary(path = '../../forms/recon/recon.xls',
+data_dict <- generate_data_dictionary(path = '../../forms/animalannex/animalannex.xlsx',
                                       language = lang, 
                                       include_variable_names = var, 
                                       include_relevant = rel, 
