@@ -154,21 +154,27 @@ if(refresh_data){
   recon_mz <- recon_mz[[2]]
   
   # read in tz data
-  recon_tz <- odk_get_data(
-    url = creds$tza_odk_server,
-    id = 'recon',
-    id2 = NULL,
-    unknown_id2 = FALSE,
-    uuids = NULL,
-    exclude_uuids = NULL,
-    user = creds$tza_odk_user,
-    password = creds$tza_odk_pass
-  )
+  # (now closed, so reading a saved rdata)
+  if('tz_done.RData' %in% dir()){
+    load('tz_done.RData')
+  } else {
+    recon_tz <- odk_get_data(
+      url = creds$tza_odk_server,
+      id = 'recon',
+      id2 = NULL,
+      unknown_id2 = FALSE,
+      uuids = NULL,
+      exclude_uuids = NULL,
+      user = creds$tza_odk_user,
+      password = creds$tza_odk_pass
+    )
+    save(recon_tz,
+         file = 'tz_done.RData')
+  }
   
   # get non repeat data
   recon_tz_rep <- recon_tz[[1]]
   recon_tz <- recon_tz[[2]]
-  
   
   # change device id to numeric
   recon_tz$device_id <- as.character(recon_tz$device_id)
@@ -180,8 +186,8 @@ if(refresh_data){
   recon_data$date <- as.Date(strftime(recon_data$start_time, format = "%Y-%m-%d"))
   
   # extract lat long
-  recon_data$lon <- as.numeric(unlist(lapply(strsplit(recon_data$location, ' '), function(x) x[1])))
-  recon_data$lat <- as.numeric(unlist(lapply(strsplit(recon_data$location, ' '), function(x) x[2])))
+  recon_data$lon <- as.numeric(unlist(lapply(strsplit(recon_data$location, ' '), function(x) x[2])))
+  recon_data$lat <- as.numeric(unlist(lapply(strsplit(recon_data$location, ' '), function(x) x[1])))
   
   # get indicator for if location has been geocoded
   recon_data$geo_coded <- ifelse(!is.na(recon_data$lon) | !is.na(recon_data$lat), TRUE, FALSE)
@@ -260,7 +266,58 @@ if(refresh_data){
                       recon_mz_rep[[1]])
   chiefs <- chiefs %>% filter(!instanceID %in% bad_ids)
   
-  save(recon_data,
+  # Get animal annex
+  animal_mz <- odk_get_data(
+    url = creds$moz_odk_server,
+    id = 'animalannex',
+    id2 = NULL,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = NULL,
+    user = creds$moz_odk_user,
+    password = creds$moz_odk_pass
+  )
+  animal_tz <- odk_get_data(
+    url = creds$tza_odk_server,
+    id = 'animalannex',
+    id2 = NULL,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = NULL,
+    user = creds$tza_odk_user,
+    password = creds$tza_odk_pass
+  )
+  
+  # no repeats in animal, so just keeping the non-repeats
+  if(is.list(animal_mz)){
+    animal_mz <- animal_mz$non_repeats
+  }
+  if(is.list(animal_tz)){
+    animal_tz <- animal_tz$non_repeats
+  }
+  # Combine
+  animal <- bind_rows(animal_mz, animal_tz)
+  
+  # get data data 
+  animal$date <- as.Date(strftime(animal$start_time, format = "%Y-%m-%d"))
+  
+  # extract lat long
+  animal$lon <- as.numeric(unlist(lapply(strsplit(animal$location, ' '), function(x) x[2])))
+  animal$lat <- as.numeric(unlist(lapply(strsplit(animal$location, ' '), function(x) x[1])))
+  
+  # get indicator for if location has been geocoded
+  animal$geo_coded <- ifelse(!is.na(animal$lon) | !is.na(animal$lat), TRUE, FALSE)
+  
+  # Read in the recon data xls in order to get variable names
+  animal_xls <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1APsFS5BrXDu5v1jrZ4EwyOGcos4JVxV61DDe9x-HKQA/edit#gid=0')
+  animal_xls <- animal_xls %>%
+    dplyr::select(name, question = `label::English`)
+  
+  # Save for fast loading
+  save(
+    animal,
+    animal_xls,
+    recon_data,
        recon_xls,
        chiefs,
        fids,

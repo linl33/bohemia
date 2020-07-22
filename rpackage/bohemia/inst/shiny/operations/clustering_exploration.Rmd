@@ -1,0 +1,42 @@
+---
+title: "Clustering exploration"
+author: '2020-06-10'
+date: "7/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# The problem
+
+Bohemia needs to generate clusters in a way that minimizes bias and allows for a clear identification of the effect of ivermectin among cattle and/or humans on the incidence of malaria. However, in order to generate clusters optimally, _information on the location, number of people/households, and number of cattle/swine/goats_ on each hamlet is required. Since the census has been delayed, that information has not yet been collected.
+
+# The solution
+
+We need to quickly determine the following:
+
+- Location of each hamlet 
+- Approximate number of people in hamlet (interpolated via number of households) 
+- Approximate number of cattle   
+- Approximate number of swine  
+- Approximate number of goats  
+
+
+# Action
+
+For those areas that have already been reconnoitered, we can use already-collected info on location and number of people (interpolated via number of households). For those areas which have not yet been reconnoitered and for those areas which have been reconnoitered but did not have location collected, we can use satellite imagery to estimate location. For the number of livestock, we can simply ask the hamlet leader for a rough estimate (0, <5, <20, 20+) for each species.
+
+
+
+# How
+
+- Daily morning meeting between Databrew and Data managers (Eldo, Imani) at 9:30, 5 days, July 6-10, to coordinate.  
+- Accelerated finishing of recon form 
+- For missing locations, determine them (via satellite imagery and phone calls to chiefs).  
+- Call every hamlet leader in order to determine:
+  - Number of cattle
+  - Number of swine
+  - Number of goats
+

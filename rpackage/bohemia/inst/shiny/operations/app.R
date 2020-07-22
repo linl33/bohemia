@@ -23,9 +23,19 @@ sidebar <- dashboardSidebar(
                 icon=icon("chart-bar")),
               
               menuItem(
+                text="Recon data",
+                tabName="recon_data",
+                icon=icon("chart-line")),
+              
+              menuItem(
                 text="Recon performance",
                 tabName="recon_performance",
                 icon=icon("thumbs-up")),
+              
+              menuItem(
+                text="Animal data",
+                tabName="animal_data",
+                icon=icon("paw")),
               
               menuItem(
                 text="Location codes",
@@ -139,10 +149,40 @@ body <- dashboardBody(
     ),
     
     tabItem(
+      tabName = 'recon_data',
+      fluidPage(
+        DT::dataTableOutput('recon_data_table'),
+        leafletOutput('recon_data_map')
+      )
+    ),
+    
+    tabItem(
       tabName = 'recon_performance',
       fluidPage(
         textInput('password', 'Password', value = ''),
         DT::dataTableOutput('recon_performance_table')
+      )
+    ),
+    
+    tabItem(
+      tabName = 'animal_data',
+      fluidPage(
+        fluidRow(
+          h2('Animal annex')
+        ),
+        fluidRow(
+          column(6,
+                 h3('Mozambique'),
+                 textOutput('animal_text_mz'),
+                 leafletOutput('animal_map_mz'),
+                 DT::dataTableOutput('animal_table_mz')),
+          column(6,
+                 h3('Tanzania'),
+                 textOutput('animal_text_tz'),
+                 leafletOutput('animal_map_tz'),
+                 DT::dataTableOutput('animal_table_tz'))
+        )
+        
       )
     ),
 
@@ -262,6 +302,22 @@ server <- function(input, output) {
         p('Enter > 2 characters in the box to the left.')
       }
     }
+  })
+  
+  output$recon_data_table <- DT::renderDataTable({
+    out <- recon_data %>%
+      mutate(Geocoded = ifelse(geo_coded, 'Yes', 'No')) %>%
+      dplyr::select(Country, Ward, Village, Hamlet,
+                    Households = number_hh,
+                    Geocoded)
+    out
+  })
+  
+  output$recon_data_map <- renderLeaflet({
+    leaflet() %>%
+      addProviderTiles(providers$Stamen.Terrain) %>%
+      addMarkers(data = recon_data,
+                 popup = paste0(recon_data$Hamlet))
   })
   
   output$recon_performance_table <- DT::renderDataTable({
@@ -1032,7 +1088,55 @@ server <- function(input, output) {
         footer = NULL
       ))
     }
-   
+  })
+  
+  output$animal_map_tz <- renderLeaflet({
+    
+    pd <- animal %>%
+      filter(Country == 'Tanzania') %>%
+      dplyr::select(Hamlet, lon, lat, n_goats, n_cattle, n_pigs) 
+    leaflet() %>%
+      addProviderTiles(providers$Esri.WorldImagery) %>%
+      addPolygons(data = ruf2,
+                  fillOpacity = 0.1) %>%
+      addMarkers(data = pd,
+                 popup = paste0(pd$Hamlet, ': ',
+                                pd$n_goats, ' goats, ',
+                                pd$n_cattle, ' cattle, ',
+                                pd$n_pigs, ' pigs'))
+  })
+  output$animal_map_mz <- renderLeaflet({
+    pd <- animal %>%
+      filter(Country == 'Mozambique') %>%
+      dplyr::select(Hamlet, lon, lat, n_goats, n_cattle, n_pigs) 
+    leaflet() %>%
+      addProviderTiles(providers$Esri.WorldImagery) %>%
+      addPolygons(data = mop2,
+                  fillOpacity = 0.1) %>%
+      addMarkers(data = pd,
+                 popup = paste0(pd$Hamlet, ': ',
+                                pd$n_goats, ' goats, ',
+                                pd$n_cattle, ' cattle, ',
+                                pd$n_pigs, ' pigs'))
+  })
+  output$animal_table_tz <- DT::renderDataTable({
+    animal %>%
+      filter(Country == 'Tanzania') %>%
+      dplyr::select(Hamlet, Goats = n_goats, Cattle = n_cattle, Pigs = n_pigs)
+  })
+  output$animal_table_mz <- DT::renderDataTable({
+    animal %>%
+      filter(Country == 'Mozambique') %>%
+      dplyr::select(Hamlet, Goats = n_goats, Cattle = n_cattle, Pigs = n_pigs)
+  })
+  
+  output$animal_text_mz <- renderText({
+    nx <- nrow(animal %>% filter(Country == 'Mozambique'))
+    paste0(nx, ' forms administered.')
+  })
+  output$animal_text_tz <- renderText({
+    nx <- nrow(animal %>% filter(Country == 'Tanzania'))
+    paste0(nx, ' forms administered.')
   })
   
   output$render_qrs <- 
