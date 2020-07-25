@@ -153,8 +153,25 @@ if(refresh_data){
   recon_mz_rep <- recon_mz[[1]]
   recon_mz <- recon_mz[[2]]
   
+  # Read in recon2 form from moz
+  recon2_mz <- odk_get_data(
+    url = creds$moz_odk_server,
+    id = 'recon2',
+    id2 = NULL,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = NULL,
+    user = creds$moz_odk_user,
+    password = creds$moz_odk_pass
+  )
+  if(!is.null(recon2_mz)){
+    recon_mz_rep <- bind_rows(recon_mz_rep, recon2_mz[[1]])
+    recon_mz <- bind_rows(recon_mz, recon2_mz[[2]])
+  }
+  
   # read in tz data
   # (now closed, so reading a saved rdata)
+  # 1 more village to do, so need to temporarily unclose in future
   if('tz_done.RData' %in% dir()){
     load('tz_done.RData')
   } else {
@@ -226,7 +243,7 @@ if(refresh_data){
     replace_wid("recon-Mikwang'ombe-2020-05-05", 51) %>%
     replace_wid('recon-Genju-2020-05-05', 51) %>%
     replace_wid('recon-Nyamikamba-2020-04-29', 27)
-  
+
   # Add manual changes to number of households, per Imani's June 10 2020 email
   replace_number_hh <- function(df, instance, new_number){
     df$number_hh[df$instanceID == instance] <- new_number
@@ -254,7 +271,8 @@ if(refresh_data){
                "uuid:f25d3a3a-a7b2-48cc-8e3e-d2ec08ad0584",
                "uuid:1ae6260f-32c4-4f34-af15-8c047b6d166a",
                "uuid:da49d73c-d370-4747-b530-1d3cabd83c27",
-               "uuid:bb276094-f5d0-406c-bcd1-c55cde178d93")
+               "uuid:bb276094-f5d0-406c-bcd1-c55cde178d93",
+               'uuid:e2934d79-a3f2-4d8e-baec-d0c3aa5cba81')
   recon_data <- recon_data %>%
     filter(!instanceID %in% bad_ids)
   # Drop if no chief
@@ -298,6 +316,14 @@ if(refresh_data){
   # Combine
   animal <- bind_rows(animal_mz, animal_tz)
   
+  # Remove bad / duplicated ids from animal annex
+  bad_animals <- c("uuid:9bf58f63-039d-491d-8018-9d34a852cc20",
+                   "uuid:aa99cd2c-78c6-4df9-b5dc-f0b6059bd2b7",
+                   "uuid:29d3abae-e0b6-4b4e-89c9-f46e94a7fa5b",
+                   "uuid:19f8ee8d-fecb-480d-8f18-75609ebbd5aa")
+  
+  animal <- animal %>% filter(!instanceID %in% bad_animals)
+  
   # get data data 
   animal$date <- as.Date(strftime(animal$start_time, format = "%Y-%m-%d"))
   
@@ -313,6 +339,23 @@ if(refresh_data){
   animal_xls <- animal_xls %>%
     dplyr::select(name, question = `label::English`)
   
+  # Update the codes when missing
+  # (this occured because of the fact that the code field was not required)
+  fix_codes <- function(x){
+    message(length(which(is.na(x$hamlet_code))), ' missing hamlet codes')
+    x <- x %>%
+      left_join(locations %>% 
+                  dplyr::select(-clinical_trial),
+                by = c("Country", "District", "Hamlet", "Region", "Village", "Ward")) %>%
+      mutate(hamlet_code = ifelse(is.na(hamlet_code) | hamlet_code == 'XXX', code, hamlet_code)) %>%
+      dplyr::select(-code)
+    message('Reduced to ', length(which(is.na(x$hamlet_code))), ' missing hamlet codes')
+    return(x)
+    
+  }
+  animal <- fix_codes(animal)
+  recon_data <- fix_codes(recon_data)
+
   # Save for fast loading
   save(
     animal,
@@ -327,5 +370,24 @@ if(refresh_data){
   load(data_file)
 }
 
+if(grepl('joebrew', getwd())){
+  # Identify places with no code (ie, manual hamlet entries)
+  no_code_animal <- animal %>% filter(is.na(hamlet_code) | !hamlet_code %in% locations$code)
+  no_code_recon <- recon_data %>% filter(is.na(hamlet_code) | !hamlet_code %in% locations$code)
+  selector <- function(x){
+    x %>% 
+      mutate(Village = ifelse(Village == 'Other', paste0(village_other, ' (entered manually)'), Village)) %>%
+      mutate(Hamlet = ifelse(Hamlet == 'Other', paste0(hamlet_other, ' (entered manually)'), Hamlet)) %>%
+      mutate(hamlet_code = ifelse(is.na(hamlet_code), '', hamlet_code)) %>%
 
+      dplyr::select(instanceID, Country, Region, District, Ward, Village, Hamlet, `Incorrect Hamlet Code` = hamlet_code)
+  }
+  
+  combined <- bind_rows(
+    selector(no_code_animal) %>% mutate(form = 'Animal Annex'),
+    selector(no_code_recon) %>% mutate(form = 'Recon')
+  ) %>%
+    mutate(`Correct Hamlet Code` = '')
+  write_csv(combined, '~/Desktop/corrections.csv')
+}
 
