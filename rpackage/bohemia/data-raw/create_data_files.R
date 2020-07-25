@@ -369,28 +369,57 @@ library(dplyr)
 url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
 # Fetch the data
 locations <- gsheet::gsheet2tbl(url = url)
-
-# Fix the incorrect localities
-locations$code <- NULL
-
-# Replace villages
-locations$Village <- bohemia::update_mopeia_locality_names(locations$Village)
-
-locations$Village <- gsub('/', '/ ', locations$Village, fixed = TRUE)
-# Fix capitalization
-simpleCap <- function(x) {
-  s <- strsplit(x, " ")[[1]]
-  paste(toupper(substring(s, 1,1)), substring(s, 2),
-        sep="", collapse=" ")
-}
-locations$Village <- sapply(tolower(locations$Village), simpleCap)
-locations$Village <- gsub('/ ', '/', locations$Village, fixed = TRUE)
+# moz_new <- read_csv('updated_moz_location_hierarchy/mozy.csv')
+# locations <- locations %>%
+#   filter(Country != 'Mozambique') %>%
+#   bind_rows(moz_new) %>%
+#   arrange(desc(Country)) 
 # 
-# # # Arrange by hamlet name and generate location codes
-locations <- locations %>% dplyr::arrange(Hamlet)
-locations <- bohemia::generate_location_codes(locations)
-locations$degrees <- NULL
-locations <- locations %>% arrange(Country, Region, District, Ward, Village, Hamlet)
+# x <- locations %>%
+#   mutate(dup = duplicated(code)) %>%
+#   filter(dup)
+# locations$clinical_trial[is.na(locations$clinical_trial)] <- FALSE
+# write_csv(locations, '~/Desktop/locations.csv')
+
+# new moz
+# new_moz <- read_csv('updated_moz_location_hierarchy/LoationHierarchy.Mopeia.2020.07.21Final.csv')
+# names(new_moz)[c(2,4:7)] <- c('Region', 'Ward', 'Ward2', 'Village', 'Hamlet')
+# new_moz$Ward <- paste0(new_moz$Ward, ' | ', new_moz$Ward2)
+# new_moz$Ward2 <- NULL
+# new_moz$Ward <- gsub('Mopeia sede | Mopeia sede/', 'Mopeia sede | ', new_moz$Ward, fixed = TRUE)
+# right <- locations %>%
+#   filter(Country == 'Mozambique') %>%
+#   ungroup %>%
+#   group_by(Hamlet) %>%
+#   summarise(code = paste0(sort(unique(code)), collapse = ' | '))
+# mozy <- left_join(new_moz, right)
+# write_csv('~/Desktop/mozy.csv')
+
+
+
+# Clean up
+# locations$Village <- gsub('/', '/ ', locations$Village, fixed = TRUE)
+# # Fix capitalization
+# simpleCap <- function(x) {
+#   s <- strsplit(x, " ")[[1]]
+#   paste(toupper(substring(s, 1,1)), substring(s, 2),
+#         sep="", collapse=" ")
+# }
+# locations$Village <- sapply(tolower(locations$Village), simpleCap)
+# 
+# # Fix the incorrect localities
+# locations$code <- NULL
+# 
+# # Replace villages
+# locations$Village <- bohemia::update_mopeia_locality_names(locations$Village)
+# 
+# 
+#  
+# # # # Arrange by hamlet name and generate location codes
+# locations <- locations %>% dplyr::arrange(Hamlet)
+# locations <- bohemia::generate_location_codes(locations)
+# locations$degrees <- NULL
+# locations <- locations %>% arrange(Country, Region, District, Ward, Village, Hamlet)
 # Make sure there are no duplicates
 locations <- locations %>%
   dplyr::distinct(Country, Region, District, Ward, Village, Hamlet, 

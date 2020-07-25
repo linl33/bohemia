@@ -14,6 +14,12 @@ The code in `bohemia/rpackage/bohemia/data-raw/create_data_files.R` contains a f
 
 The function defined in `bohemia/rpackage/bohemia/odk_create_location_choices.R` formats correctly for the ODK choices page. Run it. And write the two elements of the list output to local csvs (for later copy-pasting into the relevant spreadsheets).
 
+```
+out <- odk_create_location_choices(country = NULL, add_other = TRUE, add_ids = FALSE, add_codes = TRUE, other_word = 'Other', other_only_levels = c("Village", "Hamlet"))
+readr::write_csv(out$survey, '~/Desktop/survey.csv')
+readr::write_csv(out$choices, '~/Desktop/choices.csv')
+```
+
 ## Step 4: Copy-paste into spreadsheets
 
 - Any ODK form which uses the hierarchy should get it copy-pasted:

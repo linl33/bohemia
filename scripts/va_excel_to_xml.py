@@ -1,27 +1,16 @@
-import pygsheets
-import xlrd
+import ezsheets
 import os
 import shutil
-#import numpy as np
+os.chdir('../credentials')
 
-# Authorize by using this: https://pygsheets.readthedocs.io/en/latest/authorization.html
-gc = pygsheets.authorize('../credentials/gsheets_oauth.json')
-
-doc = 'va'
-sh = gc.open(doc)
-wks = sh.sheet1
-
-#export as xls
-wks.export(pygsheets.ExportType.XLS, doc)
-
-os.rename(doc + '.xls' ,'va.xls')
-
+s = ezsheets.Spreadsheet('https://docs.google.com/spreadsheets/d/1BuRSJdWmottUW8SDnh8nGTkLCeTjEX3LgkRpaPvoKjE/edit#gid=1264701015')
+s.downloadAsExcel()
 
 ## Convert to xml
-os.system('xls2xform ' + 'va' + '.xls ' + 'va' +'.xml')
+os.system('xls2xform va.xlsx va.xml ')
 
 # Move
-shutil.move('va.xls', "../forms/va/va.xls")
-shutil.move('va.xml', "../forms/va/va.xml")
+shutil.move('va.xlsx', '../forms/va/va.xlsx')
+shutil.move('va.xml',  '../forms/va/va.xml')
 
-print("Successfully created the following documents:\n---" + 'va' + '.xls\n---' + 'va' +'.xml')
+print('Done. Docs in forms/va.')

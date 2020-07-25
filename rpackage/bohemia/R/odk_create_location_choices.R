@@ -7,6 +7,7 @@
 #' @param add_codes Whether to add the hamlet code. TRUE as default
 #' @param other_word The name of the word to be used to mark "Other"
 #' @param other_only_levels Whether the other option should be applied only to certain geographical levels. If \code{NULL}, all levels get an "other" option. Otherwise, only the named vector.
+#' @param lower_it Whether to lowercase the names of the levels (ie "village", not "Village"). Default is False
 #' @return A list of two tables named "survey" and "choices"
 #' @import dplyr
 #' @import gsheet
@@ -18,7 +19,8 @@ odk_create_location_choices <- function(country = NULL,
                                         add_ids = FALSE, 
                                         add_codes = TRUE,
                                         other_word = 'Other',
-                                        other_only_levels = c('Village', 'Hamlet')){
+                                        other_only_levels = c('Village', 'Hamlet'),
+                                        lower_it = TRUE){
   
   # country = NULL; add_other = TRUE; add_ids = FALSE; other_word = 'Other';
   # other_only_levels = c('Village', 'Hamlet')
@@ -202,7 +204,23 @@ odk_create_location_choices <- function(country = NULL,
     survey$choice_filter[j] <- the_filters
   }
   
+  if(lower_it){
+    choices$list_name <- tolower(choices$list_name)
+    names(choices)[names(choices) == 'Country'] <- 'country'
+    names(choices)[names(choices) == 'Region'] <- 'region'
+    names(choices)[names(choices) == 'District'] <- 'district'
+    names(choices)[names(choices) == 'Ward'] <- 'ward'
+    names(choices)[names(choices) == 'Village'] <- 'village'
+    names(choices)[names(choices) == 'Hamlet'] <- 'hamlet'
+    
+  }
   
+  # Remove the all NAs from choices
+  choices <- choices %>% filter(!is.na(name))
+  
+  # Add other options in other language
+  choices$`label::Portuguese`[choices$`label::English` == 'Other'] <- 'Outro'
+  choices$`label::Swahili`[choices$`label::English` == 'Other'] <- 'Nyingine'
   
   out <- list(survey, choices)
   names(out) <- c('survey', 'choices')

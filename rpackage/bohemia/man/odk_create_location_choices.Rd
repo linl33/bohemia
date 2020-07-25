@@ -10,7 +10,8 @@ odk_create_location_choices(
   add_ids = FALSE,
   add_codes = TRUE,
   other_word = "Other",
-  other_only_levels = c("Village", "Hamlet")
+  other_only_levels = c("Village", "Hamlet"),
+  lower_it = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ odk_create_location_choices(
 \item{other_word}{The name of the word to be used to mark "Other"}
 
 \item{other_only_levels}{Whether the other option should be applied only to certain geographical levels. If \code{NULL}, all levels get an "other" option. Otherwise, only the named vector.}
+
+\item{lower_it}{Whether to lowercase the names of the levels (ie "village", not "Village"). Default is False}
 }
 \value{
 A list of two tables named "survey" and "choices"

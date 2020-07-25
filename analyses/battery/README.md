@@ -19,7 +19,7 @@ creds <- yaml::yaml.load_file('../../credentials/credentials.yaml')
 sync_workers_traccar(credentials = creds)
 
 # Read in google data bout which tablets we're experimenting on
-experiment <- gsheet2tbl('https://docs.google.com/spreadsheets/d/11T8oB0NBQWiWIymx8F1dBDOlri_YPZE0CO6FnJvg5uA/edit?usp=sharing')
+experiment <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1P305C84d0SUe7qVeAfzMVCUgiy1ImXhdjfAWNaTywu4/edit?ts=5eea0d49#gid=0')
 ```
 
 ``` r
@@ -31,8 +31,8 @@ df <- bohemia::get_traccar_data(url = creds$traccar_server,
 keep <- df %>%
   mutate(bohemia_id = as.numeric(uniqueId)) %>%
   filter(bohemia_id %in% experiment$bohemia_id) %>%
-  left_join(experiment %>% dplyr::select(bohemia_id, Interval)) %>%
-  dplyr::select(bohemia_id, name, Interval, status, id)
+  left_join(experiment %>% dplyr::select(bohemia_id, interval)) %>%
+  dplyr::select(bohemia_id, name, interval, status, id)
 
 # Get battery life
 out_list <- list()
@@ -63,24 +63,66 @@ extract_battery <- function(x){
 }
 out$battery <- extract_battery(out$valid)
 
-# Join the Interval setting
+# Join the interval setting
 out <- out %>%
   left_join(keep %>% dplyr::rename(deviceId = id))
 
+# Get last time at which battery was at 100
+out <- out %>%
+  arrange(fixTime) %>%
+  group_by(interval) %>%
+  # calculate the first moment at which there is a decrease
+  mutate(power = battery - dplyr::lag(battery, 1)) %>%
+  filter(power <0 ) %>%
+  ungroup %>%
+  group_by(interval) %>%
+  mutate(relative_time = deviceTime - min(deviceTime)) %>%
+  mutate(start_point = max(battery)) %>%
+  ungroup %>%
+  mutate(adjustor = 100 - start_point) %>%
+  mutate(battery = battery + adjustor)
+out <- out %>%
+  group_by(interval) %>%
+  mutate(obs = n()) %>%
+  ungroup %>% filter(obs > 2)
+
 # Plot
+library(RColorBrewer)
 ggplot(data = out,
-       aes(x = deviceTime,
+       aes(x = relative_time / 60 / 60,
            y = battery,
-           color = factor(Interval))) +
-  geom_line()
+           color = factor(interval))) +
+  geom_line(size = 2) +
+  scale_color_manual(name = 'interval',
+                     values = colorRampPalette(brewer.pal(n = 9, 'Spectral'))(length(unique(out$interval)))) +
+  labs(x = 'Hours since unplug',
+       y = 'Battery life',
+       title = 'Battery life and ping interval') +
+  theme_simple()
 ```
 
 ![](figures/unnamed-chunk-4-1.png)<!-- -->
 
+``` r
+ggplot(data = out,
+       aes(x = relative_time / 60 / 60,
+           y = battery,
+           color = factor(bohemia_id))) +
+  geom_line(size = 2) +
+  scale_color_manual(name = 'Bohemia ID',
+                     values = colorRampPalette(brewer.pal(n = 9, 'Spectral'))(length(unique(out$interval)))) +
+  labs(x = 'Hours since unplug',
+       y = 'Battery life',
+       title = 'Battery life and Bohemia ID') +
+  theme_simple()
+```
+
+![](figures/unnamed-chunk-4-2.png)<!-- -->
+
 # Technical details
 
-This document was produced on 2020-05-24 on a Linux machine (release
-5.3.0-53-generic. To reproduce, one should take the following steps:
+This document was produced on 2020-06-24 on a Linux machine (release
+5.3.0-59-generic. To reproduce, one should take the following steps:
 
   - Clone the repository at <https://github.com/databrew/bohemia>
 
