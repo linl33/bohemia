@@ -17,6 +17,10 @@ sidebar <- dashboardSidebar(
                 tabName="hamlet_explorer",
                 icon=icon("home")),
               
+              menuItem('Data collection',
+                       tabName = 'data_collection',
+                       icon = icon('database')),
+              
               menuItem(
                 text="Recon progress",
                 tabName="recon_progress",
@@ -118,6 +122,31 @@ body <- dashboardBody(
                         DT::dataTableOutput('qualy_table')))
       )
     ),
+    
+    tabItem(
+      tabName = 'data_collection',
+      fluidPage(
+        fluidRow(h2('Data collection')),
+        fluidRow(column(12, align = 'center',
+                        selectInput('data_collection_picker',
+                                    'How to view data',
+                                    choices = c('Raw',
+                                                'By country')),
+                        h3('Overall:'),
+                        DT::dataTableOutput('data_collection_table'),
+                        h3('Hamlets without geocoding:'),
+                        DT::dataTableOutput('data_collection_need_geocoding_table'),
+                        h3('Hamlets without recon:'),
+                        DT::dataTableOutput('data_collection_need_recon_table'),
+                        h3('Hamlets without animal annex:'),
+                        DT::dataTableOutput('data_collection_need_animal_table'),
+                        h3('Hamlets with potentially contradictory geocoding'),
+                        helpText('The below table shows hamlets that have geocoding from both Recon and animal annex. It is ordered, descending, by the distance (in meters) between the points. Distances of >500 meters should be considered suspect for error.'),
+                        DT::dataTableOutput('data_collection_contradictory_table')
+                        ))
+      )
+    ),
+    
     
     tabItem(
       tabName = 'recon_progress',
@@ -1137,6 +1166,71 @@ server <- function(input, output) {
   output$animal_text_tz <- renderText({
     nx <- nrow(animal %>% filter(Country == 'Tanzania'))
     paste0(nx, ' forms administered.')
+  })
+  
+  output$data_collection_table <- DT::renderDataTable({
+    
+    dcx <- input$data_collection_picker
+    
+    pd <- geocodes %>%
+      mutate(geocoded = ifelse(is.na(animal_lat) & is.na(recon_lat),
+                               'No',
+                               ifelse(is.na(animal_lat) & !is.na(recon_lat),
+                                      'Yes, in recon',
+                                      ifelse(!is.na(animal_lat) & is.na(recon_lat),
+                                             'Yes, in animal annex',
+                                             ifelse(!is.na(animal_lat) & !is.na(recon_lat),
+                                                    'Yes, in both', NA))))) %>%
+      mutate(animal_done = ifelse(is.na(animal_done), FALSE, animal_done)) %>%
+      mutate(recon_done = ifelse(is.na(recon_done), FALSE, recon_done)) %>%
+      dplyr::select(Country, Region, District, Ward, Village, Hamlet, geocoded,
+                    code, lng, lat, animal_done, recon_done)
+
+    if(dcx == 'By country'){
+      pd <- pd %>%
+        group_by(Country) %>%
+        summarise(`Hamlets` = n(),
+                  `Geocoded` = length(which(grepl('Yes', geocoded))),
+                  `Finished recon` = length(which(recon_done)),
+                  `Finished animal annex` = length(which(animal_done)))
+      pd
+    } else {
+      return(pd)
+    }
+  })
+  
+  output$data_collection_need_geocoding_table <- DT::renderDataTable({
+    pd <- geocodes %>%
+      filter(is.na(lng)) %>%
+      dplyr::select(Country, Region, District, Ward, Village, Hamlet, code)
+      pd
+  })
+  
+  output$data_collection_need_recon_table <- DT::renderDataTable({
+    pd <- geocodes %>%
+      filter(is.na(recon_done)) %>%
+      dplyr::select(Country, Region, District, Ward, Village, Hamlet, code)
+    pd
+  })
+  
+  output$data_collection_need_animal_table <- DT::renderDataTable({
+    pd <- geocodes %>%
+      filter(is.na(animal_done)) %>%
+      dplyr::select(Country, Region, District, Ward, Village, Hamlet, code)
+    pd
+  })
+  
+  output$data_collection_contradictory_table <- DT::renderDataTable({
+    pd <- geocodes %>%
+      filter(!is.na(distance)) %>%
+      dplyr::select(distance, Country, Region, District, Ward, Village, Hamlet, code,
+                    animal_lat,
+                    animal_lng,
+                    recon_lat,
+                    recon_lng) %>%
+      mutate(distance = round(distance)) %>%
+      arrange(desc(distance))
+    pd
   })
   
   output$render_qrs <- 

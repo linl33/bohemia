@@ -8,6 +8,7 @@ library(kableExtra)
 library(tidyverse)
 library(yaml)
 library(gsheet)
+library(geosphere)
 
 # rdir <- '../../rpackage/bohemia/R/'
 # funs <- dir(rdir)
@@ -122,6 +123,9 @@ filter_locations <- function(locations,
   return(out)
 }
 
+locations <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit#gid=1134589765')
+
+
 
 # add_nothing <- function(x){c('', x)}
 add_nothing <- function(x){x}
@@ -158,12 +162,13 @@ if(refresh_data){
     url = creds$moz_odk_server,
     id = 'recon2',
     id2 = NULL,
-    unknown_id2 = FALSE,
+    unknown_id2 = TRUE,
     uuids = NULL,
     exclude_uuids = NULL,
     user = creds$moz_odk_user,
     password = creds$moz_odk_pass
   )
+  recon2_mz$non_repeats$device_id <- as.character(recon2_mz$non_repeats$device_id)
   if(!is.null(recon2_mz)){
     recon_mz_rep <- bind_rows(recon_mz_rep, recon2_mz[[1]])
     recon_mz <- bind_rows(recon_mz, recon2_mz[[2]])
@@ -172,7 +177,7 @@ if(refresh_data){
   # read in tz data
   # (now closed, so reading a saved rdata)
   # 1 more village to do, so need to temporarily unclose in future
-  if('tz_done.RData' %in% dir()){
+  if('tz_done.RData' %in% dir() & !refresh_data){
     load('tz_done.RData')
   } else {
     recon_tz <- odk_get_data(
@@ -243,8 +248,10 @@ if(refresh_data){
     replace_wid("recon-Mikwang'ombe-2020-05-05", 51) %>%
     replace_wid('recon-Genju-2020-05-05', 51) %>%
     replace_wid('recon-Nyamikamba-2020-04-29', 27)
-
-  # Add manual changes to number of households, per Imani's June 10 2020 email
+  recon_data$wid <- ifelse(recon_data$wid == 301, 108, recon_data$wid)
+  recon_data$wid <- ifelse(recon_data$wid == 302, 108, recon_data$wid)
+  
+  # Add manual changes to number of households, per Imani's August 1 2020 email
   replace_number_hh <- function(df, instance, new_number){
     df$number_hh[df$instanceID == instance] <- new_number
     return(df)
@@ -271,8 +278,7 @@ if(refresh_data){
                "uuid:f25d3a3a-a7b2-48cc-8e3e-d2ec08ad0584",
                "uuid:1ae6260f-32c4-4f34-af15-8c047b6d166a",
                "uuid:da49d73c-d370-4747-b530-1d3cabd83c27",
-               "uuid:bb276094-f5d0-406c-bcd1-c55cde178d93",
-               'uuid:e2934d79-a3f2-4d8e-baec-d0c3aa5cba81')
+               "uuid:bb276094-f5d0-406c-bcd1-c55cde178d93")
   recon_data <- recon_data %>%
     filter(!instanceID %in% bad_ids)
   # Drop if no chief
@@ -314,14 +320,26 @@ if(refresh_data){
     animal_tz <- animal_tz$non_repeats
   }
   # Combine
+  animal_mz$device_id <- as.character(animal_mz$device_id)
+  animal_tz$device_id <- as.character(animal_tz$device_id)
   animal <- bind_rows(animal_mz, animal_tz)
   
   # Remove bad / duplicated ids from animal annex
   bad_animals <- c("uuid:9bf58f63-039d-491d-8018-9d34a852cc20",
                    "uuid:aa99cd2c-78c6-4df9-b5dc-f0b6059bd2b7",
                    "uuid:29d3abae-e0b6-4b4e-89c9-f46e94a7fa5b",
-                   "uuid:19f8ee8d-fecb-480d-8f18-75609ebbd5aa")
+                   "uuid:19f8ee8d-fecb-480d-8f18-75609ebbd5aa",
+                   "uuid:e2934d79-a3f2-4d8e-baec-d0c3aa5cba81",
+                   "uuid:fbce3e5b-2fa7-4496-8543-a92aea30b538",
+                   "uuid:e81ac431-93e8-4069-8841-3c179ed208cc")
   
+  # Correct incorrect fieldworkers in animal
+  animal <- replace_wid(animal, "uuid:1a79dabe-62cb-4897-8c20-d6607eeec717", 22)
+  animal <- replace_wid(animal, "uuid:59b5197d-f0cd-4976-a68f-ef174b5338a5", 2)
+  animal <- replace_wid(animal, "uuid:91303f21-52be-473d-8f77-7c87694d095a", 28)
+  animal <- replace_wid(animal, "uuid:55f408a7-62c6-40ae-8413-2ccbdeaa9293", 66)
+  animal <- replace_wid(animal, "uuid:2900856e-aa7d-4d7f-b70a-cf9b3fd42261", 62)
+
   animal <- animal %>% filter(!instanceID %in% bad_animals)
   
   # get data data 
@@ -355,9 +373,60 @@ if(refresh_data){
   }
   animal <- fix_codes(animal)
   recon_data <- fix_codes(recon_data)
+  
+  # Read in the code corrections
+  cc <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1EuQXpZ5TcFzReIDr-jJDMQdxxguSpdIVOGyzwsFStlQ/edit#gid=0')
+  cc <- cc %>% dplyr::select(instanceID, correct_code = `Correct Hamlet Code`)
+  
+  # Make corrections
+  animal <- animal %>% left_join(cc) %>% mutate(hamlet_code = ifelse(!is.na(correct_code),
+                                                                     correct_code,
+                                                                     hamlet_code))
+  recon_data <- recon_data %>% left_join(cc) %>% mutate(hamlet_code = ifelse(!is.na(correct_code),
+                                                                             correct_code,
+                                                                             hamlet_code))
+  
+  # Remove duplicates (NOT DONE YET)
+  # Use the spreadsheet here: https://docs.google.com/spreadsheets/d/1uFEHmL6rRdAvEPHe8wwOdUy6ntGBFh_RAs2hntR-Rig/edit#gid=664792461
+  
+  
+  # Get all locations that are geocoded
+  geocodes <- locations %>%
+    left_join(animal %>%
+                dplyr::arrange(lat) %>%
+                mutate(animal_done = TRUE) %>%
+                dplyr::select(animal_lat = lat,
+                              animal_lng = lon,
+                              code = hamlet_code,
+                              animal_done) %>%
+              dplyr::distinct(code, .keep_all = TRUE)) %>%
+    left_join(recon_data %>%
+                dplyr::arrange(lat) %>%
+                mutate(recon_done = TRUE) %>%
+                dplyr::select(recon_lat = lat,
+                              recon_lng = lon,
+                              code = hamlet_code,
+                              recon_done) %>%
+                dplyr::distinct(code, .keep_all = TRUE))
+  
+  geocodes$distance <- NA
+  for(i in 1:nrow(geocodes)){
+    geocodes$distance[i] <- distm(c(geocodes$animal_lng[i], geocodes$animal_lat[i]), 
+                                  c(geocodes$recon_lng[i], geocodes$recon_lat[i]), fun = distHaversine)
+  }
+  
+  geocodes$lng <- ifelse(is.na(geocodes$animal_lng), geocodes$recon_lng, geocodes$animal_lng)
+  geocodes$lat <- ifelse(is.na(geocodes$animal_lat), geocodes$recon_lat, geocodes$animal_lat)
+  
+  # Some more manual corrections
+  animal <- animal %>%
+    mutate(hamlet_code = ifelse(instanceID == 'uuid:fd75edcd-1f9e-420f-94a7-691209d5d91d',
+                                'UCM', hamlet_code))
+  
 
   # Save for fast loading
   save(
+    geocodes,
     animal,
     animal_xls,
     recon_data,
@@ -369,6 +438,8 @@ if(refresh_data){
 } else {
   load(data_file)
 }
+
+
 
 if(grepl('joebrew', getwd())){
   # Identify places with no code (ie, manual hamlet entries)
@@ -389,5 +460,21 @@ if(grepl('joebrew', getwd())){
   ) %>%
     mutate(`Correct Hamlet Code` = '')
   write_csv(combined, '~/Desktop/corrections.csv')
+  
+  # Deal with duplicates
+  # Generate duplicates for fixing
+  make_dups <- function(df, word = 'Animal'){
+    left <- df %>% group_by(hamlet_code) %>%
+      tally %>% filter(n > 1) %>% mutate(form = word)
+    out <- left_join(left, df) %>% filter(!is.na(hamlet_code))
+    return(out)
+  }
+  
+  duplicates_animal <- make_dups(df = animal, 'Animal')
+  duplicates_recon <- make_dups(df = recon_data, 'Recon')
+  write_csv(duplicates_animal, '~/Desktop/duplicates_animal.csv')
+  write_csv(duplicates_recon, '~/Desktop/duplicates_recon.csv')
+  # Write to the spreadsheet here: https://docs.google.com/spreadsheets/d/1uFEHmL6rRdAvEPHe8wwOdUy6ntGBFh_RAs2hntR-Rig/edit#gid=664792461
+  
 }
 
