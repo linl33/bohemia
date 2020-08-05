@@ -1,5 +1,14 @@
 source('global.R')
 
+# # Clustering rules:
+# humans: >= 35 children (<5 in moz, 5-15 in tza)
+# distance: >= 1km around core (ie, 2km between cores)
+# number of ttm groups: 3 (human-ivm, all-ivm, control)
+# number of clusters per group: >48 per group
+# Preferences:
+# - no splitting of villages (assuming to mean "hamlets")
+# - experiment by different species
+
 # Define the country
 the_country <- 'Tanzania'
 
@@ -10,6 +19,10 @@ interpolate_humans <- TRUE
 
 # Define the percentage of people which are children
 p_children <- 30
+
+# Define the human sufficiency rule
+human_sufficiency_rule <- 'n_children >= 35'
+animal_sufficiency_rule <- 'n_animals >= 35'
 
 # Get the locations
 left <- geocodes %>% filter(Country == the_country) %>%
@@ -31,6 +44,9 @@ right <- recon_data %>% filter(Country == the_country) %>%
                 n_households = number_hh)
 # Join all info
 df <- left_join(joined, right)
+message(nrow(df), ' locations. Removing those without geocoding reduces to:')
+df <- df %>% filter(!is.na(lng), !is.na(lat))
+message(nrow(df), ' locations.')
 
 # Recode categorical variables so as to get approximate numbers
 recodify <- function(x){
@@ -83,11 +99,55 @@ df <- df %>%
          !is.na(n_pigs),
          !is.na(n_goats))
 
-# Clustering rules:
-# humans: >= 35 children (<5 in moz, 5-15 in tza)
-# distance: >= 1km around core (ie, 2km between cores)
-# number of ttm groups: 3 (human-ivm, all-ivm, control)
-# number of clusters per group: >48 per group
-# Preferences:
-# - no splitting of villages
-# - experiment by different species
+# Define a n_children variable
+df$n_children <- df$n_households * (0.01 * p_children)
+# Define an animal variable
+df$n_animals <- df$n_cattle + df$n_goats + df$n_pigs
+
+# Create a space for indicating whether the hamlet
+# has already been assigned to a cluster or not
+df$assigned <- FALSE
+
+# Spatial section ######################################
+library(dplyr)
+library(sp)
+library(geosphere)
+
+# Create a spatial version of df
+df_sp <- df
+coordinates(df_sp) <- ~lng+lat
+proj4string(df_sp) <- CRS("+init=epsg:4326") # define as lat/lng
+
+zone <- 36
+
+new_proj <- CRS(paste0("+proj=utm +zone=", 
+           zone, 
+           " +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+df_sp <- spTransform(df_sp, new_proj)
+
+# Get a distance matrix between all points
+distance_matrix <- rgeos::gDistance(spgeom1 = df_sp, byid = TRUE)
+
+# Add a perimeter around each hamlet (guessing based on population)
+buffers <- rgeos::gBuffer(df_sp, byid = TRUE, width = 1000)
+# Get in lat/lng
+buffers_ll <- spTransform(buffers, proj4string(ruf2))
+
+# Start at the point which is furthest (on average) to all others
+median_distances <- apply(distance_matrix, 1, median, na.rm = TRUE)
+start_here <- which.min(median_distances)[1]
+this_hamlet <- df[start_here,]
+sufficiency_rule <- paste0(animal_sufficiency_rule, ' & ',
+                           human_sufficiency_rule)
+suffiency_text <- paste0(
+  "this_hamlet <- this_hamlet %>%
+  dplyr::mutate(is_sufficient = ", sufficiency_rule, ")"
+)
+eval(parse(text = suffiency_text))
+is_sufficient <- this_hamlet$is_sufficient
+# Get nearest
+
+done <- FALSE
+while(!done){
+  
+}

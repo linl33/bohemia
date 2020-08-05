@@ -131,7 +131,7 @@ locations <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5g
 add_nothing <- function(x){x}
 
 # Get ODK data for recon form
-refresh_data <- F
+refresh_data <- T
 data_file <- 'recon.RData'
 
 if(refresh_data){
@@ -269,7 +269,7 @@ if(refresh_data){
   recon_data$wid <- ifelse(recon_data$wid == 302, 108, recon_data$wid)
   # Drop duplicates
   bad_ids <- c("uuid:b6b28300-1b0b-43d3-9b0b-3ce21353d5fc",
-               "uuid:387ad05d-aa9e-4009-b351-89527237cd9e",
+               # "uuid:387ad05d-aa9e-4009-b351-89527237cd9e", # ok, email aug 5
                "uuid:55d6d8d0-3e9c-41dd-be95-a6124c512378",
                "uuid:e230358d-3e51-4df9-bdb1-2defb261983d",
                "uuid:43ef137d-558f-49df-9804-4f1c9dec3697",
@@ -281,6 +281,15 @@ if(refresh_data){
                "uuid:bb276094-f5d0-406c-bcd1-c55cde178d93")
   recon_data <- recon_data %>%
     filter(!instanceID %in% bad_ids)
+  # Name fix
+  recon_data <- recon_data %>%
+    mutate(hamlet_code = ifelse(instanceID == 'uuid:33dc64ac-0065-4cc8-823b-6179486de466',
+                                'MMN',
+                                hamlet_code))
+  recon_data <- recon_data %>%
+    mutate(Hamlet = ifelse(instanceID == 'uuid:33dc64ac-0065-4cc8-823b-6179486de466',
+                                'Malenda Halisi',
+                           Hamlet))
   # Drop if no chief
   recon_data$drop <- recon_data$Country == 'Tanzania' &
     !recon_data$instanceID %in% recon_tz_rep$repeat_chief$instanceID
@@ -331,7 +340,8 @@ if(refresh_data){
                    "uuid:19f8ee8d-fecb-480d-8f18-75609ebbd5aa",
                    "uuid:e2934d79-a3f2-4d8e-baec-d0c3aa5cba81",
                    "uuid:fbce3e5b-2fa7-4496-8543-a92aea30b538",
-                   "uuid:e81ac431-93e8-4069-8841-3c179ed208cc")
+                   "uuid:e81ac431-93e8-4069-8841-3c179ed208cc",
+                   "uuid:69cf6304-f799-4640-b9fc-16a8c65a13d4")
   
   # Correct incorrect fieldworkers in animal
   animal <- replace_wid(animal, "uuid:1a79dabe-62cb-4897-8c20-d6607eeec717", 22)
