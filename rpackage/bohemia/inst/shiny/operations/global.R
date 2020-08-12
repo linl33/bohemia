@@ -9,7 +9,9 @@ library(tidyverse)
 library(yaml)
 library(gsheet)
 library(geosphere)
-
+library(sf)
+library(rgeos)
+library(htmlTable)
 # rdir <- '../../rpackage/bohemia/R/'
 # funs <- dir(rdir)
 # for(i in 1:length(funs)){
@@ -131,7 +133,7 @@ locations <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5g
 add_nothing <- function(x){x}
 
 # Get ODK data for recon form
-refresh_data <- T
+refresh_data <- F
 data_file <- 'recon.RData'
 
 if(refresh_data){
@@ -278,7 +280,8 @@ if(refresh_data){
                "uuid:f25d3a3a-a7b2-48cc-8e3e-d2ec08ad0584",
                "uuid:1ae6260f-32c4-4f34-af15-8c047b6d166a",
                "uuid:da49d73c-d370-4747-b530-1d3cabd83c27",
-               "uuid:bb276094-f5d0-406c-bcd1-c55cde178d93")
+               "uuid:bb276094-f5d0-406c-bcd1-c55cde178d93",
+               "uuid:3d5f3519-8fa1-4161-8b67-2e0e33c15472")
   recon_data <- recon_data %>%
     filter(!instanceID %in% bad_ids)
   # Name fix
@@ -341,7 +344,8 @@ if(refresh_data){
                    "uuid:e2934d79-a3f2-4d8e-baec-d0c3aa5cba81",
                    "uuid:fbce3e5b-2fa7-4496-8543-a92aea30b538",
                    "uuid:e81ac431-93e8-4069-8841-3c179ed208cc",
-                   "uuid:69cf6304-f799-4640-b9fc-16a8c65a13d4")
+                   "uuid:69cf6304-f799-4640-b9fc-16a8c65a13d4",
+                   "uuid:cb2e8078-256e-4cb2-bf53-c805c552dabf")
   
   # Correct incorrect fieldworkers in animal
   animal <- replace_wid(animal, "uuid:1a79dabe-62cb-4897-8c20-d6607eeec717", 22)
@@ -351,6 +355,12 @@ if(refresh_data){
   animal <- replace_wid(animal, "uuid:2900856e-aa7d-4d7f-b70a-cf9b3fd42261", 62)
 
   animal <- animal %>% filter(!instanceID %in% bad_animals)
+  
+  # Correct the number of pigs
+  animal <- animal %>%
+    mutate(n_pigs = ifelse(instanceID == "uuid:e16ff6b2-072b-4636-bf7a-85eefd138658",
+                           '0',
+                           n_pigs))
   
   # get data data 
   animal$date <- as.Date(strftime(animal$start_time, format = "%Y-%m-%d"))
@@ -433,7 +443,13 @@ if(refresh_data){
     mutate(hamlet_code = ifelse(instanceID == 'uuid:fd75edcd-1f9e-420f-94a7-691209d5d91d',
                                 'UCM', hamlet_code))
   
-
+  # Clean up geocodes
+  geocodes <- geocodes %>% filter(code %in% locations$code)
+  
+  # Manually add locations for missing geography from Tanzania
+  geocodes$lng[geocodes$code == 'UCM'] <- 39.11625
+  geocodes$lat[geocodes$code == 'UCM'] <- -7.7603228
+  
   # Save for fast loading
   save(
     geocodes,
@@ -448,6 +464,8 @@ if(refresh_data){
 } else {
   load(data_file)
 }
+
+
 
 
 
@@ -487,4 +505,31 @@ if(grepl('joebrew', getwd())){
   # Write to the spreadsheet here: https://docs.google.com/spreadsheets/d/1uFEHmL6rRdAvEPHe8wwOdUy6ntGBFh_RAs2hntR-Rig/edit#gid=664792461
   
 }
+
+# Get a cleaned, final df for animals
+# Get the locations
+left <- geocodes
+
+left <- left %>% 
+  filter(!duplicated(code)) %>%
+  dplyr::select(code, lng, lat, clinical_trial, Country)
+# Get the animal info
+right <- animal %>%
+  filter(!duplicated(hamlet_code)) %>%
+  mutate(code = hamlet_code) %>%
+  dplyr::select(code,
+                contains('n_'))
+# Join locations and animal info
+joined <- left_join(left, right)
+# Get the number of residents info
+right <- recon_data %>%
+  filter(!duplicated(hamlet_code)) %>%
+  mutate(code = hamlet_code) %>%
+  dplyr::select(code,
+                n_households = number_hh)
+# Join all info
+df <- left_join(joined, right)
+message(nrow(df), ' locations. Removing those without geocoding reduces to:')
+df <- df %>% filter(!is.na(lng), !is.na(lat))
+message(nrow(df), ' locations.')
 

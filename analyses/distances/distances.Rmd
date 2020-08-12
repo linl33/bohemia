@@ -1,0 +1,132 @@
+---
+title: "Distances"
+author: "www.databrew.cc"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: "hide"
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = TRUE,
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 9.64,
+               fig.height = 5.9,
+               fig.path = 'figures/')
+```
+
+```{r}
+## Load libraries
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(sp)
+library(raster)
+library(viridis)
+library(ggthemes)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(RColorBrewer)
+library(readr)
+library(zoo)
+library(tidyr)
+options(scipen = '999')
+library(bohemia)
+library(geosphere)
+```
+
+```{r}
+# Define function for calculating distance
+calculate_distance <- function(shp, lat, lng){
+  p <- c(lng, lat)
+  ll <- length(shp@polygons[[1]]@Polygons)
+  out_list <- list()
+  for(i in 1:ll){
+    temp_points <- shp@polygons[[1]]@Polygons[[ll]]@coords
+    out_list[[i]] <- temp_points
+  }
+  the_points <- do.call('rbind', out_list)
+  the_line <- SpatialPointsDataFrame(coords = the_points,
+                                     data = data.frame(id = 1:nrow(the_points)))
+  proj4string(the_line) <- proj4string(shp)
+  i = 1
+  out <- rep(NA, nrow(the_points))
+  for(i in 1:nrow(the_points)){
+    out[i] <- distm(c(the_points[i,]), c(lng, lat), fun = distHaversine)
+  }
+  df <- data.frame(the_points)
+  df$distance <- out
+  df$lng <- lng
+  df$lat <- lat
+  return(df)
+}
+```
+
+
+```{r}
+# Define function for drawing
+draw <- function(df,
+                 shp,
+                 n = 20){
+  shp_fort <- fortify(shp, id = NAME_2)
+  sub_df <- dplyr::sample_n(df, size = n)
+  
+  g1 <- ggplot() +
+    geom_polygon(data = shp_fort,
+         aes(x = long,
+             y = lat,
+             group = group)) +
+    geom_segment(data = sub_df,
+                 aes(x = x,
+                     y = y,
+                     xend = lng,
+                     yend = lat)) +
+    geom_text(data = sub_df,
+              aes(x = x,
+                  y = y,
+                  label = round(distance / 1000, digits = 2)))
+  
+  g2 <- ggplot(data = df,
+               aes(x = distance/1000)) +
+    geom_density() +
+    labs(x = 'Km',
+         y = 'Density',
+         title = paste0('Max: ', round(max(df$distance)/1000, 2)))
+  Rmisc::multiplot(g1, g2, cols = 2)
+}
+
+
+```
+
+# Mopeia
+
+```{r}
+# Calculate distances for Mopeia
+df <- calculate_distance(shp = mop2,
+                         lng = 35.711553,
+                         lat = -17.979446)
+draw(df = df,
+     shp = mop2,
+     n = 20)
+```
+
+# Rufiji
+
+```{r}
+# Calculate distances for Mopeia
+df <- calculate_distance(shp = ruf2,
+                         lng = 38.984170,
+                         lat = -7.947843)
+draw(df = df,
+     shp = ruf2,
+     n = 20)
+```

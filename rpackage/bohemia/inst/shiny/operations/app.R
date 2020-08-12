@@ -3,6 +3,7 @@ library(shinydashboard)
 library(dplyr)
 library(geosphere)
 library(lubridate)
+library(shinyjs)
 source('global.R')
 
 
@@ -30,6 +31,11 @@ sidebar <- dashboardSidebar(
                 text="Recon data",
                 tabName="recon_data",
                 icon=icon("chart-line")),
+              
+              menuItem(
+                text="Clustering",
+                tabName="clustering",
+                icon=icon("android")),
               
               menuItem(
                 text="Recon performance",
@@ -63,6 +69,7 @@ sidebar <- dashboardSidebar(
 )
 
 body <- dashboardBody(
+  useShinyjs(),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
   ),
@@ -186,6 +193,45 @@ body <- dashboardBody(
     ),
     
     tabItem(
+      tabName = 'clustering',
+      fluidPage(
+        fluidRow(column(4, align = 'center',
+                        actionButton('action_cluster', 'Generate clusters!'),
+                        selectInput('clustering_country', 'Country',
+                                    choices = c('Tanzania')),
+                        checkboxInput('include_clinical', 'Include clinical', value = TRUE),
+                        checkboxInput('interpolate_animals', 'Guess number of animals if missing', value = TRUE),
+                        checkboxInput('interpolate_humans', 'Guess number of households/humans if missing', value = TRUE),
+                        sliderInput('p_children', 'Percentage of people which are children',
+                                    min = 0, max = 100,
+                                    value = 30, step = 5),
+                        sliderInput('minimum_children', 'Minimum number of children per cluster',
+                                    min = 0, max = 100,
+                                    value = 0, step = 5),
+                        sliderInput('minimum_humans', 'Minimum number of humans per cluster',
+                                    min = 0, max = 100,
+                                    value = 0, step = 5),
+                        sliderInput('minimum_animals', 'Minimum number of animals per cluster',
+                                    min = 0, max = 100,
+                                    value = 30, step = 5),
+                        
+                        sliderInput('minimum_cattle', 'Minimum number of cattle per cluster',
+                                    min = 0, max = 100,
+                                    value = 0, step = 5),
+                        sliderInput('minimum_pigs', 'Minimum number of pigs per cluster',
+                                    min = 0, max = 100,
+                                    value = 0, step = 5),
+                        sliderInput('minimum_goats', 'Minimum number of goats per cluster',
+                                    min = 0, max = 100,
+                                    value = 0, step = 5)),
+                 column(8,
+                        textOutput('cluster_summary_text'),
+                        leafletOutput('cluster_map'),
+                        verbatimTextOutput("text")))
+      )
+    ),
+    
+    tabItem(
       tabName = 'recon_performance',
       fluidPage(
         textInput('password', 'Password', value = ''),
@@ -203,11 +249,13 @@ body <- dashboardBody(
           column(6,
                  h3('Mozambique'),
                  textOutput('animal_text_mz'),
+                 plotOutput('animal_plot_mz'),
                  leafletOutput('animal_map_mz'),
                  DT::dataTableOutput('animal_table_mz')),
           column(6,
                  h3('Tanzania'),
                  textOutput('animal_text_tz'),
+                 plotOutput('animal_plot_tz'),
                  leafletOutput('animal_map_tz'),
                  DT::dataTableOutput('animal_table_tz'))
         )
@@ -1231,6 +1279,101 @@ server <- function(input, output) {
       mutate(distance = round(distance)) %>%
       arrange(desc(distance))
     pd
+  })
+  
+  cluster_data <- reactiveValues(summary_text = NULL,
+                                 map = NULL,
+                                 hamlet_df = NULL,
+                                 cluster_df = NULL)
+  
+  observeEvent(input$action_cluster, {
+    
+    withCallingHandlers({
+      message('Server messages:')
+      shinyjs::html("text", "")
+      
+      out <- try_clusters(the_country = input$cluster_the_country,
+                          include_clinical = input$include_clinical,
+                          interpolate_animals = input$interpolate_animals,
+                          interpolate_humans = input$interpolate_humans,
+                          humans_per_household = input$humans_per_household,
+                          p_children = input$p_children,
+                          minimum_households = input$minimum_households,
+                          minimum_children = input$minimum_children,
+                          minimum_humans = input$minimum_humans,
+                          minimum_animals = input$minimum_animals,
+                          minimum_cattle = input$minimum_cattle,
+                          minimum_pigs = input$minimum_pigs,
+                          minimum_goats = imput$minimum_goats,
+                          df = df)
+      cluster_data$summary_text <- out$summary_text
+      cluster_data$map <- out$map
+      cluster_data$hamlet_df <- out$hamlet_df
+      cluster_data$cluster_df <- out$cluster_df                   
+      message = function(m) output$text <- renderPrint(m$message) 
+    },
+    message = function(m) {
+      shinyjs::html(id = "text", html = m$message, add = TRUE)
+    }
+    )
+    
+  })
+  
+  output$cluster_summary_text <- renderText({
+    cluster_data$summary_text
+  })
+  output$cluster_map <- renderLeaflet({
+    cluster_data$map
+  })
+  
+  output$animal_plot_mz <- renderPlot({
+    pd <- animal %>% filter(Country == 'Mozambique') %>%
+      dplyr::select(hamlet_code, n_cattle, n_goats, n_pigs) %>%
+      tidyr::gather(key, value, n_cattle:n_pigs) %>%
+      mutate(key = gsub('n_', '', key)) %>%
+      group_by(key, value) %>%
+      tally %>%
+      mutate(value = ifelse(is.na(value), '0', value))
+    pd$value <- factor(pd$value, 
+                       levels = c('0',
+                                  '1 to 5',
+                                  '6 to 19',
+                                  '20 or more'))
+    ggplot(data = pd,
+           aes(x = value,
+               y = n)) +
+      geom_bar(stat = 'identity') +
+      facet_wrap(~key, ncol = 1) +
+      theme_bw() +
+      labs(x = '',
+           y = 'Hamlets') +
+      theme(strip.text = element_text(size = 20)) +
+      geom_text(aes(label = n),nudge_y = 15)
+  })
+  
+  output$animal_plot_tz <- renderPlot({
+    pd <- animal %>% filter(Country == 'Tanzania') %>%
+      dplyr::select(hamlet_code, n_cattle, n_goats, n_pigs) %>%
+      tidyr::gather(key, value, n_cattle:n_pigs) %>%
+      mutate(key = gsub('n_', '', key)) %>%
+      group_by(key, value) %>%
+      tally %>%
+      mutate(value = ifelse(is.na(value), '0', value))
+    pd$value <- factor(pd$value, 
+                       levels = c('0',
+                                  '1 to 5',
+                                  '6 to 19',
+                                  '20 or more'))
+    ggplot(data = pd,
+           aes(x = value,
+               y = n)) +
+      geom_bar(stat = 'identity') +
+      facet_wrap(~key, ncol = 1) +
+      theme_bw() +
+      labs(x = '',
+           y = 'Hamlets') +
+      theme(strip.text = element_text(size = 20)) +
+      geom_text(aes(label = n),nudge_y = 15)
   })
   
   output$render_qrs <- 
