@@ -50,6 +50,10 @@ Imports:
     httr,
     gridExtra,
     ggpubr,
-    extrafont
+    extrafont,
+    rgeos,
+    deldir,
+    geosphere,
+    htmlTable
 Depends: 
     R (>= 2.10)
