@@ -14,6 +14,7 @@
 #' @param minimum_pigs The minimum number of pigs required for a cluster
 #' @param minimum_goats The minimum number of goats required for a cluster
 #' @param km The distance in kilometers between two clusters of different assignment groups
+#' @param max_km_from_hq Maximum distance from HQ
 #' @param df A dataframe with combined animal and household info, as generated in global.R of operations app
 #' @return A list
 #' @import rgeos
@@ -38,8 +39,26 @@ try_clusters <- function(the_country = 'Tanzania',
                          minimum_pigs = 0,
                          minimum_goats = 0,
                          km = 2,
+                         max_km_from_hq = 100,
                          df = NULL){
+  set.seed(1)
 
+  # save(the_country,
+  #      include_clinical,
+  #      interpolate_animals,
+  #      interpolate_humans,
+  #      humans_per_household,
+  #      p_children,
+  #      minimum_households,
+  #      minimum_children,
+  #      minimum_humans,
+  #      minimum_animals,
+  #      minimum_cattle,
+  #      minimum_pigs,
+  #      minimum_goats,
+  #      km,
+  #      df,
+  #      file = '~/Desktop/temp.RData')
 # #   # Temporary, just for testing
 #   the_country = 'Tanzania'
 #   include_clinical = TRUE
@@ -80,6 +99,26 @@ try_clusters <- function(the_country = 'Tanzania',
 
   # Get the locations filtered
   xdf <- df
+  
+  # Get max distance filter
+  if(the_country == 'Tanzania'){
+    hq <- data.frame(x = 38.990643,
+                     y = -7.933194)
+  } else {
+    hq <- data.frame(x = 35.710587,
+                     y = -17.980314)
+  }
+  coordinates(hq) <- ~x+y
+  ss <- xdf
+  coordinates(ss) <- ~lng+lat
+  proj4string(ss) <- proj4string(hq) <- proj4string(shp)
+  hqll <- hq
+  CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+  ss <- spTransform(ss, CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+  hq <- spTransform(hq, CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+  hq_distance <- as.numeric(unlist(gDistance(hq, ss, byid = TRUE)))
+  xdf <- xdf[(hq_distance/1000) <= max_km_from_hq,]
+  
   if(!include_clinical){
     xdf <- xdf %>% filter(!clinical_trial)
   }
@@ -339,7 +378,7 @@ try_clusters <- function(the_country = 'Tanzania',
               n_goats = sum(n_goats),
               n_animals = sum(n_animals),
               n_children = sum(n_children))
-  hamlet_xdf <- left_join(hamlet_xdf, cluster_xdf %>% dplyr::select(cluster, n_hamlets_in_cluster = n_hamlets))
+  hamlet_xdf <- left_join(hamlet_xdf, cluster_xdf %>% dplyr::select(cluster, assignment_group, n_hamlets_in_cluster = n_hamlets))
   
   # Bring in complete cluster info
   polys@data <- left_join(polys@data, complete_clusters)
@@ -349,7 +388,7 @@ try_clusters <- function(the_country = 'Tanzania',
   
   # Get a summary text
   summary_text <- paste0(
-    1-nrow(cluster_xdf), ' were able to be formed with the given rules. These were made up of ',
+    1-nrow(cluster_xdf), ' clusters were able to be formed with the given rules. These were made up of ',
     nrow(hamlet_xdf), ' hamlets, of which ',
     length(which(hamlet_xdf$cluster == 0)), ' fall into "buffer" areas. '
   ) 
@@ -380,7 +419,7 @@ try_clusters <- function(the_country = 'Tanzania',
                        radius = 5,
                        fillOpacity = 0.5,
                        stroke = FALSE,
-                       color = cols[this_row$cluster + 1],
+                       color = assignment_cols[this_row$assignment_group],  #cols[this_row$cluster + 1],
                        popup = paste0(this_row$code, '<br>',
                                       ifelse(this_row$cluster > 0, paste0('Cluster number: ', this_row$cluster, ' (which has ', this_row$n_hamlets_in_cluster, ' hamlets).<br>Treatment assignment group (1-3): ', cluster_xdf$assignment_group), 'No cluster (buffer zone).'),
                                       '.<br>',
@@ -392,6 +431,9 @@ try_clusters <- function(the_country = 'Tanzania',
                                       this_row$n_humans, ' humans. ', 
                                       this_row$n_children, ' children.'))
   }
+  map <- map %>%
+    addMarkers(data = hqll,
+               popup = 'Headquarters')
      
   
   out_list <- list(summary_text,
