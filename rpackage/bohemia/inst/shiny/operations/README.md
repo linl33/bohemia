@@ -25,6 +25,8 @@ scp -r -i "/home/joebrew/.ssh/odkkey.pem" /home/joebrew/Documents/bohemia/rpacka
 
 ### On remote machine
 
+sudo rm -r /home/ubuntu/Documents/operations
+sudo rm -r /srv/shiny-server/operations
 sudo cp -r /home/ubuntu/Documents/operations /srv/shiny-server/operations;
 cd /srv/shiny-server;
 sudo chmod -R 777 operations/;
