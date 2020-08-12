@@ -18,6 +18,7 @@ try_clusters(
   minimum_cattle = 0,
   minimum_pigs = 0,
   minimum_goats = 0,
+  km = 2,
   df = NULL
 )
 }
@@ -45,6 +46,8 @@ try_clusters(
 \item{minimum_pigs}{The minimum number of pigs required for a cluster}
 
 \item{minimum_goats}{The minimum number of goats required for a cluster}
+
+\item{km}{The distance in kilometers between two clusters of different assignment groups}
 
 \item{df}{A dataframe with combined animal and household info, as generated in global.R of operations app}
 }

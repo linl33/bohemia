@@ -5,6 +5,7 @@ library(geosphere)
 library(lubridate)
 library(shinyjs)
 source('global.R')
+source('try_clusters.R')
 
 
 
@@ -195,11 +196,11 @@ body <- dashboardBody(
     tabItem(
       tabName = 'clustering',
       fluidPage(
-        fluidRow(column(4, align = 'center',
-                        actionButton('action_cluster', 'Generate clusters!'),
+        fluidRow(column(4, 
                         selectInput('clustering_country', 'Country',
                                     choices = c('Tanzania')),
-                        checkboxInput('include_clinical', 'Include clinical', value = TRUE),
+                        sliderInput('km', 'Kilometers between two clusters of different treatment assignments', min = 0, max = 3, value = 2, step = 0.1),
+                        checkboxInput('include_clinical', 'Include hamlets which are part of ongoing clinical trial', value = TRUE),
                         checkboxInput('interpolate_animals', 'Guess number of animals if missing', value = TRUE),
                         checkboxInput('interpolate_humans', 'Guess number of households/humans if missing', value = TRUE),
                         sliderInput('p_children', 'Percentage of people which are children',
@@ -224,7 +225,9 @@ body <- dashboardBody(
                         sliderInput('minimum_goats', 'Minimum number of goats per cluster',
                                     min = 0, max = 100,
                                     value = 0, step = 5)),
-                 column(8,
+                 column(8, align = 'center',
+                        helpText('Once you are satisfied with the parameters at left, click the "Generate clusters!" button below. Note that this can take ~60 seconds.'),
+                        actionButton('action_cluster', 'Generate clusters!'),
                         textOutput('cluster_summary_text'),
                         leafletOutput('cluster_map'),
                         verbatimTextOutput("text")))
@@ -1291,8 +1294,8 @@ server <- function(input, output) {
     withCallingHandlers({
       message('Server messages:')
       shinyjs::html("text", "")
-      
-      out <- try_clusters(the_country = input$cluster_the_country,
+      out <- try_clusters(the_country = input$clustering_country,
+                          km = input$km,
                           include_clinical = input$include_clinical,
                           interpolate_animals = input$interpolate_animals,
                           interpolate_humans = input$interpolate_humans,
@@ -1304,7 +1307,7 @@ server <- function(input, output) {
                           minimum_animals = input$minimum_animals,
                           minimum_cattle = input$minimum_cattle,
                           minimum_pigs = input$minimum_pigs,
-                          minimum_goats = imput$minimum_goats,
+                          minimum_goats = input$minimum_goats,
                           df = df)
       cluster_data$summary_text <- out$summary_text
       cluster_data$map <- out$map
