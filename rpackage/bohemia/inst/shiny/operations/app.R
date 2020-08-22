@@ -6,6 +6,7 @@ library(lubridate)
 library(shinyjs)
 source('global.R')
 source('try_clusters.R')
+source('make_animal_map.R')
 
 
 
@@ -255,15 +256,37 @@ body <- dashboardBody(
         fluidRow(
           h2('Animal annex')
         ),
+        
+        fluidRow(h5('Animal map inputs')),
+        fluidRow(column(4,
+                        selectInput('animal_heat_map_country',
+                                    'Country',
+                                    choices = c('Tanzania', 'Mozambique'),
+                                    selected = 'Tanzania'),
+                        checkboxGroupInput('animal_heat_map_include_animals',
+                                           'Animals to include',
+                                           choices = c('goats', 'cattle', 'pigs'),
+                                           selected = c('goats', 'cattle', 'pigs')),
+                        sliderInput('granularity', 'Granularity',
+                                    min = 0.01, max = 0.3, step = 0.005, value = 0.02),
+                        checkboxInput('interpolate', 'Interpolate (smooth)',
+                                      value = TRUE)),
+                 column(8,
+                        plotOutput('animal_heat_map'))),
+        
+
+        
         fluidRow(
           column(6,
                  h3('Mozambique'),
+                 
                  textOutput('animal_text_mz'),
                  plotOutput('animal_plot_mz'),
                  leafletOutput('animal_map_mz'),
                  DT::dataTableOutput('animal_table_mz')),
           column(6,
                  h3('Tanzania'),
+                 
                  textOutput('animal_text_tz'),
                  plotOutput('animal_plot_tz'),
                  leafletOutput('animal_map_tz'),
@@ -393,10 +416,9 @@ server <- function(input, output) {
   
   output$recon_data_table <- DT::renderDataTable({
     out <- recon_data %>%
-      mutate(Geocoded = ifelse(geo_coded, 'Yes', 'No')) %>%
+      # mutate(Geocoded = ifelse(geo_coded, 'Yes', 'No')) %>%
       dplyr::select(Country, Ward, Village, Hamlet,
-                    Households = number_hh,
-                    Geocoded)
+                    Households = number_hh)
     out
   })
   
@@ -762,6 +784,15 @@ server <- function(input, output) {
       leafletProxy("l") %>%
         clearShapes()
     }
+  })
+  
+  output$animal_heat_map <- renderPlot({
+    make_animal_map(df = df,
+                    the_country = input$animal_heat_map_country,
+                    include_animals = input$animal_heat_map_include_animals,
+                    granularity = input$granularity,
+                    interpolate = input$interpolate)
+    
   })
   
   

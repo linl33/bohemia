@@ -15,7 +15,9 @@ sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpac
 
 
 
-sudo systemctl restart shiny-server
+### On remote machine
+
+sudo rm -r /home/ubuntu/Documents/operations
 
 
 ### On local machine
@@ -25,8 +27,7 @@ scp -r -i "/home/joebrew/.ssh/odkkey.pem" /home/joebrew/Documents/bohemia/rpacka
 
 ### On remote machine
 
-sudo rm -r /home/ubuntu/Documents/operations
-sudo rm -r /srv/shiny-server/operations
+sudo rm -r /srv/shiny-server/operations;
 sudo cp -r /home/ubuntu/Documents/operations /srv/shiny-server/operations;
 cd /srv/shiny-server;
 sudo chmod -R 777 operations/;

@@ -133,7 +133,7 @@ locations <- gsheet2tbl('https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5g
 add_nothing <- function(x){x}
 
 # Get ODK data for recon form
-refresh_data <- F
+refresh_data <- FALSE
 data_file <- 'recon.RData'
 
 if(refresh_data){
@@ -355,6 +355,13 @@ if(refresh_data){
   animal <- replace_wid(animal, "uuid:2900856e-aa7d-4d7f-b70a-cf9b3fd42261", 62)
 
   animal <- animal %>% filter(!instanceID %in% bad_animals)
+  
+  
+  # Manually correct the Ucheme / Njianne issues
+  uuid <- "uuid:4dbcdfac-e36d-4e39-abfa-ac64c467fdb1"
+  recon_data$hamlet_code[recon_data$instanceID == uuid] <- 'UCM'
+  # uuid <- 'uuid:fd75edcd-1f9e-420f-94a7-691209d5d91d'
+  # animal$hamlet_code[animal$instanceID == uuid] <- uuid
   
   # Correct the number of pigs
   animal <- animal %>%
