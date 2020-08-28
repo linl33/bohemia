@@ -1,5 +1,7 @@
 library(shiny)
 library(shinydashboard)
+library(tidyverse)
+library(reshape2)
 if('temp_data.RData' %in% dir()){
     load('temp_data.RData')
 } else {
