@@ -13,7 +13,7 @@ data <- odk_get_data(
   url = creds$databrew_odk_server,
   id = 'minicensus',
   id2 = NULL,
-  unknown_id2 = TRUE,
+  unknown_id2 = FALSE,
   uuids = NULL,
   exclude_uuids = NULL,
   user = creds$databrew_odk_user,
