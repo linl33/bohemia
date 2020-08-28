@@ -35,13 +35,13 @@ body <- dashboardBody(
                     column(4,
                            selectInput(inputId = 'fw_id',
                                        label = 'Select FW',
-                                       choices = wid_names, 
-                                       selected = wid_names,
+                                       choices = c('fw1', 'fw2', 'fw3'), 
+                                       selected = c('fw1', 'fw2', 'fw3'),
                                        multiple = TRUE),
                            selectInput(inputId = 'q_id',
                                        label = 'Select Question',
                                        choices = sort(unique(temp$question)), 
-                                       selected = wid_names,
+                                       selected = sort(unique(temp$question)), 
                                        multiple = TRUE)),
                     column(8,
                            plotOutput('fw_plot'),
@@ -80,23 +80,41 @@ server <- function(input, output, session) {
     
     output$fw_table <- DT::renderDataTable({
         # get inputs
-        
+        fw_id <- c('fw1', 'fw2', 'fw3')
+        q_id <- sort(unique(temp$question))
         fw_id <- input$fw_id
         q_id <- input$q_id
-        if(length(fw_id) == 1){
-            if(fw_id == '333'){
-                temp <- temp %>% select(question, key, test_333, wrong_333)
-            } else {
-                temp <- temp %>% select(question, key, test_444, wrong_444)
-            }
-        }
         
+        temp <- temp %>% 
+            select(question, key, fw_id) %>% 
+            filter(question %in% q_id)
         
         DT::datatable(temp)
     })
     
     output$fw_plot <- renderPlot({
-        ggplot()
+        # get inputs
+        fw_id <- c('fw1', 'fw2', 'fw3')
+        q_id <- sort(unique(temp$question))
+        fw_id <- input$fw_id
+        q_id <- input$q_id
+        
+        temp <- temp %>% 
+            select(question, key, fw_id) %>% 
+            filter(question %in% q_id)
+        
+        temp_key <- temp %>% select(question, key)
+        temp_test <- temp %>% select(question, fw_id)
+        
+        temp_test <- melt(temp_test, id.vars = c('question'))
+        temp_test <- left_join(temp_test, temp_key)
+        temp_test$answer <- ifelse(temp_test$value != temp_test$key, 'wrong', 'right')
+        temp_test$answer[is.na(temp_test$answer)] <- 'wrong'
+
+        temp_test <- temp_test %>% group_by(variable) %>% summarise(sum_right = sum(answer == 'right'),
+                                                                     sum_wrong = sum(answer == 'wrong'))
+        temp_test$percent_correct = round(temp_test$sum_right/(temp_test$sum_right+temp_test$sum_wrong)*100,2)
+        ggplot(temp_test, aes(variable, percent_correct)) + geom_bar(stat='identity')
     })
     
     
