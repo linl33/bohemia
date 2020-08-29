@@ -11,12 +11,16 @@ if('temp_data.RData' %in% dir()){
 # am i adding to the credentials file
 
 # use function to get odk data using minicensus as name 
-header <- dashboardHeader(title = tags$a(tags$img(src='logo.png',height='32',width='36', alt = 'DataBrew')))
+header <- dashboardHeader(title = 'Minicensus grader')
 sidebar <- dashboardSidebar(
     sidebarMenu(
         menuItem(
             text="Main",
             tabName="main",
+            icon=icon("home")),
+        menuItem(
+            text="Details",
+            tabName="details",
             icon=icon("archway")),
         menuItem(
             text = 'About',
@@ -33,30 +37,37 @@ body <- dashboardBody(
         tabItem(
             tabName="main",
             fluidPage(
+                DT::dataTableOutput('agg_table')
+            )),
+        tabItem(
+            tabName = 'details',
+            fluidPage(
                 fluidRow(
-                    column(4,
+                    column(12,
+                           h3('Fieldworkers'),
                            selectInput(inputId = 'fw_id',
-                                       label = 'Select FW',
-                                       choices = c('fw1', 'fw2', 'fw3'), 
-                                       selected = c('fw1', 'fw2', 'fw3'),
-                                       multiple = TRUE),
+                                       label = 'Select FW ID',
+                                       choices = agg$`Worker ID`, 
+                                       multiple = FALSE),
+                           DT::dataTableOutput('fw_table'),
+                           h3('Questions'),
                            selectInput(inputId = 'q_id',
                                        label = 'Select Question',
-                                       choices = sort(unique(temp$question)), 
-                                       selected = sort(unique(temp$question)), 
-                                       multiple = TRUE)),
-                    column(8,
-                           plotOutput('fw_plot'),
-                           DT::dataTableOutput('fw_table'))
+                                       choices = sort(unique(final$Variable))),
+                           DT::dataTableOutput('q_table'),
+                           h3('Complete data'),
+                           DT::dataTableOutput('overall_table'))
                 )
                 
             )
+            
+            
         ),
         tabItem(
             tabName = 'about',
             fluidPage(
                 fluidRow(
-                    div(img(src='logo.png', align = "center"), style="text-align: center;"),
+                    # div(img(src='logo.png', align = "center"), style="text-align: center;"),
                     h4('Built in partnership with ',
                        a(href = 'http://databrew.cc',
                          target='_blank', 'Databrew'),
@@ -81,44 +92,32 @@ server <- function(input, output, session) {
     
     
     output$fw_table <- DT::renderDataTable({
-        # get inputs
-        fw_id <- c('fw1', 'fw2', 'fw3')
-        q_id <- sort(unique(temp$question))
-        fw_id <- input$fw_id
-        q_id <- input$q_id
-        
-        temp <- temp %>% 
-            select(question, key, fw_id) %>% 
-            filter(question %in% q_id)
-        
-        DT::datatable(temp)
+        fid <- input$fw_id
+        if(is.null(fid)){
+            out <- NULL
+        } else{
+            out <- done %>% filter(`Worker ID` == fid)
+        }
+        return(out)
     })
     
-    output$fw_plot <- renderPlot({
-        # get inputs
-        fw_id <- c('fw1', 'fw2', 'fw3')
-        q_id <- sort(unique(temp$question))
-        fw_id <- input$fw_id
-        q_id <- input$q_id
-        
-        temp <- temp %>% 
-            select(question, key, fw_id) %>% 
-            filter(question %in% q_id)
-        
-        temp_key <- temp %>% select(question, key)
-        temp_test <- temp %>% select(question, fw_id)
-        
-        temp_test <- melt(temp_test, id.vars = c('question'))
-        temp_test <- left_join(temp_test, temp_key)
-        temp_test$answer <- ifelse(temp_test$value != temp_test$key, 'wrong', 'right')
-        temp_test$answer[is.na(temp_test$answer)] <- 'wrong'
-
-        temp_test <- temp_test %>% group_by(variable) %>% summarise(sum_right = sum(answer == 'right'),
-                                                                     sum_wrong = sum(answer == 'wrong'))
-        temp_test$percent_correct = round(temp_test$sum_right/(temp_test$sum_right+temp_test$sum_wrong)*100,2)
-        ggplot(temp_test, aes(variable, percent_correct)) + geom_bar(stat='identity')
+    output$q_table <- DT::renderDataTable({
+        fid <- input$q_id
+        if(is.null(fid)){
+            out <- NULL
+        } else{
+            out <- done %>% filter(Variable == fid)
+        }
+        return(out)
     })
     
+    output$overall_table <- DT::renderDataTable({
+        done
+    })
+    
+    output$agg_table <- DT::renderDataTable({
+        agg
+    })
     
 }
 shinyApp(ui, server)#
