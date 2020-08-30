@@ -2,6 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(tidyverse)
 library(reshape2)
+library(DT)
 if('temp_data.RData' %in% dir()){
     load('temp_data.RData')
 } else {
@@ -22,6 +23,10 @@ sidebar <- dashboardSidebar(
             text="Details",
             tabName="details",
             icon=icon("archway")),
+        menuItem(
+            text="Answer key",
+            tabName="answer_key",
+            icon=icon("key")),
         menuItem(
             text = 'About',
             tabName = 'about',
@@ -62,6 +67,19 @@ body <- dashboardBody(
             )
             
             
+        ),
+        tabItem(
+            tabName = 'answer_key',
+            fluidPage(
+                column(3,
+                       selectInput('code', 'Hamlet code',
+                                   choices = answer_non_repeats$hh_hamlet_code)),
+                column(9,
+                       h3('Non-repeats'),
+                       DT::dataTableOutput('answer_key_table'),
+                       h3('Repeats'),
+                       DT::dataTableOutput('answer_key_repeats_table'))
+            )
         ),
         tabItem(
             tabName = 'about',
@@ -117,6 +135,57 @@ server <- function(input, output, session) {
     
     output$agg_table <- DT::renderDataTable({
         agg
+    })
+    
+    output$answer_key_table <- DT::renderDataTable({
+        the_code <- input$code
+        the_answer_non_repeats <- answer_non_repeats %>% filter(hh_hamlet_code == the_code)
+        label_df <- tibble(name = names(the_answer_non_repeats)) %>% left_join(xf)
+        out <- tibble(`Worker ID` = wid,
+               `Variable` = names(the_answer_non_repeats),
+               `Label (en)` = label_df$en,
+               `Label (sw)` = label_df$sw,
+               `Correct answer` = as.character(the_answer_non_repeats))
+        out <- out %>%
+            filter(!Variable %in% dont_evaluate,
+                   !is.na(`Correct answer`)) %>%
+            filter(`Correct answer` != 'NA',
+                   `Correct answer` != '()')
+        out
+    })
+    
+    output$answer_key_repeats_table <- DT::renderDataTable({
+        the_code <- input$code
+        the_answer_non_repeats <- answer_non_repeats %>% filter(hh_hamlet_code == the_code)
+        answer_uuid <- the_answer_non_repeats$instanceID
+
+        # Go through each repeat and get those correct answers too
+        rep_list <- list()
+        counter <- 0
+        for(r in 1:length(repeat_names)){
+            print(r)
+            this_repeat_name <- repeat_names[r]
+            this_answer <- answer_repeats[[this_repeat_name]] %>% filter(instanceID == answer_uuid)
+            this_answer <- this_answer[,!names(this_answer) %in% dont_evaluate]
+            for(x in 1:nrow(this_answer)){
+                x_answer <- this_answer[x,]
+                label_df <- tibble(name = names(x_answer)) %>% left_join(xf)
+                outx <- tibble(`Worker ID` = wid,
+                               `Variable` = names(x_answer),
+                               `Label (en)` = label_df$en,
+                               `Label (sw)` = label_df$sw,
+                               `Correct answer` = as.character(this_answer))
+                counter <- counter + 1
+                rep_list[[counter]] <- outx
+            }
+        }
+        out <- bind_rows(rep_list)
+        out <- out %>%
+            filter(!Variable %in% dont_evaluate,
+                   !is.na(`Correct answer`)) %>%
+            filter(`Correct answer` != 'NA',
+                   `Correct answer` != '()')
+        out
     })
     
 }

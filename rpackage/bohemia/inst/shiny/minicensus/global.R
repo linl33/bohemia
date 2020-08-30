@@ -161,5 +161,11 @@ if('data.RData' %in% dir()){
               Incorrect = length(which(Status == 'Incorrect')),
               Percent = round(Correct / (Correct+Incorrect) * 100, digits = 2))
   save(agg, done, wrong_hamlet_list, xf, final,
+       fw_repeats,
+       fw_non_repeats,
+       answer_repeats,
+       answer_non_repeats,
+       repeat_names,
+       dont_evaluate,
        file = 'data.RData')
 }
