@@ -1,0 +1,319 @@
+---
+title: "Minicensus report"
+author: "www.databrew.cc"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: "hide"
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               # echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 9.64,
+               fig.height = 5.9,
+               fig.path = 'figures/')
+source('global.R')
+```
+
+
+## Household IDs' matching with hamlet codes
+
+```{r, echo = TRUE}
+pd <- data$non_repeats
+truth_vector <- substr(pd$hh_id, 1, 3) == pd$hh_hamlet_code
+incorrect <- which(!truth_vector)
+incorrect_fids <- pd$wid[incorrect]
+```
+
+Of the `r nrow(pd)` entries, `r length(incorrect)` had household ID numbers did not match the hamlet code. These were for fieldworkers `r paste0(incorrect_fids, collapse = ' and ')`. Below is the info in question:
+
+```{r}
+pd[incorrect,] %>%
+  dplyr::select(wid, hh_hamlet_code, hh_id, instanceID) %>% kable
+```
+
+## Worker IDs within accepted range (1-100)
+
+```{r, echo = TRUE}
+pd <- data$non_repeats
+truth_vector <- pd$wid <= 100
+incorrect_a <- which(!truth_vector)
+incorrect_b <- which(is.na(truth_vector))
+incorrect <- unique(c(incorrect_a, incorrect_b))
+incorrect_fids <- pd$wid[incorrect]
+```
+
+Of the `r nrow(pd)` entries, `r length(incorrect)` had worker ID numbers outside of the acceptable range. These were for fieldworkers `r paste0(incorrect_fids, collapse = ' and ')`. Below is the info in question:
+
+```{r}
+pd[incorrect,] %>%
+  dplyr::select(wid, instanceID) %>% kable
+```
+
+## Discrepancy in numbers of residents 
+
+```{r, echo = TRUE}
+pd <- data$non_repeats
+out_list <- list()
+for(i in 1:nrow(pd)){
+  # Retrieve residency info
+  this_pd <- pd[i,]
+  this_id <- this_pd$instanceID
+  this_wid <- this_pd$wid
+  n_residents <- this_pd$hh_member_num_residents
+  # Get number of repeats pertaining to the residents
+  this_repeat <- data$repeats$repeat_household_members_enumeration %>%
+    filter(instanceID == this_id)
+  # Put results together
+  out <- tibble(instanceID = this_id,
+                wid = this_wid,
+                n_residents,
+                n_repeats = nrow(this_repeat))
+  out_list[[i]] <- out
+}
+pd <- bind_rows(out_list)
+# Check for matching
+pd$ok <- pd$n_residents == pd$n_repeats
+```
+
+Of the `r nrow(pd)` entries, `r length(which(!pd$ok))` had mismatches in the number of residents in the initial question and the number of repeat entries for each resident. Below is data pertaining to these mismatches:
+
+```{r}
+pd %>%
+  filter(!ok) %>%
+  dplyr::select(-ok) %>%
+  kable
+```
+
+# Summary statistics
+
+## Number of residents
+
+```{r, fig.height = 10, fig.width = 10}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(hh_hamlet_code, hh_member_num_residents) %>%
+  tally
+
+ggplot(data = pd,
+       aes(x = hh_member_num_residents,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~hh_hamlet_code) +
+  labs(x = 'Number of residents',
+       y = 'Observations')
+```
+
+## Number of non-residents
+
+```{r, fig.height = 10, fig.width = 10}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(hh_hamlet_code, hh_member_num_non_residents) %>%
+  tally
+
+ggplot(data = pd,
+       aes(x = hh_member_num_non_residents,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~hh_hamlet_code) +
+  labs(x = 'Number of non-residents',
+       y = 'Observations')
+```
+
+## Livestock owned per household
+
+The following charts are intentionally shown as distributions (rather than singular values) so as to identify any discrepancies.
+
+### Pigs < 6 weeks
+
+```{r}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(hh_hamlet_code, animal = hh_n_pigs_less_than_6_weeks) %>%
+  tally
+
+ggplot(data = pd,
+       aes(x = animal,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~hh_hamlet_code) +
+  labs(x = 'Number of animal',
+       y = 'Observations')
+```
+
+
+### Pigs > 6 weeks
+
+```{r}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(hh_hamlet_code, animal = hh_n_pigs_greater_than_6_weeks) %>%
+  tally
+
+ggplot(data = pd,
+       aes(x = animal,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~hh_hamlet_code) +
+  labs(x = 'Number of animal',
+       y = 'Observations')
+```
+
+### Cattle > 1 year
+
+```{r}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(hh_hamlet_code, animal = hh_n_cows_greater_than_1_year) %>%
+  tally
+
+ggplot(data = pd,
+       aes(x = animal,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~hh_hamlet_code) +
+  labs(x = 'Number of animal',
+       y = 'Observations')
+```
+
+### Cattle < 1 year
+
+
+```{r}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(hh_hamlet_code, animal = hh_n_cows_less_than_1_year) %>%
+  tally
+
+ggplot(data = pd,
+       aes(x = animal,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~hh_hamlet_code) +
+  labs(x = 'Number of animal',
+       y = 'Observations')
+```
+
+## Mosquito nets per household
+
+### Mosquito nets by hamlet
+
+```{r}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(hh_hamlet_code, n_nets_in_hh) %>%
+  tally
+
+ggplot(data = pd,
+       aes(x = n_nets_in_hh,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  facet_wrap(~hh_hamlet_code) +
+  labs(x = 'Number of nets',
+       y = 'Observations')
+```
+
+
+### Mosquito nets (overall)
+
+```{r}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(n_nets_in_hh) %>%
+  tally
+
+ggplot(data = pd,
+       aes(x = n_nets_in_hh,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  labs(x = 'Number of nets',
+       y = 'Observations')
+```
+
+## Deaths
+
+### Overall deaths
+
+```{r}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(how_many_deaths) %>%
+  tally %>%
+  mutate(how_many_deaths = ifelse(is.na(how_many_deaths), 0, how_many_deaths))
+
+ggplot(data = pd,
+       aes(x = how_many_deaths,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  labs(x = 'Number of deaths',
+       y = 'Observations')
+```
+
+### Deaths by hamlet
+
+```{r}
+pd <- data$non_repeats
+pd <- pd %>%
+  group_by(hh_hamlet_code, how_many_deaths) %>%
+  tally %>%
+  mutate(how_many_deaths = ifelse(is.na(how_many_deaths), 0, how_many_deaths))
+
+ggplot(data = pd,
+       aes(x = how_many_deaths,
+           y = n)) +
+  geom_bar(stat = 'identity') +
+  labs(x = 'Number of deaths',
+       y = 'Observations') +
+  facet_wrap(~hh_hamlet_code)
+```
+
+## Place of death
+
+```{r, echo = TRUE}
+pd <- data$repeats$repeat_death_info
+pd <- pd %>%
+  group_by(death_location) %>%
+  tally
+kable(pd)
+```
+
+## Time to fill form
+
+```{r}
+library(lubridate)
+pd <- data$non_repeats
+pd$end_time <- lubridate::as_datetime(pd$end_time)
+pd$start_time <- lubridate::as_datetime(pd$start_time)
+pd$time <- pd$end_time - pd$start_time
+avg <- mean(pd$time, na.rm = T)
+```
+
+The average time to fill out the form was `r round(avg)` seconds. The below chart shows the distribution.
+
+```{r}
+ggplot(data = pd,
+       aes(x = time)) +
+  geom_density(fill = 'darkorange') +
+  labs(x = 'Seconds',y = 'Density') +
+  geom_vline(xintercept = avg, lty = 2)
+```
+
+The below table shows the time per fieldworker:
+
+```{r}
+pd %>%
+  arrange(desc(time)) %>%
+  dplyr::select(wid, seconds = time, instanceID) %>%
+  mutate(seconds = round(seconds, digits = 1)) %>%
+  DT::datatable()
+```
+
