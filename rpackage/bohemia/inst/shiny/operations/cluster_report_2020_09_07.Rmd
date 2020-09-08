@@ -1,0 +1,472 @@
+---
+title: "Cluster report"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: "hide"
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               # echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 9.64,
+               fig.height = 5.9,
+               fig.path = 'figures/')
+```
+
+```{r}
+## Load libraries
+library(bohemia)
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(sp)
+library(raster)
+library(ggthemes)
+library(sf)
+library(RColorBrewer)
+library(readr)
+library(tidyr)
+options(scipen = '999')
+theme_set(databrew::theme_simple())
+```
+
+```{r}
+source('global.R')
+source('try_clusters.R')
+```
+
+# Clustering {.tabset}
+
+
+## Summary
+
+We would like to know how many clusters can be formed given the spatial distribution of hamlets and certain "parameters" (buffer distance, minimum number of children per cluster, minimum number and type of animals, etc.). We can approximate this number by taking advantage of the data collected during Bohemia "Reconnaissance" activities (ie, hamlet-level questionnaires during the period of May-Aug 2020). Though less accurate than person-level data (for example, with hamlet level data we don't know exactly where the "borders" of a hamlet are, nor can we be sure whether a hamlet leader's estimations of the number of people/livestock in their hamlet are systematically biased), we believe that hamlet-level data is sufficiently accurate to at least _approximate_ how many clusters we'll be able to generate once we have person-level data. 
+
+The purpose of this report is to answer the question: will we have enough clusters to carry out Bohemia as planned, or do we need to change plans?
+
+## Parameters and assumptions
+
+We consider a cluster to be "complete" if it has the following characteristics:
+- At least 35 children  
+- At least 35 pigs (in Mozambique) / cattle (in Tanzania)  
+- At least 2 kilometers between clusters of different treatment assignments (ie, a 1km "buffer" for each cluster, except in the case that the nearby cluster is of identical treatment assignment)  
+
+We consider that the number of clusters is "enough" if 144 are reached (ie, sufficient for the random assignment of all clusters to 3 assignment groups of n=48).
+
+We allow for clusters to be formed by more than one hamlet, but we do not allow for the splitting of hamlets. 
+
+The clustering algorithm:  
+- Starts at the hamlet of the district headquarters  
+- Assess whether the hamlet is a complete cluster, then  
+  - If it is a complete cluster, it moves on to the next hamlet and starts a new cluster  
+  - If it is not a complete cluster, it adds the nearest hamlet to the same cluster (and so on)   
+- Uses _pre-assigned_ (but random) treatment groups, so as to allow for the assignation of buffers only when necessary  
+- Assumes a perfectly circular hamlet shape and a radius based on population (since true distribution of households is not available). The assumed radius is 1 meter per person (except for hamlets with > 2,000 people, which are assumed to have a radius of 2,000 meters)  
+- Assumes that 30% of people are children  
+- Assumes an average of 5 people per household   
+- Assumes the following number of animals (quantification from categorical variables):  
+  - "1 to 5": 3  
+  - "6 to 19": 12  
+  - "20 or more": 35  
+- Does not take into account hamlets whose location has not yet been collected (Mozambique has several dozen). 
+
+**Major caveat**: Location, reconnaissance, and animal data has been collected from all Tanzania hamlets. However, in the case of Mozambique, data are complete for only `r nrow(df[df$Country == 'Mozambique,])` hamlets of a total of `r nrow(locations %>% filter(Country == 'Mozambique'))` hamlets in the district (ie, `r round(nrow(df[df$Country == 'Mozambique,])/ nrow(locations %>% filter(Country == 'Mozambique')) * 100, digits = 1)` percent).
+
+
+## Tanzania
+
+```{r, echo = TRUE}
+out <- try_clusters(the_country = 'Tanzania',
+  include_clinical = TRUE,
+  interpolate_animals = TRUE,
+  interpolate_humans = TRUE,
+  humans_per_household = 5,
+  p_children = 30,
+  minimum_households = 0,
+  minimum_children = 35,
+  minimum_humans = 0,
+  minimum_animals = 0,
+  minimum_cattle = 35,
+  minimum_pigs = 0,
+  minimum_goats = 0,
+  km = 2,
+  max_km_from_hq = 1000,
+  start_at_hq = TRUE,
+  df = df)
+```
+
+### Summary
+
+```{r, results='asis'}
+cat(paste0(out$summary_text))
+```
+
+### Map
+
+```{r}
+out$map
+```
+
+
+### Cluster-level details
+
+```{r}
+DT::datatable(out$cluster_xdf %>% filter(cluster != 0))
+```
+
+
+### Hamlet-level details
+
+```{r}
+DT::datatable(out$hamlet_xdf)
+```
+
+## Mozambique
+
+### Pigs-only
+
+```{r, echo = TRUE}
+out <- try_clusters(the_country = 'Mozambique',
+  include_clinical = TRUE,
+  interpolate_animals = TRUE,
+  interpolate_humans = TRUE,
+  humans_per_household = 5,
+  p_children = 30,
+  minimum_households = 0,
+  minimum_children = 35,
+  minimum_humans = 0,
+  minimum_animals = 0,
+  minimum_cattle = 0,
+  minimum_pigs = 35,
+  minimum_goats = 0,
+  km = 2,
+  max_km_from_hq = 1000,
+  start_at_hq = TRUE,
+  df = df)
+```
+
+#### Summary
+
+```{r, results='asis'}
+cat(paste0(out$summary_text))
+```
+
+#### Map
+
+```{r}
+out$map
+```
+
+
+#### Cluster-level details
+
+```{r}
+DT::datatable(out$cluster_xdf %>% filter(cluster != 0))
+```
+
+
+#### Hamlet-level details
+
+```{r}
+DT::datatable(out$hamlet_xdf)
+```
+
+
+
+### Any animal (not just pigs)
+
+```{r, echo = TRUE}
+out <- try_clusters(the_country = 'Mozambique',
+  include_clinical = TRUE,
+  interpolate_animals = TRUE,
+  interpolate_humans = TRUE,
+  humans_per_household = 5,
+  p_children = 30,
+  minimum_households = 0,
+  minimum_children = 35,
+  minimum_humans = 0,
+  minimum_animals = 35,
+  minimum_cattle = 0,
+  minimum_pigs = 0,
+  minimum_goats = 0,
+  km = 2,
+  max_km_from_hq = 1000,
+  start_at_hq = TRUE,
+  df = df)
+```
+
+#### Summary
+
+```{r, results='asis'}
+cat(paste0(out$summary_text))
+```
+
+#### Map
+
+```{r}
+out$map
+```
+
+
+#### Cluster-level details
+
+```{r}
+DT::datatable(out$cluster_xdf %>% filter(cluster != 0))
+```
+
+
+#### Hamlet-level details
+
+```{r}
+DT::datatable(out$hamlet_xdf)
+```
+
+
+
+## More maps
+
+```{r}
+library(raster)
+library(rasterVis)
+
+make_grid <- function(the_densities,
+                      vals,
+                      the_map = mop2,
+                     griddy = 0.01){
+  
+  # Define the densities
+  gdf_spatial <- the_densities %>% mutate(x = lng, y = lat) %>% filter(!is.na(lng), !is.na(lat))
+  coordinates(gdf_spatial) <- ~x+y
+  proj4string(gdf_spatial) <- proj4string(the_map)
+  # First we need to create a uniform grid
+  # Create a gridded dataframe with values 
+  # for the entire range (bbox) of magude
+  gdf_grid <- expand.grid(lng = seq(bbox(the_map)[1,1],
+                                   bbox(the_map)[1,2],
+                                   by = griddy), # make this smaller for better quality
+                         lat = seq(bbox(the_map)[2,1],
+                                   bbox(the_map)[2,2],
+                                   by = griddy), # make this smaller for better quality
+                         pos_score = NA)
+  gdf_grid$latitude <- gdf_grid$lat
+  gdf_grid$longitude <- gdf_grid$lng
+  coordinates(gdf_grid) <- ~longitude+latitude
+  proj4string(gdf_grid) <- proj4string(the_map)
+  
+  
+  
+  # Loop through each point in our grid
+  for (i in 1:nrow(gdf_grid)){
+    # message(i)
+    # Get distance from this grid point to every point in gdf_spatial
+    distances <- spDistsN1(pts = gdf_spatial,
+                           pt = gdf_grid[i,],
+                           longlat = TRUE)
+    # Define which are acceptably close (define a radius)
+    close_enough <- which(distances <= 500)
+    
+    positivity <- mean(vals * 1 / (distances[close_enough]^(1/4)), na.rm = TRUE)
+    # positivity <- mean(1 / (distances[close_enough]^(1/4)), na.rm = TRUE)
+    # Assign irs to the dataframe
+    gdf_grid$pos_score[i] <- positivity
+  }
+  
+  # Convert gdf_grid to raster
+  temp <- gdf_grid@data %>% arrange(lng, lat)
+  r <- rasterFromXYZ(temp[, c('lng', 'lat', 'pos_score')])
+  # plot(r)
+  # plot(the_map, add = TRUE)
+  
+  # Make grid smaller and then reconvert to raster
+  proj4string(gdf_grid) <- proj4string(the_map)
+  x <- over(gdf_grid, polygons(the_map))
+  gdf_grid_small <- gdf_grid[!is.na(x),]
+  # plot(gdf_grid_small,
+  #      col = adjustcolor('black', alpha.f = 0.2))
+  temp <- gdf_grid_small@data %>% arrange(lng, lat)
+  r <- rasterFromXYZ(temp[, c('lng', 'lat', 'pos_score')])
+  return(r)
+  # # plot(r, legend = FALSE)
+  # # plot(the_map, add = TRUE)
+  # 
+  # # plot(the_map, add = T)
+}
+
+
+heat_map <- function(r){
+  # levelplot(r, contour = F, par.settings = BuRdTheme()) +
+  levelplot(r, contour = F, par.settings = infernoTheme()) +
+  layer(sp.polygons(mop2, lwd = 3))
+}
+```
+
+
+### Mozambique
+
+#### Cattle distribution
+
+```{r}
+the_densities = df %>% filter(Country == 'Mozambique') %>%
+    dplyr::select(lng, lat, value = n_cattle)
+vals <- recodify(the_densities$value)
+file_name <- 'grids/1.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = the_densities,
+                 vals = vals,
+                 the_map = mop2)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+
+#### Pigs distribution
+
+```{r}
+the_densities = df %>% filter(Country == 'Mozambique') %>%
+    dplyr::select(lng, lat, value = n_pigs)
+vals <- recodify(the_densities$value)
+file_name <- 'grids/2.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = the_densities,
+                 vals = vals,
+                 the_map = mop2)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+
+#### Goats distribution
+
+```{r}
+the_densities = df %>% filter(Country == 'Mozambique') %>%
+    dplyr::select(lng, lat, value = n_goats)
+vals <- recodify(the_densities$value)
+file_name <- 'grids/3.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = the_densities,
+                 vals = vals,
+                 the_map = mop2)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+#### Population distribution
+
+```{r}
+the_densities = df %>% filter(Country == 'Mozambique') %>%
+    dplyr::select(lng, lat, value = n_households)
+vals <- the_densities$value
+file_name <- 'grids/4.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = the_densities,
+                 vals = vals,
+                 the_map = mop2)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+
+### Tanzania
+
+#### Cattle distribution
+
+```{r}
+the_densities = df %>% filter(Country == 'Tanzania') %>%
+    dplyr::select(lng, lat, value = n_cattle)
+vals <- recodify(the_densities$value)
+file_name <- 'grids/5.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = the_densities,
+                 vals = vals,
+                 the_map = ruf2)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+
+#### Pigs distribution
+
+```{r}
+the_densities = df %>% filter(Country == 'Tanzania') %>%
+    dplyr::select(lng, lat, value = n_pigs)
+vals <- recodify(the_densities$value)
+file_name <- 'grids/6.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = the_densities,
+                 vals = vals,
+                 the_map = ruf2)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+
+#### Goats distribution
+
+```{r}
+the_densities = df %>% filter(Country == 'Tanzania') %>%
+    dplyr::select(lng, lat, value = n_goats)
+vals <- recodify(the_densities$value)
+file_name <- 'grids/7.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = the_densities,
+                 vals = vals,
+                 the_map = ruf2)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+#### Population distribution
+
+```{r}
+the_densities = df %>% filter(Country == 'Tanzania') %>%
+    dplyr::select(lng, lat, value = n_households)
+vals <- the_densities$value
+file_name <- 'grids/8.RData'
+if(file.exists(file_name)){
+  load(file_name)
+} else {
+  r <- make_grid(the_densities = the_densities,
+                 vals = vals,
+                 the_map = ruf2)
+  save(r, file = file_name)
+}
+heat_map(r)
+```
+
+
+## More resources
+
+- Source code for the hamlet-level clustering algorithm: [here](https://github.com/databrew/bohemia/blob/master/rpackage/bohemia/inst/shiny/operations/try_clusters.R) 
+- Interactive web app for modifying parameters and re-running cluster algorithm: [here](https://bohemia.team/operations) ("Clustering" tab)
+
+

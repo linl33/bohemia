@@ -199,7 +199,7 @@ body <- dashboardBody(
       fluidPage(
         fluidRow(column(4, 
                         selectInput('clustering_country', 'Country',
-                                    choices = c('Tanzania')),
+                                    choices = c('Tanzania', 'Mozambique')),
                         sliderInput('km', 'Kilometers between two clusters of different treatment assignments', min = 0, max = 3, value = 2, step = 0.1),
                         sliderInput('max_km_from_hq', 'Maximum kilometers from headquarters',
                                     min = 10, max = 200, step = 10, value = 100),
