@@ -35,7 +35,7 @@ library(sf)
 library(RColorBrewer)
 library(readr)
 library(tidyr)
-options(scipen = '999')
+# options(scipen = '999')
 theme_set(databrew::theme_simple())
 ```
 
@@ -57,7 +57,7 @@ The purpose of this report is to answer the question: will we have enough cluste
 
 We consider a cluster to be "complete" if it has the following characteristics:
 - At least 35 children  
-- At least 35 pigs (in Mozambique) / cattle (in Tanzania)  
+- NO ANIMAL FLOOR  
 - At least 2 kilometers between clusters of different treatment assignments (ie, a 1km "buffer" for each cluster, except in the case that the nearby cluster is of identical treatment assignment)  
 
 We consider that the number of clusters is "enough" if 144 are reached (ie, sufficient for the random assignment of all clusters to 3 assignment groups of n=48).
@@ -70,83 +70,37 @@ The clustering algorithm:
   - If it is a complete cluster, it moves on to the next hamlet and starts a new cluster  
   - If it is not a complete cluster, it adds the nearest hamlet to the same cluster (and so on)   
 - Uses _pre-assigned_ (but random) treatment groups, so as to allow for the assignation of buffers only when necessary  
-- Assumes a perfectly circular hamlet shape and a radius based on population (since true distribution of households is not available). The assumed radius is 1 meter per person (except for hamlets with > 2,000 people, which are assumed to have a radius of 2,000 meters)  
+- Assumes a perfectly circular hamlet shape and a radius based on population (since true distribution of households is not available). The assumed radius is 1 meter per person (except for hamlets with > 1,000 people, which are assumed to have a radius of 1,000 meters)  
 - Assumes that 30% of people are children  
-- Assumes an average of 5 people per household   
+- Assumes an average of 6 people per household   
 - Assumes the following number of animals (quantification from categorical variables):  
   - "1 to 5": 3  
   - "6 to 19": 12  
   - "20 or more": 35  
-- Does not take into account hamlets whose location has not yet been collected (Mozambique has several dozen). 
+- Does not take into account hamlets whose location has not yet been collected (Mozambique has many). 
 
-**Major caveat**: Location, reconnaissance, and animal data has been collected from all Tanzania hamlets. However, in the case of Mozambique, data are complete for only `r nrow(df[df$Country == 'Mozambique,])` hamlets of a total of `r nrow(locations %>% filter(Country == 'Mozambique'))` hamlets in the district (ie, `r round(nrow(df[df$Country == 'Mozambique,])/ nrow(locations %>% filter(Country == 'Mozambique')) * 100, digits = 1)` percent).
+**Major caveat**: Location, reconnaissance, and animal data has been collected from all Tanzania hamlets. However, in the case of Mozambique, data are complete for only `r nrow(df[df$Country == 'Mozambique',])` hamlets of a total of `r nrow(locations %>% filter(Country == 'Mozambique'))` hamlets in the district (ie, `r round(nrow(df[df$Country == 'Mozambique',])/ nrow(locations %>% filter(Country == 'Mozambique')) * 100, digits = 1)` percent).
 
 
 ## Tanzania
 
+
+### Excluding hamlets in other clinical trial
+
+
 ```{r, echo = TRUE}
 out <- try_clusters(the_country = 'Tanzania',
-  include_clinical = TRUE,
+  include_clinical = FALSE,
   interpolate_animals = TRUE,
   interpolate_humans = TRUE,
-  humans_per_household = 5,
-  p_children = 30,
-  minimum_households = 0,
-  minimum_children = 35,
-  minimum_humans = 0,
-  minimum_animals = 0,
-  minimum_cattle = 35,
-  minimum_pigs = 0,
-  minimum_goats = 0,
-  km = 2,
-  max_km_from_hq = 1000,
-  start_at_hq = TRUE,
-  df = df)
-```
-
-### Summary
-
-```{r, results='asis'}
-cat(paste0(out$summary_text))
-```
-
-### Map
-
-```{r}
-out$map
-```
-
-
-### Cluster-level details
-
-```{r}
-DT::datatable(out$cluster_xdf %>% filter(cluster != 0))
-```
-
-
-### Hamlet-level details
-
-```{r}
-DT::datatable(out$hamlet_xdf)
-```
-
-## Mozambique
-
-### Pigs-only
-
-```{r, echo = TRUE}
-out <- try_clusters(the_country = 'Mozambique',
-  include_clinical = TRUE,
-  interpolate_animals = TRUE,
-  interpolate_humans = TRUE,
-  humans_per_household = 5,
+  humans_per_household = 6,
   p_children = 30,
   minimum_households = 0,
   minimum_children = 35,
   minimum_humans = 0,
   minimum_animals = 0,
   minimum_cattle = 0,
-  minimum_pigs = 35,
+  minimum_pigs = 0,
   minimum_goats = 0,
   km = 2,
   max_km_from_hq = 1000,
@@ -164,6 +118,130 @@ cat(paste0(out$summary_text))
 
 ```{r}
 out$map
+```
+
+
+#### Distributions (hamlet level)
+
+The below shows distributions for _all_ hamlets in the district.
+
+```{r}
+pd <- out$hamlet_xdf %>% filter(cluster != 0) %>%
+  # filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), code) %>%
+  gather(key, value, n_cattle:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key))
+ggplot(data = pd,
+       aes(x = value)) +
+  geom_density(aes(fill = key)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  theme(legend.position = 'none') +
+  scale_fill_manual(name = '', values = RColorBrewer::brewer.pal(n = length(unique(pd$key)),
+                                                                 'Spectral'))
+```
+
+
+#### Distributions (cluster level)
+
+The below shows distributions only for clusters which are sufficient/complete.
+
+```{r}
+pd <- out$cluster_xdf %>% filter(cluster != 0) %>%
+  filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), cluster) %>%
+  gather(key, value, n_hamlets:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key))
+ggplot(data = pd,
+       aes(x = value)) +
+  geom_density(aes(fill = key)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  theme(legend.position = 'none') +
+  scale_fill_manual(name = '', values = RColorBrewer::brewer.pal(n = length(unique(pd$key)),
+                                                                 'Spectral'))
+```
+
+#### Distributions (assignment level)
+
+```{r}
+pd <- out$cluster_xdf %>% filter(cluster != 0) %>%
+  filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), assignment_group) %>%
+  gather(key, value, n_hamlets:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+    filter(!key %in% 'n_humans') %>%
+  filter(!key %in% 'n_hamlets') %>%
+    filter(!key %in% 'n_animals') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key)) %>%
+  mutate(assignment_group = factor(assignment_group))
+ggplot(data = pd,
+       aes(x = key, y = value)) +
+  # geom_density(aes(fill = assignment_group,
+  #                  group = assignment_group)) +
+    geom_violin(aes(fill = assignment_group,
+                   group = assignment_group)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  # theme(legend.position = 'none') +
+  scale_fill_manual(name = 'Assignment\ngroup', values = RColorBrewer::brewer.pal(n = length(unique(pd$assignment_group)),
+                                                                 'Spectral')) +
+  theme(legend.position = 'bottom')
+```
+
+
+#### Categorized (terciled) distributions (assignment level)
+
+```{r}
+pd <- out$cluster_xdf %>% filter(cluster != 0) %>%
+  filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), assignment_group) %>%
+  gather(key, value, n_hamlets:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+    filter(!key %in% 'n_humans') %>%
+  filter(!key %in% 'n_hamlets') %>%
+    filter(!key %in% 'n_animals') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key)) %>%
+  mutate(assignment_group = factor(assignment_group)) %>%
+  group_by(key) %>%
+  mutate(value_cat = base::cut(x = value,
+                               breaks = unique(stats::quantile(value, probs = seq(0, 1.05, 0.333333), type = 3)),
+                               include.lowest = T,
+                               right = T)) %>%
+  group_by(assignment_group, key, value_cat) %>%
+  tally %>%
+  ungroup %>%
+  group_by(key, value_cat) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup
+
+
+ggplot(data = pd,
+       aes(x = value_cat,
+           y = n,
+           fill = assignment_group,
+           group = assignment_group)) +
+  geom_bar(stat = 'identity', position = position_dodge(width = 0.8)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  # theme(legend.position = 'none') +
+  scale_fill_manual(name = 'Assignment\ngroup', values = RColorBrewer::brewer.pal(n = length(unique(pd$assignment_group)),
+                                                                 'Spectral')) +
+  theme(legend.position = 'bottom') +
+  geom_text(aes(label = round(p, digits = 1),
+                y = n-5),
+            position = position_dodge(width = 0.8),
+            alpha = 0.5)
 ```
 
 
@@ -181,20 +259,20 @@ DT::datatable(out$hamlet_xdf)
 ```
 
 
+### Including hamlets in other clinical trial
 
-### Any animal (not just pigs)
 
 ```{r, echo = TRUE}
-out <- try_clusters(the_country = 'Mozambique',
+out <- try_clusters(the_country = 'Tanzania',
   include_clinical = TRUE,
   interpolate_animals = TRUE,
   interpolate_humans = TRUE,
-  humans_per_household = 5,
+  humans_per_household = 6,
   p_children = 30,
   minimum_households = 0,
   minimum_children = 35,
   minimum_humans = 0,
-  minimum_animals = 35,
+  minimum_animals = 0,
   minimum_cattle = 0,
   minimum_pigs = 0,
   minimum_goats = 0,
@@ -216,6 +294,304 @@ cat(paste0(out$summary_text))
 out$map
 ```
 
+
+#### Distributions (hamlet level)
+
+The below shows distributions for _all_ hamlets in the district.
+
+```{r}
+pd <- out$hamlet_xdf %>% filter(cluster != 0) %>%
+  # filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), code) %>%
+  gather(key, value, n_cattle:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key))
+ggplot(data = pd,
+       aes(x = value)) +
+  geom_density(aes(fill = key)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  theme(legend.position = 'none') +
+  scale_fill_manual(name = '', values = RColorBrewer::brewer.pal(n = length(unique(pd$key)),
+                                                                 'Spectral'))
+```
+
+
+#### Distributions (cluster level)
+
+The below shows distributions only for clusters which are sufficient/complete.
+
+```{r}
+pd <- out$cluster_xdf %>% filter(cluster != 0) %>%
+  filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), cluster) %>%
+  gather(key, value, n_hamlets:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key))
+ggplot(data = pd,
+       aes(x = value)) +
+  geom_density(aes(fill = key)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  theme(legend.position = 'none') +
+  scale_fill_manual(name = '', values = RColorBrewer::brewer.pal(n = length(unique(pd$key)),
+                                                                 'Spectral'))
+```
+
+#### Distributions (assignment level)
+
+```{r}
+pd <- out$cluster_xdf %>% filter(cluster != 0) %>%
+  filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), assignment_group) %>%
+  gather(key, value, n_hamlets:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+    filter(!key %in% 'n_humans') %>%
+  filter(!key %in% 'n_hamlets') %>%
+    filter(!key %in% 'n_animals') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key)) %>%
+  mutate(assignment_group = factor(assignment_group))
+ggplot(data = pd,
+       aes(x = key, y = value)) +
+  # geom_density(aes(fill = assignment_group,
+  #                  group = assignment_group)) +
+    geom_violin(aes(fill = assignment_group,
+                   group = assignment_group)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  # theme(legend.position = 'none') +
+  scale_fill_manual(name = 'Assignment\ngroup', values = RColorBrewer::brewer.pal(n = length(unique(pd$assignment_group)),
+                                                                 'Spectral')) +
+  theme(legend.position = 'bottom')
+```
+
+
+#### Categorized (terciled) distributions (assignment level)
+
+```{r}
+pd <- out$cluster_xdf %>% filter(cluster != 0) %>%
+  filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), assignment_group) %>%
+  gather(key, value, n_hamlets:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+    filter(!key %in% 'n_humans') %>%
+  filter(!key %in% 'n_hamlets') %>%
+    filter(!key %in% 'n_animals') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key)) %>%
+  mutate(assignment_group = factor(assignment_group)) %>%
+  group_by(key) %>%
+  mutate(value_cat = base::cut(x = value,
+                               breaks = unique(stats::quantile(value, probs = seq(0, 1.05, 0.333333), type = 3)),
+                               include.lowest = T,
+                               right = T)) %>%
+  group_by(assignment_group, key, value_cat) %>%
+  tally %>%
+  ungroup %>%
+  group_by(key, value_cat) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup
+
+
+ggplot(data = pd,
+       aes(x = value_cat,
+           y = n,
+           fill = assignment_group,
+           group = assignment_group)) +
+  geom_bar(stat = 'identity', position = position_dodge(width = 0.8)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  # theme(legend.position = 'none') +
+  scale_fill_manual(name = 'Assignment\ngroup', values = RColorBrewer::brewer.pal(n = length(unique(pd$assignment_group)),
+                                                                 'Spectral')) +
+  theme(legend.position = 'bottom') +
+  geom_text(aes(label = round(p, digits = 1),
+                y = n-5),
+            position = position_dodge(width = 0.8),
+            alpha = 0.5)
+```
+
+
+
+#### Cluster-level details
+
+```{r}
+DT::datatable(out$cluster_xdf %>% filter(cluster != 0))
+```
+
+
+#### Hamlet-level details
+
+```{r}
+DT::datatable(out$hamlet_xdf)
+```
+
+## Mozambique
+
+
+```{r, echo = TRUE}
+out <- try_clusters(the_country = 'Mozambique',
+  include_clinical = TRUE,
+  interpolate_animals = TRUE,
+  interpolate_humans = TRUE,
+  humans_per_household = 6,
+  p_children = 30,
+  minimum_households = 0,
+  minimum_children = 35,
+  minimum_humans = 0,
+  minimum_animals = 0,
+  minimum_cattle = 0,
+  minimum_pigs = 0,
+  minimum_goats = 0,
+  km = 2,
+  max_km_from_hq = 1000,
+  start_at_hq = TRUE,
+  df = df)
+```
+
+
+#### Summary
+
+```{r, results='asis'}
+cat(paste0(out$summary_text))
+```
+
+#### Map
+
+```{r}
+out$map
+```
+
+
+#### Distributions (hamlet level)
+
+The below shows distributions for _all_ hamlets in the district.
+
+```{r}
+pd <- out$hamlet_xdf %>% filter(cluster != 0) %>%
+  # filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), code) %>%
+  gather(key, value, n_cattle:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key))
+ggplot(data = pd,
+       aes(x = value)) +
+  geom_density(aes(fill = key)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  theme(legend.position = 'none') +
+  scale_fill_manual(name = '', values = RColorBrewer::brewer.pal(n = length(unique(pd$key)),
+                                                                 'Spectral'))
+```
+
+
+#### Distributions (cluster level)
+
+The below shows distributions only for clusters which are sufficient/complete.
+
+```{r}
+pd <- out$cluster_xdf %>% filter(cluster != 0) %>%
+  filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), cluster) %>%
+  gather(key, value, n_hamlets:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key))
+ggplot(data = pd,
+       aes(x = value)) +
+  geom_density(aes(fill = key)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  theme(legend.position = 'none') +
+  scale_fill_manual(name = '', values = RColorBrewer::brewer.pal(n = length(unique(pd$key)),
+                                                                 'Spectral'))
+```
+
+#### Distributions (assignment level)
+
+```{r}
+pd <- out$cluster_xdf %>% filter(cluster != 0) %>%
+  filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), assignment_group) %>%
+  gather(key, value, n_hamlets:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+    filter(!key %in% 'n_humans') %>%
+  filter(!key %in% 'n_hamlets') %>%
+    filter(!key %in% 'n_animals') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key)) %>%
+  mutate(assignment_group = factor(assignment_group))
+ggplot(data = pd,
+       aes(x = key, y = value)) +
+  # geom_density(aes(fill = assignment_group,
+  #                  group = assignment_group)) +
+    geom_violin(aes(fill = assignment_group,
+                   group = assignment_group)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  # theme(legend.position = 'none') +
+  scale_fill_manual(name = 'Assignment\ngroup', values = RColorBrewer::brewer.pal(n = length(unique(pd$assignment_group)),
+                                                                 'Spectral')) +
+  theme(legend.position = 'bottom')
+```
+
+
+#### Categorized (terciled) distributions (assignment level)
+
+```{r}
+pd <- out$cluster_xdf %>% filter(cluster != 0) %>%
+  filter(complete_cluster) %>%
+  dplyr::select(contains('n_'), assignment_group) %>%
+  gather(key, value, n_hamlets:n_children) %>%
+  filter(!key %in% 'n_households') %>%
+    filter(!key %in% 'n_humans') %>%
+  filter(!key %in% 'n_hamlets') %>%
+    filter(!key %in% 'n_animals') %>%
+  mutate(key = gsub('n_', '', key)) %>%
+  mutate(key = Hmisc::capitalize(key)) %>%
+  mutate(assignment_group = factor(assignment_group)) %>%
+  group_by(key) %>%
+  mutate(value_cat = base::cut(x = value,
+                               breaks = unique(stats::quantile(value, probs = seq(0, 1.05, 0.333333), type = 3)),
+                               include.lowest = T,
+                               right = T)) %>%
+  group_by(assignment_group, key, value_cat) %>%
+  tally %>%
+  ungroup %>%
+  group_by(key, value_cat) %>%
+  mutate(p = n / sum(n) * 100) %>%
+  ungroup
+
+
+ggplot(data = pd,
+       aes(x = value_cat,
+           y = n,
+           fill = assignment_group,
+           group = assignment_group)) +
+  geom_bar(stat = 'identity', position = position_dodge(width = 0.8)) +
+  facet_wrap(~key, scales = 'free') +
+  theme_bw() +
+  labs(x = 'Value', y = 'Density') +
+  # theme(legend.position = 'none') +
+  scale_fill_manual(name = 'Assignment\ngroup', values = RColorBrewer::brewer.pal(n = length(unique(pd$assignment_group)),
+                                                                 'Spectral')) +
+  theme(legend.position = 'bottom') +
+  geom_text(aes(label = round(p, digits = 1),
+                y = n-5),
+            position = position_dodge(width = 0.8),
+            alpha = 0.5)
+```
 
 #### Cluster-level details
 

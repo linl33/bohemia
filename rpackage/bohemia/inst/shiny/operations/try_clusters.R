@@ -15,6 +15,7 @@
 #' @param minimum_goats The minimum number of goats required for a cluster
 #' @param km The distance in kilometers between two clusters of different assignment groups
 #' @param max_km_from_hq Maximum distance from HQ
+#' @param start_at_hq Make the start point be whatever is nearest to HQ so as to get clusters as close to HQ as possible
 #' @param df A dataframe with combined animal and household info, as generated in global.R of operations app
 #' @return A list
 #' @import rgeos
@@ -24,6 +25,15 @@
 #' @import geosphere
 #' @import htmlTable
 
+# Recode categorical variables so as to get approximate numbers
+recodify <- function(x){
+  x <- as.character(x)
+  x <- ifelse(x == '0', 0,
+              ifelse(x == '1 to 5', 3,
+                     ifelse(x == '6 to 19', 12,
+                            ifelse(x == '20 or more', 35, NA))))
+  return(x)
+}
 
 try_clusters <- function(the_country = 'Tanzania',
                          include_clinical = TRUE,
@@ -40,6 +50,7 @@ try_clusters <- function(the_country = 'Tanzania',
                          minimum_goats = 0,
                          km = 2,
                          max_km_from_hq = 100,
+                         start_at_hq = FALSE,
                          df = NULL){
   set.seed(1)
 
@@ -60,20 +71,22 @@ try_clusters <- function(the_country = 'Tanzania',
   #      df,
   #      file = '~/Desktop/temp.RData')
 # #   # Temporary, just for testing
-#   the_country = 'Tanzania'
-#   include_clinical = TRUE
-#   interpolate_animals = TRUE
-#   interpolate_humans = TRUE
-#   humans_per_household = 5
-#   p_children = 30
-#   minimum_households = 0
-#   minimum_children = 35
-#   minimum_humans = 0
-#   minimum_animals = 35
-#   minimum_cattle = 0
-#   minimum_pigs = 0
-#   minimum_goats = 0
-#   km = 2
+  # the_country = 'Tanzania'
+  # include_clinical = TRUE
+  # interpolate_animals = TRUE
+  # interpolate_humans = TRUE
+  # humans_per_household = 5
+  # p_children = 30
+  # minimum_households = 0
+  # minimum_children = 35
+  # minimum_humans = 0
+  # minimum_animals = 35
+  # minimum_cattle = 0
+  # minimum_pigs = 0
+  # minimum_goats = 0
+  # km = 2
+  # max_km_from_hq = 100
+  # start_at_hq = FALSE
 
   # Define the shp based on the country
   if(the_country == 'Tanzania'){
@@ -98,7 +111,13 @@ try_clusters <- function(the_country = 'Tanzania',
   )
 
   # Get the locations filtered
-  xdf <- df
+  xdf <- df %>% filter(Country == the_country)
+  
+  if(!include_clinical){
+    xdf <- xdf %>% filter(!as.logical(clinical_trial))
+  }
+  # xdf <- xdf %>% filter(Country == the_country) 
+  
   
   # Get max distance filter
   if(the_country == 'Tanzania'){
@@ -119,19 +138,7 @@ try_clusters <- function(the_country = 'Tanzania',
   hq_distance <- as.numeric(unlist(gDistance(hq, ss, byid = TRUE)))
   xdf <- xdf[(hq_distance/1000) <= max_km_from_hq,]
   
-  if(!include_clinical){
-    xdf <- xdf %>% filter(!clinical_trial)
-  }
-  xdf <- xdf %>% filter(Country == the_country) 
-  # Recode categorical variables so as to get approximate numbers
-  recodify <- function(x){
-    x <- as.character(x)
-    x <- ifelse(x == '0', 0,
-                ifelse(x == '1 to 5', 3,
-                       ifelse(x == '6 to 19', 12,
-                              ifelse(x == '20 or more', 35, NA))))
-    return(x)
-  }
+  
   n_names <- c('n_cattle', 'n_goats', 'n_pigs')
   for(j in 1:length(n_names)){
     this_column <- n_names[j]
@@ -204,7 +211,6 @@ try_clusters <- function(the_country = 'Tanzania',
                          " +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   xdf_sp <- spTransform(xdf_sp, new_proj)
 
-  # New approch
   # Pre-assign (before creating clusters) the treatment groups
   # (so as to not have the necessity of buffers between clusters of identical
   # treatment groups)
@@ -222,7 +228,14 @@ try_clusters <- function(the_country = 'Tanzania',
     message('Cluster number: ', cluster_counter)
     # Get a starting point
     if(is.null(next_hamlet_id)){
-      next_hamlet_id <- sample(1:nrow(xdf_sp), 1)
+      if(start_at_hq){
+        # Start at the nearest hamlet to HQ
+        next_hamlet_id <- which.min(hq_distance)[1]
+      } else {
+        # Just randomly pick a start point
+        next_hamlet_id <- sample(1:nrow(xdf_sp), 1)
+      }
+      
     }
     this_cluster_sp <- this_hamlet_sp <- xdf_sp[next_hamlet_id,]
     this_hamlet_id <- this_hamlet_sp@data$id
@@ -230,10 +243,13 @@ try_clusters <- function(the_country = 'Tanzania',
     xdf$cluster[xdf$id == this_hamlet_id] <- cluster_counter
     # See if it's sufficient
     this_cluster <- this_cluster_sp@data
+    # Get radius
+    radius <- this_cluster$n_humans 
+    radius <- ifelse(radius > 1000, 1000, radius )
     eval(parse(text = suffiency_text))
     is_sufficient <- this_cluster$is_sufficient
     # Turn the cluster into a convex
-    cluster_convex <- SpatialPolygonsDataFrame(Sr = gConvexHull(spgeom = gBuffer(this_cluster_sp, width = 300)), 
+    cluster_convex <- SpatialPolygonsDataFrame(Sr = gConvexHull(spgeom = gBuffer(this_cluster_sp, width = radius)), 
                                                data = data.frame(cluster = cluster_counter))
     if(is_sufficient){
       message('---sufficient with just one hamlet')
@@ -264,7 +280,7 @@ try_clusters <- function(the_country = 'Tanzania',
       # Try adding the closest hamlet to the current cluster and see if it creates an overlap
       if(!is.null(polys) & !done_with_overlap_test){ # on the first round, this will be skipped
         this_cluster_sp <- xdf_sp[xdf$cluster == cluster_counter | xdf$id == this_hamlet_id,]
-        has_overlap <- gOverlaps(spgeom1 = gConvexHull(spgeom = gBuffer(this_cluster_sp, width = 300)),
+        has_overlap <- gOverlaps(spgeom1 = gConvexHull(spgeom = gBuffer(this_cluster_sp, width = radius)), # this used to be 300
                                  spgeom2 = polys)
         # If it has overlap, remove the hamlet and question and try another one
         while(has_overlap & !done_with_overlap_test){
@@ -388,7 +404,7 @@ try_clusters <- function(the_country = 'Tanzania',
   
   # Get a summary text
   summary_text <- paste0(
-    1-nrow(cluster_xdf), ' clusters were able to be formed with the given rules. These were made up of ',
+    1-nrow(cluster_xdf[cluster_xdf$complete_cluster,]), ' complete clusters were able to be formed with the given rules. ', 'These were made up of ',
     nrow(hamlet_xdf), ' hamlets, of which ',
     length(which(hamlet_xdf$cluster == 0)), ' fall into "buffer" areas. '
   ) 

@@ -32,11 +32,11 @@ if('data.RData' %in% dir()){
     user = creds$tza_odk_user,
     password = creds$tza_odk_pass
   )
-  
-  # Get answer keys
-  answer_uuids <- c("uuid:06e9b414-4c82-4097-bd4a-e31065f1265e",
-                    "uuid:641eaadd-1e47-4e48-99c2-02c13de93b0a",
-                    "uuid:bab37889-d8a8-4b6c-984c-a99e2b9926ce")
+  # Keep only those from the date period specified by Imani
+  answer_uuid <- answer_uuids <- "uuid:685917ac-89b9-4054-80e2-4e815f245d9f"
+  keep_uuids <- data$non_repeats$instanceID[data$non_repeats$todays_date >= '2020-09-05' |
+                                             data$non_repeats$instanceID == answer_uuid]
+  data$non_repeats <- data$non_repeats[data$non_repeats$instanceID %in% keep_uuids,]
   
   # Divide answers vs non-answers
   repeat_names <- names(data$repeats)
@@ -47,6 +47,8 @@ if('data.RData' %in% dir()){
     this_answer_repeats <- this_repeat_data %>% filter(instanceID %in% answer_uuids)
     this_non_answer_repeats <- this_repeat_data %>% filter(!instanceID %in% answer_uuids)
     answer_repeats[[i]] <- this_answer_repeats
+    # Remove from the non-answer repeats those which are not in the correct dates
+    this_non_answer_repeats <- this_non_answer_repeats %>% filter(instanceID %in% keep_uuids)
     non_answer_repeats[[i]] <- this_non_answer_repeats
   }
   fw_repeats <- non_answer_repeats
@@ -85,7 +87,7 @@ if('data.RData' %in% dir()){
     wid <- this_row$wid
     the_uuid <- this_row$instanceID
     this_hamlet_id <- this_row$hh_hamlet_code
-    this_answer <- answer_non_repeats %>% filter(hh_hamlet_code == this_hamlet_id)
+    this_answer <- answer_non_repeats# %>% filter(hh_hamlet_code == this_hamlet_id)
     if(nrow(this_answer) < 1){
       wrong_hamlet_list <- c(wrong_hamlet_list, wid)
     } else {
@@ -146,7 +148,7 @@ if('data.RData' %in% dir()){
   }
   
   done <- bind_rows(out_list)
-  wrong_hamlet_list
+  # wrong_hamlet_list
   
   # Clean up a bit
   done <- done %>% filter(!grepl('note_', Variable)) %>%
@@ -159,7 +161,8 @@ if('data.RData' %in% dir()){
     group_by(`Worker ID`) %>%
     summarise(Correct = length(which(Status == 'Correct')),
               Incorrect = length(which(Status == 'Incorrect')),
-              Percent = round(Correct / (Correct+Incorrect) * 100, digits = 2))
+              Percent = round(Correct / (Correct+Incorrect) * 100, digits = 2)) %>%
+    arrange(desc(Percent))
   save(agg, done, wrong_hamlet_list, xf, final,
        fw_repeats,
        fw_non_repeats,
@@ -169,3 +172,11 @@ if('data.RData' %in% dir()){
        dont_evaluate,
        file = 'data.RData')
 }
+
+# # Write csvs for Elena
+# dir.create('~/Desktop/elena')
+# write_csv(answer_non_repeats, '~/Desktop/elena/scenarios_non_repats.csv')
+# write_csv(answer_repeats$repeat_hh_sub, '~/Desktop/elena/scenarios_repats_hh_sub.csv')
+# write_csv(answer_repeats$repeat_household_members_enumeration, '~/Desktop/elena/scenarios_repeats_household_members_enumeration.csv')
+# write_csv(answer_repeats$repeat_mosquito_net, '~/Desktop/elena/scenarios_repeat_mosquito_net.csv')
+# write_csv(answer_repeats$repeat_water, '~/Desktop/elena/scenarios_repeat_water.csv')

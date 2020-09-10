@@ -35,3 +35,4 @@ sudo su - -c "R -e \"remove.packages('bohemia')\"";
 sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia')\""; 
 sudo systemctl restart shiny-server;
 
+

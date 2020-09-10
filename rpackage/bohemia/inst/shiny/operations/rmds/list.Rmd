@@ -64,7 +64,7 @@ while(length(team_numbers) > n_hh){
   team_numbers <- team_numbers[1:n_hh]
 }
 
-out <- tibble(id = paste0(lc, '-', bohemia::add_zero(1:n_hh, n = 3)),
+out <- tibble(`Código do agregado` = paste0(lc, '-', bohemia::add_zero(1:n_hh, n = 3)),
               team = team_numbers)
 ```
 
@@ -72,8 +72,8 @@ out <- tibble(id = paste0(lc, '-', bohemia::add_zero(1:n_hh, n = 3)),
 chunk_list <- list()
 for(i in 1:n_teams){
   chunk_list[[i]] <-
-    paste0("## Team ", i, "\n\n\n```{r}\n",
-           "kable(out %>% filter(team == ", i, ") %>% data.frame %>% dplyr::select(-team) %>% dplyr::mutate(`Status` = ' ', Comments = ' '), 'latex', longtable = T, caption = 'Team ", i,"')  %>% kable_styling(latex_options = c('striped', 'repeat_header', full_width = TRUE)) %>% column_spec(3, width = '8cm') \n```\n\\newpage\n")
+    paste0("## Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
+           "kable(out %>% filter(team == ", i, ") %>% data.frame %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = ' ', `Localização do Numero de Agregado` = ' ', `Data de enumeração` = ' ', `O chefe de agregado assino o consentimento informado?` = ' ', `O chede de agregado foi entrevistado?` = ' ', `Data da visita` = ' ', `Se Não foi visitado ou entrevistado, explique o porque? (Ausente, Desabitada, Destruída, Não localizada, Recusa, etc.)` = ' ', `Observações/Comentários` = ' '), 'latex', longtable = T, caption = 'Team ", i,"')  %>% kable_styling(latex_options = c('striped', 'repeat_header', full_width = TRUE))  \n```\n\\newpage\n")
 }
 chunks <- unlist(chunk_list)
 chunks <- paste0(chunks, collapse = '\n')

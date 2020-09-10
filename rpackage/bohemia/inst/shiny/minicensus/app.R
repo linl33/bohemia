@@ -141,7 +141,7 @@ server <- function(input, output, session) {
         the_code <- input$code
         the_answer_non_repeats <- answer_non_repeats %>% filter(hh_hamlet_code == the_code)
         label_df <- tibble(name = names(the_answer_non_repeats)) %>% left_join(xf)
-        out <- tibble(`Worker ID` = wid,
+        out <- tibble(
                `Variable` = names(the_answer_non_repeats),
                `Label (en)` = label_df$en,
                `Label (sw)` = label_df$sw,
@@ -170,7 +170,7 @@ server <- function(input, output, session) {
             for(x in 1:nrow(this_answer)){
                 x_answer <- this_answer[x,]
                 label_df <- tibble(name = names(x_answer)) %>% left_join(xf)
-                outx <- tibble(`Worker ID` = wid,
+                outx <- tibble(
                                `Variable` = names(x_answer),
                                `Label (en)` = label_df$en,
                                `Label (sw)` = label_df$sw,

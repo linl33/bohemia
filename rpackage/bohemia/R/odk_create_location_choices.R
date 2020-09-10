@@ -22,7 +22,7 @@ odk_create_location_choices <- function(country = NULL,
                                         other_only_levels = c('Village', 'Hamlet'),
                                         lower_it = TRUE){
   
-  # country = NULL; add_other = TRUE; add_ids = FALSE; other_word = 'Other';
+  # country = NULL; add_other = TRUE; add_ids = FALSE; other_word = 'Other'; lower_it = FALSE
   # other_only_levels = c('Village', 'Hamlet')
   # require(dplyr)
   # require(gsheet)
