@@ -55,6 +55,18 @@ lc <- loc_id
 n_hh <- as.numeric(data$n_hh)
 n_teams <- as.numeric(data$n_teams)
 
+# Get country
+country <- 'Mozambique'
+if(lc %in% locations$code[locations$Country == 'Tanzania']){
+  country <- 'Tanzania'
+}
+
+```
+
+`r country`
+
+```{r}
+
 team_numbers <- rep(1:n_teams, each = round(n_hh / n_teams))
 while(length(team_numbers) < n_hh){
   team_numbers <- c(team_numbers, team_numbers[length(team_numbers)])
@@ -64,17 +76,34 @@ while(length(team_numbers) > n_hh){
   team_numbers <- team_numbers[1:n_hh]
 }
 
-out <- tibble(`Código do agregado` = paste0(lc, '-', bohemia::add_zero(1:n_hh, n = 3)),
+if(country == 'Tanzania'){
+  out <- tibble(`HHID` = paste0(lc, '-', bohemia::add_zero(1:n_hh, n = 3)),
+              team = team_numbers) 
+  left <- locations %>% filter(code == lc) %>% dplyr::select(District, Ward, Village, Hamlet)
+  out = bind_cols(left, out)
+  } else {
+  out <- tibble(`Código do agregado` = paste0(lc, '-', bohemia::add_zero(1:n_hh, n = 3)),
               team = team_numbers)
+}
+
 ```
 
 ```{r}
 chunk_list <- list()
-for(i in 1:n_teams){
+if(country == 'Mozambique'){
+  for(i in 1:n_teams){
   chunk_list[[i]] <-
     paste0("## Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
            "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = ' ', `Localização do Numero de Agregado` = ' ', `Data de enumeração` = ' ', `O chefe de agregado assino o consentimento informado?` = ' ', `O chede de agregado foi entrevistado?` = ' ', `Data da visita` = ' ', `Se Não foi visitado ou entrevistado, explique o porque?` = ' ', `Observações/Comentários` = ' '), 'latex', longtable = T, booktabs=TRUE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:9,width = '1.5cm')   \n```\n\\newpage\n")
 }
+} else {
+  for(i in 1:n_teams){
+  chunk_list[[i]] <-
+    paste0("## Team ", i, "\n\n\nFieldworker name/code:\n\n\n```{r}\n",
+           "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Status` = ' ', `Comments` = ' '), 'latex', longtable = T, booktabs=TRUE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:6, width = '1.5cm') %>% column_spec(7, width = '3cm')   \n```\n\\newpage\n")
+}
+}
+
 chunks <- unlist(chunk_list)
 chunks <- paste0(chunks, collapse = '\n')
 
