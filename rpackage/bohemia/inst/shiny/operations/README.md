@@ -13,7 +13,7 @@ sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpac
 
 
 
-
+.libPaths()
 
 ### On remote machine
 
@@ -33,6 +33,10 @@ cd /srv/shiny-server;
 sudo chmod -R 777 operations/;
 sudo su - -c "R -e \"remove.packages('bohemia')\""; 
 sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia')\""; 
+sudo chmod -R 777 /usr/local/lib/R/site-library;
+sudo chmod -R 777 /usr/lib/R/site-library;
+sudo chmod -R 777 /usr/lib/R/library;
+
 sudo systemctl restart shiny-server;
 
 
