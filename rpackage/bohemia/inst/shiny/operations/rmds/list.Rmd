@@ -46,7 +46,7 @@ for (i in 1:length(params)){
 }
 ```
 
-## Enumeration lists for `r loc_id`
+## Visit control sheet for `r loc_id`
 
 \newpage
 

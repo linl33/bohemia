@@ -15,6 +15,10 @@ if('data.RData' %in% dir()){
                                                         en = `label::English`,
                                                         sw = `label::Swahili`)
   
+  # Read in list of ids to be evaluated
+  imani <- read_excel('Final_list_Test_2.xlsx')
+  keep_uuids <- imani$instanceid
+  
   # read in creds
   creds <- read_yaml('credentials.yaml')
   
@@ -34,9 +38,16 @@ if('data.RData' %in% dir()){
   )
   # Keep only those from the date period specified by Imani
   answer_uuid <- answer_uuids <- "uuid:685917ac-89b9-4054-80e2-4e815f245d9f"
-  keep_uuids <- data$non_repeats$instanceID[data$non_repeats$todays_date >= '2020-09-05' |
-                                             data$non_repeats$instanceID == answer_uuid]
+  keep_uuids <- c(keep_uuids, 
+                  data$non_repeats$instanceID[data$non_repeats$instanceID == answer_uuid])
+  # keep_uuids <- data$non_repeats$instanceID[data$non_repeats$todays_date >= '2020-09-05' |
+  #                                            data$non_repeats$instanceID == answer_uuid]
   data$non_repeats <- data$non_repeats[data$non_repeats$instanceID %in% keep_uuids,]
+  
+  # Manually make some changes per Imani
+  data$non_repeats$wid[data$non_repeats$instanceID == 'uuid:f3249504-e3f3-41d9-86ad-a40d7e58f78a'] <- 76
+  drop_ids <- 'uuid:5f6083e2-b507-48dc-96e9-b601e6a008dd'
+  data$non_repeats <- data$non_repeats[!data$non_repeats$instanceID %in% drop_ids,]
   
   # Divide answers vs non-answers
   repeat_names <- names(data$repeats)
@@ -44,8 +55,8 @@ if('data.RData' %in% dir()){
   for(i in 1:length(repeat_names)){
     this_repeat_name <- repeat_names[i]
     this_repeat_data <- data$repeats[[this_repeat_name]]
-    this_answer_repeats <- this_repeat_data %>% filter(instanceID %in% answer_uuids)
-    this_non_answer_repeats <- this_repeat_data %>% filter(!instanceID %in% answer_uuids)
+    this_answer_repeats <- this_repeat_data %>% filter(instanceID %in% answer_uuids & !instanceID %in% drop_ids)
+    this_non_answer_repeats <- this_repeat_data %>% filter(!instanceID %in% answer_uuids & !instanceID %in% drop_ids)
     answer_repeats[[i]] <- this_answer_repeats
     # Remove from the non-answer repeats those which are not in the correct dates
     this_non_answer_repeats <- this_non_answer_repeats %>% filter(instanceID %in% keep_uuids)
