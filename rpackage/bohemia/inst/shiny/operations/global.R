@@ -133,7 +133,7 @@
     add_nothing <- function(x){x}
     
     # Get ODK data for recon form
-    refresh_data <- FALSE
+    refresh_data <- TRUE
     tza_done <- TRUE
     data_file <- 'recon.RData'
     
