@@ -736,7 +736,9 @@ recon_data <- recon_data %>%
   update_nearest_hf_name("FARAJA", "uuid:e4a1ee5f-b583-4f9c-8a61-0d13319e5f70") %>%
   update_nearest_hf_name("Ikwiriri Health center","uuid:e8f47e31-49e4-4fec-b737-c8ba64c70806")
 recon_data$type_nearest_hf_other[recon_data$instanceID == 'uuid:35129fa3-ca18-499f-a055-a4baa159175b'] <- NA
-
+# More Tanzania cleaning
+animal$hamlet_code[animal$instanceID == 'uuid:baf2145b-aca1-4413-9508-d5ad615e9e93'] <- 'LIK'
+animal$hamlet_code[animal$instanceID == 'uuid:57a35737-3254-4296-81d9-c4582b2a118a'] <- 'MKJ'
 #     # Manual cleaning instructions from Eldo sent after
 #     # data collection ended
 #     1 - "Remove from Location Hierarchy" - All hamlets in this file should be deleted from location hierarchy, these are villages that are either duplicates or doesn't exist.
