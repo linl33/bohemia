@@ -869,3 +869,36 @@ message(nrow(df), ' locations. Removing those without geocoding reduces to:')
 df <- df %>% filter(!is.na(lng), !is.na(lat))
 message(nrow(df), ' locations.')
 
+# xdf = df
+# xdf <- left_join(xdf, locations %>% dplyr::select(-clinical_trial, -Country))
+# 
+# y = xdf %>% filter(is.na(lat))
+# # Make a leaflet map of all locations
+# library(leaflet)
+# library(leaflet.extras)
+# m = leaflet() %>% 
+#   # addTiles() %>%
+#   addProviderTiles(providers$Esri.WorldImagery,
+#                    group = 'Satellite', options = providerTileOptions(zIndex = 3)) %>%
+#   addProviderTiles(providers$OpenStreetMap,
+#                    group = 'OSM', options = providerTileOptions(zIndex = 1000)
+#   ) %>%
+#   addProviderTiles(providers$Hydda.RoadsAndLabels, group = 'Places and names', options = providerTileOptions(zIndex = 10000)) %>%
+#   
+# 
+#   addLayersControl(
+#     baseGroups = c(#'ESRI WSM', 
+#       'OSM',
+#                    'Satellite'),
+#     # overlayGroups = c(
+#     #   'Places and names'
+#     # ),
+#     position = 'bottomright') %>%
+#   addScaleBar(position = 'topright') %>%
+#   addMarkers(data = xdf,
+#              popup = paste0(xdf$code, ": Ward: ", xdf$Ward, ' | Village: ', xdf$Village, ' | Hamlet: ', xdf$Hamlet),
+#              label = paste0(xdf$code, ": Ward: ", xdf$Ward, ' | Village: ', xdf$Village, ' | Hamlet: ', xdf$Hamlet),
+#              options = markerOptions(riseOnHover = T))
+# 
+# library(htmlwidgets)
+# saveWidget(m, file="map.html")
