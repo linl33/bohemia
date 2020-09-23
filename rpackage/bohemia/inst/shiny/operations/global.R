@@ -664,6 +664,13 @@ df <- left_join(joined, right)
 message(nrow(df), ' locations. Removing those without geocoding reduces to:')
 df <- df %>% filter(!is.na(lng), !is.na(lat))
 message(nrow(df), ' locations.')
+# Get chiefs
+right <- recon_data %>% dplyr::select(instanceID, code = hamlet_code) %>%
+  left_join(
+    chiefs %>% dplyr::distinct(instanceID, .keep_all = TRUE) %>%
+      dplyr::select(instanceID, chief_name, chief_contact)
+  )
+df <- left_join(df, right)
 
 # xdf = df
 # xdf <- left_join(xdf, locations %>% dplyr::select(-clinical_trial, -Country))

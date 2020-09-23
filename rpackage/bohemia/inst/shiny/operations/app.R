@@ -961,13 +961,15 @@ server <- function(input, output) {
   # Get number of households for hamlet selected
   hamlet_num_hh <- reactive({
     ok <- FALSE
-    hamlet_name <- input$hamlet
-    if(!is.null(hamlet_name)){
+    # hamlet_name <- input$hamlet
+    lc <- location_code()
+    if(!is.null(lc)){
       ok <- TRUE
     }
     if(ok){
-      num_houses <- (mop_houses %>% filter(Hamlet %in% hamlet_name) %>% .$households)*1.25
-      num_houses <- round(num_houses)
+      num_houses <- df %>% filter(code == lc) %>% .$n_households
+      # num_houses <- (mop_houses %>% filter(Hamlet %in% hamlet_name) %>% .$households)*1.25
+      num_houses <- round(num_houses * 1.25)
     }
     return(num_houses)
   })
@@ -1190,11 +1192,18 @@ server <- function(input, output) {
                    textInput('enumeration_n_hh',
                              'Estimated number of households',
                              value = num_houses),
-                   helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration).')),
+                   helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration). THE DEFAULT NUMBERS SHOWN ARE 25% HIGHER THAN THE NUMBER ESTIMATED BY THE VILLAGE LEADER.')),
             column(6,
                    textInput('enumeration_n_teams',
                              'Number of teams'),
                    helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'))
+          ),
+          fluidRow(
+            sliderInput('id_limit', 'Limit IDs to:',
+                        min = 1,
+                        max = round(num_houses),
+                        value = c(1, num_houses),
+                        step = 1)
           ),
           fluidRow(
             column(12, align = 'center',
@@ -1447,7 +1456,9 @@ server <- function(input, output) {
                       # Get the location code
                       lc <- location_code()
                       data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
-                                         n_teams = as.numeric(as.character(input$enumeration_n_teams)))
+                                         n_teams = as.numeric(as.character(input$enumeration_n_teams)),
+                                         id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
+                                         id_limit_upr = as.numeric(as.character(input$id_limit[2])))
                       # generate html
                       out_file <- paste0(system.file('shiny/operations/rmds', package = 'bohemia'), '/list.pdf')
                       rmarkdown::render(paste0(system.file('shiny/operations/rmds', package = 'bohemia'), '/list.Rmd'),

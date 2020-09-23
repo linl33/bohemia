@@ -1,0 +1,18 @@
+Country,Region,District,Ward,Village,Hamlet,clinical_trial,code,Observation,Action
+Mozambique,Zambezia,Mopeia,Mopeia sede | Cuacua,Chamanga,Mbaua,0,MBX,"Duplicated ""BAX""",Delete
+Mozambique,Zambezia,Mopeia,Mopeia sede | Sambalendo,Sambalendo,NTiamara,0,TIA,Not hamlet,Delete
+Mozambique,Zambezia,Mopeia,Mopeia sede | Nzanza,Nhamirere,Nhamirere B,0,RRB,Not hamlet,Delete
+Mozambique,Zambezia,Mopeia,Mopeia sede | Nzanza,Nhacatundo,Nhacatundo A,0,HNA,Not hamlet,Delete
+Mozambique,Zambezia,Mopeia,Mopeia sede | Nzanza,Nhacatundo,Nhacatundo B,0,HNB,Not hamlet,Delete
+Mozambique,Zambezia,Mopeia,Mopeia sede | Nzanza,Nhacatundo,Nhacatundo C,0,HNC,Not hamlet,Delete
+Mozambique,Zambezia,Mopeia,Mopeia sede | Nzanza,Cocorico,Nhanga,0,HHX,Not hamlet,Delete
+Mozambique,Zambezia,Mopeia,Mopeia sede | Nzanza,Cocorico,Guda,0,GDX,Not hamlet,Delete
+Mozambique,Zambezia,Mopeia,Mopeia sede | Nzanza,Cocorico,Velozo,0,VLX,Not hamlet,Delete
+Mozambique,Zambezia,Mopeia,Campo | Luala,Lima,Nhamazenga,0,NZN,"Duplicated ""NZZ""",Delete
+Mozambique,Zambezia,Mopeia,Campo | Luala,Lua lua,Josina Machel,0,JSF,"Duplicated ""XSO""",Delete
+Mozambique,Zambezia,Mopeia,Campo | Luala,Simogo,1 de Junho B,0,JXA,"duplicated ""PXA""",Delete
+Mozambique,Zambezia,Mopeia,Campo | Luala,Simogo,1 de Junho C,0,NXA,"Duplicated ""DEH""",Delete
+Mozambique,Zambezia,Mopeia,Campo | Campo sede,Mongana,Cuerelo B,0,CBX,"Duplicated ""CRB""",Delete
+Mozambique,Zambezia,Mopeia,Campo | Campo sede,Mugurrumba,Simuancano,0,XSI,"Not a hamlet, ""Lider's name""",Delete
+Mozambique,Zambezia,Mopeia,Campo | Campo sede,Samurrenge,Samurendje,0,SAM,"Not a hamlet, ""Lider's name""",Delete
+Mozambique,Zambezia,Mopeia,Mopeia sede | Cuacua,Nsadgi,Nsadgi,0,NDD,"Not a hamlet, ""Lider's name""",Delete

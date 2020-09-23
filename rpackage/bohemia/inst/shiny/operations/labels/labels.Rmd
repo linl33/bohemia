@@ -1,0 +1,105 @@
+---
+params:
+  data: !r data.frame(n_hh = 400, n_teams = 2) # data on the hamlet
+  loc_id: 'ABC'
+output:
+  pdf_document:
+    keep_tex: yes
+    includes:
+      in_header: preamble.sty
+tables: yes
+---
+
+```{r setup, include=FALSE}
+# output: 
+#   pdf_document:
+#     latex_engine: xelatex
+#      pandoc_args: [
+#      "-V", "classoption=twocolumn"
+#    ]
+#     template: pdf/layout.tex
+#     includes:
+#       in_header: pdf/preamble.sty
+library(knitr)# Basic knitr options
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = F,
+               fig.height = 6)
+# knit_engines$set(asis = function(options) {
+#   if (options$echo && options$eval) knit_child(text = options$code)
+# })
+```
+
+
+```{r}
+library(dplyr)
+options(kableExtra.latex.load_packages = FALSE)
+library(kableExtra)
+# Specify paramaters
+for (i in 1:length(params)){
+  assign(names(params)[i],
+         params[[i]],
+         env = .GlobalEnv)
+}
+```
+
+```{r}
+# Get data
+source('../global.R', chdir = TRUE)
+pd <- df %>% filter(Country == 'Mozambique')
+pd$n_households[is.na(pd$n_households)] <- 300
+pd$n_households <- round(pd$n_households * 1.15)
+pd <- left_join(pd, locations %>% dplyr::select(code, Ward, Village, Hamlet))
+# Create the actual households
+out_list <- list()
+key_list <- list()
+counter <- 0
+for(i in 1:nrow(pd)){
+  this_pd <- pd[i,]
+  this_code <- this_pd$code
+  this_ward <- this_pd$Ward
+  this_village <- this_pd$Village
+  this_hamlet <- this_pd$Hamlet
+  for(j in 1:this_pd$n_households){
+    counter <- counter + 1
+    this_hh <- paste0(this_code, '-', add_zero(j, 3), '\n\n')
+    this_key <- tibble(ward = this_ward,
+                       village = this_village,
+                       hamlet = this_hamlet,
+                       hh = this_hh)
+    key_list[[counter]] <- this_key
+    out_list[[counter]] <- this_hh
+  }
+}
+out_list <- unlist(out_list)
+key_df <- bind_rows(key_list)
+write_csv(key_df, 'key.csv')
+chunk_list <- list()
+  for(i in 1:length(out_list)){
+  chunk_list[[i]] <-
+    paste0(out_list[i])
+}
+
+
+chunks <- unlist(chunk_list)
+chunks <- paste0(chunks, collapse = '\n')
+chunks <- paste0("\\begin{center}\n\\begin{labels}\n",
+                 chunks,
+                 "\n\\end{labels}\n\\end{center}")
+
+file_connection <- file('children.Rmd')
+writeLines(paste0('---\noutput: pdf_document\n---\n\n', 
+                  chunks), 
+           file_connection)
+close(file_connection)
+```
+
+```{r child='children.Rmd'}
+```
+
+```{r, results='hide'}
+file.remove('children.Rmd')
+```
