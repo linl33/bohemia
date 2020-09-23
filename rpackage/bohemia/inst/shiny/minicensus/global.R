@@ -15,9 +15,9 @@ if('data.RData' %in% dir()){
                                                         en = `label::English`,
                                                         sw = `label::Swahili`)
   
-  # Read in list of ids to be evaluated
-  imani <- read_excel('Final_list_Test_2.xlsx')
-  keep_uuids <- imani$instanceid
+  # # Read in list of ids to be evaluated
+  # imani <- read_excel('Final_list_Test_2.xlsx')
+  # keep_uuids <- imani$instanceid
   
   # read in creds
   creds <- read_yaml('credentials.yaml')
@@ -37,17 +37,19 @@ if('data.RData' %in% dir()){
     password = creds$tza_odk_pass
   )
   # Keep only those from the date period specified by Imani
-  answer_uuid <- answer_uuids <- "uuid:685917ac-89b9-4054-80e2-4e815f245d9f"
-  keep_uuids <- c(keep_uuids, 
-                  data$non_repeats$instanceID[data$non_repeats$instanceID == answer_uuid])
+  answer_uuid <- answer_uuids <- "uuid:0e05fd1e-4c0d-46d6-a02e-6786a57e0102"
+  keep_uuids <- sort(unique(data$non_repeats$instanceID))
+  # keep_uuids <- c(keep_uuids, 
+  #                 data$non_repeats$instanceID[data$non_repeats$instanceID == answer_uuid])
   # keep_uuids <- data$non_repeats$instanceID[data$non_repeats$todays_date >= '2020-09-05' |
   #                                            data$non_repeats$instanceID == answer_uuid]
   data$non_repeats <- data$non_repeats[data$non_repeats$instanceID %in% keep_uuids,]
   
-  # Manually make some changes per Imani
-  data$non_repeats$wid[data$non_repeats$instanceID == 'uuid:f3249504-e3f3-41d9-86ad-a40d7e58f78a'] <- 76
-  drop_ids <- 'uuid:5f6083e2-b507-48dc-96e9-b601e6a008dd'
-  data$non_repeats <- data$non_repeats[!data$non_repeats$instanceID %in% drop_ids,]
+  # # Manually make some changes per Imani
+  # data$non_repeats$wid[data$non_repeats$instanceID == 'uuid:f3249504-e3f3-41d9-86ad-a40d7e58f78a'] <- 76
+  # drop_ids <- 'uuid:5f6083e2-b507-48dc-96e9-b601e6a008dd'
+  # data$non_repeats <- data$non_repeats[!data$non_repeats$instanceID %in% drop_ids,]
+  drop_ids <- c()
   
   # Divide answers vs non-answers
   repeat_names <- names(data$repeats)

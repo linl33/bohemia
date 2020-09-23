@@ -56,7 +56,7 @@ The purpose of this report is to answer the question: will we have enough cluste
 ## Parameters and assumptions
 
 We consider a cluster to be "complete" if it has the following characteristics:
-- At least 35 children  
+- At least 30 children  
 - NO ANIMAL FLOOR  
 - At least 2 kilometers between clusters of different treatment assignments (ie, a 1km "buffer" for each cluster, except in the case that the nearby cluster is of identical treatment assignment)  
 
@@ -76,10 +76,7 @@ The clustering algorithm:
 - Assumes the following number of animals (quantification from categorical variables):  
   - "1 to 5": 3  
   - "6 to 19": 12  
-  - "20 or more": 35  
-- Does not take into account hamlets whose location has not yet been collected (Mozambique has many). 
-
-**Major caveat**: Location, reconnaissance, and animal data has been collected from all Tanzania hamlets. However, in the case of Mozambique, data are complete for only `r nrow(df[df$Country == 'Mozambique',])` hamlets of a total of `r nrow(locations %>% filter(Country == 'Mozambique'))` hamlets in the district (ie, `r round(nrow(df[df$Country == 'Mozambique',])/ nrow(locations %>% filter(Country == 'Mozambique')) * 100, digits = 1)` percent).
+  - "20 or more": 30  
 
 
 ## Tanzania
@@ -96,7 +93,7 @@ out <- try_clusters(the_country = 'Tanzania',
   humans_per_household = 6,
   p_children = 30,
   minimum_households = 0,
-  minimum_children = 35,
+  minimum_children = 30,
   minimum_humans = 0,
   minimum_animals = 0,
   minimum_cattle = 0,
@@ -270,7 +267,7 @@ out <- try_clusters(the_country = 'Tanzania',
   humans_per_household = 6,
   p_children = 30,
   minimum_households = 0,
-  minimum_children = 35,
+  minimum_children = 30,
   minimum_humans = 0,
   minimum_animals = 0,
   minimum_cattle = 0,
@@ -444,7 +441,7 @@ out <- try_clusters(the_country = 'Mozambique',
   humans_per_household = 6,
   p_children = 30,
   minimum_households = 0,
-  minimum_children = 35,
+  minimum_children = 30,
   minimum_humans = 0,
   minimum_animals = 0,
   minimum_cattle = 0,
@@ -605,6 +602,80 @@ DT::datatable(out$cluster_xdf %>% filter(cluster != 0))
 ```{r}
 DT::datatable(out$hamlet_xdf)
 ```
+
+
+## Posto campo exploration
+
+What would happen if Posto Campo were removed from Mozambique (ie, if we wanted to use Posto Campo for another study)?
+
+### Mopeia without Posto Campo
+
+```{r, echo = TRUE}
+out <- try_clusters(the_country = 'Mozambique',
+  include_clinical = TRUE,
+  interpolate_animals = TRUE,
+  interpolate_humans = TRUE,
+  humans_per_household = 6,
+  p_children = 30,
+  minimum_households = 0,
+  minimum_children = 30,
+  minimum_humans = 0,
+  minimum_animals = 0,
+  minimum_cattle = 0,
+  minimum_pigs = 0,
+  minimum_goats = 0,
+  km = 2,
+  max_km_from_hq = 1000,
+  start_at_hq = TRUE,
+  df = df %>% filter(!code %in% locations$code[grepl('Campo ', locations$Ward)]))
+```
+
+#### Summary
+
+```{r, results='asis'}
+cat(paste0(out$summary_text))
+```
+
+#### Map
+
+```{r}
+out$map
+```
+
+### Only including Posto Campo
+
+```{r, echo = TRUE}
+out <- try_clusters(the_country = 'Mozambique',
+  include_clinical = TRUE,
+  interpolate_animals = TRUE,
+  interpolate_humans = TRUE,
+  humans_per_household = 6,
+  p_children = 30,
+  minimum_households = 0,
+  minimum_children = 30,
+  minimum_humans = 0,
+  minimum_animals = 0,
+  minimum_cattle = 0,
+  minimum_pigs = 0,
+  minimum_goats = 0,
+  km = 2,
+  max_km_from_hq = 1000,
+  start_at_hq = TRUE,
+  df = df %>% filter(code %in% locations$code[grepl('Campo ', locations$Ward)]))
+```
+
+#### Summary
+
+```{r, results='asis'}
+cat(paste0(out$summary_text))
+```
+
+#### Map
+
+```{r}
+out$map
+```
+
 
 
 

@@ -69,6 +69,10 @@ if(lc %in% locations$code[locations$Country == 'Tanzania']){
 
 ```{r}
 
+id_vals <- 1:n_hh
+id_vals <- id_vals[id_vals %in% id_limit_lwr:id_limit_upr]
+n_hh <- length(id_vals)
+
 team_numbers <- rep(1:n_teams, each = round(n_hh / n_teams))
 while(length(team_numbers) < n_hh){
   team_numbers <- c(team_numbers, team_numbers[length(team_numbers)])
@@ -78,8 +82,6 @@ while(length(team_numbers) > n_hh){
   team_numbers <- team_numbers[1:n_hh]
 }
 
-id_vals <- 1:n_hh
-id_vals <- id_vals[id_vals %in% id_limit_lwr:id_limit_upr]
 
 if(country == 'Tanzania'){
   out <- tibble(`HHID` = paste0(lc, '-', bohemia::add_zero(id_vals, n = 3)),
