@@ -672,6 +672,14 @@ right <- recon_data %>% dplyr::select(instanceID, code = hamlet_code) %>%
   )
 df <- left_join(df, right)
 
+# Write a locations thing for gps
+gps <- df %>%
+  left_join(recon_data %>% dplyr::select(code = hamlet_code, religion, electricity, contains('telecom_have')))
+gps$iso <- ifelse(gps$Country == 'Mozambique', 'MOZ', 'TZA')
+gps <- gps %>% dplyr::select(iso, code, lng, lat, clinical_trial, n_cattle, n_goats, n_pigs, n_households,
+                             religion, electricity, telecom_have_data, telecom_have_voice, chief_name)
+# usethis::use_data(gps)
+# Copy paste to google sheets
 # xdf = df
 # xdf <- left_join(xdf, locations %>% dplyr::select(-clinical_trial, -Country))
 # 

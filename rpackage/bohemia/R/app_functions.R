@@ -66,7 +66,7 @@ make_log_in_modal <- function(info_text = NULL){
       fluidRow(column(12, align = 'center',
                       p(info_text))),
       fluidRow(column(12, align = 'center',
-                      p('Note: This application is currently under development. As of this time, you can log-in with any Email/Password combination. In the future (when this app is exhibiting real data), log-in will be restricted to authorized users only.')))
+                      p('If you are an authorized project collaborator and do not have log-in credentials, please email bohemia@databrew.cc.')))
     )
   ))
 }
@@ -162,11 +162,56 @@ ui_main <- fluidPage(
   fluidRow(column(12, align = 'center',
                   h3('The Bohemia Data Portal'))),
   fluidRow(column(12, align = 'center',
-                  selectInput('geo',
+                  radioButtons('geo',
                               'Choose your geography',
                               choices = c('Rufiji',
                                           'Mopeia',
-                                          'Both')))),
+                                          'Both'),
+                              inline = TRUE))),
   fluidRow(column(12, align = 'center',
                   plotOutput('main_plot'))),
 )
+
+# Filter locations
+# Define function for filtering locations based on inputs
+filter_locations <- function(locations,
+                             country = NULL,
+                             region = NULL,
+                             district = NULL,
+                             ward = NULL,
+                             village = NULL,
+                             hamlet = NULL){
+  out <- locations
+  if(!is.null(country)){
+    if(country != ''){
+      out <- out %>% filter(Country %in% country) 
+    }
+  }
+  if(!is.null(region)){
+    if(region != ''){
+      out <- out %>% filter(Region %in% region)
+    }
+  }
+  if(!is.null(district)){
+    if(district != ''){
+      out <- out %>% filter(District %in% district)
+    }
+  }
+  if(!is.null(ward)){
+    if(ward != ''){
+      out <- out %>% filter(Ward %in% ward) 
+    }
+  }
+  if(!is.null(village)){
+    if(village != ''){
+      out <- out %>% filter(Village %in% village)
+    }
+  }
+  if(!is.null(hamlet)){
+    if(hamlet != ''){
+      out <- out %>% filter(Hamlet %in% hamlet) 
+    }
+    
+  }
+  return(out)
+}

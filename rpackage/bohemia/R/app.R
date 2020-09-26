@@ -17,11 +17,11 @@ app_ui <- function(request) {
     mobile_golem_add_external_resources(),
     
     dashboardPage(
-      dashboardHeader(title = tags$a(tags$img(src='www/logo.png',height='32',width='36', alt = 'BohemiApp')),
-                      tags$li(class = 'dropdown',
-                              tags$style(type='text/css', "#log_ui {margin-right: 10px; margin-left: 10px; font-size:80%; margin-top: 10px; margin-bottom: -12px;}"),
-                              tags$li(class = 'dropdown',
-                                      uiOutput('log_ui')))),
+      dashboardHeader(#title = tags$a(tags$img(src='www/logo.png',height='32',width='36', alt = 'BohemiApp')),
+        tags$li(class = 'dropdown',
+                tags$style(type='text/css', "#log_ui {margin-right: 10px; margin-left: 10px; font-size:80%; margin-top: 10px; margin-bottom: -12px;}"),
+                tags$li(class = 'dropdown',
+                        uiOutput('log_ui')))),
       dashboardSidebar(
         sidebarMenu(
           menuItem(
@@ -29,8 +29,8 @@ app_ui <- function(request) {
             tabName="main",
             icon=icon("archway")),
           menuItem(
-            text = 'Tech',
-            tabName = 'tech',
+            text = 'Operations',
+            tabName = 'operations',
             icon = icon('laptop-code'),
             startExpanded = FALSE,
             menuSubItem(
@@ -38,15 +38,15 @@ app_ui <- function(request) {
               tabName="field_monitoring",
               icon=icon("clipboard")),
             menuSubItem(
-              text="Data management",
-              tabName="data_management",
+              text="Enrollment",
+              tabName="enrollment",
               icon=icon("database")),  
             menuSubItem(
               text="Server status",
               tabName="server_status",
               icon=icon("server"))),
-          menuItem('Science',
-                   tabName = 'science',
+          menuItem('Research',
+                   tabName = 'research',
                    icon = icon('microscope'),
                    startExpanded = FALSE,
                    menuSubItem(
@@ -74,6 +74,10 @@ app_ui <- function(request) {
                      tabName="malaria",
                      icon=icon("procedures"))),
           menuItem(
+              text="List generator",
+              tabName="list_generator",
+              icon=icon("list")),
+          menuItem(
             text = 'About',
             tabName = 'about',
             icon = icon("cog", lib = "glyphicon"))
@@ -83,7 +87,7 @@ app_ui <- function(request) {
         # tags$head(
         #   tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
         # ),
-
+        
         tabItems(
           tabItem(
             tabName="main",
@@ -92,11 +96,52 @@ app_ui <- function(request) {
             tabName="field_monitoring",
             uiOutput('ui_field_monitoring')),
           tabItem(
-            tabName="data_management",
-            uiOutput('ui_data_management')),
+            tabName="enrollment",
+            uiOutput('ui_enrollment')),
           tabItem(
             tabName="server_status",
             uiOutput('ui_server_status')),
+          tabItem(
+            tabName="list_generator",
+            
+            tabsetPanel(
+              tabPanel('Visit control sheet',
+                       fluidPage(
+                         fluidRow(h2('Visit control sheet')),
+                         fluidRow(
+                           column(3,
+                                  radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
+                                  uiOutput('region_ui'),
+                                  uiOutput('district_ui'),
+                                  uiOutput('ward_ui'),
+                                  uiOutput('village_ui'),
+                                  uiOutput('hamlet_ui')),
+                           column(4,
+                                  h4('Location code:'),
+                                  h3(textOutput('location_code_text')),
+                                  uiOutput('ui_enumeration_n_hh'),
+                                  helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration). THE DEFAULT NUMBERS SHOWN ARE 25% HIGHER THAN THE NUMBER ESTIMATED BY THE VILLAGE LEADER.')),
+                           column(4,
+                                  textInput('enumeration_n_teams',
+                                            'Number of teams',
+                                            value = 2),
+                                  checkboxInput('enumeration', 'Enumeration?', value = FALSE),
+                                  helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
+                                  uiOutput('ui_id_limit'))),
+                         fluidRow(
+                           column(12, align = 'center',
+                                  downloadButton('render_enumeration_list',
+                                                 'Generate list(s)')))
+                       )
+              ),
+              tabPanel('Informed consent verifying list',
+                       h4('Under construction')),
+              tabPanel('File index and folder location',
+                       h4('Under construction'))
+              
+            )
+            
+            ),
           tabItem(
             tabName="demography",
             uiOutput('ui_demography')),
@@ -236,7 +281,7 @@ app_server <- function(input, output, session) {
   # (Joe will build log-in functionality later
   session_info <- reactiveValues(logged_in = FALSE,
                                  user = 'default',
-                                 access = c("field_monitoring", "data_management", "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
+                                 access = c("field_monitoring", "enrollment", 'list_generator', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
                                  country = 'MOZ')
   
   # Create some reactive data
@@ -274,13 +319,124 @@ app_server <- function(input, output, session) {
       info_text <- reactive_log_in_text()
       make_log_in_modal(info_text = info_text)
     }
-    
   })
-  
   observeEvent(input$log_out_button, {
     session_info$logged_in <- FALSE
     removeModal()
   })
+  
+  ##################
+  # LOCATION HIERARCHY UTILITIES
+  ##################
+  # Get the location code based on the input hierarchy
+  location_code <- reactiveVal(value = NULL)
+  observeEvent(c(input$country,
+                 input$region,
+                 input$district,
+                 input$ward,
+                 input$village,
+                 input$hamlet), {
+                   country = input$country
+                   region = input$region
+                   district = input$district
+                   ward = input$ward
+                   village = input$village
+                   hamlet = input$hamlet
+                   
+                   glc <- get_location_code(country = country,
+                                            region = region,
+                                            district = district,
+                                            ward = ward,
+                                            village = village,
+                                            hamlet = hamlet)
+                   location_code(glc)
+                 })
+  output$location_code_text <- renderText({
+    lc <- location_code()
+    lc
+  })
+  
+  output$region_ui <- renderUI({
+    sub_locations <- filter_locations(locations = locations,
+                                      country = input$country)
+    choices <- sort(unique(sub_locations$Region))
+    selectInput('region', 'Region', choices = choices)
+  })
+  
+  output$district_ui <- renderUI({
+    sub_locations <- filter_locations(locations = locations,
+                                      country = input$country,
+                                      region = input$region)
+    choices <- sort(unique(sub_locations$District))
+    selectInput('district', 'District', choices = choices)
+  })
+  
+  output$ward_ui <- renderUI({
+    sub_locations <- filter_locations(locations = locations,
+                                      country = input$country,
+                                      region = input$region,
+                                      district = input$district)
+    choices <- sort(unique(sub_locations$Ward))
+    selectInput('ward', 'Ward', choices = choices)
+  })
+  
+  output$village_ui <- renderUI({
+    sub_locations <- filter_locations(locations = locations,
+                                      country = input$country,
+                                      region = input$region,
+                                      district = input$district,
+                                      ward = input$ward)
+    choices <- sort(unique(sub_locations$Village))
+    selectInput('village', 'Village', choices = choices)
+  })
+  
+  output$hamlet_ui <- renderUI({
+    sub_locations <- filter_locations(locations = locations,
+                                      country = input$country,
+                                      region = input$region,
+                                      district = input$district,
+                                      ward = input$ward,
+                                      village = input$village)
+    choices <- sort(unique(sub_locations$Hamlet))
+    selectInput('hamlet', 'Hamlet', choices = choices)
+    
+  })
+  
+  # Get number of households for hamlet selected
+  hamlet_num_hh <- reactive({
+    ok <- FALSE
+    # hamlet_name <- input$hamlet
+    lc <- location_code()
+    if(!is.null(lc)){
+      ok <- TRUE
+    }
+    if(ok){
+      ## JOE NEED TO DEBUG THIS
+      num_houses <- gps %>% filter(code == lc) %>% .$n_households
+      # # num_houses <- (mop_houses %>% filter(Hamlet %in% hamlet_name) %>% .$households)*1.25
+      num_houses <- round(num_houses * 1.25)
+    } else {
+      num_houses <- 500
+    }
+    return(num_houses)
+  })
+  
+  output$ui_enumeration_n_hh <- renderUI({
+    val <- hamlet_num_hh()
+    textInput('enumeration_n_hh',
+              'Estimated number of households',
+              value = val)
+    })
+  
+  output$ui_id_limit <- renderUI({
+    val <- hamlet_num_hh()
+    sliderInput('id_limit', 'Limit IDs to:',
+                min = 1,
+                max = val, # round(num_houses),
+                value = c(1, val), # c(1, num_houses),
+                step = 1)
+  })
+  
   
   
   ###########################################################################
@@ -325,6 +481,8 @@ app_server <- function(input, output, session) {
     si <- session_info
     li <- si$logged_in
     ac <- 'field_monitoring' %in% si$access
+    
+    
     # Generate the ui
     make_ui(li = li,
             ac = ac,
@@ -540,11 +698,11 @@ app_server <- function(input, output, session) {
   
   
   # Data management UI  ##############################################
-  output$ui_data_management <- renderUI({
+  output$ui_enrollment <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
     li <- si$logged_in
-    ac <- 'data_management' %in% si$access
+    ac <- 'enrollment' %in% si$access
     # Generate the ui
     make_ui(li = li,
             ac = ac,
@@ -570,6 +728,7 @@ app_server <- function(input, output, session) {
               )
     )
   })
+  
   
   # Demography UI  ###################################################
   output$ui_demography <- renderUI({
@@ -740,6 +899,36 @@ app_server <- function(input, output, session) {
              value = c(input$fid, id, last_upload, total_forms, average_time))
     })
   
+  output$render_enumeration_list <-
+    downloadHandler(filename = "list.pdf",
+                    content = function(file){
+                      
+                      # Get the location code
+                      lc <- location_code()
+                      # Get other details
+                      enum <- input$enumeration
+                      data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
+                                         n_teams = as.numeric(as.character(input$enumeration_n_teams)),
+                                         id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
+                                         id_limit_upr = as.numeric(as.character(input$id_limit[2])))
+                      # generate html
+                      # out_file <- paste0(system.file('shiny/operations/rmds', package = 'bohemia'), '/list.pdf')
+                      out_file <- paste0(getwd(), '/list.pdf')
+                      rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/list.Rmd'),
+                                        output_file = out_file,
+                                        params = list(data = data,
+                                                      loc_id = lc,
+                                                      enumeration = enum))
+                      
+                      # copy html to 'file'
+                      file.copy(out_file, file)
+                      
+                      # # delete folder with plots
+                      # unlink("figure", recursive = TRUE)
+                    },
+                    contentType = "application/pdf"
+    )
+  
   # Data management UI elements #########################################
   
   # Server status UI elements ###########################################
@@ -757,7 +946,7 @@ app_server <- function(input, output, session) {
   # Malaria UI elements #################################################
   
   
-
+  
 }
 
 app <- function(){

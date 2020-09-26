@@ -8,6 +8,12 @@ library(RColorBrewer)
 library(raster)
 library(sf)
 
+# GPS data
+url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit#gid=1016618615'
+library(gsheet)
+gps <- gsheet::gsheet2tbl(url)
+use_data(gps, overwrite = TRUE)
+
 # Get country shapefiles
 moz0 <- getData(country = 'MOZ', level = 0)
 moz1 <- getData(country = 'MOZ', level = 1)
