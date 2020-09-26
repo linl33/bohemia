@@ -211,7 +211,34 @@ filter_locations <- function(locations,
     if(hamlet != ''){
       out <- out %>% filter(Hamlet %in% hamlet) 
     }
-    
   }
   return(out)
+}
+
+# Fake data retrieval function
+fake_data <- function(){
+  if(!'fake_data.RData' %in% dir('/tmp')){
+    require(yaml)
+    creds <- yaml::yaml.load_file('../../../credentials/credentials.yaml')
+    url <- 'https://bohemia.systems'
+    id = 'minicensus'
+    id2 = NULL
+    user = creds$databrew_odk_user
+    password = creds$databrew_odk_pass
+    data <- odk_get_data(
+      url = url,
+      id = id,
+      id2 = id2,
+      unknown_id2 = FALSE,
+      uuids = NULL,
+      exclude_uuids = NULL,
+      user = user,
+      password = password
+    )
+    save(data, file = '/tmp/fake_data.RData')
+    return(data)
+  } else {
+    load('/tmp/fake_data.RData')
+    return(data)
+  }
 }

@@ -73,10 +73,23 @@ app_ui <- function(request) {
                      text="Malaria",
                      tabName="malaria",
                      icon=icon("procedures"))),
-          menuItem(
-              text="List generator",
-              tabName="list_generator",
-              icon=icon("list")),
+          menuItem('List generator',
+                   tabName = 'list_generator',
+                   icon = icon('list'),
+                   startExpanded = FALSE,
+                   menuSubItem(
+                     text="Visit control sheet",
+                     tabName="visit_control_sheet",
+                     icon=icon("users")),
+                   menuSubItem(
+                     text="Consent verification list",
+                     tabName="consent_verification_list",
+                     icon=icon("users")),
+                   menuSubItem(
+                     text="File index location",
+                     tabName="file_index_location",
+                     icon=icon("users"))
+                   ),
           menuItem(
             text = 'About',
             tabName = 'about',
@@ -102,7 +115,7 @@ app_ui <- function(request) {
             tabName="server_status",
             uiOutput('ui_server_status')),
           tabItem(
-            tabName="list_generator",
+            tabName="visit_control_sheet",
             
             tabsetPanel(
               tabPanel('Visit control sheet',
@@ -140,8 +153,13 @@ app_ui <- function(request) {
                        h4('Under construction'))
               
             )
-            
             ),
+          tabItem(
+            tabName="consent_verification_list",
+            uiOutput('ui_consent_verification_list')),
+          tabItem(
+            tabName="file_index_location",
+            uiOutput('ui_file_index_location')),
           tabItem(
             tabName="demography",
             uiOutput('ui_demography')),
@@ -281,7 +299,7 @@ app_server <- function(input, output, session) {
   # (Joe will build log-in functionality later
   session_info <- reactiveValues(logged_in = FALSE,
                                  user = 'default',
-                                 access = c("field_monitoring", "enrollment", 'list_generator', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
+                                 access = c("field_monitoring", "enrollment", 'consent_verification_list', 'file_index_location', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
                                  country = 'MOZ')
   
   # Create some reactive data
@@ -289,6 +307,8 @@ app_server <- function(input, output, session) {
                                  action = default_action_table,
                                  fieldworkers = default_fieldworkers,
                                  notifications = default_notifications)
+  
+  odk_data <- reactiveValues(data = fake_data())
   
   # Text for incorrect log-in, etc.
   reactive_log_in_text <- reactiveVal(value = '')
@@ -729,6 +749,113 @@ app_server <- function(input, output, session) {
     )
   })
   
+  # Consent verification list UI ##########################################
+  output$ui_consent_verification_list <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'consent_verification_list' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              
+              # Get the odk data
+              pd <- odk_data$data
+              pd <- pd$non_repeats
+              # Get the country
+              co <- input$geo
+              co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
+              pd <- pd %>% dplyr::filter(hh_country == co)
+              # Get hh head
+              pd$hh_head_permid <- pd$hh_head_first_name <- pd$hh_head_last_name <- NA
+              if(nrow(pd) > 0){
+                for(i in 1:nrow(pd)){
+                  this_row <- pd[i,]
+                  id <- this_row$hh_head_id
+                  good <- TRUE
+                  if(is.null(id)){
+                    good <- FALSE
+                  } else
+                    if(is.na(id)){
+                      good <- FALSE
+                    }
+                  if(!good){
+                    message('IMPORANT, MISSING ID FOR HH HEAD')
+                    id <- 1
+                  }
+                  pd$hh_head_permid[i] <- this_row[,paste0('pid', id)] %>% unlist
+                  pd$hh_head_first_name[i] <- this_row[,paste0('first_name', id)] %>% unlist
+                  pd$hh_head_last_name[i] <- this_row[,paste0('last_name', id)] %>% unlist
+                  
+                }
+                pd <- pd %>%
+                  mutate(name = paste0(hh_head_first_name, ' ', hh_head_last_name)) %>%
+                  mutate(age = round((Sys.Date() - as.Date(hh_head_dob))/365.25)) %>%
+                  mutate(consent = 'HoH (minicensus)') %>%
+                  mutate(x = ' ',y = ' ', z = ' ') %>%
+                  dplyr::select(wid,
+                                hh_hamlet_code,
+                                hh_head_permid,
+                                name,
+                                age,
+                                todays_date,
+                                consent,
+                                x,y,z)
+                if(co == 'Mozambique'){
+                  names(pd) <- c('Código TC',
+                                 'Código Bairro',
+                                 # 'Número do Agregado Familiar',
+                                 'ExtID (número de identificação do participante)',
+                                 'Nome do membro do agregado',
+                                 'Idade do membro do agregado',
+                                 'Data de recrutamento',
+                                 'Consentimento/Assentimento informado',
+                                 'Se o documento não estiver preenchido correitamente, indicar o error',
+                                 'O error foi resolvido (sim/não)',
+                                 'Verificado por (iniciais do arquivista) e data')
+                } else {
+                  names(pd) <- c('FW code',
+                                 'Hamlet code',
+                                 # 'HH number',
+                                 'ExtID HH member',
+                                 'Name of household member',
+                                 'Age of household member',
+                                 'Recruitment date',
+                                 'Informed consent/assent type',
+                                 'If not ocrrect, please enter type of error',
+                                 'Was the error resolved (Yes/No)?',
+                                 'Verified by (archivist initials) and date')
+                }
+                fluidPage(
+                  gt(pd) %>%
+                    tab_style(
+                      style = cell_fill(
+                        color = "#FFA500"
+                      ),
+                      locations = cells_body(names(pd)[1:7])
+                    ))
+              }
+            }
+    )
+  })
+  
+  # File index location UI ##########################################
+  output$ui_file_index_location <- renderUI({
+    message('file index........')
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'file_index_location' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = 
+              fluidPage(
+                h5('This is what the user will see if logged in and granted access.')
+              )
+    )
+  })
   
   # Demography UI  ###################################################
   output$ui_demography <- renderUI({
