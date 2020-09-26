@@ -476,7 +476,7 @@ library(rasterVis)
 
 make_grid <- function(the_densities = locations,
                       the_map = mop2,
-                     griddy = 0.005){
+                     griddy = 0.01){
   
   # Define the densities
   df_spatial <- the_densities %>% mutate(x = lng, y = lat) %>% filter(!is.na(lng), !is.na(lat))

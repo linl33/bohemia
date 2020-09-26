@@ -37,7 +37,7 @@ Of the `r nrow(pd)` entries, `r length(incorrect)` had household ID numbers did 
 
 ```{r}
 pd[incorrect,] %>%
-  dplyr::select(wid, hh_hamlet_code, hh_id, instanceID) %>% kable
+  dplyr::select(wid, hh_hamlet_code, hh_id, instanceID) %>% DT::datatable
 ```
 
 ## Worker IDs within accepted range (1-100)
@@ -55,7 +55,7 @@ Of the `r nrow(pd)` entries, `r length(incorrect)` had worker ID numbers outside
 
 ```{r}
 pd[incorrect,] %>%
-  dplyr::select(wid, instanceID) %>% kable
+  dplyr::select(wid, instanceID) %>% DT::datatable
 ```
 
 ## Discrepancy in numbers of residents 
@@ -69,6 +69,7 @@ for(i in 1:nrow(pd)){
   this_id <- this_pd$instanceID
   this_wid <- this_pd$wid
   n_residents <- this_pd$hh_member_num_residents
+  n_non_residents <- this_pd$hh_member_num_non_residents
   # Get number of repeats pertaining to the residents
   this_repeat <- data$repeats$repeat_household_members_enumeration %>%
     filter(instanceID == this_id)
@@ -76,22 +77,26 @@ for(i in 1:nrow(pd)){
   out <- tibble(instanceID = this_id,
                 wid = this_wid,
                 n_residents,
+                n_non_residents,
                 n_repeats = nrow(this_repeat))
   out_list[[i]] <- out
 }
 pd <- bind_rows(out_list)
 # Check for matching
-pd$ok <- pd$n_residents == pd$n_repeats
+pd$ok <- pd$n_residents + pd$n_non_residents == pd$n_repeats
 ```
 
 Of the `r nrow(pd)` entries, `r length(which(!pd$ok))` had mismatches in the number of residents in the initial question and the number of repeat entries for each resident. Below is data pertaining to these mismatches:
+
+Table 1
 
 ```{r}
 pd %>%
   filter(!ok) %>%
   dplyr::select(-ok) %>%
-  kable
+  DT::datatable
 ```
+
 
 # Summary statistics
 
@@ -112,6 +117,10 @@ ggplot(data = pd,
        y = 'Observations')
 ```
 
+```{r}
+DT::datatable(pd)
+```
+
 ## Number of non-residents
 
 ```{r, fig.height = 10, fig.width = 10}
@@ -127,6 +136,10 @@ ggplot(data = pd,
   facet_wrap(~hh_hamlet_code) +
   labs(x = 'Number of non-residents',
        y = 'Observations')
+```
+
+```{r}
+DT::datatable(pd)
 ```
 
 ## Livestock owned per household
@@ -150,6 +163,9 @@ ggplot(data = pd,
        y = 'Observations')
 ```
 
+```{r}
+DT::datatable(pd)
+```
 
 ### Pigs > 6 weeks
 
@@ -166,6 +182,10 @@ ggplot(data = pd,
   facet_wrap(~hh_hamlet_code) +
   labs(x = 'Number of animal',
        y = 'Observations')
+```
+
+```{r}
+DT::datatable(pd)
 ```
 
 ### Cattle > 1 year
@@ -185,6 +205,10 @@ ggplot(data = pd,
        y = 'Observations')
 ```
 
+```{r}
+DT::datatable(pd)
+```
+
 ### Cattle < 1 year
 
 
@@ -201,6 +225,10 @@ ggplot(data = pd,
   facet_wrap(~hh_hamlet_code) +
   labs(x = 'Number of animal',
        y = 'Observations')
+```
+
+```{r}
+DT::datatable(pd)
 ```
 
 ## Mosquito nets per household
@@ -222,6 +250,9 @@ ggplot(data = pd,
        y = 'Observations')
 ```
 
+```{r}
+DT::datatable(pd)
+```
 
 ### Mosquito nets (overall)
 
@@ -237,6 +268,10 @@ ggplot(data = pd,
   geom_bar(stat = 'identity') +
   labs(x = 'Number of nets',
        y = 'Observations')
+```
+
+```{r}
+DT::datatable(pd)
 ```
 
 ## Deaths
@@ -258,6 +293,10 @@ ggplot(data = pd,
        y = 'Observations')
 ```
 
+```{r}
+DT::datatable(pd)
+```
+
 ### Deaths by hamlet
 
 ```{r}
@@ -276,6 +315,10 @@ ggplot(data = pd,
   facet_wrap(~hh_hamlet_code)
 ```
 
+```{r}
+DT::datatable(pd)
+```
+
 ## Place of death
 
 ```{r, echo = TRUE}
@@ -283,7 +326,7 @@ pd <- data$repeats$repeat_death_info
 pd <- pd %>%
   group_by(death_location) %>%
   tally
-kable(pd)
+DT::datatable(pd)
 ```
 
 ## Time to fill form
@@ -303,7 +346,7 @@ The average time to fill out the form was `r round(avg)` seconds. The below char
 ggplot(data = pd,
        aes(x = time)) +
   geom_density(fill = 'darkorange') +
-  labs(x = 'Seconds',y = 'Density') +
+  labs(x = 'Minutes',y = 'Density') +
   geom_vline(xintercept = avg, lty = 2)
 ```
 
