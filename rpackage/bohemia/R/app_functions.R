@@ -80,6 +80,8 @@ credentials_check <- function(user = NULL,
   return(TRUE)
 }
 
+
+
 # Function for generating the about page
 make_about <- function(){
   fluidPage(
@@ -97,6 +99,17 @@ make_about <- function(){
       style = 'text-align:center;'
     )
   )
+}
+
+# Plot theme
+theme_bohemia <- theme_bw
+
+# Function for extracting lng and lat from a odk geocode object
+extract_ll <- function(x){
+  lng <- unlist(lapply(strsplit(x[1], ' '), function(z){z[1]}))
+  lat <- unlist(lapply(strsplit(x[1], ' '), function(z){z[2]}))
+  lng <- as.numeric(lng); lat <- as.numeric(lat)
+  return(c(lng, lat))
 }
 
 # Function for generating a fake / placeholder map 
@@ -161,13 +174,7 @@ ui_main <- fluidPage(
                   h1('BohemiApp'))),
   fluidRow(column(12, align = 'center',
                   h3('The Bohemia Data Portal'))),
-  fluidRow(column(12, align = 'center',
-                  radioButtons('geo',
-                              'Choose your geography',
-                              choices = c('Rufiji',
-                                          'Mopeia',
-                                          'Both'),
-                              inline = TRUE))),
+  fluidRow(column(12, align = 'center')),
   fluidRow(column(12, align = 'center',
                   plotOutput('main_plot'))),
 )
