@@ -85,7 +85,7 @@ app_ui <- function(request) {
                    icon = icon('list'),
                    startExpanded = FALSE,
                    menuSubItem(
-                     text="Visit control sheet",
+                     text="Visit control and file index",
                      tabName="visit_control_sheet",
                      icon=icon("users")),
                    menuSubItem(
@@ -735,12 +735,13 @@ app_server <- function(input, output, session) {
                            fluidPage(
                              h2('Performance'),
                              fluidRow(
-                               h3('Map'),
-                               column(6, align = 'center',
-                                      selectInput('fid_select', 'Select',
-                                                  choices = 1:600,
+                               column(3, align = 'center',
+                                      selectInput('fid_select', 'Select fieldworker ID(s) to show on map',
+                                                  choices = 1:700,
+                                                  # selected = 1:700,
                                                   multiple = TRUE)),
-                               column(6, align = 'center',
+                               column(9, align = 'center',
+                                      h3('Map of forms for fieldworker(s)'),
                                       leafletOutput('fid_leaf')
                                ),
                                fluidRow(
@@ -888,8 +889,9 @@ app_server <- function(input, output, session) {
   observeEvent(input$fid_select, {
     fids <- input$fid_select
     if(is.null(fids)){
-      fids <- 1:600
+      fids <- 1:700
     }
+    fids <- as.numeric(fids)
     # Get the aggregate table # (fake)
     aggregate_table <- session_data$aggregate_table
     
@@ -1149,7 +1151,7 @@ app_server <- function(input, output, session) {
                                  'Age of household member',
                                  'Recruitment date',
                                  'Informed consent/assent type',
-                                 'If not ocrrect, please enter type of error',
+                                 'If not correct, please enter type of error',
                                  'Was the error resolved (Yes/No)?',
                                  'Verified by (archivist initials) and date')
                 }
