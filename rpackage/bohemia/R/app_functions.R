@@ -226,7 +226,13 @@ filter_locations <- function(locations,
 fake_data <- function(){
   if(!'fake_data.RData' %in% dir('/tmp')){
     require(yaml)
-    creds <- yaml::yaml.load_file('../../../credentials/credentials.yaml')
+    is_aws <- grepl('aws', tolower(Sys.info()['release']))
+    if(is_aws){
+      credentials_file <- 'credentials/credentials.yaml'
+    } else {
+      credentials_file = '../../../credentials/credentials.yaml'
+    }
+    creds <- yaml::yaml.load_file(credentials_file)
     url <- 'https://bohemia.systems'
     id = 'minicensus'
     id2 = NULL

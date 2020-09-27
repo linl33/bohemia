@@ -645,18 +645,43 @@ app_server <- function(input, output, session) {
                   dplyr::select(Village, `Forms done` = numerator,
                                 `Estimated households` = n_households,
                                 `Estimated percent finished` = p)
+                
+                # va table
+                deaths <- odk_data$data$repeats$repeat_death_info
+                deaths <- deaths %>% filter(instanceID %in% pd$instanceID)
+                # save(deaths, pd, file = '/tmp/deaths.RData')
+                va <- left_join(deaths %>% 
+                                  mutate(xx = '(What is this?)',
+                                         yy = '?') %>%
+                                  dplyr::select(instanceID,
+                  `Date of death` = death_dod,
+                  `Latest date to collect VA form` = xx,
+                  `Time elapsed` = yy),
+                                    pd %>% mutate(va_code = '(What is this?)') %>% 
+                    dplyr::select(instanceID,
+                                                         District = hh_district,
+                                                         Ward = hh_ward,
+                                                         Village = hh_village,
+                                                         Hamlet = hh_hamlet,
+                                                         `HH ID` = hh_hamlet_code,
+                                                         `FW ID` = wid,
+                                                         `VA code` = va_code,
+                                                         `HH visit date` = todays_date)) %>%
+                  dplyr::select(-instanceID) 
+                if(nrow(va) > 0){
+                  va <- va[,c(4:11, 1:3)]
+                }
 
 
               } else {
                 progress_by <- progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
-                  fwt_daily <- fwt_weekly <- fwt_overall <- overview <- tibble(`No data available` = ' ')
+                  fwt_daily <- fwt_weekly <- fwt_overall <- overview <- va <- tibble(`No data available` = ' ')
                 l <- leaflet() %>% addTiles()
                 fwt <- tibble(`No fieldworkers from this country` = ' ')
                 output$progress_plot <- renderPlot({
                   ggplot() + theme_bohemia()
                 })
               }
-
 
               fluidPage(
                 fluidRow(column(12, align = 'center',
@@ -737,9 +762,15 @@ app_server <- function(input, output, session) {
                                ),
                              )
                            )),
+                  tabPanel('VA Monitoring',
+                           fluidPage(
+                             h3('VA monitoring',
+                                DT::datatable(va, rownames =FALSE))
+                           )),
                   tabPanel('Alerts',
                            fluidPage(
                              br(),
+                             h1('UNDER CONSTRUCTION'),
                              fluidRow(h3('Action required')),
                              fluidRow(
                                box(width = 9,
@@ -766,6 +797,7 @@ app_server <- function(input, output, session) {
                              ),
                              br(),
                              fluidRow(h3('Notifications')),
+                             h1('UNDER CONSTRUCTION'),
                              fluidRow(
                                box(width = 9,
                                    color = 'purple',
@@ -781,6 +813,7 @@ app_server <- function(input, output, session) {
                              )
                            )),
                   tabPanel('Aggregate data',
+                           h1('DEPRECATED'),
                            fluidPage(
                              # br(),
                              fluidRow(
@@ -815,6 +848,7 @@ app_server <- function(input, output, session) {
                                column(6)
                              ))),
                   tabPanel('Individual data',
+                           h1('DEPRECATED'),
                            fluidPage(
                              fluidRow(
                                infoBox(title = 'Number of detected anomalies',

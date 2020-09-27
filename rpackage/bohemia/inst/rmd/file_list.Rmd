@@ -1,0 +1,80 @@
+---
+params:
+  data: !r data.frame(n_hh = 400) # data on the hamlet
+  loc_id: 'ABC'
+output:
+  pdf_document:
+    keep_tex: yes
+    includes:
+      in_header: list_preamble.sty
+tables: yes
+---
+
+```{r setup, include=FALSE}
+# output: 
+#   pdf_document:
+#     latex_engine: xelatex
+#      pandoc_args: [
+#      "-V", "classoption=twocolumn"
+#    ]
+#     template: pdf/layout.tex
+#     includes:
+#       in_header: pdf/preamble.sty
+library(knitr)# Basic knitr options
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = F,
+               fig.height = 6)
+# knit_engines$set(asis = function(options) {
+#   if (options$echo && options$eval) knit_child(text = options$code)
+# })
+```
+
+
+```{r}
+library(dplyr)
+options(kableExtra.latex.load_packages = FALSE)
+library(kableExtra)
+# Specify paramaters
+for (i in 1:length(params)){
+  assign(names(params)[i],
+         params[[i]],
+         env = .GlobalEnv)
+}
+```
+
+## File location sheet for `r loc_id`
+
+\newpage
+
+```{r}
+lc <- loc_id
+n_hh <- as.numeric(data$n_hh)
+
+# Get country
+country <- 'Mozambique'
+if(lc %in% locations$code[locations$Country == 'Tanzania']){
+  country <- 'Tanzania'
+}
+
+```
+
+
+```{r}
+id_vals <- 1:n_hh
+out <- tibble(`Neighborhood code` = loc_id, `HHID` = paste0(lc, '-', bohemia::add_zero(id_vals, n = 3))) 
+left <- locations %>% filter(code == lc) %>% dplyr::select(Ward, Village, Hamlet)
+out = bind_cols(left, out)
+out$`File folder location` <- out$Observations <-  '     '
+```
+
+```{r}
+kable(out,
+      'latex', longtable = T, booktabs=TRUE, caption = 'File location list')  %>%   
+  kable_styling(font_size = 7) %>% 
+  kable_styling(latex_options = c('striped', 'repeat_header')) #%>% 
+  # column_spec(1:4,width = '2.5cm')
+```
