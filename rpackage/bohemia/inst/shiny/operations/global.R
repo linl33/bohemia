@@ -676,8 +676,11 @@ df <- left_join(df, right)
 gps <- df %>%
   left_join(recon_data %>% dplyr::select(code = hamlet_code, religion, electricity, contains('telecom_have')))
 gps$iso <- ifelse(gps$Country == 'Mozambique', 'MOZ', 'TZA')
-gps <- gps %>% dplyr::select(iso, code, lng, lat, clinical_trial, n_cattle, n_goats, n_pigs, n_households,
+gps <- gps %>% 
+  left_join(locations %>% dplyr::select(Ward, Village, Hamlet, code)) %>%
+  dplyr::select(iso, code, ward = Ward, village = Village, hamlet = Hamlet, lng, lat, clinical_trial, n_cattle, n_goats, n_pigs, n_households,
                              religion, electricity, telecom_have_data, telecom_have_voice, chief_name)
+# write_csv(gps, '~/Desktop/gps.csv')
 # usethis::use_data(gps)
 # Copy paste to google sheets
 # xdf = df
