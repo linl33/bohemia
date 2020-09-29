@@ -80,8 +80,8 @@ app_ui <- function(request) {
                      text="Malaria",
                      tabName="malaria",
                      icon=icon("procedures"))),
-          menuItem('List generator',
-                   tabName = 'list_generator',
+          menuItem('Tracking tools',
+                   tabName = 'tracking_tools',
                    icon = icon('list'),
                    startExpanded = FALSE,
                    menuSubItem(
@@ -137,7 +137,8 @@ app_ui <- function(request) {
                        textInput('enumeration_n_teams',
                                  'Number of teams',
                                  value = 2),
-                       checkboxInput('enumeration', 'Enumeration?', value = FALSE),
+                       checkboxInput('enumeration', 'Enumeration? (MOZ only)', value = FALSE),
+                       helpText('Enumeration is a table with fewer columns'),
                        helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
                        uiOutput('ui_id_limit')),
                 column(4, align = 'center',
@@ -534,7 +535,7 @@ app_server <- function(input, output, session) {
 
                 # Create table of overview
                 overview <- pd %>%
-                  summarise(`N. FWs` = length(unique(pd$wid)),
+                  summarise(`N. FWs` = ifelse(iso == 'TZA', 100, 77),  #length(unique(pd$wid)),
                             `Daily forms per FW` = round(nrow(pd) / `N. FWs` / n_days, digits = 1),
                             `Weekly forms per FW` = round(`Daily forms per FW` * 7, digits = 1),
                             `Total forms per FW` = round(nrow(pd) / `N. FWs`, digits = 1),
@@ -651,8 +652,8 @@ app_server <- function(input, output, session) {
                 deaths <- deaths %>% filter(instanceID %in% pd$instanceID)
                 # save(deaths, pd, file = '/tmp/deaths.RData')
                 va <- left_join(deaths %>% 
-                                  mutate(xx = '(What is this?)',
-                                         yy = '?') %>%
+                                  mutate(xx = ' ', # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
+                                         yy = ' ') %>%
                                   dplyr::select(instanceID,
                   `Date of death` = death_dod,
                   `Latest date to collect VA form` = xx,
@@ -670,12 +671,17 @@ app_server <- function(input, output, session) {
                   dplyr::select(-instanceID) 
                 if(nrow(va) > 0){
                   va <- va[,c(4:11, 1:3)]
+                  va2 <- tibble(`No data available` = ' ') # this will need to be updated later with location-level VA performance info # paula slide page 10
+                  va3 <- tibble(`No data available` = ' ') # this will need to be updated later with VA fieldowrker performance: fw id, # va forms, # of va forms pending
+                } else {
+                  va2 <- tibble(`No data available` = ' ')
+                  va3 <- tibble(`No data available` = ' ')
                 }
 
 
               } else {
                 progress_by <- progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
-                  fwt_daily <- fwt_weekly <- fwt_overall <- overview <- va <- tibble(`No data available` = ' ')
+                  fwt_daily <- fwt_weekly <- fwt_overall <- overview <- va <- va2 <- va3 <- tibble(`No data available` = ' ')
                 l <- leaflet() %>% addTiles()
                 fwt <- tibble(`No fieldworkers from this country` = ' ')
                 output$progress_plot <- renderPlot({
@@ -763,10 +769,18 @@ app_server <- function(input, output, session) {
                                ),
                              )
                            )),
-                  tabPanel('VA Monitoring',
+                  tabPanel('VA',
                            fluidPage(
-                             h3('VA monitoring',
-                                DT::datatable(va, rownames =FALSE))
+                             
+                             h2('VA list generation'),
+                             DT::datatable(va, rownames = FALSE),
+                             h2('VA monitoring'),
+                                DT::datatable(va2, rownames =FALSE),
+                             
+                             h2('VA FW performance'),
+                             DT::datatable(va3, rownames =FALSE),
+                             h4('Map of VA forms submitted'), # will need to upload later to show by fieldworker
+                             leaflet() %>% addTiles()
                            )),
                   tabPanel('Alerts',
                            fluidPage(
