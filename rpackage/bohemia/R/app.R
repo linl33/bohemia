@@ -23,9 +23,9 @@ app_ui <- function(request) {
                 tags$style(type='text/css', "#log_ui {margin-right: 10px; margin-left: 10px; font-size:80%; margin-top: 10px; margin-bottom: -12px;}"),
                 tags$li(class = 'dropdown',
                         radioButtons('geo', ' ',
-                                     choices = c('Rufiji',
+                                     choices = c('Tanzania' = 'Rufiji',
                                                  # 'Both',
-                                                 'Mopeia'),
+                                                 'Mozambique' = 'Mopeia'),
                                      inline = TRUE)),
                 tags$li(class = 'dropdown',
                         uiOutput('log_ui')))),
@@ -110,6 +110,7 @@ app_ui <- function(request) {
             ui_main),
           tabItem(
             tabName="field_monitoring",
+            uiOutput('ui_field_monitoring_by'),
             uiOutput('ui_field_monitoring')),
           tabItem(
             tabName="enrollment",
@@ -128,31 +129,41 @@ app_ui <- function(request) {
                        uiOutput('district_ui'),
                        uiOutput('ward_ui'),
                        uiOutput('village_ui'),
-                       uiOutput('hamlet_ui')),
-                column(4,
+                       uiOutput('hamlet_ui'),
                        h4('Location code:'),
-                       h3(textOutput('location_code_text')),
-                       uiOutput('ui_enumeration_n_hh'),
-                       helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration). THE DEFAULT NUMBERS SHOWN ARE 25% HIGHER THAN THE NUMBER ESTIMATED BY THE VILLAGE LEADER.'),
-                       textInput('enumeration_n_teams',
-                                 'Number of teams',
-                                 value = 2),
-                       checkboxInput('enumeration', 'Enumeration? (MOZ only)', value = FALSE),
-                       helpText('Enumeration is a table with fewer columns'),
-                       helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
-                       uiOutput('ui_id_limit')),
-                column(4, align = 'center',
-                       br(), br(),
-                       downloadButton('render_enumeration_list',
-                                      'Generate visit control sheet(s)'),
-                       br(), br(),
-                       downloadButton('render_file_index_list',
-                                      'Generate file index and folder location list(s)')
-                ))
+                       h3(textOutput('location_code_text'))),
+                       column(8,
+                              tabsetPanel(type = 'pills',
+                                          tabPanel("Visit control sheet", 
+                                                   fluidPage(
+                                                     h3("Visit control sheet"),
+                                                     uiOutput('ui_enumeration_n_hh'),
+                                                     helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration). THE DEFAULT NUMBERS SHOWN ARE 25% HIGHER THAN THE NUMBER ESTIMATED BY THE VILLAGE LEADER.'),
+                                                     textInput('enumeration_n_teams',
+                                                               'Number of teams',
+                                                               value = 2),
+                                                     checkboxInput('enumeration', 'Enumeration? (MOZ only)', value = FALSE),
+                                                     helpText('Enumeration is a table with fewer columns'),
+                                                     helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
+                                                     uiOutput('ui_id_limit'),
+                                                     br(), br(),
+                                                     downloadButton('render_enumeration_list',
+                                                                    'Generate visit control sheet(s)')
+                                                   )),
+                                          tabPanel("File index locator",
+                                                   fluidPage(
+                                                     h3("File index"),
+                                                     uiOutput('ui_id_limit_file'),
+                                                     br(), br(),
+                                                     downloadButton('render_file_index_list',
+                                                                    'Generate file index and folder location list(s)')
+                                                   ))))
+              )
             )
           ),
           tabItem(
             tabName="consent_verification_list",
+            uiOutput('ui_consent_verification_list_a'),
             uiOutput('ui_consent_verification_list')),
           tabItem(
             tabName="demography",
@@ -452,11 +463,26 @@ app_server <- function(input, output, session) {
   
   output$ui_id_limit <- renderUI({
     val <- hamlet_num_hh()
-    sliderInput('id_limit', 'Limit IDs to:',
-                min = 1,
-                max = val, # round(num_houses),
-                value = c(1, val), # c(1, num_houses),
-                step = 1)
+    fluidPage(
+      sliderInput('id_limit', 'Limit IDs to:',
+                  min = 1,
+                  max = val, # round(num_houses),
+                  value = c(1, val), # c(1, num_houses),
+                  step = 1),
+      helpText('Normally, do not touch this slider. Adjust it only if you want to exclude certain IDs (ie, in the case of having already printed numbers 1-50, you might set the lower limit of the slider to 51).')
+    )
+  })
+  
+  output$ui_id_limit_file <- renderUI({
+    val <- hamlet_num_hh()
+    fluidPage(
+      sliderInput('id_limit', 'Limit IDs to:',
+                  min = 1,
+                  max = val, # round(num_houses),
+                  value = c(1, val), # c(1, num_houses),
+                  step = 1),
+      helpText('Normally, do not touch this slider. Adjust it only if you want to exclude certain IDs (ie, in the case of having already printed numbers 1-50, you might set the lower limit of the slider to 51).')
+    )
   })
   
   
@@ -498,28 +524,51 @@ app_server <- function(input, output, session) {
   
   
   # Field monitoring UI  #############################################
+  output$ui_field_monitoring_by <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'field_monitoring' %in% si$access
+    
+    
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              fluidPage(
+                column(12, align = 'center',
+                       radioButtons('field_monitor_by',
+                                    'Geographic level:',
+                                    choices = c('District',
+                                                'Ward',
+                                                'Village',
+                                                'Hamlet'),
+                                    inline = TRUE))
+              )
+  })
+  })
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
     li <- si$logged_in
     ac <- 'field_monitoring' %in% si$access
-
-
+    
+    
     # Generate the ui
     make_ui(li = li,
             ac = ac,
             ok = {
-
+              
               # Get the aggregate table # (fake)
               aggregate_table <- session_data$aggregate_table
-
+              
               # Get the odk data
               pd <- odk_data$data
               pd <- pd$non_repeats
               co <- country()
               # save(pd, file = '/tmp/pd.RData')
               pd <- pd %>% filter(hh_country == co)
-
+              
               pd_ok <- FALSE
               if(!is.null(pd)){
                 if(nrow(pd) > 0){
@@ -532,7 +581,7 @@ app_server <- function(input, output, session) {
                 n_days = as.numeric(1 + (max(dr)-min(dr)))
                 the_iso <- iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
                 target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
-
+                
                 # Create table of overview
                 overview <- pd %>%
                   summarise(`N. FWs` = ifelse(iso == 'TZA', 100, 77),  #length(unique(pd$wid)),
@@ -543,13 +592,13 @@ app_server <- function(input, output, session) {
                             `Weekly forms per country` = round(`Daily forms per country` * 7, digits = 1),
                             `Overall target per country` = target,
                             `Estimated weeks` = round(`Overall target per country` / `Weekly forms per country`, digits = 1))
-
+                
                 # Create map
                 ll <- extract_ll(pd$hh_geo_location)
                 pd$lng <- ll[1]; pd$lat <- ll[2]
                 l <- leaflet() %>% addTiles() %>%
                   addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
-
+                
                 # Create fieldworkers table
                 pd$end_time <- lubridate::as_datetime(pd$end_time)
                 pd$start_time <- lubridate::as_datetime(pd$start_time)
@@ -587,9 +636,9 @@ app_server <- function(input, output, session) {
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
                             `Time of last form end` = max(end_time, na.rm = TRUE),
                             `Daily work hours` = '(Pending feature)')
-
-
-
+                
+                
+                
                 # Create a progress plot
                 output$progress_plot <- renderPlot({
                   x <- pd %>%
@@ -613,7 +662,7 @@ app_server <- function(input, output, session) {
                                          `Estimated total forms` = target,
                                          `Estimated forms remaining` = target - nrow(pd),
                                          `Estimated % finished` = round(nrow(pd) / target * 100, digits = 2))
-
+                
                 # Create a detailed progress table (by hamlet)
                 left <- gps %>%
                   filter(iso == the_iso) %>%
@@ -630,10 +679,17 @@ app_server <- function(input, output, session) {
                   dplyr::select(code, Hamlet, `Forms done` = numerator,
                                 `Estimated households` = n_households,
                                 `Estimated percent finished` = p)
-
-
+                
+                
                 # Create a progress by geo tables
-                progress_by <- joined %>% left_join(locations %>% dplyr::select(code, Ward, Village, Hamlet))
+                progress_by <- joined %>% left_join(locations %>% dplyr::select(code, District, Ward, Village, Hamlet))
+                # save(progress_by, file = '/tmp/progress_by.RData')
+                progress_by_district <- progress_by %>% group_by(District) %>% summarise(numerator = sum(numerator, na.rm  = TRUE),
+                                                             n_households = sum(n_households, na.rm = TRUE)) %>%
+                  mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
+                  dplyr::select(District, `Forms done` = numerator,
+                                `Estimated households` = n_households,
+                                `Estimated percent finished` = p)
                 progress_by_ward <- progress_by %>% group_by(Ward) %>% summarise(numerator = sum(numerator, na.rm  = TRUE),
                                                                                  n_households = sum(n_households, na.rm = TRUE)) %>%
                   mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
@@ -646,6 +702,22 @@ app_server <- function(input, output, session) {
                   dplyr::select(Village, `Forms done` = numerator,
                                 `Estimated households` = n_households,
                                 `Estimated percent finished` = p)
+                by_geo <- input$field_monitor_by
+                if(is.null(by_geo)){
+                  monitor_by_table <- progress_by_district
+                } else {
+                  if(by_geo == 'District'){
+                    monitor_by_table <- progress_by_district
+                  } else if(by_geo == 'Ward'){
+                    monitor_by_table <- progress_by_ward
+                  } else if(by_geo == 'Village'){
+                    monitor_by_table <- progress_by_village
+                  } else if(by_geo == 'Hamlet'){
+                    monitor_by_table <- progress_by_hamlet
+                  }
+                }
+                
+                
                 
                 # va table
                 deaths <- odk_data$data$repeats$repeat_death_info
@@ -655,19 +727,19 @@ app_server <- function(input, output, session) {
                                   mutate(xx = ' ', # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
                                          yy = ' ') %>%
                                   dplyr::select(instanceID,
-                  `Date of death` = death_dod,
-                  `Latest date to collect VA form` = xx,
-                  `Time elapsed` = yy),
-                                    pd %>% mutate(va_code = '(What is this?)') %>% 
-                    dplyr::select(instanceID,
-                                                         District = hh_district,
-                                                         Ward = hh_ward,
-                                                         Village = hh_village,
-                                                         Hamlet = hh_hamlet,
-                                                         `HH ID` = hh_hamlet_code,
-                                                         `FW ID` = wid,
-                                                         `VA code` = va_code,
-                                                         `HH visit date` = todays_date)) %>%
+                                                `Date of death` = death_dod,
+                                                `Latest date to collect VA form` = xx,
+                                                `Time elapsed` = yy),
+                                pd %>% mutate(va_code = '(What is this?)') %>% 
+                                  dplyr::select(instanceID,
+                                                District = hh_district,
+                                                Ward = hh_ward,
+                                                Village = hh_village,
+                                                Hamlet = hh_hamlet,
+                                                `HH ID` = hh_hamlet_code,
+                                                `FW ID` = wid,
+                                                `VA code` = va_code,
+                                                `HH visit date` = todays_date)) %>%
                   dplyr::select(-instanceID) 
                 if(nrow(va) > 0){
                   va <- va[,c(4:11, 1:3)]
@@ -677,10 +749,10 @@ app_server <- function(input, output, session) {
                   va2 <- tibble(`No data available` = ' ')
                   va3 <- tibble(`No data available` = ' ')
                 }
-
-
+                
+                
               } else {
-                progress_by <- progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
+                progress_by <- progress_by_district <- monitor_by_table <-  progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
                   fwt_daily <- fwt_weekly <- fwt_overall <- overview <- va <- va2 <- va3 <- tibble(`No data available` = ' ')
                 l <- leaflet() %>% addTiles()
                 fwt <- tibble(`No fieldworkers from this country` = ' ')
@@ -688,13 +760,19 @@ app_server <- function(input, output, session) {
                   ggplot() + theme_bohemia()
                 })
               }
-
+              
               fluidPage(
                 fluidRow(column(12, align = 'center',
                                 h1('Field monitoring'))),
                 tabsetPanel(
                   tabPanel('Overview',
                            fluidPage(
+                             h3('Progress by geography'),
+                             fluidRow(
+                               column(12, align = 'center',
+                                      DT::datatable(monitor_by_table, rownames = FALSE)
+                               )
+                             ),
                              h3('Estimated targets'),
                              gt(overview),
                              fluidRow(
@@ -703,9 +781,7 @@ app_server <- function(input, output, session) {
                                       h3('Map of forms'),
                                       l),
                                column(6, align = 'center',
-                                      br(),
-                                      h3('Table of fieldworkers'),
-                                      DT::datatable(fwt, rownames = FALSE))
+                                      br())
                              ),
                              fluidRow(
                                column(6,
@@ -714,26 +790,6 @@ app_server <- function(input, output, session) {
                                column(6,
                                       h3('Overall progress table'),
                                       gt(progress_table))
-                             ),
-
-                             h3('Progress by Ward'),
-                             fluidRow(
-                               column(12, align = 'center',
-                                      DT::datatable(progress_by_ward, rownames = FALSE)
-                               )
-                             ),
-
-                             h3('Progress by Village'),
-                             fluidRow(
-                               column(12, align = 'center',
-                                      DT::datatable(progress_by_village, rownames = FALSE)
-                               )
-                             ),
-                             h3('Progress by hamlet'),
-                             fluidRow(
-                               column(12, align = 'center',
-                                      DT::datatable(progress_by_hamlet, rownames = FALSE)
-                               )
                              )
                            )
                   ),
@@ -752,6 +808,8 @@ app_server <- function(input, output, session) {
                                ),
                                fluidRow(
                                  column(12, align = 'center',
+                                        h3('Table of fieldworkers'),
+                                        DT::datatable(fwt, rownames = FALSE),
                                         h3('By fieldworker'),
                                         h5('DAILY performance'), p('Data over the last 24 hours'),
                                         DT::datatable(fwt_daily, rownames = FALSE),
@@ -775,7 +833,7 @@ app_server <- function(input, output, session) {
                              h2('VA list generation'),
                              DT::datatable(va, rownames = FALSE),
                              h2('VA monitoring'),
-                                DT::datatable(va2, rownames =FALSE),
+                             DT::datatable(va2, rownames =FALSE),
                              
                              h2('VA FW performance'),
                              DT::datatable(va3, rownames =FALSE),
@@ -798,15 +856,15 @@ app_server <- function(input, output, session) {
                                        p('Select a row and then click one of the below:')
                                      ),
                                      fluidRow(
-
+                                       
                                        column(12, align = 'center',
                                               actionButton('confirm_correct',
                                                            'Confirm correct'),
                                               br(),br(),
                                               actionButton('submit_fix',
                                                            'Submit fix'))
-
-
+                                       
+                                       
                                      )
                                    ))
                              ),
@@ -1071,7 +1129,7 @@ app_server <- function(input, output, session) {
                 )
               )
             }
-              
+            
     )
   })
   
@@ -1092,6 +1150,25 @@ app_server <- function(input, output, session) {
   })
   
   # Consent verification list UI ##########################################
+  output$ui_consent_verification_list_a <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'consent_verification_list' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              fluidPage(
+                column(4,
+                       textInput('verification_text_filter',
+                                 'Filter by FW code'),
+                       dateRangeInput('verification_date_filter',
+                                      'Filter by date',
+                                      start = as.Date('2020-09-01'),
+                                      end = Sys.Date()))
+              )
+            })})
   output$ui_consent_verification_list <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -1144,6 +1221,19 @@ app_server <- function(input, output, session) {
                                 todays_date,
                                 consent,
                                 x,y,z)
+                text_filter <- input$verification_text_filter
+                if(!is.null(text_filter)){
+                  pd <- pd %>% 
+                    dplyr::filter(grepl(text_filter, wid))
+                }
+                date_filter <- input$verification_date_filter
+                if(!is.null(date_filter)){
+                  pd <- pd %>%
+                    dplyr::filter(
+                      todays_date <= date_filter[2],
+                      todays_date >= date_filter[1]
+                    )
+                }
                 if(co == 'Mozambique'){
                   names(pd) <- c('Código TC',
                                  'Código Bairro',
@@ -1164,7 +1254,7 @@ app_server <- function(input, output, session) {
                                  'Name of household member',
                                  'Age of household member',
                                  'Recruitment date',
-                                 'Informed consent/assent type',
+                                 'Informed consent/assent type (check off if correct and complete)',
                                  'If not correct, please enter type of error',
                                  'Was the error resolved (Yes/No)?',
                                  'Verified by (archivist initials) and date')
@@ -1393,7 +1483,9 @@ app_server <- function(input, output, session) {
                       lc <- location_code()
                       # Get other details
                       enum <- input$enumeration
-                      data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)))
+                      data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
+                                         id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
+                                         id_limit_upr = as.numeric(as.character(input$id_limit[2])))
                       # generate html
                       # out_file <- paste0(system.file('shiny/operations/rmds', package = 'bohemia'), '/list.pdf')
                       out_file <- paste0(getwd(), '/file_list.pdf')

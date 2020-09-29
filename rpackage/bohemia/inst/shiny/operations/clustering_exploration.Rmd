@@ -1,7 +1,5 @@
 ---
 title: "Clustering exploration"
-author: '2020-06-10'
-date: "7/3/2020"
 output: html_document
 ---
 
