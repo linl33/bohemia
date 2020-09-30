@@ -6,6 +6,7 @@
 CREATE DATABASE bohemia;
 CREATE USER bohemia_app WITH LOGIN PASSWORD 'riscrazy';
 -- NOTE switch to the bohemia database before proceeding with the following queries execution.
+-- psql command `\c bohemia`
 
 CREATE TABLE minicensus_main (
     instance_id  uuid,

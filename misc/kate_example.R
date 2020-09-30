@@ -9,7 +9,7 @@ password = creds$databrew_odk_pass
 
 require('RPostgreSQL')
 drv <- dbDriver('PostgreSQL')
-con <- dbConnect(drv, dbname='bohemia', host='localhost', port=5432, user='bohem_app', password='riscrazy')
+con <- dbConnect(drv, dbname='bohemia', host='localhost', port=5432, user='bohemia_app', password='riscrazy')
 dbExistsTable(con, 'minicensus_main')
 
 existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
