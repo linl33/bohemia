@@ -143,8 +143,8 @@ app_ui <- function(request) {
                                               textInput('enumeration_n_teams',
                                                         'Number of teams',
                                                         value = 2),
-                                              checkboxInput('enumeration', 'Enumeration? (MOZ only)', value = FALSE),
-                                              helpText('Enumeration is a table with fewer columns'),
+                                              checkboxInput('enumeration', 'Enumeration?', value = FALSE),
+                                              helpText('MOZ only. Tick this box if you want to generate a list for enumerators'),
                                               helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
                                               uiOutput('ui_id_limit'),
                                               br(), br(),
@@ -780,7 +780,7 @@ app_server <- function(input, output, session) {
                                                 Hamlet = hh_hamlet,
                                                 `HH ID` = hh_hamlet_code,
                                                 `FW ID` = wid,
-                                                `VA code` = va_code,
+                                                `PERM ID` = va_code,
                                                 `HH visit date` = todays_date)) %>%
                   dplyr::select(-instanceID) 
                 if(nrow(va) > 0){
@@ -813,7 +813,7 @@ app_server <- function(input, output, session) {
                              h3('Progress by geography'),
                              fluidRow(
                                column(12, align = 'center',
-                                      DT::datatable(monitor_by_table, rownames = FALSE)
+                                      bohemia::prettify(monitor_by_table, nrows = nrow(monitor_by_table))
                                )
                              ),
                              h3('Estimated targets'),
@@ -895,16 +895,18 @@ app_server <- function(input, output, session) {
                            )),
                   tabPanel('VA',
                            fluidPage(
-                             
-                             h2('VA list generation'),
-                             DT::datatable(va, rownames = FALSE),
-                             h2('VA monitoring'),
-                             DT::datatable(va2, rownames =FALSE),
-                             
-                             h2('VA FW performance'),
-                             DT::datatable(va3, rownames =FALSE),
-                             h4('Map of VA forms submitted'), # will need to upload later to show by fieldworker
-                             leaflet() %>% addTiles()
+                             br(), br(),
+                             navbarPage(title = 'VA',
+                                        tabPanel('List generation',
+                                                 DT::datatable(va, rownames = FALSE)),
+                                        tabPanel('Monitoring',
+                                                 fluidPage(
+                                                   DT::datatable(va2, rownames =FALSE),
+                                                   h4('Map of VA forms submitted'),
+                                                   leaflet() %>% addTiles()
+                                                 )),
+                                        tabPanel('Performance',
+                                                 DT::datatable(va3, rownames =FALSE)))
                            )),
                   tabPanel('Alerts',
                            fluidPage(
