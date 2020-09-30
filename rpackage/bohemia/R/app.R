@@ -26,7 +26,8 @@ app_ui <- function(request) {
                                      choices = c('Tanzania' = 'Rufiji',
                                                  # 'Both',
                                                  'Mozambique' = 'Mopeia'),
-                                     inline = TRUE)),
+                                     inline = TRUE,
+                                     selected = 'Mopeia')),
                 tags$li(class = 'dropdown',
                         uiOutput('log_ui')))),
       dashboardSidebar(
@@ -132,32 +133,32 @@ app_ui <- function(request) {
                        uiOutput('hamlet_ui'),
                        h4('Location code:'),
                        h3(textOutput('location_code_text'))),
-                       column(8,
-                              tabsetPanel(type = 'pills',
-                                          tabPanel("Visit control sheet", 
-                                                   fluidPage(
-                                                     h3("Visit control sheet"),
-                                                     uiOutput('ui_enumeration_n_hh'),
-                                                     helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration). THE DEFAULT NUMBERS SHOWN ARE 25% HIGHER THAN THE NUMBER ESTIMATED BY THE VILLAGE LEADER.'),
-                                                     textInput('enumeration_n_teams',
-                                                               'Number of teams',
-                                                               value = 2),
-                                                     checkboxInput('enumeration', 'Enumeration? (MOZ only)', value = FALSE),
-                                                     helpText('Enumeration is a table with fewer columns'),
-                                                     helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
-                                                     uiOutput('ui_id_limit'),
-                                                     br(), br(),
-                                                     downloadButton('render_enumeration_list',
-                                                                    'Generate visit control sheet(s)')
-                                                   )),
-                                          tabPanel("File index locator",
-                                                   fluidPage(
-                                                     h3("File index"),
-                                                     uiOutput('ui_id_limit_file'),
-                                                     br(), br(),
-                                                     downloadButton('render_file_index_list',
-                                                                    'Generate file index and folder location list(s)')
-                                                   ))))
+                column(8,
+                       tabsetPanel(type = 'pills',
+                                   tabPanel("Visit control sheet", 
+                                            fluidPage(
+                                              h3("Visit control sheet"),
+                                              uiOutput('ui_enumeration_n_hh'),
+                                              helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration). THE DEFAULT NUMBERS SHOWN ARE 25% HIGHER THAN THE NUMBER ESTIMATED BY THE VILLAGE LEADER.'),
+                                              textInput('enumeration_n_teams',
+                                                        'Number of teams',
+                                                        value = 2),
+                                              checkboxInput('enumeration', 'Enumeration? (MOZ only)', value = FALSE),
+                                              helpText('Enumeration is a table with fewer columns'),
+                                              helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
+                                              uiOutput('ui_id_limit'),
+                                              br(), br(),
+                                              downloadButton('render_enumeration_list',
+                                                             'Generate visit control sheet(s)')
+                                            )),
+                                   tabPanel("File index locator",
+                                            fluidPage(
+                                              h3("File index"),
+                                              uiOutput('ui_id_limit_file'),
+                                              br(), br(),
+                                              downloadButton('render_file_index_list',
+                                                             'Generate file index and folder location list(s)')
+                                            ))))
               )
             )
           ),
@@ -276,18 +277,24 @@ app_server <- function(input, output, session) {
   )
   
   # Define a default fieldworkers data
-  default_fieldworkers <- tibble(id = sort(sample(1:300, size = 10)),
-                                 name = c('John Doe',
-                                          'Jane Doe',
-                                          'Abraham Lincoln',
-                                          'Maurice Fromage',
-                                          'Pepe Birra',
-                                          'Ebenezer Scrooge',
-                                          'Byron Bryon',
-                                          'Anabel García',
-                                          'Camille de la Croix',
-                                          'Raquel Manhiça'))
+  if(!'fids.csv' %in% dir('/tmp')){
+    fids_url1 <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0'
+    fids1 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name)
+    fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130'
+    fids2 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name)
+    fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=179257508'
+    fids3 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name)
+    fids <- bind_rows(fids1, fids2, fids3)
+    readr::write_csv(fids, '/tmp/fids.csv')
+  } else {
+    fids <- readr::read_csv('/tmp/fids.csv')
+  }
   
+  default_fieldworkers <- fids %>%
+    dplyr::rename(id = bohemia_id) %>%
+    mutate(name = paste0(first_name, ' ', last_name)) %>%
+    dplyr::select(id, name)
+
   # Define a default notificaitons table
   default_notifications <- 
     tibble(ID = c(101, 144, 149),
@@ -545,7 +552,7 @@ app_server <- function(input, output, session) {
                                                 'Hamlet'),
                                     inline = TRUE))
               )
-  })
+            })
   })
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
@@ -576,6 +583,18 @@ app_server <- function(input, output, session) {
                 }
               }
               if(pd_ok){
+                
+                # List of fieldworkers
+                fid_options <- sort(unique(pd$wid))
+                fid_choices <- session_data$fieldworkers
+                # save(fid_options, fid_choices, file = '/tmp/fid.RData')
+                fid_choices <- fid_choices %>% dplyr::filter(as.numeric(id) %in% as.numeric(fid_options))
+                x = as.character(fid_choices$name)
+                y = as.character(fid_choices$id)
+                fid_choices <- as.numeric(y)
+                names(fid_choices) <- x
+                # fid_choices <- c(x = y)
+
                 # Some pre-processing
                 dr <- as.Date(range(pd$todays_date, na.rm = TRUE))
                 n_days = as.numeric(1 + (max(dr)-min(dr)))
@@ -591,13 +610,36 @@ app_server <- function(input, output, session) {
                             `Daily forms per country` = round(nrow(pd) / n_days, digits = 1),
                             `Weekly forms per country` = round(`Daily forms per country` * 7, digits = 1),
                             `Overall target per country` = target,
-                            `Estimated weeks` = round(`Overall target per country` / `Weekly forms per country`, digits = 1))
+                            `Estimated weeks` = round(`Overall target per country` / `Weekly forms per country`, digits = 1)) %>%
+                  mutate(`Estimated date` = (`Estimated weeks` * 7) + as.Date(dr[1]))
+                # save(overview, file = '/tmp/overview.RData')
+                
                 
                 # Create map
                 ll <- extract_ll(pd$hh_geo_location)
-                pd$lng <- ll[1]; pd$lat <- ll[2]
-                l <- leaflet() %>% addTiles() %>%
-                  addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
+                pd$lng <- ll$lng; pd$lat <- ll$lat
+                l <- leaflet() %>% addTiles()
+                if(!all(is.na(pd$lng))){
+                  l <- l %>%
+                    addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
+                }
+                
+                
+                # Create color-coded map
+                # Get percent done by hamlet
+                lxd <- pd %>% group_by(code = hh_hamlet_code) %>%
+                  tally %>%
+                  left_join(gps %>% dplyr::select(code, n_households)) %>%
+                  mutate(p = n / n_households * 100)
+                lxd <- left_join(gps %>% filter(iso == the_iso) %>% dplyr::select(code, lng, lat), lxd) %>%
+                  mutate(p = ifelse(is.na(p), 0, p))
+                pal <- colorNumeric(
+                  palette = c("black","darkred", 'red', 'darkorange', 'blue'),
+                  domain = 0:100
+                )
+                lx <- leaflet(data = lxd) %>% addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
+                  addCircleMarkers(data = lxd, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal(p), fillOpacity = 0.6) %>%
+                  addLegend(position = c("bottomleft"), pal = pal, values = lxd$p)
                 
                 # Create fieldworkers table
                 pd$end_time <- lubridate::as_datetime(pd$end_time)
@@ -685,7 +727,7 @@ app_server <- function(input, output, session) {
                 progress_by <- joined %>% left_join(locations %>% dplyr::select(code, District, Ward, Village, Hamlet))
                 # save(progress_by, file = '/tmp/progress_by.RData')
                 progress_by_district <- progress_by %>% group_by(District) %>% summarise(numerator = sum(numerator, na.rm  = TRUE),
-                                                             n_households = sum(n_households, na.rm = TRUE)) %>%
+                                                                                         n_households = sum(n_households, na.rm = TRUE)) %>%
                   mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
                   dplyr::select(District, `Forms done` = numerator,
                                 `Estimated households` = n_households,
@@ -754,7 +796,8 @@ app_server <- function(input, output, session) {
               } else {
                 progress_by <- progress_by_district <- monitor_by_table <-  progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
                   fwt_daily <- fwt_weekly <- fwt_overall <- overview <- va <- va2 <- va3 <- tibble(`No data available` = ' ')
-                l <- leaflet() %>% addTiles()
+                l <- lx <- leaflet() %>% addTiles()
+                fid_options <- fid_choices <- 1:700
                 fwt <- tibble(`No fieldworkers from this country` = ' ')
                 output$progress_plot <- renderPlot({
                   ggplot() + theme_bohemia()
@@ -775,14 +818,7 @@ app_server <- function(input, output, session) {
                              ),
                              h3('Estimated targets'),
                              gt(overview),
-                             fluidRow(
-                               column(6, align = 'center',
-                                      br(),
-                                      h3('Map of forms'),
-                                      l),
-                               column(6, align = 'center',
-                                      br())
-                             ),
+                             
                              fluidRow(
                                column(6,
                                       h3('Overall progress plot'),
@@ -790,41 +826,71 @@ app_server <- function(input, output, session) {
                                column(6,
                                       h3('Overall progress table'),
                                       gt(progress_table))
+                             ),
+                             fluidRow(
+                               column(6, align = 'center',
+                                      br(),
+                                      h3('Map of forms'),
+                                      l),
+                               column(6, align = 'center',
+                                      br(),
+                                      h3('Map of completion % by hamlet'),
+                                      lx)
                              )
                            )
                   ),
                   tabPanel('Performance',
                            fluidPage(
-                             h2('Performance'),
-                             fluidRow(
-                               column(3, align = 'center',
-                                      selectInput('fid_select', 'Select fieldworker ID(s) to show on map',
-                                                  choices = 1:700,
-                                                  # selected = 1:700,
-                                                  multiple = TRUE)),
-                               column(9, align = 'center',
-                                      h3('Map of forms for fieldworker(s)'),
-                                      leafletOutput('fid_leaf')
-                               ),
-                               fluidRow(
-                                 column(12, align = 'center',
-                                        h3('Table of fieldworkers'),
-                                        DT::datatable(fwt, rownames = FALSE),
-                                        h3('By fieldworker'),
-                                        h5('DAILY performance'), p('Data over the last 24 hours'),
-                                        DT::datatable(fwt_daily, rownames = FALSE),
-                                        h5('WEEKLY performance'), p('Data over the last 7 days'),
-                                        DT::datatable(fwt_weekly, rownames = FALSE),
-                                        h5('OVERALL performance'),
-                                        DT::datatable(fwt_overall, rownames = FALSE),
-                                        h5('Drop-outs'),
-                                        p('PENDING: need standardized definition of what a drop-out is.'))
-                               ),
-                               fluidRow(
-                                 column(12, align = 'center',
-                                        h3('By supervisor'),
-                                        p('PENDING: need standardized supervisor information from both sites for all fieldworkers.'))
-                               ),
+                             navbarPage(title = 'Performance',
+                               tabPanel('Fieldworkers',
+                                        fluidPage(
+                                          # fluidRow(column(3, align = 'center',
+                                          #                 selectInput('fid_select', 'Select fieldworker ID',
+                                          #                             choices = fid_options))
+                                          # ),
+                                            fluidRow(
+                                              infoBox(title = 'Number of detected anomalies',
+                                                      icon = icon('microscope'),
+                                                      color = 'black',
+                                                      width = 6,
+                                                      h1(0)),
+                                              infoBox(title = 'Missing response rate',
+                                                      icon = icon('address-book'),
+                                                      color = 'black',
+                                                      width = 6,
+                                                      h1('0%'))
+                                            ),
+                                            fluidRow(
+                                              column(4,
+                                                     selectInput('fid',
+                                                                 'Fieldworker',
+                                                                 choices = fid_choices),
+                                                     tableOutput('individual_details')),
+                                              box(width = 8,
+                                                  title = 'Location of forms submitted by this worker',
+                                                  leafletOutput('fid_leaf'))
+                                            ),
+                                          navbarPage('Fieldworkers tables',
+                                                     tabPanel('Daily',
+                                                              DT::datatable(fwt_daily, rownames = FALSE)),
+                                                     tabPanel('Weekly',
+                                                              DT::datatable(fwt_weekly, rownames = FALSE)),
+                                                     tabPanel('Overall',
+                                                              DT::datatable(fwt_overall, rownames = FALSE))),
+                                          fluidRow(
+                                                   h3('Table of fieldworkers'),
+                                                   DT::datatable(fwt, rownames = FALSE),
+                                                   h5('Drop-outs'),
+                                                   p('PENDING: need standardized definition of what a drop-out is.')
+                                          ))),
+                                        tabPanel('Supervisors',
+                                                 fluidPage(
+                                                   fluidRow(
+                                                     column(12, align = 'center',
+                                                            h3('By supervisor'),
+                                                            p('PENDING: need standardized supervisor information from both sites for all fieldworkers.'))
+                                                   )
+                                                 ))
                              )
                            )),
                   tabPanel('VA',
@@ -919,47 +985,16 @@ app_server <- function(input, output, session) {
                              ),
                              fluidRow(
                                column(6)
-                             ))),
-                  tabPanel('Individual data',
-                           h1('DEPRECATED'),
-                           fluidPage(
-                             fluidRow(
-                               infoBox(title = 'Number of detected anomalies',
-                                       icon = icon('microscope'),
-                                       color = 'black',
-                                       width = 6,
-                                       h1(7)),
-                               infoBox(title = 'Missing response rate',
-                                       icon = icon('address-book'),
-                                       color = 'black',
-                                       width = 6,
-                                       h1('4.2%'))
-                             ),
-                             fluidRow(
-                               column(4,
-                                      selectInput('fid',
-                                                  'Fieldworker',
-                                                  choices = session_data$fieldworkers$name),
-                                      tableOutput('individual_details')),
-                               box(width = 8,
-                                   title = 'Location of forms submitted by this worker',
-                                   leafletOutput('individual_map'))
-                             ),
-                             fluidRow(
-                               box(width = 12,
-                                   title = 'Individual performance table',
-                                   DT::dataTableOutput('individual_table'))
-                             )
-                           ))))
+                             )))))
             })
   })
   
   # Leaflet of fieldworkers
   output$fid_leaf <- renderLeaflet({
-    leaflet() %>% addTiles()
+    leaflet() %>% addProviderTiles(providers$Stamen.Toner)
   })
-  observeEvent(input$fid_select, {
-    fids <- input$fid_select
+  observeEvent(input$fid, {
+    fids <- input$fid
     if(is.null(fids)){
       fids <- 1:700
     }
@@ -982,7 +1017,7 @@ app_server <- function(input, output, session) {
     }
     if(pd_ok){
       ll <- extract_ll(pd$hh_geo_location)
-      pd$lng <- ll[1]; pd$lat <- ll[2]
+      pd$lng <- ll$lng; pd$lat <- ll$lat
       pd <- pd %>% filter(wid %in% fids)
       leafletProxy('fid_leaf') %>%
         clearMarkers() %>%
@@ -1103,7 +1138,7 @@ app_server <- function(input, output, session) {
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
               pd <- pd %>% dplyr::filter(hh_country == co)
               ll <- extract_ll(pd$hh_geo_location)
-              pd$lng <- ll[1]; pd$lat <- ll[2]
+              pd$lng <- ll$lng; pd$lat <- ll$lat
               pd <- pd %>%
                 dplyr::select(code = hh_hamlet_code,
                               hh_id,
@@ -1418,32 +1453,35 @@ app_server <- function(input, output, session) {
                with_polys = TRUE)
     })
   
-  output$individual_map <- 
-    renderLeaflet({
-      x <- input$fieldworker
-      fake_map(with_points = 95,
-               tile = 'Stamen.Toner',
-               with_polys = FALSE)
-    })
-  
-  output$individual_table <-
-    DT::renderDataTable({
-      tibble(a = 1:10,
-             b = sample(1:1000, 10),
-             c = sample(letters, 10),
-             d = sample(LETTERS, 10))
-    })
-  
   output$individual_details <- 
     renderTable({
-      who <- input$fid
-      id <- sample(1:600, 1)
-      last_upload <- as.character(Sys.time() - 100000)
-      total_forms <- 91
-      average_time <- 63
-      tibble(key = c('Name', 'ID', 'Last upload', 'Total forms',
-                     'Avg time'),
-             value = c(input$fid, id, last_upload, total_forms, average_time))
+      
+      # Get the odk data
+      pd <- odk_data$data
+      pd <- pd$non_repeats
+      co <- country()
+      # save(pd, file = '/tmp/pd.RData')
+      pd <- pd %>% filter(hh_country == co)
+      
+      pd_ok <- FALSE
+      if(!is.null(pd)){
+        if(nrow(pd) > 0){
+          pd_ok <- TRUE
+        }
+      }
+      if(pd_ok){
+        who <- input$fid
+        id <- who
+        last_upload <- as.character(max(pd$end_time[pd$wid == who]))
+        total_forms <- length(which(pd$wid == who))
+        average_time <- 63
+        tibble(key = c('ID', 'Last upload', 'Total forms'),
+               value = c(id, last_upload, total_forms))
+      } else {
+        NULL
+      }
+      
+      
     })
   
   output$render_enumeration_list <-

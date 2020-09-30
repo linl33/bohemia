@@ -36,6 +36,7 @@ opts_chunk$set(comment = NA,
 
 ```{r}
 library(dplyr)
+library(bohemia)
 options(kableExtra.latex.load_packages = FALSE)
 library(kableExtra)
 # Specify paramaters
@@ -48,11 +49,11 @@ for (i in 1:length(params)){
 
 ```{r}
 # Get data
-source('../global.R', chdir = TRUE)
-pd <- df %>% filter(Country == 'Mozambique')
+# source('../global.R', chdir = TRUE)
+pd <- bohemia::gps %>% left_join(bohemia::locations %>% dplyr::select(code, Country))
+pd <- pd %>% filter(Country == 'Mozambique')
 pd$n_households[is.na(pd$n_households)] <- 300
 pd$n_households <- round(pd$n_households * 1.15)
-pd <- left_join(pd, locations %>% dplyr::select(code, Ward, Village, Hamlet))
 # Create the actual households
 out_list <- list()
 key_list <- list()
@@ -60,9 +61,9 @@ counter <- 0
 for(i in 1:nrow(pd)){
   this_pd <- pd[i,]
   this_code <- this_pd$code
-  this_ward <- this_pd$Ward
-  this_village <- this_pd$Village
-  this_hamlet <- this_pd$Hamlet
+  this_ward <- this_pd$ward
+  this_village <- this_pd$village
+  this_hamlet <- this_pd$hamlet
   for(j in 1:this_pd$n_households){
     counter <- counter + 1
     this_hh <- paste0(this_code, '-', add_zero(j, 3), '\n\n')

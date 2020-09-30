@@ -1,3 +1,6 @@
+library(shiny)
+library(ggplot2)
+
 # Basic placeholder function
 placeholder <- function(li = FALSE,
                         ac = FALSE){
@@ -102,15 +105,22 @@ make_about <- function(){
 }
 
 # Plot theme
-theme_bohemia <- theme_bw
+theme_bohemia <- ggplot2::theme_bw
 
 # Function for extracting lng and lat from a odk geocode object
 extract_ll <- function(x){
-  lng <- unlist(lapply(strsplit(x[1], ' '), function(z){z[1]}))
-  lat <- unlist(lapply(strsplit(x[1], ' '), function(z){z[2]}))
-  lng <- as.numeric(lng); lat <- as.numeric(lat)
-  return(c(lng, lat))
+  lngs <- lats <- c()
+  for(i in 1:length(x)){
+    y <- x[i]
+    lng <- unlist(lapply(strsplit(y[1], ' '), function(z){z[1]}))
+    lat <- unlist(lapply(strsplit(y[1], ' '), function(z){z[2]}))
+    lngs[i] <- lng; lats[i] <- lat
+  }
+  
+  lng <- as.numeric(lngs); lat <- as.numeric(lats)
+  return(tibble(lng = lng, lat = lat))
 }
+# extract_ll <- Vectorize(extract_ll)
 
 # Function for generating a fake / placeholder map 
 fake_map <- function(tile = 'Stamen.Watercolor',
