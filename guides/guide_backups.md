@@ -130,20 +130,17 @@ server=bohemiasystems
 bucket=databrewbohemia
 folder=aggregate
 dateValue=`(date --iso-8601=seconds)`
-file=${dateValue}.gz
+file=${dateValue}.sql
 resource="/${bucket}/${server}/${folder}/${file}"
 
 # Stop running tomcat
 sudo service tomcat8 stop
 
 # Run the dump
-pg_dump aggregate -U postgres -F t > ${file}
+pg_dump aggregate -U postgres > ${file}
 
 # Restart tomcat
 sudo service tomcat8 start
-
-## Restore
-#gunzip out.gz
 
 
 aws s3 cp ${file} s3:/${resource}
