@@ -86,7 +86,7 @@ app_ui <- function(request) {
                    icon = icon('list'),
                    startExpanded = FALSE,
                    menuSubItem(
-                     text="Visit control and file index",
+                     text="Visit control sheet and file index and folder location",
                      tabName="visit_control_sheet",
                      icon=icon("users")),
                    menuSubItem(
@@ -122,7 +122,7 @@ app_ui <- function(request) {
           tabItem(
             tabName="visit_control_sheet",
             fluidPage(
-              fluidRow(h2('Visit control and file index sheets')),
+              fluidRow(h2('Visit control sheet and file index and folder location')),
               fluidRow(
                 column(4,
                        radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
@@ -151,9 +151,9 @@ app_ui <- function(request) {
                                               downloadButton('render_enumeration_list',
                                                              'Generate visit control sheet(s)')
                                             )),
-                                   tabPanel("File index locator",
+                                   tabPanel("File index and folder location",
                                             fluidPage(
-                                              h3("File index"),
+                                              h3("File index and folder location"),
                                               uiOutput('ui_id_limit_file'),
                                               br(), br(),
                                               downloadButton('render_file_index_list',
@@ -878,9 +878,7 @@ app_server <- function(input, output, session) {
                                                      tabPanel('Overall',
                                                               DT::datatable(fwt_overall, rownames = FALSE))),
                                           fluidRow(
-                                                   h3('Table of fieldworkers'),
-                                                   DT::datatable(fwt, rownames = FALSE),
-                                                   h5('Drop-outs'),
+                                                   h2('Drop-outs'),
                                                    p('PENDING: need standardized definition of what a drop-out is.')
                                           ))),
                                         tabPanel('Supervisors',
@@ -1279,7 +1277,7 @@ app_server <- function(input, output, session) {
                                  'Nome do membro do agregado',
                                  'Idade do membro do agregado',
                                  'Data de recrutamento',
-                                 'Consentimento/Assentimento informado',
+                                 'Consentimento/Assentimento informado (marque se estiver correto e completo)',
                                  'Se o documento não estiver preenchido correitamente, indicar o error',
                                  'O error foi resolvido (sim/não)',
                                  'Verificado por (iniciais do arquivista) e data')
