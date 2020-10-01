@@ -77,9 +77,13 @@ format_minicensus <- function(data){
     mutate(hh_main_wall_material = ifelse(!is.na(hh_main_wall_material_free),
                                           hh_main_wall_material_free,
                                           hh_main_wall_material)) %>%
-    mutate(hh_health_permission = ifelse(!is.na(hh_health_permission_other),
-                                         hh_health_permission_other,
-                                         hh_health_permission))
+    # Not doing the below since it's a select multiple (ie "other" is compatible with more responses)
+    # mutate(hh_health_permission = ifelse(!is.na(hh_health_permission_other),
+    #                                      hh_health_permission_other,
+    #                                      hh_health_permission)) %>%
+    dplyr::select(-hh_main_energy_source_for_lighting_other,
+                  -hh_main_wall_material_free,
+                  -instanceName)
   
   # REPEATS
   # death
@@ -117,5 +121,13 @@ format_minicensus <- function(data){
               repeat_water)
   names(out) <- c('main', 'people', 'repeat_death_info', 'repeat_hh_sub', 'repeat_mosquito_net',
                   'repeat_water')
+  names(out) <- paste0('minicensus_', names(out))
+  # Clean up uuid column
+  for(i in 1:length(out)){
+    if('instance_id' %in% names(out[[i]])){
+      out[[i]]$instance_id <- gsub('uuid:', '', out[[i]]$instance_id)
+    }
+    
+  }
   return(out)
 }
