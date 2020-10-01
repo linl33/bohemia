@@ -147,6 +147,26 @@ aws s3 cp ${file} s3:/${resource}
 rm ${file}
 ```
 
+##### For backing up the bohemia database (using same server)
+
+Modify the ~/Documents/dumps/backup.sh file by adding the following lines:
+
+```
+dateValue=`(date --iso-8601=seconds)`
+password=<PASSWORD GOES HERE>
+endpoint=<ENDPOINT GOES HERE>
+bucket=databrewbohemia
+server=bohemiadb
+folder=bohemia
+file=${dateValue}.sql
+resource="/${bucket}/${server}/${folder}/${file}"
+#pg_dump -h ${endpoint} -U postgres bohemia > ${file}
+pg_dump --dbname=postgresql://postgres:${password}@bohemiacluster.cluster-carq1ylei7sf.eu-west-3.rds.amazonaws.com:5432/bohemia > ${file}
+aws s3 cp ${file} s3:/${resource}
+rm ${file}
+```
+
+
 ##### On the traccar server (bohemia.fun)
 
 - On the server, create a folder for dumps:

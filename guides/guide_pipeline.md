@@ -94,3 +94,5 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
                  port=5432,
                  user=psql_user, password=psql_pass)
 ```
+
+- Having retrieved the data, the code for updating it is in `scripts/update_database.R`.  

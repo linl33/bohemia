@@ -11,6 +11,8 @@
 #' @import sp
 #' @import DT
 #' @import lubridate
+#' @import RPostgreSQL
+#' @import yaml
 app_ui <- function(request) {
   options(scipen = '999')
   
@@ -260,6 +262,8 @@ mobile_golem_add_external_resources <- function(){
 #' @import DT
 app_server <- function(input, output, session) {
   
+  message('Working directory is :', getwd())
+  
   
   # Define a summary data table (from which certain high-level indicators read)
   default_aggregate_table <- tibble(forms_submitted = 538,
@@ -294,7 +298,7 @@ app_server <- function(input, output, session) {
     dplyr::rename(id = bohemia_id) %>%
     mutate(name = paste0(first_name, ' ', last_name)) %>%
     dplyr::select(id, name)
-
+  
   # Define a default notificaitons table
   default_notifications <- 
     tibble(ID = c(101, 144, 149),
@@ -319,7 +323,31 @@ app_server <- function(input, output, session) {
                                  fieldworkers = default_fieldworkers,
                                  notifications = default_notifications)
   
-  odk_data <- reactiveValues(data = fake_data())
+  # Connect to db
+  creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+  psql_end_point = creds$endpoint
+  psql_user = creds$psql_master_username
+  psql_pass = creds$psql_master_password
+  drv <- dbDriver('PostgreSQL')
+  con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                   port=5432,
+                   user=psql_user, password=psql_pass)
+  # Read in data
+  data <- list()
+  data$non_repeats <- dbGetQuery(con, 'SELECT * FROM minicensus_main')
+  data$repeats <- list()
+  repeat_names <- c("minicensus_people", 
+                    "minicensus_repeat_death_info",
+                    "minicensus_repeat_hh_sub", 
+                    "minicensus_repeat_mosquito_net", "minicensus_repeat_water")
+  for(i in 1:length(repeat_names)){
+    this_name <- repeat_names[i]
+    data$repeats[[i]] <- 
+      dbGetQuery(con, paste0('SELECT * FROM ', this_name))
+  }
+  dbDisconnect(con)
+  names(data$repeats) <- repeat_names
+  odk_data <- reactiveValues(data = data)
   
   # Text for incorrect log-in, etc.
   reactive_log_in_text <- reactiveVal(value = '')
@@ -451,9 +479,7 @@ app_server <- function(input, output, session) {
       ok <- TRUE
     }
     if(ok){
-      ## JOE NEED TO DEBUG THIS
       num_houses <- gps %>% filter(code == lc) %>% .$n_households
-      # # num_houses <- (mop_houses %>% filter(Hamlet %in% hamlet_name) %>% .$households)*1.25
       num_houses <- round(num_houses * 1.25)
     } else {
       num_houses <- 500
@@ -594,7 +620,7 @@ app_server <- function(input, output, session) {
                 fid_choices <- as.numeric(y)
                 names(fid_choices) <- x
                 # fid_choices <- c(x = y)
-
+                
                 # Some pre-processing
                 dr <- as.Date(range(pd$todays_date, na.rm = TRUE))
                 n_days = as.numeric(1 + (max(dr)-min(dr)))
@@ -762,18 +788,18 @@ app_server <- function(input, output, session) {
                 
                 
                 # va table
-                deaths <- odk_data$data$repeats$repeat_death_info
-                deaths <- deaths %>% filter(instanceID %in% pd$instanceID)
+                deaths <- odk_data$data$repeats$minicensus_repeat_death_info
+                deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
                 # save(deaths, pd, file = '/tmp/deaths.RData')
                 va <- left_join(deaths %>% 
                                   mutate(xx = ' ', # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
                                          yy = ' ') %>%
-                                  dplyr::select(instanceID,
+                                  dplyr::select(instance_id,
                                                 `Date of death` = death_dod,
                                                 `Latest date to collect VA form` = xx,
                                                 `Time elapsed` = yy),
-                                pd %>% mutate(va_code = '(What is this?)') %>% 
-                                  dplyr::select(instanceID,
+                                pd %>% mutate(va_code = ' ') %>% 
+                                  dplyr::select(instance_id,
                                                 District = hh_district,
                                                 Ward = hh_ward,
                                                 Village = hh_village,
@@ -782,7 +808,7 @@ app_server <- function(input, output, session) {
                                                 `FW ID` = wid,
                                                 `PERM ID` = va_code,
                                                 `HH visit date` = todays_date)) %>%
-                  dplyr::select(-instanceID) 
+                  dplyr::select(-instance_id) 
                 if(nrow(va) > 0){
                   va <- va[,c(4:11, 1:3)]
                   va2 <- tibble(`No data available` = ' ') # this will need to be updated later with location-level VA performance info # paula slide page 10
@@ -842,45 +868,45 @@ app_server <- function(input, output, session) {
                   tabPanel('Performance',
                            fluidPage(
                              navbarPage(title = 'Performance',
-                               tabPanel('Fieldworkers',
-                                        fluidPage(
-                                          # fluidRow(column(3, align = 'center',
-                                          #                 selectInput('fid_select', 'Select fieldworker ID',
-                                          #                             choices = fid_options))
-                                          # ),
-                                            fluidRow(
-                                              infoBox(title = 'Number of detected anomalies',
-                                                      icon = icon('microscope'),
-                                                      color = 'black',
-                                                      width = 6,
-                                                      h1(0)),
-                                              infoBox(title = 'Missing response rate',
-                                                      icon = icon('address-book'),
-                                                      color = 'black',
-                                                      width = 6,
-                                                      h1('0%'))
-                                            ),
-                                            fluidRow(
-                                              column(4,
-                                                     selectInput('fid',
-                                                                 'Fieldworker',
-                                                                 choices = fid_choices),
-                                                     tableOutput('individual_details')),
-                                              box(width = 8,
-                                                  title = 'Location of forms submitted by this worker',
-                                                  leafletOutput('fid_leaf'))
-                                            ),
-                                          navbarPage('Fieldworkers tables',
-                                                     tabPanel('Daily',
-                                                              DT::datatable(fwt_daily, rownames = FALSE)),
-                                                     tabPanel('Weekly',
-                                                              DT::datatable(fwt_weekly, rownames = FALSE)),
-                                                     tabPanel('Overall',
-                                                              DT::datatable(fwt_overall, rownames = FALSE))),
-                                          fluidRow(
-                                                   h2('Drop-outs'),
-                                                   p('PENDING: need standardized definition of what a drop-out is.')
-                                          ))),
+                                        tabPanel('Fieldworkers',
+                                                 fluidPage(
+                                                   # fluidRow(column(3, align = 'center',
+                                                   #                 selectInput('fid_select', 'Select fieldworker ID',
+                                                   #                             choices = fid_options))
+                                                   # ),
+                                                   fluidRow(
+                                                     infoBox(title = 'Number of detected anomalies',
+                                                             icon = icon('microscope'),
+                                                             color = 'black',
+                                                             width = 6,
+                                                             h1(0)),
+                                                     infoBox(title = 'Missing response rate',
+                                                             icon = icon('address-book'),
+                                                             color = 'black',
+                                                             width = 6,
+                                                             h1('0%'))
+                                                   ),
+                                                   fluidRow(
+                                                     column(4,
+                                                            selectInput('fid',
+                                                                        'Fieldworker',
+                                                                        choices = fid_choices),
+                                                            tableOutput('individual_details')),
+                                                     box(width = 8,
+                                                         title = 'Location of forms submitted by this worker',
+                                                         leafletOutput('fid_leaf'))
+                                                   ),
+                                                   navbarPage('Fieldworkers tables',
+                                                              tabPanel('Daily',
+                                                                       DT::datatable(fwt_daily, rownames = FALSE)),
+                                                              tabPanel('Weekly',
+                                                                       DT::datatable(fwt_weekly, rownames = FALSE)),
+                                                              tabPanel('Overall',
+                                                                       DT::datatable(fwt_overall, rownames = FALSE))),
+                                                   fluidRow(
+                                                     h2('Drop-outs'),
+                                                     p('PENDING: need standardized definition of what a drop-out is.')
+                                                   ))),
                                         tabPanel('Supervisors',
                                                  fluidPage(
                                                    fluidRow(
@@ -1216,100 +1242,93 @@ app_server <- function(input, output, session) {
               
               # Get the odk data
               pd <- odk_data$data
+              people <- pd$repeats$minicensus_people
               pd <- pd$non_repeats
               # Get the country
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
               pd <- pd %>% dplyr::filter(hh_country == co)
               # Get hh head
-              pd$hh_head_permid <- pd$hh_head_first_name <- pd$hh_head_last_name <- NA
-              if(nrow(pd) > 0){
-                for(i in 1:nrow(pd)){
-                  this_row <- pd[i,]
-                  id <- this_row$hh_head_id
-                  good <- TRUE
-                  if(is.null(id)){
-                    good <- FALSE
-                  } else
-                    if(is.na(id)){
-                      good <- FALSE
-                    }
-                  if(!good){
-                    message('IMPORANT, MISSING ID FOR HH HEAD')
-                    id <- 1
-                  }
-                  pd$hh_head_permid[i] <- this_row[,paste0('pid', id)] %>% unlist
-                  pd$hh_head_first_name[i] <- this_row[,paste0('first_name', id)] %>% unlist
-                  pd$hh_head_last_name[i] <- this_row[,paste0('last_name', id)] %>% unlist
-                  
-                }
-                pd <- pd %>%
-                  mutate(name = paste0(hh_head_first_name, ' ', hh_head_last_name)) %>%
-                  mutate(age = round((Sys.Date() - as.Date(hh_head_dob))/365.25)) %>%
-                  mutate(consent = 'HoH (minicensus)') %>%
-                  mutate(x = ' ',y = ' ', z = ' ') %>%
-                  dplyr::select(wid,
-                                hh_hamlet_code,
-                                hh_head_permid,
-                                name,
-                                age,
-                                todays_date,
-                                consent,
-                                x,y,z)
-                text_filter <- input$verification_text_filter
-                if(!is.null(text_filter)){
-                  pd <- pd %>% 
-                    dplyr::filter(grepl(text_filter, wid))
-                }
-                date_filter <- input$verification_date_filter
-                if(!is.null(date_filter)){
-                  pd <- pd %>%
-                    dplyr::filter(
-                      todays_date <= date_filter[2],
-                      todays_date >= date_filter[1]
-                    )
-                }
-                if(co == 'Mozambique'){
-                  names(pd) <- c('Código TC',
-                                 'Código Bairro',
-                                 # 'Número do Agregado Familiar',
-                                 'ExtID (número de identificação do participante)',
-                                 'Nome do membro do agregado',
-                                 'Idade do membro do agregado',
-                                 'Data de recrutamento',
-                                 'Consentimento/Assentimento informado (marque se estiver correto e completo)',
-                                 'Se o documento não estiver preenchido correitamente, indicar o error',
-                                 'O error foi resolvido (sim/não)',
-                                 'Verificado por (iniciais do arquivista) e data')
-                } else {
-                  names(pd) <- c('FW code',
-                                 'Hamlet code',
-                                 # 'HH number',
-                                 'ExtID HH member',
-                                 'Name of household member',
-                                 'Age of household member',
-                                 'Recruitment date',
-                                 'Informed consent/assent type (check off if correct and complete)',
-                                 'If not correct, please enter type of error',
-                                 'Was the error resolved (Yes/No)?',
-                                 'Verified by (archivist initials) and date')
-                }
-                fluidPage(
-                  gt(pd) %>%
-                    tab_style(
-                      style = cell_fill(
-                        color = "#FFA500"
-                      ),
-                      locations = cells_body(names(pd)[1:7])
-                    ))
-              } else {
-                fluidPage(
-                  h3(paste0('No data available for location: ', input$geo, '.'))
-                )
+              out_list <- list()
+              for(i in 1:nrow(pd)){
+                this_instance_id <- pd$instance_id[i]
+                this_num <- pd$hh_head_id[i]
+                this_date <- pd$todays_date[i]
+                this_dob <- pd$hh_head_dob[i]
+                this_wid <- pd$wid[i]
+                this_hh_hamlet_code <- pd$hh_hamlet_code[i]
+                this_person <- people %>% filter(instance_id == this_instance_id,
+                                                 num == this_num)
+                out <- this_person %>% mutate(todays_date = this_date,
+                                              hh_head_dob = this_dob,
+                                              wid = this_wid,
+                                              hh_hamlet_code = this_hh_hamlet_code)
+                out_list[[i]] <- out
               }
+              out <- bind_rows(out_list)
+              pd <- out %>%
+                mutate(name = paste0(first_name, ' ', last_name),
+                       age = round((as.Date(todays_date) - as.Date(hh_head_dob)) / 365.25)) %>%
+                mutate(consent = 'HoH (minicensus)') %>%
+                mutate(x = ' ',y = ' ', z = ' ') %>%
+                dplyr::select(wid,
+                              hh_hamlet_code,
+                              hh_head_permid = pid,
+                              name,
+                              age,
+                              todays_date,
+                              consent,
+                              x,y,z)
+              text_filter <- input$verification_text_filter
+              if(!is.null(text_filter)){
+                pd <- pd %>% 
+                  dplyr::filter(grepl(text_filter, wid))
+              }
+              date_filter <- input$verification_date_filter
+              if(!is.null(date_filter)){
+                pd <- pd %>%
+                  dplyr::filter(
+                    todays_date <= date_filter[2],
+                    todays_date >= date_filter[1]
+                  )
+              }
+              if(co == 'Mozambique'){
+                names(pd) <- c('Código TC',
+                               'Código Bairro',
+                               # 'Número do Agregado Familiar',
+                               'ExtID (número de identificação do participante)',
+                               'Nome do membro do agregado',
+                               'Idade do membro do agregado',
+                               'Data de recrutamento',
+                               'Consentimento/Assentimento informado (marque se estiver correto e completo)',
+                               'Se o documento não estiver preenchido correitamente, indicar o error',
+                               'O error foi resolvido (sim/não)',
+                               'Verificado por (iniciais do arquivista) e data')
+              } else {
+                names(pd) <- c('FW code',
+                               'Hamlet code',
+                               # 'HH number',
+                               'ExtID HH member',
+                               'Name of household member',
+                               'Age of household member',
+                               'Recruitment date',
+                               'Informed consent/assent type (check off if correct and complete)',
+                               'If not correct, please enter type of error',
+                               'Was the error resolved (Yes/No)?',
+                               'Verified by (archivist initials) and date')
+              }
+              fluidPage(
+                gt(pd) %>%
+                  tab_style(
+                    style = cell_fill(
+                      color = "#FFA500"
+                    ),
+                    locations = cells_body(names(pd)[1:7])
+                  ))
             }
     )
-  })
+  }
+  )
   
   
   # Demography UI  ###################################################
@@ -1559,11 +1578,12 @@ app_server <- function(input, output, session) {
   # Malaria UI elements #################################################
   
   
-}
+  }
 
 app <- function(){
   # Detect the system. If on AWS, don't launch browswer
   is_aws <- grepl('aws', tolower(Sys.info()['release']))
+
   shinyApp(ui = app_ui,
            server = app_server,
            options = list('launch.browswer' = !is_aws))
