@@ -1,12 +1,11 @@
--- TODO review non nullable fields, 
--- inspect full dataframe labels, 
--- whats with the repeat_id and repeat_counts?, 
--- what is the lgl type ideal to match in sql? currently using BOOLEAN.
+-- TODO 
+-- inspect full dataframe labels to fix the column names marked with TODO 
 
 CREATE DATABASE bohemia;
 CREATE USER bohemia_app WITH LOGIN PASSWORD 'riscrazy';
 -- NOTE switch to the bohemia database before proceeding with the following queries execution.
--- psql command `\c bohemia`
+-- psql command within a database session `\c bohemia` 
+-- bash command to get to the database directly: `export PGPASSWORD='riscrazy'; psql -h 'localhost' -U 'bohemia_app' -d 'bohemia'`
 
 CREATE TABLE minicensus_main (
     instance_id  uuid,

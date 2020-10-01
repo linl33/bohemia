@@ -14,6 +14,12 @@ dbExistsTable(con, 'minicensus_main')
 
 existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
 
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+} 
+
 data <- odk_get_data(
   url = url,
   id = id,
