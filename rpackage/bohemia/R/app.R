@@ -112,7 +112,6 @@ app_ui <- function(request) {
             ui_main),
           tabItem(
             tabName="field_monitoring",
-            uiOutput('ui_field_monitoring_by'),
             uiOutput('ui_field_monitoring')),
           tabItem(
             tabName="enrollment",
@@ -556,17 +555,17 @@ app_server <- function(input, output, session) {
   
   
   # Field monitoring UI  #############################################
+  field_monitoring_geo <- reactiveVal('District')
   output$ui_field_monitoring_by <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
     li <- si$logged_in
     ac <- 'field_monitoring' %in% si$access
-    
-    
     # Generate the ui
     make_ui(li = li,
             ac = ac,
             ok = {
+              fmg <- field_monitoring_geo()
               fluidPage(
                 column(12, align = 'center',
                        radioButtons('field_monitor_by',
@@ -575,9 +574,14 @@ app_server <- function(input, output, session) {
                                                 'Ward',
                                                 'Village',
                                                 'Hamlet'),
+                                    selected = fmg,
                                     inline = TRUE))
               )
             })
+  })
+  observeEvent(input$field_monitor_by,{
+    x <- input$field_monitor_by
+    field_monitoring_geo(x)
   })
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
@@ -769,7 +773,7 @@ app_server <- function(input, output, session) {
                   dplyr::select(Village, `Forms done` = numerator,
                                 `Estimated households` = n_households,
                                 `Estimated percent finished` = p)
-                by_geo <- input$field_monitor_by
+                by_geo <- field_monitoring_geo() #input$field_monitor_by
                 if(is.null(by_geo)){
                   monitor_by_table <- progress_by_district
                 } else {
@@ -836,6 +840,7 @@ app_server <- function(input, output, session) {
                   tabPanel('Overview',
                            fluidPage(
                              h3('Progress by geography'),
+                             uiOutput('ui_field_monitoring_by'),
                              fluidRow(
                                column(12, align = 'center',
                                       bohemia::prettify(monitor_by_table, nrows = nrow(monitor_by_table))

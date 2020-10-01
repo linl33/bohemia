@@ -418,25 +418,10 @@ sudo systemctl restart shiny-server
 
 ### BohemiApp
 
-- On the shiny server, run the following:
-
 ```
-sudo su - -c "R -e \"remove.packages('bohemia')\""
-sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia', dependencies = TRUE, force = TRUE)\""
-# Need to make the location of the package writeable (this is for the operations pdf writing)
-sudo chmod -R 777 /usr/local/lib/R/site-library/bohemia/shiny/operations  # identify this by running system.file('shiny/operations', package = 'bohemia')
-
-
-# Run the below once only
-mkdir /srv/shiny-server/bohemiapp
-sudo chmod -R 777 /srv/shiny-server/bohemiapp
-echo "library(bohemia); bohemia::run_bohemiapp()" > /srv/shiny-server/bohemiapp/app.R
+sudo su - -c "R -e \"remove.packages('bohemia')\""; sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia')\""; sudo chmod -R 777 /usr/local/lib/R/site-library; sudo systemctl restart shiny-server;
 ```
-- Restart the server:
 
-```
-sudo systemctl restart shiny-server
-```
 
 # Configure shiny server
 
