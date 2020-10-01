@@ -438,33 +438,52 @@ echo "library(bohemia); bohemia::run_bohemiapp()" > /srv/shiny-server/bohemiapp/
 sudo systemctl restart shiny-server
 ```
 
+# Configure shiny server
 
-# Old stuff
+`sudo nano /etc/shiny-server/shiny-server.conf`
 
-Move things to the serving area
 
 ```
-cp -r bohemia/shiny/operations /srv/shiny-server
-cp -r bohemia/shiny/directory /srv/shiny-server
-cp -r bohemia/shiny/datamanager /srv/shiny-server
+# Instruct Shiny Server to run applications as the user "shiny"
+run_as shiny;
+http_keepalive_timeout 180;
+#socksjs_disconnect_delay 10;
 
-sudo systemctl restart shiny-server
+# Define a server that listens on port 3838
+server {
+  listen 3838;
+
+  # Define a location at the base URL
+  location / {
+
+   # Disable idle timeouts
+   app_idle_timeout 0;
+
+   # Allow 10 concurrent connections
+   simple_scheduler 10;
+
+   # time outs
+   app_init_timeout 180;
+#   app_session_timeout 1000;
+
+    disable_protocols websocket;
+
+    # Host the directory of Shiny Apps stored in this directory
+    site_dir /srv/shiny-server;
+
+    # Log all Shiny output to files in this directory
+    log_dir /var/log/shiny-server;
+
+    # When a user visits the base URL rather than a particular application,
+    # an index of the applications available in this directory will be shown.
+    directory_index on;
+  }
+}
+
 
 ```
 
-
-- Port from local to remote
-```
-mkdir ~/Documents
-scp -r -i "/home/joebrew/.ssh/openhdskey.pem" ~/Documents/vilaweb/analyses/deleted_tweets ubuntu@bohemia.team:/home/ubuntu/Documents
-```
-
-- On remote machine, move to deploy area
-
-```
-sudo cp -r ~/Documents/deleted_tweets /srv/shiny-server/piulets
-```
-
+# Deprecated
 
 ## install postgres
 
