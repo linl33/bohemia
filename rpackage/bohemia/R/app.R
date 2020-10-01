@@ -1229,6 +1229,7 @@ app_server <- function(input, output, session) {
                                       end = Sys.Date()))
               )
             })})
+  consent_verification_list_reactive <- reactiveValues(data = NULL)
   output$ui_consent_verification_list <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -1299,7 +1300,7 @@ app_server <- function(input, output, session) {
                                'Nome do membro do agregado',
                                'Idade do membro do agregado',
                                'Data de recrutamento',
-                               'Consentimento/Assentimento informado (marque se estiver correto e completo)',
+                               'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
                                'Se o documento não estiver preenchido correitamente, indicar o error',
                                'O error foi resolvido (sim/não)',
                                'Verificado por (iniciais do arquivista) e data')
@@ -1316,7 +1317,11 @@ app_server <- function(input, output, session) {
                                'Was the error resolved (Yes/No)?',
                                'Verified by (archivist initials) and date')
               }
+              consent_verification_list_reactive$data <- pd
               fluidPage(
+                downloadButton('render_consent_verification_list',
+                               'Print consent verification list'),
+                br(),
                 gt(pd) %>%
                   tab_style(
                     style = cell_fill(
@@ -1549,6 +1554,27 @@ app_server <- function(input, output, session) {
                                         output_file = out_file,
                                         params = list(data = data,
                                                       loc_id = lc))
+                      
+                      # copy html to 'file'
+                      file.copy(out_file, file)
+                      
+                      # # delete folder with plots
+                      # unlink("figure", recursive = TRUE)
+                    },
+                    contentType = "application/pdf"
+    )
+  output$render_consent_verification_list <-
+    downloadHandler(filename = "consent_verification_list.pdf",
+                    content = function(file){
+                      
+                      # Get the data
+                      pdx <- consent_verification_list_reactive$data
+                      save(pdx, file = '/tmp/data.RData')
+
+                      out_file <- paste0(getwd(), '/consent_verification_list.pdf')
+                      rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/consent_verification_list.Rmd'),
+                                        output_file = out_file,
+                                        params = list(data = pdx))
                       
                       # copy html to 'file'
                       file.copy(out_file, file)
