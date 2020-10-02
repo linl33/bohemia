@@ -21,15 +21,8 @@ format_minicensus <- function(data){
   df <- df[,!names(df) %in% people_columns]
   # Remove all the notes
   df <- df[,!grepl('note_', names(df))]
-  df <- df[,!names(df) %in% c('animal_house_distance_pigs', 
-                              'hh_animals_animal_house_location_pigs',
-                              'hh_member_note',
-                              'hh_no_paint_problem',
-                              'hh_owns_cattle_or_pigs_note',
-                              'hh_paint_note',
-                              'hh_region_show',
-                              'other_decider')]
-  # Clean up the people part
+
+    # Clean up the people part
   people_list <- list()
   counter <- 0
   for(i in 1:nrow(people_part)){
@@ -73,28 +66,32 @@ format_minicensus <- function(data){
     mutate(hh_main_energy_source_for_lighting = ifelse(!is.na(hh_main_energy_source_for_lighting_other),
                                                        hh_main_energy_source_for_lighting_other,
                                                        hh_main_energy_source_for_lighting)) %>%
-    # wall material clean up
-    mutate(hh_main_wall_material = ifelse(!is.na(hh_main_wall_material_free),
-                                          hh_main_wall_material_free,
-                                          hh_main_wall_material)) %>%
-    # Not doing the below since it's a select multiple (ie "other" is compatible with more responses)
-    # mutate(hh_health_permission = ifelse(!is.na(hh_health_permission_other),
-    #                                      hh_health_permission_other,
-    #                                      hh_health_permission)) %>%
+    # The below are select multiple, so it's theoretically possible to combine the other option
+    mutate(hh_main_wall_material = paste0(ifelse(!is.na(hh_main_wall_material), hh_main_wall_material, ''),
+                                          ' ',
+                                          ifelse(!is.na(hh_main_wall_material_other), hh_main_wall_material_other, ''))) %>%
+    mutate(hh_health_permission = paste0(ifelse(!is.na(hh_health_permission), hh_health_permission, ''),
+                                          ' ',
+                                          ifelse(!is.na(hh_health_permission_other), hh_health_permission_other, ''))) %>%
     dplyr::select(-hh_main_energy_source_for_lighting_other,
-                  -hh_main_wall_material_free,
-                  -instanceName)
+                  -hh_main_wall_material_other,
+                  -instanceName,
+                  -hh_health_permission_other)
   
   # REPEATS
   # death
   repeat_death_info <- data$repeats$repeat_death_info %>%
-    dplyr::rename(instance_id = instanceID) %>% dplyr::select(-repeat_name, -repeated_id)
+    dplyr::rename(instance_id = instanceID) %>% dplyr::select(-repeat_name, -repeated_id, -death_adjustment)
   # hh_sub
   repeat_hh_sub <- data$repeats$repeat_hh_sub %>%
     dplyr::rename(instance_id = instanceID) %>% 
     dplyr::select(-repeat_name, 
                   -repeated_id,
-                  -note_hh_head_is_sub)
+                  -note_hh_head_is_sub) %>%
+    mutate(hh_sub_relationship = ifelse(!is.na(hh_sub_relationship_other),
+                                        hh_sub_relationship_other,
+                                        hh_sub_relationship)) %>%
+    dplyr::select(-hh_sub_relationship_other)
   # household members (joining to people part) 
   repeat_household_members_enumeration <- data$repeats$repeat_household_members_enumeration %>%
     dplyr::rename(instance_id = instanceID) %>% dplyr::select(-repeat_name, -repeated_id, -hh_member_number_size) %>% filter(!is.na(permid))

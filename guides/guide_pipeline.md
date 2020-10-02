@@ -8,9 +8,18 @@ The data processing scripts that migrate data from the ODK Aggregate server to p
 
 1. All `.xml` forms deployed on the ODK Aggregate server be generated via the `xls2xform` functionality (or via the python scripts for conversion in the `scripts` sub-directory), _not_ via online converters.
 
-2. All repeat elements (ie, xlsform rows in which the type is `begin repeat`) must contain `repeat` in the `name` field.
+2. All repeat elements (ie, xlsform rows in which the type is `begin repeat`) must contain `repeat_` prefix in the `name` field.
 
 3. No non-repeat elements should contain the word `repeat` in the name field.
+
+4. All group elements (ie, xlsform rows in which the type is `begin group`) must contain `group_` prefix in the `name` field.
+
+5. No non-group elements should contain the word `group` in the name field.
+
+6. All note elements (ie, xlsform rows in which the type is `note`) must contain `note_` prefix in the `name` field.
+
+7. No non-note elements should contain the word `note` in the name field.
+
 
 ## General overview
 
