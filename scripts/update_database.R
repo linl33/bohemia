@@ -38,9 +38,7 @@ data <- odk_get_data(
 
 new_data <- FALSE
 if(!is.null(data)){
-  if(nrow(data) > 0){
-    new_data <- TRUE
-  }
+  new_data <- TRUE
 }
 
 if(new_data){
