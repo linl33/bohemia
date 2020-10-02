@@ -1,7 +1,6 @@
 ---
 title: "Number of locations"
 author: "Databrew"
-date: "9/30/2020"
 output: html_document
 ---
 
