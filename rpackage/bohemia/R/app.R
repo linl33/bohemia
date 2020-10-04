@@ -133,7 +133,7 @@ app_ui <- function(request) {
                        h4('Location code:'),
                        h3(textOutput('location_code_text')),
                        uiOutput('ui_enumeration_n_hh'),
-                       helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration). THE DEFAULT NUMBERS SHOWN ARE 25% HIGHER THAN THE NUMBER ESTIMATED BY THE VILLAGE LEADER.'),
+                       helpText('The default numbers shown are 25% higher than the number of estimated by the village leader.'),
                        textInput('enumeration_n_teams',
                                  'Number of teams',
                                  value = 2),
@@ -382,7 +382,12 @@ app_server <- function(input, output, session) {
     sub_locations <- filter_locations(locations = locations,
                                       country = input$country)
     choices <- sort(unique(sub_locations$Region))
-    selectInput('region', 'Region', choices = choices)
+    country_name <- input$country
+    if(country_name == 'Mozambique'){
+      selectInput('region', 'Região', choices = choices)
+    } else {
+      selectInput('region', 'Region', choices = choices)
+    } 
   })
   
   output$district_ui <- renderUI({
@@ -390,7 +395,12 @@ app_server <- function(input, output, session) {
                                       country = input$country,
                                       region = input$region)
     choices <- sort(unique(sub_locations$District))
-    selectInput('district', 'District', choices = choices)
+    country_name <- input$country
+    if(country_name == 'Mozambique'){
+      selectInput('district', 'Distrito', choices = choices)
+    } else {
+      selectInput('district', 'District', choices = choices)
+    }
   })
   
   output$ward_ui <- renderUI({
@@ -399,7 +409,12 @@ app_server <- function(input, output, session) {
                                       region = input$region,
                                       district = input$district)
     choices <- sort(unique(sub_locations$Ward))
-    selectInput('ward', 'Ward', choices = choices)
+    country_name <- input$country
+    if(country_name == 'Mozambique'){
+      selectInput('ward', 'Posto administrativo/localidade', choices = choices)
+    } else {
+      selectInput('ward', 'Ward', choices = choices)
+    }  
   })
   
   output$village_ui <- renderUI({
@@ -409,7 +424,12 @@ app_server <- function(input, output, session) {
                                       district = input$district,
                                       ward = input$ward)
     choices <- sort(unique(sub_locations$Village))
-    selectInput('village', 'Village', choices = choices)
+    country_name <- input$country
+    if(country_name == 'Mozambique'){
+      selectInput('village', 'Povoado', choices = choices)
+    } else {
+      selectInput('village', 'Village', choices = choices)
+    }  
   })
   
   output$hamlet_ui <- renderUI({
@@ -420,7 +440,12 @@ app_server <- function(input, output, session) {
                                       ward = input$ward,
                                       village = input$village)
     choices <- sort(unique(sub_locations$Hamlet))
-    selectInput('hamlet', 'Hamlet', choices = choices)
+    country_name <- input$country
+    if(country_name == 'Mozambique'){
+      selectInput('hamlet', 'Bairro', choices = choices)
+    } else {
+      selectInput('hamlet', 'Hamlet', choices = choices)
+    } 
     
   })
   
