@@ -139,7 +139,7 @@ app_ui <- function(request) {
                                             fluidPage(
                                               h3("Visit control sheet"),
                                               uiOutput('ui_enumeration_n_hh'),
-                                              helpText('Err on the high side (ie, enter 20-30% more households than there likely are). It is better to have a list which is too long (and does not get finished) than to have a list which is too-short (and is exhausted prior to finishing enumeration). THE DEFAULT NUMBERS SHOWN ARE 25% HIGHER THAN THE NUMBER ESTIMATED BY THE VILLAGE LEADER.'),
+                                              helpText('The defulat numbers shown are 25% higher than the number estimated by the village leader.'),
                                               textInput('enumeration_n_teams',
                                                         'Number of teams',
                                                         value = 2),
@@ -582,6 +582,19 @@ app_server <- function(input, output, session) {
   # Field monitoring UI  #############################################
   field_monitoring_geo <- reactiveVal('District')
   output$ui_field_monitoring_by <- renderUI({
+    
+    cn <- input$country
+    if(cn=='Tanzania'){
+      cn_choices = c('District',
+                     'Ward',
+                     'Village',
+                     'Hamlet')
+    } else {
+      cn_choices = c('Distrito' = 'District',
+                     'Posto administrativo/localidade' ='Ward',
+                     'Povoado' ='Village',
+                     'Bairro' ='Hamlet')
+    }
     # See if the user is logged in and has access
     si <- session_info
     li <- si$logged_in
@@ -595,10 +608,7 @@ app_server <- function(input, output, session) {
                 column(12, align = 'center',
                        radioButtons('field_monitor_by',
                                     'Geographic level:',
-                                    choices = c('District',
-                                                'Ward',
-                                                'Village',
-                                                'Hamlet'),
+                                    choices = cn_choices,
                                     selected = fmg,
                                     inline = TRUE))
               )
@@ -1251,14 +1261,32 @@ app_server <- function(input, output, session) {
             ok = {
               fluidPage(
                 column(4,
-                       textInput('verification_text_filter',
-                                 'Filter by FW code'),
+                       uiOutput('ui_verification_text_filter'),
                        dateRangeInput('verification_date_filter',
                                       'Filter by date',
                                       start = as.Date('2020-09-01'),
                                       end = Sys.Date()))
               )
-            })})
+            })
+    })
+  
+  # HERE - not showing up
+  output$ui_verification_text_filter <- renderUI({
+    pd <- odk_data$data
+    pd <- pd$non_repeats
+    
+    # Get the country
+    co <- input$geo
+    co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
+    pd <- pd %>% dplyr::filter(hh_country == co)
+    wid <- unique(pd$wid)
+    save(pd, file = 'temp.rda')
+    selectInput('verification_text_filter',
+              'Filter by FW code',
+              choices = wid,
+              selected = wid[1])
+  })
+ 
   consent_verification_list_reactive <- reactiveValues(data = NULL)
   output$ui_consent_verification_list <- renderUI({
     # See if the user is logged in and has access
@@ -1312,7 +1340,7 @@ app_server <- function(input, output, session) {
               text_filter <- input$verification_text_filter
               if(!is.null(text_filter)){
                 pd <- pd %>% 
-                  dplyr::filter(grepl(text_filter, wid))
+                  dplyr::filter(wid %in% text_filter)
               }
               date_filter <- input$verification_date_filter
               if(!is.null(date_filter)){
