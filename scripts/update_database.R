@@ -16,9 +16,6 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
                  port=5432,
                  user=psql_user, password=psql_pass)
 
-# con <- dbConnect(drv, dbname='bohemia', host='localhost', port=5432, user='bohemia_app', password='riscrazy')
-dbExistsTable(con, 'minicensus_main')
-
 existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
 
 if (nrow(existing_uuids)< 0){
@@ -39,10 +36,18 @@ data <- odk_get_data(
   password = password
 )
 
-# Format data
-formatted_data <- format_minicensus(data = data)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
 
-# Update data
-update_minicensus(formatted_data = formatted_data,
-                  con = con)
+if(new_data){
+  # Format data
+  formatted_data <- format_minicensus(data = data)
+  
+  # Update data
+  update_minicensus(formatted_data = formatted_data,
+                    con = con)
+}
+
 dbDisconnect(con)

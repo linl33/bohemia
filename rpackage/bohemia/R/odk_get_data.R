@@ -63,6 +63,10 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   
   # If there are submissions, we need to conform them to the list of given uuids and exclude_uuids
   if(!is.null(uuids)){
+    # Add the uuid string if necessary
+    if(!grepl('uuid', uuids[1])){
+      uuids <- paste0('uuid:', uuids)
+    }
     submissions <- submissions[submissions %in% uuids]
   }
   # If no remaining submissions, stop
@@ -71,6 +75,9 @@ odk_get_data <- function(url = 'https://bohemia.systems',
     return(c())
   } 
   if(!is.null(exclude_uuids)){
+    if(!grepl('uuid', exclude_uuids[1])){
+      exclude_uuids <- paste0('uuid:', exclude_uuids)
+    }
     submissions <- submissions[!submissions %in% exclude_uuids]
   }
   if(length(submissions) == 0){

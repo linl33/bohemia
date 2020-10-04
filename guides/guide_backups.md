@@ -130,25 +130,42 @@ server=bohemiasystems
 bucket=databrewbohemia
 folder=aggregate
 dateValue=`(date --iso-8601=seconds)`
-file=${dateValue}.gz
+file=${dateValue}.sql
 resource="/${bucket}/${server}/${folder}/${file}"
 
 # Stop running tomcat
 sudo service tomcat8 stop
 
 # Run the dump
-pg_dump aggregate -U postgres -F t > ${file}
+pg_dump aggregate -U postgres > ${file}
 
 # Restart tomcat
 sudo service tomcat8 start
-
-## Restore
-#gunzip out.gz
 
 
 aws s3 cp ${file} s3:/${resource}
 rm ${file}
 ```
+
+##### For backing up the bohemia database (using same server)
+
+Modify the ~/Documents/dumps/backup.sh file by adding the following lines:
+
+```
+dateValue=`(date --iso-8601=seconds)`
+password=<PASSWORD GOES HERE>
+endpoint=<ENDPOINT GOES HERE>
+bucket=databrewbohemia
+server=bohemiadb
+folder=bohemia
+file=${dateValue}.sql
+resource="/${bucket}/${server}/${folder}/${file}"
+#pg_dump -h ${endpoint} -U postgres bohemia > ${file}
+pg_dump --dbname=postgresql://postgres:${password}@bohemiacluster.cluster-carq1ylei7sf.eu-west-3.rds.amazonaws.com:5432/bohemia > ${file}
+aws s3 cp ${file} s3:/${resource}
+rm ${file}
+```
+
 
 ##### On the traccar server (bohemia.fun)
 

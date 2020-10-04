@@ -418,53 +418,57 @@ sudo systemctl restart shiny-server
 
 ### BohemiApp
 
-- On the shiny server, run the following:
-
 ```
-sudo su - -c "R -e \"remove.packages('bohemia')\""
-sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia', dependencies = TRUE, force = TRUE)\""
-# Need to make the location of the package writeable (this is for the operations pdf writing)
-sudo chmod -R 777 /usr/local/lib/R/site-library/bohemia/shiny/operations  # identify this by running system.file('shiny/operations', package = 'bohemia')
-
-
-# Run the below once only
-mkdir /srv/shiny-server/bohemiapp
-sudo chmod -R 777 /srv/shiny-server/bohemiapp
-echo "library(bohemia); bohemia::run_bohemiapp()" > /srv/shiny-server/bohemiapp/app.R
-```
-- Restart the server:
-
-```
-sudo systemctl restart shiny-server
+sudo su - -c "R -e \"remove.packages('bohemia')\""; sudo su - -c "R -e \"devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia')\""; sudo chmod -R 777 /usr/local/lib/R/site-library; sudo systemctl restart shiny-server;
 ```
 
 
-# Old stuff
+# Configure shiny server
 
-Move things to the serving area
+`sudo nano /etc/shiny-server/shiny-server.conf`
+
 
 ```
-cp -r bohemia/shiny/operations /srv/shiny-server
-cp -r bohemia/shiny/directory /srv/shiny-server
-cp -r bohemia/shiny/datamanager /srv/shiny-server
+# Instruct Shiny Server to run applications as the user "shiny"
+run_as shiny;
+http_keepalive_timeout 180;
+#socksjs_disconnect_delay 10;
 
-sudo systemctl restart shiny-server
+# Define a server that listens on port 3838
+server {
+  listen 3838;
+
+  # Define a location at the base URL
+  location / {
+
+   # Disable idle timeouts
+   app_idle_timeout 0;
+
+   # Allow 10 concurrent connections
+   simple_scheduler 10;
+
+   # time outs
+   app_init_timeout 180;
+#   app_session_timeout 1000;
+
+    disable_protocols websocket;
+
+    # Host the directory of Shiny Apps stored in this directory
+    site_dir /srv/shiny-server;
+
+    # Log all Shiny output to files in this directory
+    log_dir /var/log/shiny-server;
+
+    # When a user visits the base URL rather than a particular application,
+    # an index of the applications available in this directory will be shown.
+    directory_index on;
+  }
+}
+
 
 ```
 
-
-- Port from local to remote
-```
-mkdir ~/Documents
-scp -r -i "/home/joebrew/.ssh/openhdskey.pem" ~/Documents/vilaweb/analyses/deleted_tweets ubuntu@bohemia.team:/home/ubuntu/Documents
-```
-
-- On remote machine, move to deploy area
-
-```
-sudo cp -r ~/Documents/deleted_tweets /srv/shiny-server/piulets
-```
-
+# Deprecated
 
 ## install postgres
 

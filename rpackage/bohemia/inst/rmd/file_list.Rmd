@@ -1,6 +1,6 @@
 ---
 params:
-  data: !r data.frame(n_hh = 400) # data on the hamlet
+  data: !r data.frame(n_hh = 400, id_limit_lwr = 1, id_limit_upr = 400) # data on the hamlet
   loc_id: 'ABC'
 output:
   pdf_document:
@@ -53,6 +53,8 @@ for (i in 1:length(params)){
 ```{r}
 lc <- loc_id
 n_hh <- as.numeric(data$n_hh)
+id_limit_lwr <- as.numeric(data$id_limit_lwr)
+id_limit_upr <- as.numeric(data$id_limit_upr)
 
 # Get country
 country <- 'Mozambique'
@@ -65,10 +67,17 @@ if(lc %in% locations$code[locations$Country == 'Tanzania']){
 
 ```{r}
 id_vals <- 1:n_hh
+id_vals <- id_vals[id_vals %in% id_limit_lwr:id_limit_upr]
 out <- tibble(`Neighborhood code` = loc_id, `HHID` = paste0(lc, '-', bohemia::add_zero(id_vals, n = 3))) 
 left <- locations %>% filter(code == lc) %>% dplyr::select(Ward, Village, Hamlet)
 out = bind_cols(left, out)
 out$`File folder location` <- out$Observations <-  '     '
+if(country == 'Mozambique'){
+  names(out) <- c("Posto administrativo", "Localidade", "Bairro", "Código Bairro",
+                  "Número do Agregado Familiar",
+                  "Observações",
+                  "Localização da pasta de arquivo")
+}
 ```
 
 ```{r}

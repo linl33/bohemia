@@ -1,0 +1,116 @@
+---
+title: "Number of locations"
+author: "Databrew"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+library(dplyr)
+library(bohemia)
+library(leaflet)
+pd <- gps %>% left_join(locations) 
+```
+
+# Countries
+
+### Table
+
+```{r}
+pdx <- pd %>% group_by(Country) %>% summarise(Hamlets = n(), lng = mean(lng), lat = mean(lat))
+prettify(pdx)
+```
+
+# MOZAMBIQUE ONLY
+
+```{r}
+pd <- pd %>% filter(Country == 'Mozambique')
+```
+
+# Districts
+
+### Table
+
+```{r}
+pdx <- pd %>% group_by(Country, District) %>% summarise(Hamlets = n(), lng = mean(lng), lat = mean(lat))
+prettify(pdx)
+```
+
+### Centroid map
+
+```{r}
+leaflet() %>% addProviderTiles(providers$Esri.WorldPhysical) %>% addMarkers(pdx, lng = pdx$lng, lat = pdx$lat,
+                                                                            popup = pdx$District)
+```
+
+# Wards
+
+### Table
+
+
+```{r}
+pdx <- pd %>% group_by(Country, District, Ward) %>% summarise(Hamlets = n(), lng = mean(lng), lat = mean(lat))
+prettify(pdx)
+```
+
+### Centroid map
+
+```{r}
+leaflet() %>% addProviderTiles(providers$Esri.WorldPhysical) %>% addMarkers(pdx, lng = pdx$lng, lat = pdx$lat,
+                                                                            popup = pdx$Ward)
+```
+
+
+# Villages
+
+### Table
+
+```{r}
+pdx <- pd %>% group_by(Country, District, Ward, Village) %>% summarise(Hamlets = n(), lng = mean(lng), lat = mean(lat))
+prettify(pdx)
+```
+
+### Centroid map
+
+```{r}
+leaflet() %>% addProviderTiles(providers$Esri.WorldPhysical) %>% addMarkers(pdx, lng = pdx$lng, lat = pdx$lat,
+                                                                            popup = pdx$Village)
+```
+
+
+# Hamlets
+
+### Table
+
+```{r}
+pdx <- pd %>% dplyr::select(Country, District, Ward, Village, Hamlet, lng, lat) 
+prettify(pdx)
+```
+
+### Centroid map
+
+```{r}
+leaflet() %>% addProviderTiles(providers$Esri.WorldPhysical) %>% addMarkers(pdx, lng = pdx$lng, lat = pdx$lat,
+                                                                            popup = pdx$Hamlet)
+```
+
+
+# Households
+
+```{r}
+sum(pd$n_households)
+```
+
