@@ -585,8 +585,8 @@ app_server <- function(input, output, session) {
   field_monitoring_geo <- reactiveVal('District')
   output$ui_field_monitoring_by <- renderUI({
     
-    cn <- input$country
-    if(cn=='Tanzania'){
+    cn <- input$geo
+    if(cn=='Rufiji'){
       cn_choices = c('District',
                      'Ward',
                      'Village',
@@ -851,14 +851,37 @@ app_server <- function(input, output, session) {
                 if(is.null(by_geo)){
                   monitor_by_table <- progress_by_district
                 } else {
+                  cn <- input$geo
+                  cn <- ifelse(cn == 'Rufiji', 'Tanzania', 'Mozambique')
                   if(by_geo == 'District'){
-                    monitor_by_table <- progress_by_district
+                    if(cn == 'Mozambique'){
+                      names(progress_by_district)[1] <- 'Distrito'
+                      monitor_by_table <- progress_by_district
+                    } else {
+                      monitor_by_table <- progress_by_district
+                    }
+                    # save(monitor_by_table, file='monitor_by_table.rda')
                   } else if(by_geo == 'Ward'){
-                    monitor_by_table <- progress_by_ward
+                    if(cn == 'Mozambique'){
+                      names(progress_by_ward)[1] <- 'Posto administrativo/localidade'
+                      monitor_by_table <- progress_by_ward
+                    } else {
+                      monitor_by_table <- progress_by_ward
+                    }
                   } else if(by_geo == 'Village'){
-                    monitor_by_table <- progress_by_village
+                    if(cn == 'Mozambique'){
+                      names(progress_by_village)[1] <- 'Povoado'
+                      monitor_by_table <- progress_by_village
+                    } else {
+                      monitor_by_table <- progress_by_village
+                    }
                   } else if(by_geo == 'Hamlet'){
-                    monitor_by_table <- progress_by_hamlet
+                    if(cn == 'Mozambique'){
+                      names(progress_by_hamlet)[1] <- 'Bairro'
+                      monitor_by_table <- progress_by_hamlet
+                    } else {
+                      monitor_by_table <- progress_by_hamlet
+                    }
                   }
                 }
                 
@@ -885,7 +908,16 @@ app_server <- function(input, output, session) {
                                                 `FW ID` = wid,
                                                 `PERM ID` = va_code,
                                                 `HH visit date` = todays_date)) %>%
-                  dplyr::select(-instance_id) 
+                  dplyr::select(-instance_id)
+                
+                if(cn=='Mozambique'){
+                  va <- va %>%  rename(Distrito = District,
+                                      `Posto administrativo/localidade`=Ward,
+                                      Povoado=Village,
+                                      Bairro=Hamlet)
+                } 
+                
+                # save(va, file = 'va.rda')
                 if(nrow(va) > 0){
                   va <- va[,c(4:11, 1:3)]
                   va2 <- tibble(`No data available` = ' ') # this will need to be updated later with location-level VA performance info # paula slide page 10
@@ -1253,6 +1285,12 @@ app_server <- function(input, output, session) {
               l <- leaflet() %>% addProviderTiles(providers$Esri.WorldImagery) %>%
                 addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
               
+              if(co=='Mozambique'){
+                pd <- pd %>% rename(`Posto administrativo/localidade`=Ward,
+                                    Povoado=Village,
+                                    Bairro=Hamlet)
+              }
+              save(pd, file ='pd.rda')
               # NO DETAILS YET FOR NON-PARTICIPANTS
               
               fluidPage(
