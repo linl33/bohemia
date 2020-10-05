@@ -148,7 +148,7 @@ app_ui <- function(request) {
                                               helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
                                               uiOutput('ui_id_limit'),
                                               br(), br(),
-                                              downloadButton('render_enumeration_list',
+                                              downloadButton('render_visit_control_sheet',
                                                              'Generate visit control sheet(s)')
                                             )),
                                    tabPanel("File index and folder location",
@@ -310,7 +310,7 @@ app_server <- function(input, output, session) {
   ###########################################################################
   # Reactive object for seeing if logged in or not
   # (Joe will build log-in functionality later
-  session_info <- reactiveValues(logged_in = FALSE, # change later 
+  session_info <- reactiveValues(logged_in = TRUE, # change later 
                                  user = 'default',
                                  access = c("field_monitoring", "enrollment", 'consent_verification_list', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
                                  country = 'MOZ')
@@ -1261,9 +1261,10 @@ app_server <- function(input, output, session) {
                   column(12, align = 'center',
                          h4('Map of participating and non-participating households'),
                          l,
-                         h4('Table of participating households'),
+                         h2('Table of participating households'),
                          DT::datatable(pd, rownames = FALSE),
-                         h4('Table of non-participating households'),
+                         br(), br(),
+                         h2('Table of non-participating households'),
                          DT::datatable(tibble(`None` = 'There are none.')))
                 )
               )
@@ -1372,7 +1373,7 @@ app_server <- function(input, output, session) {
                 dplyr::select(wid,
                               hh_hamlet_code,
                               hh_head_permid = pid,
-                              name,
+                              # name,
                               age,
                               todays_date,
                               consent,
@@ -1393,9 +1394,8 @@ app_server <- function(input, output, session) {
               if(co == 'Mozambique'){
                 names(pd) <- c('Código TC',
                                'Código Bairro',
-                               # 'Número do Agregado Familiar',
                                'ExtID (número de identificação do participante)',
-                               'Nome do membro do agregado',
+                               # 'Nome do membro do agregado',
                                'Idade do membro do agregado',
                                'Data de recrutamento',
                                'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
@@ -1405,9 +1405,8 @@ app_server <- function(input, output, session) {
               } else {
                 names(pd) <- c('FW code',
                                'Hamlet code',
-                               # 'HH number',
                                'ExtID HH member',
-                               'Name of household member',
+                               # 'Name of household member',
                                'Age of household member',
                                'Recruitment date',
                                'Informed consent/assent type (check off if correct and complete)',
@@ -1606,8 +1605,8 @@ app_server <- function(input, output, session) {
       
     })
   
-  output$render_enumeration_list <-
-    downloadHandler(filename = "list.pdf",
+  output$render_visit_control_sheet <-
+    downloadHandler(filename = "visit_control_sheet.pdf",
                     content = function(file){
                       
                       # Get the location code
@@ -1618,10 +1617,13 @@ app_server <- function(input, output, session) {
                                          n_teams = as.numeric(as.character(input$enumeration_n_teams)),
                                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))
-                      # generate html
-                      # out_file <- paste0(system.file('shiny/operations/rmds', package = 'bohemia'), '/list.pdf')
-                      out_file <- paste0(getwd(), '/list.pdf')
-                      rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/list.Rmd'),
+
+                      # tmp <- list(data = data,
+                      #             loc_id = lc,
+                      #             enumeration = enum)
+                      # save(tmp, file = '/tmp/tmp.RData')
+                      out_file <- paste0(getwd(), '/visit_control_sheet.pdf')
+                      rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/visit_control_sheet.Rmd'),
                                         output_file = out_file,
                                         params = list(data = data,
                                                       loc_id = lc,
@@ -1668,7 +1670,7 @@ app_server <- function(input, output, session) {
                       
                       # Get the data
                       pdx <- consent_verification_list_reactive$data
-                      save(pdx, file = '/tmp/data.RData')
+                      # save(pdx, file = '/tmp/data.RData')
 
                       out_file <- paste0(getwd(), '/consent_verification_list.pdf')
                       rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/consent_verification_list.Rmd'),

@@ -5,7 +5,7 @@ output:
   pdf_document:
     keep_tex: yes
     includes:
-      in_header: list_preamble.sty
+      in_header: consent_verification_list_preamble.sty
 tables: yes
 ---
 
@@ -64,9 +64,9 @@ kable(dfx, 'latex',
                                 'repeat_header')) %>%
     kable_styling(font_size = 6)  %>%
   column_spec(1:2, width = '1.6cm') %>%
-  column_spec(3:4, width = '1.7cm') %>%
-  column_spec(5, width = '1cm') %>%
-  column_spec(6:ncol(dfx), width = '2.5cm')
+  column_spec(3, width = '1.7cm') %>%
+  column_spec(4, width = '1cm') %>%
+  column_spec(5:ncol(dfx), width = '2.5cm')
 ```
 
 \end{landscape}
