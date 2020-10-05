@@ -1,37 +1,17 @@
-import pygsheets
-import xlrd
+import ezsheets
 import os
 import shutil
-#import numpy as np
+os.chdir('../credentials')
 
-# Authorize by using this: https://pygsheets.readthedocs.io/en/latest/authorization.html
-gc = pygsheets.authorize('../credentials/gsheets_oauth.json')
-
-# Define the documents
-# docs = ['censushouse', 'censusmember']
-#for doc in docs:
-    # Open spreadsheet and then workseet
-#    sh = gc.open(doc)
-#    wks = sh.sheet1
-
-    #export as xls
-#    wks.export(pygsheets.ExportType.XLS, doc)
-
-    ## Convert to xml
-#    os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
-
-doc = 'geocoding'
-sh = gc.open(doc)
-wks = sh.sheet1
-
-#export as xls
-wks.export(pygsheets.ExportType.XLS, doc)
+s = ezsheets.Spreadsheet('https://docs.google.com/spreadsheets/d/1sf3vtqBjWnFfJpUSMiTLDj-o2d23mYb_fMUwMmurgQY/edit#gid=0')
+s.downloadAsExcel()
 
 ## Convert to xml
-os.system('xls2xform ' + doc + '.xls ' + doc +'.xml')
+os.system('xls2xform geocoding.xlsx geocoding.xml ')
 
 # Move
-shutil.move(doc + '.xls', "../forms/geocoding/" + doc + '.xls')
-shutil.move(doc + '.xml', "../forms/geocoding/" + doc + '.xml')
+shutil.move('geocoding.xlsx', '../forms/geocoding/geocoding.xlsx')
+shutil.move('geocoding.xml',  '../forms/geocoding/geocoding.xml')
+# shutil.move('itemsets.csv', '../forms/geocoding/itemsets.csv')
 
 print('Done. Docs in forms/geocoding.')

@@ -6,7 +6,7 @@ output:
   pdf_document:
     keep_tex: yes
     includes:
-      in_header: list_preamble.sty
+      in_header: file_list_preamble.sty
 tables: yes
 ---
 
@@ -46,9 +46,11 @@ for (i in 1:length(params)){
 }
 ```
 
-## File location sheet for `r loc_id`
+File location sheet for `r loc_id`
 
-\newpage
+\begin{landscape}
+\pagenumbering{gobble}
+
 
 ```{r}
 lc <- loc_id
@@ -82,8 +84,10 @@ if(country == 'Mozambique'){
 
 ```{r}
 kable(out,
-      'latex', longtable = T, booktabs=TRUE, caption = 'File location list')  %>%   
+      'latex', longtable = T, booktabs=FALSE, caption = 'File location list')  %>%   
   kable_styling(font_size = 7) %>% 
   kable_styling(latex_options = c('striped', 'repeat_header')) #%>% 
   # column_spec(1:4,width = '2.5cm')
 ```
+
+\end{landscape}

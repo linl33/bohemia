@@ -1,13 +1,13 @@
 ---
 params:
   data: !r data.frame(n_hh = 400, n_teams = 2, id_limit_lwr = 1, id_limit_upr = 400) # data on the hamlet
-  loc_id: 'ABC'
+  loc_id: 'SGG'
   enumeration: FALSE
 output:
   pdf_document:
     keep_tex: yes
     includes:
-      in_header: list_preamble.sty
+      in_header: visit_control_sheet_preamble.sty
 tables: yes
 ---
 
@@ -37,6 +37,7 @@ opts_chunk$set(comment = NA,
 
 ```{r}
 library(dplyr)
+library(bohemia)
 options(kableExtra.latex.load_packages = FALSE)
 library(kableExtra)
 # Specify paramaters
@@ -47,9 +48,11 @@ for (i in 1:length(params)){
 }
 ```
 
-## Visit control sheet for `r loc_id`
+Visit control sheet for `r loc_id`
 
-\newpage
+\begin{landscape}
+\pagenumbering{gobble}
+
 
 ```{r}
 lc <- loc_id
@@ -69,7 +72,6 @@ if(lc %in% locations$code[locations$Country == 'Tanzania']){
 `r country`
 
 ```{r}
-
 id_vals <- 1:n_hh
 id_vals <- id_vals[id_vals %in% id_limit_lwr:id_limit_upr]
 n_hh <- length(id_vals)
@@ -105,8 +107,8 @@ if(country == 'Mozambique'){
   
   for(i in 1:n_teams){
   chunk_list[[i]] <-
-    paste0("## Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
-           "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = '", "', `Localização do Numero de Agregado` = '",   ' ', "', `Data de enumeração` = ' '), 'latex', longtable = T, booktabs=TRUE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 9) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:4,width = '2.5cm')   \n```\n\\newpage\n")
+    paste0("Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
+           "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = '", "', `Localização do Numero de Agregado` = '",   ' ', "', `Data de enumeração` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 9) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:4,width = '2.5cm')   \n```\n\\newpage\n")
 }
   } else {
     # NON ENUMERATION
@@ -120,16 +122,19 @@ if(country == 'Mozambique'){
     
   for(i in 1:n_teams){
   chunk_list[[i]] <-
-    paste0("## Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
-           "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = '", this_df$chief_name,"', `Localização do Numero de Agregado` = '",  this_df$Village, ', ', this_df$Hamlet ,"', `Data de enumeração` = ' ", as.character(Sys.Date()), "', `O chefe de agregado assino o consentimento informado?` = ' ', `O chede de agregado foi entrevistado?` = ' ', `Data da visita` = ' ', `Se Não foi visitado ou entrevistado, explique o porque?` = ' ', `Observações/Comentários` = ' '), 'latex', longtable = T, booktabs=TRUE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:9,width = '1.5cm')   \n```\n\\newpage\n")
+    paste0("Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
+           "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = '", 
+           # this_df$chief_name,
+           " ", # currently blocking names from being stored
+           "', `Localização do Numero de Agregado` = '",  this_df$Village, ', ', this_df$Hamlet ,"', `Data de enumeração` = ' ", as.character(Sys.Date()), "', `O chefe de agregado assino o consentimento informado?` = ' ', `O chede de agregado foi entrevistado?` = ' ', `Data da visita` = ' ', `Se Não foi visitado ou entrevistado, explique o porque?` = ' ', `Observações/Comentários` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:9,width = '1.5cm')   \n```\n\\newpage\n")
 }
   }
 
 } else {
   for(i in 1:n_teams){
   chunk_list[[i]] <-
-    paste0("## Team ", i, "\n\n\nFieldworker name/code:\n\n\n```{r}\n",
-           "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Status` = ' ', `Comments` = ' '), 'latex', longtable = T, booktabs=TRUE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:6, width = '1.5cm') %>% column_spec(7, width = '3cm')   \n```\n\\newpage\n")
+    paste0("Team ", i, "\n\n\nFieldworker name/code:\n\n\n```{r}\n",
+           "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Status` = ' ', `Comments` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:6, width = '1.5cm') %>% column_spec(7, width = '3cm')   \n```\n\\newpage\n")
 }
 }
 
@@ -149,3 +154,7 @@ close(file_connection)
 ```{r, results='hide'}
 file.remove('children.Rmd')
 ```
+
+\end{landscape}
+
+End.

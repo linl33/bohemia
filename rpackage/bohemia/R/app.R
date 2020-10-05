@@ -148,7 +148,7 @@ app_ui <- function(request) {
                                               helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
                                               uiOutput('ui_id_limit'),
                                               br(), br(),
-                                              downloadButton('render_enumeration_list',
+                                              downloadButton('render_visit_control_sheet',
                                                              'Generate visit control sheet(s)')
                                             )),
                                    tabPanel("File index and folder location",
@@ -320,34 +320,38 @@ app_server <- function(input, output, session) {
                                  action = default_action_table,
                                  fieldworkers = default_fieldworkers,
                                  notifications = default_notifications)
-  
-  # Connect to db
-  creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-  users <- yaml::yaml.load_file('credentials/users.yaml')
-  psql_end_point = creds$endpoint
-  psql_user = creds$psql_master_username
-  psql_pass = creds$psql_master_password
-  drv <- dbDriver('PostgreSQL')
-  con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
-                   port=5432,
-                   user=psql_user, password=psql_pass)
-  # Read in data
-  data <- list()
-  data$non_repeats <- dbGetQuery(con, 'SELECT * FROM minicensus_main')
-  data$repeats <- list()
-  repeat_names <- c("minicensus_people", 
-                    "minicensus_repeat_death_info",
-                    "minicensus_repeat_hh_sub", 
-                    "minicensus_repeat_mosquito_net", "minicensus_repeat_water")
-  for(i in 1:length(repeat_names)){
-    this_name <- repeat_names[i]
-    data$repeats[[i]] <- 
-      dbGetQuery(con, paste0('SELECT * FROM ', this_name))
+  odk_data <- reactiveValues(data = NULL)
+  load_odk_data <- function(the_country = 'Mozambique'){
+    creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+    users <- yaml::yaml.load_file('credentials/users.yaml')
+    psql_end_point = creds$endpoint
+    psql_user = creds$psql_master_username
+    psql_pass = creds$psql_master_password
+    drv <- dbDriver('PostgreSQL')
+    con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                     port=5432,
+                     user=psql_user, password=psql_pass)
+    # Read in data
+    data <- list()
+    main <- dbGetQuery(con, paste0("SELECT * FROM minicensus_main where hh_country='", the_country, "'"))
+    data$non_repeats <- main
+    data$repeats <- list()
+    ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
+    
+    repeat_names <- c("minicensus_people", 
+                      "minicensus_repeat_death_info",
+                      "minicensus_repeat_hh_sub", 
+                      "minicensus_repeat_mosquito_net", "minicensus_repeat_water")
+    for(i in 1:length(repeat_names)){
+      this_name <- repeat_names[i]
+      this_data <- dbGetQuery(con, paste0("SELECT * FROM ", this_name, " WHERE instance_id IN ", ok_uuids))
+      data$repeats[[i]] <- this_data
+    }
+    dbDisconnect(con)
+    names(data$repeats) <- repeat_names
+    return(data)
   }
-  dbDisconnect(con)
-  names(data$repeats) <- repeat_names
-  odk_data <- reactiveValues(data = data)
-  
+
   # Text for incorrect log-in, etc.
   reactive_log_in_text <- reactiveVal(value = '')
   
@@ -360,6 +364,7 @@ app_server <- function(input, output, session) {
   
   observeEvent(input$confirm_log_in,{
     # Run a check on the credentials
+    users <- yaml::yaml.load_file('credentials/users.yaml')
     liu <- input$log_in_user
     lip <- input$log_in_password
     ok <- credentials_check(user = liu,
@@ -393,11 +398,28 @@ app_server <- function(input, output, session) {
   observeEvent(input$geo, {
     gg <- input$geo
     if(gg == 'Rufiji'){
-      country('Tanzania')
+      the_country <- 'Tanzania'
     } else {
-      country('Mozambique')
+      the_country <- 'Mozambique'
+    }
+    country(the_country)
+    
+    # Load data     
+    li <- session_info$logged_in
+    if(li){
+      out <- load_odk_data(the_country = the_country)
+      odk_data$data = out
     }
   })
+  observeEvent(input$confirm_log_in, {
+    the_country <- country()
+    li <- session_info$logged_in
+    if(li){
+      out <- load_odk_data(the_country = the_country)
+      odk_data$data = out
+    }
+  })
+  
   observeEvent(c(input$country,
                  input$region,
                  input$district,
@@ -666,7 +688,7 @@ app_server <- function(input, output, session) {
                 n_days = as.numeric(1 + (max(dr)-min(dr)))
                 the_iso <- iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
                 # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
-                target <- ifelse(iso == 'TZA', 109008, 30467)
+                target <- ifelse(iso == 'TZA', 46105, 30467)
                 
                 # Create table of overview
                 overview <- pd %>%
@@ -683,10 +705,10 @@ app_server <- function(input, output, session) {
                 # Get a second row for targets
                 target_helper <- 
                   tibble(xiso = c('MOZ', 'TZA'),
-                         n_fids = c(77,100),
+                         n_fids = c(100,77),
                          end_date = as.Date(c('2020-12-31',
                                               '2020-12-15')),
-                         start_date = as.Date(c('2020-10-07',
+                         start_date = as.Date(c('2020-10-06',
                                                 '2020-10-15'))) %>%
                   mutate(n_days = as.numeric(end_date - start_date),
                          n_weeks = round(n_days / 7, digits = 1)) %>%
@@ -1299,9 +1321,10 @@ app_server <- function(input, output, session) {
                   column(12, align = 'center',
                          h4('Map of participating and non-participating households'),
                          l,
-                         h4('Table of participating households'),
+                         h2('Table of participating households'),
                          DT::datatable(pd, rownames = FALSE),
-                         h4('Table of non-participating households'),
+                         br(), br(),
+                         h2('Table of non-participating households'),
                          DT::datatable(tibble(`None` = 'There are none.')))
                 )
               )
@@ -1375,6 +1398,7 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               
+              # NOW NOT SHOWING TABLE AT ALL IN APP
               # Get the odk data
               pd <- odk_data$data
               people <- pd$repeats$minicensus_people
@@ -1409,14 +1433,14 @@ app_server <- function(input, output, session) {
                 dplyr::select(wid,
                               hh_hamlet_code,
                               hh_head_permid = pid,
-                              name,
+                              # name,
                               age,
                               todays_date,
                               consent,
                               x,y,z)
               text_filter <- input$verification_text_filter
               if(!is.null(text_filter)){
-                pd <- pd %>% 
+                pd <- pd %>%
                   dplyr::filter(wid %in% text_filter)
               }
               date_filter <- input$verification_date_filter
@@ -1430,9 +1454,8 @@ app_server <- function(input, output, session) {
               if(co == 'Mozambique'){
                 names(pd) <- c('Código TC',
                                'Código Bairro',
-                               # 'Número do Agregado Familiar',
                                'ExtID (número de identificação do participante)',
-                               'Nome do membro do agregado',
+                               # 'Nome do membro do agregado',
                                'Idade do membro do agregado',
                                'Data de recrutamento',
                                'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
@@ -1442,9 +1465,8 @@ app_server <- function(input, output, session) {
               } else {
                 names(pd) <- c('FW code',
                                'Hamlet code',
-                               # 'HH number',
                                'ExtID HH member',
-                               'Name of household member',
+                               # 'Name of household member',
                                'Age of household member',
                                'Recruitment date',
                                'Informed consent/assent type (check off if correct and complete)',
@@ -1456,14 +1478,15 @@ app_server <- function(input, output, session) {
               fluidPage(
                 downloadButton('render_consent_verification_list',
                                'Print consent verification list'),
-                br(),
-                gt(pd) %>%
-                  tab_style(
-                    style = cell_fill(
-                      color = "#FFA500"
-                    ),
-                    locations = cells_body(names(pd)[1:7])
-                  ))
+                br()#,
+                # gt(pd) %>%
+                #   tab_style(
+                #     style = cell_fill(
+                #       color = "#FFA500"
+                #     ),
+                #     locations = cells_body(names(pd)[1:7])
+                #   )
+                )
             }
     )
   }
@@ -1642,8 +1665,8 @@ app_server <- function(input, output, session) {
       
     })
   
-  output$render_enumeration_list <-
-    downloadHandler(filename = "list.pdf",
+  output$render_visit_control_sheet <-
+    downloadHandler(filename = "visit_control_sheet.pdf",
                     content = function(file){
                       
                       # Get the location code
@@ -1654,10 +1677,13 @@ app_server <- function(input, output, session) {
                                          n_teams = as.numeric(as.character(input$enumeration_n_teams)),
                                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))
-                      # generate html
-                      # out_file <- paste0(system.file('shiny/operations/rmds', package = 'bohemia'), '/list.pdf')
-                      out_file <- paste0(getwd(), '/list.pdf')
-                      rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/list.Rmd'),
+
+                      # tmp <- list(data = data,
+                      #             loc_id = lc,
+                      #             enumeration = enum)
+                      # save(tmp, file = '/tmp/tmp.RData')
+                      out_file <- paste0(getwd(), '/visit_control_sheet.pdf')
+                      rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/visit_control_sheet.Rmd'),
                                         output_file = out_file,
                                         params = list(data = data,
                                                       loc_id = lc,
@@ -1704,7 +1730,7 @@ app_server <- function(input, output, session) {
                       
                       # Get the data
                       pdx <- consent_verification_list_reactive$data
-                      save(pdx, file = '/tmp/data.RData')
+                      # save(pdx, file = '/tmp/data.RData')
 
                       out_file <- paste0(getwd(), '/consent_verification_list.pdf')
                       rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/consent_verification_list.Rmd'),
