@@ -310,7 +310,7 @@ app_server <- function(input, output, session) {
   ###########################################################################
   # Reactive object for seeing if logged in or not
   # (Joe will build log-in functionality later
-  session_info <- reactiveValues(logged_in = TRUE, # change later 
+  session_info <- reactiveValues(logged_in = FALSE, # change later 
                                  user = 'default',
                                  access = c("field_monitoring", "enrollment", 'consent_verification_list', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
                                  country = 'MOZ')
@@ -320,34 +320,38 @@ app_server <- function(input, output, session) {
                                  action = default_action_table,
                                  fieldworkers = default_fieldworkers,
                                  notifications = default_notifications)
-  
-  # Connect to db
-  creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-  users <- yaml::yaml.load_file('credentials/users.yaml')
-  psql_end_point = creds$endpoint
-  psql_user = creds$psql_master_username
-  psql_pass = creds$psql_master_password
-  drv <- dbDriver('PostgreSQL')
-  con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
-                   port=5432,
-                   user=psql_user, password=psql_pass)
-  # Read in data
-  data <- list()
-  data$non_repeats <- dbGetQuery(con, 'SELECT * FROM minicensus_main')
-  data$repeats <- list()
-  repeat_names <- c("minicensus_people", 
-                    "minicensus_repeat_death_info",
-                    "minicensus_repeat_hh_sub", 
-                    "minicensus_repeat_mosquito_net", "minicensus_repeat_water")
-  for(i in 1:length(repeat_names)){
-    this_name <- repeat_names[i]
-    data$repeats[[i]] <- 
-      dbGetQuery(con, paste0('SELECT * FROM ', this_name))
+  odk_data <- reactiveValues(data = NULL)
+  load_odk_data <- function(the_country = 'Mozambique'){
+    creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+    users <- yaml::yaml.load_file('credentials/users.yaml')
+    psql_end_point = creds$endpoint
+    psql_user = creds$psql_master_username
+    psql_pass = creds$psql_master_password
+    drv <- dbDriver('PostgreSQL')
+    con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                     port=5432,
+                     user=psql_user, password=psql_pass)
+    # Read in data
+    data <- list()
+    main <- dbGetQuery(con, paste0("SELECT * FROM minicensus_main where hh_country='", the_country, "'"))
+    data$non_repeats <- main
+    data$repeats <- list()
+    ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
+    
+    repeat_names <- c("minicensus_people", 
+                      "minicensus_repeat_death_info",
+                      "minicensus_repeat_hh_sub", 
+                      "minicensus_repeat_mosquito_net", "minicensus_repeat_water")
+    for(i in 1:length(repeat_names)){
+      this_name <- repeat_names[i]
+      this_data <- dbGetQuery(con, paste0("SELECT * FROM ", this_name, " WHERE instance_id IN ", ok_uuids))
+      data$repeats[[i]] <- this_data
+    }
+    dbDisconnect(con)
+    names(data$repeats) <- repeat_names
+    return(data)
   }
-  dbDisconnect(con)
-  names(data$repeats) <- repeat_names
-  odk_data <- reactiveValues(data = data)
-  
+
   # Text for incorrect log-in, etc.
   reactive_log_in_text <- reactiveVal(value = '')
   
@@ -360,6 +364,7 @@ app_server <- function(input, output, session) {
   
   observeEvent(input$confirm_log_in,{
     # Run a check on the credentials
+    users <- yaml::yaml.load_file('credentials/users.yaml')
     liu <- input$log_in_user
     lip <- input$log_in_password
     ok <- credentials_check(user = liu,
@@ -393,11 +398,28 @@ app_server <- function(input, output, session) {
   observeEvent(input$geo, {
     gg <- input$geo
     if(gg == 'Rufiji'){
-      country('Tanzania')
+      the_country <- 'Tanzania'
     } else {
-      country('Mozambique')
+      the_country <- 'Mozambique'
+    }
+    country(the_country)
+    
+    # Load data     
+    li <- session_info$logged_in
+    if(li){
+      out <- load_odk_data(the_country = the_country)
+      odk_data$data = out
     }
   })
+  observeEvent(input$confirm_log_in, {
+    the_country <- country()
+    li <- session_info$logged_in
+    if(li){
+      out <- load_odk_data(the_country = the_country)
+      odk_data$data = out
+    }
+  })
+  
   observeEvent(c(input$country,
                  input$region,
                  input$district,
