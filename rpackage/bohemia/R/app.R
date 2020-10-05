@@ -310,7 +310,7 @@ app_server <- function(input, output, session) {
   ###########################################################################
   # Reactive object for seeing if logged in or not
   # (Joe will build log-in functionality later
-  session_info <- reactiveValues(logged_in = TRUE, # to change later
+  session_info <- reactiveValues(logged_in = FALSE, 
                                  user = 'default',
                                  access = c("field_monitoring", "enrollment", 'consent_verification_list', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
                                  country = 'MOZ')
@@ -323,6 +323,7 @@ app_server <- function(input, output, session) {
   
   # Connect to db
   creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+  users <- yaml::yaml.load_file('credentials/users.yaml')
   psql_end_point = creds$endpoint
   psql_user = creds$psql_master_username
   psql_pass = creds$psql_master_password
@@ -362,7 +363,8 @@ app_server <- function(input, output, session) {
     liu <- input$log_in_user
     lip <- input$log_in_password
     ok <- credentials_check(user = liu,
-                            password = lip)
+                            password = lip,
+                            users = users)
     if(ok){
       message('---Correct user/password. Logged in.')
       session_info$logged_in <- TRUE

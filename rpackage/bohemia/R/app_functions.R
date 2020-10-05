@@ -76,11 +76,16 @@ make_log_in_modal <- function(info_text = NULL){
 
 # Check credentials
 credentials_check <- function(user = NULL,
-                              password = NULL){
-  # This is a placeholder function; later, it will contain the code to test
-  # the validity of a user/password combination
-  message('Checking user/password combo (dummy).')
-  return(TRUE)
+                              password = NULL,
+                              users = NULL){
+  checks_out <- FALSE
+  if(user %in% names(users)){
+    correct_password <- users[names(users) == user]
+    if(password == correct_password){
+      checks_out <- TRUE
+    }
+  }
+  return(checks_out)
 }
 
 
