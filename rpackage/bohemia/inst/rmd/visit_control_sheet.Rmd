@@ -50,7 +50,7 @@ for (i in 1:length(params)){
 
 Visit control sheet for `r loc_id`
 
-\begin{landscape}
+\uselandscape
 \pagenumbering{gobble}
 
 
@@ -155,6 +155,5 @@ close(file_connection)
 file.remove('children.Rmd')
 ```
 
-\end{landscape}
 
 End.
