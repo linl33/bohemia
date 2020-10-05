@@ -46,10 +46,8 @@ for (i in 1:length(params)){
 dfx <- params$data
 ```
 
-Consent verification list
-
+\uselandscape
 \pagenumbering{gobble}
-\begin{landscape}
 
 
 
@@ -69,7 +67,6 @@ kable(dfx, 'latex',
   column_spec(5:ncol(dfx), width = '2.5cm')
 ```
 
-\end{landscape}
 
 
 End.

@@ -15,3 +15,34 @@
 \usepackage{makecell}
 \usepackage{xcolor}
 \usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{lipsum}
+\usepackage{multicol}
+
+\usepackage[usegeometry]{typearea}% before geometry!
+\usepackage{geometry}
+\geometry{
+  left=0.5in, right=0.5in, top=0.6in, bottom=1.25in,headheight=23pt,includehead
+}
+\newcommand*{\useportrait}{%
+  \clearpage
+  \KOMAoptions{paper=portrait,DIV=current}%switch to portrait
+  \newgeometry{% geometry settings for portrait
+    left=0.5in, right=0.5in, top=0.6in, bottom=1.25in,headheight=23pt,includehead
+  }%
+  \fancyhfoffset{0pt}% <- recalculate head and foot width for fancyhdr
+}
+\newcommand*{\uselandscape}{%
+  \clearpage
+  \KOMAoptions{paper=landscape,DIV=current}%switch to landscape
+  \newgeometry{% geometry settings for landscap
+    left=0.5in, right=0.5in, top=0.6in, bottom=1.25in,headheight=23pt,includehead
+  }%
+  \fancyhfoffset{0pt}% recalculate head and foot width for fancyhdr
+}
+
+\pagestyle{fancy}
+\fancyfoot[C]{\includegraphics[width = 2cm]{logo} \\Demography protocol}
+\fancyhead[C]{Visit control sheet}

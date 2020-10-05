@@ -50,7 +50,7 @@ for (i in 1:length(params)){
 
 Visit control sheet for `r loc_id`
 
-\begin{landscape}
+\uselandscape
 \pagenumbering{gobble}
 
 
@@ -126,7 +126,7 @@ if(country == 'Mozambique'){
            "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = '", 
            # this_df$chief_name,
            " ", # currently blocking names from being stored
-           "', `Localização do Numero de Agregado` = '",  this_df$Village, ', ', this_df$Hamlet ,"', `Data de enumeração` = ' ", as.character(Sys.Date()), "', `O chefe de agregado assino o consentimento informado?` = ' ', `O chede de agregado foi entrevistado?` = ' ', `Data da visita` = ' ', `Se Não foi visitado ou entrevistado, explique o porque?` = ' ', `Observações/Comentários` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:9,width = '1.5cm')   \n```\n\\newpage\n")
+           "', `Localização do Numero de Agregado` = '",  ' ',  "', `Data de enumeração` = ' ", as.character(Sys.Date()), "', `O chefe de agregado assino o consentimento informado?` = ' ', `O chede de agregado foi entrevistado?` = ' ', `Data da visita` = ' ', `Se Não foi visitado ou entrevistado, explique o porque?` = ' ', `Observações/Comentários` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:9,width = '1.5cm')   \n```\n\\newpage\n")
 }
   }
 
@@ -155,6 +155,5 @@ close(file_connection)
 file.remove('children.Rmd')
 ```
 
-\end{landscape}
 
 End.
