@@ -1280,7 +1280,7 @@ app_server <- function(input, output, session) {
     co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
     pd <- pd %>% dplyr::filter(hh_country == co)
     wid <- unique(pd$wid)
-    save(pd, file = 'temp.rda')
+    # save(pd, file = 'temp.rda')
     selectInput('verification_text_filter',
               'Filter by FW code',
               choices = wid,
