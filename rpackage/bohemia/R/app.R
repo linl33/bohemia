@@ -988,12 +988,12 @@ app_server <- function(input, output, session) {
                              fluidRow(
                                column(6, align = 'center',
                                       br(),
-                                      h3('Map of forms'),
-                                      l),
+                                      h3('Map of completion % by hamlet'),
+                                      lx),
                                column(6, align = 'center',
                                       br(),
-                                      h3('Map of completion % by hamlet'),
-                                      lx)
+                                      h3('Map of forms'),
+                                      l)
                              )
                            )
                   ),
