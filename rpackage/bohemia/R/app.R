@@ -310,7 +310,7 @@ app_server <- function(input, output, session) {
   ###########################################################################
   # Reactive object for seeing if logged in or not
   # (Joe will build log-in functionality later
-  session_info <- reactiveValues(logged_in = FALSE, 
+  session_info <- reactiveValues(logged_in = FALSE, # change later 
                                  user = 'default',
                                  access = c("field_monitoring", "enrollment", 'consent_verification_list', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
                                  country = 'MOZ')
@@ -665,11 +665,13 @@ app_server <- function(input, output, session) {
                 dr <- as.Date(range(pd$todays_date, na.rm = TRUE))
                 n_days = as.numeric(1 + (max(dr)-min(dr)))
                 the_iso <- iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
-                target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
+                # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
+                target <- ifelse(iso == 'TZA', 109008, 30467)
                 
                 # Create table of overview
                 overview <- pd %>%
-                  summarise(`N. FWs` = ifelse(iso == 'TZA', 100, 77),  #length(unique(pd$wid)),
+                  summarise(Type = 'Observed',
+                            `N. FWs` = length(unique(pd$wid)),
                             `Daily forms per FW` = round(nrow(pd) / `N. FWs` / n_days, digits = 1),
                             `Weekly forms per FW` = round(`Daily forms per FW` * 7, digits = 1),
                             `Total forms per FW` = round(nrow(pd) / `N. FWs`, digits = 1),
@@ -678,7 +680,42 @@ app_server <- function(input, output, session) {
                             `Overall target per country` = target,
                             `Estimated weeks` = round(`Overall target per country` / `Weekly forms per country`, digits = 1)) %>%
                   mutate(`Estimated date` = (`Estimated weeks` * 7) + as.Date(dr[1]))
-                # save(overview, file = '/tmp/overview.RData')
+                # Get a second row for targets
+                target_helper <- 
+                  tibble(xiso = c('MOZ', 'TZA'),
+                         n_fids = c(77,100),
+                         end_date = as.Date(c('2020-12-31',
+                                              '2020-12-15')),
+                         start_date = as.Date(c('2020-10-07',
+                                                '2020-10-15'))) %>%
+                  mutate(n_days = as.numeric(end_date - start_date),
+                         n_weeks = round(n_days / 7, digits = 1)) %>%
+                  mutate(n_forms = c(30467, 109008)) %>%
+                  mutate(n_forms_daily = round(n_forms / n_days, digits = 2)) %>%
+                  mutate(n_forms_weekly =  round(n_forms_daily * 7, digits = 2)) %>%
+                  mutate(n_forms_daily_per_fid = round(n_forms_daily/n_fids, digits = 2)) %>%
+                  mutate(n_forms_weekly_per_fid = round(n_forms_weekly/n_fids, digits = 2)) %>%
+                  mutate(n_forms_total_per_fid = round(n_forms / n_fids, 2))
+                target_helper <- target_helper %>% filter(xiso == iso)
+                second_row <- 
+                  tibble(Type = 'Target',
+                         `N. FWs` = target_helper$n_fids,  
+                         `Daily forms per FW` = target_helper$n_forms_daily_per_fid,
+                         `Weekly forms per FW` = target_helper$n_forms_weekly_per_fid,
+                         `Total forms per FW` = target_helper$n_forms_total_per_fid,
+                         `Daily forms per country` = target_helper$n_forms_daily,
+                         `Weekly forms per country` = target_helper$n_forms_weekly,
+                         `Overall target per country` = target_helper$n_forms,
+                         `Estimated weeks` = target_helper$n_weeks, #as.character(target_helper$end_date))
+                         `Estimated date` = as.character(target_helper$end_date))
+                # save(pd, overview,target_helper, second_row, file = '/tmp/overview.RData')
+                for(j in 1:ncol(overview)){
+                  overview[,j] <- as.character(overview[,j])
+                }
+                for(j in 1:ncol(second_row)){
+                  second_row[,j] <- as.character(second_row[,j])
+                }
+                overview <- bind_rows(overview, second_row)
                 
                 
                 # Create map
