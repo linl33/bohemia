@@ -666,7 +666,7 @@ app_server <- function(input, output, session) {
                 n_days = as.numeric(1 + (max(dr)-min(dr)))
                 the_iso <- iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
                 # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
-                target <- ifelse(iso == 'TZA', 109008, 30467)
+                target <- ifelse(iso == 'TZA', 46105, 30467)
                 
                 # Create table of overview
                 overview <- pd %>%
@@ -683,10 +683,10 @@ app_server <- function(input, output, session) {
                 # Get a second row for targets
                 target_helper <- 
                   tibble(xiso = c('MOZ', 'TZA'),
-                         n_fids = c(77,100),
+                         n_fids = c(100,77),
                          end_date = as.Date(c('2020-12-31',
                                               '2020-12-15')),
-                         start_date = as.Date(c('2020-10-07',
+                         start_date = as.Date(c('2020-10-06',
                                                 '2020-10-15'))) %>%
                   mutate(n_days = as.numeric(end_date - start_date),
                          n_weeks = round(n_days / 7, digits = 1)) %>%
@@ -1337,6 +1337,7 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               
+              # NOW NOT SHOWING TABLE AT ALL IN APP
               # Get the odk data
               pd <- odk_data$data
               people <- pd$repeats$minicensus_people
@@ -1378,7 +1379,7 @@ app_server <- function(input, output, session) {
                               x,y,z)
               text_filter <- input$verification_text_filter
               if(!is.null(text_filter)){
-                pd <- pd %>% 
+                pd <- pd %>%
                   dplyr::filter(wid %in% text_filter)
               }
               date_filter <- input$verification_date_filter
@@ -1418,14 +1419,15 @@ app_server <- function(input, output, session) {
               fluidPage(
                 downloadButton('render_consent_verification_list',
                                'Print consent verification list'),
-                br(),
-                gt(pd) %>%
-                  tab_style(
-                    style = cell_fill(
-                      color = "#FFA500"
-                    ),
-                    locations = cells_body(names(pd)[1:7])
-                  ))
+                br()#,
+                # gt(pd) %>%
+                #   tab_style(
+                #     style = cell_fill(
+                #       color = "#FFA500"
+                #     ),
+                #     locations = cells_body(names(pd)[1:7])
+                #   )
+                )
             }
     )
   }

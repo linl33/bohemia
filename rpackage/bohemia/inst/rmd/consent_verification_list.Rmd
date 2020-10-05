@@ -43,26 +43,34 @@ for (i in 1:length(params)){
          params[[i]],
          env = .GlobalEnv)
 }
+dfx <- params$data
 ```
 
+Consent verification list
 
-## Consent verification list
+\pagenumbering{gobble}
+\begin{landscape}
 
-
-\newpage
 
 
 ```{r}
-kable(data, 'latex',  
+# load('/tmp/data.RData')
+# data <- pdx
+# save(dfx, file = '/tmp/dfx.RData')
+kable(dfx, 'latex',  
       # booktabs = F,
       longtable = T)  %>%   
-  kable_styling(latex_options = c(#'striped', 
-                                  'repeat_header')) %>%
-    kable_styling(font_size = 5)  %>%
-  column_spec(1:2, width = '0.8cm') %>%
-  column_spec(3:4, width = '1cm') %>%
-  column_spec(5, width = '0.7cm') %>%
-  column_spec(6:ncol(data), width = '1.45cm') 
+  kable_styling(latex_options = c('striped',
+                                'repeat_header')) %>%
+    kable_styling(font_size = 6)  %>%
+  column_spec(1:2, width = '1.6cm') %>%
+  column_spec(3:4, width = '1.7cm') %>%
+  column_spec(5, width = '1cm') %>%
+  column_spec(6:ncol(dfx), width = '2.5cm')
 ```
 
+\end{landscape}
+
+
 End.
+
