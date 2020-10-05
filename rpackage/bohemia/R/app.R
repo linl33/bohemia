@@ -1384,7 +1384,8 @@ app_server <- function(input, output, session) {
     selectInput('verification_text_filter',
               'Filter by FW code',
               choices = wid,
-              selected = wid[1])
+              selected = wid,
+              multiple = TRUE)
   })
  
   consent_verification_list_reactive <- reactiveValues(data = NULL)
