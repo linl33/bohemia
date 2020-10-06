@@ -25,7 +25,7 @@ The data processing scripts that migrate data from the ODK Aggregate server to p
 
 First, the ODK utilities in the `bohemia` R package (main wrapper function: `odk_get_data`) are used for fetching data from ODK Aggregate databases. Second, cleaning/formatting functions in the `bohemia` R package are used to process the data so as to conform with database standards. Third, the script in `scripts/bohemia_db_schema.sql` is used to set up the PosgreSQL database. Finally, upload functions in the `bohemia` R package are used to send data to the database. 
 
-The above is all run automatically every N minutes via the script at `scripts/check_for_new.sql` (under construction).
+The above is all run automatically every N minutes via crontab which executes the script at `scripts/run_odk_get_data_cron.sh`.
 
 ## Database set up
 
@@ -87,7 +87,8 @@ psql \
 ```
 library(bohemia)
 library(yaml)
-creds <- yaml::yaml.load_file('../credentials/credentials.yaml')
+creds_fpath <- '/home/ubuntu/Documents/bohemia/credentials/credentials.yaml'  # Change this to your local path
+creds <- yaml::yaml.load_file(creds_fpath)
 url <- 'https://bohemia.systems'
 id = 'minicensus'
 id2 = NULL
@@ -105,3 +106,36 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
 ```
 
 - Having retrieved the data, the code for updating it is in `scripts/update_database.R`.  
+
+
+## Data Update
+
+As mentioned in the General Overview section, the `bohemia` R package (main wrapper function: `odk_get_data`) used for fetching data from ODK is run every N minutes automatically. This section details the steps to deploy and set it up on AWS EC2 instances.
+
+### CronTab Set Up
+1. SSH into the server e.g:
+
+   ```ssh ubuntu@ec2-18-218-151-100.us-east-2.compute.amazonaws.com```
+
+2. Run (on the shell):
+
+   `crontab -e`
+
+   a. In the crontab editor opened, type in for an automatic run every 15 minutes past the hour: 
+   
+      `15 * * * * sh /home/ubuntu/Documents/bohemia/scripts/run_odk_get_data_cron.sh`
+   
+   b. Save and exit the editor.
+
+3. Wait for the time set to verify the job is run by checking the syslog for the entry:
+
+   `tail -f /var/log/syslog | grep CRON`
+
+### Deploy
+The script is part of the main project and should be deployed with it.
+
+The script depends upon `Rscript` and so this should be installed if it doesn't already exist on the server by running:
+   
+   `sudo bash`
+
+   `apt update && apt install r-base-core`
