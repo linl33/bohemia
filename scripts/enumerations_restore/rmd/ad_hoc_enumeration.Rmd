@@ -1,0 +1,119 @@
+---
+params:
+  data: !r data.frame(a = 123)
+  n_teams: 2
+output:
+  pdf_document:
+    keep_tex: yes
+    includes:
+      in_header: visit_control_sheet_preamble.sty
+tables: yes
+---
+
+```{r setup, include=FALSE}
+# output: 
+#   pdf_document:
+#     latex_engine: xelatex
+#      pandoc_args: [
+#      "-V", "classoption=twocolumn"
+#    ]
+#     template: pdf/layout.tex
+#     includes:
+#       in_header: pdf/preamble.sty
+library(knitr)# Basic knitr options
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = F,
+               fig.height = 6)
+# knit_engines$set(asis = function(options) {
+#   if (options$echo && options$eval) knit_child(text = options$code)
+# })
+```
+
+
+```{r}
+library(dplyr)
+library(bohemia)
+options(kableExtra.latex.load_packages = FALSE)
+library(kableExtra)
+# Specify paramaters
+for (i in 1:length(params)){
+  assign(names(params)[i],
+         params[[i]],
+         env = .GlobalEnv)
+}
+```
+
+
+\uselandscape
+\pagenumbering{gobble}
+
+
+```{r}
+n_hh <- nrow(data)
+id_vals <- 1:n_hh
+
+team_numbers <- rep(1:n_teams, each = round(n_hh / n_teams))
+while(length(team_numbers) < n_hh){
+  team_numbers <- c(team_numbers, team_numbers[length(team_numbers)])
+}
+
+while(length(team_numbers) > n_hh){
+  team_numbers <- team_numbers[1:n_hh]
+}
+data$team_number = team_numbers
+
+```
+
+```{r}
+chunk_list <- list()
+for(i in 1:n_teams){
+  this_data <- data %>% filter(team_number == i)
+  out <- this_data %>%
+    dplyr::select(
+  date = GROUP_INQUIRY_INQUIRY_DATE,
+  paint = GROUP_LOCATION_LOCALIZACAO_AGREGADO,
+  # hamlet = GROUP_LOCATION_HAMLET,
+  # code = GROUP_LOCATION_HAMLET_CODE,
+  # lat = GROUP_CONSTRUCTION_LOCATION_GPS_LAT,
+  # lng = GROUP_CONSTRUCTION_LOCATION_GPS_LNG,
+  wid = GROUP_INQUIRY_WID,
+  # constructions = GROUP_CONSTRUCTION_N_TOTAL_CONSTRUCTIONS,
+  name = GROUP_CHEFE_CHEFE_NAME,
+  hhid = GROUP_LOCATION_AGREGADO) %>%
+    dplyr::mutate(`O chefe assino o consentimento?` = ' ',
+           `O chefe foi entrevistado?` = ' ',
+           `Data da visita` = ' ',
+           `Se não foi entrevistado, pq?` = ' ',
+           `Observacoes` = ' ' ) %>%
+    arrange(hhid)
+  # residents = GROUP_CONSTRUCTION_N_RESIDENTS,
+  # type = GROUP_CONSTRUCTION_CONSTRUCTION_TYPE,
+  # roof_material,
+  # wall_material)
+  chunk_list[[i]] <-
+    paste0("Team ", i, "\n\n\n```{r}\n",
+           "kable(out, 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 9) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:ncol(out),width = '1.9cm')  
+           \n```\n\\newpage\n")
+}
+
+
+chunks <- unlist(chunk_list)
+chunks <- paste0(chunks, collapse = '\n')
+
+file_connection <- file('children.Rmd')
+writeLines(paste0('---\noutput: pdf_document\n---\n\n', 
+                  chunks), 
+           file_connection)
+close(file_connection)
+```
+
+```{r child='children.Rmd'}
+```
+
+```{r, results='hide'}
+file.remove('children.Rmd')
+```

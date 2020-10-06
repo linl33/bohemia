@@ -1,3 +1,5 @@
 dumps/
 *.RData
 *.sql
+*.log
+*.pdf
