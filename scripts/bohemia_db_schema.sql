@@ -166,4 +166,42 @@ CREATE TABLE minicensus_repeat_water (
     num  INT, 
     water_bodies_type  VARCHAR(64), 
     CONSTRAINT fk_minicensus_main FOREIGN KEY (instance_id) REFERENCES minicensus_main(instance_id) on delete CASCADE
-);                                    
+);     
+
+-- Enumerations
+
+CREATE TABLE enumerations (
+    instance_id   uuid, 
+    agregado   VARCHAR(16),
+    chefe_name   VARCHAR(128),
+    construction_material   VARCHAR(256), 
+    construction_type   VARCHAR(256),
+    country   VARCHAR(32),
+    device_id   VARCHAR(64),
+    district   VARCHAR(32),
+    end_time   TIMESTAMP,
+    hamlet   VARCHAR(128),
+    hamlet_code   VARCHAR(3),
+    have_wid   VARCHAR(64),
+    inquiry_date   Date,
+    localizacao_agregado   VARCHAR(256),
+    location_gps   VARCHAR(256),
+    n_deaths_past_year   INT,
+    n_residents   INT,
+    n_total_constructions   INT,
+    region   VARCHAR(64),
+    start_time   TIMESTAMP,
+    sub_name   VARCHAR(256),
+    todays_date   DATE,
+    village   VARCHAR(256),
+    vizinho1   VARCHAR(256),
+    vizinho2   VARCHAR(256),
+    wall_material   VARCHAR(256),
+    --wall_material_free   VARCHAR(256),
+    ward   VARCHAR(256),
+    wid   INT,
+    wid_manual   VARCHAR(32),
+    wid_qr   VARCHAR(32),
+    PRIMARY KEY(instance_id)
+);
+

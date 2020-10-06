@@ -46,3 +46,39 @@ formatted_data <- format_minicensus(data = data)
 update_minicensus(formatted_data = formatted_data,
                   con = con)
 dbDisconnect(con)
+
+
+#### ENUMERATIONS
+id = 'enumerations'
+
+
+# con <- dbConnect(drv, dbname='bohemia', host='localhost', port=5432, user='bohemia_app', password='riscrazy')
+dbExistsTable(con, 'enumerations')
+
+existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM enumerations')
+
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+} 
+
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password
+)
+
+# Format data
+formatted_data <- format_minicensus(data = data)
+
+# Update data
+update_minicensus(formatted_data = formatted_data,
+                  con = con)
+dbDisconnect(con)
