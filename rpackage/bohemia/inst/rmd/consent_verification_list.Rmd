@@ -58,7 +58,7 @@ dfx <- params$data
 kable(dfx, 'latex',  
       # booktabs = F,
       longtable = T)  %>%   
-  kable_styling(latex_options = c('striped',
+  kable_styling(latex_options = c(#'striped',
                                 'repeat_header')) %>%
     kable_styling(font_size = 6)  %>%
   column_spec(1:2, width = '1.6cm') %>%
