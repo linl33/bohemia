@@ -1,6 +1,8 @@
+#!/usr/bin/Rscript
 library(bohemia)
 library(yaml)
-creds <- yaml::yaml.load_file('../credentials/credentials.yaml')
+creds_fpath <- '/home/ubuntu/Documents/bohemia/credentials/credentials.yaml'
+creds <- yaml::yaml.load_file(creds_fpath)
 url <- 'https://bohemia.systems'
 require('RPostgreSQL')
 user = creds$databrew_odk_user
