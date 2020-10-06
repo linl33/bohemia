@@ -9,6 +9,7 @@ output:
     includes:
       in_header: visit_control_sheet_preamble.sty
 tables: yes
+classoption: landscape
 ---
 
 ```{r setup, include=FALSE}
@@ -50,7 +51,6 @@ for (i in 1:length(params)){
 
 Visit control sheet for `r loc_id`
 
-\uselandscape
 \pagenumbering{gobble}
 
 

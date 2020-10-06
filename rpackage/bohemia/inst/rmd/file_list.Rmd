@@ -8,6 +8,7 @@ output:
     includes:
       in_header: file_list_preamble.sty
 tables: yes
+classoption: landscape
 ---
 
 ```{r setup, include=FALSE}
@@ -46,7 +47,6 @@ for (i in 1:length(params)){
 }
 ```
 
-\uselandscape
 \pagenumbering{gobble}
 
 
