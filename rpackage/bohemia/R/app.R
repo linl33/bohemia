@@ -640,49 +640,48 @@ app_server <- function(input, output, session) {
   })
   
   # percent complete map input UI  #############################################
-  map_complete_geo<- reactiveVal('Hamlet')
-  output$ui_map_complete_by <- renderUI({
-    
-    cn <- input$geo
-    if(cn=='Rufiji'){
-      cn_choices = c('Ward',
-                     'Village',
-                     'Hamlet')
-    } else {
-      cn_choices = c('Posto administrativo/localidade' ='Ward',
-                     'Povoado' ='Village',
-                     'Bairro' ='Hamlet')
-    }
-    # See if the user is logged in and has access
-    si <- session_info
-    li <- si$logged_in
-    ac <- 'field_monitoring' %in% si$access
-    # Generate the ui
-    make_ui(li = li,
-            ac = ac,
-            ok = {
-              mcg <- map_complete_geo()
-              
-              fluidPage(
-                column(6,
-                       selectInput('map_complete_by',
-                                    'Geographic level for map:',
-                                    choices = cn_choices,
-                                    selected = mcg))
-              )
-            })
-  })
+  # map_complete_geo<- reactiveVal('Hamlet')
+  # output$ui_map_complete_by <- renderUI({
+  #   
+  #   cn <- input$geo
+  #   if(cn=='Rufiji'){
+  #     cn_choices = c('Ward',
+  #                    'Village',
+  #                    'Hamlet')
+  #   } else {
+  #     cn_choices = c('Posto administrativo/localidade' ='Ward',
+  #                    'Povoado' ='Village',
+  #                    'Bairro' ='Hamlet')
+  #   }
+  #   # See if the user is logged in and has access
+  #   si <- session_info
+  #   li <- si$logged_in
+  #   ac <- 'field_monitoring' %in% si$access
+  #   # Generate the ui
+  #   make_ui(li = li,
+  #           ac = ac,
+  #           ok = {
+  #             mcg <- map_complete_geo()
+  #             
+  #             fluidPage(
+  #               column(6,
+  #                      selectInput('map_complete_by',
+  #                                   'Geographic level for map:',
+  #                                   choices = cn_choices,
+  #                                   selected = mcg))
+  #             )
+  #           })
+  # })
   observeEvent(input$field_monitor_by,{
     x <- input$field_monitor_by
     field_monitoring_geo(x)
     
   })
   
-  observeEvent(input$map_complete_by,{
-    x <- input$map_complete_by
-    map_complete_geo(x)
-    
-  })
+  # observeEvent(input$map_complete_by,{
+  #   x <- input$map_complete_by
+  #   map_complete_geo(x)
+  # })
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -830,13 +829,18 @@ app_server <- function(input, output, session) {
                   addLegend(position = c("bottomleft"), pal = pal, values = lxd_ward$p)
                 
                 # get input for which location to view
-                map_location = map_complete_geo()
+                map_location = field_monitoring_geo()#  map_complete_geo()
+                print('MAP LOCATION IS ')
+                print(map_location)
                 # get country to translate names for map title
                 cn <- input$geo
                 cn <- ifelse(cn == 'Rufiji', 'Tanzania', 'Mozambique')
                 if(is.null(map_location)){
                   lx <- lxd_hamlet
                 } else {
+                  if(map_location == 'District'){
+                    lx <- lxd_hamlet %>% leaflet::clearMarkers()
+                  }
                   if(map_location=='Hamlet'){
                     lx <- lxd_hamlet
                     if(cn=='Mozambique'){
@@ -1078,7 +1082,7 @@ app_server <- function(input, output, session) {
                                       gt(progress_table))
                              ),
                              fluidRow(
-                               uiOutput('ui_map_complete_by'),
+                               # uiOutput('ui_map_complete_by'),
                                column(6, align = 'center',
                                       br(),
                                       h3(map_complete_title),
@@ -1405,7 +1409,6 @@ app_server <- function(input, output, session) {
                                     Povoado=Village,
                                     Bairro=Hamlet)
               }
-              save(pd, file ='pd.rda')
               # NO DETAILS YET FOR NON-PARTICIPANTS
               
               fluidPage(
