@@ -80,3 +80,4 @@ for(i in 1:nrow(main)){
 
 # Save
 save(main, file = 'enumerations.RData')
+readr::write_csv(main, '~/Desktop/enumeration.csv')
