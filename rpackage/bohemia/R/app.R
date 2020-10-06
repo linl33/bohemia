@@ -638,9 +638,50 @@ app_server <- function(input, output, session) {
               )
             })
   })
+  
+  # percent complete map input UI  #############################################
+  map_complete_geo<- reactiveVal('Hamlet')
+  output$ui_map_complete_by <- renderUI({
+    
+    cn <- input$geo
+    if(cn=='Rufiji'){
+      cn_choices = c('Ward',
+                     'Village',
+                     'Hamlet')
+    } else {
+      cn_choices = c('Posto administrativo/localidade' ='Ward',
+                     'Povoado' ='Village',
+                     'Bairro' ='Hamlet')
+    }
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'field_monitoring' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              mcg <- map_complete_geo()
+              
+              fluidPage(
+                column(6,
+                       selectInput('map_complete_by',
+                                    'Geographic level for map:',
+                                    choices = cn_choices,
+                                    selected = mcg))
+              )
+            })
+  })
   observeEvent(input$field_monitor_by,{
     x <- input$field_monitor_by
     field_monitoring_geo(x)
+    
+  })
+  
+  observeEvent(input$map_complete_by,{
+    x <- input$map_complete_by
+    map_complete_geo(x)
+    
   })
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
@@ -739,7 +780,7 @@ app_server <- function(input, output, session) {
                 }
                 overview <- bind_rows(overview, second_row)
                 
-                
+                # save(pd,file='map_pd.rda')
                 # Create map
                 ll <- extract_ll(pd$hh_geo_location)
                 pd$lng <- ll$lng; pd$lat <- ll$lat
@@ -749,23 +790,74 @@ app_server <- function(input, output, session) {
                     addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
                 }
                 
-                
-                # Create color-coded map
-                # Get percent done by hamlet
-                lxd <- pd %>% group_by(code = hh_hamlet_code) %>%
+                #########   percent complete map - create dataframe grouped by all locations together
+                lxd_all <- pd %>% group_by(hh_ward, hh_village, code = hh_hamlet_code) %>%
                   tally %>%
                   left_join(gps %>% dplyr::select(code, n_households)) %>%
                   mutate(p = n / n_households * 100)
-                lxd <- left_join(gps %>% filter(iso == the_iso) %>% dplyr::select(code, lng, lat), lxd) %>%
+                lxd_all <- left_join(gps %>% filter(iso == the_iso) %>% 
+                                       dplyr::select(code, lng, lat), lxd_all) %>%
                   mutate(p = ifelse(is.na(p), 0, p))
                 pal <- colorNumeric(
                   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
                   domain = 0:100
                 )
-                lx <- leaflet(data = lxd) %>% addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-                  addCircleMarkers(data = lxd, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal(p), fillOpacity = 0.6) %>%
-                  addLegend(position = c("bottomleft"), pal = pal, values = lxd$p)
                 
+                # create map for hamlet
+                lxd_hamlet <- leaflet(data = lxd_all) %>% 
+                  addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
+                  addCircleMarkers(data = lxd_all, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal(p), fillOpacity = 0.6) %>%
+                  addLegend(position = c("bottomleft"), pal = pal, values = lxd_all$p)
+                
+                # create map for village
+                lxd_village <- lxd_all %>% group_by(hh_village) %>%
+                  summarise(p = mean(p),
+                            lat =mean(lat),
+                            lng=mean(lng))
+                lxd_village <- leaflet(data = lxd_village) %>% 
+                  addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
+                  addCircleMarkers(data = lxd_village, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal(p), fillOpacity = 0.6) %>%
+                  addLegend(position = c("bottomleft"), pal = pal, values = lxd_village$p)
+                
+                # create map for ward 
+                lxd_ward <- lxd_all %>% group_by(hh_ward) %>%
+                  summarise(p = mean(p),
+                            lat =mean(lat),
+                            lng=mean(lng))
+                lxd_ward <- leaflet(data = lxd_ward) %>% 
+                  addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
+                  addCircleMarkers(data = lxd_ward, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal(p), fillOpacity = 0.6) %>%
+                  addLegend(position = c("bottomleft"), pal = pal, values = lxd_ward$p)
+                
+                # get input for which location to view
+                map_location = map_complete_geo()
+                # get country to translate names for map title
+                cn <- input$geo
+                cn <- ifelse(cn == 'Rufiji', 'Tanzania', 'Mozambique')
+                if(is.null(map_location)){
+                  lx <- lxd_hamlet
+                } else {
+                  if(map_location=='Hamlet'){
+                    lx <- lxd_hamlet
+                    if(cn=='Mozambique'){
+                      map_location = 'Bairro'
+                    }
+                  } else if(map_location=='Village'){
+                    lx <- lxd_village
+                    if(cn=='Mozambique'){
+                      map_location = 'Povaodo'
+                    }
+                  } else if(map_location=='Ward'){
+                    lx <- lxd_ward
+                    if(cn=='Mozambique'){
+                      map_location = 'Posto administrativo/localidade'
+                    }
+                  }
+                }
+                
+                # create map title
+                map_complete_title <- paste0('Map of completion % by ', map_location)
+          
                 # Create fieldworkers table
                 pd$end_time <- lubridate::as_datetime(pd$end_time)
                 pd$start_time <- lubridate::as_datetime(pd$start_time)
@@ -986,9 +1078,10 @@ app_server <- function(input, output, session) {
                                       gt(progress_table))
                              ),
                              fluidRow(
+                               uiOutput('ui_map_complete_by'),
                                column(6, align = 'center',
                                       br(),
-                                      h3('Map of completion % by hamlet'),
+                                      h3(map_complete_title),
                                       lx),
                                column(6, align = 'center',
                                       br(),
