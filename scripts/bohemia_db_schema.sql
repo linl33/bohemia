@@ -16,6 +16,7 @@ CREATE TABLE minicensus_main (
     device_id   VARCHAR(64),
     end_time   TIMESTAMP,
     have_wid   VARCHAR(64),
+    hh_sub_size   INT,
     hh_animals_distance_cattle_dry_season   VARCHAR(256),
     hh_animals_distance_cattle_dry_season_geo   VARCHAR(256),
     hh_animals_distance_cattle_rainy_season   VARCHAR(256),

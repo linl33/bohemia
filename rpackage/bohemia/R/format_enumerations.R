@@ -6,7 +6,7 @@
 #' @import dplyr
 #' @export
 
-format_minicensus <- function(data){
+format_enumerations <- function(data){
   
   ## MAIN PART OF enumerations
   df <- data$non_repeats

@@ -21,6 +21,11 @@ format_minicensus <- function(data){
   df <- df[,!names(df) %in% people_columns]
   # Remove all the notes
   df <- df[,!grepl('note_', names(df))]
+  df <- df[,!grepl('_warning', names(df))]
+  # Remove a few extra columns
+  df <- df %>%
+    dplyr::select(-non_residents_filled_out,
+                  -residents_filled_out)
 
     # Clean up the people part
   people_list <- list()
@@ -41,6 +46,10 @@ format_minicensus <- function(data){
   }
   people_part <- bind_rows(people_list)
   people_part <- people_part %>% dplyr::filter(!is.na(pid))
+  people_part <- people_part
+  people_part$invisible_non_resident_count <- NULL
+  people_part$invisible_resident_count <- NULL
+
   # Clean up some variables
   df <- df %>%
     # Hamlet and village clean-up
@@ -81,7 +90,10 @@ format_minicensus <- function(data){
   # REPEATS
   # death
   repeat_death_info <- data$repeats$repeat_death_info %>%
-    dplyr::rename(instance_id = instanceID) %>% dplyr::select(-repeat_name, -repeated_id, -death_adjustment)
+    dplyr::rename(instance_id = instanceID)
+  repeat_death_info$repeat_name <- NULL
+  repeat_death_info$repeated_id <- NULL
+  repeat_death_info$death_adjustment <- NULL
   # hh_sub
   repeat_hh_sub <- data$repeats$repeat_hh_sub %>%
     dplyr::rename(instance_id = instanceID) %>% 
@@ -92,25 +104,37 @@ format_minicensus <- function(data){
                                         hh_sub_relationship_other,
                                         hh_sub_relationship)) %>%
     dplyr::select(-hh_sub_relationship_other)
+  repeat_hh_sub <- repeat_hh_sub[,!grepl('note_|_warning', names(repeat_hh_sub))]
+  repeat_hh_sub$repeat_hh_sub_count <- NULL
+  
+  repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
   # household members (joining to people part) 
   repeat_household_members_enumeration <- data$repeats$repeat_household_members_enumeration %>%
     dplyr::rename(instance_id = instanceID) %>% dplyr::select(-repeat_name, -repeated_id, -hh_member_number_size) %>% filter(!is.na(permid))
+  repeat_household_members_enumeration <- repeat_household_members_enumeration[,!grepl('note_|_warning', names(repeat_household_members_enumeration))]
   people <- people_part %>% left_join(repeat_household_members_enumeration %>%
                                         dplyr::select(-first_name,
                                                       -last_name) %>%
                                         mutate(pid = permid))
+  people$invisible_non_resident_count <- NULL
+  people$invisible_resident_count <- NULL
+  
+  
   # mosquito nets
   repeat_mosquito_net <- data$repeats$repeat_mosquito_net %>%
     dplyr::rename(instance_id = instanceID,
                   num = repeat_mosquito_net_count) %>% 
     dplyr::select(-repeat_name, -repeated_id) %>%
     filter(!is.na(num))
+  repeat_mosquito_net <- repeat_mosquito_net[,!grepl('note_|_warning', names(repeat_mosquito_net))]
+  
   # water 
   repeat_water <- data$repeats$repeat_water %>%
     dplyr::rename(instance_id = instanceID,
                   num = repeat_water_count) %>% 
     dplyr::select(-repeat_name, -repeated_id) %>%
     dplyr::filter(!is.na(num))
+  repeat_water <- repeat_water[,!grepl('note_|_warning', names(repeat_water))]
   
   # Return the formatted data
   out <- list(df, people,

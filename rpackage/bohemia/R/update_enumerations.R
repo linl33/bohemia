@@ -13,7 +13,7 @@
 #' @import RPostgreSQL
 #' @export
 
-update_minicensus <- function(formatted_data,
+update_enumerations <- function(formatted_data,
                               con = NULL,
                               host = NULL,
                               user = NULL,

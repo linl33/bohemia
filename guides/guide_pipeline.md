@@ -82,7 +82,7 @@ psql \
 ```
 
 - Copy paste the code from `scripts/bohemia_db_schema.sql`  
-- Now, you can access the database via R using the following:  
+- Now, you can access the database via R using the following (example for minicensus):  
 
 ```
 library(bohemia)
