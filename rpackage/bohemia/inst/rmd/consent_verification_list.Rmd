@@ -3,6 +3,7 @@ params:
   data: !r data.frame(a = 1, b = 2, x = 4, xx=5,xy=6,xyz=8, yy=9,yz=11,zz=12) 
 output:
   pdf_document:
+    latex_engine : xelatex
     keep_tex: yes
     includes:
       in_header: consent_verification_list_preamble.sty
