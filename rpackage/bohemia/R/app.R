@@ -452,7 +452,7 @@ app_server <- function(input, output, session) {
     choices <- sort(unique(sub_locations$Region))
     country_name <- input$country
     if(country_name == 'Mozambique'){
-      selectInput('region', 'Região', choices = choices)
+      selectInput('region', 'Regi??o', choices = choices)
     } else {
       selectInput('region', 'Region', choices = choices)
     } 
@@ -1485,6 +1485,8 @@ app_server <- function(input, output, session) {
   })
  
   consent_verification_list_reactive <- reactiveValues(data = NULL)
+  
+  quality_control_list_reactive <- reactiveValues(data = NULL)
   output$ui_consent_verification_list <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -1500,6 +1502,7 @@ app_server <- function(input, output, session) {
               pd <- odk_data$data
               people <- pd$repeats$minicensus_people
               pd <- pd$non_repeats
+              save(pd, file='new_pd.rda')
               # Get the country
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
@@ -1530,11 +1533,13 @@ app_server <- function(input, output, session) {
                 dplyr::select(wid,
                               hh_hamlet_code,
                               hh_head_permid = pid,
+                              hh_id = permid,
                               # name,
                               age,
                               todays_date,
                               consent,
                               x,y,z)
+              
               text_filter <- input$verification_text_filter
               if(!is.null(text_filter)){
                 pd <- pd %>%
@@ -1548,20 +1553,36 @@ app_server <- function(input, output, session) {
                     todays_date >= date_filter[1]
                   )
               }
+              
+              # convert to date for quality control table
+              pd$todays_date <- as.Date(pd$todays_date)
+              # get today's date and find the closest date in the data
+              today_date <- Sys.Date()
+              # get date closest to today
+              qc <- pd[which(abs(pd$todays_date-today_date) == min(abs(pd$todays_date - today_date))),]
+              # only keep hh_id and permid
+              qc <- qc %>% select(hh_id, hh_head_permid)
+              # get inputs for slider to control sample size
+              min_value <- 1
+              max_value <- nrow(qc)
+              selected_value <- sample(min_value:max_value, 1)
+              # NEED TRANSLATION FOR HOUSEHOLD ID
               if(co == 'Mozambique'){
-                names(pd) <- c('Código TC',
-                               'Código Bairro',
-                               'ExtID (número de identificação do participante)',
+                names(pd) <- c('C??digo TC',
+                               'C??digo Bairro',
+                               'Household ID',
+                               'ExtID (n??mero de identifica????o do participante)',
                                # 'Nome do membro do agregado',
                                'Idade do membro do agregado',
                                'Data de recrutamento',
                                'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
-                               'Se o documento não estiver preenchido correitamente, indicar o error',
-                               'O error foi resolvido (sim/não)',
+                               'Se o documento n??o estiver preenchido correitamente, indicar o error',
+                               'O error foi resolvido (sim/n??o)',
                                'Verificado por (iniciais do arquivista) e data')
               } else {
                 names(pd) <- c('FW code',
                                'Hamlet code',
+                               'Household ID',
                                'ExtID HH member',
                                # 'Name of household member',
                                'Age of household member',
@@ -1572,10 +1593,21 @@ app_server <- function(input, output, session) {
                                'Verified by (archivist initials) and date')
               }
               consent_verification_list_reactive$data <- pd
+              quality_control_list_reactive$data <- qc
               fluidPage(
                 downloadButton('render_consent_verification_list',
                                'Print consent verification list'),
-                br()#,
+                
+                actionButton('quality_control_check',
+                             'Quality control check'),
+                sliderInput('sample_num', 'Number of households to sample',
+                            min = min_value,
+                            max = max_value,
+                            value = selected_value, step = 1),
+                DT::dataTableOutput('quality_control_table')
+                
+                
+                #,
                 # gt(pd) %>%
                 #   tab_style(
                 #     style = cell_fill(
@@ -1762,6 +1794,34 @@ app_server <- function(input, output, session) {
       
     })
   
+  # observe event for action button quality_control_check
+  quality_control_table_data <- reactiveValues(data = NULL)
+  observeEvent(input$quality_control_check, {
+    # Get the data
+    sample_num = input$sample_num
+    qcx <- quality_control_list_reactive$data
+    if(is.null(qcx)|is.null(sample_num)){
+    NULL
+    } else {
+      # sample half data (replace with input)
+      if(nrow(qcx)>1){
+        sample_index <- sample(1:nrow(qcx), sample_num, replace = FALSE)
+        qcx <- qcx[sample_index,]
+      }
+      quality_control_table_data$data <- qcx
+    }
+    
+  })
+  
+  output$quality_control_table <- DT::renderDataTable({
+    qct <- quality_control_table_data$data
+    if(is.null(qct)){
+      NULL
+    } else {
+      datatable(qct)
+    }
+  })
+  
   output$render_visit_control_sheet <-
     downloadHandler(filename = "visit_control_sheet.pdf",
                     content = function(file){
@@ -1821,6 +1881,8 @@ app_server <- function(input, output, session) {
                     },
                     contentType = "application/pdf"
     )
+  
+  
   output$render_consent_verification_list <-
     downloadHandler(filename = "consent_verification_list.pdf",
                     content = function(file){
