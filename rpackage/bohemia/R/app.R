@@ -605,7 +605,7 @@ app_server <- function(input, output, session) {
   
   
   # Field monitoring UI  #############################################
-  field_monitoring_geo <- reactiveVal('District')
+  field_monitoring_geo <- reactiveVal('Ward')
   output$ui_field_monitoring_by <- renderUI({
     
     cn <- input$geo
@@ -712,7 +712,7 @@ app_server <- function(input, output, session) {
                 }
               }
               if(pd_ok){
-                
+                # save(pd, file = 'pd.rda')
                 # List of fieldworkers
                 fid_options <- sort(unique(pd$wid))
                 fid_choices <- session_data$fieldworkers
@@ -734,15 +734,15 @@ app_server <- function(input, output, session) {
                 # Create table of overview
                 overview <- pd %>%
                   summarise(Type = 'Observed',
-                            `N. FWs` = length(unique(pd$wid)),
-                            `Daily forms per FW` = round(nrow(pd) / `N. FWs` / n_days, digits = 1),
-                            `Weekly forms per FW` = round(`Daily forms per FW` * 7, digits = 1),
-                            `Total forms per FW` = round(nrow(pd) / `N. FWs`, digits = 1),
-                            `Daily forms per country` = round(nrow(pd) / n_days, digits = 1),
-                            `Weekly forms per country` = round(`Daily forms per country` * 7, digits = 1),
-                            `Overall target per country` = target,
-                            `Estimated weeks` = round(`Overall target per country` / `Weekly forms per country`, digits = 1)) %>%
-                  mutate(`Estimated date` = (`Estimated weeks` * 7) + as.Date(dr[1]))
+                            `No. FWs` = length(unique(pd$wid)),
+                            `Daily forms/FW` = round(nrow(pd) / `No. FWs` / n_days, digits = 1),
+                            `Weekly forms/FW` = round(`Daily forms/FW` * 7, digits = 1),
+                            `Total forms/FW` = round(nrow(pd) / `No. FWs`, digits = 1),
+                            `Total Daily forms/country` = round(nrow(pd) / n_days, digits = 1),
+                            `Total Weekly forms/country` = round(`Total Daily forms/country` * 7, digits = 1),
+                            `Overall target/country` = target,
+                            `# Total weeks` = round(`Overall target/country` / `Total Weekly forms/country`, digits = 1)) %>%
+                  mutate(`Estimated date` = (`# Total weeks` * 7) + as.Date(dr[1]))
                 # Get a second row for targets
                 target_helper <- 
                   tibble(xiso = c('MOZ', 'TZA'),
@@ -762,14 +762,14 @@ app_server <- function(input, output, session) {
                 target_helper <- target_helper %>% filter(xiso == iso)
                 second_row <- 
                   tibble(Type = 'Target',
-                         `N. FWs` = target_helper$n_fids,  
-                         `Daily forms per FW` = target_helper$n_forms_daily_per_fid,
-                         `Weekly forms per FW` = target_helper$n_forms_weekly_per_fid,
-                         `Total forms per FW` = target_helper$n_forms_total_per_fid,
-                         `Daily forms per country` = target_helper$n_forms_daily,
-                         `Weekly forms per country` = target_helper$n_forms_weekly,
-                         `Overall target per country` = target_helper$n_forms,
-                         `Estimated weeks` = target_helper$n_weeks, #as.character(target_helper$end_date))
+                         `No. FWs` = target_helper$n_fids,  
+                         `Daily forms/FW` = target_helper$n_forms_daily_per_fid,
+                         `Weekly forms/FW` = target_helper$n_forms_weekly_per_fid,
+                         `Total forms/FW` = target_helper$n_forms_total_per_fid,
+                         `Total Daily forms/country` = target_helper$n_forms_daily,
+                         `Total Weekly forms/country` = target_helper$n_forms_weekly,
+                         `Overall target/country` = target_helper$n_forms,
+                         `# Total weeks` = target_helper$n_weeks, #as.character(target_helper$end_date))
                          `Estimated date` = as.character(target_helper$end_date))
                 # save(pd, overview,target_helper, second_row, file = '/tmp/overview.RData')
                 for(j in 1:ncol(overview)){
@@ -780,7 +780,7 @@ app_server <- function(input, output, session) {
                 }
                 overview <- bind_rows(overview, second_row)
                 
-                # save(pd,file='map_pd.rda')
+                # save(overview,file='overview.rda')
                 # Create map
                 ll <- extract_ll(pd$hh_geo_location)
                 pd$lng <- ll$lng; pd$lat <- ll$lat
@@ -1063,36 +1063,39 @@ app_server <- function(input, output, session) {
                                 h1('Field monitoring'))),
                 tabsetPanel(
                   tabPanel('Overview',
-                           fluidPage(
-                             h3('Progress by geography'),
-                             uiOutput('ui_field_monitoring_by'),
-                             fluidRow(
-                               column(12, align = 'center',
-                                      bohemia::prettify(monitor_by_table, nrows = nrow(monitor_by_table))
-                               )
-                             ),
-                             h3('Estimated targets'),
-                             gt(overview),
+                           tabsetPanel(
                              
-                             fluidRow(
-                               column(6,
-                                      h3('Overall progress plot'),
-                                      plotOutput('progress_plot')),
-                               column(6,
-                                      h3('Overall progress table'),
-                                      gt(progress_table))
-                             ),
-                             fluidRow(
-                               # uiOutput('ui_map_complete_by'),
-                               column(6, align = 'center',
-                                      br(),
-                                      h3(map_complete_title),
-                                      lx),
-                               column(6, align = 'center',
-                                      br(),
-                                      h3('Map of forms'),
-                                      l)
-                             )
+                             tabPanel('Progress by geographical unit',
+                                      fluidRow(
+                                      h3('Progress by geography'),
+                                      uiOutput('ui_field_monitoring_by'),
+                                        column(12, align = 'center',
+                                               bohemia::prettify(monitor_by_table, nrows = 10),
+                                               h3(map_complete_title),
+                                               lx
+                                        )
+                                      )),
+                             tabPanel('Overall progress',
+                                      fluidPage(
+                                        h3('Estimated targets'),
+                                        gt(overview),
+                                        
+                                        fluidRow(
+                                          column(6,
+                                                 h3('Overall progress plot'),
+                                                 plotOutput('progress_plot')),
+                                          column(6,
+                                                 h3('Overall progress table'),
+                                                 gt(progress_table))
+                                        )#, removing map of forms
+                                        # fluidRow(
+                                        #   # uiOutput('ui_map_complete_by'),
+                                        #   column(6, align = 'center',
+                                        #          br(),
+                                        #          h3('Map of forms'),
+                                        #          l)
+                                        # )
+                                      ))
                            )
                   ),
                   tabPanel('Performance',
