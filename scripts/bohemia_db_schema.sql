@@ -227,5 +227,18 @@ CREATE TABLE refusals (
     wid_manual   VARCHAR(32),
     wid_qr   VARCHAR(32),
     PRIMARY KEY(instance_id)
-    );
-  
+);                                    
+
+-- Corrections_Errors
+
+
+CREATE TABLE corrections_errors (
+    id  INT,
+    date_identified    TIMESTAMP,
+    uuid    uuid,
+    assigned_user   VARCHAR(128),
+    action  TEXT,
+    done    BOOLEAN DEFAULT false,
+    done_by     VARCHAR(128),
+    done_date   TIMESTAMP
+);
