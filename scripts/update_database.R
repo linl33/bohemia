@@ -139,7 +139,7 @@ user = creds$databrew_odk_user
 password = creds$databrew_odk_pass
 id = 'va153'
 suppressWarnings({
-  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM va153')
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM va')
 })
 if (nrow(existing_uuids)< 0){
   existing_uuids <- c()
