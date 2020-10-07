@@ -4,7 +4,7 @@ A sysadmin guide for setting up the Bohemia data "pipeline"
 
 ## Standards and "rules"  
 
-The data processing scripts that migrate data from the ODK Aggregate server to project databases require that: 
+The data processing scripts that migrate data from the ODK Aggregate server to project databases require that:
 
 1. All `.xml` forms deployed on the ODK Aggregate server be generated via the `xls2xform` functionality (or via the python scripts for conversion in the `scripts` sub-directory), _not_ via online converters.
 
@@ -23,7 +23,7 @@ The data processing scripts that migrate data from the ODK Aggregate server to p
 
 ## General overview
 
-First, the ODK utilities in the `bohemia` R package (main wrapper function: `odk_get_data`) are used for fetching data from ODK Aggregate databases. Second, cleaning/formatting functions in the `bohemia` R package are used to process the data so as to conform with database standards. Third, the script in `scripts/bohemia_db_schema.sql` is used to set up the PosgreSQL database. Finally, upload functions in the `bohemia` R package are used to send data to the database. 
+First, the ODK utilities in the `bohemia` R package (main wrapper function: `odk_get_data`) are used for fetching data from ODK Aggregate databases. Second, cleaning/formatting functions in the `bohemia` R package are used to process the data so as to conform with database standards. Third, the script in `scripts/bohemia_db_schema.sql` is used to set up the PosgreSQL database. Finally, upload functions in the `bohemia` R package are used to send data to the database.
 
 The above is all run automatically every N minutes via crontab which executes the script at `scripts/run_odk_get_data_cron.sh`.
 
@@ -69,7 +69,7 @@ psql \
 - Run the following:  
 ```
 CREATE DATABASE bohemia;
-``` 
+```
 - Now disconnect and re-connect to the database as per below:
 
 ```
@@ -100,31 +100,30 @@ psql_pass = creds$psql_master_password
 
 require('RPostgreSQL')
 drv <- dbDriver('PostgreSQL')
-con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
                  port=5432,
                  user=psql_user, password=psql_pass)
 ```
 
-- Having retrieved the data, the code for updating it is in `scripts/update_database.R`.  
 
 
 ## Data Update
 
-As mentioned in the General Overview section, the `bohemia` R package (main wrapper function: `odk_get_data`) used for fetching data from ODK is run every N minutes automatically. This section details the steps to deploy and set it up on AWS EC2 instances.
+- Having retrieved the data, the code for updating it is in `scripts/update_database.R`.  
+- As mentioned in the General Overview section, the `bohemia` R package (main wrapper function: `odk_get_data`) used for fetching data from ODK is run every N minutes automatically. This section details the steps to deploy and set it up on AWS EC2 instances.
 
 ### CronTab Set Up
-1. SSH into the server e.g:
 
-   ```ssh ubuntu@ec2-18-218-151-100.us-east-2.compute.amazonaws.com```
+1. SSH into the `shiny` server (deployed at bohemia.team). The reason for using the shiny server is that it has the necessary R packages.
 
 2. Run (on the shell):
 
    `crontab -e`
 
-   a. In the crontab editor opened, type in for an automatic run every 15 minutes past the hour: 
-   
+   a. In the crontab editor opened, type in for an automatic run every 15 minutes past the hour:
+
       `15 * * * * sh /home/ubuntu/Documents/bohemia/scripts/run_odk_get_data_cron.sh`
-   
+
    b. Save and exit the editor.
 
 3. Wait for the time set to verify the job is run by checking the syslog for the entry:
@@ -135,7 +134,12 @@ As mentioned in the General Overview section, the `bohemia` R package (main wrap
 The script is part of the main project and should be deployed with it.
 
 The script depends upon `Rscript` and so this should be installed if it doesn't already exist on the server by running:
-   
+
    `sudo bash`
 
    `apt update && apt install r-base-core`
+
+### Backups
+
+- Backups are automated and covered in https://github.com/databrew/bohemia/blob/master/guides/guide_backups.md
+- Backups for creating data dumps and storing on S3 are on the `odk` server.  

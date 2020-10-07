@@ -156,7 +156,7 @@ dateValue=`(date --iso-8601=seconds)`
 password=<PASSWORD GOES HERE>
 endpoint=<ENDPOINT GOES HERE>
 bucket=databrewbohemia
-server=bohemiadb
+server=bohemia
 folder=bohemia
 file=${dateValue}.sql
 resource="/${bucket}/${server}/${folder}/${file}"
