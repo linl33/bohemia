@@ -145,7 +145,7 @@ app_ui <- function(request) {
                                                         value = 2),
                                               checkboxInput('enumeration', 'Enumeration?', value = FALSE),
                                               helpText('MOZ only. Tick this box if you want to generate a list for enumerators'),
-                                              helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of households.'),
+                                              helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of forms.'),
                                               uiOutput('ui_id_limit'),
                                               br(), br(),
                                               downloadButton('render_visit_control_sheet',
@@ -537,7 +537,7 @@ app_server <- function(input, output, session) {
   output$ui_enumeration_n_hh <- renderUI({
     val <- hamlet_num_hh()
     textInput('enumeration_n_hh',
-              'Estimated number of households',
+              'Estimated number of forms',
               value = val)
   })
   
@@ -1603,7 +1603,7 @@ app_server <- function(input, output, session) {
                 
                 actionButton('quality_control_check',
                              'Quality control check'),
-                sliderInput('sample_num', 'Number of households to sample',
+                sliderInput('sample_num', 'Number of forms to sample',
                             min = min_value,
                             max = max_value,
                             value = selected_value, step = 1),
