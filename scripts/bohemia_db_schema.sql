@@ -237,3 +237,17 @@ CREATE TABLE sessions (
     end_time    TIMESTAMP
 );
   
+
+-- Corrections_Errors
+
+
+CREATE TABLE corrections_errors (
+    id  INT,
+    date_identified    TIMESTAMP,
+    uuid    uuid,
+    assigned_user   VARCHAR(128),
+    action  TEXT,
+    done    BOOLEAN DEFAULT false,
+    done_by     VARCHAR(128),
+    done_date   TIMESTAMP
+);
