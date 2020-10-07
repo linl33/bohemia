@@ -130,14 +130,7 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
 
    `tail -f /var/log/syslog | grep CRON`
 
-### Deploy
-The script is part of the main project and should be deployed with it.
 
-The script depends upon `Rscript` and so this should be installed if it doesn't already exist on the server by running:
-
-   `sudo bash`
-
-   `apt update && apt install r-base-core`
 
 ### Backups
 
