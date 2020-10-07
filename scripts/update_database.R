@@ -1,9 +1,15 @@
 #!/usr/bin/Rscript
-library(bohemia)
-library(yaml)
+start_time <- Sys.time()
+message('System time is: ', as.character(start_time))
+message('---Timezone: ', as.character(Sys.timezone()))
 creds_fpath <- '../credentials/credentials.yaml'
 creds <- yaml::yaml.load_file(creds_fpath)
-require('RPostgreSQL')
+suppressMessages({
+  require('RPostgreSQL')
+  library(bohemia)
+  library(yaml)
+}
+)
 psql_end_point = creds$endpoint
 psql_user = creds$psql_master_username
 psql_pass = creds$psql_master_password
@@ -50,11 +56,14 @@ id2 = NULL
 # }
 
 # ENUMERATIONS MOZAMBIQUE######################################################################
+message('PULLING ENUMERATIONS...')
 url <- creds$databrew_odk_server
 user = creds$databrew_odk_user
 password = creds$databrew_odk_pass
 id = 'enumerations'
-existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM enumerations')
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM enumerations')
+})
 if (nrow(existing_uuids)< 0){
   existing_uuids <- c()
 } else {
@@ -74,6 +83,7 @@ data <- odk_get_data(
 new_data <- FALSE
 if(!is.null(data)){
   new_data <- TRUE
+  message('---', nrow(data$non_repeats), ' new data points.')
 }
 if(new_data){
   # Format data
@@ -84,11 +94,14 @@ if(new_data){
 }
 
 # REFUSALS MOZAMBIQUE######################################################################
+message('PULLING REFUSALS')
 url <- creds$databrew_odk_server
 user = creds$databrew_odk_user
 password = creds$databrew_odk_pass
 id = 'refusals'
-existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
+})
 if (nrow(existing_uuids)< 0){
   existing_uuids <- c()
 } else {
@@ -108,6 +121,7 @@ data <- odk_get_data(
 new_data <- FALSE
 if(!is.null(data)){
   new_data <- TRUE
+  message('---', nrow(data$non_repeats), ' new data points.')
 }
 if(new_data){
   # Format data
@@ -118,5 +132,49 @@ if(new_data){
 }
 
 
-dbDisconnect(con)
+# # VA MOZAMBIQUE######################################################################
+# message('PULLING VA153')
+# url <- creds$databrew_odk_server
+# user = creds$databrew_odk_user
+# password = creds$databrew_odk_pass
+# id = 'va153'
+# suppressWarnings({
+#   existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM va153')
+# })
+# if (nrow(existing_uuids)< 0){
+#   existing_uuids <- c()
+# } else {
+#   existing_uuids <- existing_uuids$instance_id
+# } 
+# # Get data
+# data <- odk_get_data(
+#   url = url,
+#   id = id,
+#   id2 = id2,
+#   unknown_id2 = FALSE,
+#   uuids = NULL,
+#   exclude_uuids = existing_uuids,
+#   user = user,
+#   password = password
+# )
+# new_data <- FALSE
+# if(!is.null(data)){
+#   new_data <- TRUE
+# }
+# if(new_data){
+#   # Format data
+#   formatted_data <- format_refusals(data = data)
+#   # Update data
+#   update_refusals(formatted_data = formatted_data,
+#                   con = con)
+# }
+
+
+x = dbDisconnect(con)
+
+end_time <- Sys.time()
+message('Done at : ', as.character(Sys.time()))
+time_diff <- end_time - start_time
+message('That took ', as.character(round(as.numeric(time_diff), 2)), ' ', attr(time_diff, 'units'))
+
 
