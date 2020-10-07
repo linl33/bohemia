@@ -49,7 +49,6 @@ update_minicensus <- function(formatted_data,
     this_table <- formatted_data[[i]]
     this_name <- names(formatted_data)[i]
     dbWriteTable(con, this_name, value = this_table, append=TRUE, row.names=FALSE)
-    
   }
   
   # Disconnect (only if not supplied an open connection)

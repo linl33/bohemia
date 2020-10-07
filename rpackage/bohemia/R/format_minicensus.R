@@ -23,11 +23,10 @@ format_minicensus <- function(data){
   df <- df[,!grepl('note_', names(df))]
   df <- df[,!grepl('_warning', names(df))]
   # Remove a few extra columns
-  df <- df %>%
-    dplyr::select(-non_residents_filled_out,
-                  -residents_filled_out)
+  df$non_residents_filled_out <- NULL
+  df$residents_filled_out <- NULL
 
-    # Clean up the people part
+  # Clean up the people part
   people_list <- list()
   counter <- 0
   for(i in 1:nrow(people_part)){
@@ -49,7 +48,12 @@ format_minicensus <- function(data){
   people_part <- people_part
   people_part$invisible_non_resident_count <- NULL
   people_part$invisible_resident_count <- NULL
-
+  
+  # Remove names
+  people_part$name_label <- NULL
+  people_part$first_name <- substr(people_part$first_name, 1, 1)
+  people_part$last_name <- substr(people_part$last_name, 1, 1)
+  
   # Clean up some variables
   df <- df %>%
     # Hamlet and village clean-up
@@ -94,6 +98,8 @@ format_minicensus <- function(data){
   repeat_death_info$repeat_name <- NULL
   repeat_death_info$repeated_id <- NULL
   repeat_death_info$death_adjustment <- NULL
+  repeat_death_info$death_name <- substr(repeat_death_info$death_name, 1, 1)
+  repeat_death_info$death_surname <- substr(repeat_death_info$death_surname, 1, 1)
   # hh_sub
   repeat_hh_sub <- data$repeats$repeat_hh_sub %>%
     dplyr::rename(instance_id = instanceID) %>% 
@@ -112,14 +118,12 @@ format_minicensus <- function(data){
   repeat_household_members_enumeration <- data$repeats$repeat_household_members_enumeration %>%
     dplyr::rename(instance_id = instanceID) %>% dplyr::select(-repeat_name, -repeated_id, -hh_member_number_size) %>% filter(!is.na(permid))
   repeat_household_members_enumeration <- repeat_household_members_enumeration[,!grepl('note_|_warning', names(repeat_household_members_enumeration))]
+  repeat_household_members_enumeration$first_name <- repeat_household_members_enumeration$last_name <- NULL
   people <- people_part %>% left_join(repeat_household_members_enumeration %>%
-                                        dplyr::select(-first_name,
-                                                      -last_name) %>%
                                         mutate(pid = permid))
   people$invisible_non_resident_count <- NULL
   people$invisible_resident_count <- NULL
-  
-  
+
   # mosquito nets
   repeat_mosquito_net <- data$repeats$repeat_mosquito_net %>%
     dplyr::rename(instance_id = instanceID,

@@ -88,8 +88,21 @@ CREATE TABLE minicensus_people (
     first_name   VARCHAR(64),
     last_name   VARCHAR(64),
     pid   VARCHAR(11),
-    name_label   VARCHAR(128),
+    --name_label   VARCHAR(128),
     num  INT,
+    dob DATE,
+    instance_id    uuid,
+    dob   DATE,
+    gender    VARCHAR(8),
+    hh_member_adjustment  INT, 
+    hh_member_number  INT,
+    last_name     VARCHAR(256), -- the first name had multiple names stored, applying the same here 
+    member_resident   VARCHAR(32),
+    non_default_id    TEXT, 
+    note_id   BOOLEAN, 
+    permid    TEXT,
+    repeat_household_members_enumeration_count    INT,
+    trigger_non_default_id    TEXT,
     CONSTRAINT fk_minicensus_main FOREIGN KEY (instance_id) REFERENCES minicensus_main(instance_id) ON DELETE CASCADE
 );
 
@@ -132,30 +145,11 @@ CREATE TABLE minicensus_repeat_hh_sub (
     CONSTRAINT fk_minicensus_main FOREIGN KEY (instance_id) REFERENCES minicensus_main(instance_id) ON DELETE CASCADE
 );
 
-CREATE TABLE minicensus_repeat_household_members_enumeration (
---   repeat_name <chr> - # table name
---   repeated_id <dbl> - # used to associate data for a single row 
-    instance_id    uuid,
-    dob   DATE,
-    first_name    VARCHAR(256),
-    gender    VARCHAR(8),
-    hh_member_adjustment  INT, 
-    hh_member_number  INT,
-    last_name     VARCHAR(256), -- the first name had multiple names stored, applying the same here 
-    member_resident   VARCHAR(16),
-    non_default_id    TEXT, 
-    note_id   BOOLEAN, 
-    permid    TEXT,
-    repeat_household_members_enumeration_count    INT,
-    trigger_non_default_id    TEXT,
-    CONSTRAINT fk_minicensus_main FOREIGN KEY (instance_id) REFERENCES minicensus_main(instance_id) ON DELETE CASCADE
-);
-
 CREATE TABLE minicensus_repeat_mosquito_net (
 --   repeat_name <chr> - # table name  
 --   repeated_id <dbl> - # used to associate data for a single row
     instance_id    uuid,     
-    net_obtain_when   DATE,
+    net_obtain_when   TEXT,
     num   INT, 
     CONSTRAINT fk_minicensus_main FOREIGN KEY (instance_id) REFERENCES minicensus_main(instance_id) ON DELETE CASCADE
 );
@@ -165,7 +159,7 @@ CREATE TABLE minicensus_repeat_water (
 --   repeated_id <dbl> - # used to associate data for a single row 
     instance_id    uuid,
     num  INT, 
-    water_bodies_type  VARCHAR(64), 
+    water_bodies_type  TEXT, 
     CONSTRAINT fk_minicensus_main FOREIGN KEY (instance_id) REFERENCES minicensus_main(instance_id) on delete CASCADE
 );     
 

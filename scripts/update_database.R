@@ -1,12 +1,9 @@
 #!/usr/bin/Rscript
 library(bohemia)
 library(yaml)
-creds_fpath <- '/home/ubuntu/Documents/bohemia/credentials/credentials.yaml'
+creds_fpath <- '../credentials/credentials.yaml'
 creds <- yaml::yaml.load_file(creds_fpath)
-url <- 'https://bohemia.systems'
 require('RPostgreSQL')
-user = creds$databrew_odk_user
-password = creds$databrew_odk_pass
 psql_end_point = creds$endpoint
 psql_user = creds$psql_master_username
 psql_pass = creds$psql_master_password
@@ -16,10 +13,15 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
                  user=psql_user, password=psql_pass)
 id2 = NULL
 
-# MINICENSUS
-id = 'minicensus'
-existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
+# MINICENSUS MOZAMBIQUE
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_user
+id = creds$moz_minicensus_name
 
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
+})
 if (nrow(existing_uuids)< 0){
   existing_uuids <- c()
 } else {
