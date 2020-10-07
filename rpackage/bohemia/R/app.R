@@ -1502,7 +1502,7 @@ app_server <- function(input, output, session) {
               pd <- odk_data$data
               people <- pd$repeats$minicensus_people
               pd <- pd$non_repeats
-              save(pd, file='new_pd.rda')
+              # save(pd, file='new_pd.rda')
               # Get the country
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
