@@ -121,9 +121,9 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
    `crontab -e`
 
    a. In the crontab editor opened, type in for an automatic run every 42 minutes past the hour:
-
-      `42 * * * * sh /home/ubuntu/Documents/bohemia/scripts/run_odk_get_data_cron.sh`
-
+```
+   42 * * * * sh /home/ubuntu/Documents/bohemia/scripts/run_odk_get_data_cron.sh > /home/ubuntu/Documents/bohemia/logs/backup.log 2>&1
+```
    b. Save and exit the editor.
 
 3. Wait for the time set to verify the job is run by checking the syslog for the entry:
