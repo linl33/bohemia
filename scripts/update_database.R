@@ -50,7 +50,11 @@ if(new_data){
                     con = con)
 }
 
-# MINICENSUS
+# ENUMERATIONS MOZAMBIQUE
+# MINICENSUS MOZAMBIQUE
+url <- creds$databrew_odk_server
+user = creds$databrew_odk_user
+password = creds$databrew_odk_pass
 id = 'enumerations'
 existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM enumerations')
 

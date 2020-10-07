@@ -167,7 +167,7 @@ CREATE TABLE minicensus_repeat_water (
 
 CREATE TABLE enumerations (
     instance_id   uuid, 
-    agregado   VARCHAR(16),
+    agregado   VARCHAR(256),
     chefe_name   VARCHAR(128),
     construction_material   VARCHAR(256), 
     construction_type   VARCHAR(256),

@@ -81,3 +81,56 @@ for(i in 1:nrow(main)){
 # Save
 save(main, file = 'enumerations.RData')
 readr::write_csv(main, '~/Desktop/enumeration.csv')
+
+
+# Format for database
+formatted <- main %>%
+  # Hamlet and village clean-up
+  mutate(hamlet = ifelse(!is.na(GROUP_LOCATION_HAMLET_OTHER),
+                         GROUP_LOCATION_HAMLET_OTHER,
+                         GROUP_LOCATION_HAMLET)) %>%
+  mutate(village = ifelse(!is.na(GROUP_LOCATION_VILLAGE_OTHER),
+                          GROUP_LOCATION_VILLAGE_OTHER,
+                          GROUP_LOCATION_VILLAGE)) %>%
+  # paint location cleanup
+  mutate(localizacao_agregado = ifelse(!is.na(GROUP_LOCATION_LOCALIZACAO_AGREGADO_FREE),
+                                       GROUP_LOCATION_LOCALIZACAO_AGREGADO_FREE,
+                                       GROUP_LOCATION_LOCALIZACAO_AGREGADO)) %>%
+  mutate(location_gps = paste0(GROUP_CONSTRUCTION_LOCATION_GPS_LAT, ' ',
+                               GROUP_CONSTRUCTION_LOCATION_GPS_LNG, ' ',
+                               GROUP_CONSTRUCTION_LOCATION_GPS_ALT, ' ',
+                               GROUP_CONSTRUCTION_LOCATION_GPS_ACC)) %>%
+  dplyr::select(
+    instance_id = META_INSTANCE_ID,
+    agregado = GROUP_LOCATION_AGREGADO,
+    chefe_name = GROUP_CHEFE_CHEFE_NAME,
+    construction_material = roof_material,
+    construction_type = GROUP_CONSTRUCTION_CONSTRUCTION_TYPE,
+    country = GROUP_LOCATION_COUNTRY,
+    device_id = GROUP_INQUIRY_DEVICE_ID,
+    district = GROUP_LOCATION_DISTRICT,
+    end_time = GROUP_INQUIRY_END_TIME,
+    hamlet,
+    hamlet_code = GROUP_LOCATION_HAMLET_CODE,
+    have_wid = GROUP_INQUIRY_HAVE_WID,
+    inquiry_date = GROUP_INQUIRY_INQUIRY_DATE,
+    localizacao_agregado,
+    location_gps,
+    n_deaths_past_year = GROUP_CONSTRUCTION_N_DEATHS_PAST_YEAR,
+    n_residents = GROUP_CONSTRUCTION_N_RESIDENTS,
+    n_total_constructions = GROUP_CONSTRUCTION_N_TOTAL_CONSTRUCTIONS,
+    region = GROUP_LOCATION_REGION,
+    start_time = GROUP_INQUIRY_START_TIME,
+    sub_name = GROUP_CHEFE_SUB_NAME,
+    todays_date = GROUP_INQUIRY_TODAYS_DATE,
+    village,
+    vizinho1 = GROUP_CONSTRUCTION_VIZINHO1,
+    vizinho2 = GROUP_CONSTRUCTION_VIZINHO2,
+    wall_material,
+    ward = GROUP_LOCATION_WARD,
+    wid = GROUP_INQUIRY_WID,
+    wid_manual = GROUP_INQUIRY_WID_MANUAL,
+    wid_qr = GROUP_INQUIRY_WID_QR
+  )
+formatted$instance_id <- gsub('uuid:', '', formatted$instance_id, fixed = TRUE)
+formatted <- formatted %>% dplyr::distinct(instance_id, .keep_all = TRUE)
