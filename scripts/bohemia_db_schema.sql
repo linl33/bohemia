@@ -228,4 +228,12 @@ CREATE TABLE refusals (
     wid_qr   VARCHAR(32),
     PRIMARY KEY(instance_id)
     );
+
+-- Sessions
+
+CREATE TABLE sessions (
+    user_email  VARCHAR(256),
+    start_time  TIMESTAMP NOT NULL,
+    end_time    TIMESTAMP
+);
   
