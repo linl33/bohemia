@@ -48,7 +48,7 @@ CREATE TABLE minicensus_main (
     hh_health_permission   VARCHAR(256),
     hh_health_who   VARCHAR(256),
     hh_health_who_other   VARCHAR(256),
-    hh_id   VARCHAR(7),
+    hh_id   VARCHAR(7), -- needs to be bigger
     hh_main_building_type   VARCHAR(256),
     hh_main_energy_source_for_lighting   VARCHAR(256),
     hh_main_wall_material   VARCHAR(256),
@@ -200,3 +200,32 @@ CREATE TABLE enumerations (
     PRIMARY KEY(instance_id)
 );
 
+-- Refusals
+
+
+CREATE TABLE refusals (
+    instance_id   uuid, 
+    device_id   VARCHAR(64),
+    end_time   TIMESTAMP,
+    have_wid   VARCHAR(64),
+    country   VARCHAR(32),
+    hh_geo_location   VARCHAR(256),
+    hamlet   VARCHAR(128),
+    district   VARCHAR(64),
+    region   VARCHAR(64),
+    hamlet_code   VARCHAR(3),
+    hh_id   VARCHAR(8),
+    hh_id_manual   VARCHAR(8),
+    hh_region   VARCHAR(32),
+    village   VARCHAR(32),
+    ward   VARCHAR(32),
+    instancename   VARCHAR(64),
+    reason_no_participate   TEXT,
+    start_time   TIMESTAMP,
+    todays_date   DATE,
+    wid   INT,
+    wid_manual   VARCHAR(32),
+    wid_qr   VARCHAR(32),
+    PRIMARY KEY(instance_id)
+    );
+  
