@@ -354,7 +354,7 @@ a:active,a:focus,a:hover {
 .user-panel>.info>a>.fa,.user-panel>.info>a>.glyphicon,.user-panel>.info>a>.ion {
     margin-right: 3px}
 .sidebar-menu {
-    font-size: 16px;
+    font-size: 18px;
     font-family: 'Konnect-Light';
     list-style: none;
     margin: 0;
@@ -374,7 +374,7 @@ a:active,a:focus,a:hover {
     margin-top: 3px}
 .sidebar-menu li.header {
     padding: 10px 25px 10px 15px;
-    font-size: 14px}
+    font-size: 18px}
 .sidebar-menu li>a>.fa-angle-left,.sidebar-menu li>a>.pull-right-container>.fa-angle-left {
     width: auto;
     height: auto;
@@ -405,7 +405,7 @@ a:active,a:focus,a:hover {
 .sidebar-menu .treeview-menu>li>a {
     padding: 5px 5px 5px 15px;
     display: block;
-    font-size: 14px}
+    font-size: 16px}
 .sidebar-menu .treeview-menu>li>a>.fa,.sidebar-menu .treeview-menu>li>a>.glyphicon,.sidebar-menu .treeview-menu>li>a>.ion {
     width: 20px}
 .sidebar-menu .treeview-menu>li>a>.fa-angle-down,.sidebar-menu .treeview-menu>li>a>.fa-angle-left,.sidebar-menu .treeview-menu>li>a>.pull-right-container>.fa-angle-down,.sidebar-menu .treeview-menu>li>a>.pull-right-container>.fa-angle-left {
@@ -544,7 +544,7 @@ a:active,a:focus,a:hover {
 .control-sidebar-subheading {
     display: block;
     font-weight: 400;
-    font-size: 14px}
+    font-size: 16px}
 .control-sidebar-menu {
     list-style: none;
     padding: 0;
