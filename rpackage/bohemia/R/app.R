@@ -543,11 +543,12 @@ app_server <- function(input, output, session) {
   
   output$ui_id_limit <- renderUI({
     val <- hamlet_num_hh()
+    high_val <- round(val * 2)
     fluidPage(
       sliderInput('id_limit', 'Limit IDs to:',
                   min = 1,
-                  max = val, # round(num_houses),
-                  value = c(1, val), # c(1, num_houses),
+                  max = high_val, # round(num_houses),
+                  value = c(1, high_val), # c(1, num_houses),
                   step = 1),
       helpText('Normally, do not touch this slider. Adjust it only if you want to exclude certain IDs (ie, in the case of having already printed numbers 1-50, you might set the lower limit of the slider to 51).')
     )
