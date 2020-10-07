@@ -1525,15 +1525,17 @@ app_server <- function(input, output, session) {
                 out_list[[i]] <- out
               }
               out <- bind_rows(out_list)
+              # save(out, file = '/tmp/out.RData')
               pd <- out %>%
                 mutate(name = paste0(first_name, ' ', last_name),
                        age = round((as.Date(todays_date) - as.Date(hh_head_dob)) / 365.25)) %>%
                 mutate(consent = 'HoH (minicensus)') %>%
                 mutate(x = ' ',y = ' ', z = ' ') %>%
+                mutate(hh_id = substr(permid, 1, 7)) %>%
                 dplyr::select(wid,
                               hh_hamlet_code,
-                              hh_head_permid = pid,
-                              hh_id = permid,
+                              hh_head_permid = permid,
+                              hh_id,
                               # name,
                               age,
                               todays_date,
@@ -1805,7 +1807,11 @@ app_server <- function(input, output, session) {
     } else {
       # sample half data (replace with input)
       if(nrow(qcx)>1){
-        sample_index <- sample(1:nrow(qcx), sample_num, replace = FALSE)
+        if(sample_num > nrow(qcx)){
+          sample_index <- 1:nrow(qcx)
+        } else {
+          sample_index <- sample(1:nrow(qcx), sample_num, replace = FALSE)
+        }
         qcx <- qcx[sample_index,]
       }
       quality_control_table_data$data <- qcx
