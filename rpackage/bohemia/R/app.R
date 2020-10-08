@@ -354,6 +354,15 @@ app_server <- function(input, output, session) {
     # Read in enumerations data
     enumerations <- dbGetQuery(con, "SELECT * FROM enumerations")
     odk_data$enumerations <- enumerations
+    
+    # # Read in va data
+    # va <- dbGetQuery(con, "SELECT * FROM va")
+    # odk_data$va <- va
+    # 
+    # # Read in refusals data
+    # refusals <- dbGetQuery(con, "SELECT * FROM refusals")
+    # odk_data$refusals <- refusals
+    
     dbDisconnect(con)
     names(data$repeats) <- repeat_names
     return(data)
