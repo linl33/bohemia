@@ -3,6 +3,8 @@ params:
   data: !r data.frame(n_hh = 400, n_teams = 2, id_limit_lwr = 1, id_limit_upr = 400) # data on the hamlet
   loc_id: 'SGG'
   enumeration: FALSE
+  use_previous: FALSE
+  enumerations_data: NULL
 output:
   pdf_document:
     keep_tex: yes
@@ -47,9 +49,17 @@ for (i in 1:length(params)){
          params[[i]],
          env = .GlobalEnv)
 }
+# save.image('/tmp/image.RData')
+x <- bohemia::locations
+x <- x %>% filter(code == loc_id)
+if(nrow(x) > 0){
+  loc_name <- paste0(x$Ward, ', ', x$Village, ', ', x$Hamlet)
+} else {
+  loc_name <- ' '
+}
 ```
 
-Visit control sheet for `r loc_id`
+Visit control sheet for `r paste0(loc_id, ' (', loc_name, ')')`
 
 \pagenumbering{gobble}
 
@@ -66,10 +76,8 @@ country <- 'Mozambique'
 if(lc %in% locations$code[locations$Country == 'Tanzania']){
   country <- 'Tanzania'
 }
-
 ```
 
-`r country`
 
 ```{r}
 id_vals <- 1:n_hh
@@ -96,7 +104,6 @@ if(country == 'Tanzania'){
   out <- tibble(`Código do agregado` = paste0(lc, '-', bohemia::add_zero(id_vals, n = 3)),
               team = team_numbers)
 }
-
 ```
 
 ```{r}
@@ -111,16 +118,30 @@ if(country == 'Mozambique'){
            "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = '", "', `Localização do Numero de Agregado` = '",   ' ', "', `Data de enumeração` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 9) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:4,width = '2.5cm')   \n```\n\\newpage\n")
 }
   } else {
-    # NON ENUMERATION
-      this_df <- gps %>% dplyr::filter(code == lc) %>% left_join(locations %>% dplyr::select(code,Village, Hamlet))
-  
-    # # Get the odk data
-    # pd <- odk_data$data
-    # pd <- pd$non_repeats
-    # pd <- pd %>%
-    #   dplyr::filter(hamlet_code == lc)
-    
-  for(i in 1:n_teams){
+    if(use_previous){
+      # NON ENUMERATION
+    # We use the previously enumerated data then
+      this_df <- enumerations_data %>% dplyr::filter(hamlet_code == lc) %>% dplyr::select(
+        agregado, hamlet, hamlet_code, localizacao_agregado, todays_date)
+      # Add team numbers
+      nr = nrow(this_df)
+      if(nr > 0){
+        team_vals <- sort(((1:nr) %% n_teams) + 1)
+        this_df$team <- team_vals
+        
+        for(i in 1:n_teams){
+          team_df <- this_df %>% filter(team == i)
+        chunk_list[[i]] <-
+          paste0("Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
+                 "kable(team_df %>% tibble %>% dplyr::select(-team) %>% dplyr::select(`Localização do Numero de Agregado` = localizacao_agregado, `Data de enumeração` = todays_date) %>% dplyr::mutate(`O chefe de agregado assino o consentimento informado?` = ' ', `O chefe foi entrevistado?` = ' ', `Data da visita` = ' ', `Se Não foi visitado ou entrevistado, explique o porque?` = ' ', `Observações i Comentários` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:9,width = '2cm')   \n```\n\\newpage\n")
+      }
+        
+      } else {
+        chunk_list[[1]] <- paste0('No previously enumerated households for ', lc)
+      }
+      
+    } else {
+      for(i in 1:n_teams){
   chunk_list[[i]] <-
     paste0("Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
            "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = '", 
@@ -128,6 +149,16 @@ if(country == 'Mozambique'){
            " ", # currently blocking names from being stored
            "', `Localização do Numero de Agregado` = '",  ' ',  "', `Data de enumeração` = ' ", as.character(Sys.Date()), "', `O chefe de agregado assino o consentimento informado?` = ' ', `O chede de agregado foi entrevistado?` = ' ', `Data da visita` = ' ', `Se Não foi visitado ou entrevistado, explique o porque?` = ' ', `Observações/Comentários` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 7) %>% kable_styling(latex_options = c('striped', 'repeat_header')) %>% column_spec(1:9,width = '1.5cm')   \n```\n\\newpage\n")
 }
+    }
+    
+  
+    # # Get the odk data
+    # pd <- odk_data$data
+    # pd <- pd$non_repeats
+    # pd <- pd %>%
+    #   dplyr::filter(hamlet_code == lc)
+    
+  
   }
 
 } else {

@@ -139,12 +139,16 @@ app_ui <- function(request) {
                                             fluidPage(
                                               h3("Visit control sheet"),
                                               uiOutput('ui_enumeration_n_hh'),
-                                              helpText('The defulat numbers shown are 25% higher than the number estimated by the village leader.'),
+                                              helpText('The default numbers shown are 25% higher than the number estimated by the village leader.'),
                                               textInput('enumeration_n_teams',
                                                         'Number of teams',
                                                         value = 2),
                                               checkboxInput('enumeration', 'Enumeration?', value = FALSE),
+                                              
                                               helpText('MOZ only. Tick this box if you want to generate a list for enumerators'),
+                                              checkboxInput('use_previous', 'Use previous', value = FALSE),
+                                              helpText('MOZ only. "Use previous" means populating the sheet based on the previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
+                                              
                                               helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of forms.'),
                                               uiOutput('ui_id_limit'),
                                               br(), br(),
@@ -347,6 +351,9 @@ app_server <- function(input, output, session) {
       this_data <- dbGetQuery(con, paste0("SELECT * FROM ", this_name, " WHERE instance_id IN ", ok_uuids))
       data$repeats[[i]] <- this_data
     }
+    # Read in enumerations data
+    enumerations <- dbGetQuery(con, "SELECT * FROM enumerations")
+    odk_data$enumerations <- enumerations
     dbDisconnect(con)
     names(data$repeats) <- repeat_names
     return(data)
@@ -1840,10 +1847,12 @@ app_server <- function(input, output, session) {
                       lc <- location_code()
                       # Get other details
                       enum <- input$enumeration
+                      use_previous <- input$use_previous
                       data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
                                          n_teams = as.numeric(as.character(input$enumeration_n_teams)),
                                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))
+                      enumerations_data = odk_data$enumerations
 
                       # tmp <- list(data = data,
                       #             loc_id = lc,
@@ -1854,7 +1863,9 @@ app_server <- function(input, output, session) {
                                         output_file = out_file,
                                         params = list(data = data,
                                                       loc_id = lc,
-                                                      enumeration = enum))
+                                                      enumeration = enum,
+                                                      use_previous = use_previous,
+                                                      enumerations_data = enumerations_data))
                       
                       # copy html to 'file'
                       file.copy(out_file, file)
