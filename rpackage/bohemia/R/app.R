@@ -468,7 +468,7 @@ app_server <- function(input, output, session) {
     choices <- sort(unique(sub_locations$Region))
     country_name <- input$country
     if(country_name == 'Mozambique'){
-      selectInput('region', 'Regi??o', choices = choices)
+      selectInput('region', 'Região', choices = choices)
     } else {
       selectInput('region', 'Region', choices = choices)
     } 
