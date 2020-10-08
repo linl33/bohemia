@@ -939,7 +939,7 @@ app_server <- function(input, output, session) {
                 pd$end_time <- lubridate::as_datetime(pd$end_time)
                 pd$start_time <- lubridate::as_datetime(pd$start_time)
                 pd$time <- pd$end_time - pd$start_time
-                save(pd, file = 'pd_sup.rda')
+                # save(pd, file = 'pd_sup.rda')
                 fwt <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   group_by(`FW ID` = wid) %>%
