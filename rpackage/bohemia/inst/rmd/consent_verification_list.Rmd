@@ -61,10 +61,10 @@ kable(dfx, 'latex',
   kable_styling(latex_options = c(#'striped',
                                 'repeat_header')) %>%
     kable_styling(font_size = 6)  %>%
-  column_spec(1:2, width = '1.6cm') %>%
+  column_spec(1:2, width = '1.2cm') %>%
   column_spec(3, width = '1.7cm') %>%
-  column_spec(4, width = '1cm') %>%
-  column_spec(5:ncol(dfx), width = '2.5cm')
+  column_spec(4, width = '2cm') %>%
+  column_spec(5:ncol(dfx), width = '2cm')
 ```
 
 
