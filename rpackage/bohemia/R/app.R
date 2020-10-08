@@ -784,16 +784,16 @@ app_server <- function(input, output, session) {
                 }
               }
               if(pd_ok){
-                # save(pd, file = 'pd.rda')
                 # List of fieldworkers
                 fid_options <- sort(unique(pd$wid))
                 fid_choices <- session_data$fieldworkers
                 # save(fid_options, fid_choices, file = '/tmp/fid.RData')
                 fid_choices <- fid_choices %>% dplyr::filter(as.numeric(id) %in% as.numeric(fid_options))
+                # save(fid_choices, file = 'temp_fid_choices.rda')
                 x = as.character(fid_choices$name)
                 y = as.character(fid_choices$id)
                 fid_choices <- as.numeric(y)
-                names(fid_choices) <- x
+                # names(fid_choices) <- x
                 # fid_choices <- c(x = y)
                 
                 # Some pre-processing
@@ -852,7 +852,6 @@ app_server <- function(input, output, session) {
                 }
                 overview <- bind_rows(overview, second_row)
                 
-                # save(overview,file='overview.rda')
                 # Create map
                 ll <- extract_ll(pd$hh_geo_location)
                 pd$lng <- ll$lng; pd$lat <- ll$lat
@@ -935,38 +934,47 @@ app_server <- function(input, output, session) {
                 # create map title
                 map_complete_title <- paste0('Map of completion % by ', map_location)
           
+                # join fids with pd to ge supervisor info
+                # Get the fieldworkers for the country in question
+                co <- country()
+                sub_fids <- fids %>% filter(country == co)
+                pd <- left_join(pd, sub_fids, by=c('wid'= 'bohemia_id'))
                 # Create fieldworkers table
                 pd$end_time <- lubridate::as_datetime(pd$end_time)
                 pd$start_time <- lubridate::as_datetime(pd$start_time)
                 pd$time <- pd$end_time - pd$start_time
-                # save(pd, file = 'pd_sup.rda')
                 fwt <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
-                  group_by(`FW ID` = wid) %>%
+                  group_by(`FW ID` = wid,
+                           `FW Supervisor` = supervisor) %>%
                   mutate(nd = as.numeric(max(todays_date, na.rm = TRUE) - min(todays_date, na.rm = TRUE) + 1)) %>%
                   ungroup %>%
-                  group_by(`FW ID`) %>%
+                  group_by(`FW ID`,
+                           `FW Supervisor`) %>%
                   summarise(`Daily forms` = round(n() / dplyr::first(nd), digits = 1),
                             `Weekly forms` = round(`Daily forms` * 7, digits = 1),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')))
+                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units'))) 
                 fwt_daily <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   filter(end_time >= (Sys.time() - lubridate::hours(24))) %>%
-                  group_by(`FW ID` = wid) %>%
+                  group_by(`FW ID` = wid,
+                           `FW Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')))
                 fwt_weekly <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   filter(end_time >= (Sys.time() - lubridate::hours(24*7))) %>%
-                  group_by(`FW ID` = wid) %>%
+                  group_by(`FW ID` = wid,
+                           `FW Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')))
                 fwt_overall <-  pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
-                  group_by(`FW ID` = wid) %>%
+                  group_by(`FW ID` = wid,
+                           `FW Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
                             `Daily work hours` = '(Pending feature)')
@@ -1049,7 +1057,6 @@ app_server <- function(input, output, session) {
                     } else {
                       monitor_by_table <- progress_by_district
                     }
-                    # save(monitor_by_table, file='monitor_by_table.rda')
                   } else if(by_geo == 'Ward'){
                     if(cn == 'Mozambique'){
                       names(progress_by_ward)[1] <- 'Posto administrativo/localidade'
@@ -1173,43 +1180,48 @@ app_server <- function(input, output, session) {
                            fluidPage(
                              navbarPage(title = 'Performance',
                                         tabPanel('Fieldworkers',
-                                                 fluidPage(
-                                                   # fluidRow(column(3, align = 'center',
-                                                   #                 selectInput('fid_select', 'Select fieldworker ID',
-                                                   #                             choices = fid_options))
-                                                   # ),
-                                                   fluidRow(
-                                                     infoBox(title = 'Number of detected anomalies',
-                                                             icon = icon('microscope'),
-                                                             color = 'black',
-                                                             width = 6,
-                                                             h1(0)),
-                                                     infoBox(title = 'Missing response rate',
-                                                             icon = icon('address-book'),
-                                                             color = 'black',
-                                                             width = 6,
-                                                             h1('0%'))
-                                                   ),
-                                                   fluidRow(
-                                                     column(4,
-                                                            selectInput('fid',
-                                                                        'Fieldworker',
-                                                                        choices = fid_choices),
-                                                            tableOutput('individual_details')),
-                                                     box(width = 8,
-                                                         title = 'Location of forms submitted by this worker',
-                                                         leafletOutput('fid_leaf'))
-                                                   ),
-                                                   navbarPage('Fieldworkers tables',
-                                                              tabPanel('Daily',
-                                                                       DT::datatable(fwt_daily, rownames = FALSE)),
-                                                              tabPanel('Weekly',
-                                                                       DT::datatable(fwt_weekly, rownames = FALSE)),
-                                                              tabPanel('Overall',
-                                                                       DT::datatable(fwt_overall, rownames = FALSE))),
-                                                   fluidRow(
-                                                     uiOutput('drop_out_ui')
-                                                   ))),
+                                                 fluidRow(
+                                                   infoBox(title = 'Number of detected anomalies',
+                                                           icon = icon('microscope'),
+                                                           color = 'black',
+                                                           width = 6,
+                                                           h1(0)),
+                                                   infoBox(title = 'Missing response rate',
+                                                           icon = icon('address-book'),
+                                                           color = 'black',
+                                                           width = 6,
+                                                           h1('0%'))
+                                                 ),
+                                                 tabsetPanel(
+                                                   tabPanel('Individual data',
+                                                            fluidPage(
+                                                              # fluidRow(column(3, align = 'center',
+                                                              #                 selectInput('fid_select', 'Select fieldworker ID',
+                                                              #                             choices = fid_options))
+                                                              # ),
+                                                              fluidRow(
+                                                                column(4,
+                                                                       selectInput('fid',
+                                                                                   'Fieldworker ID',
+                                                                                   choices = fid_choices),
+                                                                       tableOutput('individual_details')),
+                                                                box(width = 8,
+                                                                    title = 'Location of forms submitted by this worker',
+                                                                    leafletOutput('fid_leaf'))
+                                                              ))),
+                                                   tabPanel('Aggregate data',
+                                                            navbarPage('Fieldworkers tables',
+                                                                       tabPanel('Daily',
+                                                                                DT::datatable(fwt_daily, rownames = FALSE)),
+                                                                       tabPanel('Weekly',
+                                                                                DT::datatable(fwt_weekly, rownames = FALSE)),
+                                                                       tabPanel('Overall',
+                                                                                DT::datatable(fwt_overall, rownames = FALSE)))),
+                                                   tabPanel('Dropouts',
+                                                            fluidRow(
+                                                              uiOutput('drop_out_ui')
+                                                            ))
+                                                 )),
                                         tabPanel('Supervisors',
                                                  fluidPage(
                                                    fluidRow(
@@ -1551,7 +1563,6 @@ app_server <- function(input, output, session) {
     co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
     pd <- pd %>% dplyr::filter(hh_country == co)
     wid <- unique(pd$wid)
-    # save(pd, file = 'temp.rda')
     selectInput('verification_text_filter',
               'Filter by FW code',
               choices = wid,
@@ -1577,7 +1588,6 @@ app_server <- function(input, output, session) {
               pd <- odk_data$data
               people <- pd$repeats$minicensus_people
               pd <- pd$non_repeats
-              # save(pd, file='new_pd.rda')
               # Get the country
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
@@ -1858,6 +1868,10 @@ app_server <- function(input, output, session) {
       }
       if(pd_ok){
         who <- input$fid
+        # save(who, file = 'temp_who.rda')
+        # save(pd, file = 'pd_table.rda')
+        # HERE - turn this table into the one on trello
+        # save(who, file = 'who_temp.rda')
         id <- who
         last_upload <- as.character(max(pd$end_time[pd$wid == who]))
         total_forms <- length(which(pd$wid == who))
