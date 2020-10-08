@@ -45,6 +45,11 @@ format_enumerations <- function(data){
                   -instancename,
                   -construction_material_free)
   
+  # Clean up characters in names
+  df <- df %>%
+    mutate(sub_name = substr(sub_name, 1, 1),
+           chefe_name = substr(chefe_name, 1, 1))
+  
   # NO REPEATS IN ENUMERATIONS
   # Return the formatted data
   out <- list(df)
