@@ -79,7 +79,8 @@ enumerations_data <- enumerations_data %>%
   dplyr::arrange(agregado)
 
 out_file <- paste0(getwd(), '/pdfs/visit_control_sheet.pdf')
-rmarkdown::render(input = paste0('../rpackage/bohemia/inst/rmd/visit_control_sheet.Rmd'),# paste0(system.file('rmd', package = 'bohemia'), '/visit_control_sheet.Rmd'),
+rmarkdown::render(input = #paste0('../rpackage/bohemia/inst/rmd/visit_control_sheet.Rmd'),
+                  paste0(system.file('rmd', package = 'bohemia'), '/visit_control_sheet.Rmd'),
                   output_file = out_file,
                   params = list(data = data,
                                 loc_id = lc,
