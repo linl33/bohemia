@@ -870,36 +870,62 @@ app_server <- function(input, output, session) {
                 lxd_all <- left_join(gps %>% filter(iso == the_iso) %>% 
                                        dplyr::select(code, lng, lat), lxd_all) %>%
                   mutate(p = ifelse(is.na(p), 0, p))
-                pal <- colorNumeric(
+                pal_all <- pal_hamlet <- colorNumeric(
                   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
-                  domain = 0:100
+                  domain = 0:ceiling(max(lxd_all$p))
                 )
                 
                 # create map for hamlet
-                lxd_hamlet <- leaflet(data = lxd_all) %>% 
+                leaflet_height <- 1000
+                lxd_hamlet <- leaflet(data = lxd_all, height = leaflet_height) %>% 
                   addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-                  addCircleMarkers(data = lxd_all, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal(p), fillOpacity = 0.6) %>%
-                  addLegend(position = c("bottomleft"), pal = pal, values = lxd_all$p)
+                  addCircleMarkers(data = lxd_all, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal_hamlet(p), fillOpacity = 0.6) %>%
+                  addLegend(position = c("bottomleft"), pal = pal_hamlet, values = lxd_all$p)
                 
                 # create map for village
                 lxd_village <- lxd_all %>% group_by(hh_village) %>%
                   summarise(p = mean(p),
                             lat =mean(lat),
                             lng=mean(lng))
-                lxd_village <- leaflet(data = lxd_village) %>% 
+                pal_village <- colorNumeric(
+                  palette = c("black","darkred", 'red', 'darkorange', 'blue'),
+                  domain = 0:ceiling(max(lxd_village$p))
+                )
+                lxd_village <- leaflet(data = lxd_village, height = leaflet_height) %>% 
                   addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-                  addCircleMarkers(data = lxd_village, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal(p), fillOpacity = 0.6) %>%
-                  addLegend(position = c("bottomleft"), pal = pal, values = lxd_village$p)
+                  addCircleMarkers(data = lxd_village, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal_village(p), fillOpacity = 0.6) %>%
+                  addLegend(position = c("bottomleft"), pal = pal_village, values = lxd_village$p)
                 
                 # create map for ward 
                 lxd_ward <- lxd_all %>% group_by(hh_ward) %>%
                   summarise(p = mean(p),
                             lat =mean(lat),
                             lng=mean(lng))
-                lxd_ward <- leaflet(data = lxd_ward) %>% 
+                pal_ward <- colorNumeric(
+                  palette = c("black","darkred", 'red', 'darkorange', 'blue'),
+                  domain = 0:ceiling(max(lxd_ward$p))
+                )
+                lxd_ward <- leaflet(data = lxd_ward, height = leaflet_height) %>% 
                   addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-                  addCircleMarkers(data = lxd_ward, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal(p), fillOpacity = 0.6) %>%
-                  addLegend(position = c("bottomleft"), pal = pal, values = lxd_ward$p)
+                  addCircleMarkers(data = lxd_ward, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal_ward(p), fillOpacity = 0.6) %>%
+                  addLegend(position = c("bottomleft"), pal = pal_ward, values = lxd_ward$p)
+                
+                # create map for district 
+                lxd_district <- lxd_all %>% ungroup %>%
+                  summarise(p = mean(p),
+                            lat =mean(lat),
+                            lng=mean(lng))
+                pal_district <- colorNumeric(
+                  palette = c("black","darkred", 'red', 'darkorange', 'blue'),
+                  domain = 0:ceiling(max(lxd_district$p))
+                )
+                lxd_district <- leaflet(data = lxd_district, height = leaflet_height) %>% 
+                  addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
+                  addCircleMarkers(data = lxd_district, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal_district(p), fillOpacity = 0.6) %>%
+                  addLegend(position = c("bottomleft"), pal = pal_district, values = lxd_district$p) %>%
+                  setView(lng = lxd_district$lng,
+                          lat = lxd_district$lat,
+                          zoom = 8)
                 
                 # get input for which location to view
                 map_location = field_monitoring_geo()#  map_complete_geo()
@@ -912,7 +938,10 @@ app_server <- function(input, output, session) {
                   lx <- lxd_hamlet
                 } else {
                   if(map_location == 'District'){
-                    lx <- lxd_hamlet %>% leaflet::clearMarkers()
+                    lx <- lxd_district
+                    if(cn == 'Mozambique'){
+                      map_location <- 'Distrito'
+                    }
                   }
                   if(map_location=='Hamlet'){
                     lx <- lxd_hamlet
@@ -1198,7 +1227,7 @@ app_server <- function(input, output, session) {
                                                             tableOutput('individual_details')),
                                                      box(width = 8,
                                                          title = 'Location of forms submitted by this worker',
-                                                         leafletOutput('fid_leaf'))
+                                                         leafletOutput('fid_leaf', height=1000))
                                                    ),
                                                    navbarPage('Fieldworkers tables',
                                                               tabPanel('Daily',
