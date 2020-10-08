@@ -125,7 +125,7 @@ a:active,a:focus,a:hover {
     margin-bottom: 0;
     margin-left: 230px;
     border: none;
-    min-height: 50px;
+    min-height: 52px;
     border-radius: 0}
 .layout-top-nav .main-header .navbar {
     margin-left: 0}
@@ -163,10 +163,12 @@ a:active,a:focus,a:hover {
     background-color: transparent;
     background-image: none;
     padding: 15px 15px;
-    font-family: 'fontAwesome'
+    font-family: "Font Awesome 5 Free"
 }
 .main-header .sidebar-toggle:before {
-    content: "\f0c9"}
+    content: "\f00b";
+    font-weight: 400
+}
 .main-header .sidebar-toggle:hover {
     color: #fff}
 .main-header .sidebar-toggle:active,.main-header .sidebar-toggle:focus {
@@ -286,7 +288,7 @@ a:active,a:focus,a:hover {
     position: absolute;
     top: 0;
     left: 0;
-    padding-top: 50px;
+    padding-top: 52px;
     min-height: 100%;
     width: 230px;
     z-index: 810;
@@ -354,7 +356,7 @@ a:active,a:focus,a:hover {
 .user-panel>.info>a>.fa,.user-panel>.info>a>.glyphicon,.user-panel>.info>a>.ion {
     margin-right: 3px}
 .sidebar-menu {
-    font-size: 16px;
+    font-size: 18px;
     font-family: 'Konnect-Light';
     list-style: none;
     margin: 0;
@@ -364,7 +366,7 @@ a:active,a:focus,a:hover {
     margin: 0;
     padding: 0}
 .sidebar-menu>li>a {
-    padding: 12px 5px 12px 15px;
+    padding: 14px 6px 14px 16px;
     display: block}
 .sidebar-menu>li>a>.fa,.sidebar-menu>li>a>.glyphicon,.sidebar-menu>li>a>.ion {
     width: 20px}
@@ -373,8 +375,8 @@ a:active,a:focus,a:hover {
 .sidebar-menu>li .badge {
     margin-top: 3px}
 .sidebar-menu li.header {
-    padding: 10px 25px 10px 15px;
-    font-size: 14px}
+    padding: 12px 6px 12px 16px;
+    font-size: 18px}
 .sidebar-menu li>a>.fa-angle-left,.sidebar-menu li>a>.pull-right-container>.fa-angle-left {
     width: auto;
     height: auto;
@@ -405,7 +407,7 @@ a:active,a:focus,a:hover {
 .sidebar-menu .treeview-menu>li>a {
     padding: 5px 5px 5px 15px;
     display: block;
-    font-size: 14px}
+    font-size: 16px}
 .sidebar-menu .treeview-menu>li>a>.fa,.sidebar-menu .treeview-menu>li>a>.glyphicon,.sidebar-menu .treeview-menu>li>a>.ion {
     width: 20px}
 .sidebar-menu .treeview-menu>li>a>.fa-angle-down,.sidebar-menu .treeview-menu>li>a>.fa-angle-left,.sidebar-menu .treeview-menu>li>a>.pull-right-container>.fa-angle-down,.sidebar-menu .treeview-menu>li>a>.pull-right-container>.fa-angle-left {
@@ -475,7 +477,7 @@ a:active,a:focus,a:hover {
     white-space: nowrap;
     overflow: hidden}
 .sidebar-menu:hover {
-    overflow: visible}
+    overflow: hidden}
 .sidebar-form,.sidebar-menu>li.header {
     overflow: hidden;
     text-overflow: clip}
@@ -544,7 +546,7 @@ a:active,a:focus,a:hover {
 .control-sidebar-subheading {
     display: block;
     font-weight: 400;
-    font-size: 14px}
+    font-size: 16px}
 .control-sidebar-menu {
     list-style: none;
     padding: 0;
