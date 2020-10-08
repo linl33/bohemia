@@ -285,11 +285,11 @@ app_server <- function(input, output, session) {
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0'
-    fids1 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name)
+    fids1 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor) %>% dplyr::mutate(country = 'Tanzania')
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130'
-    fids2 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name)
+    fids2 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor) %>% dplyr::mutate(country = 'Mozambique')
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=179257508'
-    fids3 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name)
+    fids3 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor) %>% dplyr::mutate(country = 'Catalonia')
     fids <- bind_rows(fids1, fids2, fids3)
     readr::write_csv(fids, '/tmp/fids.csv')
   } else {
@@ -353,15 +353,15 @@ app_server <- function(input, output, session) {
     }
     # Read in enumerations data
     enumerations <- dbGetQuery(con, "SELECT * FROM enumerations")
-    odk_data$enumerations <- enumerations
+    data$enumerations <- enumerations
     
     # # Read in va data
     # va <- dbGetQuery(con, "SELECT * FROM va")
-    # odk_data$va <- va
+    # data$va <- va
     # 
     # # Read in refusals data
     # refusals <- dbGetQuery(con, "SELECT * FROM refusals")
-    # odk_data$refusals <- refusals
+    # data$refusals <- refusals
     
     dbDisconnect(con)
     names(data$repeats) <- repeat_names
@@ -695,10 +695,66 @@ app_server <- function(input, output, session) {
     
   })
   
-  # observeEvent(input$map_complete_by,{
-  #   x <- input$map_complete_by
-  #   map_complete_geo(x)
-  # })
+  # Table of drop outs for fieldworkers
+  output$drop_out_ui <- renderUI({
+    options(dplyr.summarise.inform = FALSE)
+    
+    # Get the fieldworkers for the country in question
+    co <- country()
+    sub_fids <- fids %>% filter(country == co)
+    # Get the minicensus data for the fieldworkers in question
+    pd <- odk_data$data
+    pd <- pd$non_repeats
+    pd$todays_date <- as.Date(pd$todays_date)
+    # Detect all "drop outs" for each fieldworker
+    pd_ids <- sort(unique(pd$wid))
+    out_list <- list()
+    for(i in 1:length(pd_ids)){
+      this_pd <- pd %>% filter(wid == pd_ids[i])
+      right <- this_pd %>%
+        group_by(date = todays_date) %>%
+        tally
+      left <- tibble(date = seq(from = min(this_pd$todays_date, na.rm = TRUE),
+                                to = Sys.Date(), #max(this_pd$todays_date, na.rm = TRUE),
+                                by = 1)) %>%
+        mutate(wd = weekdays(date))
+      joined <- left_join(left, right, by = 'date')
+      joined <- joined %>% filter(!wd %in% c('Saturday', 'Sunday'))
+      # Identify episodes of non-activity
+      joined$roller <- ave(joined$n, cumsum(!is.na(joined$n)), FUN = seq_along) - 1
+      joined$episode_start <- ifelse(joined$roller == 1, 1, 0)
+      joined$episode <- cumsum(joined$episode_start)
+      joined$episode <- ifelse(!is.na(joined$n), NA, joined$episode)
+      min_date <- min(joined$date)
+      out <- joined %>%
+        filter(is.na(n)) %>%
+        group_by(episode) %>%
+        summarise(n_days = max(roller),
+                  start_date = min(date),
+                  end_date = max(date)) %>%
+        ungroup %>%
+        mutate(period = paste0(format(start_date, '%b %d'), '-', format(end_date, '%b %d'))) %>%
+        mutate(start_working = min_date) %>%
+        mutate(fwid =  pd_ids[i]) %>%
+        dplyr::select(`FW ID` = fwid,
+                      `FW start date` = start_working,
+                      `Drop-out episode number` = episode,
+                      `Days missing` = n_days,
+                      Dates = period)
+      out_list[[i]] <- out
+    }
+    out <- bind_rows(out_list)
+    out <- left_join(out, 
+                     sub_fids %>% dplyr::select(`FW ID` = bohemia_id,
+                                                Supervisor = supervisor))
+    
+  fluidPage(
+    h2('Drop-outs table'),
+    bohemia::prettify(out)
+  )
+  })
+  
+  
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -1111,7 +1167,8 @@ app_server <- function(input, output, session) {
                                         #          h3('Map of forms'),
                                         #          l)
                                         # )
-                                      ))
+                                      )),
+                             type = 'pills'
                            )
                   ),
                   tabPanel('Performance',
@@ -1153,8 +1210,7 @@ app_server <- function(input, output, session) {
                                                               tabPanel('Overall',
                                                                        DT::datatable(fwt_overall, rownames = FALSE))),
                                                    fluidRow(
-                                                     h2('Drop-outs'),
-                                                     p('PENDING: need standardized definition of what a drop-out is.')
+                                                     uiOutput('drop_out_ui')
                                                    ))),
                                         tabPanel('Supervisors',
                                                  fluidPage(
@@ -1225,42 +1281,43 @@ app_server <- function(input, output, session) {
                                                            'Discard notification'))
                                    ))
                              )
-                           )),
-                  tabPanel('Aggregate data',
-                           h1('DEPRECATED'),
-                           fluidPage(
-                             # br(),
-                             fluidRow(
-                               infoBox(width = 4,
-                                       icon = icon('address-book'),
-                                       color = 'black',
-                                       title = 'Forms submitted',
-                                       column(12,
-                                              align = 'center', h1(aggregate_table$forms_submitted))),
-                               infoBox(title = 'Active fieldworkers',
-                                       icon = icon("user"),
-                                       color = 'black',
-                                       column(12,
-                                              align = 'center',
-                                              h1(aggregate_table$active_fieldworkers))),
-                               infoBox(title = 'Minutes since last form',
-                                       icon = icon("business-time"),
-                                       color = 'black',
-                                       column(12,
-                                              align = 'center',
-                                              h3(aggregate_table$most_recent_submission)                                                  ))
-                             ),
-                             fluidRow(
-                               box(title = 'Forms submitted',
-                                   width = 6,
-                                   leafletOutput('field_monitoring_map_forms')),
-                               box(title = 'Estimated completion by ward',
-                                   width = 6,
-                                   leafletOutput('field_monitoring_map_coverage'))
-                             ),
-                             fluidRow(
-                               column(6)
-                             )))))
+                           ))#,
+                  # tabPanel('Aggregate data',
+                  #          h1('DEPRECATED'),
+                  #          fluidPage(
+                  #            # br(),
+                  #            fluidRow(
+                  #              infoBox(width = 4,
+                  #                      icon = icon('address-book'),
+                  #                      color = 'black',
+                  #                      title = 'Forms submitted',
+                  #                      column(12,
+                  #                             align = 'center', h1(aggregate_table$forms_submitted))),
+                  #              infoBox(title = 'Active fieldworkers',
+                  #                      icon = icon("user"),
+                  #                      color = 'black',
+                  #                      column(12,
+                  #                             align = 'center',
+                  #                             h1(aggregate_table$active_fieldworkers))),
+                  #              infoBox(title = 'Minutes since last form',
+                  #                      icon = icon("business-time"),
+                  #                      color = 'black',
+                  #                      column(12,
+                  #                             align = 'center',
+                  #                             h3(aggregate_table$most_recent_submission)                                                  ))
+                  #            ),
+                  #            fluidRow(
+                  #              box(title = 'Forms submitted',
+                  #                  width = 6,
+                  #                  leafletOutput('field_monitoring_map_forms')),
+                  #              box(title = 'Estimated completion by ward',
+                  #                  width = 6,
+                  #                  leafletOutput('field_monitoring_map_coverage'))
+                  #            ),
+                  #            fluidRow(
+                  #              column(6)
+                  #            )))
+                  ))
             })
   })
   
@@ -1269,11 +1326,11 @@ app_server <- function(input, output, session) {
     leaflet() %>% addProviderTiles(providers$Stamen.Toner)
   })
   observeEvent(input$fid, {
-    fids <- input$fid
-    if(is.null(fids)){
-      fids <- 1:700
+    xfids <- input$fid
+    if(is.null(xfids)){
+      xfids <- 1:700
     }
-    fids <- as.numeric(fids)
+    xfids <- as.numeric(xfids)
     # Get the aggregate table # (fake)
     aggregate_table <- session_data$aggregate_table
     
@@ -1293,7 +1350,7 @@ app_server <- function(input, output, session) {
     if(pd_ok){
       ll <- extract_ll(pd$hh_geo_location)
       pd$lng <- ll$lng; pd$lat <- ll$lat
-      pd <- pd %>% filter(wid %in% fids)
+      pd <- pd %>% filter(wid %in% xfids)
       leafletProxy('fid_leaf') %>%
         clearMarkers() %>%
         addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
