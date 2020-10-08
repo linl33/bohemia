@@ -769,7 +769,7 @@ app_server <- function(input, output, session) {
                                                 '2020-10-15'))) %>%
                   mutate(n_days = as.numeric(end_date - start_date),
                          n_weeks = round(n_days / 7, digits = 1)) %>%
-                  mutate(n_forms = c(30467, 109008)) %>%
+                  mutate(n_forms = c(30467, 46105)) %>%
                   mutate(n_forms_daily = round(n_forms / n_days, digits = 2)) %>%
                   mutate(n_forms_weekly =  round(n_forms_daily * 7, digits = 2)) %>%
                   mutate(n_forms_daily_per_fid = round(n_forms_daily/n_fids, digits = 2)) %>%
@@ -883,6 +883,7 @@ app_server <- function(input, output, session) {
                 pd$end_time <- lubridate::as_datetime(pd$end_time)
                 pd$start_time <- lubridate::as_datetime(pd$start_time)
                 pd$time <- pd$end_time - pd$start_time
+                save(pd, file = 'pd_sup.rda')
                 fwt <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   group_by(`FW ID` = wid) %>%
@@ -898,23 +899,20 @@ app_server <- function(input, output, session) {
                   filter(end_time >= (Sys.time() - lubridate::hours(24))) %>%
                   group_by(`FW ID` = wid) %>%
                   summarise(`Forms` = n(),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
-                            `Time of last form end` = max(end_time, na.rm = TRUE))
+                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')))
                 fwt_weekly <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   filter(end_time >= (Sys.time() - lubridate::hours(24*7))) %>%
                   group_by(`FW ID` = wid) %>%
                   summarise(`Forms` = n(),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
-                            `Time of last form end` = max(end_time, na.rm = TRUE))
+                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')))
                 fwt_overall <-  pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   group_by(`FW ID` = wid) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
-                            `Time of last form end` = max(end_time, na.rm = TRUE),
                             `Daily work hours` = '(Pending feature)')
                 
                 
