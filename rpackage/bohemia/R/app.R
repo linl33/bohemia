@@ -367,7 +367,7 @@ app_server <- function(input, output, session) {
     names(data$repeats) <- repeat_names
     return(data)
   }
-
+  
   # Text for incorrect log-in, etc.
   reactive_log_in_text <- reactiveVal(value = '')
   
@@ -837,10 +837,10 @@ app_server <- function(input, output, session) {
                      sub_fids %>% dplyr::select(`FW ID` = bohemia_id,
                                                 Supervisor = supervisor))
     
-  fluidPage(
-    h2('Drop-outs table'),
-    bohemia::prettify(out)
-  )
+    fluidPage(
+      h2('Drop-outs table'),
+      bohemia::prettify(out)
+    )
   })
   
   
@@ -935,14 +935,14 @@ app_server <- function(input, output, session) {
                          `Estimated date` = as.character(target_helper$end_date))
                 third_row <- 
                   tibble(Type = 'Percentage',
-                         `No. FWs` = overview$`No. FWs`/second_row$`No. FWs`,  
-                         `Daily forms/FW` = round(overview$`Daily forms/FW`/second_row$`Daily forms/FW`, 2),
-                         `Weekly forms/FW` = round(overview$`Weekly forms/FW`/second_row$`Weekly forms/FW`,2),
-                         `Total forms/FW` = round(overview$`Total forms/FW`/second_row$`Total forms/FW`,2),
-                         `Total Daily forms/country` = round(overview$`Total Daily forms/country`/second_row$`Total Daily forms/country`,2),
-                         `Total Weekly forms/country` = round(overview$`Total Weekly forms/country`/second_row$`Total Weekly forms/country`,2),
-                         `Overall target/country` = round(overview$`Overall target/country`/second_row$`Overall target/country`,2),
-                         `# Total weeks` = round(overview$`# Total weeks`/second_row$`# Total weeks`,2),
+                         `No. FWs` = overview$`No. FWs`/second_row$`No. FWs` * 100,  
+                         `Daily forms/FW` = round(overview$`Daily forms/FW`/second_row$`Daily forms/FW`, 2)  * 100,
+                         `Weekly forms/FW` = round(overview$`Weekly forms/FW`/second_row$`Weekly forms/FW`,2) * 100,
+                         `Total forms/FW` = round(overview$`Total forms/FW`/second_row$`Total forms/FW`,2) * 100,
+                         `Total Daily forms/country` = round(overview$`Total Daily forms/country`/second_row$`Total Daily forms/country`,2) * 100,
+                         `Total Weekly forms/country` = round(overview$`Total Weekly forms/country`/second_row$`Total Weekly forms/country`,2) * 100,
+                         `Overall target/country` = ' ',
+                         `# Total weeks` = ' ', #round(overview$`# Total weeks`/second_row$`# Total weeks`,2),
                          `Estimated date` = '')
                 # save(pd, overview,target_helper, second_row, file = '/tmp/overview.RData')
                 for(j in 1:ncol(overview)){
@@ -957,7 +957,7 @@ app_server <- function(input, output, session) {
                 }
                 overview <- bind_rows(overview, second_row, third_row)
                 
-               
+                
                 # Create map
                 ll <- extract_ll(pd$hh_geo_location)
                 pd$lng <- ll$lng; pd$lat <- ll$lat
@@ -1068,7 +1068,7 @@ app_server <- function(input, output, session) {
                 
                 # create map title
                 map_complete_title <- paste0('Map of completion % by ', map_location)
-          
+                
                 # join fids with pd to ge supervisor info
                 # Get the fieldworkers for the country in question
                 co <- country()
@@ -1222,7 +1222,7 @@ app_server <- function(input, output, session) {
                 deaths <- odk_data$data$repeats$minicensus_repeat_death_info
                 deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
                                             !is.na(death_adjustment))
-                # save(deaths, pd, file = '/tmp/deaths.RData')
+                save(deaths, pd, file = '/tmp/deaths.RData')
                 # Conditional mourning period
                 mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
                 va <- left_join(deaths %>% 
@@ -1240,8 +1240,9 @@ app_server <- function(input, output, session) {
                                   dplyr::select(instance_id,
                                                 `Date of death` = death_dod,
                                                 `Latest date to collect VA form` = xx,
+                                                `PERM ID` = death_id,
                                                 `Time elapsed` = yy),
-                                pd %>% mutate(va_code = ' ') %>% 
+                                pd %>%
                                   dplyr::select(instance_id,
                                                 District = hh_district,
                                                 Ward = hh_ward,
@@ -1249,8 +1250,8 @@ app_server <- function(input, output, session) {
                                                 Hamlet = hh_hamlet,
                                                 `HH ID` = hh_hamlet_code,
                                                 `FW ID` = wid,
-                                                `PERM ID` = va_code,
                                                 `HH visit date` = todays_date)) %>%
+                  mutate(`FW ID` = ' ') %>%
                   dplyr::select(-instance_id)
                 # Filter to only include those past the latest date
                 va <- va %>% filter(`Latest date to collect VA form` <= Sys.Date())
@@ -1260,7 +1261,8 @@ app_server <- function(input, output, session) {
                                              `HH visit date`, `Date of death`,
                                              `Latest date to collect VA form`#,
                                              # `Time elapsed`
-                                             )
+                  ) %>%
+                    arrange(desc(`HH visit date`))
                   if(cn=='Mozambique'){
                     va <- va %>%  rename(Distrito = District,
                                          `Posto administrativo/localidade`=Ward,
@@ -1268,7 +1270,7 @@ app_server <- function(input, output, session) {
                                          Bairro=Hamlet)
                   } 
                 }
-
+                
               } else {
                 progress_by <- progress_by_district <- monitor_by_table <-  progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
                   fwt_daily <- fwt_weekly <- fwt_overall <- overview <- va <- va2 <- va3 <- tibble(`No data available` = ' ')
@@ -1289,8 +1291,8 @@ app_server <- function(input, output, session) {
                              
                              tabPanel('Progress by geographical unit',
                                       fluidRow(
-                                      h3('Progress by geography'),
-                                      uiOutput('ui_field_monitoring_by'),
+                                        h3('Progress by geography'),
+                                        uiOutput('ui_field_monitoring_by'),
                                         column(12, align = 'center',
                                                bohemia::prettify(monitor_by_table, nrows = 10),
                                                h3(map_complete_title),
@@ -1473,7 +1475,7 @@ app_server <- function(input, output, session) {
                   #            fluidRow(
                   #              column(6)
                   #            )))
-                  ))
+                ))
             })
   })
   
@@ -1699,7 +1701,7 @@ app_server <- function(input, output, session) {
                                       end = Sys.Date()))
               )
             })
-    })
+  })
   
   # HERE - not showing up
   output$ui_verification_text_filter <- renderUI({
@@ -1712,12 +1714,12 @@ app_server <- function(input, output, session) {
     pd <- pd %>% dplyr::filter(hh_country == co)
     wid <- unique(pd$wid)
     selectInput('verification_text_filter',
-              'Filter by FW code',
-              choices = wid,
-              selected = wid,
-              multiple = TRUE)
+                'Filter by FW code',
+                choices = wid,
+                selected = wid,
+                multiple = TRUE)
   })
- 
+  
   consent_verification_list_reactive <- reactiveValues(data = NULL)
   
   quality_control_list_reactive <- reactiveValues(data = NULL)
@@ -1850,7 +1852,7 @@ app_server <- function(input, output, session) {
                 #     ),
                 #     locations = cells_body(names(pd)[1:7])
                 #   )
-                )
+              )
             }
     )
   }
@@ -2038,7 +2040,7 @@ app_server <- function(input, output, session) {
     sample_num = input$sample_num
     qcx <- quality_control_list_reactive$data
     if(is.null(qcx)|is.null(sample_num)){
-    NULL
+      NULL
     } else {
       # sample half data (replace with input)
       if(nrow(qcx)>1){
@@ -2077,7 +2079,7 @@ app_server <- function(input, output, session) {
                                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))
                       enumerations_data = odk_data$enumerations
-
+                      
                       # tmp <- list(data = data,
                       #             loc_id = lc,
                       #             enumeration = enum)
@@ -2135,7 +2137,7 @@ app_server <- function(input, output, session) {
                       # Get the data
                       pdx <- consent_verification_list_reactive$data
                       # save(pdx, file = '/tmp/data.RData')
-
+                      
                       out_file <- paste0(getwd(), '/consent_verification_list.pdf')
                       rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/consent_verification_list.Rmd'),
                                         output_file = out_file,
@@ -2168,12 +2170,12 @@ app_server <- function(input, output, session) {
   # Malaria UI elements #################################################
   
   
-  }
+}
 
 app <- function(){
   # Detect the system. If on AWS, don't launch browswer
   is_aws <- grepl('aws', tolower(Sys.info()['release']))
-
+  
   shinyApp(ui = app_ui,
            server = app_server,
            options = list('launch.browswer' = !is_aws))
