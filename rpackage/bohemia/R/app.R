@@ -712,7 +712,7 @@ app_server <- function(input, output, session) {
               pd <- pd %>% 
                 filter(hh_country == co)
               deaths <- odk_data$data$repeats$minicensus_repeat_death_info
-              save(pd, co, deaths, file = '/tmp/joe.RData')
+              # save(pd, co, deaths, file = '/tmp/joe.RData')
               
               deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
                                           !is.na(death_adjustment))
@@ -892,7 +892,7 @@ app_server <- function(input, output, session) {
                 # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
                 target <- ifelse(iso == 'TZA', 46105, 30467)
                 
-                save(pd, file='pd_tab.rda')
+                # save(pd, file='pd_tab.rda')
                 # Create table of overview
                 overview <- pd %>%
                   summarise(Type = 'Observed',
