@@ -1342,19 +1342,16 @@ app_server <- function(input, output, session) {
                                                  tabsetPanel(
                                                    tabPanel('Individual data',
                                                             fluidPage(
-                                                              # fluidRow(column(3, align = 'center',
-                                                              #                 selectInput('fid_select', 'Select fieldworker ID',
-                                                              #                             choices = fid_options))
-                                                              # ),
                                                               fluidRow(
-                                                                column(4,
+                                                                column(12,
                                                                        selectInput('fid',
                                                                                    'Fieldworker ID',
                                                                                    choices = fid_choices),
-                                                                       tableOutput('individual_details')),
-                                                                box(width = 8,
+                                                                       tableOutput('individual_details'))),
+                                                                fluidRow(box(width = 12,
                                                                     title = 'Location of forms submitted by this worker',
-                                                                    leafletOutput('fid_leaf'))
+                                                                    leafletOutput('fid_leaf',
+                                                                                  height = 500))
                                                               ))),
                                                    tabPanel('Aggregate data',
                                                             navbarPage('Fieldworkers tables',
