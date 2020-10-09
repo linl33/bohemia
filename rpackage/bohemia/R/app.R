@@ -680,14 +680,67 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
+              
               fmg <- va_monitoring_geo()
               fluidPage(
-                column(12, align = 'center',
-                       radioButtons('va_monitor_by',
-                                    'Geographic level:',
-                                    choices = cn_choices,
-                                    selected = fmg,
-                                    inline = TRUE))
+                fluidRow(
+                  column(12, align = 'center',
+                         radioButtons('va_monitor_by',
+                                      'Geographic level:',
+                                      choices = cn_choices,
+                                      selected = fmg,
+                                      inline = TRUE))
+                )
+              )
+            })
+  })
+  
+  output$va_progress_ui <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              
+              # Get the overall va progress table
+              pd <- odk_data$data
+              pd <- pd$non_repeats
+              co <- country()
+              pd <- pd %>% 
+                filter(hh_country == co)
+              deaths <- odk_data$data$repeats$minicensus_repeat_death_info
+              save(pd, co, deaths, file = '/tmp/joe.RData')
+              
+              deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
+                                          !is.na(death_adjustment))
+              pd <- pd %>%
+                dplyr::select(district = hh_district,
+                              ward = hh_ward,
+                              village = hh_village,
+                              hamlet = hh_hamlet, instance_id)
+              grouper <- input$va_monitor_by
+              if(is.null(grouper)){
+                grouper <- 'district'
+              } else {
+                grouper <- tolower(grouper)
+              }
+              va_progress <- deaths %>%
+                left_join(pd) %>%
+                filter(!is.na(hamlet)) %>%
+                group_by_(grouper) %>%
+                summarise(`VA forms collected` = 0,
+                          `Deaths reported` = n()) %>%
+                mutate(`% VA forms completed` = round(`VA forms collected` / 
+                                                        `Deaths reported` * 100))
+              
+              fluidPage(
+                fluidRow(
+                  h2('Overall progress table'),
+                  prettify(va_progress)
+                )
               )
             })
   })
@@ -1215,16 +1268,7 @@ app_server <- function(input, output, session) {
                                          Bairro=Hamlet)
                   } 
                 }
-                
-                
-                
-                
-                # save(va, file = 'va.rda')
-                if(nrow(va) > 0){
-                  va2 <- tibble(`No data available` = ' ') 
-                } else {
-                  va2 <- tibble(`No data available` = ' ')
-                }
+
               } else {
                 progress_by <- progress_by_district <- monitor_by_table <-  progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
                   fwt_daily <- fwt_weekly <- fwt_overall <- overview <- va <- va2 <- va3 <- tibble(`No data available` = ' ')
@@ -1339,11 +1383,12 @@ app_server <- function(input, output, session) {
                              navbarPage(title = 'VA',
                                         tabPanel('List generation',
                                                  DT::datatable(va, rownames = FALSE)),
-                                        tabPanel('Monitoring',
+                                        tabPanel('VA progress',
                                                  fluidPage(
                                                    h2('By geography'),
                                                    uiOutput('ui_va_monitoring_by'),
-                                                   DT::datatable(va2, rownames =FALSE),
+                                                   br(),
+                                                   uiOutput('va_progress_ui'),
                                                    h4('Map of VA forms submitted'),
                                                    leaflet(height = 1000) %>% addTiles()
                                                  )))
