@@ -803,6 +803,7 @@ app_server <- function(input, output, session) {
                 # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
                 target <- ifelse(iso == 'TZA', 46105, 30467)
                 
+                save(pd, file='pd_tab.rda')
                 # Create table of overview
                 overview <- pd %>%
                   summarise(Type = 'Observed',
@@ -843,6 +844,17 @@ app_server <- function(input, output, session) {
                          `Overall target/country` = target_helper$n_forms,
                          `# Total weeks` = target_helper$n_weeks, #as.character(target_helper$end_date))
                          `Estimated date` = as.character(target_helper$end_date))
+                third_row <- 
+                  tibble(Type = 'Percentage',
+                         `No. FWs` = overview$`No. FWs`/second_row$`No. FWs`,  
+                         `Daily forms/FW` = round(overview$`Daily forms/FW`/second_row$`Daily forms/FW`, 2),
+                         `Weekly forms/FW` = round(overview$`Weekly forms/FW`/second_row$`Weekly forms/FW`,2),
+                         `Total forms/FW` = round(overview$`Total forms/FW`/second_row$`Total forms/FW`,2),
+                         `Total Daily forms/country` = round(overview$`Total Daily forms/country`/second_row$`Total Daily forms/country`,2),
+                         `Total Weekly forms/country` = round(overview$`Total Weekly forms/country`/second_row$`Total Weekly forms/country`,2),
+                         `Overall target/country` = round(overview$`Overall target/country`/second_row$`Overall target/country`,2),
+                         `# Total weeks` = round(overview$`# Total weeks`/second_row$`# Total weeks`,2),
+                         `Estimated date` = '')
                 # save(pd, overview,target_helper, second_row, file = '/tmp/overview.RData')
                 for(j in 1:ncol(overview)){
                   overview[,j] <- as.character(overview[,j])
@@ -850,8 +862,13 @@ app_server <- function(input, output, session) {
                 for(j in 1:ncol(second_row)){
                   second_row[,j] <- as.character(second_row[,j])
                 }
-                overview <- bind_rows(overview, second_row)
                 
+                for(j in 1:ncol(third_row)){
+                  third_row[,j] <- as.character(third_row[,j])
+                }
+                overview <- bind_rows(overview, second_row, third_row)
+                
+               
                 # Create map
                 ll <- extract_ll(pd$hh_geo_location)
                 pd$lng <- ll$lng; pd$lat <- ll$lat
@@ -1390,10 +1407,12 @@ app_server <- function(input, output, session) {
       ll <- extract_ll(pd$hh_geo_location)
       pd$lng <- ll$lng; pd$lat <- ll$lat
       pd <- pd %>% filter(wid %in% xfids)
+      # round table not here, and here make sure map works (not saving data below)
       leafletProxy('fid_leaf') %>%
         clearMarkers() %>%
         addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
     } else {
+      message('here instead')
       leafletProxy('fid_leaf') %>%
         clearMarkers() 
     }
@@ -1897,16 +1916,14 @@ app_server <- function(input, output, session) {
       }
       if(pd_ok){
         who <- input$fid
-        # save(who, file = 'temp_who.rda')
-        # save(pd, file = 'pd_table.rda')
-        # HERE - turn this table into the one on trello
-        # save(who, file = 'who_temp.rda')
         id <- who
         last_upload <- as.character(max(pd$end_time[pd$wid == who]))
         total_forms <- length(which(pd$wid == who))
         average_time <- 63
-        tibble(key = c('ID', 'Last upload', 'Total forms'),
-               value = c(id, last_upload, total_forms))
+        daily_work_hours <- 'pending'
+        tibble(`FW ID` = id, `# forms` = total_forms, `Average time/form` = average_time,
+               `Last upload`=last_upload, `Daily work hours`= daily_work_hours)
+        
       } else {
         NULL
       }
