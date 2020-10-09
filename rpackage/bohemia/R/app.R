@@ -656,6 +656,42 @@ app_server <- function(input, output, session) {
             })
   })
   
+  # VA geo monitoring UI  #############################################
+  va_monitoring_geo <- reactiveVal('Ward')
+  output$ui_va_monitoring_by <- renderUI({
+    
+    cn <- input$geo
+    if(cn=='Rufiji'){
+      cn_choices = c('District',
+                     'Ward',
+                     'Village',
+                     'Hamlet')
+    } else {
+      cn_choices = c('Distrito' = 'District',
+                     'Posto administrativo/localidade' ='Ward',
+                     'Povoado' ='Village',
+                     'Bairro' ='Hamlet')
+    }
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              fmg <- va_monitoring_geo()
+              fluidPage(
+                column(12, align = 'center',
+                       radioButtons('va_monitor_by',
+                                    'Geographic level:',
+                                    choices = cn_choices,
+                                    selected = fmg,
+                                    inline = TRUE))
+              )
+            })
+  })
+  
   # percent complete map input UI  #############################################
   # map_complete_geo<- reactiveVal('Hamlet')
   # output$ui_map_complete_by <- renderUI({
@@ -1269,9 +1305,11 @@ app_server <- function(input, output, session) {
                                                  DT::datatable(va, rownames = FALSE)),
                                         tabPanel('Monitoring',
                                                  fluidPage(
+                                                   h2('By geography'),
+                                                   uiOutput('ui_va_monitoring_by'),
                                                    DT::datatable(va2, rownames =FALSE),
                                                    h4('Map of VA forms submitted'),
-                                                   leaflet() %>% addTiles()
+                                                   leaflet(height = 1000) %>% addTiles()
                                                  )),
                                         tabPanel('Performance',
                                                  DT::datatable(va3, rownames =FALSE)))
