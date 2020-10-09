@@ -1153,14 +1153,20 @@ app_server <- function(input, output, session) {
                 deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
                                             !is.na(death_adjustment))
                 # save(deaths, pd, file = '/tmp/deaths.RData')
+                # Conditional mourning period
+                mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
                 va <- left_join(deaths %>% 
                                   left_join(pd %>% dplyr::select(instance_id, todays_date)) %>%
                                   mutate(todays_date = as.Date(todays_date),
                                          death_dod = as.Date(death_dod)) %>%
-                                  mutate(old = (todays_date - death_dod) > 40) %>%
-                                  mutate(time_to_add = ifelse(old, 40, 7)) %>%
+                                  mutate(old = (todays_date - death_dod) > mourning_period) %>%
+                                  mutate(time_to_add = ifelse(old, 7, mourning_period)) %>%
                                   mutate(xx = todays_date + time_to_add, # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
                                          yy = Sys.Date() - todays_date) %>%
+                                  # Note: in case the "date of death" is unknown (the form has that option): let's just calculate the "latest date to do VA" by adding 40 days (Tanzania) and 30 days (Moz) to the "date of the hh visit", to be safe.
+                                  mutate(safe_bet = todays_date + mourning_period) %>%
+                                  mutate(xx = ifelse(is.na(xx), safe_bet, xx)) %>%
+                                  mutate(xx = as.Date(xx, origin = '1970-01-01')) %>%
                                   dplyr::select(instance_id,
                                                 `Date of death` = death_dod,
                                                 `Latest date to collect VA form` = xx,
@@ -1182,8 +1188,9 @@ app_server <- function(input, output, session) {
                   va <- va %>% dplyr::select(District, Ward, Village, Hamlet,
                                              `HH ID`, `FW ID`, `PERM ID`,
                                              `HH visit date`, `Date of death`,
-                                             `Latest date to collect VA form`,
-                                             `Time elapsed`)
+                                             `Latest date to collect VA form`#,
+                                             # `Time elapsed`
+                                             )
                   if(cn=='Mozambique'){
                     va <- va %>%  rename(Distrito = District,
                                          `Posto administrativo/localidade`=Ward,
