@@ -1150,11 +1150,17 @@ app_server <- function(input, output, session) {
                 
                 # va table
                 deaths <- odk_data$data$repeats$minicensus_repeat_death_info
-                deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
+                deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
+                                            !is.na(death_adjustment))
                 # save(deaths, pd, file = '/tmp/deaths.RData')
                 va <- left_join(deaths %>% 
-                                  mutate(xx = ' ', # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
-                                         yy = ' ') %>%
+                                  left_join(pd %>% dplyr::select(instance_id, todays_date)) %>%
+                                  mutate(todays_date = as.Date(todays_date),
+                                         death_dod = as.Date(death_dod)) %>%
+                                  mutate(old = (todays_date - death_dod) > 40) %>%
+                                  mutate(time_to_add = ifelse(old, 40, 7)) %>%
+                                  mutate(xx = todays_date + time_to_add, # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
+                                         yy = Sys.Date() - todays_date) %>%
                                   dplyr::select(instance_id,
                                                 `Date of death` = death_dod,
                                                 `Latest date to collect VA form` = xx,
@@ -1170,25 +1176,31 @@ app_server <- function(input, output, session) {
                                                 `PERM ID` = va_code,
                                                 `HH visit date` = todays_date)) %>%
                   dplyr::select(-instance_id)
-                
-                if(cn=='Mozambique'){
-                  va <- va %>%  rename(Distrito = District,
-                                      `Posto administrativo/localidade`=Ward,
-                                      Povoado=Village,
-                                      Bairro=Hamlet)
-                } 
-                
-                # save(va, file = 'va.rda')
+                # Filter to only include those past the latest date
+                va <- va %>% filter(`Latest date to collect VA form` <= Sys.Date())
                 if(nrow(va) > 0){
-                  va <- va[,c(4:11, 1:3)]
-                  va2 <- tibble(`No data available` = ' ') # this will need to be updated later with location-level VA performance info # paula slide page 10
-                  va3 <- tibble(`No data available` = ' ') # this will need to be updated later with VA fieldowrker performance: fw id, # va forms, # of va forms pending
-                } else {
-                  va2 <- tibble(`No data available` = ' ')
-                  va3 <- tibble(`No data available` = ' ')
+                  va <- va %>% dplyr::select(District, Ward, Village, Hamlet,
+                                             `HH ID`, `FW ID`, `PERM ID`,
+                                             `HH visit date`, `Date of death`,
+                                             `Latest date to collect VA form`,
+                                             `Time elapsed`)
+                  if(cn=='Mozambique'){
+                    va <- va %>%  rename(Distrito = District,
+                                         `Posto administrativo/localidade`=Ward,
+                                         Povoado=Village,
+                                         Bairro=Hamlet)
+                  } 
                 }
                 
                 
+                
+                
+                # save(va, file = 'va.rda')
+                if(nrow(va) > 0){
+                  va2 <- tibble(`No data available` = ' ') 
+                } else {
+                  va2 <- tibble(`No data available` = ' ')
+                }
               } else {
                 progress_by <- progress_by_district <- monitor_by_table <-  progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
                   fwt_daily <- fwt_weekly <- fwt_overall <- overview <- va <- va2 <- va3 <- tibble(`No data available` = ' ')
@@ -1310,9 +1322,7 @@ app_server <- function(input, output, session) {
                                                    DT::datatable(va2, rownames =FALSE),
                                                    h4('Map of VA forms submitted'),
                                                    leaflet(height = 1000) %>% addTiles()
-                                                 )),
-                                        tabPanel('Performance',
-                                                 DT::datatable(va3, rownames =FALSE)))
+                                                 )))
                            )),
                   tabPanel('Alerts',
                            fluidPage(
