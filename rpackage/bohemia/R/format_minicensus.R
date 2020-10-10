@@ -89,7 +89,9 @@ format_minicensus <- function(data){
     dplyr::select(-hh_main_energy_source_for_lighting_other,
                   -hh_main_wall_material_other,
                   -instanceName,
-                  -hh_health_permission_other)
+                  -hh_health_permission_other) %>%
+    mutate(hh_contact_info_number_alternate = as.character(hh_contact_info_number_alternate),
+           hh_contact_info_number = as.character(hh_contact_info_number))
   
   # REPEATS
   # death

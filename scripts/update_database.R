@@ -20,6 +20,7 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
 id2 = NULL
 
 # MINICENSUS MOZAMBIQUE #######################################################################
+message('PULLING MINICENSUS (MOZAMBIQUE')
 url <- creds$moz_odk_server
 user = creds$moz_odk_user
 password = creds$moz_odk_pass
@@ -58,7 +59,7 @@ if(new_data){
 }
 
 # ENUMERATIONS MOZAMBIQUE######################################################################
-message('PULLING ENUMERATIONS...')
+message('PULLING ENUMERATIONS (MOZAMBIQUE')
 url <- creds$databrew_odk_server
 user = creds$databrew_odk_user
 password = creds$databrew_odk_pass
@@ -96,7 +97,7 @@ if(new_data){
 }
 
 # REFUSALS MOZAMBIQUE######################################################################
-message('PULLING REFUSALS')
+message('PULLING REFUSALS (MOZAMBIQUE)')
 url <- creds$databrew_odk_server
 user = creds$databrew_odk_user
 password = creds$databrew_odk_pass
@@ -135,7 +136,7 @@ if(new_data){
 
 
 # VA MOZAMBIQUE######################################################################
-message('PULLING VA153')
+message('PULLING VA153 (MOZAMBIQUE)')
 url <- creds$databrew_odk_server
 user = creds$databrew_odk_user
 password = creds$databrew_odk_pass
