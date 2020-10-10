@@ -4,7 +4,12 @@
 \alias{odk_list_forms}
 \title{List the forms on an ODK server}
 \usage{
-odk_list_forms(url = "https://bohemia.systems", user = NULL, password = NULL)
+odk_list_forms(
+  url = "https://bohemia.systems",
+  user = NULL,
+  password = NULL,
+  pre_auth = FALSE
+)
 }
 \arguments{
 \item{url}{The URL of the ODK Aggregate server, default being https://bohemia.systems, without a trailing dash}
@@ -12,6 +17,8 @@ odk_list_forms(url = "https://bohemia.systems", user = NULL, password = NULL)
 \item{user}{The ODK Aggregate username}
 
 \item{password}{The ODK Aggregate password}
+
+\item{pre-auth}{Pre-authenticate (needed for Manhica server)}
 }
 \value{
 A tibble with columns name, id, and url

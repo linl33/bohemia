@@ -7,6 +7,7 @@
 #' @param uuid The uuid (including the "uuid:" prefix) of the particular submission to be retrieved
 #' @param user The ODK Aggregate username
 #' @param password The ODK Aggregate password
+#' @param use_data_id Whether to substitute the id2 field with "data" in the submission retrieval URL
 #' @import httr
 #' @import xml2
 #' @import dplyr
@@ -18,7 +19,8 @@ odk_get_submission <- function(url = 'https://bohemia.systems',
                                  id2 = NULL,
                                  uuid = NULL,
                                  user = NULL,
-                                 password = NULL){
+                                 password = NULL,
+                                use_data_id = FALSE){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){
@@ -42,7 +44,7 @@ odk_get_submission <- function(url = 'https://bohemia.systems',
                  "/view/downloadSubmission?formId=",
                 id,
                 "%5B@version=null%20and%20@uiVersion=null%5D/",
-                ifelse(id == 'census', 'data', id2),
+                ifelse(use_data_id, 'data', id2),
                 # id2, # this works for recon, but not for census
                 # 'data', # this works for census (online converted) but not odk
                 "%5B@key=",

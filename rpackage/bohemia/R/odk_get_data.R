@@ -10,6 +10,8 @@
 #' @param user The ODK Aggregate username
 #' @param password The ODK Aggregate password
 #' @param widen Whether to widen
+#' @param pre-auth Pre-authenticate (needed for Manhica server)
+#' @param use_data_id Whether to substitute the id2 field with "data" in the submission retrieval URL
 #' @import httr
 #' @import xml2
 #' @import dplyr
@@ -25,7 +27,9 @@ odk_get_data <- function(url = 'https://bohemia.systems',
                               exclude_uuids = NULL,
                               user = NULL,
                               password = NULL,
-                              widen = TRUE){
+                              widen = TRUE,
+                         pre_auth = FALSE,
+                         use_data_id = FALSE){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){
@@ -34,7 +38,7 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   
   # Get the forms available at the url given
   message('---Fetching the forms list at ', url)
-  fl <- odk_list_forms(url = url, user = user, password = password)
+  fl <- odk_list_forms(url = url, user = user, password = password, pre_auth = pre_auth)
   # If the requested id is not available, stop
   if(!id %in% fl$id){
     message('The form with id "', id, '" is not listed at ', url, '.\nThe listed form ids are:\n')
@@ -54,7 +58,8 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   submissions <- odk_list_submissions(url = url,
                                       id = id,
                                       user = user,
-                                      password = password)
+                                      password = password,
+                                      pre_auth = pre_auth)
   # If no submissions, stop
   if(length(submissions) == 0){
     message('No submissions are available for the form with id: ', id, ' at ', url, '.\nReturning an empty vector')
@@ -97,7 +102,8 @@ odk_get_data <- function(url = 'https://bohemia.systems',
                                      id2 = id2,
                                      uuid = this_uuid, 
                                      user = user, 
-                                     password = password)
+                                     password = password,
+                                     use_data_id = use_data_id)
     # Parse the submission into R format
     parsed <- odk_parse_submission(xml = submission)
    

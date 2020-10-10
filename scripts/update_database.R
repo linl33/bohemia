@@ -19,41 +19,43 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
                  user=psql_user, password=psql_pass)
 id2 = NULL
 
-# # MINICENSUS MOZAMBIQUE #######################################################################
-# url <- creds$moz_odk_server
-# user = creds$moz_odk_user
-# password = creds$moz_odk_user
-# id = creds$moz_minicensus_name
-# suppressWarnings({
-#   existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
-# })
-# if (nrow(existing_uuids)< 0){
-#   existing_uuids <- c()
-# } else {
-#   existing_uuids <- existing_uuids$instance_id
-# } 
-# # Get data
-# data <- odk_get_data(
-#   url = url,
-#   id = id,
-#   id2 = id2,
-#   unknown_id2 = FALSE,
-#   uuids = NULL,
-#   exclude_uuids = existing_uuids,
-#   user = user,
-#   password = password
-# )
-# new_data <- FALSE
-# if(!is.null(data)){
-#   new_data <- TRUE
-# }
-# if(new_data){
-#   # Format data
-#   formatted_data <- format_minicensus(data = data)
-#   # Update data
-#   update_minicensus(formatted_data = formatted_data,
-#                     con = con)
-# }
+# MINICENSUS MOZAMBIQUE #######################################################################
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'minicensus'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+}
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user, 
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = TRUE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_minicensus(data = data)
+  # Update data
+  update_minicensus(formatted_data = formatted_data,
+                    con = con)
+}
 
 # ENUMERATIONS MOZAMBIQUE######################################################################
 message('PULLING ENUMERATIONS...')

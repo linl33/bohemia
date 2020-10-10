@@ -5,6 +5,7 @@
 #' @param id The primary id fo the form
 #' @param user The ODK Aggregate username
 #' @param password The ODK Aggregate password
+#' @param pre-auth Pre-authenticate (needed for Manhica server)
 #' @import httr
 #' @import xml2
 #' @import dplyr
@@ -14,7 +15,8 @@
 odk_list_submissions <- function(url = 'https://bohemia.systems',
                                  id = 'recon',
                                  user = NULL,
-                                 password = NULL){
+                                 password = NULL,
+                                 pre_auth = FALSE){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){
@@ -23,7 +25,6 @@ odk_list_submissions <- function(url = 'https://bohemia.systems',
   
   # Create the url for the request
   rurl <- paste0(url, '/view/submissionList?formId=', id)
-  url3 = 'https://bohemia.systems/view/submissionList?formId=recon'
   r = GET(rurl,
           authenticate(user = user,
                        password = password, 

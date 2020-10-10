@@ -10,7 +10,8 @@ odk_get_submission(
   id2 = NULL,
   uuid = NULL,
   user = NULL,
-  password = NULL
+  password = NULL,
+  use_data_id = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ odk_get_submission(
 \item{user}{The ODK Aggregate username}
 
 \item{password}{The ODK Aggregate password}
+
+\item{use_data_id}{Whether to substitute the id2 field with "data" in the submission retrieval URL}
 }
 \value{
 An xml of the submission's content

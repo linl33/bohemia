@@ -17,7 +17,23 @@ format_va <- function(data){
   
   # Make all names lowercase
   names(df) <- tolower(names(df))
-
+  
+  # Hide names
+  if('id10007' %in% names(df)){
+    df$id10007 <- substr(as.character(df$id10007), 1, 1)
+  }
+  if('id10017' %in% names(df)){
+    df$id10017 <- substr(as.character(df$id10017), 1, 1)
+  }
+  if('id10018' %in% names(df)){
+    df$id10018 <- substr(as.character(df$id10018), 1, 1)
+  }
+  if('id10061' %in% names(df)){
+    df$id10061 <- substr(as.character(df$id10061), 1, 1)
+  }
+  if('id10062' %in% names(df)){
+    df$id10062 <- substr(as.character(df$id10062), 1, 1)
+  }
   
   # NO REPEATS IN va
   # Return the formatted data

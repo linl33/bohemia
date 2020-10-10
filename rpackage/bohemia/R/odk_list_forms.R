@@ -4,6 +4,7 @@
 #' @param url The URL of the ODK Aggregate server, default being https://bohemia.systems, without a trailing dash
 #' @param user The ODK Aggregate username
 #' @param password The ODK Aggregate password
+#' @param pre-auth Pre-authenticate (needed for Manhica server)
 #' @import httr
 #' @import xml2
 #' @import dplyr
@@ -12,16 +13,28 @@
 
 odk_list_forms <- function(url = 'https://bohemia.systems',
                            user = NULL,
-                           password = NULL){
+                           password = NULL,
+                           pre_auth = FALSE){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){
     message('No user/password were entered. Will try with it. If the server requires it, you\'ll get a 401 error')
   }
   
+  
+  # authenticate
+  if(pre_auth){
+    auth_url <- paste0(url, '/local_login.html?redirect=formList')
+    r <- POST(auth_url,
+              authenticate(user = user,
+                           password = password,
+                           type = 'basic'))
+  }
+  
+  
   # Create the url for the forms list
   fl_url <- paste0(url, '/formList')
-  
+
   # Carry out the GET request
   if(is.null(user)){
     r <- GET(fl_url)

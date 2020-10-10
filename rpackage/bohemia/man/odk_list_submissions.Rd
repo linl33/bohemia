@@ -8,7 +8,8 @@ odk_list_submissions(
   url = "https://bohemia.systems",
   id = "recon",
   user = NULL,
-  password = NULL
+  password = NULL,
+  pre_auth = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ odk_list_submissions(
 \item{user}{The ODK Aggregate username}
 
 \item{password}{The ODK Aggregate password}
+
+\item{pre-auth}{Pre-authenticate (needed for Manhica server)}
 }
 \value{
 A character vector of length 1 with the uuids (including the prefix "uuid:") of the submitted forms

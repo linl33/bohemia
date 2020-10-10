@@ -1222,7 +1222,7 @@ app_server <- function(input, output, session) {
                 deaths <- odk_data$data$repeats$minicensus_repeat_death_info
                 deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
                                             !is.na(death_adjustment))
-                save(deaths, pd, file = '/tmp/deaths.RData')
+                # save(deaths, pd, file = '/tmp/deaths.RData')
                 # Conditional mourning period
                 mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
                 va <- left_join(deaths %>% 

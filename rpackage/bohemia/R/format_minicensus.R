@@ -100,6 +100,8 @@ format_minicensus <- function(data){
   repeat_death_info$death_adjustment <- NULL
   repeat_death_info$death_name <- substr(repeat_death_info$death_name, 1, 1)
   repeat_death_info$death_surname <- substr(repeat_death_info$death_surname, 1, 1)
+  repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
+  
   # hh_sub
   repeat_hh_sub <- data$repeats$repeat_hh_sub %>%
     dplyr::rename(instance_id = instanceID) %>% 
@@ -113,7 +115,6 @@ format_minicensus <- function(data){
   repeat_hh_sub <- repeat_hh_sub[,!grepl('note_|_warning', names(repeat_hh_sub))]
   repeat_hh_sub$repeat_hh_sub_count <- NULL
   
-  repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
   # household members (joining to people part) 
   repeat_household_members_enumeration <- data$repeats$repeat_household_members_enumeration %>%
     dplyr::rename(instance_id = instanceID) %>% dplyr::select(-repeat_name, -repeated_id, -hh_member_number_size) %>% filter(!is.na(permid))

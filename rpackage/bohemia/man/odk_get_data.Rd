@@ -13,7 +13,9 @@ odk_get_data(
   exclude_uuids = NULL,
   user = NULL,
   password = NULL,
-  widen = TRUE
+  widen = TRUE,
+  pre_auth = FALSE,
+  use_data_id = FALSE
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ odk_get_data(
 \item{password}{The ODK Aggregate password}
 
 \item{widen}{Whether to widen}
+
+\item{use_data_id}{Whether to substitute the id2 field with "data" in the submission retrieval URL}
+
+\item{pre-auth}{Pre-authenticate (needed for Manhica server)}
 }
 \value{
 A list of dataframes
