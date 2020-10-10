@@ -905,37 +905,58 @@ app_server <- function(input, output, session) {
                             `Overall target/country` = target,
                             `# Total weeks` = round(`Overall target/country` / `Total Weekly forms/country`, digits = 1)) %>%
                   mutate(`Estimated date` = (`# Total weeks` * 7) + as.Date(dr[1]))
-                # Get a second row for targets
-                target_helper <- 
-                  tibble(xiso = c('MOZ', 'TZA'),
-                         n_fids = c(100,77),
-                         end_date = as.Date(c('2020-12-31',
-                                              '2020-12-15')),
-                         start_date = as.Date(c('2020-10-06',
-                                                '2020-10-15'))) %>%
-                  mutate(n_days = as.numeric(end_date - start_date),
-                         n_weeks = round(n_days / 7, digits = 1)) %>%
-                  mutate(n_forms = c(30467, 46105)) %>%
-                  mutate(n_forms_daily = round(n_forms / n_days, digits = 2)) %>%
-                  mutate(n_forms_weekly =  round(n_forms_daily * 7, digits = 2)) %>%
-                  mutate(n_forms_daily_per_fid = round(n_forms_daily/n_fids, digits = 2)) %>%
-                  mutate(n_forms_weekly_per_fid = round(n_forms_weekly/n_fids, digits = 2)) %>%
-                  mutate(n_forms_total_per_fid = round(n_forms / n_fids, 2))
-                target_helper <- target_helper %>% filter(xiso == iso)
+                # # Get a second row for targets
+                # target_helper <- 
+                #   tibble(xiso = c('MOZ', 'TZA'),
+                #          n_fids = c(100,77),
+                #          end_date = as.Date(c('2020-12-31',
+                #                               '2020-12-15')),
+                #          start_date = as.Date(c('2020-10-06',
+                #                                 '2020-10-15'))) %>%
+                #   mutate(n_days = as.numeric(end_date - start_date),
+                #          n_weeks = round(n_days / 7, digits = 1)) %>%
+                #   mutate(n_forms = c(30467, 46105)) %>%
+                #   mutate(n_forms_daily = round(n_forms / n_days, digits = 2)) %>%
+                #   mutate(n_forms_weekly =  round(n_forms_daily * 7, digits = 2)) %>%
+                #   mutate(n_forms_daily_per_fid = round(n_forms_daily/n_fids, digits = 2)) %>%
+                #   mutate(n_forms_weekly_per_fid = round(n_forms_weekly/n_fids, digits = 2)) %>%
+                #   mutate(n_forms_total_per_fid = round(n_forms / n_fids, 2))
+                # target_helper <- target_helper %>% filter(xiso == iso)
+                # hard coded values for each country
+                if(co=='Tanzania'){
+                  num_fws <- 77
+                  daily_forms_fw <- 13
+                  weekly_forms_fw <- daily_forms_fw*5
+                  total_forms_fw <- 599
+                  total_daily_country <- 1001
+                  total_weekly_country <- total_daily_country*5
+                  total_forms <- 41605
+                  total_weeks <- 6
+                } else {
+                  num_fws <- 100
+                  daily_forms_fw <- 10
+                  weekly_forms_fw <- daily_forms_fw*5
+                  total_forms_fw <- 500
+                  total_daily_country <- 1000
+                  total_weekly_country <- total_daily_country*5
+                  total_forms <- 30000
+                  total_weeks <- 6
+                  
+                }
                 second_row <- 
                   tibble(Type = 'Target',
-                         `No. FWs` = target_helper$n_fids,  
-                         `Daily forms/FW` = target_helper$n_forms_daily_per_fid,
-                         `Weekly forms/FW` = target_helper$n_forms_weekly_per_fid,
-                         `Total forms/FW` = target_helper$n_forms_total_per_fid,
-                         `Total Daily forms/country` = target_helper$n_forms_daily,
-                         `Total Weekly forms/country` = target_helper$n_forms_weekly,
-                         `Overall target/country` = target_helper$n_forms,
-                         `# Total weeks` = target_helper$n_weeks, #as.character(target_helper$end_date))
-                         `Estimated date` = as.character(target_helper$end_date))
+                         `No. FWs` = num_fws,  
+                         `Daily forms/FW` = daily_forms_fw,
+                         `Weekly forms/FW` = weekly_forms_fw,
+                         `Total forms/FW` = total_forms_fw,
+                         `Total Daily forms/country` = total_daily_country,
+                         `Total Weekly forms/country` = total_weekly_country,
+                         `Overall target/country` = total_forms,
+                         `# Total weeks` = '', #as.character(target_helper$end_date))
+                         `Estimated date` = '')
                 third_row <- 
                   tibble(Type = 'Percentage',
-                         `No. FWs` = overview$`No. FWs`/second_row$`No. FWs` * 100,  
+                         `No. FWs` = round(overview$`No. FWs`/second_row$`No. FWs` * 100),  
                          `Daily forms/FW` = round(overview$`Daily forms/FW`/second_row$`Daily forms/FW`, 2)  * 100,
                          `Weekly forms/FW` = round(overview$`Weekly forms/FW`/second_row$`Weekly forms/FW`,2) * 100,
                          `Total forms/FW` = round(overview$`Total forms/FW`/second_row$`Total forms/FW`,2) * 100,
@@ -979,12 +1000,17 @@ app_server <- function(input, output, session) {
                   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
                   domain = 0:ceiling(max(lxd_all$p))
                 )
-                
+                # save(lxd_all, file = 'lxd_all.rda')
+                hamlet_text <- paste(
+                  "Percent finished: ",  round(lxd_all$p,2),"<br>",
+                  as.character(lxd_all$code),"<br/>",
+                  sep="") %>%
+                  lapply(htmltools::HTML)
                 # create map for hamlet
                 leaflet_height <- 1000
                 lxd_hamlet <- leaflet(data = lxd_all, height = leaflet_height) %>% 
                   addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-                  addCircleMarkers(data = lxd_all, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal_hamlet(p), fillOpacity = 0.6) %>%
+                  addCircleMarkers(data = lxd_all, lng = ~lng, lat = ~lat,label = hamlet_text, stroke=FALSE, color=~pal_hamlet(p), fillOpacity = 0.6) %>%
                   addLegend(position = c("bottomleft"), pal = pal_hamlet, values = lxd_all$p)
                 
                 # create map for village
@@ -996,9 +1022,14 @@ app_server <- function(input, output, session) {
                   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
                   domain = 0:ceiling(max(lxd_village$p))
                 )
+                village_text <- paste(
+                  "Percent finished: ", round(lxd_village$p,2),"<br>",
+                  as.character(lxd_village$hh_village),"<br/>",
+                  sep="") %>%
+                  lapply(htmltools::HTML)
                 lxd_village <- leaflet(data = lxd_village, height = leaflet_height) %>% 
                   addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-                  addCircleMarkers(data = lxd_village, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal_village(p), fillOpacity = 0.6) %>%
+                  addCircleMarkers(data = lxd_village, lng = ~lng, lat = ~lat,label = village_text, stroke=FALSE, color=~pal_village(p), fillOpacity = 0.6) %>%
                   addLegend(position = c("bottomleft"), pal = pal_village, values = lxd_village$p)
                 
                 # create map for ward 
@@ -1010,9 +1041,14 @@ app_server <- function(input, output, session) {
                   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
                   domain = 0:ceiling(max(lxd_ward$p))
                 )
+                ward_text <- paste(
+                  "Percent finished: ",  round(lxd_ward$p,2),"<br>",
+                  as.character(lxd_ward$hh_ward),"<br/>",
+                  sep="") %>%
+                  lapply(htmltools::HTML)
                 lxd_ward <- leaflet(data = lxd_ward, height = leaflet_height) %>% 
                   addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-                  addCircleMarkers(data = lxd_ward, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal_ward(p), fillOpacity = 0.6) %>%
+                  addCircleMarkers(data = lxd_ward, lng = ~lng, lat = ~lat,label = ward_text, stroke=FALSE, color=~pal_ward(p), fillOpacity = 0.6) %>%
                   addLegend(position = c("bottomleft"), pal = pal_ward, values = lxd_ward$p)
                 
                 # create map for district 
@@ -1024,9 +1060,14 @@ app_server <- function(input, output, session) {
                   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
                   domain = 0:ceiling(max(lxd_district$p))
                 )
+                district_text <- paste(
+                  "Percent finished: ",  round(lxd_district$p,2),"<br>",
+                  input$geo,"<br>",
+                  sep="") %>%
+                  lapply(htmltools::HTML)
                 lxd_district <- leaflet(data = lxd_district, height = leaflet_height) %>% 
                   addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-                  addCircleMarkers(data = lxd_district, lng = ~lng, lat = ~lat, stroke=FALSE, color=~pal_district(p), fillOpacity = 0.6) %>%
+                  addCircleMarkers(data = lxd_district, lng = ~lng, lat = ~lat, label = district_text,stroke=FALSE, color=~pal_district(p), fillOpacity = 0.6) %>%
                   addLegend(position = c("bottomleft"), pal = pal_district, values = lxd_district$p) %>%
                   setView(lng = lxd_district$lng,
                           lat = lxd_district$lat,
@@ -1154,7 +1195,7 @@ app_server <- function(input, output, session) {
                 progress_by_hamlet <- joined %>%
                   left_join(locations %>% dplyr::select(code, Hamlet)) %>%
                   dplyr::select(code, Hamlet, `Forms done` = numerator,
-                                `Estimated households` = n_households,
+                                `Estimated number of forms` = n_households,
                                 `Estimated percent finished` = p)
                 
                 
@@ -1165,19 +1206,19 @@ app_server <- function(input, output, session) {
                                                                                          n_households = sum(n_households, na.rm = TRUE)) %>%
                   mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
                   dplyr::select(District, `Forms done` = numerator,
-                                `Estimated households` = n_households,
+                                `Estimated number of forms` = n_households,
                                 `Estimated percent finished` = p)
                 progress_by_ward <- progress_by %>% group_by(Ward) %>% summarise(numerator = sum(numerator, na.rm  = TRUE),
                                                                                  n_households = sum(n_households, na.rm = TRUE)) %>%
                   mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
                   dplyr::select(Ward, `Forms done` = numerator,
-                                `Estimated households` = n_households,
+                                `Estimated number of forms` = n_households,
                                 `Estimated percent finished` = p)
                 progress_by_village <- progress_by %>% group_by(Village) %>% summarise(numerator = sum(numerator, na.rm  = TRUE),
                                                                                        n_households = sum(n_households, na.rm = TRUE)) %>%
                   mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
                   dplyr::select(Village, `Forms done` = numerator,
-                                `Estimated households` = n_households,
+                                `Estimated number of forms` = n_households,
                                 `Estimated percent finished` = p)
                 by_geo <- field_monitoring_geo() #input$field_monitor_by
                 if(is.null(by_geo)){
