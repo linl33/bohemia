@@ -100,15 +100,20 @@ format_minicensus <- function(data){
   # REPEATS
   # death
   repeat_death_info <- data$repeats$repeat_death_info 
+  repeat_death_info <- repeat_death_info %>% filter(!is.na(repeat_death_info_count))
   if(!is.null(repeat_death_info)){
-    repeat_death_info <- repeat_death_info %>%
-      dplyr::rename(instance_id = instanceID)
-    repeat_death_info$repeat_name <- NULL
-    repeat_death_info$repeated_id <- NULL
-    repeat_death_info$death_adjustment <- NULL
-    repeat_death_info$death_name <- substr(repeat_death_info$death_name, 1, 1)
-    repeat_death_info$death_surname <- substr(repeat_death_info$death_surname, 1, 1)
-    repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
+    if(nrow(repeat_death_info) > 0){
+      repeat_death_info <- repeat_death_info %>%
+        dplyr::rename(instance_id = instanceID)
+      repeat_death_info$repeat_name <- NULL
+      repeat_death_info$repeated_id <- NULL
+      repeat_death_info$death_adjustment <- NULL
+      repeat_death_info$death_name <- substr(repeat_death_info$death_name, 1, 1)
+      repeat_death_info$death_surname <- substr(repeat_death_info$death_surname, 1, 1)
+      repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
+    } else {
+      repeat_death_info <- NULL
+    }
   }
     
   
@@ -176,10 +181,11 @@ format_minicensus <- function(data){
   names(out) <- paste0('minicensus_', names(out))
   # Clean up uuid column
   for(i in 1:length(out)){
-    if('instance_id' %in% names(out[[i]])){
-      out[[i]]$instance_id <- gsub('uuid:', '', out[[i]]$instance_id)
+    if(!is.null(out[[i]])){
+      if('instance_id' %in% names(out[[i]])){
+        out[[i]]$instance_id <- gsub('uuid:', '', out[[i]]$instance_id)
+      }
     }
-    
   }
   return(out)
 }
