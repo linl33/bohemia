@@ -45,8 +45,8 @@ for(i in 1:nrow(keep)){
   # Define the format for the xml files
   the_format <- paste0('<enumerations id="enumerations" instanceID="uuid:', df$instance_id, '" version="2020100503" submissionDate="2020-10-01T01:01:01.001Z" isComplete="true" markedAsCompleteDate="2020-10-01T01:01:01.001Z" xmlns="http://opendatakit.org/submissions"><group_inquiry><device_id>', df$device_id, '</device_id><start_time>', paste0(gsub(' ', 'T', as.character(df$start_time)), '.001+02:00'), '</start_time><end_time>', paste0(gsub(' ', 'T', as.character(df$end_time)), '.001+02:00'), '</end_time><todays_date>', as.character(df$todays_date), '</todays_date><have_wid>', df$have_wid, '</have_wid><wid_manual>', df$wid_manual, '</wid_manual><wid_qr /><wid>', df$wid, '</wid><inquiry_date>', df$inquiry_date, '</inquiry_date></group_inquiry><group_location><agregado>', df$agregado, '</agregado><localizacao_agregado>', df$localizacao_agregado, '</localizacao_agregado><localizacao_agregado_free /><Country>', df$country, '</Country><Region>', df$region, '</Region><District>', df$district, '</District><Ward>', df$ward, '</Ward><Village>', df$village, '</Village><village_other /><Hamlet>', df$hamlet, '</Hamlet><hamlet_other /><other_location>AAA</other_location><hamlet_code_list>', df$hamlet_code, '</hamlet_code_list><hamlet_code_not_list /><hamlet_code>', df$hamlet_code, '</hamlet_code></group_location><group_construction><construction_type>', df$construction_type, '</construction_type><construction_material>', df$construction_material, '</construction_material><construction_material_free /><wall_material>', df$wall_material, '</wall_material><wall_material_free /><n_total_constructions>', df$n_total_constructions, '</n_total_constructions><location_gps>', df$location_gps, '</location_gps><n_residents>', df$n_residents, '</n_residents><n_deaths_past_year>', df$n_deaths_past_year, '</n_deaths_past_year><vizinho1>', df$vizinho1, '</vizinho1><vizinho2>', ifelse(is.na(df$vizinho2), '', df$vizinho2), '</vizinho2></group_construction><group_chefe><chefe_name>', df$chefe_name, '</chefe_name><sub_name>', df$sub_name, '</sub_name></group_chefe><n0:meta xmlns:n0="http://openrosa.org/xforms"><n0:instanceID>uuid:', df$instance_id, '</n0:instanceID><n0:instanceName>enumerations_', df$hamlet_code, '-', 'migrated', as.numeric(Sys.time()), '</n0:instanceName></n0:meta></enumerations>')
   # Define the path
-  new_folder <- paste0(briefcase_folder, 'forms/Enumerations/instances/uuid', df$instance_id)
-  # new_folder <- paste0('~/Desktop/instances/', df$instance_id)
+  # new_folder <- paste0(briefcase_folder, 'forms/Enumerations/instances/uuid', df$instance_id)
+  new_folder <- paste0('~/Desktop/instances/', df$instance_id)
   if(!dir.exists(new_folder)){
     dir.create(new_folder)
   }
@@ -60,3 +60,4 @@ for(i in 1:nrow(keep)){
 
 
 dbDisconnect(con)
+  
