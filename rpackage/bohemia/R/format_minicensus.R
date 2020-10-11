@@ -55,6 +55,10 @@ format_minicensus <- function(data){
   people_part$last_name <- substr(people_part$last_name, 1, 1)
   
   # Clean up some variables
+  if('hh_main_wall_material_free' %in% names(df)){
+    df$hh_main_wall_material_other <- df$hh_main_wall_material_free
+    df$hh_main_wall_material_free <- NULL
+  }
   df <- df %>%
     # Hamlet and village clean-up
     mutate(hh_hamlet = ifelse(!is.na(hh_hamlet_other),
@@ -95,53 +99,73 @@ format_minicensus <- function(data){
   
   # REPEATS
   # death
-  repeat_death_info <- data$repeats$repeat_death_info %>%
-    dplyr::rename(instance_id = instanceID)
-  repeat_death_info$repeat_name <- NULL
-  repeat_death_info$repeated_id <- NULL
-  repeat_death_info$death_adjustment <- NULL
-  repeat_death_info$death_name <- substr(repeat_death_info$death_name, 1, 1)
-  repeat_death_info$death_surname <- substr(repeat_death_info$death_surname, 1, 1)
-  repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
+  repeat_death_info <- data$repeats$repeat_death_info 
+  if(!is.null(repeat_death_info)){
+    repeat_death_info <- repeat_death_info %>%
+      dplyr::rename(instance_id = instanceID)
+    repeat_death_info$repeat_name <- NULL
+    repeat_death_info$repeated_id <- NULL
+    repeat_death_info$death_adjustment <- NULL
+    repeat_death_info$death_name <- substr(repeat_death_info$death_name, 1, 1)
+    repeat_death_info$death_surname <- substr(repeat_death_info$death_surname, 1, 1)
+    repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
+  }
+    
   
   # hh_sub
-  repeat_hh_sub <- data$repeats$repeat_hh_sub %>%
-    dplyr::rename(instance_id = instanceID) %>% 
-    dplyr::select(-repeat_name, 
-                  -repeated_id,
-                  -note_hh_head_is_sub) %>%
-    mutate(hh_sub_relationship = ifelse(!is.na(hh_sub_relationship_other),
-                                        hh_sub_relationship_other,
-                                        hh_sub_relationship)) %>%
-    dplyr::select(-hh_sub_relationship_other)
-  repeat_hh_sub <- repeat_hh_sub[,!grepl('note_|_warning', names(repeat_hh_sub))]
-  repeat_hh_sub$repeat_hh_sub_count <- NULL
+  repeat_hh_sub <- data$repeats$repeat_hh_sub
+  if(!is.null(repeat_hh_sub)){
+    repeat_hh_sub <- repeat_hh_sub %>%
+      dplyr::rename(instance_id = instanceID) %>% 
+      dplyr::select(-repeat_name, 
+                    -repeated_id,
+                    -note_hh_head_is_sub) %>%
+      mutate(hh_sub_relationship = ifelse(!is.na(hh_sub_relationship_other),
+                                          hh_sub_relationship_other,
+                                          hh_sub_relationship)) %>%
+      dplyr::select(-hh_sub_relationship_other)
+    repeat_hh_sub <- repeat_hh_sub[,!grepl('note_|_warning', names(repeat_hh_sub))]
+    repeat_hh_sub$repeat_hh_sub_count <- NULL
+  }
+    
   
   # household members (joining to people part) 
-  repeat_household_members_enumeration <- data$repeats$repeat_household_members_enumeration %>%
-    dplyr::rename(instance_id = instanceID) %>% dplyr::select(-repeat_name, -repeated_id, -hh_member_number_size) %>% filter(!is.na(permid))
-  repeat_household_members_enumeration <- repeat_household_members_enumeration[,!grepl('note_|_warning', names(repeat_household_members_enumeration))]
-  repeat_household_members_enumeration$first_name <- repeat_household_members_enumeration$last_name <- NULL
-  people <- people_part %>% left_join(repeat_household_members_enumeration %>%
-                                        mutate(pid = permid))
-  people$invisible_non_resident_count <- NULL
-  people$invisible_resident_count <- NULL
+  repeat_household_members_enumeration <- data$repeats$repeat_household_members_enumeration 
+  if(!is.null(repeat_household_members_enumeration)){
+    repeat_household_members_enumeration <- repeat_household_members_enumeration %>%
+      dplyr::rename(instance_id = instanceID) %>% dplyr::select(-repeat_name, -repeated_id, -hh_member_number_size) %>% filter(!is.na(permid))
+    repeat_household_members_enumeration <- repeat_household_members_enumeration[,!grepl('note_|_warning', names(repeat_household_members_enumeration))]
+    repeat_household_members_enumeration$first_name <- repeat_household_members_enumeration$last_name <- NULL
+    people <- people_part %>% left_join(repeat_household_members_enumeration %>%
+                                          mutate(pid = permid))
+    people$invisible_non_resident_count <- NULL
+    people$invisible_resident_count <- NULL
+  }
+    
 
   # mosquito nets
-  repeat_mosquito_net <- data$repeats$repeat_mosquito_net %>%
-    dplyr::rename(instance_id = instanceID,
-                  num = repeat_mosquito_net_count) %>% 
-    dplyr::select(-repeat_name, -repeated_id) %>%
-    filter(!is.na(num))
-  repeat_mosquito_net <- repeat_mosquito_net[,!grepl('note_|_warning', names(repeat_mosquito_net))]
+  repeat_mosquito_net <- data$repeats$repeat_mosquito_net 
+  if(!is.null(repeat_mosquito_net)){
+    repeat_mosquito_net <- repeat_mosquito_net %>%
+      dplyr::rename(instance_id = instanceID,
+                    num = repeat_mosquito_net_count) %>% 
+      dplyr::select(-repeat_name, -repeated_id) %>%
+      filter(!is.na(num))
+    repeat_mosquito_net <- repeat_mosquito_net[,!grepl('note_|_warning', names(repeat_mosquito_net))]
+  }  
+  
   
   # water 
-  repeat_water <- data$repeats$repeat_water %>%
-    dplyr::rename(instance_id = instanceID,
-                  num = repeat_water_count) %>% 
-    dplyr::select(-repeat_name, -repeated_id) %>%
-    dplyr::filter(!is.na(num))
-  repeat_water <- repeat_water[,!grepl('note_|_warning', names(repeat_water))]
+  repeat_water <- data$repeats$repeat_water
+  if(!is.null(repeat_water)){
+    repeat_water <- repeat_water %>%
+      dplyr::rename(instance_id = instanceID,
+                    num = repeat_water_count) %>% 
+      dplyr::select(-repeat_name, -repeated_id) %>%
+      dplyr::filter(!is.na(num))
+    repeat_water <- repeat_water[,!grepl('note_|_warning', names(repeat_water))]
+  }  
+  
   
   # Return the formatted data
   out <- list(df, people,
