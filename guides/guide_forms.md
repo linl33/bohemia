@@ -1,15 +1,56 @@
-# How to create a form for the Bohemia project
+# Forms
 
-The data _collection_ component of the Bohemia data system is built on the ODK framework, allowing for the creation and modification of survey forms specific to the Bohemia project's different study components. This guide shows how to create and deploy a form. For the purpose of this example, it assumes your ODK Aggregate server is running at https://bohemia.systems, and that the administrator's username and password is data/data.
+## Overview
 
-## Create / modify forms
+The Bohemia project uses the ODK framework for surveys. This means that forms are designed in `xls` format, converted to `xml` format (sometimes with accompanying metadata in `itemsets.csv`) and deployed to and ODK Aggregate server to be retrieved by tablets/phones running the ODK Collect mobile app.
 
-For the Bohemia project, there are two forms:
+## Versioning
 
-1. The [census form](https://docs.google.com/spreadsheets/d/16_drw-35haLaBlB6tn92mr6zbIuYorAUDyieGONyGTM/edit#gid=141178862)  
-2. The [VA form](https://docs.google.com/spreadsheets/d/1BuRSJdWmottUW8SDnh8nGTkLCeTjEX3LgkRpaPvoKjE/edit#gid=1264701015) (verbal autopsy)  
+Version control is important. Forms undergo modifications, and these modifications may lead to data formatting incompatibilities if not appropriately controlled. Additionally, clear versioning is essential to ensuring compliance.
 
-The forms conform to the [xlsform](https://build.opendatakit.org/) standard. Only authorized collaborators should modify forms.
+During the form design and development phase (ie, prior to a form actually being used in the field), versioning is inconsequential. Changes (corrections and improvements) can be made at the request of a site or the sponsor, or in response to finding a bug.
+
+However, once a form has been IRB-approved and deployed (ie, data is being collected), it is essential to maintain structured versioning. This requires the following:
+- All field ODK servers (CISM, IHI) should use the same version of the same form.   
+- Databrew should communicate the current version string to the sites.  
+- "Beta" versions (ie, those which have incorporated and are undergoing testing) should be deployed at https://bohemia.systems (the Databrew ODK server).  
+- The files to be uploaded to site ODK servers should the xml (and `itemsets.csv`, when applicable) from the [FORMS PAGE](https://github.com/databrew/bohemia/tree/master/forms).
+  - The `xls` files should not be manipulated in any way.  
+  - Sites should not carry out any conversion from `xls` to `xml` (as this can corrupt data)
+- Form `name`s will have a `bohemia_` prefix
+- Form `id`s will have no prefix
+- Forms will have a `version` string in the following format: `YYYYMMDDXX` wherein:
+  - `YYYY`: the four digit year, such as 2020
+  - `MM`: the two digit month, such as 10 for October or 04 for April
+  - `DD`: the two digit day, such as 03 for the third of the month or 28 for the 28th of the month
+  - `XX`: an incrementing two-character numeric showing the specific version for that day
+
+### Deploys
+
+When a form needs to be updated (ie, replaced with a newer version), the process is as follows:
+- Databrew should:
+  - Communicate to the sites and sponsor that a form update is taking place and provide all associated materials.  
+- Sites should:
+  - Update and upload the new form to their respective ODK servers.  
+  - Ensure that all tablets are synced with the new form.  
+  - Inform Databrew when both the server and all tablets have been updated.  
+
+### Backwards compatibility
+
+In the case of a form which is not backwards compatible (ie, data fields have been modified), a new id will be issued. For example, `minicensus` may become `minicensus2`, `minicensus3`, etc. In general, backwards-incompatibile form revisions are to be avoided (but in some cases they cannot be). In the case of a backwards-incompatible form revision, it is essential that:
+- The "deprecated" (ie, no longer active) form remain on the site server  
+- Tablets be synced to include the updated form
+- Fieldworkers be instructed to use the updated form  
+
+
+
+# Deprecated documentation
+
+
+## How to create a form for the Bohemia project
+
+The data _collection_ component of the Bohemia data system is built on the ODK framework, allowing for the creation and modification of survey forms specific to the Bohemia project's different study components. This guide shows how to create and deploy a form. For the purpose of this example, it assumes your ODK Aggregate server is running at https://bohemia.systems.
+
 
 ## Download / convert forms
 
@@ -24,14 +65,9 @@ python census_excel_to_xml.py
 python va_excel_to_xml.py
 ```
 
-- As an alternative to the above, you can:  
-- Go to https://opendatakit.org/xlsform/
-- Submit your file
-- Before downloading as XML, consider previewing it by clicking the "Preview in Enketo" option
-
 ## Uploading form into Bohemia system
 
-- Once your form is ready to go, go to https://bohemia.systems and log in as data/data
+- Once your form is ready to go, go to https://bohemia.systems and log in.
 - Click "Form Management"
 - Click "Add New Form"
 - Upload your form
