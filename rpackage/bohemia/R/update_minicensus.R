@@ -10,7 +10,7 @@
 #' @param dbname The database name
 #' @return Data will be updated in the database
 #' @import dplyr
-#' @import RPostgreSQL
+#' @import RPostgres
 #' @export
 
 update_minicensus <- function(formatted_data,
@@ -34,7 +34,7 @@ update_minicensus <- function(formatted_data,
   # If no open connection establish one
   if(!open_connection){
     # Connect
-    drv <- dbDriver('PostgreSQL')
+    drv <- RPostgres::Postgres()
     con <- dbConnect(drv, 
                      dbname=dbname, 
                      host=host, 

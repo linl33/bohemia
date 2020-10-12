@@ -1,11 +1,11 @@
 #!/usr/bin/Rscript
 start_time <- Sys.time()
-message('System time is: ', as.character(start_time))
-message('---Timezone: ', as.character(Sys.timezone()))
+message('------System time is: ', as.character(start_time))
+message('------Timezone: ', as.character(Sys.timezone()))
 creds_fpath <- '../credentials/credentials.yaml'
 creds <- yaml::yaml.load_file(creds_fpath)
 suppressMessages({
-  require('RPostgreSQL')
+  library(RPostgres)
   library(bohemia)
   library(yaml)
 }
@@ -13,7 +13,7 @@ suppressMessages({
 psql_end_point = creds$endpoint
 psql_user = creds$psql_master_username
 psql_pass = creds$psql_master_password
-drv <- dbDriver('PostgreSQL')
+drv <- RPostgres::Postgres()
 con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
                  port=5432,
                  user=psql_user, password=psql_pass)
@@ -24,7 +24,7 @@ corrections <- dbReadTable(conn = con,
 
 # Read in raw data
 data <- list()
-main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where hh_country='", the_country, "'"))
+main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main"))
 data$minicensus_main <- main
 ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
 repeat_names <- c("minicensus_people",
@@ -51,9 +51,11 @@ data$refusals <- refusals
 corrections <- dbGetQuery(con, "SELECT * FROM corrections")
 
 # Drop the previously cleaned data
+message('------DROPPING OLD CLEAN_ DATA')
 create_clean_db(credentials_file = '../credentials/credentials.yaml', 
                 drop_all = TRUE)
 # Create new clean tables
+message('------CREATING NEW CLEAN_ DATA')
 create_clean_db(credentials_file = '../credentials/credentials.yaml')
 
 # Process / clean data

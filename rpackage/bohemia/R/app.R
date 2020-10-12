@@ -10,7 +10,7 @@
 #' @import sp
 #' @import DT
 #' @import lubridate
-#' @import RPostgreSQL
+#' @import RPostgres
 #' @import yaml
 app_ui <- function(request) {
   options(scipen = '999')
@@ -347,7 +347,7 @@ app_server <- function(input, output, session) {
       psql_end_point = creds$endpoint
       psql_user = creds$psql_master_username
       psql_pass = creds$psql_master_password
-      drv <- dbDriver('PostgreSQL')
+      drv <- RPostgres::Postgres()
       con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
                        port=5432,
                        user=psql_user, password=psql_pass)

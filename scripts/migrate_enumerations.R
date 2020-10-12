@@ -10,7 +10,7 @@
 creds_fpath <- '../credentials/credentials.yaml'
 creds <- yaml::yaml.load_file(creds_fpath)
 suppressMessages({
-  require('RPostgreSQL')
+  library(RPostgres)
   library(bohemia)
   library(yaml)
   library(dplyr)
@@ -20,7 +20,7 @@ suppressMessages({
 psql_end_point = creds$endpoint
 psql_user = creds$psql_master_username
 psql_pass = creds$psql_master_password
-drv <- dbDriver('PostgreSQL')
+drv <- RPostgres::Postgres()
 con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
                  port=5432,
                  user=psql_user, password=psql_pass)

@@ -4,7 +4,7 @@
 #' @param credentials_file Path to a credentials.yaml
 #' @return Data will be modified in the database
 #' @import dplyr
-#' @import RPostgreSQL
+#' @import RPostgres
 #' @import yaml
 #' @export
 
@@ -13,7 +13,7 @@ clean_db <- function(credentials_file = 'credentials/credentials.yaml'){
   # Connect to the bohemia database
   start_time <- Sys.time()
   creds <- yaml::yaml.load_file(credentials_file)
-  drv <- dbDriver('PostgreSQL')
+  drv <- RPostgres::Postgres()
   con <- dbConnect(drv, dbname='bohemia', host=creds$endpoint, 
                    port=5432,
                    user=creds$psql_master_username, password=creds$psql_master_password)

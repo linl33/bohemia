@@ -5,7 +5,7 @@
 #' @param drop_all Whether to, instead of creating clean tables, drop them
 #' @return Data will be created in the database
 #' @import dplyr
-#' @import RPostgreSQL
+#' @import RPostgres
 #' @import yaml
 #' @export
 
@@ -15,7 +15,7 @@ create_clean_db <- function(credentials_file = 'credentials/credentials.yaml',
   # Connect to the bohemia database
   start_time <- Sys.time()
   creds <- yaml::yaml.load_file(credentials_file)
-  drv <- dbDriver('PostgreSQL')
+  drv <- RPostgres::Postgres()
   con <- dbConnect(drv, dbname='bohemia', host=creds$endpoint, 
                    port=5432,
                    user=creds$psql_master_username, password=creds$psql_master_password)

@@ -33,21 +33,21 @@ In order to test out writing `identification_code` and `incident_code` snippets,
 ```
 library(yaml)
 library(bohemia)
-library(RPostgreSQL)
+library(RPostgres)
 library(dplyr)
 creds <- yaml::yaml.load_file('credentials/credentials.yaml')
 
 psql_end_point = creds$endpoint
 psql_user = creds$psql_master_username
 psql_pass = creds$psql_master_password
-drv <- dbDriver('PostgreSQL')
+drv <- RPostgres::Postgres()
 con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
                  port=5432,
                  user=psql_user, password=psql_pass)
 
 # Read in data
  data <- list()
- main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where hh_country='", the_country, "'"))
+ main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main"))
  data$minicensus_main <- main
  ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
 
