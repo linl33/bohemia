@@ -20,7 +20,7 @@ odk_get_submission <- function(url = 'https://bohemia.systems',
                                  uuid = NULL,
                                  user = NULL,
                                  password = NULL,
-                                use_data_id = FALSE){
+                                 use_data_id = FALSE){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){

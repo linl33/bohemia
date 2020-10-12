@@ -23,6 +23,15 @@ odk_list_submissions <- function(url = 'https://bohemia.systems',
     stop('A user and password are required.')
   }
   
+  # authenticate
+  if(pre_auth){
+    auth_url <- paste0(url, '/local_login.html?redirect=formList')
+    r <- POST(auth_url,
+              authenticate(user = user,
+                           password = password,
+                           type = 'basic'))
+  }
+  
   # Create the url for the request
   rurl <- paste0(url, '/view/submissionList?formId=', id)
   r = GET(rurl,

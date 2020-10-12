@@ -82,7 +82,7 @@ data <- odk_get_data(
   user = user,
   password = password,
   pre_auth = TRUE,
-  use_data_id = TRUE
+  use_data_id = FALSE
 )
 new_data <- FALSE
 if(!is.null(data)){
