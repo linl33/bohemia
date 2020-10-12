@@ -24,9 +24,9 @@ app_ui <- function(request) {
                 tags$style(type='text/css', "#log_ui {margin-right: 10px; margin-left: 10px; font-size:80%; margin-top: 10px; margin-bottom: -12px;}"),
                 tags$li(class = 'dropdown',
                         radioButtons('geo', ' ',
-                                     choices = c('Tanzania' = 'Rufiji',
-                                                 # 'Both',
-                                                 'Mozambique' = 'Mopeia'),
+                                     choices = c(#'Tanzania' = 'Rufiji',
+                                                 'Mozambique' = 'Mopeia'
+                                                 ),
                                      inline = TRUE,
                                      selected = 'Mopeia')),
                 tags$li(class = 'dropdown',
@@ -314,7 +314,7 @@ app_server <- function(input, output, session) {
   ###########################################################################
   # Reactive object for seeing if logged in or not
   # (Joe will build log-in functionality later
-  session_info <- reactiveValues(logged_in = FALSE, # change later 
+  session_info <- reactiveValues(logged_in = ifelse(grepl('joebrew', getwd()), TRUE, FALSE), # change later 
                                  user = 'default',
                                  access = c("field_monitoring", "enrollment", 'consent_verification_list', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
                                  country = 'MOZ')
@@ -325,46 +325,66 @@ app_server <- function(input, output, session) {
                                  fieldworkers = default_fieldworkers,
                                  notifications = default_notifications)
   odk_data <- reactiveValues(data = NULL)
-  load_odk_data <- function(the_country = 'Mozambique'){
-    creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-    users <- yaml::yaml.load_file('credentials/users.yaml')
-    psql_end_point = creds$endpoint
-    psql_user = creds$psql_master_username
-    psql_pass = creds$psql_master_password
-    drv <- dbDriver('PostgreSQL')
-    con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
-                     port=5432,
-                     user=psql_user, password=psql_pass)
-    # Read in data
-    data <- list()
-    main <- dbGetQuery(con, paste0("SELECT * FROM minicensus_main where hh_country='", the_country, "'"))
-    data$non_repeats <- main
-    data$repeats <- list()
-    ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
-    
-    repeat_names <- c("minicensus_people", 
-                      "minicensus_repeat_death_info",
-                      "minicensus_repeat_hh_sub", 
-                      "minicensus_repeat_mosquito_net", "minicensus_repeat_water")
-    for(i in 1:length(repeat_names)){
-      this_name <- repeat_names[i]
-      this_data <- dbGetQuery(con, paste0("SELECT * FROM ", this_name, " WHERE instance_id IN ", ok_uuids))
-      data$repeats[[i]] <- this_data
+  load_odk_data <- function(the_country = 'Mozambique', max_time = 3){
+    file_name <- paste0('/tmp/', the_country, '.RData')
+    load_old <- TRUE
+    if(file.exists(file_name)){
+      message('### Temporary Rdata for ', the_country, ' exists in the /tmp directory.')
+      time_created <- file.info(file_name)$ctime
+      time_ago <- Sys.time() - time_created
+      time_ago <- lubridate::time_length(time_ago, unit = 'hour')
+      if(time_ago < max_time){
+        load_old <- FALSE
+      } else {
+        message('### --- But the temporary file is more than ', max_time, ' old. So, reading from database')
+      }
+    } else {
+      message('### No temporary Rdata for ', the_country, ' exists in the /tmp directory. Reading from database.')
     }
-    # Read in enumerations data
-    enumerations <- dbGetQuery(con, "SELECT * FROM enumerations")
-    data$enumerations <- enumerations
-    
-    # # Read in va data
-    # va <- dbGetQuery(con, "SELECT * FROM va")
-    # data$va <- va
-    # 
-    # # Read in refusals data
-    # refusals <- dbGetQuery(con, "SELECT * FROM refusals")
-    # data$refusals <- refusals
-    
-    dbDisconnect(con)
-    names(data$repeats) <- repeat_names
+    if(load_old){
+      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+      users <- yaml::yaml.load_file('credentials/users.yaml')
+      psql_end_point = creds$endpoint
+      psql_user = creds$psql_master_username
+      psql_pass = creds$psql_master_password
+      drv <- dbDriver('PostgreSQL')
+      con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                       port=5432,
+                       user=psql_user, password=psql_pass)
+      # Read in data
+      data <- list()
+      main <- dbGetQuery(con, paste0("SELECT * FROM minicensus_main where hh_country='", the_country, "'"))
+      data$non_repeats <- main
+      data$repeats <- list()
+      ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
+      
+      repeat_names <- c("minicensus_people", 
+                        "minicensus_repeat_death_info",
+                        "minicensus_repeat_hh_sub", 
+                        "minicensus_repeat_mosquito_net", "minicensus_repeat_water")
+      for(i in 1:length(repeat_names)){
+        this_name <- repeat_names[i]
+        this_data <- dbGetQuery(con, paste0("SELECT * FROM ", this_name, " WHERE instance_id IN ", ok_uuids))
+        data$repeats[[i]] <- this_data
+      }
+      # Read in enumerations data
+      enumerations <- dbGetQuery(con, "SELECT * FROM enumerations")
+      data$enumerations <- enumerations
+      
+      # # Read in va data
+      # va <- dbGetQuery(con, "SELECT * FROM va")
+      # data$va <- va
+      # 
+      # # Read in refusals data
+      # refusals <- dbGetQuery(con, "SELECT * FROM refusals")
+      # data$refusals <- refusals
+      
+      dbDisconnect(con)
+      names(data$repeats) <- repeat_names
+      save(data, file = file_name)
+    } else {
+      load(file_name)
+    }
     return(data)
   }
   
@@ -424,6 +444,7 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       out <- load_odk_data(the_country = the_country)
+      # save(out, file = '/tmp/out.RData')
       odk_data$data = out
     }
   })
@@ -715,7 +736,7 @@ app_server <- function(input, output, session) {
               # save(pd, co, deaths, file = '/tmp/joe.RData')
               
               deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
-                                          !is.na(death_adjustment))
+                                          !is.na(death_number))
               pd <- pd %>%
                 dplyr::select(district = hh_district,
                               ward = hh_ward,
@@ -847,6 +868,7 @@ app_server <- function(input, output, session) {
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
+
     li <- si$logged_in
     ac <- 'field_monitoring' %in% si$access
     
@@ -1257,12 +1279,9 @@ app_server <- function(input, output, session) {
                   }
                 }
                 
-                
-                
                 # va table
                 deaths <- odk_data$data$repeats$minicensus_repeat_death_info
-                deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
-                                            !is.na(death_adjustment))
+                deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
                 # save(deaths, pd, file = '/tmp/deaths.RData')
                 # Conditional mourning period
                 mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
