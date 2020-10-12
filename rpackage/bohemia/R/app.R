@@ -272,16 +272,7 @@ app_server <- function(input, output, session) {
                                     active_fieldworkers = 51,
                                     most_recent_submission = 12.6)
   
-  # Define a action table example
-  default_action_table <- tibble(ID = 87:89,
-                                 Type = c('Anomaly',
-                                          'Anomaly',
-                                          'Error'),
-                                 Description = c('3 consecutive houses for one fieldworker with no head-of-household substitute',
-                                                 'Household with > 100 animals',
-                                                 'Mismatch between number of household members and number of individual forms')
-  )
-  
+
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0'
@@ -301,29 +292,21 @@ app_server <- function(input, output, session) {
     mutate(name = paste0(first_name, ' ', last_name)) %>%
     dplyr::select(id, name)
   
-  # Define a default notificaitons table
-  default_notifications <- 
-    tibble(ID = c(101, 144, 149),
-           Type = c('Individual', 'Aggregate', 'Individual'),
-           Description = c('Worker 167: 4 days without submissions',
-                           'Overall: 12 hours with no submissions',
-                           'Worker 003: > 15% missingness on form 20920101'))
-  
+
   ###########################################################################
   # REACTIVE OBJECTS
   ###########################################################################
   # Reactive object for seeing if logged in or not
   # (Joe will build log-in functionality later
-  session_info <- reactiveValues(logged_in = ifelse(grepl('joebrew', getwd()), TRUE, FALSE), # change later 
+  session_info <- reactiveValues(logged_in =FALSE, 
                                  user = 'default',
                                  access = c("field_monitoring", "enrollment", 'consent_verification_list', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
                                  country = 'MOZ')
   
   # Create some reactive data
-  session_data <- reactiveValues(aggregate_table = default_aggregate_table,
-                                 action = default_action_table,
-                                 fieldworkers = default_fieldworkers,
-                                 notifications = default_notifications)
+  session_data <- reactiveValues(aggregate_table = data.frame(),
+                                 anomalies = data.frame(),
+                                 fieldworkers = default_fieldworkers)
   odk_data <- reactiveValues(data = NULL)
   load_odk_data <- function(the_country = 'Mozambique', max_time = 3){
     file_name <- paste0('/tmp/', the_country, '.RData')
@@ -447,12 +430,29 @@ app_server <- function(input, output, session) {
       odk_data$data = out
     }
   })
+  
+  # Load correct data
   observeEvent(input$confirm_log_in, {
     the_country <- country()
     li <- session_info$logged_in
     if(li){
       out <- load_odk_data(the_country = the_country)
       odk_data$data = out
+      
+      # Define a anomalies table
+      if(!'anomalies_registry.csv' %in% dir('/tmp')){
+        anomalies_url <- 'https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0'
+        anomalies_registry <- gsheet::gsheet2tbl(anomalies_url)
+        write_csv(anomalies_registry, '/tmp/anomalies_registry.csv')
+      } else {
+        anomalies_registry <- read_csv('/tmp/anomalies_registry.csv')
+      }
+      # save(out, file = '/tmp/out.RData')
+      anomalies <- identify_anomalies_and_errors(data = out,
+                                                 anomalies_registry = anomalies_registry)
+      session_data$anomalies <- anomalies
+      
+      
     }
   })
   
@@ -1453,50 +1453,7 @@ app_server <- function(input, output, session) {
                                                  )))
                            )),
                   tabPanel('Alerts',
-                           fluidPage(
-                             br(),
-                             h1('UNDER CONSTRUCTION'),
-                             fluidRow(h3('Action required')),
-                             fluidRow(
-                               box(width = 9,
-                                   # icon = icon('table'),
-                                   color = 'orange',
-                                   DT::dataTableOutput('action_table')),
-                               box(width = 3,
-                                   fluidPage(
-                                     fluidRow(
-                                       p('Select a row and then click one of the below:')
-                                     ),
-                                     fluidRow(
-                                       
-                                       column(12, align = 'center',
-                                              actionButton('confirm_correct',
-                                                           'Confirm correct'),
-                                              br(),br(),
-                                              actionButton('submit_fix',
-                                                           'Submit fix'))
-                                       
-                                       
-                                     )
-                                   ))
-                             ),
-                             br(),
-                             fluidRow(h3('Notifications')),
-                             h1('UNDER CONSTRUCTION'),
-                             fluidRow(
-                               box(width = 9,
-                                   color = 'purple',
-                                   DT::dataTableOutput('notifications_table')),
-                               box(width = 3,
-                                   fluidPage(
-                                     fluidRow(
-                                       p('Select a row and then click the below:')
-                                     ),
-                                     fluidRow(actionButton('discard_notification',
-                                                           'Discard notification'))
-                                   ))
-                             )
-                           ))#,
+                           uiOutput('alert_ui'))#,
                   # tabPanel('Aggregate data',
                   #          h1('DEPRECATED'),
                   #          fluidPage(
@@ -1553,7 +1510,7 @@ app_server <- function(input, output, session) {
     pd <- odk_data$data
     pd <- pd$minicensus_main
     co <- country()
-    # save(pd, file = '/tmp/pd.RData')
+    # save(cpd, file = '/tmp/pd.RData')
     pd <- pd %>% filter(hh_country == co)
     
     pd_ok <- FALSE
@@ -1578,50 +1535,10 @@ app_server <- function(input, output, session) {
     
   })
   
-  # Observe corrections confirmation
-  observeEvent(input$confirm_correct,{
-    # Capture selected rows
-    sr <- input$action_table_rows_selected
-    # If more than 0, show the modal
-    ok <- length(sr) > 0
-    if(ok){
-      
-      action <- session_data$action
-      this_row <- action[sr,][1,]
-      
-      showModal(
-        modalDialog(
-          title = 'Can you confidently confirm that the below information is correct and not a data-entry error?',
-          size = 'm',
-          easyClose = TRUE,
-          fade = TRUE,
-          footer = modalButton('Go back'),
-          fluidPage(
-            fluidRow(HTML(knitr::kable(this_row, 'html'))),
-            fluidRow(column(12, align = 'center',
-                            actionButton('confirm_correct_again',
-                                         'Confirm')))
-          )
-        )
-      )
-    }
-  })
-  
-  observeEvent(input$confirm_correct_again,{
-    sr <- input$action_table_rows_selected
-    action <- session_data$action
-    message('sr is ', sr)
-    vals <- 1:nrow(action)
-    vals <- vals[!vals %in% sr]
-    action <- action[vals,]
-    session_data$action <- action
-    removeModal()
-  })
-  
   # Observe the fix submission
   observeEvent(input$submit_fix,{
-    sr <- input$action_table_rows_selected
-    action <- session_data$action
+    sr <- input$anomalies_table_rows_selected
+    action <- session_data$anomalies
     this_row <- action[sr,]
     
     showModal(
@@ -1644,26 +1561,26 @@ app_server <- function(input, output, session) {
     )
   })
   
-  # Observe the notification disregard
-  observeEvent(input$discard_notification,{
-    sr <- input$notifications_table_rows_selected
-    notifications <- session_data$notifications
-    message('sr is ', sr)
-    vals <- 1:nrow(notifications)
-    vals <- vals[!vals %in% sr]
-    notifications <- notifications[vals,]
-    session_data$notifications <- notifications
-  })
+  # # Observe the notification disregard
+  # observeEvent(input$discard_notification,{
+  #   sr <- input$notifications_table_rows_selected
+  #   notifications <- session_data$notifications
+  #   message('sr is ', sr)
+  #   vals <- 1:nrow(notifications)
+  #   vals <- vals[!vals %in% sr]
+  #   notifications <- notifications[vals,]
+  #   session_data$notifications <- notifications
+  # })
   
   # Confirm a fix send
   observeEvent(input$send_fix,{
-    sr <- input$action_table_rows_selected
-    action <- session_data$action
+    sr <- input$anomalies_table_rows_selected
+    action <- session_data$anomalies
     message('sr is ', sr)
     vals <- 1:nrow(action)
     vals <- vals[!vals %in% sr]
     action <- action[vals,]
-    session_data$action <- action
+    session_data$anomalies <- action
     removeModal()
   })
   
@@ -2030,15 +1947,9 @@ app_server <- function(input, output, session) {
   # Field monitoring UI elements ########################################
   
   # Action table
-  output$action_table <- DT::renderDataTable({
-    action <- session_data$action
+  output$anomalies_table <- DT::renderDataTable({
+    action <- session_data$anomalies
     DT::datatable(action)
-  })
-  
-  # Notifications table
-  output$notifications_table <- DT::renderDataTable({
-    notifications <- session_data$notifications
-    DT::datatable(notifications)
   })
   
   
@@ -2120,6 +2031,48 @@ app_server <- function(input, output, session) {
     } else {
       datatable(qct)
     }
+  })
+  
+  # Alert ui
+  output$alert_ui <- renderUI({
+    
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'malaria' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              fluidPage(
+                br(),
+                h1('UNDER CONSTRUCTION'),
+                fluidRow(h3('Action required')),
+                fluidRow(
+                  box(width = 9,
+                      # icon = icon('table'),
+                      color = 'orange',
+                      DT::dataTableOutput('anomalies_table')),
+                  box(width = 3,
+                      fluidPage(
+                        fluidRow(
+                          p('Select a row and then click one of the below:')
+                        ),
+                        fluidRow(
+                          
+                          column(12, align = 'center',
+                                 actionButton('submit_fix',
+                                              'Submit fix'))
+                          
+                          
+                        )
+                      ))
+                )
+              )
+            }
+    )
+    
+
   })
   
   output$render_visit_control_sheet <-

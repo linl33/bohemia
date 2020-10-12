@@ -1,18 +1,26 @@
 #' Identify anomalies and errors
 #'
 #' Given a clean Bohemia database, identify anomalies and errors 
-#' @param data_list A named list of dataframes. It should have the structure of named dataframes sharing names with the names of the tables in the database (excluding the "clean_" prefix)
+#' @param data A named list of dataframes. It should have the structure of named dataframes sharing names with the names of the tables in the database (excluding the "clean_" prefix)
+#' @param anomalies_registry Dataframe of anomalies registry. If NULL, fetched from google
 #' @return Data will be modified in the database
 #' @import dplyr
 #' @import gsheet
 #' @export
 
-identify_anomalies_and_errors <- function(data_list){
+identify_anomalies_and_errors <- function(data,
+                                          anomalies_registry = NULL){
   message('Beginning anomalies and errors identification...')
   
   # Read in the anomalies_and_errors table
-  ae <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0')
+  if(is.null(anomalies_registry)){
+    ae <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0')
+  } else {
+    ae <- anomalies_registry
+  }
   message('...', nrow(ae), ' anomalies and errors in the registry')
+  
+  
   ae <- ae %>% dplyr::filter(!is.na(identification_code))
   message('...', nrow(ae), ' have associated code snippets')
   

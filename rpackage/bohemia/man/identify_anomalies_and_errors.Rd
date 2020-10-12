@@ -4,10 +4,12 @@
 \alias{identify_anomalies_and_errors}
 \title{Identify anomalies and errors}
 \usage{
-identify_anomalies_and_errors(data_list)
+identify_anomalies_and_errors(data, anomalies_registry = NULL)
 }
 \arguments{
-\item{data_list}{A named list of dataframes. It should have the structure of named dataframes sharing names with the names of the tables in the database (excluding the "clean_" prefix)}
+\item{data}{A named list of dataframes. It should have the structure of named dataframes sharing names with the names of the tables in the database (excluding the "clean_" prefix)}
+
+\item{anomalies_registry}{Dataframe of anomalies registry. If NULL, fetched from google}
 }
 \value{
 Data will be modified in the database
