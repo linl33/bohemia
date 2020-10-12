@@ -85,18 +85,16 @@ CREATE TABLE minicensus_main (
 
 CREATE TABLE minicensus_people (
     instance_id    uuid,
-    first_name   VARCHAR(64),
-    last_name   VARCHAR(64),
+    first_name   VARCHAR(256),
+    last_name   VARCHAR(256),
     pid   VARCHAR(12),
     --name_label   VARCHAR(128),
     num  INT,
     dob DATE,
-    instance_id    uuid,
-    dob   DATE,
+    dob_type   TEXT,
     gender    VARCHAR(8),
     hh_member_adjustment  INT,
     hh_member_number  INT,
-    last_name     VARCHAR(256), -- the first name had multiple names stored, applying the same here
     member_resident   VARCHAR(32),
     non_default_id    TEXT,
     note_id   BOOLEAN,

@@ -58,11 +58,11 @@ if(new_data){
                     con = con)
 }
 
-message('PULLING UPDATED MINICENSUS (MINICENSUS2) (MOZAMBIQUE')
+message('PULLING UPDATED MINICENSUS (SMALLCENSUS) (MOZAMBIQUE')
 url <- creds$moz_odk_server
 user = creds$moz_odk_user
 password = creds$moz_odk_pass
-id = 'minicensus2'
+id = 'smallcensus'
 suppressWarnings({
   existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
 })
@@ -203,7 +203,6 @@ data <- odk_get_data(
   password = password
 )
 new_data <- FALSE
-if(!is.null(data)){
   new_data <- TRUE
   message('---', nrow(data$non_repeats), ' new data points.')
 }
@@ -215,86 +214,87 @@ if(new_data){
                     con = con)
 }
 
-# REFUSALS MOZAMBIQUE######################################################################
-message('PULLING REFUSALS (MOZAMBIQUE)')
-url <- creds$databrew_odk_server
-user = creds$databrew_odk_user
-password = creds$databrew_odk_pass
-id = 'refusals'
-suppressWarnings({
-  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
-})
-if (nrow(existing_uuids)< 0){
-  existing_uuids <- c()
-} else {
-  existing_uuids <- existing_uuids$instance_id
-} 
-# Get data
-data <- odk_get_data(
-  url = url,
-  id = id,
-  id2 = id2,
-  unknown_id2 = FALSE,
-  uuids = NULL,
-  exclude_uuids = existing_uuids,
-  user = user,
-  password = password
-)
-new_data <- FALSE
-if(!is.null(data)){
-  new_data <- TRUE
-  message('---', nrow(data$non_repeats), ' new data points.')
-}
-if(new_data){
-  # Format data
-  formatted_data <- format_refusals(data = data)
-  # Update data
-  update_refusals(formatted_data = formatted_data,
-                      con = con)
-}
+  # REFUSALS MOZAMBIQUE######################################################################
+  message('PULLING REFUSALS (MOZAMBIQUE)')
+  url <- creds$databrew_odk_server
+  user = creds$databrew_odk_user
+  password = creds$databrew_odk_pass
+  id = 'refusals'
+  suppressWarnings({
+    existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
+  })
+  if (nrow(existing_uuids)< 0){
+    existing_uuids <- c()
+  } else {
+    existing_uuids <- existing_uuids$instance_id
+  } 
+  # Get data
+  data <- odk_get_data(
+    url = url,
+    id = id,
+    id2 = id2,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = existing_uuids,
+    user = user,
+    password = password
+  )
+  new_data <- FALSE
+  if(!is.null(data)){
+    new_data <- TRUE
+    message('---', nrow(data$non_repeats), ' new data points.')
+  }
+  if(new_data){
+    # Format data
+    formatted_data <- format_refusals(data = data)
+    # Update data
+    update_refusals(formatted_data = formatted_data,
+                        con = con)
+  }
+  
+  
+  # VA MOZAMBIQUE######################################################################
+  message('PULLING VA153 (MOZAMBIQUE)')
+  url <- creds$databrew_odk_server
+  user = creds$databrew_odk_user
+  password = creds$databrew_odk_pass
+  id = 'va153'
+  suppressWarnings({
+    existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM va')
+  })
+  if (nrow(existing_uuids)< 0){
+    existing_uuids <- c()
+  } else {
+    existing_uuids <- existing_uuids$instance_id
+  }
+  # Get data
+  data <- odk_get_data(
+    url = url,
+    id = id,
+    id2 = id2,
+    unknown_id2 = FALSE,
+    uuids = NULL,
+    exclude_uuids = existing_uuids,
+    user = user,
+    password = password
+  )
+  new_data <- FALSE
+  if(!is.null(data)){
+    new_data <- TRUE
+  }
+  if(new_data){
+    # Format data
+    formatted_data <- format_va(data = data)
+    # Update data
+    update_va(formatted_data = formatted_data,
+                    con = con)
+  }
+  
+  
+  x = dbDisconnect(con)
 
-
-# VA MOZAMBIQUE######################################################################
-message('PULLING VA153 (MOZAMBIQUE)')
-url <- creds$databrew_odk_server
-user = creds$databrew_odk_user
-password = creds$databrew_odk_pass
-id = 'va153'
-suppressWarnings({
-  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM va')
-})
-if (nrow(existing_uuids)< 0){
-  existing_uuids <- c()
-} else {
-  existing_uuids <- existing_uuids$instance_id
-}
-# Get data
-data <- odk_get_data(
-  url = url,
-  id = id,
-  id2 = id2,
-  unknown_id2 = FALSE,
-  uuids = NULL,
-  exclude_uuids = existing_uuids,
-  user = user,
-  password = password
-)
-new_data <- FALSE
-if(!is.null(data)){
-  new_data <- TRUE
-}
-if(new_data){
-  # Format data
-  formatted_data <- format_va(data = data)
-  # Update data
-  update_va(formatted_data = formatted_data,
-                  con = con)
-}
-
-
-x = dbDisconnect(con)
-
-# Execute cleaning code
+# #Execute cleaning code
+  # create_clean_db(credentials_file = '../credentials/credentials.yaml')
 message('--- NOW EXECUTING CLEANING CODE ---')
 source('clean_database.R')
 
