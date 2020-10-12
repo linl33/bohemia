@@ -353,34 +353,33 @@ app_server <- function(input, output, session) {
                        user=psql_user, password=psql_pass)
       # Read in data
       data <- list()
-      main <- dbGetQuery(con, paste0("SELECT * FROM minicensus_main where hh_country='", the_country, "'"))
-      data$non_repeats <- main
-      data$repeats <- list()
+      main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where hh_country='", the_country, "'"))
+      data$minicensus_main <- main
       ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
       
       repeat_names <- c("minicensus_people", 
                         "minicensus_repeat_death_info",
                         "minicensus_repeat_hh_sub", 
-                        "minicensus_repeat_mosquito_net", "minicensus_repeat_water")
+                        "minicensus_repeat_mosquito_net", 
+                        "minicensus_repeat_water")
       for(i in 1:length(repeat_names)){
         this_name <- repeat_names[i]
-        this_data <- dbGetQuery(con, paste0("SELECT * FROM ", this_name, " WHERE instance_id IN ", ok_uuids))
-        data$repeats[[i]] <- this_data
+        this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+        data[[this_name]] <- this_data
       }
       # Read in enumerations data
-      enumerations <- dbGetQuery(con, "SELECT * FROM enumerations")
+      enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
       data$enumerations <- enumerations
       
       # # Read in va data
-      # va <- dbGetQuery(con, "SELECT * FROM va")
+      # va <- dbGetQuery(con, "SELECT * FROM clean_va")
       # data$va <- va
       # 
-      # # Read in refusals data
-      # refusals <- dbGetQuery(con, "SELECT * FROM refusals")
-      # data$refusals <- refusals
+      # Read in refusals data
+      refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
+      data$refusals <- refusals
       
       dbDisconnect(con)
-      names(data$repeats) <- repeat_names
       save(data, file = file_name)
     } else {
       load(file_name)
@@ -728,11 +727,11 @@ app_server <- function(input, output, session) {
               
               # Get the overall va progress table
               pd <- odk_data$data
-              pd <- pd$non_repeats
+              pd <- pd$minicensus_main
               co <- country()
               pd <- pd %>% 
                 filter(hh_country == co)
-              deaths <- odk_data$data$repeats$minicensus_repeat_death_info
+              deaths <- odk_data$data$minicensus_repeat_death_info
               # save(pd, co, deaths, file = '/tmp/joe.RData')
               
               deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
@@ -814,7 +813,7 @@ app_server <- function(input, output, session) {
     sub_fids <- fids %>% filter(country == co)
     # Get the minicensus data for the fieldworkers in question
     pd <- odk_data$data
-    pd <- pd$non_repeats
+    pd <- pd$minicensus_main
     pd$todays_date <- as.Date(pd$todays_date)
     # Detect all "drop outs" for each fieldworker
     pd_ids <- sort(unique(pd$wid))
@@ -883,7 +882,7 @@ app_server <- function(input, output, session) {
               
               # Get the odk data
               pd <- odk_data$data
-              pd <- pd$non_repeats
+              pd <- pd$minicensus_main
               co <- country()
               # save(pd, file = '/tmp/pd.RData')
               pd <- pd %>% filter(hh_country == co)
@@ -1024,7 +1023,7 @@ app_server <- function(input, output, session) {
                 )
                 # save(lxd_all, file = 'lxd_all.rda')
                 hamlet_text <- paste(
-                  "Percent finished: ",  round(lxd_all$p,2),"<br>",
+                  "Percent finished: ",  round(ifelse(is.na(lxd_all$p), 0, lxd_all$p),2),"<br>",
                   as.character(lxd_all$code),"<br/>",
                   sep="") %>%
                   lapply(htmltools::HTML)
@@ -1032,7 +1031,8 @@ app_server <- function(input, output, session) {
                 leaflet_height <- 1000
                 lxd_hamlet <- leaflet(data = lxd_all, height = leaflet_height) %>% 
                   addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-                  addCircleMarkers(data = lxd_all, lng = ~lng, lat = ~lat,label = hamlet_text, stroke=FALSE, color=~pal_hamlet(p), fillOpacity = 0.6) %>%
+                  addCircleMarkers(data = lxd_all, lng = ~lng, lat = ~lat,label = hamlet_text, stroke=FALSE, color=~pal_hamlet(p), fillOpacity = 0.6, 
+                                   radius = 10) %>%
                   addLegend(position = c("bottomleft"), pal = pal_hamlet, values = lxd_all$p)
                 
                 # create map for village
@@ -1280,7 +1280,7 @@ app_server <- function(input, output, session) {
                 }
                 
                 # va table
-                deaths <- odk_data$data$repeats$minicensus_repeat_death_info
+                deaths <- odk_data$data$minicensus_repeat_death_info
                 deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
                 # save(deaths, pd, file = '/tmp/deaths.RData')
                 # Conditional mourning period
@@ -1551,7 +1551,7 @@ app_server <- function(input, output, session) {
     
     # Get the odk data
     pd <- odk_data$data
-    pd <- pd$non_repeats
+    pd <- pd$minicensus_main
     co <- country()
     # save(pd, file = '/tmp/pd.RData')
     pd <- pd %>% filter(hh_country == co)
@@ -1681,7 +1681,7 @@ app_server <- function(input, output, session) {
               
               # Get places visisted so far
               pd <- odk_data$data
-              pd <- pd$non_repeats
+              pd <- pd$minicensus_main
               # Get the country
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
@@ -1763,7 +1763,7 @@ app_server <- function(input, output, session) {
   # HERE - not showing up
   output$ui_verification_text_filter <- renderUI({
     pd <- odk_data$data
-    pd <- pd$non_repeats
+    pd <- pd$minicensus_main
     
     # Get the country
     co <- input$geo
@@ -1793,8 +1793,8 @@ app_server <- function(input, output, session) {
               # NOW NOT SHOWING TABLE AT ALL IN APP
               # Get the odk data
               pd <- odk_data$data
-              people <- pd$repeats$minicensus_people
-              pd <- pd$non_repeats
+              people <- pd$minicensus_people
+              pd <- pd$minicensus_main
               # Get the country
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
@@ -2062,7 +2062,7 @@ app_server <- function(input, output, session) {
       
       # Get the odk data
       pd <- odk_data$data
-      pd <- pd$non_repeats
+      pd <- pd$minicensus_main
       co <- country()
       # save(pd, file = '/tmp/pd.RData')
       pd <- pd %>% filter(hh_country == co)

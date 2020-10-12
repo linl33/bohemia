@@ -238,19 +238,17 @@ CREATE TABLE sessions (
 );
 
 
--- Corrections_Errors
+-- Corrections
 
 
-CREATE TABLE corrections_errors (
+CREATE TABLE corrections (
     id  INT,
-    date_identified    TIMESTAMP,
-    uuid    uuid,
-    assigned_user   VARCHAR(128),
     action  TEXT,
     done    BOOLEAN DEFAULT false,
-    done_by     VARCHAR(128),
-    done_date   TIMESTAMP
+    done_by     VARCHAR(128)
 );
+
+
 
 -- VA 153
 

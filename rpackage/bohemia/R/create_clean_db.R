@@ -1,0 +1,52 @@
+#' Create clean DB
+#'
+#' Create a clean database as a copy of the ODK "raw" database
+#' @param credentials_file Path to a credentials.yaml
+#' @param drop_all Whether to, instead of creating clean tables, drop them
+#' @return Data will be created in the database
+#' @import dplyr
+#' @import RPostgreSQL
+#' @import yaml
+#' @export
+
+create_clean_db <- function(credentials_file = 'credentials/credentials.yaml',
+                            drop_all = FALSE){
+  
+  # Connect to the bohemia database
+  start_time <- Sys.time()
+  creds <- yaml::yaml.load_file(credentials_file)
+  drv <- dbDriver('PostgreSQL')
+  con <- dbConnect(drv, dbname='bohemia', host=creds$endpoint, 
+                   port=5432,
+                   user=creds$psql_master_username, password=creds$psql_master_password)
+  
+  # Define the tables to copy
+  copy_these <- c(
+    'enumerations',
+    'minicensus_main',
+    'minicensus_people',
+    'minicensus_repeat_death_info',
+    'minicensus_repeat_hh_sub',
+    'minicensus_repeat_mosquito_net',
+    'minicensus_repeat_water',
+    'refusals',
+    'va'
+  )
+  
+  # Loop through each table and copy
+  for(i in 1:length(copy_these)){
+    this_table <- copy_these[i]
+    if(drop_all){
+      message('Dropping clean_', this_table)
+      dbExecute(conn = con,
+                statement = paste0('drop table clean_', this_table))
+    } else {
+      message('Creating clean_', this_table)
+      dbExecute(conn = con,
+                statement = paste0('create table clean_', this_table, ' as (select * from ', this_table, ')')) 
+    }
+  }
+  
+  
+  dbDisconnect(con)
+}

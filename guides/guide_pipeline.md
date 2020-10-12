@@ -82,28 +82,29 @@ psql \
 ```
 
 - Copy paste the code from `scripts/bohemia_db_schema.sql`  
-- Now, you can access the database via R using the following (example for minicensus):  
 
-```
-library(bohemia)
-library(yaml)
-creds_fpath <- '/home/ubuntu/Documents/bohemia/credentials/credentials.yaml'  # Change this to your local path
-creds <- yaml::yaml.load_file(creds_fpath)
-url <- 'https://bohemia.systems'
-id = 'minicensus'
-id2 = NULL
-user = creds$databrew_odk_user
-password = creds$databrew_odk_pass
-psql_end_point = creds$endpoint
-psql_user = creds$psql_master_username
-psql_pass = creds$psql_master_password
+### Creating the "clean" tables
 
-require('RPostgreSQL')
-drv <- dbDriver('PostgreSQL')
-con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
-                 port=5432,
-                 user=psql_user, password=psql_pass)
+- Clean tables are structurally a copy of their similarly named "non-clean" counterparts (with the `clean_` prefix).  
+- Clean tables differ from their non-clean counterparts in that they may undergo manual modifications (ie, "data cleaning").  
+- These manual modifications are stored in the `xxx` script.  
+
+At first-go, to create the clean tables, run:
 ```
+create_clean_db()
+```  
+
+To drop all of the clean tables, run:
+```
+create_clean_db(drop_all = TRUE)
+```
+
+To carry out the "cleaning" (ie, execute changes on the newly-created clean tables), run:
+```
+clean_db()
+```
+
+
 
 
 

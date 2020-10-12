@@ -1,0 +1,45 @@
+#' Identify anomalies and errors
+#'
+#' Given a clean Bohemia database, identify anomalies and errors 
+#' @param data_list A named list of dataframes. It should have the structure of named dataframes sharing names with the names of the tables in the database (excluding the "clean_" prefix)
+#' @return Data will be modified in the database
+#' @import dplyr
+#' @import gsheet
+#' @export
+
+identify_anomalies_and_errors <- function(data_list){
+  message('Beginning anomalies and errors identification...')
+  
+  # Read in the anomalies_and_errors table
+  ae <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0')
+  message('...', nrow(ae), ' anomalies and errors in the registry')
+  ae <- ae %>% dplyr::filter(!is.na(identification_code))
+  message('...', nrow(ae), ' have associated code snippets')
+  
+  # Go through each code snippet and execute
+  out_list <- list()
+  counter <- 0
+  for(i in 1:nrow(ae)){
+    this_row <- ae[i,]
+    message('......Snippet ', i, ' of ', nrow(ae), ': ', this_row$name)
+    this_snippet <- this_row$identification_code
+    this_incident_code <- this_row$incident_code
+    eval(parse(text = this_snippet))
+    no_pass <- nrow(result) > 0
+    if(no_pass){
+      message('.........Did not pass: ', nrow(result), ' anomalous incidents.')
+      for(j in 1:nrow(result)){
+        counter <- counter + 1
+        result_row <- result[j,]
+        eval(parse(text = this_incident_code))
+        out <- this_row %>%
+          dplyr::mutate(id = paste0(this_row$name, '_',result_row$instance_id)) %>%
+          dplyr::select(id,  description) %>%
+          mutate(incident = incident)
+        out_list[[counter]] <- out
+      }
+    }
+  }
+  out <- bind_rows(out_list)
+  return(out)
+}
