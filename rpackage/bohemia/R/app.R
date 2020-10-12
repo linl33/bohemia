@@ -362,6 +362,10 @@ app_server <- function(input, output, session) {
       refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
       data$refusals <- refusals
       
+      # Read in corrections data
+      corrections <- dbGetQuery(con, "SELECT * FROM corrections")
+      data$corrections <- corrections
+      
       dbDisconnect(con)
       save(data, file = file_name)
     } else {
@@ -427,7 +431,7 @@ app_server <- function(input, output, session) {
     if(li){
       out <- load_odk_data(the_country = the_country)
       # save(out, file = '/tmp/out.RData')
-      odk_data$data = out
+      odk_data$data <- out
     }
   })
   
@@ -450,6 +454,8 @@ app_server <- function(input, output, session) {
       # save(out, file = '/tmp/out.RData')
       anomalies <- identify_anomalies_and_errors(data = out,
                                                  anomalies_registry = anomalies_registry)
+      
+      # save(corrections, anomalies, file = '/tmp/joe.RData')
       session_data$anomalies <- anomalies
       
       
@@ -1541,24 +1547,48 @@ app_server <- function(input, output, session) {
     action <- session_data$anomalies
     this_row <- action[sr,]
     
-    showModal(
-      modalDialog(
-        title = 'Provide information on the fix',
-        size = 'm',
-        easyClose = TRUE,
-        fade = TRUE,
-        footer = modalButton('Go back'),
-        fluidPage(
-          fluidRow(h3('The problem:')),
-          fluidRow(HTML(knitr::kable(this_row, 'html'))),
-          fluidRow(h3('The fix:')),
-          fluidRow(textAreaInput('fix_details', 'Fix details:')),
-          fluidRow(column(12, align = 'center',
-                          actionButton('send_fix',
-                                       'Send fix')))
+    # Must be just one row
+    just_one <- FALSE
+    if(nrow(this_row) == 1){
+      just_one <- TRUE
+    }
+    if(just_one){
+      showModal(
+        modalDialog(
+          title = 'Provide information on the fix',
+          size = 'l',
+          easyClose = TRUE,
+          fade = TRUE,
+          footer = modalButton('Go back'),
+          fluidPage(
+            fluidRow(h3('The problem:')),
+            fluidRow(HTML(knitr::kable(this_row, 'html'))),
+            fluidRow(h3('The fix:')),
+            fluidRow(textAreaInput('fix_details', 'Fix details:')),
+            fluidRow(column(12, align = 'center',
+                            actionButton('send_fix',
+                                         'Send fix')))
+          )
         )
       )
-    )
+    } else {
+      showModal(
+        modalDialog(
+          title = 'Not quite...',
+          size = 'm',
+          easyClose = TRUE,
+          fade = TRUE,
+          footer = modalButton('Go back'),
+          fluidPage(
+            p(paste0('You have selected ',
+                     nrow(this_row), 
+                     ' rows.')),
+            p('Before submitting a correction / confirmation, you must select exactly one row.')
+          )
+        )
+      )
+    }
+    
   })
   
   # # Observe the notification disregard
@@ -1576,11 +1606,32 @@ app_server <- function(input, output, session) {
   observeEvent(input$send_fix,{
     sr <- input$anomalies_table_rows_selected
     action <- session_data$anomalies
-    message('sr is ', sr)
-    vals <- 1:nrow(action)
-    vals <- vals[!vals %in% sr]
-    action <- action[vals,]
-    session_data$anomalies <- action
+    
+    # Get the fix row
+    this_row <- action[sr,]
+    # Get the fix text
+    fix_details <- input$fix_details
+    fix <-
+      tibble(id = this_row$id,
+             action = fix_details,
+             submitted_by = input$log_in_user,
+             done = FALSE,
+             done_by = ' ')
+    # CONNECT TO THE DATABASE AND ADD FIX
+    # --- DB STUFF HERE
+    # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
+    # save(this_row, sr, action, fix, odk_data, fix_details, file = '/tmp/this_row.RData')
+    
+    old_corrections <- odk_data$data$corrections 
+    new_correction <- fix
+    new_corrections <- bind_rows(old_corrections, new_correction)
+    odk_data$data$corrections  <- new_corrections
+    
+    # message('sr is ', sr)
+    # vals <- 1:nrow(action)
+    # vals <- vals[!vals %in% sr]
+    # action <- action[vals,]
+    # session_data$anomalies <- action
     removeModal()
   })
   
@@ -1949,7 +2000,18 @@ app_server <- function(input, output, session) {
   # Action table
   output$anomalies_table <- DT::renderDataTable({
     action <- session_data$anomalies
-    DT::datatable(action)
+    # Join with the already existing fixes and remove those for which a fix has already been submitted
+    corrections <- odk_data$data$corrections
+    if(nrow(corrections) == 0){
+      corrections <- dplyr::tibble(id = '',
+                                   action = '',
+                                   submitted_by = '',
+                                   done = FALSE,
+                                   done_by = ' ')
+    }
+    joined <- dplyr::left_join(action, corrections)
+    # joined <- joined %>% filter(action != '')
+    DT::datatable(joined)
   })
   
   
@@ -2046,27 +2108,16 @@ app_server <- function(input, output, session) {
             ok = {
               fluidPage(
                 br(),
-                h1('UNDER CONSTRUCTION'),
                 fluidRow(h3('Action required')),
+                p('Select a row and then click one of the below:'),
+                fluidRow(column(12, align = 'center',
+                                actionButton('submit_fix',
+                                             'Submit fix'))),
                 fluidRow(
-                  box(width = 9,
+                  box(width = 12,
                       # icon = icon('table'),
                       color = 'orange',
-                      DT::dataTableOutput('anomalies_table')),
-                  box(width = 3,
-                      fluidPage(
-                        fluidRow(
-                          p('Select a row and then click one of the below:')
-                        ),
-                        fluidRow(
-                          
-                          column(12, align = 'center',
-                                 actionButton('submit_fix',
-                                              'Submit fix'))
-                          
-                          
-                        )
-                      ))
+                      DT::dataTableOutput('anomalies_table'))
                 )
               )
             }

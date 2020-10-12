@@ -242,8 +242,9 @@ CREATE TABLE sessions (
 
 
 CREATE TABLE corrections (
-    id  INT,
+    id  TEXT,
     action  TEXT,
+    submitted_by   VARCHAR(128),
     done    BOOLEAN DEFAULT false,
     done_by     VARCHAR(128)
 );
