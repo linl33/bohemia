@@ -1449,14 +1449,18 @@ app_server <- function(input, output, session) {
                                         tabPanel('List generation',
                                                  DT::datatable(va, rownames = FALSE)),
                                         tabPanel('VA progress',
-                                                 fluidPage(
-                                                   h2('By geography'),
-                                                   uiOutput('ui_va_monitoring_by'),
-                                                   br(),
-                                                   uiOutput('va_progress_ui'),
-                                                   h4('Map of VA forms submitted'),
-                                                   leaflet(height = 1000) %>% addTiles()
-                                                 )))
+                                                 tabsetPanel(
+                                                   tabPanel('VA Overall progress',
+                                                            uiOutput('va_progress_ui'),
+                                                            #h4('Map of VA forms submitted'),
+                                                            #leaflet(height = 1000) %>% addTiles()),
+                                                   tabPanel('VA progress by geographical unit',
+                                                            h2('By geography'),
+                                                            uiOutput('ui_va_monitoring_by')),
+                                                   tabPanel('Past due VAs', 
+                                                            h1('Past due'))
+                                                 )
+                                                 ))
                            )),
                   tabPanel('Alerts',
                            uiOutput('alert_ui'))#,
