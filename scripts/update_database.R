@@ -21,7 +21,7 @@ id2 = NULL
 
 # MINICENSUS MOZAMBIQUE #######################################################################
 message('PULLING DEPRECATED MINICENSUS (MOZAMBIQUE')
-skip_deprecated <- TRUE
+skip_deprecated <- FALSE
 if(!skip_deprecated){
   url <- creds$moz_odk_server
   user = creds$moz_odk_user
@@ -185,9 +185,9 @@ if(new_data){
 
 # ENUMERATIONS MOZAMBIQUE######################################################################
 message('PULLING ENUMERATIONS (MOZAMBIQUE')
-url <- creds$databrew_odk_server
-user = creds$databrew_odk_user
-password = creds$databrew_odk_pass
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
 id = 'enumerations'
 suppressWarnings({
   existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM enumerations')
