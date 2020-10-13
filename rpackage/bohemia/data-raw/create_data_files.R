@@ -14,6 +14,12 @@ library(gsheet)
 gps <- gsheet::gsheet2tbl(url)
 use_data(gps, overwrite = TRUE)
 
+# Anomaly and error registry
+url <- 'https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0'
+anomaly_and_error_registry <- gsheet::gsheet2tbl(url)
+use_data(anomaly_and_error_registry, overwrite = TRUE)
+
+
 # Get country shapefiles
 moz0 <- getData(country = 'MOZ', level = 0)
 moz1 <- getData(country = 'MOZ', level = 1)

@@ -25,8 +25,8 @@ app_ui <- function(request) {
                 tags$li(class = 'dropdown',
                         radioButtons('geo', ' ',
                                      choices = c(#'Tanzania' = 'Rufiji',
-                                                 'Mozambique' = 'Mopeia'
-                                                 ),
+                                       'Mozambique' = 'Mopeia'
+                                     ),
                                      inline = TRUE,
                                      selected = 'Mopeia')),
                 tags$li(class = 'dropdown',
@@ -89,10 +89,6 @@ app_ui <- function(request) {
                    menuSubItem(
                      text="Visit control sheet and file index and folder location",
                      tabName="visit_control_sheet",
-                     icon=icon("users")),
-                   menuSubItem(
-                     text="Consent verification list",
-                     tabName="consent_verification_list",
                      icon=icon("users"))
           ),
           menuItem(
@@ -134,42 +130,44 @@ app_ui <- function(request) {
                        h4('Location code:'),
                        h3(textOutput('location_code_text'))),
                 column(8,
-                       tabsetPanel(type = 'pills',
-                                   tabPanel("Visit control sheet", 
-                                            fluidPage(
-                                              h3("Visit control sheet"),
-                                              uiOutput('ui_enumeration_n_hh'),
-                                              helpText('The default numbers shown are 25% higher than the number estimated by the village leader.'),
-                                              textInput('enumeration_n_teams',
-                                                        'Number of teams',
-                                                        value = 2),
-                                              checkboxInput('enumeration', 'Enumeration?', value = FALSE),
-                                              
-                                              helpText('MOZ only. Tick this box if you want to generate a list for enumerators'),
-                                              checkboxInput('use_previous', 'Use previous', value = FALSE),
-                                              helpText('MOZ only. "Use previous" means populating the sheet based on the previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
-                                              
-                                              helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of forms.'),
-                                              uiOutput('ui_id_limit'),
-                                              br(), br(),
-                                              downloadButton('render_visit_control_sheet',
-                                                             'Generate visit control sheet(s)')
-                                            )),
-                                   tabPanel("File index and folder location",
-                                            fluidPage(
-                                              h3("File index and folder location"),
-                                              uiOutput('ui_id_limit_file'),
-                                              br(), br(),
-                                              downloadButton('render_file_index_list',
-                                                             'Generate file index and folder location list(s)')
-                                            ))))
+                       navbarPage(title = 'Sheets',
+                                  tabPanel("Visit control sheet", 
+                                           fluidPage(
+                                             h3("Visit control sheet"),
+                                             uiOutput('ui_enumeration_n_hh'),
+                                             helpText('The default numbers shown are 25% higher than the number estimated by the village leader.'),
+                                             textInput('enumeration_n_teams',
+                                                       'Number of teams',
+                                                       value = 2),
+                                             checkboxInput('enumeration', 'Enumeration?', value = FALSE),
+                                             
+                                             helpText('MOZ only. Tick this box if you want to generate a list for enumerators'),
+                                             checkboxInput('use_previous', 'Use previous', value = FALSE),
+                                             helpText('MOZ only. "Use previous" means populating the sheet based on the previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
+                                             
+                                             helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of forms.'),
+                                             uiOutput('ui_id_limit'),
+                                             br(), br(),
+                                             downloadButton('render_visit_control_sheet',
+                                                            'Generate visit control sheet(s)')
+                                           )),
+                                  tabPanel("File index and folder location",
+                                           fluidPage(
+                                             h3("File index and folder location"),
+                                             uiOutput('ui_id_limit_file'),
+                                             br(), br(),
+                                             downloadButton('render_file_index_list',
+                                                            'Generate file index and folder location list(s)')
+                                           )),
+                                  tabPanel('Consent verification list',
+                                           fluidPage(
+                                             uiOutput('ui_verification_text_filter'),
+                                             uiOutput('ui_consent_verification_list_a'),
+                                             uiOutput('ui_consent_verification_list')
+                                           ))))
               )
             )
           ),
-          tabItem(
-            tabName="consent_verification_list",
-            uiOutput('ui_consent_verification_list_a'),
-            uiOutput('ui_consent_verification_list')),
           tabItem(
             tabName="demography",
             uiOutput('ui_demography')),
@@ -272,7 +270,7 @@ app_server <- function(input, output, session) {
                                     active_fieldworkers = 51,
                                     most_recent_submission = 12.6)
   
-
+  
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0'
@@ -292,7 +290,7 @@ app_server <- function(input, output, session) {
     mutate(name = paste0(first_name, ' ', last_name)) %>%
     dplyr::select(id, name)
   
-
+  
   ###########################################################################
   # REACTIVE OBJECTS
   ###########################################################################
@@ -443,17 +441,21 @@ app_server <- function(input, output, session) {
       out <- load_odk_data(the_country = the_country)
       odk_data$data = out
       
-      # Define a anomalies table
-      if(!'anomalies_registry.csv' %in% dir('/tmp')){
-        anomalies_url <- 'https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0'
-        anomalies_registry <- gsheet::gsheet2tbl(anomalies_url)
-        write_csv(anomalies_registry, '/tmp/anomalies_registry.csv')
-      } else {
-        anomalies_registry <- read_csv('/tmp/anomalies_registry.csv')
-      }
+      # # Define a anomalies table
+      # if(!'anomalies_registry.csv' %in% dir('/tmp')){
+      #   anomalies_url <- 'https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0'
+      #   anomalies_registry <- gsheet::gsheet2tbl(anomalies_url)
+      #   write_csv(anomalies_registry, '/tmp/anomalies_registry.csv')
+      # } else {
+      #   anomalies_registry <- read_csv('/tmp/anomalies_registry.csv')
+      # }
+      anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
       # save(out, file = '/tmp/out.RData')
-      anomalies <- identify_anomalies_and_errors(data = out,
-                                                 anomalies_registry = anomalies_registry)
+      suppressMessages({
+        anomalies <- identify_anomalies_and_errors(data = out,
+                                                   anomalies_registry = anomaly_and_error_registry)
+      })
+      
       
       # save(corrections, anomalies, file = '/tmp/joe.RData')
       session_data$anomalies <- anomalies
@@ -873,7 +875,7 @@ app_server <- function(input, output, session) {
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
-
+    
     li <- si$logged_in
     ac <- 'field_monitoring' %in% si$access
     
@@ -1353,8 +1355,8 @@ app_server <- function(input, output, session) {
                                 h1('Field monitoring'))),
                 tabsetPanel(
                   tabPanel('Overview',
-                           tabsetPanel(
-                             
+                           navbarPage(
+                             title = 'Overview',
                              tabPanel('Progress by geographical unit',
                                       fluidRow(
                                         h3('Progress by geography'),
@@ -1385,8 +1387,7 @@ app_server <- function(input, output, session) {
                                         #          h3('Map of forms'),
                                         #          l)
                                         # )
-                                      )),
-                             type = 'pills'
+                                      ))
                            )
                   ),
                   tabPanel('Performance',
@@ -1414,10 +1415,10 @@ app_server <- function(input, output, session) {
                                                                                    'Fieldworker ID',
                                                                                    choices = fid_choices),
                                                                        tableOutput('individual_details'))),
-                                                                fluidRow(box(width = 12,
-                                                                    title = 'Location of forms submitted by this worker',
-                                                                    leafletOutput('fid_leaf',
-                                                                                  height = 500))
+                                                              fluidRow(box(width = 12,
+                                                                           title = 'Location of forms submitted by this worker',
+                                                                           leafletOutput('fid_leaf',
+                                                                                         height = 500))
                                                               ))),
                                                    tabPanel('Aggregate data',
                                                             navbarPage('Fieldworkers tables',
@@ -1444,7 +1445,7 @@ app_server <- function(input, output, session) {
                            )),
                   tabPanel('VA',
                            fluidPage(
-                             br(), br(),
+                             # br(), br(),
                              navbarPage(title = 'VA',
                                         tabPanel('List generation',
                                                  DT::datatable(va, rownames = FALSE)),
@@ -1454,52 +1455,17 @@ app_server <- function(input, output, session) {
                                                             uiOutput('va_progress_ui'),
                                                             #h4('Map of VA forms submitted'),
                                                             #leaflet(height = 1000) %>% addTiles()),
-                                                   tabPanel('VA progress by geographical unit',
-                                                            h2('By geography'),
-                                                            uiOutput('ui_va_monitoring_by')),
-                                                   tabPanel('Past due VAs', 
-                                                            h1('Past due'))
-                                                 )
+                                                            tabPanel('VA progress by geographical unit',
+                                                                     h2('By geography'),
+                                                                     uiOutput('ui_va_monitoring_by')),
+                                                            tabPanel('Past due VAs', 
+                                                                     h1('Past due'))
+                                                   )
                                                  ))
-                           )),
+                             ))
+                  ),
                   tabPanel('Alerts',
-                           uiOutput('alert_ui'))#,
-                  # tabPanel('Aggregate data',
-                  #          h1('DEPRECATED'),
-                  #          fluidPage(
-                  #            # br(),
-                  #            fluidRow(
-                  #              infoBox(width = 4,
-                  #                      icon = icon('address-book'),
-                  #                      color = 'black',
-                  #                      title = 'Forms submitted',
-                  #                      column(12,
-                  #                             align = 'center', h1(aggregate_table$forms_submitted))),
-                  #              infoBox(title = 'Active fieldworkers',
-                  #                      icon = icon("user"),
-                  #                      color = 'black',
-                  #                      column(12,
-                  #                             align = 'center',
-                  #                             h1(aggregate_table$active_fieldworkers))),
-                  #              infoBox(title = 'Minutes since last form',
-                  #                      icon = icon("business-time"),
-                  #                      color = 'black',
-                  #                      column(12,
-                  #                             align = 'center',
-                  #                             h3(aggregate_table$most_recent_submission)                                                  ))
-                  #            ),
-                  #            fluidRow(
-                  #              box(title = 'Forms submitted',
-                  #                  width = 6,
-                  #                  leafletOutput('field_monitoring_map_forms')),
-                  #              box(title = 'Estimated completion by ward',
-                  #                  width = 6,
-                  #                  leafletOutput('field_monitoring_map_coverage'))
-                  #            ),
-                  #            fluidRow(
-                  #              column(6)
-                  #            )))
-                ))
+                           uiOutput('alert_ui'))))
             })
   })
   
@@ -1722,17 +1688,14 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               fluidPage(
-                column(4,
-                       uiOutput('ui_verification_text_filter'),
-                       dateRangeInput('verification_date_filter',
+               dateRangeInput('verification_date_filter',
                                       'Filter by date',
                                       start = as.Date('2020-09-01'),
                                       end = Sys.Date()))
-              )
+            
             })
   })
   
-  # HERE - not showing up
   output$ui_verification_text_filter <- renderUI({
     pd <- odk_data$data
     pd <- pd$minicensus_main
@@ -1741,9 +1704,10 @@ app_server <- function(input, output, session) {
     co <- input$geo
     co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
     pd <- pd %>% dplyr::filter(hh_country == co)
-    wid <- unique(pd$wid)
+    wid <- sort(unique(pd$wid))
+    wid <- wid[!is.na(wid)]
     selectInput('verification_text_filter',
-                'Filter by FW code',
+                'Filter by FW code (all, by default)',
                 choices = wid,
                 selected = wid,
                 multiple = TRUE)
@@ -1762,7 +1726,6 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               
-              # NOW NOT SHOWING TABLE AT ALL IN APP
               # Get the odk data
               pd <- odk_data$data
               people <- pd$minicensus_people
@@ -1827,23 +1790,29 @@ app_server <- function(input, output, session) {
               # get date closest to today
               qc <- pd[which(abs(pd$todays_date-today_date) == min(abs(pd$todays_date - today_date))),]
               # only keep hh_id and permid
-              qc <- qc %>% select(hh_id, hh_head_permid)
+              # save(qc, file = '/tmp/qc.RData')
+              qc <- qc %>% select(`Hamlet code` = hh_hamlet_code,
+                                  `Worker code` = wid,
+                                  `Household ID` = hh_id, 
+                                  `HH Head ID` = hh_head_permid,
+                                  Age = age,
+                                  Date = todays_date)
               # get inputs for slider to control sample size
               min_value <- 1
               max_value <- nrow(qc)
               selected_value <- sample(min_value:max_value, 1)
               # NEED TRANSLATION FOR HOUSEHOLD ID
               if(co == 'Mozambique'){
-                names(pd) <- c('C??digo TC',
-                               'C??digo Bairro',
+                names(pd) <- c('Código TC',
+                               'Código Bairro',
                                'Household ID',
-                               'ExtID (n??mero de identifica????o do participante)',
+                               'ExtID (número de identificão do participante)',
                                # 'Nome do membro do agregado',
                                'Idade do membro do agregado',
                                'Data de recrutamento',
                                'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
-                               'Se o documento n??o estiver preenchido correitamente, indicar o error',
-                               'O error foi resolvido (sim/n??o)',
+                               'Se o documento não estiver preenchido correitamente, indicar o error',
+                               'O error foi resolvido (sim/não)',
                                'Verificado por (iniciais do arquivista) e data')
               } else {
                 names(pd) <- c('FW code',
@@ -1861,27 +1830,24 @@ app_server <- function(input, output, session) {
               consent_verification_list_reactive$data <- pd
               quality_control_list_reactive$data <- qc
               fluidPage(
-                downloadButton('render_consent_verification_list',
-                               'Print consent verification list'),
-                
-                actionButton('quality_control_check',
-                             'Quality control check'),
-                sliderInput('sample_num', 'Number of forms to sample',
-                            min = min_value,
-                            max = max_value,
-                            value = selected_value, step = 1),
-                DT::dataTableOutput('quality_control_table')
-                
-                
-                #,
-                # gt(pd) %>%
-                #   tab_style(
-                #     style = cell_fill(
-                #       color = "#FFA500"
-                #     ),
-                #     locations = cells_body(names(pd)[1:7])
-                #   )
-              )
+                fluidRow(
+                  downloadButton('render_consent_verification_list',
+                                 'Print consent verification list')
+                ),
+                br(),
+                br(),
+                fluidRow(
+                  h3('Quality control check'),
+                  p('Select the number of forms to sample (below) and filter by date (above). Then, click "Quality control check" to generate a random table of forms to check on.'),
+                  sliderInput('sample_num', 'Number of forms to sample',
+                              min = min_value,
+                              max = max_value,
+                              value = selected_value, step = 1),
+                  actionButton('quality_control_check',
+                               'Quality control check'),
+                  DT::dataTableOutput('quality_control_table')
+                )
+                )
             }
     )
   }
@@ -2095,7 +2061,9 @@ app_server <- function(input, output, session) {
     if(is.null(qct)){
       NULL
     } else {
-      datatable(qct)
+      bohemia::prettify(qct,
+               download_options = TRUE,
+               nrows = nrow(qct))
     }
   })
   
@@ -2111,12 +2079,12 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               fluidPage(
-                br(),
-                fluidRow(h3('Action required')),
-                p('Select a row and then click one of the below:'),
-                fluidRow(column(12, align = 'center',
+                fluidRow(column(6,
+                                p('Select a row and then click one of the below:')),
+                         column(6,
                                 actionButton('submit_fix',
-                                             'Submit fix'))),
+                                             'Submit fix',
+                                             style='padding:=8px; font-size:280%'))),
                 fluidRow(
                   box(width = 12,
                       # icon = icon('table'),
@@ -2127,7 +2095,7 @@ app_server <- function(input, output, session) {
             }
     )
     
-
+    
   })
   
   output$render_visit_control_sheet <-
