@@ -2070,15 +2070,34 @@ app_server <- function(input, output, session) {
         }
       }
       if(pd_ok){
+        if(co=='Tanzania'){
+          num_fws <- 77
+          daily_forms_fw <- 13
+          weekly_forms_fw <- daily_forms_fw*5
+          total_forms_fw <- 599
+          
+        } else {
+          num_fws <- 100
+          daily_forms_fw <- 10
+          weekly_forms_fw <- daily_forms_fw*5
+          total_forms_fw <- 500
+          
+          # save(est_date, file = 'est_date.rda')
+          
+        }
         who <- input$fid
         id <- who
-        last_upload <- as.character(max(pd$end_time[pd$wid == who]))
-        total_forms <- length(which(pd$wid == who))
+        # save(id, file = 'id_perf.rda')
+        last_upload <- as.character(max(pd$end_time[pd$wid == id], na.rm = TRUE))
+        total_forms <- length(which(pd$wid == id))
+        # save(pd,file = 'fw_perf.rda')
         average_time <- 63
         daily_work_hours <- 'pending'
-        tibble(`FW ID` = id, `# forms` = total_forms, `Average time/form` = average_time,
-               `Last upload`=last_upload, `Daily work hours`= daily_work_hours)
-        
+        week_per = round(total_forms/weekly_forms_fw,2)
+        total_per = round(total_forms/total_forms_fw,2)
+        # tibble(`FW ID` = id, `% of weekly target` = week_per, `% of total target`= total_per, `# forms` = total_forms, `Average time/form` = average_time,
+        #        `Last upload`=last_upload, `Daily work hours`= daily_work_hours)
+       tibble(key = c('FW ID','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(id, week_per, total_per, total_forms, average_time, daily_work_hours))
       } else {
         NULL
       }
