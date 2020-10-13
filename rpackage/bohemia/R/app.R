@@ -983,7 +983,9 @@ app_server <- function(input, output, session) {
                   total_daily_country <- 1001
                   total_weekly_country <- total_daily_country*5
                   total_forms <- 41605
-                  total_weeks <- 6
+                  total_weeks <- round(total_forms/total_weekly_country,2)
+                  total_days <- total_weeks*7
+                  est_date <- Sys.Date()+total_days
                 } else {
                   num_fws <- 100
                   daily_forms_fw <- 10
@@ -991,8 +993,10 @@ app_server <- function(input, output, session) {
                   total_forms_fw <- 500
                   total_daily_country <- 1000
                   total_weekly_country <- total_daily_country*5
-                  total_forms <- 30000
-                  total_weeks <- 6
+                  total_forms <- 30467
+                  total_weeks <- round(total_forms/total_weekly_country,2)
+                  total_days <- total_weeks*7
+                  # save(est_date, file = 'est_date.rda')
                   
                 }
                 second_row <- 
@@ -1004,8 +1008,8 @@ app_server <- function(input, output, session) {
                          `Total Daily forms/country` = total_daily_country,
                          `Total Weekly forms/country` = total_weekly_country,
                          `Overall target/country` = total_forms,
-                         `# Total weeks` = '', #as.character(target_helper$end_date))
-                         `Estimated date` = '')
+                         `# Total weeks` = total_weeks, #as.character(target_helper$end_date))
+                         `Estimated date` = as.character(Sys.Date()+total_days))
                 third_row <- 
                   tibble(Type = 'Percentage',
                          `No. FWs` = round(overview$`No. FWs`/second_row$`No. FWs` * 100),  
@@ -1029,7 +1033,6 @@ app_server <- function(input, output, session) {
                   third_row[,j] <- as.character(third_row[,j])
                 }
                 overview <- bind_rows(overview, second_row, third_row)
-                
                 
                 # Create map
                 ll <- extract_ll(pd$hh_geo_location)
