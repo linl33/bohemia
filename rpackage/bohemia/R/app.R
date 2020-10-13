@@ -1734,25 +1734,37 @@ app_server <- function(input, output, session) {
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
               pd <- pd %>% dplyr::filter(hh_country == co)
+              # save(pd, co, people, file = '/tmp/joe.RData')
               # Get hh head
-              out_list <- list()
-              for(i in 1:nrow(pd)){
-                this_instance_id <- pd$instance_id[i]
-                this_num <- pd$hh_head_id[i]
-                this_date <- pd$todays_date[i]
-                this_dob <- pd$hh_head_dob[i]
-                this_wid <- pd$wid[i]
-                this_hh_hamlet_code <- pd$hh_hamlet_code[i]
-                this_person <- people %>% filter(instance_id == this_instance_id,
-                                                 num == this_num)
-                out <- this_person %>% mutate(todays_date = this_date,
-                                              hh_head_dob = this_dob,
-                                              wid = this_wid,
-                                              hh_hamlet_code = this_hh_hamlet_code)
-                out_list[[i]] <- out
-              }
-              out <- bind_rows(out_list)
-              # save(out, file = '/tmp/out.RData')
+              out <- pd %>%
+                dplyr::select(num = hh_head_id,
+                              instance_id,
+                              todays_date,
+                              hh_head_dob,
+                              wid,
+                              hh_hamlet_code) %>%
+                mutate(num = as.character(num)) %>%
+                left_join(people %>% mutate(num = as.character(num)),
+                          by = c('instance_id', 'num'))
+              
+              # out_list <- list()
+              # for(i in 1:nrow(pd)){
+              #   this_instance_id <- pd$instance_id[i]
+              #   this_num <- pd$hh_head_id[i]
+              #   this_date <- pd$todays_date[i]
+              #   this_dob <- pd$hh_head_dob[i]
+              #   this_wid <- pd$wid[i]
+              #   this_hh_hamlet_code <- pd$hh_hamlet_code[i]
+              #   this_person <- people %>% filter(instance_id == this_instance_id,
+              #                                    num == this_num)
+              #   out <- this_person %>% mutate(todays_date = this_date,
+              #                                 hh_head_dob = this_dob,
+              #                                 wid = this_wid,
+              #                                 hh_hamlet_code = this_hh_hamlet_code)
+              #   out_list[[i]] <- out
+              # }
+              # out <- bind_rows(out_list)
+              # # save(out, file = '/tmp/out.RData')
               pd <- out %>%
                 mutate(name = paste0(first_name, ' ', last_name),
                        age = round((as.Date(todays_date) - as.Date(hh_head_dob)) / 365.25)) %>%
@@ -1767,7 +1779,8 @@ app_server <- function(input, output, session) {
                               age,
                               todays_date,
                               consent,
-                              x,y,z)
+                              x,y,z) %>%
+                mutate(todays_date = as.Date(todays_date))
               
               text_filter <- input$verification_text_filter
               if(!is.null(text_filter)){
@@ -1782,13 +1795,9 @@ app_server <- function(input, output, session) {
                     todays_date >= date_filter[1]
                   )
               }
-              
-              # convert to date for quality control table
-              pd$todays_date <- as.Date(pd$todays_date)
-              # get today's date and find the closest date in the data
-              today_date <- Sys.Date()
+
               # get date closest to today
-              qc <- pd[which(abs(pd$todays_date-today_date) == min(abs(pd$todays_date - today_date))),]
+              qc <- pd
               # only keep hh_id and permid
               # save(qc, file = '/tmp/qc.RData')
               qc <- qc %>% select(`Hamlet code` = hh_hamlet_code,
