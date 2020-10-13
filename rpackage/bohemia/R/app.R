@@ -307,50 +307,50 @@ app_server <- function(input, output, session) {
                                  fieldworkers = default_fieldworkers)
   odk_data <- reactiveValues(data = NULL)
   load_odk_data <- function(the_country = 'Mozambique'){
-
-      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      users <- yaml::yaml.load_file('credentials/users.yaml')
-      psql_end_point = creds$endpoint
-      psql_user = creds$psql_master_username
-      psql_pass = creds$psql_master_password
-      drv <- RPostgres::Postgres()
-      con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
-                       port=5432,
-                       user=psql_user, password=psql_pass)
-      # Read in data
-      data <- list()
-      main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where hh_country='", the_country, "'"))
-      data$minicensus_main <- main
-      ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
-      
-      repeat_names <- c("minicensus_people", 
-                        "minicensus_repeat_death_info",
-                        "minicensus_repeat_hh_sub", 
-                        "minicensus_repeat_mosquito_net", 
-                        "minicensus_repeat_water")
-      for(i in 1:length(repeat_names)){
-        this_name <- repeat_names[i]
-        this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
-        data[[this_name]] <- this_data
-      }
-      # Read in enumerations data
-      enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
-      data$enumerations <- enumerations
-      
-      # # Read in va data
-      # va <- dbGetQuery(con, "SELECT * FROM clean_va")
-      # data$va <- va
-      # 
-      # Read in refusals data
-      refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
-      data$refusals <- refusals
-      
-      # Read in corrections data
-      corrections <- dbGetQuery(con, "SELECT * FROM corrections")
-      data$corrections <- corrections
-      
-      dbDisconnect(con)
-
+    
+    creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+    users <- yaml::yaml.load_file('credentials/users.yaml')
+    psql_end_point = creds$endpoint
+    psql_user = creds$psql_master_username
+    psql_pass = creds$psql_master_password
+    drv <- RPostgres::Postgres()
+    con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                     port=5432,
+                     user=psql_user, password=psql_pass)
+    # Read in data
+    data <- list()
+    main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where hh_country='", the_country, "'"))
+    data$minicensus_main <- main
+    ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
+    
+    repeat_names <- c("minicensus_people", 
+                      "minicensus_repeat_death_info",
+                      "minicensus_repeat_hh_sub", 
+                      "minicensus_repeat_mosquito_net", 
+                      "minicensus_repeat_water")
+    for(i in 1:length(repeat_names)){
+      this_name <- repeat_names[i]
+      this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+      data[[this_name]] <- this_data
+    }
+    # Read in enumerations data
+    enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
+    data$enumerations <- enumerations
+    
+    # # Read in va data
+    # va <- dbGetQuery(con, "SELECT * FROM clean_va")
+    # data$va <- va
+    # 
+    # Read in refusals data
+    refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
+    data$refusals <- refusals
+    
+    # Read in corrections data
+    corrections <- dbGetQuery(con, "SELECT * FROM corrections")
+    data$corrections <- corrections
+    
+    dbDisconnect(con)
+    
     return(data)
   }
   
@@ -422,7 +422,7 @@ app_server <- function(input, output, session) {
     if(li){
       out <- load_odk_data(the_country = the_country)
       odk_data$data = out
-
+      
       anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
       # save(out, file = '/tmp/out.RData')
       suppressMessages({
@@ -696,7 +696,58 @@ app_server <- function(input, output, session) {
               )
             })
   })
-  
+  # 
+  # ui for VA progress by geography.
+  output$va_progress_geo_ui <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+
+              # Get the overall va progress table
+              pd <- odk_data$data
+              pd <- pd$minicensus_main
+              co <- country()
+              pd <- pd %>%
+                filter(hh_country == co)
+              deaths <- odk_data$data$minicensus_repeat_death_info
+              # save(pd, co, deaths, file = '/tmp/joe.RData')
+
+              deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
+                                          !is.na(death_number))
+              pd <- pd %>%
+                dplyr::select(district = hh_district,
+                              ward = hh_ward,
+                              village = hh_village,
+                              hamlet = hh_hamlet, instance_id)
+              grouper <- input$va_monitor_by
+              if(is.null(grouper)){
+                grouper <- 'district'
+              } else {
+                grouper <- tolower(grouper)
+              }
+              va_progress_geo <- deaths %>%
+                left_join(pd) %>%
+                filter(!is.na(hamlet)) %>%
+                group_by_(grouper) %>%
+                summarise(`VA forms collected` = 0,
+                          `Deaths reported` = n()) %>%
+                mutate(`% VA forms completed` = round(`VA forms collected` /
+                                                        `Deaths reported` * 100))
+
+              fluidPage(
+                fluidRow(
+                  h2(paste0('Progress by ', grouper)),
+                  prettify(va_progress_geo)
+                )
+              )
+            })
+  })
+  # 
   output$va_progress_ui <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -715,7 +766,6 @@ app_server <- function(input, output, session) {
                 filter(hh_country == co)
               deaths <- odk_data$data$minicensus_repeat_death_info
               # save(pd, co, deaths, file = '/tmp/joe.RData')
-              
               deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
                                           !is.na(death_number))
               pd <- pd %>%
@@ -723,12 +773,10 @@ app_server <- function(input, output, session) {
                               ward = hh_ward,
                               village = hh_village,
                               hamlet = hh_hamlet, instance_id)
-              grouper <- input$va_monitor_by
-              if(is.null(grouper)){
-                grouper <- 'district'
-              } else {
-                grouper <- tolower(grouper)
-              }
+              # grouper <- input$va_monitor_by
+              
+              grouper <- 'district'
+             
               va_progress <- deaths %>%
                 left_join(pd) %>%
                 filter(!is.na(hamlet)) %>%
@@ -736,7 +784,8 @@ app_server <- function(input, output, session) {
                 summarise(`VA forms collected` = 0,
                           `Deaths reported` = n()) %>%
                 mutate(`% VA forms completed` = round(`VA forms collected` / 
-                                                        `Deaths reported` * 100))
+                                                        `Deaths reported` * 100)) %>%
+                select(`VA forms collected`, `Deaths reported`, `% VA forms completed`)
               
               fluidPage(
                 fluidRow(
@@ -1301,8 +1350,8 @@ app_server <- function(input, output, session) {
                   va <- va %>% dplyr::select(District, Ward, Village, Hamlet,
                                              `HH ID`, `FW ID`, `PERM ID`,
                                              `HH visit date`, `Date of death`,
-                                             `Latest date to collect VA form`#,
-                                             # `Time elapsed`
+                                             `Latest date to collect VA form`,
+                                             `Time elapsed`
                   ) %>%
                     arrange(desc(`HH visit date`))
                   if(cn=='Mozambique'){
@@ -1312,7 +1361,6 @@ app_server <- function(input, output, session) {
                                          Bairro=Hamlet)
                   } 
                 }
-                
               } else {
                 progress_by <- progress_by_district <- monitor_by_table <-  progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
                   fwt_daily <- fwt_weekly <- fwt_overall <- overview <- va <- va2 <- va3 <- tibble(`No data available` = ' ')
@@ -1422,19 +1470,22 @@ app_server <- function(input, output, session) {
                              # br(), br(),
                              navbarPage(title = 'VA',
                                         tabPanel('List generation',
-                                                 DT::datatable(va, rownames = FALSE)),
+                                                 DT::datatable(va_list <- va%>%select(-`Time elapsed`), rownames = FALSE)),
                                         tabPanel('VA progress',
                                                  tabsetPanel(
                                                    tabPanel('VA Overall progress',
-                                                            uiOutput('va_progress_ui'),
-                                                            #h4('Map of VA forms submitted'),
-                                                            #leaflet(height = 1000) %>% addTiles()),
-                                                            tabPanel('VA progress by geographical unit',
-                                                                     h2('By geography'),
-                                                                     uiOutput('ui_va_monitoring_by')),
-                                                            tabPanel('Past due VAs', 
-                                                                     h1('Past due'))
-                                                   )
+                                                            uiOutput('va_progress_ui')),
+                                                   #h4('Map of VA forms submitted'),
+                                                   #leaflet(height = 1000) %>% addTiles()),
+                                                   tabPanel('VA progress by geographical unit',
+                                                            br(),
+                                                            uiOutput('ui_va_monitoring_by'),
+                                                            br(),
+                                                            uiOutput('va_progress_geo_ui')),
+                                                   tabPanel('Past due VAs', 
+                                                            h1('Past due'),
+                                                            DT::datatable(va, rownames = FALSE))
+                                                   
                                                  ))
                              ))
                   ),
@@ -1566,8 +1617,8 @@ app_server <- function(input, output, session) {
     message('Connecting to the database in order to add a fix to the corrections table')
     con <- get_db_connection()
     dbAppendTable(conn = con,
-                name = 'corrections',
-                value = fix)
+                  name = 'corrections',
+                  value = fix)
     message('Done. now disconnecting from database')
     dbDisconnect(con)
     # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
@@ -1670,11 +1721,11 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               fluidPage(
-               dateRangeInput('verification_date_filter',
-                                      'Filter by date',
-                                      start = as.Date('2020-09-01'),
-                                      end = Sys.Date()))
-            
+                dateRangeInput('verification_date_filter',
+                               'Filter by date',
+                               start = as.Date('2020-09-01'),
+                               end = Sys.Date()))
+              
             })
   })
   
@@ -1777,7 +1828,7 @@ app_server <- function(input, output, session) {
                     todays_date >= date_filter[1]
                   )
               }
-
+              
               # get date closest to today
               qc <- pd
               # only keep hh_id and permid
@@ -1838,7 +1889,7 @@ app_server <- function(input, output, session) {
                                'Quality control check'),
                   DT::dataTableOutput('quality_control_table')
                 )
-                )
+              )
             }
     )
   }
@@ -2061,8 +2112,8 @@ app_server <- function(input, output, session) {
       NULL
     } else {
       bohemia::prettify(qct,
-               download_options = TRUE,
-               nrows = nrow(qct))
+                        download_options = TRUE,
+                        nrows = nrow(qct))
     }
   })
   
