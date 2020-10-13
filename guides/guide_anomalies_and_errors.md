@@ -99,4 +99,6 @@ The developer now has an object named `data` to be operated on.
 ## Code standards for database "cleaning" code  
 
 - Corrections are codified in `scripts/clean_database.R`  
-- Running this script takes the "raw" data, modifies it (individual entries, each corresponding to an entry in the `corrections` table), and then generates "clean" data with `clean_` prefixes in the database.  
+- Running this script takes the "raw" data, modifies it (individual entries, each corresponding to an entry in the `corrections` table), and then generates "clean" data with `clean_` prefixes in the database.
+
+# Handling anomalies and errors  

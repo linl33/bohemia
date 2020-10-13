@@ -1464,8 +1464,8 @@ app_server <- function(input, output, session) {
                                                  ))
                              ))
                   ),
-                  tabPanel('Alerts',
-                           uiOutput('alert_ui'))))
+                  tabPanel('Anomalies',
+                           uiOutput('anomalies_ui'))))
             })
   })
   
@@ -1990,7 +1990,13 @@ app_server <- function(input, output, session) {
     }
     joined <- dplyr::left_join(action, corrections)
     # joined <- joined %>% filter(action != '')
-    DT::datatable(joined)
+    DT::datatable(joined,
+                  rownames = NULL,
+                  filter = 'bottom',
+                  options = list(
+                    paging =TRUE,
+                    pageLength =  nrow(joined) 
+                  ))
   })
   
   
@@ -2077,7 +2083,7 @@ app_server <- function(input, output, session) {
   })
   
   # Alert ui
-  output$alert_ui <- renderUI({
+  output$anomalies_ui <- renderUI({
     
     # See if the user is logged in and has access
     si <- session_info
@@ -2098,7 +2104,7 @@ app_server <- function(input, output, session) {
                   box(width = 12,
                       # icon = icon('table'),
                       color = 'orange',
-                      DT::dataTableOutput('anomalies_table'))
+                      div(DT::dataTableOutput('anomalies_table'), style = "font-size:60%"))
                 )
               )
             }

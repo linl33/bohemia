@@ -20,6 +20,76 @@ anomaly_and_error_registry <- gsheet::gsheet2tbl(url)
 use_data(anomaly_and_error_registry, overwrite = TRUE)
 
 
+# Read in the location hierachy
+library(gsheet)
+library(dplyr)
+# Note: the below url was created by manually copy-pasting data sent from site teams
+url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
+# Fetch the data
+locations <- gsheet::gsheet2tbl(url = url)
+# moz_new <- read_csv('updated_moz_location_hierarchy/mozy.csv')
+# locations <- locations %>%
+#   filter(Country != 'Mozambique') %>%
+#   bind_rows(moz_new) %>%
+#   arrange(desc(Country)) 
+# 
+# x <- locations %>%
+#   mutate(dup = duplicated(code)) %>%
+#   filter(dup)
+# locations$clinical_trial[is.na(locations$clinical_trial)] <- FALSE
+# write_csv(locations, '~/Desktop/locations.csv')
+
+# new moz
+# new_moz <- read_csv('updated_moz_location_hierarchy/LoationHierarchy.Mopeia.2020.07.21Final.csv')
+# names(new_moz)[c(2,4:7)] <- c('Region', 'Ward', 'Ward2', 'Village', 'Hamlet')
+# new_moz$Ward <- paste0(new_moz$Ward, ' | ', new_moz$Ward2)
+# new_moz$Ward2 <- NULL
+# new_moz$Ward <- gsub('Mopeia sede | Mopeia sede/', 'Mopeia sede | ', new_moz$Ward, fixed = TRUE)
+# right <- locations %>%
+#   filter(Country == 'Mozambique') %>%
+#   ungroup %>%
+#   group_by(Hamlet) %>%
+#   summarise(code = paste0(sort(unique(code)), collapse = ' | '))
+# mozy <- left_join(new_moz, right)
+# write_csv('~/Desktop/mozy.csv')
+
+
+
+# Clean up
+# locations$Village <- gsub('/', '/ ', locations$Village, fixed = TRUE)
+# # Fix capitalization
+# simpleCap <- function(x) {
+#   s <- strsplit(x, " ")[[1]]
+#   paste(toupper(substring(s, 1,1)), substring(s, 2),
+#         sep="", collapse=" ")
+# }
+# locations$Village <- sapply(tolower(locations$Village), simpleCap)
+# 
+# # Fix the incorrect localities
+# locations$code <- NULL
+# 
+# # Replace villages
+# locations$Village <- bohemia::update_mopeia_locality_names(locations$Village)
+# 
+# 
+#  
+# # # # Arrange by hamlet name and generate location codes
+# locations <- locations %>% dplyr::arrange(Hamlet)
+# locations <- bohemia::generate_location_codes(locations)
+# locations$degrees <- NULL
+# locations <- locations %>% arrange(Country, Region, District, Ward, Village, Hamlet)
+# Make sure there are no duplicates
+locations <- locations %>%
+  dplyr::distinct(Country, Region, District, Ward, Village, Hamlet, 
+                  .keep_all = TRUE)
+
+location_hierarchy <- locations
+usethis::use_data(locations, location_hierarchy,
+                  overwrite = TRUE)
+# Also re-write the csv to google sheet
+# readr::write_csv(locations, '~/Desktop/locations.csv')
+
+
 # Get country shapefiles
 moz0 <- getData(country = 'MOZ', level = 0)
 moz1 <- getData(country = 'MOZ', level = 1)
@@ -373,75 +443,6 @@ usethis::use_data(health_facilities,
                   mopeia_health_facilities,
                   rufiji_health_facilities, 
                   overwrite = TRUE)
-
-# Read in the location hierachy
-library(gsheet)
-library(dplyr)
-# Note: the below url was created by manually copy-pasting data sent from site teams
-url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
-# Fetch the data
-locations <- gsheet::gsheet2tbl(url = url)
-# moz_new <- read_csv('updated_moz_location_hierarchy/mozy.csv')
-# locations <- locations %>%
-#   filter(Country != 'Mozambique') %>%
-#   bind_rows(moz_new) %>%
-#   arrange(desc(Country)) 
-# 
-# x <- locations %>%
-#   mutate(dup = duplicated(code)) %>%
-#   filter(dup)
-# locations$clinical_trial[is.na(locations$clinical_trial)] <- FALSE
-# write_csv(locations, '~/Desktop/locations.csv')
-
-# new moz
-# new_moz <- read_csv('updated_moz_location_hierarchy/LoationHierarchy.Mopeia.2020.07.21Final.csv')
-# names(new_moz)[c(2,4:7)] <- c('Region', 'Ward', 'Ward2', 'Village', 'Hamlet')
-# new_moz$Ward <- paste0(new_moz$Ward, ' | ', new_moz$Ward2)
-# new_moz$Ward2 <- NULL
-# new_moz$Ward <- gsub('Mopeia sede | Mopeia sede/', 'Mopeia sede | ', new_moz$Ward, fixed = TRUE)
-# right <- locations %>%
-#   filter(Country == 'Mozambique') %>%
-#   ungroup %>%
-#   group_by(Hamlet) %>%
-#   summarise(code = paste0(sort(unique(code)), collapse = ' | '))
-# mozy <- left_join(new_moz, right)
-# write_csv('~/Desktop/mozy.csv')
-
-
-
-# Clean up
-# locations$Village <- gsub('/', '/ ', locations$Village, fixed = TRUE)
-# # Fix capitalization
-# simpleCap <- function(x) {
-#   s <- strsplit(x, " ")[[1]]
-#   paste(toupper(substring(s, 1,1)), substring(s, 2),
-#         sep="", collapse=" ")
-# }
-# locations$Village <- sapply(tolower(locations$Village), simpleCap)
-# 
-# # Fix the incorrect localities
-# locations$code <- NULL
-# 
-# # Replace villages
-# locations$Village <- bohemia::update_mopeia_locality_names(locations$Village)
-# 
-# 
-#  
-# # # # Arrange by hamlet name and generate location codes
-# locations <- locations %>% dplyr::arrange(Hamlet)
-# locations <- bohemia::generate_location_codes(locations)
-# locations$degrees <- NULL
-# locations <- locations %>% arrange(Country, Region, District, Ward, Village, Hamlet)
-# Make sure there are no duplicates
-locations <- locations %>%
-  dplyr::distinct(Country, Region, District, Ward, Village, Hamlet, 
-                  .keep_all = TRUE)
-
-location_hierarchy <- locations
-usethis::use_data(locations, location_hierarchy,
-                  overwrite = TRUE)
-# Also re-write the csv to google sheet
-# readr::write_csv(locations, '~/Desktop/locations.csv')
 
 
 # Creating osm files is time-consuming. Only set to TRUE if a change is needed
