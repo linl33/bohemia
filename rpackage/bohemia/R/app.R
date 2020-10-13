@@ -1850,8 +1850,8 @@ app_server <- function(input, output, session) {
               if(co == 'Mozambique'){
                 names(pd) <- c('Código TC',
                                'Código Bairro',
-                               'Household ID',
                                'ExtID (número de identificão do participante)',
+                               'Household ID',
                                # 'Nome do membro do agregado',
                                'Idade do membro do agregado',
                                'Data de recrutamento',
@@ -1862,8 +1862,8 @@ app_server <- function(input, output, session) {
               } else {
                 names(pd) <- c('FW code',
                                'Hamlet code',
-                               'Household ID',
                                'ExtID HH member',
+                               'Household ID',
                                # 'Name of household member',
                                'Age of household member',
                                'Recruitment date',
@@ -2184,7 +2184,7 @@ app_server <- function(input, output, session) {
                                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))
                       enumerations_data = odk_data$enumerations
-                      
+
                       # tmp <- list(data = data,
                       #             loc_id = lc,
                       #             enumeration = enum)
@@ -2242,7 +2242,7 @@ app_server <- function(input, output, session) {
                       # Get the data
                       pdx <- consent_verification_list_reactive$data
                       # save(pdx, file = '/tmp/data.RData')
-                      
+                      # save(pdx, file = 'pdx_tab.rda')
                       out_file <- paste0(getwd(), '/consent_verification_list.pdf')
                       rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/consent_verification_list.Rmd'),
                                         output_file = out_file,
