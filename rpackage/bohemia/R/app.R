@@ -306,23 +306,8 @@ app_server <- function(input, output, session) {
                                  anomalies = data.frame(),
                                  fieldworkers = default_fieldworkers)
   odk_data <- reactiveValues(data = NULL)
-  load_odk_data <- function(the_country = 'Mozambique', max_time = 3){
-    file_name <- paste0('/tmp/', the_country, '.RData')
-    load_old <- TRUE
-    if(file.exists(file_name)){
-      message('### Temporary Rdata for ', the_country, ' exists in the /tmp directory.')
-      time_created <- file.info(file_name)$ctime
-      time_ago <- Sys.time() - time_created
-      time_ago <- lubridate::time_length(time_ago, unit = 'hour')
-      if(time_ago < max_time){
-        load_old <- FALSE
-      } else {
-        message('### --- But the temporary file is more than ', max_time, ' old. So, reading from database')
-      }
-    } else {
-      message('### No temporary Rdata for ', the_country, ' exists in the /tmp directory. Reading from database.')
-    }
-    if(load_old){
+  load_odk_data <- function(the_country = 'Mozambique'){
+
       creds <- yaml::yaml.load_file('credentials/credentials.yaml')
       users <- yaml::yaml.load_file('credentials/users.yaml')
       psql_end_point = creds$endpoint
@@ -365,10 +350,7 @@ app_server <- function(input, output, session) {
       data$corrections <- corrections
       
       dbDisconnect(con)
-      save(data, file = file_name)
-    } else {
-      load(file_name)
-    }
+
     return(data)
   }
   
@@ -440,15 +422,7 @@ app_server <- function(input, output, session) {
     if(li){
       out <- load_odk_data(the_country = the_country)
       odk_data$data = out
-      
-      # # Define a anomalies table
-      # if(!'anomalies_registry.csv' %in% dir('/tmp')){
-      #   anomalies_url <- 'https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0'
-      #   anomalies_registry <- gsheet::gsheet2tbl(anomalies_url)
-      #   write_csv(anomalies_registry, '/tmp/anomalies_registry.csv')
-      # } else {
-      #   anomalies_registry <- read_csv('/tmp/anomalies_registry.csv')
-      # }
+
       anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
       # save(out, file = '/tmp/out.RData')
       suppressMessages({
@@ -1585,17 +1559,25 @@ app_server <- function(input, output, session) {
       tibble(id = this_row$id,
              action = fix_details,
              submitted_by = input$log_in_user,
+             submitted_at = Sys.time(),
              done = FALSE,
              done_by = ' ')
     # CONNECT TO THE DATABASE AND ADD FIX
-    # --- DB STUFF HERE
+    message('Connecting to the database in order to add a fix to the corrections table')
+    con <- get_db_connection()
+    dbAppendTable(conn = con,
+                name = 'corrections',
+                value = fix)
+    message('Done. now disconnecting from database')
+    dbDisconnect(con)
     # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
-    # save(this_row, sr, action, fix, odk_data, fix_details, file = '/tmp/this_row.RData')
-    
+    save(this_row, sr, action, fix, odk_data, fix_details, file = '/tmp/this_row.RData')
+    message('Now uploading the in-session data')
     old_corrections <- odk_data$data$corrections 
     new_correction <- fix
     new_corrections <- bind_rows(old_corrections, new_correction)
     odk_data$data$corrections  <- new_corrections
+    save(new_corrections, file = '/tmp/new_corrections.RData')
     
     # message('sr is ', sr)
     # vals <- 1:nrow(action)
@@ -1981,10 +1963,12 @@ app_server <- function(input, output, session) {
     action <- session_data$anomalies
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
+    save(action, corrections, file = '/tmp/this.RData')
     if(nrow(corrections) == 0){
       corrections <- dplyr::tibble(id = '',
                                    action = '',
                                    submitted_by = '',
+                                   submitted_at = Sys.time(),
                                    done = FALSE,
                                    done_by = ' ')
     }

@@ -243,6 +243,7 @@ CREATE TABLE corrections (
     id  TEXT,
     action  TEXT,
     submitted_by   VARCHAR(128),
+    submitted_at   TIMESTAMP,
     done    BOOLEAN DEFAULT false,
     done_by     VARCHAR(128)
 );

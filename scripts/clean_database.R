@@ -47,9 +47,6 @@ data$va <- va
 refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
 data$refusals <- refusals
 
-# Read in corrections data
-corrections <- dbGetQuery(con, "SELECT * FROM corrections")
-
 # Drop the previously cleaned data
 message('------DROPPING OLD CLEAN_ DATA')
 create_clean_db(credentials_file = '../credentials/credentials.yaml', 
@@ -75,5 +72,14 @@ create_clean_db(credentials_file = '../credentials/credentials.yaml')
 # # This part modifies the corrections table
 # dbExecute(conn = con,
 #           statement = paste0("UPDATE corrections SET done = 'true', done_by = 'Joe Brew' WHERE id='fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e'"))
+
+#######################
+# hh_head_too_young_old_ade9172b-3b03-4254-b252-54e92b9a63e4
+dbExecute(con,
+          statement = paste0("UPDATE clean_minicensus_people SET dob = '2000-01-01' WHERE instance_id = 'ade9172b-3b03-4254-b252-54e92b9a63e4'"))
+dbExecute(con,
+          statement = paste0("UPDATE clean_minicensus_main SET hh_head_dob = '2000-01-01' WHERE instance_id = 'ade9172b-3b03-4254-b252-54e92b9a63e4'"))
+dbExecute(conn = con,
+          statement = paste0("UPDATE corrections SET done = 'true', done_by = 'Joe Brew' WHERE id='hh_head_too_young_old_ade9172b-3b03-4254-b252-54e92b9a63e4'"))
 
 dbDisconnect(con)

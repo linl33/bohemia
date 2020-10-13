@@ -20,7 +20,6 @@ identify_anomalies_and_errors <- function(data,
   }
   message('...', nrow(ae), ' anomalies and errors in the registry')
   
-  
   ae <- ae %>% dplyr::filter(!is.na(identification_code))
   message('...', nrow(ae), ' have associated code snippets')
   
@@ -32,14 +31,18 @@ identify_anomalies_and_errors <- function(data,
     message('......Snippet ', i, ' of ', nrow(ae), ': ', this_row$name)
     this_snippet <- this_row$identification_code
     this_incident_code <- this_row$incident_code
-    eval(parse(text = this_snippet))
+    suppressMessages({
+      eval(parse(text = this_snippet))
+    })
     no_pass <- nrow(result) > 0
     if(no_pass){
       message('.........Did not pass: ', nrow(result), ' anomalous incidents.')
       for(j in 1:nrow(result)){
         counter <- counter + 1
         result_row <- result[j,]
-        eval(parse(text = this_incident_code))
+        suppressMessages({
+          eval(parse(text = this_incident_code))
+        })
         out <- this_row %>%
           dplyr::mutate(id = paste0(this_row$name, '_',result_row$instance_id)) %>%
           dplyr::select(id,  description) %>%
