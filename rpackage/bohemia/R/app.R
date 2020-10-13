@@ -1489,7 +1489,7 @@ app_server <- function(input, output, session) {
                                                  ))
                              ))
                   ),
-                  tabPanel('Anomalies',
+                  tabPanel('Alerts',
                            uiOutput('anomalies_ui'))))
             })
   })
