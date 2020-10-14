@@ -1673,61 +1673,63 @@ app_server <- function(input, output, session) {
               # Get places visisted so far
               pd <- odk_data$data
               pd <- pd$minicensus_main
+              
+              # get enumerations and refusals data
+              en = odk_data$data$enumerations
+              save(en, file = 'enum.rda')
+              rf = odk_data$data$refusals
+
+              # save(rf, file = 'refs.rda')
               # Get the country
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
-              pd <- pd %>% dplyr::filter(hh_country == co)
+              pd <- pd %>% dplyr::filter(hh_country == co) %>% mutate(status = 'participant') %>%
+                dplyr::select(code = hh_hamlet_code,
+                              hh_id,
+                              wid, lng, lat, status)
+              rf <- rf %>% dplyr::filter(country == co) %>% dplyr::select(country, hh_geo_location,hh_id, reason_no_participate)
+              en <- en %>% dplyr::filter(country == co) %>% dplyr::select(country, location_gps, agregado)
+              
+              en<- left_join(en,pd,by=c('agregado'='hh_id'))
+              en <- en %>% mutate(status = ifelse(is.na(status), ''))
+              # en <- left_join(en, rf, by=c('agregado'= 'hh_id'))
+              
               ll <- extract_ll(pd$hh_geo_location)
               pd$lng <- ll$lng; pd$lat <- ll$lat
+              save(pd, file = 'pd_enrol.rda')
+              
               pd <- pd %>%
                 dplyr::select(code = hh_hamlet_code,
                               hh_id,
                               wid, lng, lat) %>%
                 left_join(locations %>% dplyr::select(code, Ward, Village, Hamlet)) %>%
                 mutate(status = 'Participant')
-              # Get map
-              l <- leaflet() %>% addProviderTiles(providers$Esri.WorldImagery) %>%
-                addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
-              
+             
               if(co=='Mozambique'){
                 pd <- pd %>% rename(`Posto administrativo/localidade`=Ward,
                                     Povoado=Village,
                                     Bairro=Hamlet)
+                enumerations_data <- left_join(enumerations_data, pd, by=c('agregado' ='hh_id'))
               }
               
-              # ENUMERATIONS DATA
-              enumerations_data = odk_data$data$enumerations
-              save(enumerations_data, file = 'enum.rda')
-              ll_enum <- extract_ll(enumerations_data$location_gps)
-              map_enum <- leaflet(data = ll_enum)%>% addTiles() %>%
-                addMarkers(data = ll_enum, lng =ll_enum$lng, lat = ll_enum$lat)
+              # Get map
+              l <- leaflet() %>% addProviderTiles(providers$Esri.WorldImagery) %>%
+                addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
               
-              # REFUSALS DATA
-              refusals_data = odk_data$data$refusals
-              save(refusals_data, file = 'refs.rda')
-              ll_ref <- extract_ll(refusals_data$hh_geo_location)
-              map_ref <- leaflet(data = ll_ref)%>% addTiles() %>%
-                addMarkers(data = ll_ref, lng =ll_ref$lng, lat = ll_ref$lat)
-              
-              # NO DETAILS YET FOR NON-PARTICIPANTS
-              
-              tabsetPanel(
-                tabPanel('Enrollment',
-                         fluidPage(
-                           fluidRow(
-                             column(12, align = 'center',
-                                    h4('Map of participating and non-participating households'),
-                                    l,
-                                    h2('Table of participating households'),
-                                    DT::datatable(pd, rownames = FALSE),
-                                    br(), br(),
-                                    h2('Table of non-participating households'),
-                                    DT::datatable(tibble(`None` = 'There are none.')))
-                           )
-                         )),
-                tabPanel('Enumerations'),
-                tabPanel('Refusals')
+           
+              fluidPage(
+                fluidRow(
+                  column(12, align = 'center',
+                         h4('Map of participating and non-participating households'),
+                         l,
+                         h2('Table of participating households'),
+                         DT::datatable(pd, rownames = FALSE),
+                         br(), br(),
+                         h2('Table of non-participating households'),
+                         DT::datatable(tibble(`None` = 'There are none.')))
+                )
               )
+              
               
             }
             
