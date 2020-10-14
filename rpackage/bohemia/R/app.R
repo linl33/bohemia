@@ -1669,63 +1669,62 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               
+              # Get the country
+              co <- input$geo
+              co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
+              
               # Get places visisted so far
               pd <- odk_data$data
               pd <- pd$minicensus_main
               
               # get enumerations and refusals data
               en = odk_data$data$enumerations
-              save(en, file = 'enum.rda')
               rf = odk_data$data$refusals
-
+              # save(en, file = 'enum.rda')
+              # save(pd, file = 'pd_en.rda')
               # save(rf, file = 'refs.rda')
-              # Get the country
-              co <- input$geo
-              co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
-              pd <- pd %>% dplyr::filter(hh_country == co) %>% mutate(status = 'participant') %>%
-                dplyr::select(code = hh_hamlet_code,
-                              hh_id,
-                              wid, lng, lat, status)
-              rf <- rf %>% dplyr::filter(country == co) %>% dplyr::select(country, hh_geo_location,hh_id, reason_no_participate)
-              en <- en %>% dplyr::filter(country == co) %>% dplyr::select(country, location_gps, agregado)
+
+              # subset by country
+              pd <- pd %>% dplyr::filter(hh_country == co) %>%
+                group_by(hh_id) %>%
+                summarise(num_mini = n(),
+                          last_date_mini = max(todays_date, na.rm=TRUE)) 
+              rf <- rf %>% dplyr::filter(country == co) %>% 
+                group_by(hh_id, reason_no_participate) %>%
+                summarise(num_ref = n(),
+                          last_date_ref = max(todays_date, na.rm=TRUE)) 
+              en <- en %>% dplyr::filter(country == co) %>% 
+                group_by(agregado) %>%
+                summarise(num_enum = n(),
+                          last_date_enum = max(todays_date, na.rm=TRUE)) 
               
-              en<- left_join(en,pd,by=c('agregado'='hh_id'))
-              en <- en %>% mutate(status = ifelse(is.na(status), ''))
-              # en <- left_join(en, rf, by=c('agregado'= 'hh_id'))
+              # get list of all unique house ids
+              all_hh_ids <- tibble(hh_id = c(Reduce(union, list(pd$hh_id, rf$hh_id, en$agregado))))
               
-              ll <- extract_ll(pd$hh_geo_location)
-              pd$lng <- ll$lng; pd$lat <- ll$lat
-              save(pd, file = 'pd_enrol.rda')
+              # join with rest of data
+              dat <- left_join(all_hh_ids, pd)
+              dat <- left_join(dat, en, by = c('hh_id'='agregado'))
+              dat <- left_join(dat, rf)
               
-              pd <- pd %>%
-                dplyr::select(code = hh_hamlet_code,
-                              hh_id,
-                              wid, lng, lat) %>%
-                left_join(locations %>% dplyr::select(code, Ward, Village, Hamlet)) %>%
-                mutate(status = 'Participant')
-             
-              if(co=='Mozambique'){
-                pd <- pd %>% rename(`Posto administrativo/localidade`=Ward,
-                                    Povoado=Village,
-                                    Bairro=Hamlet)
-                enumerations_data <- left_join(enumerations_data, pd, by=c('agregado' ='hh_id'))
-              }
-              
-              # Get map
-              l <- leaflet() %>% addProviderTiles(providers$Esri.WorldImagery) %>%
-                addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
+              # create summary stats off of dat
+              sub_dat <- dat %>%
+                summarise(n_minicensus = sum(num_mini, na.rm = TRUE),
+                          n_enumerate = sum(num_enum, na.rm = TRUE),
+                          n_refusals = sum(num_ref, na.rm = TRUE),
+                          total_forms = nrow(all_hh_ids)) %>%
+                gather(key = 'key', value = 'value')
               
            
               fluidPage(
                 fluidRow(
                   column(12, align = 'center',
-                         h4('Map of participating and non-participating households'),
-                         l,
-                         h2('Table of participating households'),
-                         DT::datatable(pd, rownames = FALSE),
-                         br(), br(),
-                         h2('Table of non-participating households'),
-                         DT::datatable(tibble(`None` = 'There are none.')))
+                         h2('Summary data'),
+                         prettify(sub_dat),
+                         br(),
+                         h2('Raw data'),
+                         prettify(dat)),
+                  
+                         
                 )
               )
               
