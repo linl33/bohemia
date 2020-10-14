@@ -1797,7 +1797,7 @@ app_server <- function(input, output, session) {
               
               pd <- out %>%
                 mutate(name = paste0(first_name, ' ', last_name),
-                       age = round(as.numeric(as.Date(todays_date) - as.Date(hh_head_dob))/ 365.25, digits = 1)) %>%
+                       age = floor(as.numeric(as.Date(todays_date) - as.Date(hh_head_dob))/ 365.25)) %>%
                 mutate(consent = 'HoH (minicensus)') %>%
                 mutate(x = ' ',y = ' ', z = ' ') %>%
                 mutate(hh_id = substr(permid, 1, 7)) %>%
@@ -1845,7 +1845,7 @@ app_server <- function(input, output, session) {
               min_value <- 1
               max_value <- nrow(qc)
               selected_value <- sample(min_value:max_value, 1)
-              # NEED TRANSLATION FOR HOUSEHOLD ID
+              pd$signature <- '  '
               if(co == 'Mozambique'){
                 names(pd) <- c('Código TC',
                                'Código Bairro',
@@ -1857,7 +1857,8 @@ app_server <- function(input, output, session) {
                                'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
                                'Se o documento não estiver preenchido correitamente, indicar o error',
                                'O error foi resolvido (sim/não)',
-                               'Verificado por (iniciais do arquivista) e data')
+                               'Verificado por (iniciais do arquivista) e data',
+                               'Firma')
               } else {
                 names(pd) <- c('FW code',
                                'Hamlet code',
@@ -1869,7 +1870,8 @@ app_server <- function(input, output, session) {
                                'Informed consent/assent type (check off if correct and complete)',
                                'If not correct, please enter type of error',
                                'Was the error resolved (Yes/No)?',
-                               'Verified by (archivist initials) and date')
+                               'Verified by (archivist initials) and date',
+                               'Signature')
               }
               consent_verification_list_reactive$data <- pd
               # save(pd, file = '/tmp/dfx.RData')
