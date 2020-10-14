@@ -1582,7 +1582,6 @@ app_server <- function(input, output, session) {
                            uiOutput('enumeration_refusals_ui')
                            ),
                   tabPanel('Alerts',
-                           uiOutput('download_ui'),
                            uiOutput('anomalies_ui'))))
             })
   })
