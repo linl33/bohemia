@@ -91,6 +91,9 @@ app_ui <- function(request) {
                      tabName="visit_control_sheet",
                      icon=icon("users"))
           ),
+          menuItem('Download data',
+                   tabName = 'download_data',
+                   icon = icon('download')),
           menuItem(
             text = 'About',
             tabName = 'about',
@@ -192,6 +195,10 @@ app_ui <- function(request) {
           tabItem(
             tabName="malaria",
             uiOutput('ui_malaria')),
+          tabItem(
+            tabName = 'download_data',
+            uiOutput('download_ui')
+          ),
           tabItem(
             tabName = 'about',
             make_about()
@@ -1501,6 +1508,7 @@ app_server <- function(input, output, session) {
                              ))
                   ),
                   tabPanel('Alerts',
+                           uiOutput('download_ui'),
                            uiOutput('anomalies_ui'))))
             })
   })
@@ -2172,9 +2180,73 @@ app_server <- function(input, output, session) {
               )
             }
     )
-    
-    
   })
+  
+  output$download_ui <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'malaria' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              fluidPage(
+                fluidRow(
+                  column(6,
+                         selectInput('which_download',
+                                     'Pick a dataset',
+                                     choices = c('Minicensus main',
+                                                 'Minicensus enumerations',
+                                                 'Minicensus refusals',
+                                                 'Minicensus people roster',
+                                                 'Minicensus death registry',
+                                                 'Minicensus HH subs',
+                                                 'Minicensus mosquito nets',
+                                                 'Minicensus water',
+                                                 'VA'
+                                                 ))
+                         ),
+                  column(6,
+                         downloadButton("download_dataset", "Download dataset")
+                  )
+                )
+              )
+            })
+  })
+  
+  output$download_dataset <- downloadHandler(
+    filename = function(){
+      paste0(input$which_download, ".csv", sep = "")
+    },
+    content = function(file){
+      
+      which_download <- input$which_download
+
+      if(which_download == 'Minicensus main'){
+        df <- odk_data$data$minicensus_main
+      } else if(which_download == 'Minicensus enumerations'){
+        df <- odk_data$data$enumerations
+      } else if(which_download == 'Minicensus refusals'){
+        df <- odk_data$data$refusals
+      } else if(which_download == 'Minicensus people roster'){
+        df <- odk_data$data$minicensus_people
+      } else if(which_download == 'Minicensus death registry'){
+        df <- odk_data$data$minicensus_repeat_death_info
+      } else if(which_download == 'Minicensus HH subs'){
+        df <- odk_data$data$minicensus_repeat_hh_sub
+      } else if(which_download == 'Minicensus mosquito nets'){
+        df <- odk_data$data$minicensus_repeat_mosquito_net
+      } else if(which_download == 'Minicensus water'){
+        df <- odk_data$data$minicensus_repeat_water
+      } else if(which_download == 'VA'){
+        df <- odk_data$data$va
+      } 
+      write.csv(df,
+                file,
+                row.names = FALSE)
+    }
+  )
   
   output$render_visit_control_sheet <-
     downloadHandler(filename = "visit_control_sheet.pdf",
