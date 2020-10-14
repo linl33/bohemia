@@ -1509,7 +1509,6 @@ app_server <- function(input, output, session) {
                              ))
                   ),
                   tabPanel('Alerts',
-                           uiOutput('download_ui'),
                            uiOutput('anomalies_ui'))))
             })
   })
