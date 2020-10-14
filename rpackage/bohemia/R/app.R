@@ -1355,8 +1355,7 @@ app_server <- function(input, output, session) {
                                                 `HH visit date` = todays_date)) %>%
                   mutate(`FW ID` = ' ') %>%
                   dplyr::select(-instance_id)
-                # Filter to only include those past the latest date
-                va <- va %>% filter(`Latest date to collect VA form` <= Sys.Date())
+                
                 if(nrow(va) > 0){
                   va <- va %>% dplyr::select(District, Ward, Village, Hamlet,
                                              `HH ID`, `FW ID`, `PERM ID`,
@@ -1495,7 +1494,8 @@ app_server <- function(input, output, session) {
                                                             uiOutput('va_progress_geo_ui')),
                                                    tabPanel('Past due VAs', 
                                                             h1('Past due'),
-                                                            DT::datatable(va, rownames = FALSE))
+                                                            # Filter to only include those past the latest date
+                                                            DT::datatable(va %>% filter(`Latest date to collect VA form` <= Sys.Date()), rownames = FALSE))
                                                    
                                                  ))
                              ))
