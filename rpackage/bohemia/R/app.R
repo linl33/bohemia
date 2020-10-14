@@ -1331,12 +1331,14 @@ app_server <- function(input, output, session) {
                                          death_dod = as.Date(death_dod)) %>%
                                   mutate(old = (todays_date - death_dod) > mourning_period) %>%
                                   mutate(time_to_add = ifelse(old, 7, mourning_period)) %>%
-                                  mutate(xx = todays_date + time_to_add, # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
-                                         yy = Sys.Date() - todays_date) %>%
+                                  mutate(xx = todays_date + time_to_add#, # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
+                                         # yy = Sys.Date() - todays_date
+                                         ) %>%
                                   # Note: in case the "date of death" is unknown (the form has that option): let's just calculate the "latest date to do VA" by adding 40 days (Tanzania) and 30 days (Moz) to the "date of the hh visit", to be safe.
                                   mutate(safe_bet = todays_date + mourning_period) %>%
                                   mutate(xx = ifelse(is.na(xx), safe_bet, xx)) %>%
                                   mutate(xx = as.Date(xx, origin = '1970-01-01')) %>%
+                                  mutate(yy = Sys.Date() - xx) %>% # "time elapsed" means time between lastest date to collect and today
                                   dplyr::select(instance_id,
                                                 `Date of death` = death_dod,
                                                 `Latest date to collect VA form` = xx,
@@ -1631,13 +1633,13 @@ app_server <- function(input, output, session) {
     message('Done. now disconnecting from database')
     dbDisconnect(con)
     # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
-    save(this_row, sr, action, fix, odk_data, fix_details, file = '/tmp/this_row.RData')
+    # save(this_row, sr, action, fix, odk_data, fix_details, file = '/tmp/this_row.RData')
     message('Now uploading the in-session data')
     old_corrections <- odk_data$data$corrections 
     new_correction <- fix
     new_corrections <- bind_rows(old_corrections, new_correction)
     odk_data$data$corrections  <- new_corrections
-    save(new_corrections, file = '/tmp/new_corrections.RData')
+    # save(new_corrections, file = '/tmp/new_corrections.RData')
     
     # message('sr is ', sr)
     # vals <- 1:nrow(action)
@@ -2018,7 +2020,7 @@ app_server <- function(input, output, session) {
     action <- session_data$anomalies
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
-    save(action, corrections, file = '/tmp/this.RData')
+    # save(action, corrections, file = '/tmp/this.RData')
     if(nrow(corrections) == 0){
       corrections <- dplyr::tibble(id = '',
                                    action = '',
