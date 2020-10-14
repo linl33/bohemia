@@ -658,6 +658,77 @@ app_server <- function(input, output, session) {
             })
   })
   
+  # Enumerations and refusals UI ######################################
+  output$enumeration_refusals_ui <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              co <- country()
+              
+              # Get the overall va progress table
+              enumerations_data = odk_data$data$enumerations
+              refusals_data = odk_data$data$refusals
+              
+              ll_enum <- extract_ll(enumerations_data$location_gps)
+              ll_ref <- extract_ll(refusals_data$hh_geo_location)
+               
+              map_enum <- leaflet(data = ll_enum)%>% addTiles() %>%
+                addMarkers(data = ll_enum, lng =ll_enum$lng, lat = ll_enum$lat)
+
+               map_ref <- leaflet(data = ll_ref)%>% addTiles() %>%
+                 addMarkers(data = ll_ref, lng =ll_ref$lng, lat = ll_ref$lat)
+               
+              # pd$lng <- ll$lng; pd$lat <- ll$lat
+
+              # save(enumerations_data, file='enum_data.rda')
+              # save(refusals_data, file = 'refuse_data.rda')
+              
+              # co <- country()
+              # pd <- pd %>%
+              #   filter(hh_country == co)
+              # deaths <- odk_data$data$minicensus_repeat_death_info
+              # # save(pd, co, deaths, file = '/tmp/joe.RData')
+              # 
+              # deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
+              #                             !is.na(death_number))
+              # pd <- pd %>%
+              #   dplyr::select(district = hh_district,
+              #                 ward = hh_ward,
+              #                 village = hh_village,
+              #                 hamlet = hh_hamlet, instance_id)
+              # grouper <- input$va_monitor_by
+              # if(is.null(grouper)){
+              #   grouper <- 'district'
+              # } else {
+              #   grouper <- tolower(grouper)
+              # }
+              # va_progress_geo <- deaths %>%
+              #   left_join(pd) %>%
+              #   filter(!is.na(hamlet)) %>%
+              #   group_by_(grouper) %>%
+              #   summarise(`VA forms collected` = 0,
+              #             `Deaths reported` = n()) %>%
+              #   mutate(`% VA forms completed` = round(`VA forms collected` /
+              #                                           `Deaths reported` * 100))
+              # 
+              fluidPage(
+                fluidRow(
+                  h2('Enumerations'),
+                  # prettify(enumerations_data),
+                  br(),
+                  h2('Refusals'),
+                  # prettify(refusals_data),
+                )
+              )
+            })
+  })
+  # 
+  
   # VA geo monitoring UI  #############################################
   va_monitoring_geo <- reactiveVal('Ward')
   output$ui_va_monitoring_by <- renderUI({
@@ -1492,6 +1563,9 @@ app_server <- function(input, output, session) {
                                                  ))
                              ))
                   ),
+                  tabPanel('Enumerations & Refusals',
+                           uiOutput('enumeration_refusals_ui')
+                           ),
                   tabPanel('Alerts',
                            uiOutput('anomalies_ui'))))
             })
