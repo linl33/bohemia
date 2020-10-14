@@ -2162,7 +2162,7 @@ app_server <- function(input, output, session) {
                          column(6,
                                 actionButton('submit_fix',
                                              'Submit fix',
-                                             style='padding:=8px; font-size:280%'))),
+                                             style='padding:=8px; font-size:180%'))),
                 fluidRow(
                   box(width = 12,
                       # icon = icon('table'),
