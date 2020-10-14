@@ -161,7 +161,13 @@ app_ui <- function(request) {
                                            )),
                                   tabPanel('Consent verification list',
                                            fluidPage(
-                                             uiOutput('ui_verification_text_filter'),
+                                             fluidRow(
+                                               column(6, checkboxInput('verification_all',
+                                                                       'All fieldworkers?',
+                                                                       value = TRUE)),
+                                               column(6, 
+                                                      uiOutput('ui_verification_text_filter'))
+                                             ),
                                              uiOutput('ui_consent_verification_list_a'),
                                              uiOutput('ui_consent_verification_list')
                                            ))))
@@ -1732,21 +1738,25 @@ app_server <- function(input, output, session) {
             })
   })
   
+  
   output$ui_verification_text_filter <- renderUI({
     pd <- odk_data$data
     pd <- pd$minicensus_main
-    
-    # Get the country
-    co <- input$geo
-    co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
-    pd <- pd %>% dplyr::filter(hh_country == co)
-    wid <- sort(unique(pd$wid))
-    wid <- wid[!is.na(wid)]
-    selectInput('verification_text_filter',
-                'Filter by FW code (all, by default)',
-                choices = wid,
-                selected = wid,
-                multiple = TRUE)
+    verification_all <- input$verification_all
+    if(!verification_all){
+      # Get the country
+      co <- input$geo
+      co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
+      pd <- pd %>% dplyr::filter(hh_country == co)
+      wid <- sort(unique(pd$wid))
+      wid <- wid[!is.na(wid)]
+      selectInput('verification_text_filter',
+                  'Filter by FW code (all, by default)',
+                  choices = wid,
+                  selected = wid,
+                  multiple = TRUE)
+    }
+
   })
   
   consent_verification_list_reactive <- reactiveValues(data = NULL)
@@ -1783,27 +1793,9 @@ app_server <- function(input, output, session) {
                 left_join(people %>% mutate(num = as.character(num)),
                           by = c('instance_id', 'num'))
               
-              # out_list <- list()
-              # for(i in 1:nrow(pd)){
-              #   this_instance_id <- pd$instance_id[i]
-              #   this_num <- pd$hh_head_id[i]
-              #   this_date <- pd$todays_date[i]
-              #   this_dob <- pd$hh_head_dob[i]
-              #   this_wid <- pd$wid[i]
-              #   this_hh_hamlet_code <- pd$hh_hamlet_code[i]
-              #   this_person <- people %>% filter(instance_id == this_instance_id,
-              #                                    num == this_num)
-              #   out <- this_person %>% mutate(todays_date = this_date,
-              #                                 hh_head_dob = this_dob,
-              #                                 wid = this_wid,
-              #                                 hh_hamlet_code = this_hh_hamlet_code)
-              #   out_list[[i]] <- out
-              # }
-              # out <- bind_rows(out_list)
-              # # save(out, file = '/tmp/out.RData')
               pd <- out %>%
                 mutate(name = paste0(first_name, ' ', last_name),
-                       age = round((as.Date(todays_date) - as.Date(hh_head_dob)) / 365.25)) %>%
+                       age = round(as.numeric(as.Date(todays_date) - as.Date(hh_head_dob))/ 365.25, digits = 1)) %>%
                 mutate(consent = 'HoH (minicensus)') %>%
                 mutate(x = ' ',y = ' ', z = ' ') %>%
                 mutate(hh_id = substr(permid, 1, 7)) %>%
@@ -1816,13 +1808,18 @@ app_server <- function(input, output, session) {
                               todays_date,
                               consent,
                               x,y,z) %>%
-                mutate(todays_date = as.Date(todays_date))
+                mutate(todays_date = as.Date(todays_date)) %>%
+                arrange(wid, todays_date)
               
               text_filter <- input$verification_text_filter
-              if(!is.null(text_filter)){
-                pd <- pd %>%
-                  dplyr::filter(wid %in% text_filter)
+              verification_all <- input$verification_all
+              if(!verification_all){
+                if(!is.null(text_filter)){
+                  pd <- pd %>%
+                    dplyr::filter(wid %in% text_filter)
+                }
               }
+              
               date_filter <- input$verification_date_filter
               if(!is.null(date_filter)){
                 pd <- pd %>%
@@ -1873,9 +1870,13 @@ app_server <- function(input, output, session) {
                                'Verified by (archivist initials) and date')
               }
               consent_verification_list_reactive$data <- pd
+              # save(pd, file = '/tmp/dfx.RData')
               quality_control_list_reactive$data <- qc
               fluidPage(
                 fluidRow(
+                  checkboxInput('workers_on_separate_pages',
+                                'Print workers on separate pages?',
+                                value = TRUE),
                   downloadButton('render_consent_verification_list',
                                  'Print consent verification list')
                 ),
@@ -2241,12 +2242,17 @@ app_server <- function(input, output, session) {
                       
                       # Get the data
                       pdx <- consent_verification_list_reactive$data
+                      # Get page numbering system
+                      workers_on_separate_pages <- input$workers_on_separate_pages
                       # save(pdx, file = '/tmp/data.RData')
                       # save(pdx, file = 'pdx_tab.rda')
                       out_file <- paste0(getwd(), '/consent_verification_list.pdf')
-                      rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/consent_verification_list.Rmd'),
+                      rmarkdown::render(
+                        # input = '../inst/rmd/consent_verification_list.Rmd',
+                        input = paste0(system.file('rmd', package = 'bohemia'), '/consent_verification_list.Rmd'),
                                         output_file = out_file,
-                                        params = list(data = pdx))
+                                        params = list(data = pdx,
+                                                      workers_on_separate_pages = workers_on_separate_pages))
                       
                       # copy html to 'file'
                       file.copy(out_file, file)
