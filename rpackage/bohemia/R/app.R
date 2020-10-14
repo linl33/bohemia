@@ -2174,11 +2174,15 @@ app_server <- function(input, output, session) {
           
         }
         who <- input$fid
+        if(is.null(who)){
+          who <- 0 
+        }
         id <- who
         # save(id, file = 'id_perf.rda')
         last_upload <- as.character(max(pd$end_time[pd$wid == id], na.rm = TRUE))
         total_forms <- length(which(pd$wid == id))
         # save(pd,file = 'fw_perf.rda')
+        # save(pd, id, file = '/tmp/14.RData')
         average_time <- 63
         daily_work_hours <- 'pending'
         week_per = round(total_forms/weekly_forms_fw,2)
