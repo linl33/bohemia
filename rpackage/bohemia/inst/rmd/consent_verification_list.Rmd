@@ -78,7 +78,7 @@ if(workers_on_separate_pages){
 } else {
   chunk_list[[1]] <- paste0(
     "All fieldworkers\n\n\n```{r}\n",
-    "kable(dfx, 'latex',  
+    "kable(dfx %>% dplyr::select(-wid), 'latex',  
       longtable = T)  %>%   
   kable_styling(latex_options = c('repeat_header')) %>%
     kable_styling(font_size = 8)  %>%
