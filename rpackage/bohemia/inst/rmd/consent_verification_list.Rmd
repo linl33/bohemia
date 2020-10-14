@@ -1,6 +1,7 @@
 ---
 params:
   data: !r data.frame(f = 'acéntõ', a = 1, b = 2, x = 4, xx=5,xy=6,xyz=8, yy=9,yz=11,zz=12) 
+  workers_on_separate_pages: True
 output:
   pdf_document:
     keep_tex: yes
@@ -44,27 +45,66 @@ for (i in 1:length(params)){
          params[[i]],
          env = .GlobalEnv)
 }
-dfx <- params$data
+# dfx <- params$data
+# load('/tmp/dfx.RData')
+# save.image('/tmp/dfx.RData')
+dfx <- data
 ```
 
-\pagenumbering{gobble}
-
-
+\pagenumbering{arabic} 
 
 ```{r}
-# load('/tmp/data.RData')
-# data <- pdx
-# save(dfx, file = '/tmp/dfx.RData')
-kable(dfx, 'latex',  
-      # booktabs = F,
+chunk_list <- list()
+dfx$wid <- unlist(dfx[,1])
+fwids <- sort(unique(dfx$wid))
+name1 <- names(dfx)[1]
+
+if(workers_on_separate_pages){
+  for(i in 1:length(fwids)){
+  this_chunk <- 
+    paste0(
+      name1, ' ', fwids[i], '\n\n\n```{r}\n',
+      "kable(dfx  %>% dplyr::filter(wid == ", fwids[i], ") %>% dplyr::select(-wid), 'latex',  
       longtable = T)  %>%   
-  kable_styling(latex_options = c(#'striped',
-                                'repeat_header')) %>%
-    kable_styling(font_size = 6)  %>%
+  kable_styling(latex_options = c('repeat_header')) %>%
+    kable_styling(font_size = 8)  %>%
   column_spec(1:2, width = '1.2cm') %>%
   column_spec(3, width = '1.7cm') %>%
   column_spec(4, width = '2cm') %>%
-  column_spec(5:ncol(dfx), width = '2cm')
+  column_spec(5:ncol(dfx), width = '2cm')\n```\n\\newpage\n"
+    )
+  chunk_list[[i]] <- this_chunk
+}
+} else {
+  chunk_list[[1]] <- paste0(
+    "All fieldworkers\n\n\n```{r}\n",
+    "kable(dfx %>% dplyr::select(-wid), 'latex',  
+      longtable = T)  %>%   
+  kable_styling(latex_options = c('repeat_header')) %>%
+    kable_styling(font_size = 8)  %>%
+  column_spec(1:2, width = '1.2cm') %>%
+  column_spec(3, width = '1.7cm') %>%
+  column_spec(4, width = '2cm') %>%
+  column_spec(5:ncol(dfx), width = '2cm')\n```\n\\newpage\n"
+  )
+}
+
+
+chunks <- unlist(chunk_list)
+chunks <- paste0(chunks, collapse = '\n')
+
+file_connection <- file('children.Rmd')
+writeLines(paste0('---\noutput: pdf_document\n---\n\n', 
+                  chunks), 
+           file_connection)
+close(file_connection)
+```
+
+```{r child='children.Rmd'}
+```
+
+```{r, results='hide'}
+file.remove('children.Rmd')
 ```
 
 

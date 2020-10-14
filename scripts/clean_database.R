@@ -1,7 +1,7 @@
 #!/usr/bin/Rscript
-start_time <- Sys.time()
-message('------System time is: ', as.character(start_time))
-message('------Timezone: ', as.character(Sys.timezone()))
+# start_time <- Sys.time()
+# message('------System time is: ', as.character(start_time))
+# message('------Timezone: ', as.character(Sys.timezone()))
 creds_fpath <- '../credentials/credentials.yaml'
 creds <- yaml::yaml.load_file(creds_fpath)
 suppressMessages({
@@ -18,9 +18,6 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
                  port=5432,
                  user=psql_user, password=psql_pass)
 
-# Read in table of corrections instructions
-corrections <- dbReadTable(conn = con,
-                           name = 'corrections')
 
 # Read in raw data
 data <- list()
@@ -58,10 +55,16 @@ create_clean_db(credentials_file = '../credentials/credentials.yaml')
 # Process / clean data
 # This should line by line SQL statements acting on tables beginning with the "clean_" prefix
 # Every entry should have the following components
-# - 1. The SQL statement which executes the change (can be more than one). This should ONLY BE ON CLEAN_ tables. It can be no change, if applicable.
-# - 2. The SQL statement which logs the execution in the corrections table
+# - 1. The SQL statement(s) which executes the change (can be more than one). This should ONLY BE ON CLEAN_ tables. It can be no change, if applicable.
+# - 2. The SQL statement(s) which logs the execution in the corrections table
 # - 3. A Comment explaining exactly what was done
 
+# It is probably helpful to examine the corrections table while doing this
+library(dplyr)
+# Read in table of corrections instructions
+corrections <- dbReadTable(conn = con,
+                           name = 'corrections')
+corrections %>% filter(!done)
 
 # # Example change
 # # This is just an example
@@ -81,5 +84,13 @@ dbExecute(con,
           statement = paste0("UPDATE clean_minicensus_main SET hh_head_dob = '2000-01-01' WHERE instance_id = 'ade9172b-3b03-4254-b252-54e92b9a63e4'"))
 dbExecute(conn = con,
           statement = paste0("UPDATE corrections SET done = 'true', done_by = 'Joe Brew' WHERE id='hh_head_too_young_old_ade9172b-3b03-4254-b252-54e92b9a63e4'"))
+
+########################
+# hh_head_too_young_old_425f18cd-e4a0-42e6-b496-8093b69fe69a
+dbExecute(con,
+          statement = paste0("DELETE FROM clean_minicensus_main WHERE instance_id = '425f18cd-e4a0-42e6-b496-8093b69fe69a'"))
+
+dbExecute(con,
+          statement = paste0("UPDATE corrections SET done = 'true', done_by = 'Joe Brew' WHERE id = 'hh_head_too_young_old_425f18cd-e4a0-42e6-b496-8093b69fe69a'"))
 
 dbDisconnect(con)

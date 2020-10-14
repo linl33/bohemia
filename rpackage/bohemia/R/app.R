@@ -91,6 +91,9 @@ app_ui <- function(request) {
                      tabName="visit_control_sheet",
                      icon=icon("users"))
           ),
+          menuItem('Download data',
+                   tabName = 'download_data',
+                   icon = icon('download')),
           menuItem(
             text = 'About',
             tabName = 'about',
@@ -161,7 +164,13 @@ app_ui <- function(request) {
                                            )),
                                   tabPanel('Consent verification list',
                                            fluidPage(
-                                             uiOutput('ui_verification_text_filter'),
+                                             fluidRow(
+                                               column(6, checkboxInput('verification_all',
+                                                                       'All fieldworkers?',
+                                                                       value = TRUE)),
+                                               column(6, 
+                                                      uiOutput('ui_verification_text_filter'))
+                                             ),
                                              uiOutput('ui_consent_verification_list_a'),
                                              uiOutput('ui_consent_verification_list')
                                            ))))
@@ -186,6 +195,10 @@ app_ui <- function(request) {
           tabItem(
             tabName="malaria",
             uiOutput('ui_malaria')),
+          tabItem(
+            tabName = 'download_data',
+            uiOutput('download_ui')
+          ),
           tabItem(
             tabName = 'about',
             make_about()
@@ -1396,12 +1409,14 @@ app_server <- function(input, output, session) {
                                          death_dod = as.Date(death_dod)) %>%
                                   mutate(old = (todays_date - death_dod) > mourning_period) %>%
                                   mutate(time_to_add = ifelse(old, 7, mourning_period)) %>%
-                                  mutate(xx = todays_date + time_to_add, # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
-                                         yy = Sys.Date() - todays_date) %>%
+                                  mutate(xx = todays_date + time_to_add#, # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
+                                         # yy = Sys.Date() - todays_date
+                                         ) %>%
                                   # Note: in case the "date of death" is unknown (the form has that option): let's just calculate the "latest date to do VA" by adding 40 days (Tanzania) and 30 days (Moz) to the "date of the hh visit", to be safe.
                                   mutate(safe_bet = todays_date + mourning_period) %>%
                                   mutate(xx = ifelse(is.na(xx), safe_bet, xx)) %>%
                                   mutate(xx = as.Date(xx, origin = '1970-01-01')) %>%
+                                  mutate(yy = Sys.Date() - xx) %>% # "time elapsed" means time between lastest date to collect and today
                                   dplyr::select(instance_id,
                                                 `Date of death` = death_dod,
                                                 `Latest date to collect VA form` = xx,
@@ -1418,8 +1433,7 @@ app_server <- function(input, output, session) {
                                                 `HH visit date` = todays_date)) %>%
                   mutate(`FW ID` = ' ') %>%
                   dplyr::select(-instance_id)
-                # Filter to only include those past the latest date
-                va <- va %>% filter(`Latest date to collect VA form` <= Sys.Date())
+                
                 if(nrow(va) > 0){
                   va <- va %>% dplyr::select(District, Ward, Village, Hamlet,
                                              `HH ID`, `FW ID`, `PERM ID`,
@@ -1558,7 +1572,8 @@ app_server <- function(input, output, session) {
                                                             uiOutput('va_progress_geo_ui')),
                                                    tabPanel('Past due VAs', 
                                                             h1('Past due'),
-                                                            DT::datatable(va, rownames = FALSE))
+                                                            # Filter to only include those past the latest date
+                                                            DT::datatable(va %>% filter(`Latest date to collect VA form` <= Sys.Date()), rownames = FALSE))
                                                    
                                                  ))
                              ))
@@ -1567,6 +1582,7 @@ app_server <- function(input, output, session) {
                            uiOutput('enumeration_refusals_ui')
                            ),
                   tabPanel('Alerts',
+                           uiOutput('download_ui'),
                            uiOutput('anomalies_ui'))))
             })
   })
@@ -1699,13 +1715,13 @@ app_server <- function(input, output, session) {
     message('Done. now disconnecting from database')
     dbDisconnect(con)
     # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
-    save(this_row, sr, action, fix, odk_data, fix_details, file = '/tmp/this_row.RData')
+    # save(this_row, sr, action, fix, odk_data, fix_details, file = '/tmp/this_row.RData')
     message('Now uploading the in-session data')
     old_corrections <- odk_data$data$corrections 
     new_correction <- fix
     new_corrections <- bind_rows(old_corrections, new_correction)
     odk_data$data$corrections  <- new_corrections
-    save(new_corrections, file = '/tmp/new_corrections.RData')
+    # save(new_corrections, file = '/tmp/new_corrections.RData')
     
     # message('sr is ', sr)
     # vals <- 1:nrow(action)
@@ -1806,21 +1822,25 @@ app_server <- function(input, output, session) {
             })
   })
   
+  
   output$ui_verification_text_filter <- renderUI({
     pd <- odk_data$data
     pd <- pd$minicensus_main
-    
-    # Get the country
-    co <- input$geo
-    co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
-    pd <- pd %>% dplyr::filter(hh_country == co)
-    wid <- sort(unique(pd$wid))
-    wid <- wid[!is.na(wid)]
-    selectInput('verification_text_filter',
-                'Filter by FW code (all, by default)',
-                choices = wid,
-                selected = wid,
-                multiple = TRUE)
+    verification_all <- input$verification_all
+    if(!verification_all){
+      # Get the country
+      co <- input$geo
+      co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
+      pd <- pd %>% dplyr::filter(hh_country == co)
+      wid <- sort(unique(pd$wid))
+      wid <- wid[!is.na(wid)]
+      selectInput('verification_text_filter',
+                  'Filter by FW code (all, by default)',
+                  choices = wid,
+                  selected = wid,
+                  multiple = TRUE)
+    }
+
   })
   
   consent_verification_list_reactive <- reactiveValues(data = NULL)
@@ -1857,46 +1877,35 @@ app_server <- function(input, output, session) {
                 left_join(people %>% mutate(num = as.character(num)),
                           by = c('instance_id', 'num'))
               
-              # out_list <- list()
-              # for(i in 1:nrow(pd)){
-              #   this_instance_id <- pd$instance_id[i]
-              #   this_num <- pd$hh_head_id[i]
-              #   this_date <- pd$todays_date[i]
-              #   this_dob <- pd$hh_head_dob[i]
-              #   this_wid <- pd$wid[i]
-              #   this_hh_hamlet_code <- pd$hh_hamlet_code[i]
-              #   this_person <- people %>% filter(instance_id == this_instance_id,
-              #                                    num == this_num)
-              #   out <- this_person %>% mutate(todays_date = this_date,
-              #                                 hh_head_dob = this_dob,
-              #                                 wid = this_wid,
-              #                                 hh_hamlet_code = this_hh_hamlet_code)
-              #   out_list[[i]] <- out
-              # }
-              # out <- bind_rows(out_list)
-              # # save(out, file = '/tmp/out.RData')
               pd <- out %>%
                 mutate(name = paste0(first_name, ' ', last_name),
-                       age = round((as.Date(todays_date) - as.Date(hh_head_dob)) / 365.25)) %>%
+                       age = floor(as.numeric(as.Date(todays_date) - as.Date(hh_head_dob))/ 365.25)) %>%
                 mutate(consent = 'HoH (minicensus)') %>%
                 mutate(x = ' ',y = ' ', z = ' ') %>%
                 mutate(hh_id = substr(permid, 1, 7)) %>%
+                mutate(firma = '  ') %>%
                 dplyr::select(wid,
                               hh_hamlet_code,
                               hh_head_permid = permid,
                               hh_id,
                               # name,
+                              firma,
                               age,
                               todays_date,
                               consent,
                               x,y,z) %>%
-                mutate(todays_date = as.Date(todays_date))
+                mutate(todays_date = as.Date(todays_date)) %>%
+                arrange(wid, todays_date)
               
               text_filter <- input$verification_text_filter
-              if(!is.null(text_filter)){
-                pd <- pd %>%
-                  dplyr::filter(wid %in% text_filter)
+              verification_all <- input$verification_all
+              if(!verification_all){
+                if(!is.null(text_filter)){
+                  pd <- pd %>%
+                    dplyr::filter(wid %in% text_filter)
+                }
               }
+              
               date_filter <- input$verification_date_filter
               if(!is.null(date_filter)){
                 pd <- pd %>%
@@ -1910,7 +1919,8 @@ app_server <- function(input, output, session) {
               qc <- pd
               # only keep hh_id and permid
               # save(qc, file = '/tmp/qc.RData')
-              qc <- qc %>% select(`Hamlet code` = hh_hamlet_code,
+              qc <- qc %>%  
+                dplyr::select(`Hamlet code` = hh_hamlet_code,
                                   `Worker code` = wid,
                                   `Household ID` = hh_id, 
                                   `HH Head ID` = hh_head_permid,
@@ -1920,13 +1930,12 @@ app_server <- function(input, output, session) {
               min_value <- 1
               max_value <- nrow(qc)
               selected_value <- sample(min_value:max_value, 1)
-              # NEED TRANSLATION FOR HOUSEHOLD ID
               if(co == 'Mozambique'){
                 names(pd) <- c('Código TC',
                                'Código Bairro',
                                'ExtID (número de identificão do participante)',
-                               'Household ID',
-                               # 'Nome do membro do agregado',
+                               'ID Agregado',
+                               'Pessoa que assino o consentimiento',
                                'Idade do membro do agregado',
                                'Data de recrutamento',
                                'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
@@ -1938,18 +1947,23 @@ app_server <- function(input, output, session) {
                                'Hamlet code',
                                'ExtID HH member',
                                'Household ID',
-                               # 'Name of household member',
+                               "Person who signed consent",
                                'Age of household member',
                                'Recruitment date',
                                'Informed consent/assent type (check off if correct and complete)',
                                'If not correct, please enter type of error',
                                'Was the error resolved (Yes/No)?',
-                               'Verified by (archivist initials) and date')
+                               'Verified by (archivist initials) and date',
+                               'Signature')
               }
               consent_verification_list_reactive$data <- pd
+              # save(pd, file = '/tmp/dfx.RData')
               quality_control_list_reactive$data <- qc
               fluidPage(
                 fluidRow(
+                  checkboxInput('workers_on_separate_pages',
+                                'Print workers on separate pages?',
+                                value = TRUE),
                   downloadButton('render_consent_verification_list',
                                  'Print consent verification list')
                 ),
@@ -2091,7 +2105,7 @@ app_server <- function(input, output, session) {
     action <- session_data$anomalies
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
-    save(action, corrections, file = '/tmp/this.RData')
+    # save(action, corrections, file = '/tmp/this.RData')
     if(nrow(corrections) == 0){
       corrections <- dplyr::tibble(id = '',
                                    action = '',
@@ -2230,7 +2244,7 @@ app_server <- function(input, output, session) {
                          column(6,
                                 actionButton('submit_fix',
                                              'Submit fix',
-                                             style='padding:=8px; font-size:280%'))),
+                                             style='padding:=8px; font-size:180%'))),
                 fluidRow(
                   box(width = 12,
                       # icon = icon('table'),
@@ -2240,9 +2254,73 @@ app_server <- function(input, output, session) {
               )
             }
     )
-    
-    
   })
+  
+  output$download_ui <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'malaria' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              fluidPage(
+                fluidRow(
+                  column(6,
+                         selectInput('which_download',
+                                     'Pick a dataset',
+                                     choices = c('Minicensus main',
+                                                 'Minicensus enumerations',
+                                                 'Minicensus refusals',
+                                                 'Minicensus people roster',
+                                                 'Minicensus death registry',
+                                                 'Minicensus HH subs',
+                                                 'Minicensus mosquito nets',
+                                                 'Minicensus water',
+                                                 'VA'
+                                                 ))
+                         ),
+                  column(6,
+                         downloadButton("download_dataset", "Download dataset")
+                  )
+                )
+              )
+            })
+  })
+  
+  output$download_dataset <- downloadHandler(
+    filename = function(){
+      paste0(input$which_download, ".csv", sep = "")
+    },
+    content = function(file){
+      
+      which_download <- input$which_download
+
+      if(which_download == 'Minicensus main'){
+        df <- odk_data$data$minicensus_main
+      } else if(which_download == 'Minicensus enumerations'){
+        df <- odk_data$data$enumerations
+      } else if(which_download == 'Minicensus refusals'){
+        df <- odk_data$data$refusals
+      } else if(which_download == 'Minicensus people roster'){
+        df <- odk_data$data$minicensus_people
+      } else if(which_download == 'Minicensus death registry'){
+        df <- odk_data$data$minicensus_repeat_death_info
+      } else if(which_download == 'Minicensus HH subs'){
+        df <- odk_data$data$minicensus_repeat_hh_sub
+      } else if(which_download == 'Minicensus mosquito nets'){
+        df <- odk_data$data$minicensus_repeat_mosquito_net
+      } else if(which_download == 'Minicensus water'){
+        df <- odk_data$data$minicensus_repeat_water
+      } else if(which_download == 'VA'){
+        df <- odk_data$data$va
+      } 
+      write.csv(df,
+                file,
+                row.names = FALSE)
+    }
+  )
   
   output$render_visit_control_sheet <-
     downloadHandler(filename = "visit_control_sheet.pdf",
@@ -2315,12 +2393,17 @@ app_server <- function(input, output, session) {
                       
                       # Get the data
                       pdx <- consent_verification_list_reactive$data
+                      # Get page numbering system
+                      workers_on_separate_pages <- input$workers_on_separate_pages
                       # save(pdx, file = '/tmp/data.RData')
                       # save(pdx, file = 'pdx_tab.rda')
                       out_file <- paste0(getwd(), '/consent_verification_list.pdf')
-                      rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/consent_verification_list.Rmd'),
+                      rmarkdown::render(
+                        # input = '../inst/rmd/consent_verification_list.Rmd',
+                        input = paste0(system.file('rmd', package = 'bohemia'), '/consent_verification_list.Rmd'),
                                         output_file = out_file,
-                                        params = list(data = pdx))
+                                        params = list(data = pdx,
+                                                      workers_on_separate_pages = workers_on_separate_pages))
                       
                       # copy html to 'file'
                       file.copy(out_file, file)
