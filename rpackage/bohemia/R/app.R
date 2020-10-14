@@ -1801,11 +1801,13 @@ app_server <- function(input, output, session) {
                 mutate(consent = 'HoH (minicensus)') %>%
                 mutate(x = ' ',y = ' ', z = ' ') %>%
                 mutate(hh_id = substr(permid, 1, 7)) %>%
+                mutate(firma = '  ') %>%
                 dplyr::select(wid,
                               hh_hamlet_code,
                               hh_head_permid = permid,
                               hh_id,
                               # name,
+                              firma,
                               age,
                               todays_date,
                               consent,
@@ -1835,7 +1837,8 @@ app_server <- function(input, output, session) {
               qc <- pd
               # only keep hh_id and permid
               # save(qc, file = '/tmp/qc.RData')
-              qc <- qc %>% select(`Hamlet code` = hh_hamlet_code,
+              qc <- qc %>%  
+                dplyr::select(`Hamlet code` = hh_hamlet_code,
                                   `Worker code` = wid,
                                   `Household ID` = hh_id, 
                                   `HH Head ID` = hh_head_permid,
@@ -1845,26 +1848,24 @@ app_server <- function(input, output, session) {
               min_value <- 1
               max_value <- nrow(qc)
               selected_value <- sample(min_value:max_value, 1)
-              pd$signature <- '  '
               if(co == 'Mozambique'){
                 names(pd) <- c('Código TC',
                                'Código Bairro',
                                'ExtID (número de identificão do participante)',
-                               'Household ID',
-                               # 'Nome do membro do agregado',
+                               'ID Agregado',
+                               'Pessoa que assino o consentimiento',
                                'Idade do membro do agregado',
                                'Data de recrutamento',
                                'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
                                'Se o documento não estiver preenchido correitamente, indicar o error',
                                'O error foi resolvido (sim/não)',
-                               'Verificado por (iniciais do arquivista) e data',
-                               'Firma')
+                               'Verificado por (iniciais do arquivista) e data')
               } else {
                 names(pd) <- c('FW code',
                                'Hamlet code',
                                'ExtID HH member',
                                'Household ID',
-                               # 'Name of household member',
+                               "Person who signed consent",
                                'Age of household member',
                                'Recruitment date',
                                'Informed consent/assent type (check off if correct and complete)',
