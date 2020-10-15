@@ -1288,24 +1288,29 @@ app_server <- function(input, output, session) {
                                 `Estimated number of forms` = n_households,
                                 `Estimated percent finished` = p)
                 
+                # Transform the estimated number of forms (will be lower for MOZ than TZA since MOZ did buildings, not households)
+                transformer <- ifelse(co == 'Mozambique', 0.55, 1)
+                
                 
                 # Create a progress by geo tables
-                progress_by <- joined %>% left_join(locations %>% dplyr::select(code, District, Ward, Village, Hamlet))
+                progress_by <- joined %>% left_join(locations %>% 
+                                                      dplyr::select(code, District, Ward, Village, Hamlet))
                 # save(progress_by, file = '/tmp/progress_by.RData')
-                progress_by_district <- progress_by %>% group_by(District) %>% summarise(numerator = sum(numerator, na.rm  = TRUE),
-                                                                                         n_households = sum(n_households, na.rm = TRUE)) %>%
+                progress_by_district <- progress_by %>% group_by(District) %>% 
+                  summarise(numerator = sum(numerator, na.rm  = TRUE),
+                            n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
                   mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
                   dplyr::select(District, `Forms done` = numerator,
                                 `Estimated number of forms` = n_households,
                                 `Estimated percent finished` = p)
                 progress_by_ward <- progress_by %>% group_by(Ward) %>% summarise(numerator = sum(numerator, na.rm  = TRUE),
-                                                                                 n_households = sum(n_households, na.rm = TRUE)) %>%
+                                                                                 n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
                   mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
                   dplyr::select(Ward, `Forms done` = numerator,
                                 `Estimated number of forms` = n_households,
                                 `Estimated percent finished` = p)
                 progress_by_village <- progress_by %>% group_by(Village) %>% summarise(numerator = sum(numerator, na.rm  = TRUE),
-                                                                                       n_households = sum(n_households, na.rm = TRUE)) %>%
+                                                                                       n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
                   mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
                   dplyr::select(Village, `Forms done` = numerator,
                                 `Estimated number of forms` = n_households,
