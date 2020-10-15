@@ -231,8 +231,10 @@ CREATE TABLE refusals (
 
 CREATE TABLE sessions (
     user_email  VARCHAR(256),
+    success   BOOLEAN,
     start_time  TIMESTAMP NOT NULL,
-    end_time    TIMESTAMP
+    end_time    TIMESTAMP,
+    web   BOOLEAN
 );
 
 

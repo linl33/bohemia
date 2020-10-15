@@ -387,11 +387,36 @@ app_server <- function(input, output, session) {
                             users = users)
     if(ok){
       message('---Correct user/password. Logged in.')
+      # Update sessions table
+      sesh <- tibble(user_email = liu,
+                     success = TRUE,
+                     start_time = Sys.time(),
+                     end_time = NA,
+                     web = grepl('ubuntu', getwd()))
+      con <- get_db_connection()
+      dbAppendTable(conn = con,
+                    name = 'sessions',
+                    value = sesh)
+      dbDisconnect(con)
       session_info$logged_in <- TRUE
       reactive_log_in_text('')
       removeModal()
     } else {
       message('---Incorrect user/password. Not logged in.')
+      # Update the sessions table
+      sesh <- tibble(user_email = liu,
+                     success = FALSE,
+                     start_time = Sys.time(),
+                     end_time = NA,
+                     web = grepl('ubuntu', getwd()))
+      con <- get_db_connection()
+      dbAppendTable(conn = con,
+                    name = 'sessions',
+                    value = sesh)
+      dbDisconnect(con)
+      session_info$logged_in <- TRUE
+      reactive_log_in_text('')
+      removeModal()
       session_info$logged_in <- FALSE
       removeModal()
       reactive_log_in_text(span('Incorrect user/password combo. Please try again.', style="color:red"))
