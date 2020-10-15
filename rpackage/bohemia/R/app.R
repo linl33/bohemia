@@ -1229,6 +1229,17 @@ app_server <- function(input, output, session) {
                 pd$end_time <- lubridate::as_datetime(pd$end_time)
                 pd$start_time <- lubridate::as_datetime(pd$start_time)
                 pd$time <- pd$end_time - pd$start_time
+                
+                if(co=='Mozambique'){
+                  daily_forms_fw <- 10
+                  weekly_forms_fw <- daily_forms_fw*5
+                  total_forms_fw <- 500
+                } else {
+                  daily_forms_fw <- 13
+                  weekly_forms_fw <- daily_forms_fw*5
+                  total_forms_fw <- 599
+                }
+                save(pd, file = 'fwt_temp.rda')
                 fwt <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   group_by(`FW ID` = wid,
@@ -1250,6 +1261,7 @@ app_server <- function(input, output, session) {
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `% complete daily` = `Forms`/daily_forms_fw,
                             `# of anomalies` = 0,
                             `# of errors` = 0)
                 fwt_weekly <- pd %>%
@@ -1260,6 +1272,7 @@ app_server <- function(input, output, session) {
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `% complete weekly` = `Forms`/weekly_forms_fw,
                             `# of anomalies` = 0,
                             `# of errors` = 0)
                 fwt_overall <-  pd %>%
@@ -1269,6 +1282,7 @@ app_server <- function(input, output, session) {
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `% complete total` = `Forms`/total_forms_fw,
                             `Daily work hours` = '(Pending feature)',
                             `# of anomalies` = 0,
                             `# of errors` = 0)
