@@ -12,6 +12,8 @@
 #' @import lubridate
 #' @import RPostgres
 #' @import yaml
+#' @import leafgl
+#' @import sf
 app_ui <- function(request) {
   options(scipen = '999')
   
@@ -1730,6 +1732,7 @@ app_server <- function(input, output, session) {
               # get enumerations and refusals data
               en = odk_data$data$enumerations
               rf = odk_data$data$refusals
+              # save(pd, en, rf, file = 'saved.RData')
               # save(en, file = 'enum.rda')
               # save(pd, file = 'pd_en.rda')
               # save(rf, file = 'refs.rda')
@@ -1738,41 +1741,132 @@ app_server <- function(input, output, session) {
               pd <- pd %>% dplyr::filter(hh_country == co) %>%
                 group_by(hh_id) %>%
                 summarise(num_mini = n(),
-                          last_date_mini = max(todays_date, na.rm=TRUE)) 
+                          last_date_mini = max(todays_date, na.rm=TRUE),
+                          loc = dplyr::first(hh_geo_location)) 
               rf <- rf %>% dplyr::filter(country == co) %>% 
                 group_by(hh_id, reason_no_participate) %>%
                 summarise(num_ref = n(),
-                          last_date_ref = max(todays_date, na.rm=TRUE)) 
+                          last_date_ref = max(todays_date, na.rm=TRUE),
+                          loc = dplyr::first(hh_geo_location)) 
               en <- en %>% dplyr::filter(country == co) %>% 
                 group_by(agregado) %>%
                 summarise(num_enum = n(),
-                          last_date_enum = max(todays_date, na.rm=TRUE)) 
+                          last_date_enum = max(todays_date, na.rm=TRUE),
+                          loc = dplyr::first(location_gps)) 
+              
+              # Extract locations
+              pd_locs <- extract_ll(pd$loc)
+              pd$lng_minicensus <- pd_locs$lng; pd$lat_minicensus <- pd_locs$lat; pd$loc <- NULL
+              en_locs <- extract_ll(en$loc)
+              en$lng_enumerations <- en_locs$lng; en$lat_enumerations <- en_locs$lat; en$loc <- NULL
+              rf_locs <- extract_ll(rf$loc)
+              rf$lng_refusals <- rf_locs$lng; rf$lat_refusals <- rf_locs$lat; rf$loc <- NULL
               
               # get list of all unique house ids
-              all_hh_ids <- tibble(hh_id = c(Reduce(union, list(pd$hh_id, rf$hh_id, en$agregado))))
+              all_hh_ids <- tibble(hh_id = sort(unique(c(pd$hh_id, rf$hh_id, en$agregado))))
               
               # join with rest of data
               dat <- left_join(all_hh_ids, pd)
               dat <- left_join(dat, en, by = c('hh_id'='agregado'))
               dat <- left_join(dat, rf)
               
+              # See if there is any geocoding for many houses
+              dat <- dat %>% mutate(any_geocode = !(is.na(lng_minicensus) &
+                                                      is.na(lng_enumerations) &
+                                                      is.na(lng_refusals))) %>%
+                # See if there is a minicensus without enumeration
+                mutate(minicensus_wo_enumeration = !is.na(last_date_enum) & is.na(last_date_mini)) %>%
+                # See if there is enumeration without minicensus
+                mutate(enumeration_wo_minicensus = is.na(last_date_enum) & !is.na(last_date_mini)) %>%
+                # Get average time between enumeration and minicensus
+                mutate(time_bw_enumeration_and_minicensus = as.numeric(last_date_mini - last_date_enum))
+              
+              # save(dat, file = '/tmp/dat.RData')
               # create summary stats off of dat
               sub_dat <- dat %>%
-                summarise(n_minicensus = sum(num_mini, na.rm = TRUE),
-                          n_enumerate = sum(num_enum, na.rm = TRUE),
-                          n_refusals = sum(num_ref, na.rm = TRUE),
-                          total_forms = nrow(all_hh_ids)) %>%
-                gather(key = 'key', value = 'value')
+                summarise(`Minicensus forms collected` = sum(num_mini, na.rm = TRUE),
+                          `Enumerations` = sum(num_enum, na.rm = TRUE),
+                          `Refusals` = sum(num_ref, na.rm = TRUE),
+                          `Unique households` = nrow(all_hh_ids),
+                          `Households geocoded` = length(which(any_geocode)),
+                          `Avg days between enumeration and minicensus` = mean(time_bw_enumeration_and_minicensus, na.rm = TRUE),
+                          `Households enumerated but not minicensed` = length(which(enumeration_wo_minicensus))) %>%
+                mutate(`%` = `Minicensus forms collected` / `Enumerations` * 100)
               
-           
+              # Get raw data table for display
+              dat <- dat %>%
+                mutate(lng = ifelse(is.na(lng_minicensus),
+                                    ifelse(is.na(lng_enumerations),
+                                           ifelse(is.na(lng_refusals),
+                                                  NA,
+                                                  lng_refusals),
+                                           lng_enumerations),
+                                    lng_minicensus)) %>%
+                mutate(lat = ifelse(is.na(lat_minicensus),
+                                    ifelse(is.na(lat_enumerations),
+                                           ifelse(is.na(lat_refusals),
+                                                  NA,
+                                                  lat_refusals),
+                                           lat_enumerations),
+                                    lat_minicensus)) %>%
+                dplyr::select(hh_id, num_mini, last_date_mini,
+                              num_enum, last_date_enum,
+                              num_ref, last_date_ref, reason_no_participate,
+                              lng, lat)
+              
+              dat_leaf <- leaflet() %>%
+                addProviderTiles(provider = providers$Esri.WorldImagery) 
+              # # Add markers
+              # icon_enumerations <- makeAwesomeIcon(icon= 'flag', markerColor = 'blue', iconColor = 'black')
+              # icon_refusals <- makeAwesomeIcon(icon = 'flag', markerColor = 'red', library='fa', iconColor = 'black')
+              # icon_minicensus <- makeAwesomeIcon(icon = 'home', markerColor = 'green', library='ion')
+              
+              ref_geo <- dat %>% filter(num_ref > 0 & !is.na(lng))
+              en_geo <- dat %>% filter(num_enum > 0 & !is.na(lng))
+              mc_geo <- dat %>% filter(num_mini > 0 & !is.na(lng))
+              if(nrow(ref_geo) > 0){
+                pts = st_as_sf(data.frame(ref_geo), coords = c("lng", "lat"), crs = 4326)
+                dat_leaf <- dat_leaf %>%
+                  addGlPoints(data = pts, fillColor = 'red')
+                  # addAwesomeMarkers(data = ref_geo,
+                  #                   label = ref_geo$hh_id,
+                  #                   labelOptions = labelOptions(noHide = TRUE),
+                  #                   icon = icon_refusals)
+              }
+              if(nrow(en_geo) > 0){
+                pts = st_as_sf(data.frame(en_geo), coords = c("lng", "lat"), crs = 4326)
+                dat_leaf <- dat_leaf %>%
+                  addGlPoints(data = pts, fillColor = 'blue')
+                  # addAwesomeMarkers(data = en_geo,
+                  #                   label = en_geo$hh_id,
+                  #                   labelOptions = labelOptions(noHide = TRUE),
+                  #                   icon = icon_enumerations)
+              }
+              if(nrow(mc_geo) > 0){
+                pts = st_as_sf(data.frame(mc_geo), coords = c("lng", "lat"), crs = 4326)
+                dat_leaf <- dat_leaf %>%
+                  addGlPoints(data = pts, fillColor = 'green')
+                  # addAwesomeMarkers(data = mc_geo,
+                  #                   label = mc_geo$hh_id,
+                  #                   labelOptions = labelOptions(noHide = TRUE),
+                  #                   icon = icon_minicensus)
+              }
+              
+              
+              
               fluidPage(
                 fluidRow(
                   column(12, align = 'center',
-                         h2('Summary data'),
-                         prettify(sub_dat),
+                         h2('Aggregated enrollment data'),
+                         p('The below table shows a summary of enrollment'),
+                         prettify(sub_dat, download_options = TRUE),
                          br(),
-                         h2('Raw data'),
-                         prettify(dat)),
+                         h2('Enrollment map'),
+                         p('Under construction'),
+                         leafletOutput('dat_leaf'),
+                         h2('De-aggregated enrollment data'),
+                         p('The below table shows the status of each household'),
+                         prettify(dat, download_options = TRUE)),
                   
                          
                 )
