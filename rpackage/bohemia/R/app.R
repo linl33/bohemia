@@ -1821,31 +1821,37 @@ app_server <- function(input, output, session) {
               # icon_refusals <- makeAwesomeIcon(icon = 'flag', markerColor = 'red', library='fa', iconColor = 'black')
               # icon_minicensus <- makeAwesomeIcon(icon = 'home', markerColor = 'green', library='ion')
               
-              ref_geo <- dat %>% filter(num_ref > 0 & !is.na(lng))
-              en_geo <- dat %>% filter(num_enum > 0 & !is.na(lng))
-              mc_geo <- dat %>% filter(num_mini > 0 & !is.na(lng))
+              ref_geo <- dat %>% filter(num_ref > 0 & !is.na(lng)) %>% filter(lng >0, lat < 0)
+              en_geo <- dat %>% filter(num_enum > 0 & !is.na(lng)) %>% filter(lng >0, lat < 0)
+              mc_geo <- dat %>% filter(num_mini > 0 & !is.na(lng)) %>% filter(lng >0, lat < 0)
               if(nrow(ref_geo) > 0){
                 pts = st_as_sf(data.frame(ref_geo), coords = c("lng", "lat"), crs = 4326)
                 dat_leaf <- dat_leaf %>%
-                  addGlPoints(data = pts, fillColor = 'red')
+                  addGlPoints(data = pts, fillColor = 'red', group = "pts") %>%
+                  setView(lng = 35.7, lat = 18, zoom = 4) %>% 
+                  addLayersControl(overlayGroups = "pts")
                   # addAwesomeMarkers(data = ref_geo,
                   #                   label = ref_geo$hh_id,
                   #                   labelOptions = labelOptions(noHide = TRUE),
                   #                   icon = icon_refusals)
               }
               if(nrow(en_geo) > 0){
-                pts = st_as_sf(data.frame(en_geo), coords = c("lng", "lat"), crs = 4326)
+                pts2 = st_as_sf(data.frame(en_geo), coords = c("lng", "lat"), crs = 4326)
                 dat_leaf <- dat_leaf %>%
-                  addGlPoints(data = pts, fillColor = 'blue')
+                  addGlPoints(data = pts2, fillColor = 'blue', group = "pts2") %>%
+                  setView(lng = 35.7, lat = 18, zoom = 4) %>% 
+                  addLayersControl(overlayGroups = "pts2")
                   # addAwesomeMarkers(data = en_geo,
                   #                   label = en_geo$hh_id,
                   #                   labelOptions = labelOptions(noHide = TRUE),
                   #                   icon = icon_enumerations)
               }
               if(nrow(mc_geo) > 0){
-                pts = st_as_sf(data.frame(mc_geo), coords = c("lng", "lat"), crs = 4326)
+                pts3 = st_as_sf(data.frame(mc_geo), coords = c("lng", "lat"), crs = 4326)
                 dat_leaf <- dat_leaf %>%
-                  addGlPoints(data = pts, fillColor = 'green')
+                  addGlPoints(data = pts, fillColor = 'green', group = "pts3") %>%
+                  setView(lng = 35.7, lat = 18, zoom = 4) %>% 
+                  addLayersControl(overlayGroups = "pts3")
                   # addAwesomeMarkers(data = mc_geo,
                   #                   label = mc_geo$hh_id,
                   #                   labelOptions = labelOptions(noHide = TRUE),
@@ -1863,7 +1869,7 @@ app_server <- function(input, output, session) {
                          br(),
                          h2('Enrollment map'),
                          p('Under construction'),
-                         leafletOutput('dat_leaf'),
+                         leafglOutput('dat_leaf'),
                          h2('De-aggregated enrollment data'),
                          p('The below table shows the status of each household'),
                          prettify(dat, download_options = TRUE)),
