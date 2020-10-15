@@ -467,7 +467,8 @@ app_server <- function(input, output, session) {
       # save(out, file = '/tmp/out.RData')
       suppressMessages({
         anomalies <- identify_anomalies_and_errors(data = out,
-                                                   anomalies_registry = anomaly_and_error_registry)
+                                                   anomalies_registry = anomaly_and_error_registry,
+                                                   locs = locations)
       })
       
       
@@ -1631,6 +1632,8 @@ app_server <- function(input, output, session) {
             fluidRow(HTML(knitr::kable(this_row, 'html'))),
             fluidRow(h3('The fix:')),
             fluidRow(textAreaInput('fix_details', 'Fix details:')),
+            fluidRow(textAreaInput('fix_source', 'Source of info (ie, fieldworker ID/name, document number, etc.):')),
+            fluidRow(textAreaInput('fix_method', 'Method of resolution (ie, phone call, self-resolved, etc.):')),
             fluidRow(column(12, align = 'center',
                             actionButton('send_fix',
                                          'Send fix')))
@@ -1676,7 +1679,7 @@ app_server <- function(input, output, session) {
     # Get the fix row
     this_row <- action[sr,]
     # Get the fix text
-    fix_details <- input$fix_details
+    fix_details <- paste0(input$fix_details, ' | ', input$fix_source, input$fix_method)
     fix <-
       tibble(id = this_row$id,
              action = fix_details,
@@ -2213,13 +2216,16 @@ app_server <- function(input, output, session) {
     }
     joined <- dplyr::left_join(action, corrections)
     # joined <- joined %>% filter(action != '')
-    DT::datatable(joined,
-                  rownames = NULL,
-                  filter = 'bottom',
-                  options = list(
-                    paging =TRUE,
-                    pageLength =  nrow(joined) 
-                  ))
+    # DT::datatable(joined,
+    #               rownames = NULL,
+    #               filter = 'bottom',
+    #               options = list(
+    #                 paging =TRUE,
+    #                 pageLength =  nrow(joined) 
+    #               ))
+    prettify(joined, 
+             download_options = TRUE,
+             nrows = nrow(joined))
   })
   
   
