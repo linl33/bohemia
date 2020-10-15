@@ -6,6 +6,37 @@ The Bohemia data pipeline consists of a semi-structured "data cleaning" process 
 
 Note: this document only refers to "in-app" anomalies and errors (ie, corrections to the database _after_ data has already been collected). "In-form" warnings and constraints are a different process.
 
+## Schema
+
+The "data cleaning" process can be understood visually below:
+
+![](img/data_cleaning.png)
+
+# Operational elements
+
+## Processes
+
+The data cleaning process consists of the following processes:
+
+- Automatically identify anomalies and errors on raw data
+- Manually submit "resolutions" (fixes) to these anomalies and errors  
+- Manually write SQL code to implement resolutions  
+- Run SQL code so as to generate "clean" data  
+- Infinitely repeat process (but now running the anomaly and error identification code on the "cleaned" rather than raw data)
+
+## Roles  
+Operationally, the data cleaning process requires input from at least the following two roles:
+
+1. Site data manager: receives anomaly and error notifications in the "Alerts" section of the app, and submits the resolution ("fix") for those anomalies/errors  
+2. Databrew: receives fix requests from site data manager, and "translates" those requests to SQL operations which modify the underlying data
+
+The site data manager will sometimes be able to resolve an alert on his own. For example, he may recognize that a submission has been flagged for having too many household members, but he knows that this particular submission was just a technical test he carried out (and therefore submits the modification request of "delete"). In many cases, however, he will require other roles in order to properly carry out function 1. Specifically, he'll need to interact with:
+- Supervisors (in order to request confirmations / corrections regarding an erroneous or anomalous event)  
+- Fieldworkers (in order to ask for confirmations / corrections regarding an erroneous or anomalous event)  
+- Databrew (in order to request, if applicable, supplementary data on the error/anomaly)
+
+# Engineering elements
+
 ## Registry of anomalies and errors
 
 - A registry of anomalies and errors exists in spreadsheet format [HERE](https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0).
