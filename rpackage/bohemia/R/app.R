@@ -752,10 +752,22 @@ app_server <- function(input, output, session) {
                           `Deaths reported` = n()) %>%
                 mutate(`% VA forms completed` = round(`VA forms collected` /
                                                         `Deaths reported` * 100))
-
+              
+              # save(va_progress_geo, file = 'va_p_geo.rda')
+              if(co == 'Mozambique'){
+                if(grouper=='district'){
+                  names(va_progress_geo)[1] <- 'Distrito'
+                } else if(grouper=='ward'){
+                  names(va_progress_geo)[1] <- 'Posto administrativo/localidade'
+                } else if (grouper=='hamlet'){
+                  names(va_progress_geo)[1] <- 'Bairro'
+                } else if(grouper =='village'){
+                  names(va_progress_geo)[1] <- 'Povaodo'
+                }
+              }
               fluidPage(
                 fluidRow(
-                  h2(paste0('Progress by ', grouper)),
+                  h2(paste0('Progress by ',  names(va_progress_geo)[1])),
                   prettify(va_progress_geo)
                 )
               )
@@ -1192,38 +1204,46 @@ app_server <- function(input, output, session) {
                 fwt <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   group_by(`FW ID` = wid,
-                           `FW Supervisor` = supervisor) %>%
+                           `Supervisor` = supervisor) %>%
                   mutate(nd = as.numeric(max(todays_date, na.rm = TRUE) - min(todays_date, na.rm = TRUE) + 1)) %>%
                   ungroup %>%
                   group_by(`FW ID`,
-                           `FW Supervisor`) %>%
+                           `Supervisor`) %>%
                   summarise(`Daily forms` = round(n() / dplyr::first(nd), digits = 1),
                             `Weekly forms` = round(`Daily forms` * 7, digits = 1),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units'))) 
+                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `# of anomalies` = 0,
+                            `# of errors` = 0) 
                 fwt_daily <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   filter(end_time >= (Sys.time() - lubridate::hours(24))) %>%
                   group_by(`FW ID` = wid,
-                           `FW Supervisor` = supervisor) %>%
+                           `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')))
+                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `# of anomalies` = 0,
+                            `# of errors` = 0)
                 fwt_weekly <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   filter(end_time >= (Sys.time() - lubridate::hours(24*7))) %>%
                   group_by(`FW ID` = wid,
-                           `FW Supervisor` = supervisor) %>%
+                           `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')))
+                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `# of anomalies` = 0,
+                            `# of errors` = 0)
                 fwt_overall <-  pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   group_by(`FW ID` = wid,
-                           `FW Supervisor` = supervisor) %>%
+                           `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
-                            `Daily work hours` = '(Pending feature)')
+                            `Daily work hours` = '(Pending feature)',
+                            `# of anomalies` = 0,
+                            `# of errors` = 0)
                 
                 
                 
