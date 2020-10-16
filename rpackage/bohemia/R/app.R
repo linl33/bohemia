@@ -394,7 +394,7 @@ app_server <- function(input, output, session) {
                      success = TRUE,
                      start_time = Sys.time(),
                      end_time = NA,
-                     web = grepl('ubuntu', getwd()))
+                     web = grepl('/srv/shiny-server', getwd(), fixed = TRUE))
       con <- get_db_connection()
       dbAppendTable(conn = con,
                     name = 'sessions',
@@ -1753,6 +1753,7 @@ app_server <- function(input, output, session) {
               # save(en, file = 'enum.rda')
               # save(pd, file = 'pd_en.rda')
               # save(rf, file = 'refs.rda')
+              # save(co, pd, en, rf, file = 'joe.RData')
 
               # subset by country
               pd <- pd %>% dplyr::filter(hh_country == co) %>%
@@ -1802,13 +1803,15 @@ app_server <- function(input, output, session) {
               # create summary stats off of dat
               sub_dat <- dat %>%
                 summarise(`Minicensus forms collected` = sum(num_mini, na.rm = TRUE),
-                          `Enumerations` = sum(num_enum, na.rm = TRUE),
+                          `Unique minicensus HH IDs` = length(which(!is.na(last_date_mini))),
+                          `Enumeration forms collected` = sum(num_enum, na.rm = TRUE),
+                          `Unique enumeration HH IDs` = length(which(!is.na(last_date_enum))),
                           `Refusals` = sum(num_ref, na.rm = TRUE),
                           `Unique households` = nrow(all_hh_ids),
                           `Households geocoded` = length(which(any_geocode)),
                           `Avg days between enumeration and minicensus` = mean(time_bw_enumeration_and_minicensus, na.rm = TRUE),
                           `Households enumerated but not minicensed` = length(which(enumeration_wo_minicensus))) %>%
-                mutate(`%` = `Minicensus forms collected` / `Enumerations` * 100)
+                mutate(`%` = `Unique minicensus HH IDs` / `Unique enumeration HH IDs` * 100)
               
               # Get raw data table for display
               dat <- dat %>%
@@ -1826,55 +1829,74 @@ app_server <- function(input, output, session) {
                                                   lat_refusals),
                                            lat_enumerations),
                                     lat_minicensus)) %>%
-                dplyr::select(hh_id, num_mini, last_date_mini,
+                mutate(status = ifelse(!is.na(last_date_ref),
+                                       'Refused',
+                                       ifelse(!is.na(last_date_mini),
+                                              'Minicensed',
+                                       ifelse(!is.na(last_date_enum),
+                                              'Enumerated',NA)))) %>%
+                dplyr::select(hh_id, status, num_mini, last_date_mini,
                               num_enum, last_date_enum,
                               num_ref, last_date_ref, reason_no_participate,
-                              lng, lat)
+                              lng, lat) 
               
+              geo_dat <- dat %>%
+                filter(!is.na(lng)) %>%
+                filter(lng > 1,
+                       lat < -1)
+              
+              pts = st_as_sf(data.frame(geo_dat), coords = c("lng", "lat"), crs = 4326)
               dat_leaf <- leaflet() %>%
-                addProviderTiles(provider = providers$Esri.WorldImagery) 
+                addProviderTiles(provider = providers$Esri.WorldImagery) %>%
+                addGlPoints(data = pts,
+                            # fillColor = 'red',
+                            fillColor = pts$status,
+                            popup = pts,
+                            group = "pts") #%>%
+                # setView(lng = 35.7, lat = 18, zoom = 4) %>%
+                # addLayersControl(overlayGroups = "pts")
               # # Add markers
               # icon_enumerations <- makeAwesomeIcon(icon= 'flag', markerColor = 'blue', iconColor = 'black')
               # icon_refusals <- makeAwesomeIcon(icon = 'flag', markerColor = 'red', library='fa', iconColor = 'black')
               # icon_minicensus <- makeAwesomeIcon(icon = 'home', markerColor = 'green', library='ion')
               
-              ref_geo <- dat %>% filter(num_ref > 0 & !is.na(lng)) %>% filter(lng >0, lat < 0)
-              en_geo <- dat %>% filter(num_enum > 0 & !is.na(lng)) %>% filter(lng >0, lat < 0)
-              mc_geo <- dat %>% filter(num_mini > 0 & !is.na(lng)) %>% filter(lng >0, lat < 0)
-              if(nrow(ref_geo) > 0){
-                pts = st_as_sf(data.frame(ref_geo), coords = c("lng", "lat"), crs = 4326)
-                dat_leaf <- dat_leaf %>%
-                  addGlPoints(data = pts, fillColor = 'red', group = "pts") %>%
-                  setView(lng = 35.7, lat = 18, zoom = 4) %>% 
-                  addLayersControl(overlayGroups = "pts")
-                  # addAwesomeMarkers(data = ref_geo,
-                  #                   label = ref_geo$hh_id,
-                  #                   labelOptions = labelOptions(noHide = TRUE),
-                  #                   icon = icon_refusals)
-              }
-              if(nrow(en_geo) > 0){
-                pts2 = st_as_sf(data.frame(en_geo), coords = c("lng", "lat"), crs = 4326)
-                dat_leaf <- dat_leaf %>%
-                  addGlPoints(data = pts2, fillColor = 'blue', group = "pts2") %>%
-                  setView(lng = 35.7, lat = 18, zoom = 4) %>% 
-                  addLayersControl(overlayGroups = "pts2")
-                  # addAwesomeMarkers(data = en_geo,
-                  #                   label = en_geo$hh_id,
-                  #                   labelOptions = labelOptions(noHide = TRUE),
-                  #                   icon = icon_enumerations)
-              }
-              if(nrow(mc_geo) > 0){
-                pts3 = st_as_sf(data.frame(mc_geo), coords = c("lng", "lat"), crs = 4326)
-                dat_leaf <- dat_leaf %>%
-                  addGlPoints(data = pts, fillColor = 'green', group = "pts3") %>%
-                  setView(lng = 35.7, lat = 18, zoom = 4) %>% 
-                  addLayersControl(overlayGroups = "pts3")
-                  # addAwesomeMarkers(data = mc_geo,
-                  #                   label = mc_geo$hh_id,
-                  #                   labelOptions = labelOptions(noHide = TRUE),
-                  #                   icon = icon_minicensus)
-              }
-              
+              # ref_geo <- geo_dat %>% filter(status == 'Refused')
+              # en_geo <- geo_dat %>% filter(status == 'Enumerated')
+              # mc_geo <- geo_dat %>% filter(status == 'Minicensed')
+              # 
+              # if(nrow(ref_geo) > 0){
+              #   pts = st_as_sf(data.frame(ref_geo), coords = c("lng", "lat"), crs = 4326)
+              #   dat_leaf <- dat_leaf %>%
+              #     addGlPoints(data = pts, fillColor = 'red', group = "pts")
+              #     # addAwesomeMarkers(data = ref_geo,
+              #     #                   label = ref_geo$hh_id,
+              #     #                   labelOptions = labelOptions(noHide = TRUE),
+              #     #                   icon = icon_refusals)
+              # }
+              # if(nrow(en_geo) > 0){
+              #   pts2 = st_as_sf(data.frame(en_geo), coords = c("lng", "lat"), crs = 4326)
+              #   dat_leaf <- dat_leaf %>%
+              #     addGlPoints(data = pts2, fillColor = 'blue', group = "pts2") 
+              #     # addAwesomeMarkers(data = en_geo,
+              #     #                   label = en_geo$hh_id,
+              #     #                   labelOptions = labelOptions(noHide = TRUE),
+              #     #                   icon = icon_enumerations)
+              # }
+              # if(nrow(mc_geo) > 0){
+              #   pts3 = st_as_sf(data.frame(mc_geo), coords = c("lng", "lat"), crs = 4326)
+              #   dat_leaf <- dat_leaf %>%
+              #     addGlPoints(data = pts, fillColor = 'green', group = "pts3") 
+              #     # addAwesomeMarkers(data = mc_geo,
+              #     #                   label = mc_geo$hh_id,
+              #     #                   labelOptions = labelOptions(noHide = TRUE),
+              #     #                   icon = icon_minicensus)
+              # }
+              # dat_leaf <- dat_leaf %>%
+              #   addLayersControl(overlayGroups = "pts3")
+              output$dat_leaf_output <- renderLeafgl({
+                dat_leaf
+              },
+              height = 650)
               
               
               fluidPage(
@@ -1886,7 +1908,7 @@ app_server <- function(input, output, session) {
                          br(),
                          h2('Enrollment map'),
                          p('Under construction'),
-                         leafglOutput('dat_leaf'),
+                         leafglOutput('dat_leaf_output'),
                          h2('De-aggregated enrollment data'),
                          p('The below table shows the status of each household'),
                          prettify(dat, download_options = TRUE)),

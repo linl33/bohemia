@@ -117,8 +117,8 @@ extract_ll <- function(x){
   lngs <- lats <- c()
   for(i in 1:length(x)){
     y <- x[i]
-    lng <- unlist(lapply(strsplit(y[1], ' '), function(z){z[1]}))
-    lat <- unlist(lapply(strsplit(y[1], ' '), function(z){z[2]}))
+    lat <- unlist(lapply(strsplit(y[1], ' '), function(z){z[1]}))
+    lng <- unlist(lapply(strsplit(y[1], ' '), function(z){z[2]}))
     lngs[i] <- lng; lats[i] <- lat
   }
   
