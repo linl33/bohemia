@@ -990,6 +990,7 @@ app_server <- function(input, output, session) {
                 fid_choices <- as.numeric(y)
                 # names(fid_choices) <- x
                 # fid_choices <- c(x = y)
+                # save(pd, file='pd_tab.rda')
                 
                 # Some pre-processing
                 dr <- as.Date(range(pd$todays_date, na.rm = TRUE))
@@ -998,7 +999,6 @@ app_server <- function(input, output, session) {
                 # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
                 target <- ifelse(iso == 'TZA', 46105, 30467)
                 
-                # save(pd, file='pd_tab.rda')
                 # Create table of overview
                 overview <- pd %>%
                   summarise(Type = 'Observed',
@@ -1008,7 +1008,7 @@ app_server <- function(input, output, session) {
                             `Total forms/FW` = round(nrow(pd) / `No. FWs`, digits = 1),
                             `Total Daily forms/country` = round(nrow(pd) / n_days, digits = 1),
                             `Total Weekly forms/country` = round(`Total Daily forms/country` * 7, digits = 1),
-                            `Overall target/country` = target,
+                            `Overall target/country` = nrow(pd),
                             `# Total weeks` = round(`Overall target/country` / `Total Weekly forms/country`, digits = 1)) %>%
                   mutate(`Estimated date` = (`# Total weeks` * 7) + as.Date(dr[1]))
                 # # Get a second row for targets
@@ -1072,7 +1072,7 @@ app_server <- function(input, output, session) {
                          `Total forms/FW` = round(overview$`Total forms/FW`/second_row$`Total forms/FW`,2) * 100,
                          `Total Daily forms/country` = round(overview$`Total Daily forms/country`/second_row$`Total Daily forms/country`,2) * 100,
                          `Total Weekly forms/country` = round(overview$`Total Weekly forms/country`/second_row$`Total Weekly forms/country`,2) * 100,
-                         `Overall target/country` = ' ',
+                         `Overall target/country` = round(overview$`Overall target/country`/total_forms,2)*100,
                          `# Total weeks` = ' ', #round(overview$`# Total weeks`/second_row$`# Total weeks`,2),
                          `Estimated date` = '')
                 # save(pd, overview,target_helper, second_row, file = '/tmp/overview.RData')
@@ -1229,6 +1229,17 @@ app_server <- function(input, output, session) {
                 pd$end_time <- lubridate::as_datetime(pd$end_time)
                 pd$start_time <- lubridate::as_datetime(pd$start_time)
                 pd$time <- pd$end_time - pd$start_time
+                
+                if(co=='Mozambique'){
+                  daily_forms_fw <- 10
+                  weekly_forms_fw <- daily_forms_fw*5
+                  total_forms_fw <- 500
+                } else {
+                  daily_forms_fw <- 13
+                  weekly_forms_fw <- daily_forms_fw*5
+                  total_forms_fw <- 599
+                }
+                # save(pd, file = 'fwt_temp.rda')
                 fwt <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   group_by(`FW ID` = wid,
@@ -1250,6 +1261,7 @@ app_server <- function(input, output, session) {
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `% complete daily` = `Forms`/daily_forms_fw,
                             `# of anomalies` = 0,
                             `# of errors` = 0)
                 fwt_weekly <- pd %>%
@@ -1260,6 +1272,7 @@ app_server <- function(input, output, session) {
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `% complete weekly` = `Forms`/weekly_forms_fw,
                             `# of anomalies` = 0,
                             `# of errors` = 0)
                 fwt_overall <-  pd %>%
@@ -1269,6 +1282,7 @@ app_server <- function(input, output, session) {
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `% complete total` = `Forms`/total_forms_fw,
                             `Daily work hours` = '(Pending feature)',
                             `# of anomalies` = 0,
                             `# of errors` = 0)
