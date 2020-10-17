@@ -321,53 +321,7 @@ app_server <- function(input, output, session) {
                                  anomalies = data.frame(),
                                  fieldworkers = default_fieldworkers)
   odk_data <- reactiveValues(data = NULL)
-  load_odk_data <- function(the_country = 'Mozambique'){
-    
-    creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-    users <- yaml::yaml.load_file('credentials/users.yaml')
-    psql_end_point = creds$endpoint
-    psql_user = creds$psql_master_username
-    psql_pass = creds$psql_master_password
-    drv <- RPostgres::Postgres()
-    con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
-                     port=5432,
-                     user=psql_user, password=psql_pass)
-    # Read in data
-    data <- list()
-    main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where hh_country='", the_country, "'"))
-    data$minicensus_main <- main
-    ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
-    
-    repeat_names <- c("minicensus_people", 
-                      "minicensus_repeat_death_info",
-                      "minicensus_repeat_hh_sub", 
-                      "minicensus_repeat_mosquito_net", 
-                      "minicensus_repeat_water")
-    for(i in 1:length(repeat_names)){
-      this_name <- repeat_names[i]
-      this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
-      data[[this_name]] <- this_data
-    }
-    # Read in enumerations data
-    enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
-    data$enumerations <- enumerations
-    
-    # # Read in va data
-    # va <- dbGetQuery(con, "SELECT * FROM clean_va")
-    # data$va <- va
-    # 
-    # Read in refusals data
-    refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
-    data$refusals <- refusals
-    
-    # Read in corrections data
-    corrections <- dbGetQuery(con, "SELECT * FROM corrections")
-    data$corrections <- corrections
-    
-    dbDisconnect(con)
-    
-    return(data)
-  }
+  
   
   # Text for incorrect log-in, etc.
   reactive_log_in_text <- reactiveVal(value = '')
