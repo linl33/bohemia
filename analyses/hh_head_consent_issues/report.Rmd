@@ -1,0 +1,304 @@
+---
+title: "Household head consent issues"
+subtitle: "Mozambique"
+author: "www.databrew.cc"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html:
+    toc: true
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+```
+
+
+```{r include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+
+```{r}
+# Libraries
+library(Hmisc)
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+library(haven)
+library(bohemia)
+library(sp)
+library(ggthemes)
+library(ggrepel)
+```
+
+
+# Context
+
+In collection of the minicensus so far, there have been cases of someone other than the household head being the "person answering the questions". We have data on this.
+
+We do _not_ have data on whether this person is the same person who signed the consent form. However, given that the former is likely a proxy for the latter, we'll do an analysis on who is the person answering the question.
+
+## Definitions
+
+"Non-compliance" means that the "respondent" (ie, the person who is indicated as answering the questions) is not the household head. It should be noted that this does not necessarily mean technical non-compliance; technical non-compliance can only be identified via manual review of ICFs^[We consider "technical non-compliance" to mean that the person who signed the consent form was not the head of household].
+
+
+## Descriptive summary 
+
+```{r}
+if('data.RData' %in% dir()){
+  load('data.RData')
+} else {
+  data <- load_odk_data(the_country = 'Mozambique',
+                        credentials_path = '../../credentials/credentials.yaml',
+                        users_path = '../../credentials/users.yaml')
+  save(data, file = 'data.RData')
+}
+```
+
+The below table shows who the "person answering the questions" was (in terms of household head vs one of the household substitutes vs other):
+
+```{r}
+pd <- data$minicensus_main %>%
+  mutate(hh_head_id = as.numeric(hh_head_id)) %>%
+  mutate(respondent_id = as.numeric(respondent_id)) %>%
+  dplyr::select(instance_id, hh_head_id,
+                n_subs = hh_sub_size,
+                n_residents = hh_member_num_residents,
+                respondent_id,
+                n_non_residents = hh_member_num_non_residents,
+                todays_date) %>%
+  mutate(head_responds = respondent_id == hh_head_id) 
+# Get info on the subs
+subs_info <- data$minicensus_repeat_hh_sub %>%
+  left_join(pd %>% dplyr::select(instance_id, respondent_id)) %>%
+  group_by(instance_id) %>%
+  summarise(sub_responds = any(respondent_id == hh_sub_id))
+# Join information on heads so subs
+joined <- left_join(pd, subs_info) %>%
+  mutate(sub_responds = ifelse(is.na(sub_responds), FALSE, sub_responds)) %>%
+  mutate(neither_sub_nor_head = !sub_responds & !head_responds) 
+
+# Get instances of both people responding
+both <- joined %>% filter(sub_responds, head_responds)
+weird <- joined %>% 
+  filter(is.na(neither_sub_nor_head))
+  # filter(!sub_responds, !head_responds, !neither_sub_nor_head)
+
+joined %>% summarise(`Start` = min(todays_date),
+            `End` = max(todays_date),
+            `Forms` = n(),
+            `Head answered questions` = length(which(head_responds)),
+            `Sub answered questions` = length(which(sub_responds & !head_responds)),
+            `Neither sub nor head` = length(which(neither_sub_nor_head))) %>%
+  kable()
+```
+
+
+## Non-compliance by date
+
+```{r}
+joined %>% 
+  group_by(date = todays_date) %>% 
+  summarise(`Forms collected` = n(),
+            `Head answered questions` = length(which(head_responds)),
+            `Sub answered questions` = length(which(sub_responds & !head_responds)),
+            `Neither sub nor head` = length(which(neither_sub_nor_head))) %>%
+  mutate(`% Head` = round(`Head answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Sub` = round(`Sub answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Other` = round(`Neither sub nor head` / `Forms collected` * 100, digits = 2)) %>% 
+  kable
+```
+
+
+# Non-compliance by geography
+
+## Non-compliance by Ward
+
+```{r}
+x <- joined %>% 
+  left_join(data$minicensus_main %>% dplyr::select(instance_id,
+                                                   `Ward` = hh_ward)) %>%
+  group_by(Ward) %>% 
+  summarise(`Forms collected` = n(),
+            `Head answered questions` = length(which(head_responds)),
+            `Sub answered questions` = length(which(sub_responds & !head_responds)),
+            `Neither sub nor head` = length(which(neither_sub_nor_head))) %>%
+  mutate(`% Head` = round(`Head answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Sub` = round(`Sub answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Other` = round(`Neither sub nor head` / `Forms collected` * 100, digits = 2))
+prettify(x, nrows = nrow(x),
+         download_options = TRUE)
+
+```
+
+
+
+## Non-compliance by Village
+
+```{r}
+x <- joined %>% 
+  left_join(data$minicensus_main %>% dplyr::select(instance_id, 
+                                                   `Village` = hh_village, 
+                                                   `Ward` = hh_ward)) %>%
+  group_by(Ward, Village) %>% 
+  summarise(`Forms collected` = n(),
+            `Head answered questions` = length(which(head_responds)),
+            `Sub answered questions` = length(which(sub_responds & !head_responds)),
+            `Neither sub nor head` = length(which(neither_sub_nor_head))) %>%
+  mutate(`% Head` = round(`Head answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Sub` = round(`Sub answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Other` = round(`Neither sub nor head` / `Forms collected` * 100, digits = 2)) 
+
+prettify(x, nrows = nrow(x),
+         download_options = TRUE)
+```
+
+
+
+## Non-compliance by Hamlet
+
+
+```{r}
+x <- joined %>% 
+  left_join(data$minicensus_main %>% dplyr::select(instance_id, Hamlet = hh_hamlet, 
+                                                   `Code` = hh_hamlet_code, 
+                                                   `Village` = hh_village, 
+                                                   `Ward` = hh_ward)) %>%
+  group_by(Ward, Village, Hamlet, Code) %>% 
+  summarise(`Forms collected` = n(),
+            `Head answered questions` = length(which(head_responds)),
+            `Sub answered questions` = length(which(sub_responds & !head_responds)),
+            `Neither sub nor head` = length(which(neither_sub_nor_head))) %>%
+  mutate(`% Head` = round(`Head answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Sub` = round(`Sub answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Other` = round(`Neither sub nor head` / `Forms collected` * 100, digits = 2)) 
+```
+
+```{r}
+prettify(x, nrows = nrow(x),
+         download_options = TRUE)
+```
+
+# Non-compliance by fieldworker
+
+The below table shows non-compliance by fieldworker.^[Fieldworker roster is available at https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130]
+
+```{r}
+if('fids.RData' %in% dir()){
+  load('fids.RData')  
+} else {
+  fids <- gsheet::gsheet2tbl(url = 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130')
+  # Keep just MOZ
+  fids <- fids %>% filter(bohemia_id >= 301,
+                          bohemia_id <= 600)
+  save(fids, file = 'fids.RData')
+}
+x <- joined %>% 
+  left_join(data$minicensus_main %>% dplyr::select(instance_id, Hamlet = hh_hamlet, 
+                                                   `Code` = hh_hamlet_code, 
+                                                   `Village` = hh_village, 
+                                                   `Ward` = hh_ward,
+                                                   `Fieldworker` = wid)) %>%
+  left_join(fids %>% dplyr::select(`Fieldworker` = bohemia_id,
+                                   first_name,
+                                   last_name, 
+                                   Supervisor = supervisor)) %>%
+  mutate(`FW Name` = ifelse(!is.na(last_name),
+                            paste0(first_name, ' ', last_name),
+                            NA)) %>%
+  mutate(FW = Fieldworker) %>%
+  group_by(FW, `FW Name`, Supervisor) %>% 
+  summarise(`Forms collected` = n(),
+            `Head answered questions` = length(which(head_responds)),
+            `Sub answered questions` = length(which(sub_responds & !head_responds)),
+            `Neither sub nor head` = length(which(neither_sub_nor_head))) %>%
+  mutate(`% Head` = round(`Head answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Sub` = round(`Sub answered questions` / `Forms collected` * 100, digits = 2)) %>% 
+  mutate(`% Other` = round(`Neither sub nor head` / `Forms collected` * 100, digits = 2)) %>%
+  mutate(`FW Name` = ifelse(is.na(`FW Name`),
+                            '(Invalid FW ID for MOZ)',
+                            `FW Name`))
+
+prettify(x, nrows = nrow(x),
+         download_options = TRUE)
+```
+
+# Non-compliance map
+
+The below shows a color-code map of compliance.^[Purple indicates "full compliance" - head of household answered the questions; Yellow indicates "partial compliance" - a household head substitute responded; Light blue indicates "full non-compliance" - someone other than household head or substitute answered the questions.] Click on any data to get specific details on that house.
+
+```{r}
+library(leaflet)
+library(leafgl)
+library(sf)
+extract_ll <- function(x){
+  lngs <- lats <- c()
+  for(i in 1:length(x)){
+    y <- x[i]
+    lat <- unlist(lapply(strsplit(y[1], ' '), function(z){z[1]}))
+    lng <- unlist(lapply(strsplit(y[1], ' '), function(z){z[2]}))
+    lngs[i] <- lng; lats[i] <- lat
+  }
+  
+  lng <- as.numeric(lngs); lat <- as.numeric(lats)
+  return(tibble(lng = lng, lat = lat))
+}
+x <- joined %>% 
+  left_join(data$minicensus_main %>% dplyr::select(instance_id, 
+                                                   hh_id,
+                                                   gc = hh_geo_location))
+locs <- extract_ll(x$gc)
+x$lng <- locs$lng
+x$lat <- locs$lat
+x <- x %>% filter(!is.na(lat))
+x$status <- ifelse(x$head_responds, 'Head responds',
+                   ifelse(x$sub_responds, 'Sub responds',
+                          'Neither'))
+pts = st_as_sf(data.frame(x), coords = c("lng", "lat"), crs = 4326)
+
+dat_leaf <- leaflet() %>%
+  addProviderTiles(provider = providers$Esri.WorldImagery) %>%
+  addGlPoints(data = pts,
+              # fillColor = 'red',
+              fillColor = pts$status,
+              popup = pts[,c('instance_id',
+                             'hh_id',
+                             'n_subs',
+                             'n_residents',
+                             'n_non_residents',
+                             'status')],
+              group = "pts")
+dat_leaf
+```
+
+# Technical details and caveats
+
+- This report is as of `r Sys.time()`. The database is updated as new data streams in, so these numbers are subject to change.^[ie, a form may have been collected yesterday but not yet uploaded to the server.]  
+- The data shown herein are as per the current status in the study database. There are pending corrections to be implemented (such as when a hamlet code is set to "XXX", or when a "practice" form was accidentally submitted as if it were real).  
+- The code used for the generation of this report has _not_ been externally code-reviewed.^["Code review" refers to someone other than the author of the code reviewing line by line to ensure accuracy. Generally, it is a rule that a report's code is reviewed prior to sharing with a client; for the sake of speed, we have broken this rule.] Code review is expected finish by Monday October 19th.
+- This document was produced on `r Sys.Date()` on a `r Sys.info()['sysname']` machine (release `r Sys.info()['release']`.  
+
+
+Any questions or problems should be addressed to bohemia@databrew.cc

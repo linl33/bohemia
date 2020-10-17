@@ -1,0 +1,145 @@
+---
+title: "Household head consent issues"
+subtitle: "Mozambique"
+author: "www.databrew.cc"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_html:
+    toc: true
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+link-citations: yes
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+```
+
+
+```{r include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+
+```{r}
+# Libraries
+library(Hmisc)
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+library(haven)
+library(bohemia)
+library(sp)
+library(ggthemes)
+library(ggrepel)
+```
+
+
+
+```{r}
+if('data.RData' %in% dir()){
+  load('data.RData')
+} else {
+  data <- load_odk_data(the_country = 'Mozambique',
+                        credentials_path = '../../credentials/credentials.yaml',
+                        users_path = '../../credentials/users.yaml')
+  save(data, file = 'data.RData')
+}
+```
+
+
+```{r}
+pd <- data$minicensus_main %>%
+  mutate(hh_head_id = as.numeric(hh_head_id)) %>%
+  mutate(respondent_id = as.numeric(respondent_id)) %>%
+  dplyr::select(instance_id, hh_head_id,
+                n_subs = hh_sub_size,
+                n_residents = hh_member_num_residents,
+                respondent_id,
+                n_non_residents = hh_member_num_non_residents,
+                todays_date) %>%
+  mutate(head_responds = respondent_id == hh_head_id) 
+# Get info on the subs
+subs_info <- data$minicensus_repeat_hh_sub %>%
+  left_join(pd %>% dplyr::select(instance_id, respondent_id)) %>%
+  group_by(instance_id) %>%
+  summarise(sub_responds = any(respondent_id == hh_sub_id))
+# Join information on heads so subs
+joined <- left_join(pd, subs_info) %>%
+  mutate(sub_responds = ifelse(is.na(sub_responds), FALSE, sub_responds)) %>%
+  mutate(neither_sub_nor_head = !sub_responds & !head_responds) 
+# Get info on household heads
+heads <- data$minicensus_people %>%
+  dplyr::select(instance_id, first_name, last_name, pid,
+                num, dob, gender) %>%
+  left_join(pd %>% dplyr::select(instance_id,
+                                 hh_head_id)) %>%
+  filter(hh_head_id == num) %>%
+  mutate(initials = paste0(first_name, last_name))
+# Join other info
+out <- left_join(heads,
+                   joined %>% dplyr::select(date = todays_date,
+                                            instance_id,
+                                            n_subs,
+                                            n_residents,
+                                            n_non_residents,
+                                            head_responds,
+                                            sub_responds,
+                                            neither_sub_nor_head)) %>%
+  mutate(status = ifelse(head_responds, 'Head answered questions',
+                   ifelse(sub_responds, 'Sub answered questions',
+                          'Neither'))) %>%
+    left_join(data$minicensus_main %>% dplyr::select(instance_id, Hamlet = hh_hamlet, 
+                                                     hh_id,
+                                                   `Code` = hh_hamlet_code, 
+                                                   `Village` = hh_village, 
+                                                   `Ward` = hh_ward))
+out <- out %>% dplyr::select(
+  Ward, Village, Hamlet, Code,
+  `Agregado` = hh_id, 
+  Date = date,
+  `Number of substitutes` = n_subs,
+  `Residents` = n_residents,
+  `Non-residents` = n_non_residents,
+  Status = status,
+  `Chefe birthday` = dob,
+  `Chefe` = pid,
+    `Chefe initials` = initials
+) %>%
+  mutate(`ICF signed by` = '______') %>%
+  mutate(`Confirmed OK` = FALSE)
+
+prettify(out,
+         download_options = TRUE,
+         nrows = nrow(out))
+write_csv(out,
+          'fix_table.csv')
+```
+
+
+# Technical details and caveats
+
+- This report is as of `r Sys.time()`. The database is updated as new data streams in, so these numbers are subject to change.^[ie, a form may have been collected yesterday but not yet uploaded to the server.]  
+- The data shown herein are as per the current status in the study database. There are pending corrections to be implemented (such as when a hamlet code is set to "XXX", or when a "practice" form was accidentally submitted as if it were real).  
+- The code used for the generation of this report has _not_ been externally code-reviewed.^["Code review" refers to someone other than the author of the code reviewing line by line to ensure accuracy. Generally, it is a rule that a report's code is reviewed prior to sharing with a client; for the sake of speed, we have broken this rule.] Code review is expected finish by Monday October 19th.
+- This document was produced on `r Sys.Date()` on a `r Sys.info()['sysname']` machine (release `r Sys.info()['release']`.  
+
+
+Any questions or problems should be addressed to bohemia@databrew.cc
