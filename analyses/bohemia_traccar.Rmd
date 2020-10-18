@@ -1,0 +1,44 @@
+---
+title: "bohemia_traccar"
+author: "Ben Brew"
+date: "18/10/2020"
+output: pdf_document
+---
+
+```{r}
+library(bohemia)
+library(tidyverse)
+# read in credenstials 
+creds <- yaml::yaml.load_file('../credentials/credentials.yaml')
+
+# sync traccar data
+sync_workers_traccar(traccar_url = creds$traccar_server,
+                     traccar_user = creds$traccar_user,
+                     traccar_pass = creds$traccar_pass)
+
+# get traccar data 
+dat <- get_traccar_data(url = creds$traccar_server,
+                        user = creds$traccar_user,
+                        pass = creds$traccar_pass)
+
+```
+
+## Traccar summary
+
+```{r}
+# how many distince users?
+length(unique(dat$id))
+# 265 distinct users
+
+# how many recently?
+dat$last_update <- unlist(lapply(strsplit(dat$lastUpdate, split = 'T'), function(x) x[1]))
+dat$last_update <- as.Date(dat$last_update, format = '%Y-%m-%d')
+
+temp <- dat %>% group_by(last_update) %>% summarise(counts=n())
+ggplot(temp, aes(last_update, counts)) + geom_bar(stat = 'identity')
+
+# status by date
+temp1 <- dat %>% group_by(last_update, status) %>% summarise(counts=n())
+ggplot(temp1, aes(last_update, counts, fill=status)) + geom_bar(stat = 'identity', position = 'dodge')
+
+```
