@@ -302,3 +302,9 @@ dat_leaf
 
 
 Any questions or problems should be addressed to bohemia@databrew.cc
+
+```{r, eval = FALSE}
+house <- data$minicensus_main %>% filter(hh_id == 'LUT-260')
+people <- data$minicensus_people %>% filter(instance_id %in% house$instance_id)
+subs <- data$minicensus_repeat_hh_sub %>% filter(instance_id %in% house$instance_id)
+```

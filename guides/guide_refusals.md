@@ -1,6 +1,6 @@
 # Refusals
 
-(and enumerations, enrollment, etc.).
+(and absences, enumerations, enrollment, etc.).
 
 This concept note / guide explains how to deal with non-participation in the Bohemia (mini)census.
 
@@ -16,7 +16,15 @@ The process for identifying and logging refusals (ie, non-participating househol
 - MOZ uses the ["a priori" enumeration method](https://github.com/databrew/bohemia/blob/master/misc/ids.md#method-1-a-priori)  
 - TZA uses the ["on the fly" enumeration method](https://github.com/databrew/bohemia/blob/master/misc/ids.md#method-2-on-the-fly)  
 
-Because of these different methods, refusals can take place at different times. What follows is a country-specific flow for when / how refusals take place
+Because of these different methods, refusals can take place at different times. What follows is a country-specific flow for when / how refusals take place.
+
+### Shared principles: handling absences
+
+In both the case of Mozambique and Tanzania, absences are handled identically. If the person is absent when the house is visited, the `refusals` form should be used to register the absence. The "Reason for not participating" field should be marked as "Not present".  
+
+Unlike a "refused" response, when a household is marked as "not present", that household will remain in visitation lists thereafter (ie, they should be tried again).
+
+A household is removed from visitation lists following three "not present" entries.
 
 ### Mozambique
 
