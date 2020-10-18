@@ -102,7 +102,7 @@ out <- try_clusters(the_country = 'Tanzania',
   km = 2,
   max_km_from_hq = 1000,
   start_at_hq = TRUE,
-  df = df)
+  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique')))
 ```
 
 #### Summary
@@ -276,7 +276,7 @@ out <- try_clusters(the_country = 'Tanzania',
   km = 2,
   max_km_from_hq = 1000,
   start_at_hq = TRUE,
-  df = df)
+  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique')))
 ```
 
 #### Summary
@@ -450,7 +450,7 @@ out <- try_clusters(the_country = 'Mozambique',
   km = 2,
   max_km_from_hq = 1000,
   start_at_hq = TRUE,
-  df = df)
+  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique')))
 ```
 
 
@@ -627,7 +627,7 @@ out <- try_clusters(the_country = 'Mozambique',
   km = 2,
   max_km_from_hq = 1000,
   start_at_hq = TRUE,
-  df = df %>% filter(!code %in% locations$code[grepl('Campo ', locations$Ward)]))
+  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique')) %>% filter(!code %in% locations$code[grepl('Campo ', locations$Ward)]))
 ```
 
 #### Summary
@@ -661,7 +661,7 @@ out <- try_clusters(the_country = 'Mozambique',
   km = 2,
   max_km_from_hq = 1000,
   start_at_hq = TRUE,
-  df = df %>% filter(code %in% locations$code[grepl('Campo ', locations$Ward)]))
+  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique')) %>% filter(code %in% locations$code[grepl('Campo ', locations$Ward)]))
 ```
 
 #### Summary
