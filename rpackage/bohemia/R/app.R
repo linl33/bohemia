@@ -1207,6 +1207,8 @@ app_server <- function(input, output, session) {
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
                             `# of anomalies` = 0,
                             `# of errors` = 0) 
+                # save(pd, file = 'fwt_daily_pd.rda')
+                
                 fwt_daily <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
@@ -1292,6 +1294,7 @@ app_server <- function(input, output, session) {
                 progress_by <- joined %>% left_join(locations %>% 
                                                       dplyr::select(code, District, Ward, Village, Hamlet))
                 # save(progress_by, file = '/tmp/progress_by.RData')
+                # load('/tmp/progress_by.RData')
                 progress_by_district <- progress_by %>% group_by(District) %>% 
                   summarise(numerator = sum(numerator, na.rm  = TRUE),
                             n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
@@ -1299,6 +1302,10 @@ app_server <- function(input, output, session) {
                   dplyr::select(District, `Forms done` = numerator,
                                 `Estimated number of forms` = n_households,
                                 `Estimated percent finished` = p)
+                
+                # save(pd, file = 'pd_done.rda')
+                progress_by_district$`Forms done` = nrow(pd)
+                
                 progress_by_ward <- progress_by %>% group_by(Ward) %>% summarise(numerator = sum(numerator, na.rm  = TRUE),
                                                                                  n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
                   mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
@@ -1455,21 +1462,21 @@ app_server <- function(input, output, session) {
                            fluidPage(
                              navbarPage(title = 'Performance',
                                         tabPanel('Fieldworkers',
-                                                 fluidRow(
-                                                   infoBox(title = 'Number of detected anomalies',
-                                                           icon = icon('microscope'),
-                                                           color = 'black',
-                                                           width = 6,
-                                                           h1(0)),
-                                                   infoBox(title = 'Missing response rate',
-                                                           icon = icon('address-book'),
-                                                           color = 'black',
-                                                           width = 6,
-                                                           h1('0%'))
-                                                 ),
                                                  tabsetPanel(
                                                    tabPanel('Individual data',
                                                             fluidPage(
+                                                              fluidRow(
+                                                                infoBox(title = 'Number of detected anomalies',
+                                                                        icon = icon('microscope'),
+                                                                        color = 'black',
+                                                                        width = 6,
+                                                                        h1(0)),
+                                                                infoBox(title = '% detected anomalies',
+                                                                        icon = icon('address-book'),
+                                                                        color = 'black',
+                                                                        width = 6,
+                                                                        h1('0%'))
+                                                              ),
                                                               fluidRow(
                                                                 column(12,
                                                                        selectInput('fid',
@@ -1485,8 +1492,6 @@ app_server <- function(input, output, session) {
                                                             navbarPage('Fieldworkers tables',
                                                                        tabPanel('Daily',
                                                                                 DT::datatable(fwt_daily, rownames = FALSE)),
-                                                                       tabPanel('Weekly',
-                                                                                DT::datatable(fwt_weekly, rownames = FALSE)),
                                                                        tabPanel('Overall',
                                                                                 DT::datatable(fwt_overall, rownames = FALSE)))),
                                                    tabPanel('Dropouts',
@@ -2272,6 +2277,8 @@ app_server <- function(input, output, session) {
         id <- who
         # save(id, file = 'id_perf.rda')
         last_upload <- as.character(max(pd$end_time[pd$wid == id], na.rm = TRUE))
+        # fids <- read.csv('/tmp/fids.csv')
+        sup_name <- as.character(fids$supervisor[fids$bohemia_id == id])
         total_forms <- length(which(pd$wid == id))
         # save(pd,file = 'fw_perf.rda')
         # save(pd, id, file = '/tmp/14.RData')
@@ -2281,7 +2288,7 @@ app_server <- function(input, output, session) {
         total_per = round(total_forms/total_forms_fw,2)
         # tibble(`FW ID` = id, `% of weekly target` = week_per, `% of total target`= total_per, `# forms` = total_forms, `Average time/form` = average_time,
         #        `Last upload`=last_upload, `Daily work hours`= daily_work_hours)
-       tibble(key = c('FW ID','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(id, week_per, total_per, total_forms, average_time, daily_work_hours))
+       tibble(key = c('Supervisor','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(sup_name, week_per, total_per, total_forms, average_time, daily_work_hours))
       } else {
         NULL
       }
