@@ -2466,7 +2466,9 @@ app_server <- function(input, output, session) {
   output$render_visit_control_sheet <-
     downloadHandler(filename = "visit_control_sheet.pdf",
                     content = function(file){
-                      
+                      # Get whether logged in
+                      si <- session_info
+                      li <- si$logged_in
                       # Get the location code
                       lc <- location_code()
                       # Get other details
@@ -2477,6 +2479,7 @@ app_server <- function(input, output, session) {
                                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))
                       enumerations_data = odk_data$data$enumerations
+                      refusals_data = odk_data$data$refusals
 
                       # tmp <- list(data = data,
                       #             loc_id = lc,
@@ -2490,7 +2493,9 @@ app_server <- function(input, output, session) {
                                                       loc_id = lc,
                                                       enumeration = enum,
                                                       use_previous = use_previous,
-                                                      enumerations_data = enumerations_data))
+                                                      enumerations_data = enumerations_data,
+                                                      refusals_data = refusals_data,
+                                                      li = li))
                       
                       # copy html to 'file'
                       file.copy(out_file, file)
