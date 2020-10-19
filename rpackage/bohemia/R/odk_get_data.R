@@ -49,7 +49,7 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   # Get the id2 if needed
   if(unknown_id2){
     message('---Fetching the secondary id for ', id)
-    id2 <- odk_get_secondary_id(id = id)
+    id2 <- odk_get_secondary_id(url = url, id = id)
   } else if(is.null(id2)){
     id2 <- id
   }
