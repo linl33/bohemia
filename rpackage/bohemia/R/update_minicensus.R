@@ -45,10 +45,12 @@ update_minicensus <- function(formatted_data,
   
   # UPDATE
   for(i in 1:length(formatted_data)){
-    message(i)
-    this_table <- formatted_data[[i]]
     this_name <- names(formatted_data)[i]
-    dbWriteTable(con, this_name, value = this_table, append=TRUE, row.names=FALSE)
+    message(i, ' ', this_name)
+    this_table <- formatted_data[[i]]
+    if(!is.null(this_table)){
+      dbWriteTable(con, this_name, value = this_table, append=TRUE, row.names=FALSE)  
+    }
   }
   
   # Disconnect (only if not supplied an open connection)

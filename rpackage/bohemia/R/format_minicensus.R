@@ -96,6 +96,8 @@ format_minicensus <- function(data){
                   -hh_health_permission_other) %>%
     mutate(hh_contact_info_number_alternate = as.character(hh_contact_info_number_alternate),
            hh_contact_info_number = as.character(hh_contact_info_number))
+  df$hh_cattle_count <- df$hh_pigs_count <- df$hh_head_age <- df$hh_health_permission_count <- 
+    df$wall_material_count <- NULL
   
   # REPEATS
   # death
@@ -120,17 +122,21 @@ format_minicensus <- function(data){
   # hh_sub
   repeat_hh_sub <- data$repeats$repeat_hh_sub
   if(!is.null(repeat_hh_sub)){
-    repeat_hh_sub <- repeat_hh_sub %>%
-      dplyr::rename(instance_id = instanceID) %>% 
-      dplyr::select(-repeat_name, 
-                    -repeated_id,
-                    -note_hh_head_is_sub) %>%
-      mutate(hh_sub_relationship = ifelse(!is.na(hh_sub_relationship_other),
-                                          hh_sub_relationship_other,
-                                          hh_sub_relationship)) %>%
-      dplyr::select(-hh_sub_relationship_other)
-    repeat_hh_sub <- repeat_hh_sub[,!grepl('note_|_warning', names(repeat_hh_sub))]
-    repeat_hh_sub$repeat_hh_sub_count <- NULL
+    if('hh_sub_relationship' %in% names(repeat_hh_sub)){
+      repeat_hh_sub <- repeat_hh_sub %>%
+        dplyr::rename(instance_id = instanceID) %>% 
+        mutate(hh_sub_relationship = ifelse(!is.na(hh_sub_relationship_other),
+                                            hh_sub_relationship_other,
+                                            hh_sub_relationship))
+      repeat_hh_sub$repeat_name <- NULL
+      repeat_hh_sub$repeated_id <- NULL
+      repeat_hh_sub$note_hh_head_is_sub <- NULL
+      repeat_hh_sub$hh_sub_relationship_other <- NULL
+      repeat_hh_sub <- repeat_hh_sub[,!grepl('note_|_warning', names(repeat_hh_sub))]
+      repeat_hh_sub$repeat_hh_sub_count <- NULL
+    } else {
+      repeat_hh_sub <- NULL
+    }
   }
     
   
