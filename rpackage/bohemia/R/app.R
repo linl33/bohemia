@@ -173,6 +173,10 @@ app_ui <- function(request) {
                                                column(6, 
                                                       uiOutput('ui_verification_text_filter'))
                                              ),
+                                             checkboxInput('use_eldo_format', 'Use "Eldo format"',
+                                                           value = TRUE),
+                                             helpText('The "Eldo format" is based on an excel being used operationally. It has different columns, such as "verificado por", etc.'),
+                                             
                                              uiOutput('ui_consent_verification_list_a'),
                                              uiOutput('ui_consent_verification_list')
                                            ))))
@@ -1970,7 +1974,6 @@ app_server <- function(input, output, session) {
                 mutate(num = as.character(num)) %>%
                 left_join(people %>% mutate(num = as.character(num)),
                           by = c('instance_id', 'num'))
-              
               pd <- out %>%
                 mutate(name = paste0(first_name, ' ', last_name),
                        age = floor(as.numeric(as.Date(todays_date) - as.Date(hh_head_dob))/ 365.25)) %>%
@@ -1991,9 +1994,9 @@ app_server <- function(input, output, session) {
                 mutate(todays_date = as.Date(todays_date)) %>%
                 arrange(wid, todays_date)
               
-              text_filter <- input$verification_text_filter
               verification_all <- input$verification_all
               if(!verification_all){
+                text_filter <- input$verification_text_filter
                 if(!is.null(text_filter)){
                   pd <- pd %>%
                     dplyr::filter(wid %in% text_filter)
@@ -2025,17 +2028,18 @@ app_server <- function(input, output, session) {
               max_value <- nrow(qc)
               selected_value <- sample(min_value:max_value, 1)
               if(co == 'Mozambique'){
-                names(pd) <- c('Código TC',
-                               'Código Bairro',
-                               'ExtID (número de identificão do participante)',
-                               'ID Agregado',
-                               'Pessoa que assino o consentimiento',
-                               'Idade do membro do agregado',
-                               'Data de recrutamento',
-                               'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
-                               'Se o documento não estiver preenchido correitamente, indicar o error',
-                               'O error foi resolvido (sim/não)',
-                               'Verificado por (iniciais do arquivista) e data')
+                  names(pd) <- c('Código TC',
+                                 'Código Bairro',
+                                 'ExtID (número de identificão do participante)',
+                                 'ID Agregado',
+                                 'Pessoa que assino o consentimiento',
+                                 'Idade do membro do agregado',
+                                 'Data de recrutamento',
+                                 'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
+                                 'Se o documento não estiver preenchido correitamente, indicar o error',
+                                 'O error foi resolvido (sim/não)',
+                                 'Verificado por (iniciais do arquivista) e data')
+
               } else {
                 names(pd) <- c('FW code',
                                'Hamlet code',
@@ -2050,6 +2054,40 @@ app_server <- function(input, output, session) {
                                'Verified by (archivist initials) and date',
                                'Signature')
               }
+              
+              eldo_format <- input$use_eldo_format
+              if(!is.null(eldo_format)){
+                if(eldo_format){
+                  pd <- pd %>%
+                    left_join(fids %>%
+                                dplyr::mutate(fid_name = paste0(first_name, ' ', last_name)) %>%
+                                dplyr::select(`Código TC` = bohemia_id,
+                                              `Nome do inquiridor` = fid_name))
+                  pd <- pd %>%
+                    left_join(locations %>%
+                                dplyr::select(`Código Bairro` = code,
+                                              Hamlet))
+                  pd <- pd %>%
+                    mutate(xxx = ' ', yyy = ' ', zzz = ' ')
+                  
+                  pd <- pd %>% dplyr::select(
+                    `Data`= `Data de recrutamento`,
+                    `ID`= `Código TC`,
+                    `Nome do inquiridor`,
+                    `Bairro` = Hamlet,
+                    `ID Bairro` = `Código Bairro`,
+                    `ID Agregado`,
+                    `Idade do chefe(a)` = `Idade do membro do agregado`,
+                    `O consentimento existe?` = xxx,
+                    `O ICF esta preenchido correctamente?` = yyy,
+                    `Se o documento não estiver preenchido correitamente, indicar o error`,
+                    `O error foi resolvido (sim/não)`,
+                    `Verificado por (iniciais do arquivista) e data`
+                  )
+                }  
+              }
+              
+              
               consent_verification_list_reactive$data <- pd
               # save(pd, file = '/tmp/dfx.RData')
               quality_control_list_reactive$data <- qc
@@ -2434,11 +2472,11 @@ app_server <- function(input, output, session) {
                       # Get other details
                       enum <- input$enumeration
                       use_previous <- input$use_previous
-                      data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
+                      xdata <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
                                          n_teams = as.numeric(as.character(input$enumeration_n_teams)),
                                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))
-                      enumerations_data = odk_data$enumerations
+                      enumerations_data = odk_data$data$enumerations
 
                       # tmp <- list(data = data,
                       #             loc_id = lc,
@@ -2447,7 +2485,7 @@ app_server <- function(input, output, session) {
                       out_file <- paste0(getwd(), '/visit_control_sheet.pdf')
                       rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/visit_control_sheet.Rmd'),
                                         output_file = out_file,
-                                        params = list(data = data,
+                                        params = list(xdata = xdata,
                                                       loc_id = lc,
                                                       enumeration = enum,
                                                       use_previous = use_previous,
@@ -2499,6 +2537,7 @@ app_server <- function(input, output, session) {
                       # Get page numbering system
                       workers_on_separate_pages <- input$workers_on_separate_pages
                       # save(pdx, file = '/tmp/data.RData')
+                      
                       # save(pdx, file = 'pdx_tab.rda')
                       out_file <- paste0(getwd(), '/consent_verification_list.pdf')
                       rmarkdown::render(

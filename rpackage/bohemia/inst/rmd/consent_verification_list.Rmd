@@ -2,6 +2,7 @@
 params:
   data: !r data.frame(f = 'acéntõ', a = 1, b = 2, x = 4, xx=5,xy=6,xyz=8, yy=9,yz=11,zz=12) 
   workers_on_separate_pages: True
+  eldo_format: False
 output:
   pdf_document:
     keep_tex: yes
@@ -45,7 +46,6 @@ for (i in 1:length(params)){
          params[[i]],
          env = .GlobalEnv)
 }
-# dfx <- params$data
 # load('/tmp/dfx.RData')
 # save.image('/tmp/dfx.RData')
 dfx <- data
@@ -55,9 +55,16 @@ dfx <- data
 
 ```{r}
 chunk_list <- list()
-dfx$wid <- unlist(dfx[,1])
+if(names(dfx)[2] == 'ID'){
+  dfx$wid <- unlist(dfx[,2])
+  name1 <- names(dfx)[2]
+} else {
+  dfx$wid <- unlist(dfx[,1])
+  name1 <- names(dfx)[1]
+}
+
 fwids <- sort(unique(dfx$wid))
-name1 <- names(dfx)[1]
+
 
 if(workers_on_separate_pages){
   for(i in 1:length(fwids)){
@@ -69,9 +76,9 @@ if(workers_on_separate_pages){
   kable_styling(latex_options = c('repeat_header')) %>%
     kable_styling(font_size = 8)  %>%
   column_spec(1:2, width = '1.2cm') %>%
-  column_spec(3, width = '1.7cm') %>%
-  column_spec(4, width = '2cm') %>%
-  column_spec(5:ncol(dfx), width = '2cm')\n```\n\\newpage\n"
+  column_spec(3, width = '1.5cm') %>%
+  column_spec(4, width = '1.7cm') %>%
+  column_spec(5:ncol(dfx), width = '1.7cm')\n```\n\\newpage\n"
     )
   chunk_list[[i]] <- this_chunk
 }
@@ -83,9 +90,9 @@ if(workers_on_separate_pages){
   kable_styling(latex_options = c('repeat_header')) %>%
     kable_styling(font_size = 8)  %>%
   column_spec(1:2, width = '1.2cm') %>%
-  column_spec(3, width = '1.7cm') %>%
-  column_spec(4, width = '2cm') %>%
-  column_spec(5:ncol(dfx), width = '2cm')\n```\n\\newpage\n"
+  column_spec(3, width = '1.5cm') %>%
+  column_spec(4, width = '1.7cm') %>%
+  column_spec(5:ncol(dfx), width = '1.7cm')\n```\n\\newpage\n"
   )
 }
 
