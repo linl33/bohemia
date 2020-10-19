@@ -2483,7 +2483,7 @@ app_server <- function(input, output, session) {
                       #             enumeration = enum)
                       # save(tmp, file = '/tmp/tmp.RData')
                       out_file <- paste0(getwd(), '/visit_control_sheet.pdf')
-                      # rmarkdown::render(input = '../inst/rmd/visit_control_sheet.Rmd',
+                      rmarkdown::render(input = #'../inst/rmd/visit_control_sheet.Rmd',
                                           paste0(system.file('rmd', package = 'bohemia'), '/visit_control_sheet.Rmd'),
                                         output_file = out_file,
                                         params = list(xdata = xdata,
