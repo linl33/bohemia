@@ -113,7 +113,11 @@ app_ui <- function(request) {
             ui_main),
           tabItem(
             tabName="field_monitoring",
-            uiOutput('ui_field_monitoring')),
+            fluidRow(
+              uiOutput('ui_fw_time_period'),
+              uiOutput('ui_field_monitoring')
+            )
+           ),
           tabItem(
             tabName="enrollment",
             uiOutput('ui_enrollment')),
@@ -906,6 +910,30 @@ app_server <- function(input, output, session) {
     )
   })
   
+  # create an input for fw daily table
+  output$ui_fw_time_period <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              fluidPage(
+                fluidRow(
+                  column(6,
+                         sliderInput(inputId = 'fw_time_period', 
+                                     label = 'Previous days to include:', 
+                                     min = 0, 
+                                     max=14, 
+                                     value = 7))
+                )
+              ) 
+              
+            })
+  })
+  
   
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
@@ -1210,20 +1238,27 @@ app_server <- function(input, output, session) {
                             `Weekly forms` = round(`Daily forms` * 7, digits = 1),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
                             `# of anomalies` = 0,
-                            `# of errors` = 0) 
+                            `# of errors` = 0)
+                time_period <- input$fw_time_period
+                if(is.null(time_period)){
+                  time_period <- 7
+                } 
+                time_range <- time_period
+                # save(time_period, file = 'time_period.rda')
                 # save(pd, file = 'fwt_daily_pd.rda')
-                
                 fwt_daily <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
+                  mutate(time_range = Sys.Date() - time_range) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
-                  filter(end_time >= (Sys.time() - lubridate::hours(24))) %>%
+                  filter(end_time >= time_range)%>%
                   group_by(`FW ID` = wid,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `Time period` = paste0('Last ', time_period, ' days'),
                             `% complete daily` = `Forms`/daily_forms_fw,
                             `# of anomalies` = 0,
-                            `# of errors` = 0)
+                            `# of errors` = 0) 
                 fwt_weekly <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
@@ -2308,6 +2343,18 @@ app_server <- function(input, output, session) {
           # save(est_date, file = 'est_date.rda')
           
         }
+        # save(pd, file = 'ind_pd.rda')
+        
+        time_period <- input$fw_time_period
+        if(is.null(time_period)){
+          time_period <- 7
+        }
+        
+        pd <- pd %>%
+          mutate(time_range = Sys.Date() - time_period) %>%
+          mutate(end_time = lubridate::as_datetime(end_time)) %>%
+          filter(end_time >= time_range)
+        # HERE need to incorporate this into pd (filter)
         who <- input$fid
         if(is.null(who)){
           who <- 0 
@@ -2324,9 +2371,10 @@ app_server <- function(input, output, session) {
         daily_work_hours <- 'pending'
         week_per = round(total_forms/weekly_forms_fw,2)
         total_per = round(total_forms/total_forms_fw,2)
+        last_days <-paste0('Last ', time_period, ' days')
         # tibble(`FW ID` = id, `% of weekly target` = week_per, `% of total target`= total_per, `# forms` = total_forms, `Average time/form` = average_time,
         #        `Last upload`=last_upload, `Daily work hours`= daily_work_hours)
-       tibble(key = c('Supervisor','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(sup_name, week_per, total_per, total_forms, average_time, daily_work_hours))
+       tibble(key = c('Supervisor','Time period','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(sup_name,last_days, week_per, total_per, total_forms, average_time, daily_work_hours))
       } else {
         NULL
       }
