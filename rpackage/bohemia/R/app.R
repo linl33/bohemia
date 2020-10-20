@@ -967,7 +967,7 @@ app_server <- function(input, output, session) {
                             `Total Daily forms/country` = round(nrow(pd) / n_days, digits = 1),
                             `Total Weekly forms/country` = round(`Total Daily forms/country` * 7, digits = 1),
                             `Overall target/country` = nrow(pd),
-                            `# Total weeks` = round(`Overall target/country` / `Total Weekly forms/country`, digits = 1)) %>%
+                            `# Total weeks` = round(target/`Overall target/country`, digits = 1)) %>%
                   mutate(`Estimated date` = (`# Total weeks` * 7) + as.Date(dr[1]))
                 # # Get a second row for targets
                 # target_helper <- 
