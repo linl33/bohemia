@@ -957,10 +957,13 @@ app_server <- function(input, output, session) {
                 # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
                 target <- ifelse(iso == 'TZA', 46105, 30467)
                 
+                # create a placeholder for number of fieldworkers. 
+                # elena said 12 are doing enumerations, so im subtracting 12 from the total
+                num_fws <- length(unique(pd$wid)) -12
                 # Create table of overview
                 overview <- pd %>%
                   summarise(Type = 'Observed',
-                            `No. FWs` = length(unique(pd$wid)),
+                            `No. FWs` = num_fws,
                             `Daily forms/FW` = round(nrow(pd) / `No. FWs` / n_days, digits = 1),
                             `Weekly forms/FW` = round(`Daily forms/FW` * 7, digits = 1),
                             `Total forms/FW` = round(nrow(pd) / `No. FWs`, digits = 1),
@@ -1390,7 +1393,7 @@ app_server <- function(input, output, session) {
                                                 Ward = hh_ward,
                                                 Village = hh_village,
                                                 Hamlet = hh_hamlet,
-                                                `HH ID` = hh_hamlet_code,
+                                                `HH ID` = hh_id,
                                                 `FW ID` = wid,
                                                 `HH visit date` = todays_date)) %>%
                   mutate(`FW ID` = ' ') %>%
@@ -1475,7 +1478,7 @@ app_server <- function(input, output, session) {
                                                                         color = 'black',
                                                                         width = 6,
                                                                         h1(0)),
-                                                                infoBox(title = '% detected anomalies',
+                                                                infoBox(title = 'Number of detected errors',
                                                                         icon = icon('address-book'),
                                                                         color = 'black',
                                                                         width = 6,
