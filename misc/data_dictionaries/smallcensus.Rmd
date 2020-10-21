@@ -1,8 +1,6 @@
 ---
 title: "Mini-census"
-output:
-  pdf_document:
-    latex_engine: xelatex
+output: html_document
 params:
     language: 'English'
     relevant: FALSE
@@ -89,87 +87,12 @@ for(i in 2:nrow(data_dict)){
 data_dict[deletesa,1] <- ' '
 data_dict[deletesa,2] <- ' '
 
-# Deal with line breaks
-line_breaker <- function(x,n = 10){
-  gsub(paste0('(.{1,',n,'})(\\s|$)'), '\\1\n', x)
-}
-# nn <- 50
-# long_vars <- which(names(dd) %in% c('Questão', 'Swali', 'Question', 'Relevance'))
-# for(i in 1:nrow(data_dict)){
-#   for(j in long_vars){
-#     # message(i)
-#     val <- as.character(unlist(data_dict[i,j]))
-#     if(!is.na(val)){
-#       if(nchar(val) > nn){
-#       data_dict[i,j] <- line_breaker(val, nn)
-#     }
-#     }
-#   }
-# }
-
-# removes <- which(grepl('_', data_dict$Swali, fixed = T))
-# dd <- data_dict[!1:nrow(data_dict) %in% removes,]
-
 dd <- data_dict
-trim.trailing <- function (x) sub("\\n+$", "", x)
-
-clean_up <- function(zz){
-  trim.trailing(
-    gsub(']', '', 
-         gsub('[', '',
-    gsub('_', ' ', 
-         gsub('$', '', as.character(unlist(zz)), fixed = TRUE), fixed = TRUE),
-    fixed = TRUE), fixed = TRUE))
-}
 
 question_var <- which(names(dd) %in% c('Questão', 'Swali', 'Question'))[1]
-dd[,question_var] <- clean_up(dd[,question_var])
 if(rel){
   rel_var <- which(names(dd) %in% c('Relevance'))[1]
   dd[,rel_var] <- clean_up(dd[,rel_var])
 }
-
-# Define hlines after
-hlas <- which(as.character(unlist(dd[,question_var])) != ' ') -1
-
-out <- dd %>%
-  # mutate_all(linebreak) %>%
-  kable("latex", 
-        escape=T, 
-        longtable = TRUE,
-        booktabs = F,
-        linesep = ""
-        ) %>%
-  kable_styling(font_size = 9,
-                full_width = T,
-                latex_options = c('repeat_header')) 
-
-if(!rel){
-  out <- out %>%
-   column_spec(question_var, width = "7cm")
-}
-out
-
-# for(i in hlas){
-#   out <- out %>%
-#     row_spec(i, hline_after = TRUE)
-# }
-
-#%>%
-#   kable_styling(full_width = T,
-#                 font_size = 9,
-#                 latex_options = 
-#                   c("striped",
-#                     "repeat_header")) %>%
-  #%>%
-  # kable_styling()
-  # collapse_rows(2)
-             # booktabs = T,
-             # escape = FALSE, col.names = linebreak(names(data_dict)), align = "c")
-
-
-  # kable_styling(latex_options = c("repeat_header", full_width = T)) %>%
-  # collapse_rows(columns = 1:2, latex_hline = "major", valign = "middle")
-# kable_styling(latex_options = "striped")
-# data_dict
+bohemia::prettify(dd, nrows = nrow(dd), download_options = TRUE)
 ```

@@ -66,7 +66,7 @@ if(!skip_deprecated){
 ####### SECOND DEPRECATED MOZAMBIQUE MINICENSUS
 message('PULLING DEPRECATED MINICENSUS (SMALLCENSUS) (MOZAMBIQUE')
 url <- creds$moz_odk_server
-  user = creds$moz_odk_user
+user = creds$moz_odk_user
 password = creds$moz_odk_pass
 id = 'smallcensus'
 suppressWarnings({
