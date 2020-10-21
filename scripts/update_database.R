@@ -63,6 +63,7 @@ if(!skip_deprecated){
   message('...skipping')
 }
 
+####### SECOND DEPRECATED MOZAMBIQUE MINICENSUS
 message('PULLING DEPRECATED MINICENSUS (SMALLCENSUS) (MOZAMBIQUE')
 url <- creds$moz_odk_server
   user = creds$moz_odk_user
@@ -100,6 +101,47 @@ if(new_data){
   update_minicensus(formatted_data = formatted_data,
                     con = con)
 }
+
+############### MOZAMBIQUE VA
+message('PULLING MOZAMBIQUE VA')
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'va153'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM va')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+}
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = FALSE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_va(data = data)
+  # Update data
+  update_va(formatted_data = formatted_data,
+                    con = con)
+}
+
+
 
 # # SMALL MOZAMBIQUE #######################################################################
 # message('PULLING SMALLCENSUS, MOZAMBIQUE')

@@ -1475,7 +1475,6 @@ app_server <- function(input, output, session) {
               pd <- pd %>% 
                 filter(hh_country == co)
               deaths <- odk_data$data$minicensus_repeat_death_info
-              # save(pd, co, deaths, file = '/tmp/joe.RData')
               deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
                                           !is.na(death_number))
               pd <- pd %>%
@@ -1483,14 +1482,17 @@ app_server <- function(input, output, session) {
                               ward = hh_ward,
                               village = hh_village,
                               hamlet = hh_hamlet, instance_id)
-
+              # # Get VA info
+              va <- odk_data$data$va
+              # save(va, pd, co, deaths, file = '/tmp/tmp.RData')
+              
               grouper <- 'district'
               
               va_progress <- deaths %>%
                 left_join(pd) %>%
                 filter(!is.na(hamlet)) %>%
                 group_by_(grouper) %>%
-                summarise(`VA forms collected` = 0,
+                summarise(`VA forms collected` = nrow(va),
                           `Deaths reported` = n()) %>%
                 mutate(`% VA forms completed` = round(`VA forms collected` / 
                                                         `Deaths reported` * 100)) %>%
@@ -1523,8 +1525,7 @@ app_server <- function(input, output, session) {
               pd <- pd %>%
                 filter(hh_country == co)
               deaths <- odk_data$data$minicensus_repeat_death_info
-              # save(pd, co, deaths, file = '/tmp/joe.RData')
-              
+
               deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
                                           !is.na(death_number))
               pd <- pd %>%
@@ -1532,24 +1533,40 @@ app_server <- function(input, output, session) {
                               ward = hh_ward,
                               village = hh_village,
                               hamlet = hh_hamlet, instance_id)
+              
               grouper <- input$va_monitor_by
+              
+              
+              va <- odk_data$data$va
+              # Get location in va
+              va <- va %>%
+                mutate(code = substr(hh_id, 1, 3)) %>%
+                left_join(locations %>% dplyr::select(code, region = Region, district = District,
+                                                      ward = Ward, village = Village, hamlet = Hamlet))
+
+              
               if(is.null(grouper)){
                 grouper <- 'district'
               } else {
                 grouper <- tolower(grouper)
               }
+              va_agg <- va %>%
+                group_by_(grouper) %>%
+                summarise(`VA forms collected` = n())
+              
               va_progress_geo <- deaths %>%
                 left_join(pd) %>%
                 filter(!is.na(hamlet)) %>%
                 group_by_(grouper) %>%
-                summarise(`VA forms collected` = 0,
-                          `Deaths reported` = n()) %>%
+                summarise(`Deaths reported` = n()) %>%
+                full_join(va_agg) %>%
+                mutate(`VA forms collected` = ifelse(is.na(`VA forms collected`), 0, `VA forms collected`)) %>%
+                mutate(`Deaths reported` = ifelse(is.na(`Deaths reported`), 0, `Deaths reported`)) %>%
                 mutate(`% VA forms completed` = round(`VA forms collected` /
                                                         `Deaths reported` * 100))
               message('---Created progess table for VA by geography')
               
               
-              # save(va_progress_geo, file = 'va_p_geo.rda')
               if(co == 'Mozambique'){
                 if(grouper=='district'){
                   names(va_progress_geo)[1] <- 'Distrito'
@@ -1588,9 +1605,11 @@ app_server <- function(input, output, session) {
       # va table
       deaths <- odk_data$data$minicensus_repeat_death_info
       deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
+      va <- odk_data$data$va
+      
       # Conditional mourning period
       mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
-      va <- left_join(deaths %>% 
+      out <- left_join(deaths %>% 
                         left_join(pd %>% dplyr::select(instance_id, todays_date), by = 'instance_id') %>%
                         mutate(todays_date = as.Date(todays_date),
                                death_dod = as.Date(death_dod)) %>%
@@ -1621,8 +1640,12 @@ app_server <- function(input, output, session) {
         mutate(`FW ID` = ' ') %>%
         dplyr::select(-instance_id)
       
-      if(nrow(va) > 0){
-        va <- va %>% dplyr::select(District, Ward, Village, Hamlet,
+      # Remove those which have already been done
+      out <- out %>%
+        filter(!`PERM ID` %in% va$death_id)
+      
+      if(nrow(out) > 0){
+        out <- out %>% dplyr::select(District, Ward, Village, Hamlet,
                                    `HH ID`, `FW ID`, `PERM ID`,
                                    `HH visit date`, `Date of death`,
                                    `Latest date to collect VA form`,
@@ -1630,16 +1653,16 @@ app_server <- function(input, output, session) {
         ) %>%
           arrange(desc(`HH visit date`))
         if(cn=='Mozambique'){
-          va <- va %>%  rename(Distrito = District,
+          out <- out %>%  rename(Distrito = District,
                                `Posto administrativo/localidade`=Ward,
                                Povoado=Village,
                                Bairro=Hamlet)
         }
-        va$`Time elapsed` <- NULL
-        print(head(va))        
+        out$`Time elapsed` <- NULL
+        print(head(out))        
         message('---Created past due table for VA')
-        va <- va %>% filter(`Latest date to collect VA form` <= Sys.Date())
-        return(bohemia::prettify(va, nrows = nrow(va), download_options = TRUE))
+        out <- out %>% filter(`Latest date to collect VA form` <= Sys.Date())
+        return(bohemia::prettify(out, nrows = nrow(out), download_options = TRUE))
       } 
     } else {
       return(NULL)

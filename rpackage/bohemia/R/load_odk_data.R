@@ -48,9 +48,9 @@ load_odk_data <- function(the_country = 'Mozambique',
   enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
   data$enumerations <- enumerations
   
-  # # Read in va data
-  # va <- dbGetQuery(con, "SELECT * FROM clean_va")
-  # data$va <- va
+  # Read in va data
+  va <- dbGetQuery(con, "SELECT * FROM clean_va")
+  data$va <- va
   # 
   # Read in refusals data
   refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
