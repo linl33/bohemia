@@ -180,6 +180,8 @@ app_ui <- function(request) {
                                    )
                                    
                                    ),
+                          tabPanel('Refusals and Absences',
+                                   uiOutput('ui_refusals_and_absences')),
                           tabPanel('Alerts',
                                    uiOutput('anomalies_ui')))
           ),
@@ -2008,8 +2010,63 @@ app_server <- function(input, output, session) {
     
   })
   
-  message('---Created map for FW performance')
   
+  # Refusals and absences UI
+  output$ui_refusals_and_absences <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              # Get the country
+              co <- country()
+
+              # # get refusals data
+              rf = odk_data$data$refusals
+
+              # Keep only the country in question
+              rf <- rf %>% dplyr::filter(country == co)
+              
+              # Get agg
+              rf_agg <- rf %>%
+                mutate(reason_no_participate = ifelse(reason_no_participate %in% 
+                                                        c('SEM COMENTARIO',
+                                                          'He didnt want to do it',
+                                                          'Dont know'),
+                                                      'refused',
+                                                      'not_present')) %>%
+                group_by(district, ward, village, hamlet, hh_id, reason_no_participate) %>%
+                summarise(n = n(),
+                          date = max(as.Date(todays_date), na.rm = TRUE)) %>%
+                ungroup
+              
+              out_rf <- rf_agg %>%
+                filter(reason_no_participate == 'refused') %>%
+                dplyr::select(district, ward, village, hamlet, hh_id,
+                              `Refusal date` = date)
+              
+              out_ab <- rf_agg %>%
+                filter(reason_no_participate == 'not_present',
+                       reason_no_participate != 'refused')  %>%
+                dplyr::select(district, ward, village, hamlet, hh_id,
+                              `Visits` = n,
+                              `Last visit` = date)
+                
+              fluidPage(
+                h2('Refusals'),
+                bohemia::prettify(out_rf,
+                                  nrows = nrow(out_rf),
+                                  download_options = TRUE),
+                h2('Absences'),
+                bohemia::prettify(out_ab,
+                                  nrows = nrow(out_ab),
+                                  download_options = TRUE)
+              )
+            })
+  })
   
   # Observe the fix submission
   observeEvent(input$submit_fix,{
