@@ -1,3 +1,5 @@
+_2020-10-21, v1_
+
 # Refusals
 
 (and absences, enumerations, enrollment, etc.).
