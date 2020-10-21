@@ -412,7 +412,6 @@ app_server <- function(input, output, session) {
       odk_data$data <- out
     }
   })
-  
   # Load correct data
   observeEvent(input$confirm_log_in, {
     the_country <- country()
@@ -462,6 +461,8 @@ app_server <- function(input, output, session) {
     lc <- location_code()
     lc
   })
+  
+  message('---Finished loading data based on chosen country')
   
   output$region_ui <- renderUI({
     sub_locations <- filter_locations(locations = locations,
@@ -738,6 +739,8 @@ app_server <- function(input, output, session) {
                           `Deaths reported` = n()) %>%
                 mutate(`% VA forms completed` = round(`VA forms collected` /
                                                         `Deaths reported` * 100))
+              message('---Created progess table for VA by geography')
+              
               
               # save(va_progress_geo, file = 'va_p_geo.rda')
               if(co == 'Mozambique'){
@@ -807,7 +810,8 @@ app_server <- function(input, output, session) {
               )
             })
   })
-  
+  message('---Finished creating UIs for VA progess and VA progess by geography')
+
   # percent complete map input UI  #############################################
   # map_complete_geo<- reactiveVal('Hamlet')
   # output$ui_map_complete_by <- renderUI({
@@ -905,8 +909,9 @@ app_server <- function(input, output, session) {
       bohemia::prettify(out)
     )
   })
+  message('---Finished droup-outs table')
   
-  
+  message('---Beginning filed monitoring UI')
   output$ui_field_monitoring <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -1048,6 +1053,7 @@ app_server <- function(input, output, session) {
                   third_row[,j] <- as.character(third_row[,j])
                 }
                 overview <- bind_rows(overview, second_row, third_row)
+                message('---Created estimated targets table')
                 
                 # Create map
                 ll <- extract_ll(pd$hh_geo_location)
@@ -1057,14 +1063,17 @@ app_server <- function(input, output, session) {
                   l <- l %>%
                     addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
                 }
+                # HERE
+                # save(pd, file = 'join_pd.rda')
+                # save(gps, file = 'gps.rda')
                 
                 #########   percent complete map - create dataframe grouped by all locations together
                 lxd_all <- pd %>% group_by(hh_ward, hh_village, code = hh_hamlet_code) %>%
                   tally %>%
-                  left_join(gps %>% dplyr::select(code, n_households)) %>%
+                  left_join(gps %>% dplyr::select(code, n_households), by = 'code') %>%
                   mutate(p = n / n_households * 100)
                 lxd_all <- left_join(gps %>% filter(iso == the_iso) %>% 
-                                       dplyr::select(code, lng, lat), lxd_all) %>%
+                                       dplyr::select(code, lng, lat), lxd_all, by = 'code') %>%
                   mutate(p = ifelse(is.na(p), 0, p))
                 pal_all <- pal_hamlet <- colorNumeric(
                   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
@@ -1143,11 +1152,9 @@ app_server <- function(input, output, session) {
                   setView(lng = lxd_district$lng,
                           lat = lxd_district$lat,
                           zoom = 8)
-                
                 # get input for which location to view
                 map_location = field_monitoring_geo()#  map_complete_geo()
-                print('MAP LOCATION IS ')
-                print(map_location)
+                message('---Field monitoring map location level is ', map_location)
                 # get country to translate names for map title
                 cn <- input$geo
                 cn <- ifelse(cn == 'Rufiji', 'Tanzania', 'Mozambique')
@@ -1211,11 +1218,11 @@ app_server <- function(input, output, session) {
                            `Supervisor`) %>%
                   summarise(`Daily forms` = round(n() / dplyr::first(nd), digits = 1),
                             `Weekly forms` = round(`Daily forms` * 7, digits = 1),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `# of anomalies` = 0,
                             `# of errors` = 0) 
                 # save(pd, file = 'fwt_daily_pd.rda')
-                
+                # save(pd, file = 'fw_daily.pda')
                 fwt_daily <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
@@ -1223,7 +1230,7 @@ app_server <- function(input, output, session) {
                   group_by(`FW ID` = wid,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `% complete daily` = `Forms`/daily_forms_fw,
                             `# of anomalies` = 0,
                             `# of errors` = 0)
@@ -1234,7 +1241,7 @@ app_server <- function(input, output, session) {
                   group_by(`FW ID` = wid,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `% complete weekly` = `Forms`/weekly_forms_fw,
                             `# of anomalies` = 0,
                             `# of errors` = 0)
@@ -1244,12 +1251,13 @@ app_server <- function(input, output, session) {
                   group_by(`FW ID` = wid,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `% complete total` = `Forms`/total_forms_fw,
                             `Daily work hours` = '(Pending feature)',
                             `# of anomalies` = 0,
                             `# of errors` = 0)
                 
+                message('---Created FW performance aggregate data tables')
                 
                 
                 # Create a progress plot
@@ -1269,6 +1277,7 @@ app_server <- function(input, output, session) {
                     labs(x = 'Date',
                          y = 'Percent of target completed',
                          title = 'Cumulative percent of target completed')
+                  
                 })
                 # Create a progress table
                 progress_table <- tibble(`Forms finished` = nrow(pd),
@@ -1283,12 +1292,12 @@ app_server <- function(input, output, session) {
                 right <- pd %>%
                   group_by(code = hh_hamlet_code) %>%
                   summarise(numerator = n())
-                joined <- left_join(left, right) %>%
+                joined <- left_join(left, right, by = 'code') %>%
                   mutate(numerator = ifelse(is.na(numerator), 0, numerator)) %>%
                   mutate(p = numerator / n_households * 100) %>%
                   mutate(p = round(p, digits = 2))
                 progress_by_hamlet <- joined %>%
-                  left_join(locations %>% dplyr::select(code, Hamlet)) %>%
+                  left_join(locations %>% dplyr::select(code, Hamlet), by = 'code') %>%
                   dplyr::select(code, Hamlet, `Forms done` = numerator,
                                 `Estimated number of forms` = n_households,
                                 `Estimated percent finished` = p)
@@ -1299,7 +1308,7 @@ app_server <- function(input, output, session) {
                 
                 # Create a progress by geo tables
                 progress_by <- joined %>% left_join(locations %>% 
-                                                      dplyr::select(code, District, Ward, Village, Hamlet))
+                                                      dplyr::select(code, District, Ward, Village, Hamlet), by = 'code')
                 # save(progress_by, file = '/tmp/progress_by.RData')
                 # load('/tmp/progress_by.RData')
                 progress_by_district <- progress_by %>% group_by(District) %>% 
@@ -1361,6 +1370,7 @@ app_server <- function(input, output, session) {
                     }
                   }
                 }
+                message('---Created progess table for Overview by geography')
                 
                 # va table
                 deaths <- odk_data$data$minicensus_repeat_death_info
@@ -1369,7 +1379,7 @@ app_server <- function(input, output, session) {
                 # Conditional mourning period
                 mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
                 va <- left_join(deaths %>% 
-                                  left_join(pd %>% dplyr::select(instance_id, todays_date)) %>%
+                                  left_join(pd %>% dplyr::select(instance_id, todays_date), by = 'instance_id') %>%
                                   mutate(todays_date = as.Date(todays_date),
                                          death_dod = as.Date(death_dod)) %>%
                                   mutate(old = (todays_date - death_dod) > mourning_period) %>%
@@ -1395,7 +1405,7 @@ app_server <- function(input, output, session) {
                                                 Hamlet = hh_hamlet,
                                                 `HH ID` = hh_id,
                                                 `FW ID` = wid,
-                                                `HH visit date` = todays_date)) %>%
+                                                `HH visit date` = todays_date), by = 'instance_id') %>%
                   mutate(`FW ID` = ' ') %>%
                   dplyr::select(-instance_id)
                 
@@ -1412,7 +1422,9 @@ app_server <- function(input, output, session) {
                                          `Posto administrativo/localidade`=Ward,
                                          Povoado=Village,
                                          Bairro=Hamlet)
-                  } 
+                  }
+                  message('---Created progess table for VA')
+                  
                 }
               } else {
                 progress_by <- progress_by_district <- monitor_by_table <-  progress_by_ward <- progress_by_village <- progress_by_hamlet <- progress_table <- performance_table <-
@@ -1588,6 +1600,9 @@ app_server <- function(input, output, session) {
     
   })
   
+  message('---Created map for FW performance')
+  
+  
   # Observe the fix submission
   observeEvent(input$submit_fix,{
     sr <- input$anomalies_table_rows_selected
@@ -1640,6 +1655,8 @@ app_server <- function(input, output, session) {
     
   })
   
+
+  
   # # Observe the notification disregard
   # observeEvent(input$discard_notification,{
   #   sr <- input$notifications_table_rows_selected
@@ -1691,6 +1708,7 @@ app_server <- function(input, output, session) {
     # session_data$anomalies <- action
     removeModal()
   })
+  message('---Finished sending fixes to server')
   
   
   # Data management UI  ##############################################
@@ -1778,6 +1796,8 @@ app_server <- function(input, output, session) {
                           `Avg days between enumeration and minicensus` = mean(time_bw_enumeration_and_minicensus, na.rm = TRUE),
                           `Households enumerated but not minicensed` = length(which(enumeration_wo_minicensus))) %>%
                 mutate(`%` = `Unique minicensus HH IDs` / `Unique enumeration HH IDs` * 100)
+              message('---Created table for aggregated enrollment data')
+              
               
               # Get raw data table for display
               dat <- dat %>%
@@ -1862,6 +1882,7 @@ app_server <- function(input, output, session) {
               output$dat_leaf_output <- renderLeafgl({
                 dat_leaf
               })
+              message('---Created Enrollment map')
               
               
               fluidPage(
@@ -1943,6 +1964,8 @@ app_server <- function(input, output, session) {
     }
 
   })
+  message('---Created consent verification UI inputs')
+  
   
   consent_verification_list_reactive <- reactiveValues(data = NULL)
   
@@ -2089,6 +2112,7 @@ app_server <- function(input, output, session) {
                   )
                 }  
               }
+              message('---Created visit control sheet')
               
               
               consent_verification_list_reactive$data <- pd
@@ -2308,20 +2332,16 @@ app_server <- function(input, output, session) {
           weekly_forms_fw <- daily_forms_fw*5
           total_forms_fw <- 500
           
-          # save(est_date, file = 'est_date.rda')
-          
         }
         who <- input$fid
         if(is.null(who)){
           who <- 0 
         }
         id <- who
-        # save(id, file = 'id_perf.rda')
         last_upload <- as.character(max(pd$end_time[pd$wid == id], na.rm = TRUE))
         # fids <- read.csv('/tmp/fids.csv')
         sup_name <- as.character(fids$supervisor[fids$bohemia_id == id])
         total_forms <- length(which(pd$wid == id))
-        # save(pd,file = 'fw_perf.rda')
         # save(pd, id, file = '/tmp/14.RData')
         average_time <- 63
         daily_work_hours <- 'pending'
@@ -2536,6 +2556,7 @@ app_server <- function(input, output, session) {
                     contentType = "application/pdf"
     )
   
+  message('---Created filed index and folder location download')
   
   output$render_consent_verification_list <-
     downloadHandler(filename = "consent_verification_list.pdf",
@@ -2564,6 +2585,7 @@ app_server <- function(input, output, session) {
                     },
                     contentType = "application/pdf"
     )
+  message('---Created consent verification list download')
   
   
   # Data management UI elements #########################################
