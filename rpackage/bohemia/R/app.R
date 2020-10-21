@@ -215,12 +215,12 @@ app_ui <- function(request) {
                                                        value = 2),
                                              checkboxInput('enumeration', 'Enumeration?', value = FALSE),
                                              
-                                             helpText('MOZ only. Tick this box if you want to generate a list for enumerators'),
-                                             checkboxInput('use_previous', 'Use previous', value = FALSE),
-                                             helpText('MOZ only. "Use previous" means populating the sheet based on the previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
+                                             helpText('MOZ only. Tick "Enumeration" box if you want to generate a list for enumerators'),
                                              
                                              helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of forms.'),
                                              uiOutput('ui_id_limit'),
+                                             checkboxInput('use_previous', 'Use previous', value = FALSE),
+                                             helpText('"Use previous" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs). This is only relevant to Mozambique, where enumerations are carried out separately from minicensus interviews.'),
                                              br(), br(),
                                              downloadButton('render_visit_control_sheet',
                                                             'Generate visit control sheet(s)')
@@ -2868,8 +2868,9 @@ app_server <- function(input, output, session) {
                       #             enumeration = enum)
                       # save(tmp, file = '/tmp/tmp.RData')
                       out_file <- paste0(getwd(), '/visit_control_sheet.pdf')
-                      rmarkdown::render(input = #'../inst/rmd/visit_control_sheet.Rmd',
+                      rmarkdown::render(input = 
                                           paste0(system.file('rmd', package = 'bohemia'), '/visit_control_sheet.Rmd'),
+                                          # '../inst/rmd/visit_control_sheet.Rmd',
                                         output_file = out_file,
                                         params = list(xdata = xdata,
                                                       loc_id = lc,
