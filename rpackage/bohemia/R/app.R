@@ -1874,7 +1874,7 @@ app_server <- function(input, output, session) {
                   group_by(`FW ID` = wid,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
-                            `Average time per form` = paste0(round(mean(time, na.rm = TRUE), 1), ' ', attr(pd$time, 'units')),
+                            `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `Time period` = paste0('Last ', time_period, ' days'),
                             `% complete daily` = `Forms`/daily_forms_fw,
                             `# of anomalies` = 0,
