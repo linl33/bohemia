@@ -37,14 +37,31 @@ When a form needs to be updated (ie, replaced with a newer version), the process
 
 ### Backwards compatibility
 
-In the case of a form which is not backwards compatible (ie, data fields have been modified), a new id will be issued. For example, `minicensus` may become `minicensus2`, `minicensus3`, etc. In general, backwards-incompatibile form revisions are to be avoided (but in some cases they cannot be). In the case of a backwards-incompatible form revision, it is essential that:
+In the case of a form which is not backwards compatible (ie, data fields have been modified), a new id will be issued. For example, `minicensus` may become `minicensusb`, `minicensusb`, etc. In general, backwards-incompatibile form revisions are to be avoided (but in some cases they cannot be). In the case of a backwards-incompatible form revision, it is essential that:
 - The "deprecated" (ie, no longer active) form remain on the site server  
 - Tablets be synced to include the updated form
 - Fieldworkers be instructed to use the updated form  
 
+### Form-log
+
+#### Mini-census
+
+- `BOHEMIA_minicensus`
+- `bohemia_minicensus2`
+- `bohemia_smallcensus`
+- `bohemia_smallcensusa`
+
+#### Mini-census related
+
+- `bohemia_enumerations`
+- `bohemia_refusals`
+- `bohemia_va153`
+
 
 
 # Deprecated documentation
+
+
 
 
 ## How to create a form for the Bohemia project
