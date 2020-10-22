@@ -493,10 +493,12 @@ app_server <- function(input, output, session) {
       
       anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
       # save(out, file = '/tmp/out.RData')
-      suppressMessages({
-        anomalies <- identify_anomalies_and_errors(data = out,
-                                                   anomalies_registry = anomaly_and_error_registry,
-                                                   locs = locations)
+      suppressWarnings({
+        suppressMessages({
+          anomalies <- identify_anomalies_and_errors(data = out,
+                                                     anomalies_registry = anomaly_and_error_registry,
+                                                     locs = locations)
+        })
       })
       
       
@@ -2089,7 +2091,7 @@ app_server <- function(input, output, session) {
           footer = modalButton('Go back'),
           fluidPage(
             fluidRow(h3('The problem:')),
-            fluidRow(bohemia::prettify(this_row)),
+            fluidRow(HTML(knitr::kable(this_row, format = 'html'))),
             fluidRow(h3('The response:')),
             fluidRow(textAreaInput('fix_details', 'Response details:')),
             fluidRow(textInput('fix_source', 'Resolved by')),
@@ -2813,6 +2815,9 @@ app_server <- function(input, output, session) {
   # Action table
   output$anomalies_table <- DT::renderDataTable({
     action <- session_data$anomalies
+    # Get supervisor
+    action <- action %>%
+      left_join(fids %>% dplyr::mutate(fw_name = paste0(first_name, ' ', last_name)) %>% dplyr::select(wid = bohemia_id, supervisor))
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
     # save(action, corrections, file = '/tmp/this.RData')
@@ -2909,7 +2914,7 @@ app_server <- function(input, output, session) {
                                 p('Select a row and then click one of the below:')),
                          column(6,
                                 actionButton('submit_fix',
-                                             'Submit fix',
+                                             'Submit response',
                                              style='padding:=8px; font-size:180%'))),
                 fluidRow(
                   box(width = 12,
