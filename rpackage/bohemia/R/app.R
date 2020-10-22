@@ -2383,10 +2383,94 @@ app_server <- function(input, output, session) {
     # Generate the ui
     make_ui(li = li,
             ac = ac,
-            ok = 
+            ok = {
+              pd <- odk_data$data
+              # save(pd, file = '/tmp/tmp.RData')
+              
+              # end time analysis
+              end_times <- pd$minicensus_main %>%
+                group_by(date_time = lubridate::round_date(end_time, unit = 'hour'),
+                         country = hh_country) %>%
+                tally
+              left <- expand.grid(date_time = seq(
+                from=as.POSIXct(min(end_times$date_time)),
+                to=as.POSIXct(max(end_times$date_time)),
+                by="hour"
+              ),
+              country = c('Mozambique', 'Tanzania'))
+              end_times <- left_join(left, end_times) %>% mutate(n = ifelse(is.na(n), 0, n))
+              end_times_plot <- ggplot(data = end_times,
+                                       aes(x = date_time,
+                                           y = n)) +
+                facet_wrap(~country) +
+                geom_area(alpha = 0.3, 
+                          fill = 'darkred',
+                          color = 'black') +
+                theme_bohemia()
+              output$end_times_plot <- renderPlot({end_times_plot})
+              
+              
+              
+              out_mc <- pd$minicensus_main %>%
+                group_by(country = hh_country,
+                         date = todays_date) %>%
+                summarise(Forms = n())
+              out_people <- pd$minicensus_people %>%
+                left_join(pd$minicensus_main %>% dplyr::select(country = hh_country,
+                                                               date = todays_date,
+                                                               instance_id),
+                          by = 'instance_id') %>%
+                group_by(country,
+                         date) %>%
+                summarise(People = n())
+              out_enumerations <- pd$enumerations %>%
+                group_by(country, date = todays_date) %>%
+                summarise(`Enumerations` = n())
+              out_va <- pd$va %>%
+                group_by(country = the_country,
+                         date = todays_date) %>%
+                summarise(`Va forms` = n())
+              out_refusals <- pd$refusals %>%
+                mutate(reason_no_participate = ifelse(reason_no_participate %in% 
+                                                        c('SEM COMENTARIO',
+                                                          'He didnt want to do it',
+                                                          'Dont know'),
+                                                      'refused',
+                                                      'not_present')) %>%
+                group_by(country,
+                         date = todays_date) %>%
+                summarise(Absences = length(which(reason_no_participate == 'not_present')),
+                          Refusals = length(which(reason_no_participate == 'refused')))
+              # Join all
+              all_dates <- c(out_mc$date, out_people$date, out_enumerations$date, out_va$date, out_refusals$date)
+              left <- expand.grid(date = seq(min(all_dates,na.rm = TRUE),
+                                             max(all_dates, na.rm = TRUE),
+                                             by = 1),
+                                  country = c('Mozambique', 'Tanzania'))
+              joined <-
+                left %>% left_join(out_mc, by = c('country', 'date')) %>%
+                left_join(out_people, by = c('country', 'date')) %>%
+                left_join(out_enumerations, by = c('country', 'date')) %>%
+                left_join(out_va, by = c('country', 'date')) %>%
+                left_join(out_refusals, by = c('country', 'date')) %>%
+                mutate(Forms = ifelse(is.na(Forms), 0, Forms),
+                       People = ifelse(is.na(People), 0, People),
+                       Enumerations = ifelse(is.na(Enumerations), 0, Enumerations),
+                       `Va forms` = ifelse(is.na(`Va forms`), 0, `Va forms`),
+                       Absences = ifelse(is.na(Absences), 0, Absences),
+                       Refusals = ifelse(is.na(Refusals), 0, Refusals))
+              
+              
               fluidPage(
-                h3('LOGGED IN. This page is under construction..')
-              )
+                h3('Plot of form end times (minicensus)'),
+                plotOutput('end_times_plot'),
+                h3('Summary table'),
+                bohemia::prettify(joined,
+                                  nrows = nrow(joined),
+                                  download_options = TRUE)
+              ) 
+            }
+              
     )
   })
   
