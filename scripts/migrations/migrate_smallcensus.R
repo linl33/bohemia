@@ -14,10 +14,68 @@ suppressMessages({
 }
 )
 
+
+
+
 # Loop through each form and modify slightly
 the_dir <- '~/Desktop/ODK Briefcase Storage/forms/bohemia_smallcensus/instances/'
 # dir.create(out_dir)
 files <- dir(the_dir)
+
+# See which one of these have already been uploaded
+#!/usr/bin/Rscript
+id2 = NULL
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'smallcensus'
+already_on_server <- odk_list_submissions(
+  url = url,
+  id = id,
+  user = user,
+  password = password,
+  pre_auth = TRUE
+)
+# Get thosw which still need to be uploaded
+still <- files[!gsub('uuid', 'uuid:', files, fixed = TRUE) %in% already_on_server]
+
+# Delete everything except for still
+for(i in 1:lenth(files)){
+  this_dir <- paste0(the_dir, files[i])
+  this_id <- files[i]#gsub('uuid', 'uuid:', files[i], fixed = T)
+  delete <- !this_id %in% still
+  if(delete){
+    file.remove(this_dir)
+  }
+}
+
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = FALSE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_minicensus(data = data)
+  # Update data
+  update_minicensus(formatted_data = formatted_data,
+                    con = con)
+}
+
+
+
 for(i in 1:length(files)){
   this_file <- files[i]
   this_xml <- readLines(paste0(the_dir, this_file, '/submission.xml'))
