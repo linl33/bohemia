@@ -2082,21 +2082,23 @@ app_server <- function(input, output, session) {
     if(just_one){
       showModal(
         modalDialog(
-          title = 'Provide information on the fix',
+          title = 'Anomaly/error resolution',
           size = 'l',
           easyClose = TRUE,
           fade = TRUE,
           footer = modalButton('Go back'),
           fluidPage(
             fluidRow(h3('The problem:')),
-            fluidRow(HTML(knitr::kable(this_row, 'html'))),
-            fluidRow(h3('The fix:')),
-            fluidRow(textAreaInput('fix_details', 'Fix details:')),
-            fluidRow(textAreaInput('fix_source', 'Source of info (ie, fieldworker ID/name, document number, etc.):')),
-            fluidRow(textAreaInput('fix_method', 'Method of resolution (ie, phone call, self-resolved, etc.):')),
+            fluidRow(bohemia::prettify(this_row)),
+            fluidRow(h3('The response:')),
+            fluidRow(textAreaInput('fix_details', 'Response details:')),
+            fluidRow(textInput('fix_source', 'Resolved by')),
+            fluidRow(selectizeInput('fix_method', 'Method of resolution',
+                                    choices = c('By going to HH', 'By phone', 'Self-resolved'),
+                                    options = list(create = TRUE))),
             fluidRow(column(12, align = 'center',
                             actionButton('send_fix',
-                                         'Send fix')))
+                                         'Submit response')))
           )
         )
       )
