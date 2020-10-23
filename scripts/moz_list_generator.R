@@ -29,7 +29,8 @@ if(refresh | !exists_enumerations){
                  password = creds$password,
                  unknown_id2 = FALSE,
                  uuids = NULL,
-                 exclude_uuids = NULL)
+                 exclude_uuids = NULL,
+                 pre_auth = TRUE)
   save(enumerations, file = file_name)
 } else {
   load(file_name)
@@ -37,7 +38,7 @@ if(refresh | !exists_enumerations){
 
 ############# MINICENSUS
 # Read in the "minicensus" data
-id <- 'minicensus'
+id <- 'smallcensus'
 file_name <- paste0('moz_list_data/', id, '.RData')
 exists_minicensus <- file.exists(file_name)
 
@@ -49,7 +50,8 @@ if(refresh | !exists_minicensus){
                  password = creds$password,
                  unknown_id2 = FALSE,
                  uuids = NULL,
-                 exclude_uuids = NULL)
+                 exclude_uuids = NULL,
+                 pre_auth = TRUE)
   save(minicensus, file = file_name)
 } else {
   load(file_name)
