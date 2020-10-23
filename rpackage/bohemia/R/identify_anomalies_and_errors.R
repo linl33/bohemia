@@ -65,7 +65,7 @@ identify_anomalies_and_errors <- function(data,
         })
         out <- this_row %>%
           dplyr::mutate(id = paste0(this_row$name, '_',result_row$instance_id)) %>%
-          dplyr::select(id,  description) %>%
+          dplyr::select(type, id,  description) %>%
           mutate(incident = incident) %>%
           mutate(wid = fid) %>%
           mutate(date = as.character(date))

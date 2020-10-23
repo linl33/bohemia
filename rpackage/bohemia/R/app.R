@@ -108,12 +108,12 @@ app_ui <- function(request) {
         )),
       dashboardBody(
         add_busy_spinner(
-          spin = "self-building-square",
+          spin = "folding-cube",#  "self-building-square",
           position = 'bottom-right',
           onstart = TRUE,
-          height = '400px',
-          width = '400px',
-          margins = c(20, 20)
+          height = '200px',
+          width = '200px',
+          margins = c(10, 10)
         ),
         
         # tags$head(
@@ -2878,9 +2878,17 @@ app_server <- function(input, output, session) {
     #                 paging =TRUE,
     #                 pageLength =  nrow(joined) 
     #               ))
-    prettify(joined, 
+    joined$technical_date <- unlist(lapply(strsplit(joined$date, ','), function(x){x[length(x)]}))
+    joined$days_ago <- Sys.Date() - as.Date(joined$technical_date)
+    joined$technical_date <- NULL
+    bohemia::prettify(joined, 
              download_options = TRUE,
-             nrows = nrow(joined))
+             nrows = nrow(joined)) %>%
+      DT::formatStyle(
+        'Type',
+        backgroundColor = styleEqual(c('Error'),
+                                     c('red'))
+      )
   })
   
   
