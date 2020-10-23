@@ -1073,6 +1073,7 @@ app_server <- function(input, output, session) {
       # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
       target <- ifelse(iso == 'TZA', 46105, 30467)
       
+      save(pd, file = 'temp_pd.rda')
       # create a placeholder for number of fieldworkers. 
       # elena said 12 are doing enumerations, so im subtracting 12 from the total
       num_fws <- length(unique(pd$wid)) -12
@@ -1086,7 +1087,7 @@ app_server <- function(input, output, session) {
                   `Total Daily forms/country` = round(nrow(pd) / n_days, digits = 1),
                   `Total Weekly forms/country` = round(`Total Daily forms/country` * 7, digits = 1),
                   `Overall target/country` = nrow(pd),
-                  `# Total weeks` = round(target/`Overall target/country`, digits = 1)) %>%
+                  `# Total weeks` = round(target/`Total Weekly forms/country`, digits = 1)) %>%
         mutate(`Estimated date` = (`# Total weeks` * 7) + as.Date(dr[1]))
       # # Get a second row for targets
       # hard coded values for each country
