@@ -14,6 +14,7 @@
 #' @import yaml
 #' @import leafgl
 #' @import sf
+#' @import shinybusy
 app_ui <- function(request) {
   options(scipen = '999')
   
@@ -35,6 +36,7 @@ app_ui <- function(request) {
                         uiOutput('log_ui')))),
       dashboardSidebar(
         sidebarMenu(
+          id = 'sidebar',
           menuItem(
             text="Main",
             tabName="main",
@@ -43,7 +45,7 @@ app_ui <- function(request) {
             text = 'Operations',
             tabName = 'operations',
             icon = icon('laptop-code'),
-            startExpanded = TRUE,
+            startExpanded = FALSE,
             menuSubItem(
               text="Field monitoring",
               tabName="field_monitoring",
@@ -89,10 +91,13 @@ app_ui <- function(request) {
                    icon = icon('list'),
                    startExpanded = FALSE,
                    menuSubItem(
-                     text="Visit control sheet and file index and folder location",
+                     text="Visit control sheet",
                      tabName="visit_control_sheet",
                      icon=icon("users"))
           ),
+          menuItem('Alerts',
+                   tabName = 'alerts',
+                   icon = icon('exclamation-circle')),
           menuItem('Download data',
                    tabName = 'download_data',
                    icon = icon('download')),
@@ -102,6 +107,14 @@ app_ui <- function(request) {
             icon = icon("cog", lib = "glyphicon"))
         )),
       dashboardBody(
+        add_busy_spinner(
+          spin = "self-building-square",
+          position = 'bottom-right',
+          onstart = TRUE,
+          height = '400px',
+          width = '400px',
+          margins = c(20, 20)
+        ),
         
         # tags$head(
         #   tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
@@ -181,9 +194,7 @@ app_ui <- function(request) {
                                    
                                    ),
                           tabPanel('Refusals and Absences',
-                                   uiOutput('ui_refusals_and_absences')),
-                          tabPanel('Alerts',
-                                   uiOutput('anomalies_ui')))
+                                   uiOutput('ui_refusals_and_absences')))
           ),
           tabItem(
             tabName="enrollment",
@@ -275,6 +286,14 @@ app_ui <- function(request) {
           tabItem(
             tabName = 'download_data',
             uiOutput('download_ui')
+          ),
+          tabItem(
+            tabName = 'alerts',
+            fluidPage(
+              # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
+              p('Note: this page can take a long time to load'),
+              uiOutput('anomalies_ui')
+            )
           ),
           tabItem(
             tabName = 'about',
@@ -389,7 +408,8 @@ app_server <- function(input, output, session) {
   session_info <- reactiveValues(logged_in =FALSE, 
                                  user = 'default',
                                  access = c("field_monitoring", "enrollment", 'consent_verification_list', "server_status", "demography", "socioeconomics", "veterinary", "environment", "health", "malaria"),
-                                 country = 'MOZ')
+                                 country = 'MOZ',
+                                 already_loaded_errors = FALSE)
   
   # Create some reactive data
   session_data <- reactiveValues(aggregate_table = data.frame(),
@@ -483,29 +503,49 @@ app_server <- function(input, output, session) {
       odk_data$data <- out
     }
   })
-  # Load correct data
+  
+  # Observe log in and load data
   observeEvent(input$confirm_log_in, {
     the_country <- country()
     li <- session_info$logged_in
     if(li){
+      message('Logged in. Loading data for ', the_country)
       out <- load_odk_data(the_country = the_country)
-      odk_data$data = out
-      
-      anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
-      # save(out, file = '/tmp/out.RData')
-      suppressWarnings({
-        suppressMessages({
-          anomalies <- identify_anomalies_and_errors(data = out,
-                                                     anomalies_registry = anomaly_and_error_registry,
-                                                     locs = locations)
+      odk_data$data <- out
+    }
+  })
+
+  
+  # Error and anomaly detection
+  observeEvent(input$sidebar, {
+    ok <- FALSE
+    sidebar <- input$sidebar
+    message('Clicked on sidebar: ', sidebar)
+    if(sidebar == 'alerts'){
+      # Check to see if the errors have already been loaded or not
+      already_loaded_errors <- session_info$already_loaded_errors
+      if(!already_loaded_errors){
+        ok <- TRUE
+      }
+    }
+    
+    if(ok){
+      the_country <- country()
+      li <- session_info$logged_in
+      if(li){
+        out <- odk_data$data
+        
+        anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
+        # save(out, file = '/tmp/out.RData')
+        suppressWarnings({
+          suppressMessages({
+            anomalies <- identify_anomalies_and_errors(data = out,
+                                                       anomalies_registry = anomaly_and_error_registry,
+                                                       locs = locations)
+          })
         })
-      })
-      
-      
-      # save(corrections, anomalies, file = '/tmp/joe.RData')
-      session_data$anomalies <- anomalies
-      
-      
+        session_data$anomalies <- anomalies
+      }
     }
   })
   
@@ -2921,8 +2961,8 @@ app_server <- function(input, output, session) {
                       # icon = icon('table'),
                       color = 'orange',
                       div(DT::dataTableOutput('anomalies_table'), style = "font-size:60%"))
-                )
-              )
+                
+              ))
             }
     )
   })
