@@ -575,8 +575,6 @@ app_server <- function(input, output, session) {
     lc
   })
   
-  message('---Finished loading data based on chosen country')
-  
   output$region_ui <- renderUI({
     sub_locations <- filter_locations(locations = locations,
                                       country = input$country)
@@ -662,6 +660,7 @@ app_server <- function(input, output, session) {
     } else {
       num_houses <- 500
     }
+    message('---- retrieved number of houses for hamlet selected')
     return(num_houses)
   })
   
@@ -670,6 +669,8 @@ app_server <- function(input, output, session) {
     textInput('enumeration_n_hh',
               'Estimated number of forms',
               value = val)
+    # message('---- created enumeration text input for estimated numer of forms')
+    
   })
   
   output$ui_id_limit <- renderUI({
@@ -882,7 +883,7 @@ app_server <- function(input, output, session) {
           }
         }
       }
-      message('---Created progess table for Overview by geography')
+      message('---created progess table for Overview by geography')
       out <- bohemia::prettify(monitor_by_table, download_options = TRUE)
     }
     return(out)
@@ -1018,10 +1019,13 @@ app_server <- function(input, output, session) {
           lx <- lxd_ward
         }
       }
+      message('---Created map of progess by geography')
+      
       out <- lx
     }
     return(out)
   })
+  
   output$ui_progress_by_geographical_unit <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -1073,7 +1077,7 @@ app_server <- function(input, output, session) {
       # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
       target <- ifelse(iso == 'TZA', 46105, 30467)
       
-      save(pd, file = 'temp_pd.rda')
+      # save(pd, file = 'temp_pd.rda')
       # create a placeholder for number of fieldworkers. 
       # elena said 12 are doing enumerations, so im subtracting 12 from the total
       num_fws <- length(unique(pd$wid)) -12
@@ -1089,6 +1093,8 @@ app_server <- function(input, output, session) {
                   `Overall target/country` = nrow(pd),
                   `# Total weeks` = round(target/`Total Weekly forms/country`, digits = 1)) %>%
         mutate(`Estimated date` = (`# Total weeks` * 7) + as.Date(dr[1]))
+      message('---Created "observed" row for overall progress table')
+      
       # # Get a second row for targets
       # hard coded values for each country
       if(co=='Tanzania'){
@@ -1124,6 +1130,8 @@ app_server <- function(input, output, session) {
                `Overall target/country` = total_forms,
                `# Total weeks` = total_weeks, #as.character(target_helper$end_date))
                `Estimated date` = as.character(Sys.Date()+total_days))
+      message('---Created "target" row for overall progress table')
+      
       third_row <- 
         tibble(Type = 'Percentage',
                `No. FWs` = round(overview$`No. FWs`/second_row$`No. FWs` * 100),  
@@ -1135,6 +1143,8 @@ app_server <- function(input, output, session) {
                `Overall target/country` = round(overview$`Overall target/country`/total_forms,2)*100,
                `# Total weeks` = ' ', #round(overview$`# Total weeks`/second_row$`# Total weeks`,2),
                `Estimated date` = '')
+      message('---Created "percentage" row for overall progress table')
+      
       # save(pd, overview,target_helper, second_row, file = '/tmp/overview.RData')
       for(j in 1:ncol(overview)){
         overview[,j] <- as.character(overview[,j])
@@ -1153,6 +1163,7 @@ app_server <- function(input, output, session) {
     }
     return(overview)
   })
+  
   output$plot_progress <- renderPlot({
     # Get the odk data
     pd <- odk_data$data
@@ -1188,6 +1199,7 @@ app_server <- function(input, output, session) {
     } else {
       ggplot() 
     }
+    message('---Created overall progress plot ')
     
   })
   output$gt_progress_table <- gt::render_gt({
@@ -1214,6 +1226,8 @@ app_server <- function(input, output, session) {
       } else {
         data.frame(a = 0)
       }
+      message('---Created overall progress table ')
+      
   })
   
   output$ui_overall_progress <- renderUI({
@@ -1295,6 +1309,8 @@ app_server <- function(input, output, session) {
     } else {
       NULL
     }
+    message('---Created FW performance individual table ')
+    
   })
   
   output$ui_individual_data <- renderUI({
@@ -2218,8 +2234,7 @@ app_server <- function(input, output, session) {
     # session_data$anomalies <- action
     removeModal()
   })
-  message('---Finished sending fixes to server')
-  
+
   
   # Data management UI  ##############################################
   output$ui_enrollment <- renderUI({
@@ -2558,9 +2573,7 @@ app_server <- function(input, output, session) {
     }
     
   })
-  message('---Created consent verification UI inputs')
-  
-  
+
   consent_verification_list_reactive <- reactiveValues(data = NULL)
   
   quality_control_list_reactive <- reactiveValues(data = NULL)
@@ -3113,8 +3126,7 @@ app_server <- function(input, output, session) {
                     contentType = "application/pdf"
     )
   
-  message('---Created filed index and folder location download')
-  
+
   output$render_consent_verification_list <-
     downloadHandler(filename = "consent_verification_list.pdf",
                     content = function(file){
@@ -3142,8 +3154,6 @@ app_server <- function(input, output, session) {
                     },
                     contentType = "application/pdf"
     )
-  message('---Created consent verification list download')
-  
   
   # Data management UI elements #########################################
   
