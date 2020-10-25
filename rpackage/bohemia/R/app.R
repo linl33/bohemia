@@ -111,9 +111,10 @@ app_ui <- function(request) {
           spin = "folding-cube",#  "self-building-square",
           position = 'bottom-right',
           onstart = TRUE,
-          height = '200px',
-          width = '200px',
-          margins = c(10, 10)
+          height = '100px',
+          width = '100px',
+          margins = c(10, 10)#,
+          # color = 'de0000'
         ),
         
         # tags$head(
@@ -2150,11 +2151,14 @@ app_server <- function(input, output, session) {
             fluidRow(h3('The problem:')),
             fluidRow(HTML(knitr::kable(this_row, format = 'html'))),
             fluidRow(h3('The response:')),
-            fluidRow(textAreaInput('fix_details', 'Response details:')),
+            fluidRow(textAreaInput('response_details', 'Response details:')),
             fluidRow(textInput('fix_source', 'Resolved by')),
             fluidRow(selectizeInput('fix_method', 'Method of resolution',
                                     choices = c('By going to HH', 'By phone', 'Self-resolved'),
                                     options = list(create = TRUE))),
+            fluidRow(dateInput('resolution_date', 'Resolution date',
+                               min = '2020-10-01',
+                               max = Sys.Date())),
             fluidRow(column(12, align = 'center',
                             actionButton('send_fix',
                                          'Submit response')))
@@ -2202,16 +2206,24 @@ app_server <- function(input, output, session) {
     # Get the fix row
     this_row <- action[sr,]
     # Get the fix text
-    fix_details <- paste0(input$fix_details, ' | ', input$fix_source, input$fix_method)
+    response_details <- paste0(input$response_details)
+    fix_source <- input$fix_source
+    fix_method <- input$fix_method
+    resolution_date <- input$resolution_date
+    log_in_user <- input$log_in_user
     fix <-
       tibble(id = this_row$id,
-             action = fix_details,
-             submitted_by = input$log_in_user,
+             response_details = response_details,
+             resolved_by = fix_source,
+             resolution_method = fix_method,
+             resolution_date = as.character(resolution_date),
+             submitted_by = log_in_user,
              submitted_at = Sys.time(),
              done = FALSE,
              done_by = ' ')
     # CONNECT TO THE DATABASE AND ADD FIX
     message('Connecting to the database in order to add a fix to the corrections table')
+    # save(fix, fix_source, fix_method, resolution_date, log_in_user, response_details, this_row, action, sr, file = '/tmp/sunday.RData')
     con <- get_db_connection()
     dbAppendTable(conn = con,
                   name = 'corrections',
@@ -2219,7 +2231,7 @@ app_server <- function(input, output, session) {
     message('Done. now disconnecting from database')
     dbDisconnect(con)
     # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
-    # save(this_row, sr, action, fix, odk_data, fix_details, file = '/tmp/this_row.RData')
+    # save(this_row, sr, action, fix, odk_data, resolution_details, file = '/tmp/this_row.RData')
     message('Now uploading the in-session data')
     old_corrections <- odk_data$data$corrections 
     new_correction <- fix
@@ -2874,24 +2886,22 @@ app_server <- function(input, output, session) {
       left_join(fids %>% dplyr::mutate(fw_name = paste0(first_name, ' ', last_name)) %>% dplyr::select(wid = bohemia_id, supervisor))
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
-    # save(action, corrections, file = '/tmp/this.RData')
+    save(action, corrections, file = '/tmp/this.RData')
     if(nrow(corrections) == 0){
       corrections <- dplyr::tibble(id = '',
-                                   action = '',
+                                   response_details = '',
+                                   resolved_by = '',
+                                   resolution_method = '',
+                                   resolution_date = '',
                                    submitted_by = '',
                                    submitted_at = Sys.time(),
                                    done = FALSE,
                                    done_by = ' ')
     }
-    joined <- dplyr::left_join(action, corrections)
-    # joined <- joined %>% filter(action != '')
-    # DT::datatable(joined,
-    #               rownames = NULL,
-    #               filter = 'bottom',
-    #               options = list(
-    #                 paging =TRUE,
-    #                 pageLength =  nrow(joined) 
-    #               ))
+    joined <- dplyr::left_join(action, corrections) %>%
+      # dplyr::filter(!done)
+      dplyr::select(-done, -done_by)
+
     joined$technical_date <- unlist(lapply(strsplit(joined$date, ','), function(x){x[length(x)]}))
     joined$days_ago <- Sys.Date() - as.Date(joined$technical_date)
     joined$technical_date <- NULL

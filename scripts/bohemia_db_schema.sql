@@ -48,7 +48,7 @@ CREATE TABLE minicensus_main (
     hh_health_permission   VARCHAR(256),
     hh_health_who   VARCHAR(256),
     hh_health_who_other   VARCHAR(256),
-    hh_id   VARCHAR(8), 
+    hh_id   VARCHAR(8),
     hh_main_building_type   VARCHAR(256),
     hh_main_energy_source_for_lighting   VARCHAR(256),
     hh_main_wall_material   VARCHAR(256),
@@ -243,7 +243,10 @@ CREATE TABLE sessions (
 
 CREATE TABLE corrections (
     id  TEXT,
-    action  TEXT,
+    response_details  TEXT,
+    resolved_by   TEXT,
+    resolution_method   TEXT,
+    resolution_date   TEXT,
     submitted_by   VARCHAR(128),
     submitted_at   TIMESTAMP,
     done    BOOLEAN DEFAULT false,

@@ -83,7 +83,7 @@ dbExecute(con,
 dbExecute(con,
           statement = paste0("UPDATE clean_minicensus_main SET hh_head_dob = '2000-01-01' WHERE instance_id = 'ade9172b-3b03-4254-b252-54e92b9a63e4'"))
 dbExecute(conn = con,
-          statement = paste0("UPDATE corrections SET done = 'true', done_by = 'Joe Brew' WHERE id='hh_head_too_young_old_ade9172b-3b03-4254-b252-54e92b9a63e4'"))
+            statement = paste0("UPDATE corrections SET done = 'true', done_by = 'Joe Brew' WHERE id='hh_head_too_young_old_ade9172b-3b03-4254-b252-54e92b9a63e4'"))
 
 ########################
 # hh_head_too_young_old_425f18cd-e4a0-42e6-b496-8093b69fe69a

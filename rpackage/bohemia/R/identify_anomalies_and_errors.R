@@ -42,6 +42,7 @@ identify_anomalies_and_errors <- function(data,
     this_incident_code <- this_row$incident_code
     this_fid_code <- this_row$fid_code
     this_date_code <- this_row$date_code
+    this_instance_id_code <- this_row$instance_id_code
     suppressMessages({
       eval(parse(text = this_snippet))
     })
@@ -63,12 +64,17 @@ identify_anomalies_and_errors <- function(data,
         suppressMessages({
           eval(parse(text = this_date_code))
         })
+        # Instance ID code
+        suppressMessages({
+          eval(parse(text = this_instance_id_code))
+        })
         out <- this_row %>%
           dplyr::mutate(id = paste0(this_row$name, '_',result_row$instance_id)) %>%
           dplyr::select(type, id,  description) %>%
           mutate(incident = incident) %>%
           mutate(wid = fid) %>%
-          mutate(date = as.character(date))
+          mutate(date = as.character(date)) %>%
+          mutate(instance_id = instance_id)
         out_list[[counter]] <- out
       }
     }
