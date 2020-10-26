@@ -18,7 +18,7 @@ con <- dbConnect(drv, dbname='bohemia', host=psql_end_point,
                  port=5432,
                  user=psql_user, password=psql_pass)
 id2 = NULL
-skip_deprecated <- TRUE
+skip_deprecated <- FALSE
 
 
 # MINICENSUS MOZAMBIQUE #######################################################################
@@ -105,43 +105,43 @@ if(!skip_deprecated){
   }
 }
 
-# ############# SMALLCENSUSA MOZAMBIQUE
-# url <- creds$moz_odk_server
-# user = creds$moz_odk_user
-# password = creds$moz_odk_pass
-# id = 'smallcensusa'
-# suppressWarnings({
-#   existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
-# })
-# if (nrow(existing_uuids)< 0){
-#   existing_uuids <- c()
-# } else {
-#   existing_uuids <- existing_uuids$instance_id
-# }
-# # Get data
-# data <- odk_get_data(
-#   url = url,
-#   id = id,
-#   id2 = id2,
-#   unknown_id2 = FALSE,
-#   uuids = NULL,
-#   exclude_uuids = existing_uuids,
-#   user = user,
-#   password = password,
-#   pre_auth = TRUE,
-#   use_data_id = FALSE
-# )
-# new_data <- FALSE
-# if(!is.null(data)){
-#   new_data <- TRUE
-# }
-# if(new_data){
-#   # Format data
-#   formatted_data <- format_minicensus(data = data)
-#   # Update data
-#   update_minicensus(formatted_data = formatted_data,
-#                     con = con)
-# }
+############# SMALLCENSUSA MOZAMBIQUE
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'smallcensusa'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+}
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = FALSE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_minicensus(data = data)
+  # Update data
+  update_minicensus(formatted_data = formatted_data,
+                    con = con)
+}
 
 
 ############### MOZAMBIQUE VA
@@ -408,20 +408,23 @@ for(i in 1:nrow(dat)){
   this_id <- dat$id[i]
   unique_id <- dat$uniqueId[i]
   # message(i, '. ', this_id)
-  this_position <- bohemia::get_positions_from_device_id(url = creds$traccar_server,
-                                                         user = creds$traccar_user,
-                                                         pass = creds$traccar_pass,
-                                                         device_id = this_id) %>%
-    mutate(unique_id = unique_id) %>%
-    mutate(accuracy = as.numeric(accuracy),
-           altitude = as.numeric(altitude),
-           course = as.numeric(course),
-           deviceId = as.numeric(deviceId),
-           deviceTime = lubridate::as_datetime(deviceTime),
-           fixTime = lubridate::as_datetime(fixTime),
-           latitude = as.numeric(latitude),
-           longitude = as.numeric(longitude),
-           id = as.numeric(id))
+  suppressMessages({
+    this_position <- bohemia::get_positions_from_device_id(url = creds$traccar_server,
+                                                           user = creds$traccar_user,
+                                                           pass = creds$traccar_pass,
+                                                           device_id = this_id) %>%
+      mutate(unique_id = unique_id) %>%
+      mutate(accuracy = as.numeric(accuracy),
+             altitude = as.numeric(altitude),
+             course = as.numeric(course),
+             deviceId = as.numeric(deviceId),
+             deviceTime = lubridate::as_datetime(deviceTime),
+             fixTime = lubridate::as_datetime(fixTime),
+             latitude = as.numeric(latitude),
+             longitude = as.numeric(longitude),
+             id = as.numeric(id))
+  })
+  
   if(!is.null(this_position)){
     if(nrow(this_position) > 0){
       position_list[[i]] <- this_position
