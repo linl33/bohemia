@@ -2457,6 +2457,7 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               pd <- odk_data$data
+              the_country <- country()
               # save(pd, file = '/tmp/tmp.RData')
               
               # end time analysis
@@ -2471,7 +2472,7 @@ app_server <- function(input, output, session) {
               ),
               country = c('Mozambique', 'Tanzania'))
               end_times <- left_join(left, end_times) %>% mutate(n = ifelse(is.na(n), 0, n))
-              end_times_plot <- ggplot(data = end_times,
+              end_times_plot <- ggplot(data = end_times %>% filter(country == the_country),
                                        aes(x = date_time,
                                            y = n)) +
                 facet_wrap(~country) +
@@ -2531,6 +2532,7 @@ app_server <- function(input, output, session) {
                        `Va forms` = ifelse(is.na(`Va forms`), 0, `Va forms`),
                        Absences = ifelse(is.na(Absences), 0, Absences),
                        Refusals = ifelse(is.na(Refusals), 0, Refusals))
+              joined <- joined %>% filter(country == the_country)
               
               
               fluidPage(
@@ -2884,9 +2886,10 @@ app_server <- function(input, output, session) {
     # Get supervisor
     action <- action %>%
       left_join(fids %>% dplyr::mutate(fw_name = paste0(first_name, ' ', last_name)) %>% dplyr::select(wid = bohemia_id, supervisor))
+    action <- action %>% dplyr::rename(FW = wid)
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
-    save(action, corrections, file = '/tmp/this.RData')
+    # save(action, corrections, file = '/tmp/this.RData')
     if(nrow(corrections) == 0){
       corrections <- dplyr::tibble(id = '',
                                    response_details = '',
