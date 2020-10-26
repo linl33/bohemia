@@ -2220,13 +2220,14 @@ app_server <- function(input, output, session) {
 
               # Keep only the country in question
               rf <- rf %>% dplyr::filter(country == co)
-              
+
               # Get agg
               rf_agg <- rf %>%
                 mutate(reason_no_participate = ifelse(reason_no_participate %in% 
                                                         c('SEM COMENTARIO',
                                                           'He didnt want to do it',
-                                                          'Dont know'),
+                                                          'Dont know',
+                                                          'refused'),
                                                       'refused',
                                                       'not_present')) %>%
                 group_by(district, ward, village, hamlet, hh_id, reason_no_participate) %>%
@@ -2453,12 +2454,16 @@ app_server <- function(input, output, session) {
               
               # save(dat, file = '/tmp/dat.RData')
               # create summary stats off of dat
+              
               sub_dat <- dat %>%
                 summarise(`Minicensus forms collected` = sum(num_mini, na.rm = TRUE),
                           `Unique minicensus HH IDs` = length(which(!is.na(last_date_mini))),
                           `Enumeration forms collected` = sum(num_enum, na.rm = TRUE),
                           `Unique enumeration HH IDs` = length(which(!is.na(last_date_enum))),
-                          `Refusals` = sum(num_ref, na.rm = TRUE),
+                          `Refusals` = sum(num_ref[reason_no_participate %in% c('SEM COMENTARIO',
+                                                                                'He didnt want to do it',
+                                                                                'Dont know',
+                                                                                'refused')], na.rm = TRUE),
                           `Unique households` = nrow(all_hh_ids),
                           `Households geocoded` = length(which(any_geocode)),
                           `Avg days between enumeration and minicensus` = mean(time_bw_enumeration_and_minicensus, na.rm = TRUE),
