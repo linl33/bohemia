@@ -25,7 +25,8 @@ format_minicensus <- function(data){
   # Remove a few extra columns
   df$non_residents_filled_out <- NULL
   df$residents_filled_out <- NULL
-
+  df$hh_head_gender_local_language <- NULL
+  
   # Clean up the people part
   people_list <- list()
   counter <- 0
@@ -48,6 +49,8 @@ format_minicensus <- function(data){
   people_part <- people_part
   people_part$invisible_non_resident_count <- NULL
   people_part$invisible_resident_count <- NULL
+  people_part$member_resident_head <- NULL
+  people_part$member_resident_non_head <- NULL
   
   # Remove names
   people_part$name_label <- NULL
@@ -134,6 +137,8 @@ format_minicensus <- function(data){
       repeat_hh_sub$hh_sub_relationship_other <- NULL
       repeat_hh_sub <- repeat_hh_sub[,!grepl('note_|_warning', names(repeat_hh_sub))]
       repeat_hh_sub$repeat_hh_sub_count <- NULL
+      repeat_hh_sub$hh_sub_age <- NULL
+      repeat_hh_sub$hh_sub_gender_local_language <- NULL
     } else {
       repeat_hh_sub <- NULL
     }

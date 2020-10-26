@@ -408,22 +408,25 @@ for(i in 1:nrow(dat)){
   this_id <- dat$id[i]
   unique_id <- dat$uniqueId[i]
   # message(i, '. ', this_id)
-  suppressMessages({
-    this_position <- bohemia::get_positions_from_device_id(url = creds$traccar_server,
-                                                           user = creds$traccar_user,
-                                                           pass = creds$traccar_pass,
-                                                           device_id = this_id) %>%
-      mutate(unique_id = unique_id) %>%
-      mutate(accuracy = as.numeric(accuracy),
-             altitude = as.numeric(altitude),
-             course = as.numeric(course),
-             deviceId = as.numeric(deviceId),
-             deviceTime = lubridate::as_datetime(deviceTime),
-             fixTime = lubridate::as_datetime(fixTime),
-             latitude = as.numeric(latitude),
-             longitude = as.numeric(longitude),
-             id = as.numeric(id))
+  suppressWarnings({
+    suppressMessages({
+      this_position <- bohemia::get_positions_from_device_id(url = creds$traccar_server,
+                                                             user = creds$traccar_user,
+                                                             pass = creds$traccar_pass,
+                                                             device_id = this_id) %>%
+        mutate(unique_id = unique_id) %>%
+        mutate(accuracy = as.numeric(accuracy),
+               altitude = as.numeric(altitude),
+               course = as.numeric(course),
+               deviceId = as.numeric(deviceId),
+               deviceTime = lubridate::as_datetime(deviceTime),
+               fixTime = lubridate::as_datetime(fixTime),
+               latitude = as.numeric(latitude),
+               longitude = as.numeric(longitude),
+               id = as.numeric(id))
+    })
   })
+  
   
   if(!is.null(this_position)){
     if(nrow(this_position) > 0){
