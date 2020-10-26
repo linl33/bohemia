@@ -394,7 +394,7 @@ if(new_data){
 
 # get traccar data - one row per ID 
 message('Syncing traccar workers')
-sync_workers_traccar()
+sync_workers_traccar(credentials = creds)
 
 message('Retrieving information on workers from traccar')
 dat <- get_traccar_data(url = creds$traccar_server,
@@ -402,6 +402,7 @@ dat <- get_traccar_data(url = creds$traccar_server,
                         pass = creds$traccar_pass)
 
 message('Retrieving information on positions from traccar')
+library(dplyr)
 position_list <- list()
 for(i in 1:nrow(dat)){
   this_id <- dat$id[i]
@@ -450,6 +451,7 @@ existing_ids <- dbGetQuery(con, 'SELECT id FROM traccar')
 
 # Subset to remove those which are in existing ids
 if(nrow(existing_ids) > 0){
+  existing_ids <- existing_ids$id
   message('...', length(existing_ids), ' positions already in database.')
   positions <- positions %>%
     filter(!id %in% existing_ids)
