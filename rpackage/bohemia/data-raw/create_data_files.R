@@ -467,6 +467,12 @@ if(redo_osm){
   ruf2 <- tza2[tza2@data$NAME_2 == 'Rufiji',]
   shps <- list(moz3, tza3)
   
+  # Get fortified
+  ruf2_fortified <- fortify(ruf2, region = 'NAME_2')
+  mop2_fortified <- fortify(mop2, region = 'NAME_2')
+  usethis::use_data(mop2_fortified, overwrite = TRUE)
+  usethis::use_data(ruf2_fortified, overwrite = TRUE)
+  
   countries <- c('mozambique', 'tanzania')
   shps <- list(mop2, ruf2)
   places <- c('mopeia', 'rufiji')

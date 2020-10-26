@@ -9,7 +9,7 @@ output: pdf_document
 library(bohemia)
 library(tidyverse)
 # read in credenstials 
-creds <- yaml::yaml.load_file('../credentials/credentials.yaml')
+creds <- yaml::yaml.load_file('../../credentials/credentials.yaml')
 
 # sync traccar data
 sync_workers_traccar(traccar_url = creds$traccar_server,

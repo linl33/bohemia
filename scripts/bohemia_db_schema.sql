@@ -825,3 +825,19 @@ CREATE TABLE va (
   vaid   TEXT,
   PRIMARY KEY(instance_id)
 );
+
+-- Traccar
+
+CREATE TABLE traccar (
+    id  INT,
+    accuracy  DECIMAL,
+    altitude  DECIMAL,
+    course  DECIMAL,
+    deviceid  INT,
+    devicetime  TIMESTAMP,
+    latitude  DECIMAL,
+    longitude  DECIMAL,
+    valid  TEXT,
+    unique_id  INT,
+    PRIMARY KEY(id)
+);

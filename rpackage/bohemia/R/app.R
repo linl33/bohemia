@@ -194,6 +194,8 @@ app_ui <- function(request) {
                                    )
                                    
                                    ),
+                          tabPanel('GPS tracking',
+                                   uiOutput('ui_gps')),
                           tabPanel('Refusals and Absences',
                                    uiOutput('ui_refusals_and_absences')))
           ),
@@ -415,7 +417,9 @@ app_server <- function(input, output, session) {
   # Create some reactive data
   session_data <- reactiveValues(aggregate_table = data.frame(),
                                  anomalies = data.frame(),
-                                 fieldworkers = default_fieldworkers)
+                                 fieldworkers = default_fieldworkers,
+                                 traccar = data.frame(),
+                                 traccar_summary = data.frame())
   odk_data <- reactiveValues(data = NULL)
   
   
@@ -429,6 +433,7 @@ app_server <- function(input, output, session) {
     make_log_in_modal(info_text = info_text)
   })
   
+  country <- reactiveVal(value = 'Tanzania')
   observeEvent(input$confirm_log_in,{
     # Run a check on the credentials
     users <- yaml::yaml.load_file('credentials/users.yaml')
@@ -437,6 +442,13 @@ app_server <- function(input, output, session) {
     ok <- credentials_check(user = liu,
                             password = lip,
                             users = users)
+    gg <- input$geo
+    if(gg == 'Rufiji'){
+      the_country <- 'Tanzania'
+    } else {
+      the_country <- 'Mozambique'
+    }
+    country(the_country)
     if(ok){
       message('---Correct user/password. Logged in.')
       # Update sessions table
@@ -446,10 +458,33 @@ app_server <- function(input, output, session) {
                      end_time = NA,
                      web = grepl('/srv/shiny-server', getwd(), fixed = TRUE))
       con <- get_db_connection()
+      message('Writing session info to sessions table.')
       dbAppendTable(conn = con,
                     name = 'sessions',
                     value = sesh)
+      # Read in the traccar data (could speed this up by not reading all in)
+      message('Reading in traccar table')
+      # Get the country
+      co <- the_country
+      # Get fieldworkers for this country
+      these_fids <- fids %>% filter(country == co)
+      keep_ids <- these_fids$bohemia_id
+      these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
+      # Get traccar data for those fieldworkers
+      traccar <- dbGetQuery(conn = con,
+                             statement = paste0('SELECT * FROM traccar WHERE unique_id IN ', these_fids))
+      session_data$traccar <- traccar
       dbDisconnect(con)
+      # Get traccar summary data
+      message('Retrieving information on workers from traccar')
+      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+      dat <- get_traccar_data(url = creds$traccar_server,
+                              user = creds$traccar_user,
+                              pass = creds$traccar_pass)
+      # Keep only the summary data for the country
+      dat$uniqueId <- as.numeric(dat$uniqueId)
+      dat <- dat %>% filter(uniqueId %in% keep_ids)
+      session_data$traccar_summary <- dat
       session_info$logged_in <- TRUE
       reactive_log_in_text('')
       removeModal()
@@ -486,7 +521,6 @@ app_server <- function(input, output, session) {
   ##################
   # Get the location code based on the input hierarchy
   location_code <- reactiveVal(value = NULL)
-  country <- reactiveVal(value = 'Tanzania')
   observeEvent(input$geo, {
     gg <- input$geo
     if(gg == 'Rufiji'){
@@ -2068,6 +2102,103 @@ app_server <- function(input, output, session) {
         clearMarkers() 
     }
     
+  })
+  
+  # TRACCAR GPS UI
+  output$traccar_plot_1 <- renderPlot({
+    # Get the traccar data for that country
+    traccar <- session_data$traccar
+    # Get the fortified shapefile
+    shp_fortified <- bohemia::mop2_fortified
+    geo <- input$geo
+    if(geo == 'Rufiji'){
+      shp_fortified <- bohemia::ruf2_fortified
+    }
+    ggplot(data = traccar) +
+      geom_polygon(data = shp_fortified,
+                   aes(x = long,
+                       y = lat),
+                   fill = 'black') +
+      # geom_path(aes(x = longitude,
+      #               y = latitude,
+      #               group = unique_id),
+      #           color = 'red',
+      #           size = 0.2,
+      #           alpha = 0.5) +
+      geom_point(aes(x = longitude,
+                     y = latitude),
+                 color = 'red',
+                 size = 0.2,
+                 alpha = 0.5) +
+      theme_bohemia()
+  })
+  output$traccar_leaf <- renderLeaflet({
+    # Get the traccar data for that country
+    traccar <- session_data$traccar
+    the_worker <- input$fid_leaf_traccar
+    if(!is.null(the_worker)){
+      sub_traccar <- traccar %>% filter(unique_id == the_worker)
+      pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
+    }
+    # Make the plot
+    l <- leaflet() %>% 
+      addProviderTiles(providers$Esri.WorldImagery)
+    if(nrow(sub_traccar) > 0){
+      l <- l %>%
+        addGlPoints(data = pts,
+                    fillColor = 'red',
+                    # fillColor = pts$status,
+                    popup = pts %>% dplyr::select(devicetime, valid),
+                    group = "pts")
+    }
+    l
+  })
+  
+
+  
+  output$traccar_table <- DT::renderDataTable({
+    traccar_summary <- session_data$traccar_summary
+    out <- traccar_summary %>%
+      mutate(lastUpdate = lubridate::as_datetime(lastUpdate)) %>%
+      dplyr::select(name, lastUpdate,
+                    status, uniqueId)
+    bohemia::prettify(out, nrows = nrow(out),
+                      download_options = TRUE)
+  })
+  output$ui_gps <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              
+              # Define choices for leaflet fw selection
+              co <- country()
+              sub_fids <- fids %>% 
+                filter(country == co)
+              the_choices <- sub_fids$bohemia_id
+              names(the_choices) <- paste0(sub_fids$bohemia_id, '. ',
+                                           sub_fids$first_name, ' ',
+                                           sub_fids$last_name)
+              
+              fluidPage(
+                fluidRow(h1('GPS tracking')),
+                fluidRow(column(6, align = 'center',
+                                plotOutput('traccar_plot_1')),
+                         column(6,
+                                selectInput('fid_leaf_traccar',
+                                            'FW',
+                                            choices = the_choices),
+                                leafletOutput('traccar_leaf'))),
+                fluidRow((column(12, align = 'center',
+                                 DT::dataTableOutput('traccar_table'))))
+              )
+
+            })
   })
   
   
