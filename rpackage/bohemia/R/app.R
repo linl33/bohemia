@@ -569,16 +569,23 @@ app_server <- function(input, output, session) {
       if(li){
         out <- odk_data$data
         
-        anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
-        # save(out, file = '/tmp/out.RData')
-        suppressWarnings({
-          suppressMessages({
-            anomalies <- identify_anomalies_and_errors(data = out,
-                                                       anomalies_registry = anomaly_and_error_registry,
-                                                       locs = locations)
-          })
-        })
+        ## OLD WAY: GENERATING IN SESSION
+        # anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
+        # # save(out, file = '/tmp/out.RData')
+        # suppressWarnings({
+        #   suppressMessages({
+        #     anomalies <- identify_anomalies_and_errors(data = out,
+        #                                                anomalies_registry = anomaly_and_error_registry,
+        #                                                locs = locations)
+        #   })
+        # })
+        
+        ### NEW WAY: ALREADY GENERATED IN DB
+        con <- get_db_connection()
+        anomalies <- dbGetQuery(conn = con,
+                                statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
         session_data$anomalies <- anomalies
+        dbDisconnect(con)
       }
     }
   })

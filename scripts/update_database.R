@@ -471,8 +471,31 @@ dbAppendTable(conn = con,
               value = positions)
 message('...done adding positions to traccar table.')
 
-
-
+####### ANOMALIES CREATION ##################################################
+data_moz <- load_odk_data(the_country = 'Mozambique', 
+                      credentials_path = '../credentials/credentials.yaml',
+                      users_path = '../credentials/users.yaml')
+data_tza <- load_odk_data(the_country = 'Tanzania', 
+                          credentials_path = '../credentials/credentials.yaml',
+                          users_path = '../credentials/users.yaml')
+# Run anomaly detection
+anomalies_moz <- identify_anomalies_and_errors(data = data_moz,
+                                           anomalies_registry = bohemia::anomaly_and_error_registry,
+                                           locs = bohemia::locations)
+anomalies_tza <- identify_anomalies_and_errors(data = data_tza,
+                                               anomalies_registry = bohemia::anomaly_and_error_registry,
+                                               locs = bohemia::locations)
+anomalies <- bind_rows(
+  anomalies_moz %>% mutate(country = 'Mozambique'),
+  anomalies_tza %>% mutate(country = 'Tanzania')
+)
+# Drop old anomalies and add these ones to the database
+# dbSendQuery(conn = con,
+#             statement = 'DELETE FROM anomalies;')
+dbWriteTable(conn = con,
+             name = 'anomalies',
+             value = anomalies,
+             overwrite = TRUE)
 x = dbDisconnect(con)
 
 # #Execute cleaning code
