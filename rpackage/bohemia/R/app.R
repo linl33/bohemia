@@ -229,14 +229,13 @@ app_ui <- function(request) {
                                              textInput('enumeration_n_teams',
                                                        'Number of teams',
                                                        value = 2),
-                                             checkboxInput('enumeration', 'Enumeration?', value = FALSE),
+                                             radioButtons('enumeration_or_minicensus',
+                                                          'Type',
+                                                          choices = c('Enumeration visit',
+                                                                      'Data collection visit')),
+                                             helpText('In the case of Mozambique, "Data collection visit" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
                                              
-                                             helpText('MOZ only. Tick "Enumeration" box if you want to generate a list for enumerators'),
-                                             
-                                             helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of forms.'),
                                              uiOutput('ui_id_limit'),
-                                             checkboxInput('use_previous', 'Use previous', value = FALSE),
-                                             helpText('"Use previous" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs). This is only relevant to Mozambique, where enumerations are carried out separately from minicensus interviews.'),
                                              br(), br(),
                                              downloadButton('render_visit_control_sheet',
                                                             'Generate visit control sheet(s)')
@@ -3213,13 +3212,15 @@ app_server <- function(input, output, session) {
                       # Get the location code
                       lc <- location_code()
                       # Get other details
-                      enum <- input$enumeration
-                      use_previous <- input$use_previous
+                      enumeration_or_minicensus <- input$enumeration_or_minicensus
+                      enum <- enumeration_or_minicensus == 'Enumeration visit'
+                      use_previous <- enumeration_or_minicensus == 'Data collection visit'
                       xdata <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
                                           n_teams = as.numeric(as.character(input$enumeration_n_teams)),
                                           id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                           id_limit_upr = as.numeric(as.character(input$id_limit[2])))
                       enumerations_data = odk_data$data$enumerations
+                      minicensus_main_data <- odk_data$data$minicensus_main
                       refusals_data = odk_data$data$refusals
                       
                       # tmp <- list(data = data,
@@ -3237,6 +3238,7 @@ app_server <- function(input, output, session) {
                                                       use_previous = use_previous,
                                                       enumerations_data = enumerations_data,
                                                       refusals_data = refusals_data,
+                                                      minicensus_main_data = minicensus_main_data,
                                                       li = li))
                       
                       # copy html to 'file'
@@ -3254,7 +3256,8 @@ app_server <- function(input, output, session) {
                       # Get the location code
                       lc <- location_code()
                       # Get other details
-                      enum <- input$enumeration
+                      enumeration_or_minicensus <- input$enumeration_or_minicensus
+                      enum <- enumeration_or_minicensus == 'Enumeration visit'
                       data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
                                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))
