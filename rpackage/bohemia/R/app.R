@@ -1321,17 +1321,20 @@ app_server <- function(input, output, session) {
       }
       time_period <- input$fw_time_period
       if(is.null(time_period)){
-        time_period <- 7
+        time_period <- c(min(pd$todays_date), max(pd$todays_date))
       }
+      time_range = time_period
+      save(pd, file='temp_pd.rda')
       pd <- pd %>%
-        mutate(time_range = Sys.Date() - time_period) %>%
         mutate(end_time = lubridate::as_datetime(end_time)) %>%
-        filter(end_time >= time_range)
+        filter(todays_date >= time_range[1],
+               todays_date <= time_range[2])
       # HERE need to incorporate this into pd (filter)
       who <- input$fid
       if(is.null(who)){
         who <- 0 
       }
+      message('hrerererere')
       id <- who
       last_upload <- as.character(max(pd$end_time[pd$wid == id], na.rm = TRUE))
       sup_name <- as.character(fids$supervisor[fids$bohemia_id == id])
@@ -1340,12 +1343,13 @@ app_server <- function(input, output, session) {
       daily_work_hours <- 'pending'
       week_per = round(total_forms/weekly_forms_fw,2)
       total_per = round(total_forms/total_forms_fw,2)
-      last_days <-paste0('Last ', time_period, ' days')
-      tibble(key = c('Supervisor','Time period','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(sup_name,last_days, week_per, total_per, total_forms, average_time, daily_work_hours))
+      message('---Created FW performance individual table ')
+      
+      # last_days <-paste0('Last ', time_period, ' days')
+      tibble(key = c('Supervisor','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(sup_name, week_per, total_per, total_forms, average_time, daily_work_hours))
     } else {
       NULL
     }
-    message('---Created FW performance individual table ')
     
   })
   
@@ -1890,14 +1894,20 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
+              pd <- odk_data$data
+              pd <- pd$minicensus_main
+              co <- country()
+              # save(pd, file = '/tmp/pd.RData')
+              pd <- pd %>% filter(hh_country == co)
+              
               fluidPage(
                 fluidRow(
                   column(6,
                          sliderInput(inputId = 'fw_time_period', 
                                      label = 'Previous days to include:', 
-                                     min = 0, 
-                                     max=14, 
-                                     value = 7))
+                                     min = min(pd$todays_date), 
+                                     max=max(pd$todays_date), 
+                                     value = c(min(pd$todays_date), max(pd$todays_date))))
                 )
               ) 
             })
@@ -1960,20 +1970,20 @@ app_server <- function(input, output, session) {
                             `# of errors` = 0)
                 time_period <- input$fw_time_period
                 if(is.null(time_period)){
-                  time_period <- 7
+                  time_period <- c(min(pd$todays_date), max(pd$todays_date))
+                  
                 } 
                 time_range <- time_period
                 
                 fwt_daily <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
-                  mutate(time_range = Sys.Date() - time_range) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
-                  filter(end_time >= time_range)%>%
+                  filter(todays_date >= time_range,
+                         todays_date <=time_range)%>%
                   group_by(`FW ID` = wid,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `Time period` = paste0('Last ', time_period, ' days'),
                             `% complete daily` = `Forms`/daily_forms_fw,
                             `# of anomalies` = 0,
                             `# of errors` = 0) 
@@ -2042,7 +2052,8 @@ app_server <- function(input, output, session) {
                             `# of errors` = 0)
                 time_period <- input$fw_time_period
                 if(is.null(time_period)){
-                  time_period <- 7
+                  time_period <- c(min(pd$todays_date), max(pd$todays_date))
+                  
                 } 
                 time_range <- time_period
 
