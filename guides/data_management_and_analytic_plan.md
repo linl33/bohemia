@@ -2362,6 +2362,19 @@ geographic distribution (see below for an example of a hypothetical
 district’s population distribution, wherein each color represents a
 different hamlet).
 
+``` r
+set.seed(1)
+library(tidyverse)
+library(sp)
+library(bohemia)
+ # Generate some fake data
+fake <- generate_fake_locations(n = 1000,
+                                n_clusters = 10,
+                                sd = 0.04)
+ # Plot the fake data
+plot(fake$x, fake$y, col = rainbow(10)[fake$cluster])
+```
+
 ![](figures_data_management/unnamed-chunk-3-1.png)<!-- -->
 
 #### Generating village boundaries
@@ -2369,6 +2382,17 @@ different hamlet).
 Hamlet/village boundaries are not always clearly defined. Accordingly,
 we generate them retrospectively based on the actual distribution of
 households in the geographic area in question:
+
+``` r
+ # Generate boundaries from the point locations
+boundaries <- bohemia::create_borders(df = fake)
+ # Plot the boundaries
+cols10 <- rainbow(10)
+cols <- cols10[fake$cluster]
+plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
+plot(boundaries, add = T, col = adjustcolor(cols10, alpha.f = 0.3),
+     border = NA)
+```
 
 ![](figures_data_management/unnamed-chunk-4-1.png)<!-- -->
 
@@ -2378,6 +2402,15 @@ Once borders are defined, buffers can be formed. The below shows each
 hamlet’s population (points), borders (filled polygons) and buffers
 (empty polygons):
 
+``` r
+ # Generate buffers from boundaries
+buffers <- bohemia::create_buffers(shp = boundaries,
+                                   meters = 5000)
+plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
+plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
+plot(buffers, add = T)
+```
+
 ![](figures_data_management/unnamed-chunk-5-1.png)<!-- -->
 
 #### Generating buffers based on tesselation
@@ -2386,12 +2419,28 @@ As an alternative to the above approach, and so as to generate
 generealizable boundaries with no “holes”, we can use voronoi
 tesselation as opposed to convex hulling.
 
+``` r
+boundaries <- create_borders(df = fake, voronoi = TRUE)
+ # Plot the boundaries
+plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
+plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
+```
+
 ![](figures_data_management/unnamed-chunk-6-1.png)<!-- -->
 
 #### Generating tesselated buffers
 
 Just like with convex hull generated borders, we can add buffers to
 delauney triangles so as to create buffers between collapsed polygons.
+
+``` r
+ # Generate buffers from boundaries
+buffers <- bohemia::create_buffers(shp = boundaries,
+                                   meters = 5000)
+plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
+plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3), border = NA)
+plot(buffers, add = T, col = adjustcolor(cols10, alpha.f = 0.3))
+```
 
 ![](figures_data_management/unnamed-chunk-7-1.png)<!-- -->
 
@@ -2400,6 +2449,16 @@ delauney triangles so as to create buffers between collapsed polygons.
 In the above, we use *external* boundaries, which results in one areas
 borders bleeding into the core of another area. As an alternative to
 this, we can use *internal* boundaries.
+
+``` r
+ # Generate buffers from boundaries
+buffers <- bohemia::create_buffers(shp = boundaries,
+                                   meters = -5000)
+plot(fake$x, fake$y, col = 'white', pch = 16, cex = 0.5)
+ # plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
+plot(buffers, add = T, col = adjustcolor(cols10, alpha.f = 0.4))
+points(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
+```
 
 ![](figures_data_management/unnamed-chunk-8-1.png)<!-- -->
 
@@ -2411,9 +2470,53 @@ between areas of identical intervention status is redundant (and can
 unecessarily eliminate potential study participants). The below is an
 example of redundant buffers.
 
+``` r
+ # Define some ids 
+ids <- sample(1:2, nrow(boundaries), replace = TRUE)
+cols2 <- c('lightblue', 'orange')
+cols <- cols2[ids]
+
+ # Create a dataframe for joining clusters to ids
+merger <- data.frame(cluster = boundaries@data$cluster,
+                     id = ids)
+ # Bring the ids into the point data
+old_fake <- fake
+fake <- left_join(fake, merger, by = 'cluster')
+
+ # Generate buffers from boundaries
+buffers@data <- left_join(buffers@data, merger, by = 'cluster')
+plot(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
+ # plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.8))
+plot(buffers, add = T, col = adjustcolor(cols2[buffers@data$id], alpha.f = 0.5))
+points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
+```
+
 ![](figures_data_management/unnamed-chunk-9-1.png)<!-- -->
 
 The below collapses redundant borders.
+
+``` r
+ # Define some ids 
+ids <- sample(1:2, nrow(boundaries), replace = TRUE)
+cols2 <- c('lightblue', 'orange')
+cols <- cols2[ids]
+
+ # Create a dataframe for joining clusters to ids
+merger <- data.frame(cluster = boundaries@data$cluster,
+                     id = ids)
+ # Bring the ids into the point data
+fake <- old_fake
+fake <- left_join(fake, merger, by = 'cluster')
+
+ # Generate buffers from boundaries
+buffers <- create_buffers(shp = boundaries,
+                                   meters = -5000,
+                                   ids = ids)
+plot(fake$x, fake$y, col = 'white', pch = 16, cex = 0.5)
+ # plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.8))
+plot(buffers, add = T, col = adjustcolor(cols2[buffers@data$id], alpha.f = 0.5))
+points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
+```
 
 ![](figures_data_management/unnamed-chunk-10-1.png)<!-- -->
 
@@ -2425,19 +2528,95 @@ project has a preference for the former. However, in the case that
 sample size cannot be obtained, there is an alternative: a cluster could
 be formed programatically, but with certain restrictions (such as the a
 rule prohibiting the division of a village into two). To do this, use
-the `create_clusters`
-function.
+the `create_clusters` function.
 
-![](figures_data_management/unnamed-chunk-11-1.png)<!-- -->![](figures_data_management/unnamed-chunk-11-2.png)<!-- -->
+``` r
+fake <- generate_fake_locations(n = 1000,
+                                n_clusters = 10,
+                                sd = 0.1) %>% dplyr::select(-cluster)
+plot(fake$x, fake$y, pch = 16)
+cs <- create_clusters(cluster_size = 100,
+                      locations = fake)
+
+rcols <- length(unique(cs$cluster))
+plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
+```
 
 The data generated from `create_clusters` is compatible with the other
-functions herein described. Here are some usage
-examples:
+functions herein described. Here are some usage examples:
 
-![](figures_data_management/unnamed-chunk-12-1.png)<!-- -->![](figures_data_management/unnamed-chunk-12-2.png)<!-- -->![](figures_data_management/unnamed-chunk-12-3.png)<!-- -->![](figures_data_management/unnamed-chunk-12-4.png)<!-- -->
+``` r
+set.seed(2)
+fake <- generate_fake_locations(n = 1000,
+                                n_clusters = 5,
+                                sd = 0.1) %>% dplyr::select(-cluster)
+cs <- create_clusters(cluster_size = 100,
+                      locations = fake)
+rcols <- length(unique(cs$cluster))
+
+ # Create true borders
+plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
+boundaries <- create_borders(df = cs)
+plot(boundaries, add = T)
+```
+
+![](figures_data_management/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+
+ # Create tesselation borders
+plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
+boundaries <- create_borders(df = cs, voronoi = TRUE)
+plot(boundaries, add = TRUE)
+```
+
+![](figures_data_management/unnamed-chunk-12-2.png)<!-- -->
+
+``` r
+
+ # Create internal buffered tesselation borders
+plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
+boundaries <- create_borders(df = cs, voronoi = TRUE)
+buffered <- create_buffers(shp = boundaries, meters = -3000)
+plot(buffered, add = TRUE)
+```
+
+![](figures_data_management/unnamed-chunk-12-3.png)<!-- -->
+
+``` r
+
+ # Create internal buffered tesselation borders with binary treatment status
+id_df <- cs %>% 
+  group_by(cluster) %>%
+  tally 
+id_df$id <- sample(1:2, nrow(id_df), replace = TRUE)
+cs <- left_join(cs, id_df)
+cols2 <- c('darkblue', 'pink')
+plot(cs$x, cs$y, col = cols2[cs$id])
+boundaries <- create_borders(df = cs, voronoi = TRUE)
+buffered <- create_buffers(shp = boundaries, meters = -3000,
+                           ids = id_df$id)
+plot(buffered, add = TRUE)
+```
+
+![](figures_data_management/unnamed-chunk-12-4.png)<!-- -->
 
 What follows below is a visualization of how the `create_buffers`
 algorithm works.
+
+``` r
+set.seed(2)
+fake <- generate_fake_locations(n = 1000,
+                                n_clusters = 5,
+                                sd = 0.1) %>% dplyr::select(-cluster)
+cs <- create_clusters(cluster_size = 100,
+                      locations = fake,
+                      plot_map = TRUE,
+                      save = 'animation')
+setwd('animation')
+system('convert -delay 100 -loop 0 *.png result.gif')
+setwd('..')
+```
 
 ![](animation/result.gif)
 

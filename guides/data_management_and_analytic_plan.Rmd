@@ -1793,7 +1793,7 @@ The clustering algorithm is a utility built into the Bohemia R package (see next
 The first step in clustering is geocoding: taking a population's geographic distribution (see below for an example of a hypothetical district's population distribution, wherein each color represents a different hamlet).
 
 
-```{r}
+```{r, echo = TRUE}
 set.seed(1)
 library(tidyverse)
 library(sp)
@@ -1810,7 +1810,7 @@ plot(fake$x, fake$y, col = rainbow(10)[fake$cluster])
 
 Hamlet/village boundaries are not always clearly defined. Accordingly, we generate them retrospectively based on the actual distribution of households in the geographic area in question:
 
-```{r}
+```{r, echo = TRUE}
  # Generate boundaries from the point locations
 boundaries <- bohemia::create_borders(df = fake)
  # Plot the boundaries
@@ -1826,7 +1826,7 @@ plot(boundaries, add = T, col = adjustcolor(cols10, alpha.f = 0.3),
 Once borders are defined, buffers can be formed. The below shows each hamlet's population (points), borders (filled polygons) and buffers (empty polygons):
 
 
-```{r}
+```{r, echo = TRUE}
  # Generate buffers from boundaries
 buffers <- bohemia::create_buffers(shp = boundaries,
                                    meters = 5000)
@@ -1840,7 +1840,7 @@ plot(buffers, add = T)
 
 As an alternative to the above approach, and so as to generate generealizable boundaries with no "holes", we can use voronoi tesselation as opposed to convex hulling.
 
-```{r}
+```{r, echo = TRUE}
 boundaries <- create_borders(df = fake, voronoi = TRUE)
  # Plot the boundaries
 plot(fake$x, fake$y, col = cols, pch = 16, cex = 0.5)
@@ -1851,7 +1851,7 @@ plot(boundaries, add = T, col = adjustcolor(cols, alpha.f = 0.3))
 
 Just like with convex hull generated borders, we can add buffers to delauney triangles so as to create buffers between collapsed polygons.
 
-```{r}
+```{r, echo = TRUE}
  # Generate buffers from boundaries
 buffers <- bohemia::create_buffers(shp = boundaries,
                                    meters = 5000)
@@ -1864,7 +1864,7 @@ plot(buffers, add = T, col = adjustcolor(cols10, alpha.f = 0.3))
 
 In the above, we use _external_ boundaries, which results in one areas borders bleeding into the core of another area. As an alternative to this, we can use _internal_ boundaries.
 
-```{r}
+```{r, echo = TRUE}
  # Generate buffers from boundaries
 buffers <- bohemia::create_buffers(shp = boundaries,
                                    meters = -5000)
@@ -1880,7 +1880,7 @@ For the purposes of an intervention in which each area is assigned status A or B
 
 
 
-```{r}
+```{r, echo = TRUE}
  # Define some ids 
 ids <- sample(1:2, nrow(boundaries), replace = TRUE)
 cols2 <- c('lightblue', 'orange')
@@ -1904,7 +1904,7 @@ points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
 The below collapses redundant borders.
 
 
-```{r}
+```{r, echo = TRUE}
  # Define some ids 
 ids <- sample(1:2, nrow(boundaries), replace = TRUE)
 cols2 <- c('lightblue', 'orange')
@@ -1931,7 +1931,7 @@ points(fake$x, fake$y, col = cols2[fake$id], pch = 16, cex = 0.5)
 
 Clusters can be defined _a priori_ (ie, named administrative units) or programatically (ie, village-agnostic groups of `n` people). The Bohemia project has a preference for the former. However, in the case that sample size cannot be obtained, there is an alternative: a cluster could be formed programatically, but with certain restrictions (such as the a rule prohibiting the division of a village into two). To do this, use the `create_clusters` function.
 
-```{r}
+```{r, eval = FALSE, echo = TRUE}
 fake <- generate_fake_locations(n = 1000,
                                 n_clusters = 10,
                                 sd = 0.1) %>% dplyr::select(-cluster)
@@ -1945,7 +1945,7 @@ plot(cs$x, cs$y, col = rainbow(rcols)[cs$cluster])
 
 The data generated from `create_clusters` is compatible with the other functions herein described. Here are some usage examples:
 
-```{r}
+```{r, echo = TRUE}
 set.seed(2)
 fake <- generate_fake_locations(n = 1000,
                                 n_clusters = 5,
@@ -1986,7 +1986,7 @@ plot(buffered, add = TRUE)
 
 What follows below is a visualization of how the `create_buffers` algorithm works.
 
-```{r}
+```{r, echo = TRUE}
 set.seed(2)
 fake <- generate_fake_locations(n = 1000,
                                 n_clusters = 5,
