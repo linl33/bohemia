@@ -74,7 +74,7 @@ if(workers_on_separate_pages){
       "kable(dfx  %>% dplyr::filter(wid == ", fwids[i], ") %>% dplyr::select(-wid), 'latex',  
       longtable = T)  %>%   
   kable_styling(latex_options = c('repeat_header')) %>%
-    kable_styling(font_size = 8)  %>%
+    kable_styling(font_size = 10)  %>%
   column_spec(1:2, width = '1.2cm') %>%
   column_spec(3, width = '1.5cm') %>%
   column_spec(4, width = '1.7cm') %>%
@@ -88,7 +88,7 @@ if(workers_on_separate_pages){
     "kable(dfx %>% dplyr::select(-wid), 'latex',  
       longtable = T)  %>%   
   kable_styling(latex_options = c('repeat_header')) %>%
-    kable_styling(font_size = 8)  %>%
+    kable_styling(font_size = 10)  %>%
   column_spec(1:2, width = '1.2cm') %>%
   column_spec(3, width = '1.5cm') %>%
   column_spec(4, width = '1.7cm') %>%
