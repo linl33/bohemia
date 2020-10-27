@@ -6,9 +6,7 @@
 
 </div>
 
-<span style="font-size:40px;">Data management and analytic plan</span>
-
-<span style="font-size:30px">Bohemia demographics/census</span>
+# Data management and analytic plan: Bohemia demographics
 
 <span style="font-size:20px;">Table of contents</span>
 
@@ -1398,11 +1396,32 @@ rm ${file}
   - Create a place to store crontb logs: `sudo mkdir /var/log/dumps;
     sudo chmod -R 700 /var/log/dumps/`
   - Use the edit functionality of crontab: `crontab -e`
-  - To back up every day at 1:00 AM, add the following line:
 
 <!-- end list -->
 
     0 1 * * * /home/ubuntu/Documents/dumps/backup.sh
+
+To back up every day at 1:00 AM, add the above line.
+
+# Bohemia R package
+
+Databrew has built an R package for the Bohemia project. This package
+contains utilities used by the Bohemia research team. It is publicly
+available for the purposes of reproducibility and transparency.
+
+## Installation and removal
+
+To install this package: - Clone the parent repo: `git clone
+https://github.com/databrew/bohemia` - `cd` into `rpackage` - Run
+`Rscript build_package.R`
+
+Alternatively, one can install directly from github:
+
+To remove the package (for example, so as to re-install for an update),
+simply run: \`remove.packages(‘bohemia’)
+
+The package is fully documented and downloadable here:
+<https://github.com/databrew/bohemia/tree/master/rpackage/bohemia#bohemia-the-r-package-of-the-bohemia-project>
 
 # Automated detection of anomalies
 
@@ -1754,7 +1773,7 @@ only be handled by site data managers.
 
 ## Steps
 
-### Step 1: Register the worker
+Step 1: Register the worker
 
   - Go to [THIS
     SPREADSHEET](https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130).
@@ -1778,7 +1797,7 @@ only be handled by site data managers.
   - *Never* delete a row. If a worker leaves the project, his/her ID
     number is simply retired. It should not be re-used.
 
-### Step 2: Give ID card
+Step 2: Give ID card
 
   - Step 1 (above) will result in a worker being assigned an ID number.
     The `bohemia_id` of row will be the worker’s ID number for the
@@ -1800,7 +1819,7 @@ only be handled by site data managers.
     generated via the tool at bohemia.team/operations.
   - Under no circumstances should a worker be given a new ID number
 
-### Step 3: Set up GPS tracking
+Step 3: Set up GPS tracking
 
   - For security and operational reasons, tablet locations will be
     tracked.
@@ -1823,7 +1842,7 @@ only be handled by site data managers.
   - More details are available in [this guide on GPS
     tracking](guide_gps_tracking_android.md)
 
-### Step 4: Set up ODK Collect
+Step 4: Set up ODK Collect
 
   - Download/Install [ODKCollect via Google
     Play](https://play.google.com/store/apps/details?id=org.odk.collect.android&hl=en)
@@ -2343,7 +2362,7 @@ geographic distribution (see below for an example of a hypothetical
 district’s population distribution, wherein each color represents a
 different hamlet).
 
-![](figures_data_management/unnamed-chunk-2-1.png)<!-- -->
+![](figures_data_management/unnamed-chunk-3-1.png)<!-- -->
 
 #### Generating village boundaries
 
@@ -2351,7 +2370,7 @@ Hamlet/village boundaries are not always clearly defined. Accordingly,
 we generate them retrospectively based on the actual distribution of
 households in the geographic area in question:
 
-![](figures_data_management/unnamed-chunk-3-1.png)<!-- -->
+![](figures_data_management/unnamed-chunk-4-1.png)<!-- -->
 
 #### Generating external buffers
 
@@ -2359,7 +2378,7 @@ Once borders are defined, buffers can be formed. The below shows each
 hamlet’s population (points), borders (filled polygons) and buffers
 (empty polygons):
 
-![](figures_data_management/unnamed-chunk-4-1.png)<!-- -->
+![](figures_data_management/unnamed-chunk-5-1.png)<!-- -->
 
 #### Generating buffers based on tesselation
 
@@ -2367,14 +2386,14 @@ As an alternative to the above approach, and so as to generate
 generealizable boundaries with no “holes”, we can use voronoi
 tesselation as opposed to convex hulling.
 
-![](figures_data_management/unnamed-chunk-5-1.png)<!-- -->
+![](figures_data_management/unnamed-chunk-6-1.png)<!-- -->
 
 #### Generating tesselated buffers
 
 Just like with convex hull generated borders, we can add buffers to
 delauney triangles so as to create buffers between collapsed polygons.
 
-![](figures_data_management/unnamed-chunk-6-1.png)<!-- -->
+![](figures_data_management/unnamed-chunk-7-1.png)<!-- -->
 
 #### Generating tesselated internal buffers
 
@@ -2382,7 +2401,7 @@ In the above, we use *external* boundaries, which results in one areas
 borders bleeding into the core of another area. As an alternative to
 this, we can use *internal* boundaries.
 
-![](figures_data_management/unnamed-chunk-7-1.png)<!-- -->
+![](figures_data_management/unnamed-chunk-8-1.png)<!-- -->
 
 #### Generating “collapsed” tesselated internal buffers
 
@@ -2392,11 +2411,11 @@ between areas of identical intervention status is redundant (and can
 unecessarily eliminate potential study participants). The below is an
 example of redundant buffers.
 
-![](figures_data_management/unnamed-chunk-8-1.png)<!-- -->
+![](figures_data_management/unnamed-chunk-9-1.png)<!-- -->
 
 The below collapses redundant borders.
 
-![](figures_data_management/unnamed-chunk-9-1.png)<!-- -->
+![](figures_data_management/unnamed-chunk-10-1.png)<!-- -->
 
 #### Generating village-agnostic clusters
 
@@ -2409,13 +2428,13 @@ rule prohibiting the division of a village into two). To do this, use
 the `create_clusters`
 function.
 
-![](figures_data_management/unnamed-chunk-10-1.png)<!-- -->![](figures_data_management/unnamed-chunk-10-2.png)<!-- -->
+![](figures_data_management/unnamed-chunk-11-1.png)<!-- -->![](figures_data_management/unnamed-chunk-11-2.png)<!-- -->
 
 The data generated from `create_clusters` is compatible with the other
 functions herein described. Here are some usage
 examples:
 
-![](figures_data_management/unnamed-chunk-11-1.png)<!-- -->![](figures_data_management/unnamed-chunk-11-2.png)<!-- -->![](figures_data_management/unnamed-chunk-11-3.png)<!-- -->![](figures_data_management/unnamed-chunk-11-4.png)<!-- -->
+![](figures_data_management/unnamed-chunk-12-1.png)<!-- -->![](figures_data_management/unnamed-chunk-12-2.png)<!-- -->![](figures_data_management/unnamed-chunk-12-3.png)<!-- -->![](figures_data_management/unnamed-chunk-12-4.png)<!-- -->
 
 What follows below is a visualization of how the `create_buffers`
 algorithm works.
@@ -2873,71 +2892,93 @@ the Bohemia scientific team in order to prepare the work on this
 section. These are as below:
 
     -Animal ownership/numbers/species and having had malaria
-    -Does IVM show up in well, water hole, or surface water (river or lake) due to its mass administration?
-    -Define the profile of people sleeping under mosquito nets (gender, age, education, livestock presence, ...)
-    -Look for associations between IPTp intake and 1) age of the mother 2) gravidity (better than parity) 3) malaria risk perception (e.g.; sleep under ITN) of the mother, the hh head and the husband 4) hh wealth index 5) socioeconomic status of the mother 6) marital status of the mother 7) gender of household head 8) care seeking behavior (e.g.; frequency, provider type)
+    -Does IVM show up in well, water hole, or surface water (river or lake) due to
+    its mass administration?
+    -Define the profile of people sleeping under mosquito nets (gender, age,
+    education, livestock presence, ...)
+    -Look for associations between IPTp intake and 1) age of the mother 2) gravidity
+    (better than parity) 3) malaria risk perception (e.g.; sleep under ITN) of the
+    mother, the hh head and the husband 4) hh wealth index 5) socioeconomic status
+    of the mother 6) marital status of the mother 7) gender of household head 8)
+    care seeking behavior (e.g.; frequency, provider type)
     -Determinants of usage of mosquito nets (my Master Final Project)
-    -Use of ivermectine in animals vs animal´s contribution to the household´s income
-    -Effect of livestock proximity on malaria incidence (controlling for ownership, which has too much socioeconomic bias). That is, among non.owners of livestock, does living near livestock increase or decrease your risk of malaria?
-    -Look at associations between school.aged children and malaria: sleeping under bednets, receive treatment etc (since they do not receive that much attention as <5 and women)
-    -Is there any association between the proximity to water body and 
-    1) malaria control measures (in this check the different measures independently and collectively: IRS, bednets and others. In this case also consider house screens as part malaria control measures)
-     2) malaria disease
-    -associations of household structure (family size, presence of both parents, marital status,..) with care.seeking behaviour and socioeconomic status
+    -Use of ivermectine in animals vs animal´s contribution to the household´s
+    income
+    -Effect of livestock proximity on malaria incidence (controlling for ownership,
+    which has too much socioeconomic bias). That is, among non.owners of livestock,
+    does living near livestock increase or decrease your risk of malaria?
+    -Look at associations between school.aged children and malaria: sleeping under
+    bednets, receive treatment etc (since they do not receive that much attention
+    as <5 and women)
+    -Is there any association between the proximity to water body and 1) malaria
+    control measures (in this check the different measures independently and
+    collectively: IRS, bednets and others. In this case also consider house screens
+    as part malaria control measures) 2) malaria disease
+    -associations of household structure (family size, presence of both parents,
+    marital status,..) with care.seeking behaviour and socioeconomic status
     -Animal ownership and snake bite
-    -If IVM showing up in drinking water, how would common household water treatments affect the transformation of IVM?
-    -In subjects who suffered from fever, is education related to the time taken before seeking formal care?
-    -Look for relationships between frequent travel or movements and malaria or other diseases
-    -Higher distance between cattle and human sleeping areas decrease significantly prevalence of zoonosis. /// Does livestock housing type play a significant role in the prevalence of zoonoses?
-    -level of education and delivery attendance  by a health professional
-    -Bednet "spillover" (ie, positive externalities): how does nearby bednet usage protect neighbors (the theory being that insecticide from nearby bednets kills mosquitoes which would otherwise bite neighbors)
-    -Look for associations between children that have been in the hospital and post.discharge mortality (maybe from one visit to another, or when doing the VA there is a question on helath care received before dying)
-    -
-    Does the timing of human behaviour that could contribute to outdoor malaria transmission match the timing of the vector behaviour?
-    This will combine the information from the census on time spend indoors and outdoors after sunset without protection i.e. before going to sleep to the entomological data on mosquitoes collected indoors and outdoors at different hours. The general idea is to see if the timing of the activity of the mosquitoes (assessed by the number of host seeking mosquitoes collected per hour) matches the timing of the activity of the humans (assessed by the period which humans are awake). 
-    
-    -Are people whose neighbours use bednets more often infected than people whose neighbours do not? (similar to repellants) That is also, do mosquitoes not only avoid resting on bednets but avoid bednet houses entirely?
+    -If IVM showing up in drinking water, how would common household water
+    treatments affect the transformation of IVM?
+    -In subjects who suffered from fever, is education related to the time taken
+    before seeking formal care?
+    -Look for relationships between frequent travel or movements and malaria or
+    other diseases
+    -Higher distance between cattle and human sleeping areas decrease significantly
+    prevalence of zoonosis. /// Does livestock housing type play a significant role
+    in the prevalence of zoonoses?
+    -level of education and delivery attendance by a health professional
+    -Bednet "spillover" (ie, positive externalities): how does nearby bednet usage
+    protect neighbors (the theory being that insecticide from nearby bednets kills
+    mosquitoes which would otherwise bite neighbors)
+    -Look for associations between children that have been in the hospital and
+    post.discharge mortality (maybe from one visit to another, or when doing the VA
+    there is a question on helath care received before dying)
+    -Does the timing of human behaviour that could contribute to outdoor malaria
+    transmission match the timing of the vector behaviour? This will combine the
+    information from the census on time spend indoors and outdoors after sunset
+    without protection i.e. before going to sleep to the entomological data on
+    mosquitoes collected indoors and outdoors at different hours. The general idea
+    is to see if the timing of the activity of the mosquitoes (assessed by the
+    number of host seeking mosquitoes collected per hour) matches the timing of the
+    activity of the humans (assessed by the period which humans are awake).
+    -Are people whose neighbours use bednets more often infected than people whose
+    neighbours do not? (similar to repellants) That is also, do mosquitoes not only
+    avoid resting on bednets but avoid bednet houses entirely?
     -Snake bite and socio.economic status/gender/ocupation
-    -Do we see higher levels of IVM in the water sources that are closer to septic tanks or latrines than in those that are farther away?
+    -Do we see higher levels of IVM in the water sources that are closer to septic
+    tanks or latrines than in those that are farther away?
     -Is the number of members in the household related to the presence of bed bugs?
-    -See if there are any associations between gender of household head with other things (e.g. health seeking behavior, malaria, etc.)
+    -See if there are any associations between gender of household head with other
+    things (e.g. health seeking behavior, malaria, etc.)
     -Which are the rates of ceasarian section and which are its determinants?
     -Amount of work months associated to use of malaria prevention tool
     -Socioeconomic factors affecting childhood mortality
-    -Does the blood feeding behaviour of the mosquitoes reflect the animal ownership? 
-    This will be done by combining the entomological data on source of blood meal for the mosquitoes with the census data on animal ownership.
-    In the case animal ownership does not mirror the mosquito source of blood meal can this be explained by where the animal sleeps by looking at what species sleeps in the household and how far are those that sleep outside 
-    
-    -Associations of household religion and choice of provider or other careseeking behaviour (for identifying "allies" and targets for health messages)
+    -Does the blood feeding behaviour of the mosquitoes reflect the animal
+    ownership?  This will be done by combining the entomological data on source of
+    blood meal for the mosquitoes with the census data on animal ownership. In the
+    case animal ownership does not mirror the mosquito source of blood meal can
+    this be explained by where the animal sleeps by looking at what species sleeps
+    in the household and how far are those that sleep outside
+    -Associations of household religion and choice of provider or other careseeking
+    behaviour (for identifying "allies" and targets for health messages)
     -Mapping animal distribution and poverty/morbidity at district level
-    -Would there be higher levels of IVM in soil or nearby water of land where IVM.administrated cattle are grazing than in those of land without grazing IVM.administrated cattle?
-    -Look at case management: relationships between reporting fever and taking antimalarials, not having a RDT done but taking antimalarials, reporting not having malaria but having taken antimalarials.
-    -Is there any association between total number of rooms used to sleep and malaria disease cases per household?
-    -Mapping LLIN ownership/universal coverage/Usage by village and having had malaria
-    -How does the weather (wet vs. dry), type of water (standing vs. flowing), distance of water from IVM input sources (latrine, septic tanks, grazing land), size of the livestock, and  affect the presence and fate of IVM in the natural environment?
+    -Would there be higher levels of IVM in soil or nearby water of land where
+    IVM.administrated cattle are grazing than in those of land without grazing
+    IVM.administrated cattle?
+    -Look at case management: relationships between reporting fever and taking
+    antimalarials, not having a RDT done but taking antimalarials, reporting not
+    having malaria but having taken antimalarials.
+    -Is there any association between total number of rooms used to sleep and
+    malaria disease cases per household?
+    -Mapping LLIN ownership/universal coverage/Usage by village and having had
+    malaria
+    -How does the weather (wet vs. dry), type of water (standing vs. flowing),
+    distance of water from IVM input sources (latrine, septic tanks, grazing land),
+    size of the livestock, and affect the presence and fate of IVM in the natural
+    environment?
     -Is there any association between the type of housing and malaria disease?
 
 The above show the census-related scientific hypotheses elicited thus
 far. In conjunction with the sponsor, these will be refined and
 prioritized so as to render in-app content related to these hypotheses
 in real-time during the collection of data for the main-census.
-
-# Bohemia R package
-
-Databrew has built an R package for the Bohemia project. This package
-contains utilities used by the Bohemia research team. It is publicly
-available for the purposes of reproducibility and transparency.
-
-## Installation and removal
-
-To install this package: - Clone the parent repo: `git clone
-https://github.com/databrew/bohemia` - `cd` into `rpackage` - Run
-`Rscript build_package.R`
-
-Alternatively, one can install directly from github:
-
-To remove the package (for example, so as to re-install for an update),
-simply run: \`remove.packages(‘bohemia’)
-
-The package is fully documented and downloadable here:
-<https://github.com/databrew/bohemia/tree/master/rpackage/bohemia#bohemia-the-r-package-of-the-bohemia-project>

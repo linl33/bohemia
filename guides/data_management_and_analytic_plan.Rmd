@@ -68,11 +68,9 @@ knitr::asis_output(paste(x, collapse = "\n"))
 </div>
 
 
-<span style="font-size:40px;">Data management and analytic plan</span>
 
 
-<span style="font-size:30px">Bohemia demographics/census</span>
-
+# Data management and analytic plan: Bohemia demographics
 
 <span style="font-size:20px;">Table of contents</span>
 
@@ -1132,10 +1130,36 @@ rm ${file}
 - Log onto the server.
 - Create a place to store crontb logs: `sudo mkdir /var/log/dumps; sudo chmod -R 700 /var/log/dumps/`
 - Use the edit functionality of crontab: `crontab -e`
-- To back up every day at 1:00 AM, add the following line:
 ```
 0 1 * * * /home/ubuntu/Documents/dumps/backup.sh
 ```
+
+To back up every day at 1:00 AM, add the above line.
+
+
+# Bohemia R package
+
+Databrew has built an R package for the Bohemia project. This package contains utilities used by the Bohemia research team. It is publicly available for the purposes of reproducibility and transparency.
+
+## Installation and removal
+
+To install this package:
+- Clone the parent repo: `git clone https://github.com/databrew/bohemia`
+- `cd` into `rpackage`
+- Run `Rscript build_package.R`
+
+Alternatively, one can install directly from github:
+
+```{r, eval = FALSE}
+devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia', dependencies = TRUE, force = TRUE)
+```
+
+To remove the package (for example, so as to re-install for an update), simply run: `remove.packages('bohemia')
+
+
+The package is fully documented and downloadable here: https://github.com/databrew/bohemia/tree/master/rpackage/bohemia#bohemia-the-r-package-of-the-bohemia-project
+
+
 
 
 
@@ -1409,7 +1433,7 @@ This is a straightforward, largely non-technical process, but should only be han
 
 ## Steps
 
-### Step 1: Register the worker
+Step 1: Register the worker
 
 - Go to [THIS SPREADSHEET](https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130).
 - Select the tab for your country.
@@ -1427,7 +1451,8 @@ This is a straightforward, largely non-technical process, but should only be han
 - _Never_ delete a row. If a worker leaves the project, his/her ID number is simply retired. It should not be re-used.
 
 
-### Step 2: Give ID card
+Step 2: Give ID card
+
 - Step 1 (above) will result in a worker being assigned an ID number. The `bohemia_id` of  row will be the worker's ID number for the entirety of the Bohemia project.
 - A QR card should be given to the worker, and the worker should be told to memorize / write down their ID number (in case they lose the QR card).
 - These cards will be supplied by Databrew.
@@ -1439,7 +1464,8 @@ This is a straightforward, largely non-technical process, but should only be han
 - If a QR code is lost, a replacement QR for that ID number should be generated via the tool at bohemia.team/operations.
 - Under no circumstances should a worker be given a new ID number
 
-### Step 3: Set up GPS tracking
+
+Step 3: Set up GPS tracking
 
 - For security and operational reasons, tablet locations will be tracked.
 - In order to enable tracking, each tablet must install the Traccar client via the [Google Play Store](https://play.google.com/store/apps/details?id=org.traccar.client)
@@ -1453,7 +1479,8 @@ This is a straightforward, largely non-technical process, but should only be han
 - Click on "Status" in the upper right to ensure that everything is working and data is sent correctly; It should show "Location update"; if it shows anything with the word "failure", email joe@databrew.cc
 - More details are available in [this guide on GPS tracking](guide_gps_tracking_android.md)
 
-### Step 4: Set up ODK Collect
+
+Step 4: Set up ODK Collect
 
 - Download/Install [ODKCollect via Google Play](https://play.google.com/store/apps/details?id=org.odk.collect.android&hl=en)
 - Open ODKCollect
@@ -2365,34 +2392,9 @@ hypo <- hypo %>% dplyr::select(-key) %>% filter(!is.na(value)) %>% filter(value 
 hypo$value <- gsub('|', ' ', hypo$value, fixed = TRUE)
 hypo$value <- gsub('-', '.', hypo$value, fixed = TRUE)
 
-# knitr::kable(hypo, type = 'html', escape = TRUE)
 for(i in 1:nrow(hypo)){
-  cat(paste0('-', hypo$value[i], '\n'))
+  cat(paste0('-', sapply(strwrap(hypo$value[i], 80, simplify = FALSE), paste, collapse = '\n'), '\n'))
 }
 ```
 
 The above show the census-related scientific hypotheses elicited thus far. In conjunction with the sponsor, these will be refined and prioritized so as to render in-app content related to these hypotheses in real-time during the collection of data for the main-census.   
-
-# Bohemia R package
-
-Databrew has built an R package for the Bohemia project. This package contains utilities used by the Bohemia research team. It is publicly available for the purposes of reproducibility and transparency.
-
-## Installation and removal
-
-To install this package:
-- Clone the parent repo: `git clone https://github.com/databrew/bohemia`
-- `cd` into `rpackage`
-- Run `Rscript build_package.R`
-
-Alternatively, one can install directly from github:
-
-```{r, eval = FALSE}
-devtools::install_github('databrew/bohemia', subdir = 'rpackage/bohemia', dependencies = TRUE, force = TRUE)
-```
-
-To remove the package (for example, so as to re-install for an update), simply run: `remove.packages('bohemia')
-
-
-The package is fully documented and downloadable here: https://github.com/databrew/bohemia/tree/master/rpackage/bohemia#bohemia-the-r-package-of-the-bohemia-project
-
-
