@@ -533,7 +533,6 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       out <- load_odk_data(the_country = the_country)
-      # save(out, file = '/tmp/out.RData')
       odk_data$data <- out
     }
   })
@@ -545,6 +544,9 @@ app_server <- function(input, output, session) {
     if(li){
       message('Logged in. Loading data for ', the_country)
       out <- load_odk_data(the_country = the_country)
+      if(grepl('joebrew', getwd())){
+        save(out, file = '~/Desktop/out.RData')
+      }
       odk_data$data <- out
     }
   })
@@ -1478,6 +1480,9 @@ app_server <- function(input, output, session) {
                                       `HH visit date` = todays_date), by = 'instance_id') %>%
         mutate(`FW ID` = ' ') %>%
         dplyr::select(-instance_id)
+      # Remove those which have already been collected
+      already_done <- unique(odk_data$data$va$death_id)
+      va <- va %>% filter(!`PERM ID` %in% already_done)
       
       if(nrow(va) > 0){
         va <- va %>% dplyr::select(District, Ward, Village, Hamlet,
