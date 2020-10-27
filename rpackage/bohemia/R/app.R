@@ -88,13 +88,7 @@ app_ui <- function(request) {
                      icon=icon("procedures"))),
           menuItem('Tracking tools',
                    tabName = 'tracking_tools',
-                   icon = icon('list'),
-                   startExpanded = FALSE,
-                   menuSubItem(
-                     text="Visit control sheet",
-                     tabName="visit_control_sheet",
-                     icon=icon("users"))
-          ),
+                   icon = icon('list')),
           menuItem('Alerts',
                    tabName = 'alerts',
                    icon = icon('exclamation-circle')),
@@ -206,9 +200,8 @@ app_ui <- function(request) {
             tabName="server_status",
             uiOutput('ui_server_status')),
           tabItem(
-            tabName="visit_control_sheet",
+            tabName="tracking_tools",
             fluidPage(
-              fluidRow(h2('Visit control sheet and file index and folder location')),
               fluidRow(
                 column(4,
                        radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
