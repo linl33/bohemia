@@ -1304,7 +1304,39 @@ app_server <- function(input, output, session) {
   
   # Individual data
   output$leaf_fid <- renderLeaflet({
-    leaflet() %>% addProviderTiles(providers$Stamen.Toner)
+    # Get the odk data
+    who <- input$fid
+    pd <- odk_data$data
+    pd <- pd$minicensus_main
+    co <- country()
+    pd <- pd %>% filter(hh_country == co)
+    save(pd, file = 'fid_pd.rda')
+    if(is.null(who)){
+      who <- 0
+    }
+    pd <- pd %>% filter(wid==who)
+    
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      ll <- extract_ll(pd$hh_geo_location)
+      pd$lng <- ll$lng; pd$lat <- ll$lat
+      # round table not here, and here make sure map works (not saving data below)
+      l <- leaflet() %>%
+        addProviderTiles(providers$Stamen.Toner) %>%
+        clearMarkers() %>%
+        addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
+
+    } else {
+     l <- leaflet() %>% addProviderTiles(providers$Stamen.Toner)
+      
+    }
+   l
+
   })
   output$table_individual_details <- renderTable({
     
