@@ -99,9 +99,9 @@ map_list <- list()
 for(i in 1:length(unique_ids)){
   this_id <- unique_ids[i]
   sub_dat <- traccar_moz %>% filter(deviceid==this_id)
-  # pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
+  pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
   l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)%>%
+      addProviderTiles(providers$OpenStreetMap)%>%
         addGlPoints(data = pts,
                     fillColor = 'black',
                     popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
@@ -123,9 +123,9 @@ map_list <- list()
 for(i in 1:length(unique_ids)){
   this_id <- unique_ids[i]
   sub_dat <- traccar_tza %>% filter(deviceid==this_id)
-  # pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
+  pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
   l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)%>%
+      addProviderTiles(providers$OpenStreetMap)%>%
         addGlPoints(data = pts,
                     fillColor = 'black',
                     popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
