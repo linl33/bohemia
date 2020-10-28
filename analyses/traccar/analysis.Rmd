@@ -4,6 +4,17 @@ author: "Databrew"
 output: html_document
 ---
 
+```{r setup, include=FALSE}
+library(knitr)# Basic knitr options
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = F,
+               fig.height = 6)
+```
+
 ```{r}
 library(bohemia)
 library(tidyverse)
@@ -67,7 +78,7 @@ traccar_tza <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country ==
 traccar_moz$date <- as.Date(traccar_moz$devicetime, "GMT+2")
 
 # groupby date get number of people with their average total disance, battery, and number of stops
-moz_tab <- traccar_moz %>% group_by(date) %>% summarise(`Numer of active FW` = n(), `Average total distance traveled` = mean(total_distance, na.rm=TRUE), `Average battery life` = mean(battery, na.rm = TRUE), `Number of stops` = sum(motion=='true'))
+moz_tab <- traccar_moz %>% group_by(date) %>% summarise(`Numer of active FW` = length(unique(unique_id)), `Average battery life` = mean(battery, na.rm = TRUE), `Number of stops` = sum(motion=='true'))
 
 # get table
 bohemia::prettify(moz_tab, nrows = 10,
@@ -81,7 +92,7 @@ bohemia::prettify(moz_tab, nrows = 10,
 traccar_tza$date <- as.Date(traccar_tza$devicetime, "GMT+2")
 
 # groupby date get number of people with their average total disance, battery, and number of stops
-moz_tab <- traccar_tza %>% group_by(date) %>% summarise(`Numer of active FW` = n(), `Average total distance traveled` = mean(total_distance, na.rm=TRUE), `Average battery life` = mean(battery, na.rm = TRUE), `Number of stops` = sum(motion=='true'))
+moz_tab <- traccar_tza %>% group_by(date) %>% summarise(`Numer of active FW` = length(unique(unique_id)), `Average battery life` = mean(battery, na.rm = TRUE), `Number of stops` = sum(motion=='true'))
 
 # get table
 bohemia::prettify(moz_tab, nrows = 10,
@@ -90,22 +101,32 @@ bohemia::prettify(moz_tab, nrows = 10,
 ```
 
 
-# Mozambique Fieldworkder maps
+# Mozambique Fieldworker maps
 ```{r}
-
 # map of all fw
-unique_ids <- unique(traccar_moz$deviceid)
+traccar_moz <- traccar_moz %>%
+  arrange(desc(devicetime)) %>%
+  mutate(dummy = 1) %>%
+  group_by(unique_id) %>%
+  mutate(cs = cumsum(dummy)) %>%
+  ungroup %>% filter(cs <=100)
+unique_ids <- unique(traccar_moz$unique_id)
 map_list <- list()
 for(i in 1:length(unique_ids)){
   this_id <- unique_ids[i]
-  sub_dat <- traccar_moz %>% filter(deviceid==this_id)
+  sub_dat <- traccar_moz %>% filter(unique_id==this_id)
   pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
   l <- leaflet() %>% 
       addProviderTiles(providers$OpenStreetMap)%>%
-        addGlPoints(data = pts,
-                    fillColor = 'black',
-                    popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
-                    group = "pts")
+        addMarkers(data = sub_dat, popup = paste0(sub_dat$deviceid,
+                                              ' ',
+                                              sub_dat$battery,
+                                              ' ',
+                                              sub_dat$total_distance))
+        # addGlPoints(data = pts,
+        #             fillColor = 'black',
+        #             popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
+        #             group = "pts")
   
   map_list[[i]]<- l
 
@@ -116,20 +137,30 @@ tagList(map_list)
 
 # Tanzania Fieldworkder maps
 ```{r}
-
+traccar_tza <- traccar_tza %>%
+    arrange(desc(devicetime)) %>%
+  mutate(dummy = 1) %>%
+  group_by(unique_id) %>%
+  mutate(cs = cumsum(dummy)) %>%
+  ungroup %>% filter(cs <=100)
 # map of all fw
-unique_ids <- unique(traccar_tza$deviceid)
+unique_ids <- unique(traccar_tza$unique_id)
 map_list <- list()
 for(i in 1:length(unique_ids)){
   this_id <- unique_ids[i]
-  sub_dat <- traccar_tza %>% filter(deviceid==this_id)
+  sub_dat <- traccar_moz %>% filter(unique_id==this_id)
   pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
   l <- leaflet() %>% 
       addProviderTiles(providers$OpenStreetMap)%>%
-        addGlPoints(data = pts,
-                    fillColor = 'black',
-                    popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
-                    group = "pts")
+        addMarkers(data = sub_dat, popup = paste0(sub_dat$deviceid,
+                                              ' ',
+                                              sub_dat$battery,
+                                              ' ',
+                                              sub_dat$total_distance))
+        # addGlPoints(data = pts,
+        #             fillColor = 'black',
+        #             popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
+        #             group = "pts")
   
   map_list[[i]]<- l
 
