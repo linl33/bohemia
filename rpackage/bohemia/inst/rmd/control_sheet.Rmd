@@ -1,0 +1,86 @@
+---
+params:
+  xdata: !r data.frame(a = 1, b = 2) 
+  column_spec: "column_spec(1:6, background = '#ffcccb') %>% column_spec(7:10, background = '#fed8b1') %>% column_spec(11:ncol(xdata), background = '#ADD8E6') %>% column_spec(1:ncol(xdata),width = '1.2cm')"
+  font_size: 7
+  li: True
+output:
+  pdf_document:
+    keep_tex: yes
+    includes:
+      in_header: control_sheet_preamble.sty
+tables: yes
+classoption: landscape
+---
+
+```{r setup, include=FALSE}
+# output: 
+#   pdf_document:
+#     latex_engine: xelatex
+#      pandoc_args: [
+#      "-V", "classoption=twocolumn"
+#    ]
+#     template: pdf/layout.tex
+#     includes:
+#       in_header: pdf/preamble.sty
+library(knitr)# Basic knitr options
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = F,
+               fig.height = 6)
+# knit_engines$set(asis = function(options) {
+#   if (options$echo && options$eval) knit_child(text = options$code)
+# })
+```
+
+
+```{r}
+library(dplyr)
+library(bohemia)
+options(kableExtra.latex.load_packages = FALSE)
+library(kableExtra)
+# Specify paramaters
+for (i in 1:length(params)){
+  assign(names(params)[i],
+         params[[i]],
+         env = .GlobalEnv)
+}
+xdata <- params$xdata
+# load('/tmp/xdata.RData')
+```
+
+
+\pagenumbering{gobble}
+
+```{r}
+chunk_list <- list()
+chunk_list[[1]] <- 
+  paste0("\n\n```{r}\n",
+               "kable(xdata, 'latex', longtable = T, booktabs=FALSE)  %>% 
+                 kable_styling(font_size = ", font_size, ") %>% kable_styling(latex_options = c('repeat_header'))  %>% ",
+                 column_spec, "\n```\n\\newpage\n")
+```
+
+```{r}
+chunks <- unlist(chunk_list)
+chunks <- paste0(chunks, collapse = '\n')
+
+file_connection <- file('children.Rmd')
+writeLines(paste0('---\noutput: pdf_document\n---\n\n', 
+                  chunks), 
+           file_connection)
+close(file_connection)
+```
+
+```{r child='children.Rmd'}
+```
+
+```{r, results='hide'}
+file.remove('children.Rmd')
+```
+
+
+End.

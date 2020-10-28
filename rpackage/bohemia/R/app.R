@@ -411,7 +411,8 @@ app_server <- function(input, output, session) {
                                  anomalies = data.frame(),
                                  fieldworkers = default_fieldworkers,
                                  traccar = data.frame(),
-                                 traccar_summary = data.frame())
+                                 traccar_summary = data.frame(),
+                                 va_table = data.frame())
   odk_data <- reactiveValues(data = NULL)
   
   
@@ -1425,9 +1426,10 @@ app_server <- function(input, output, session) {
             })
   })
   
-  # Via list generation table
+  # VA list generation table
   output$table_va_list_generation <- DT::renderDataTable({
     # Get the odk data
+    
     pd <- odk_data$data
     pd <- pd$minicensus_main
     cn <- country()
@@ -1441,12 +1443,14 @@ app_server <- function(input, output, session) {
     }
     if(pd_ok){
       # va table
+      people <- odk_data$data$minicensus_people
       deaths <- odk_data$data$minicensus_repeat_death_info
       deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
       # Conditional mourning period
       mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
       va <- left_join(deaths %>% 
-                        left_join(pd %>% dplyr::select(instance_id, todays_date), by = 'instance_id') %>%
+                        left_join(pd %>% 
+                                    dplyr::select(instance_id, todays_date), by = 'instance_id') %>%
                         mutate(todays_date = as.Date(todays_date),
                                death_dod = as.Date(death_dod)) %>%
                         mutate(old = (todays_date - death_dod) > mourning_period) %>%
@@ -1459,12 +1463,19 @@ app_server <- function(input, output, session) {
                         mutate(xx = ifelse(is.na(xx), safe_bet, xx)) %>%
                         mutate(xx = as.Date(xx, origin = '1970-01-01')) %>%
                         mutate(yy = Sys.Date() - xx) %>% # "time elapsed" means time between lastest date to collect and today
+                        mutate(death_initials = paste0(
+                          ifelse(is.na(death_name), '.',
+                                 death_name), 
+                          ifelse(is.na(death_surname),
+                                 '.', death_surname))) %>%
                         dplyr::select(instance_id,
+                                      death_initials,
                                       `Date of death` = death_dod,
                                       `Latest date to collect VA form` = xx,
-                                      `PERM ID` = death_id,
+                                      `ID of deceased person` = death_id,
                                       `Time elapsed` = yy),
                       pd %>%
+                        mutate(num = as.numeric(hh_head_id)) %>%
                         dplyr::select(instance_id,
                                       District = hh_district,
                                       Ward = hh_ward,
@@ -1472,33 +1483,65 @@ app_server <- function(input, output, session) {
                                       Hamlet = hh_hamlet,
                                       `HH ID` = hh_id,
                                       `FW ID` = wid,
+                                      num, # for getting the initials of household head
                                       `HH visit date` = todays_date), by = 'instance_id') %>%
+        left_join(people %>% dplyr::select(instance_id,
+                                           first_name,
+                                           last_name,
+                                           pid,
+                                           num), by = c('instance_id', 'num')) %>%
         mutate(`FW ID` = ' ') %>%
-        dplyr::select(-instance_id)
+        dplyr::select(-instance_id) %>%
+        mutate(`HH head ID and initials` = paste0(pid, ' (', first_name, last_name, ')'))
+      
       # Remove those which have already been collected
       already_done <- unique(odk_data$data$va$death_id)
-      va <- va %>% filter(!`PERM ID` %in% already_done)
+      va <- va %>% filter(!`ID of deceased person` %in% already_done)
       
       if(nrow(va) > 0){
-        va <- va %>% dplyr::select(District, Ward, Village, Hamlet,
-                                   `HH ID`, `FW ID`, `PERM ID`,
-                                   `HH visit date`, `Date of death`,
-                                   `Latest date to collect VA form`,
-                                   `Time elapsed`
+        va <- va %>% dplyr::select(District, 
+                                   Ward, 
+                                   Village, 
+                                   Hamlet,
+                                   `HH ID`, 
+                                   `HH head ID and initials`,
+                                   # `FW ID`, 
+                                   `Name of deceased person` = death_initials,
+                                   `ID of deceased person`,
+                                   `Date of death`,
+                                   `Latest date to collect VA form`
         ) %>%
-          arrange(desc(`HH visit date`))
+          mutate(`FW / Supervisor ID` = ' ',
+                 `Date of VA visit` = ' ',
+                 `Was the ICF signed?` = 'Yes__ No__',
+                 `Was the VA form completed?` = 'Yes__ No__',
+                 `If this HH was not visited or the VA form was not completed, explain why` = '                 ')
         if(cn=='Mozambique'){
           va <- va %>%  rename(Distrito = District,
-                               `Posto administrativo/localidade`=Ward,
+                               `PA / Localidade`=Ward,
                                Povoado=Village,
                                Bairro=Hamlet)
         }
-        va$`Time elapsed` <- NULL
-        print(head(va))        
-        message('---Created list generatioon table for VA')
-        return(bohemia::prettify(va, nrows = nrow(va), download_options = TRUE))
+        
+        message('---Created list generation table for VA')
+        # Save for use in other places
+        session_data$va_table <- va
+        # Make datatable
+        final <- DT::datatable(va, 
+                               options = list(pageLength = nrow(va), 
+                                              dom = "Bfrtip", buttons = list("copy", "print", 
+                                                                             list(extend = "collection", buttons = "csv", 
+                                                                                  text = "Download"))), rownames = FALSE, extensions = "Buttons") %>%
+          formatStyle(names(va)[1:6],
+                      backgroundColor = '#ffcccb') %>%
+          formatStyle(names(va)[7:10],
+                      backgroundColor = '#fed8b1') %>%
+          formatStyle(names(va)[11:ncol(va)],
+                      backgroundColor = '#ADD8E6')
+        return(final)
       } 
     } else {
+      session_data$va_table <- data.frame()
       return(NULL)
     }
 
@@ -1514,6 +1557,8 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               fluidPage(
+                downloadButton('render_control_sheet',
+                               'Generate control sheet(s)'),
                 DT::dataTableOutput('table_va_list_generation')
                 )
             })
@@ -3216,6 +3261,31 @@ app_server <- function(input, output, session) {
                 row.names = FALSE)
     }
   )
+  
+  output$render_control_sheet <-
+    downloadHandler(filename = "sheet.pdf",
+                    content = function(file){
+                      # Get whether logged in
+                      si <- session_info
+                      li <- si$logged_in
+                      xdata <- session_data$va_table
+                     
+                      out_file <- paste0(getwd(), '/control_sheet.pdf')
+                      rmarkdown::render(input = 
+                                          paste0(system.file('rmd', package = 'bohemia'), '/control_sheet.Rmd'),
+                                        # '../inst/rmd/control_sheet.Rmd',
+                                        output_file = out_file,
+                                        params = list(xdata = xdata,
+                                                      li = li))
+                      
+                      # copy html to 'file'
+                      file.copy(out_file, file)
+                      
+                      # # delete folder with plots
+                      # unlink("figure", recursive = TRUE)
+                    },
+                    contentType = "application/pdf"
+    )
   
   output$render_visit_control_sheet <-
     downloadHandler(filename = "visit_control_sheet.pdf",
