@@ -14,6 +14,7 @@ suppressMessages({
   library(RPostgres)
   library(bohemia)
   library(leafgl)
+  library(htmltools)
   library(sf)
   library(yaml)
   library(leaflet)
@@ -47,68 +48,20 @@ if(!'fids.csv' %in% dir('/tmp')){
 }
 ```
 
-```{r}
-# get traccar data - one row per ID 
-dat <- get_traccar_data(url = creds$traccar_server,
-                        user = creds$traccar_user,
-                        pass = creds$traccar_pass)
-pd <- dat %>%
-  mutate(uniqueId = as.numeric(uniqueId)) %>%
-  dplyr::arrange(uniqueId) %>%
-  dplyr::select(`Bohemia ID` = uniqueId,
-                status,
-                name,
-                lastUpdate)
-bohemia::prettify(pd, nrows = nrow(dat),
-                  download_options = TRUE)
-```
 
 ```{r}
-traccar1 <- separate(data = traccar, col = 'valid', into = c('battery', 'distance', 'total_distance', 'motion'), sep = ' ')
+traccar <- separate(data = traccar, col = 'valid', into = c('battery', 'distance', 'total_distance', 'motion'), sep = ' ')
 traccar$battery <- as.numeric(unlist(lapply(strsplit(traccar$battery, ':'), function(x) x[2])))
 traccar$distance <- as.numeric(unlist(lapply(strsplit(traccar$distance, ':'), function(x) x[2])))
 traccar$total_distance <- as.numeric(unlist(lapply(strsplit(traccar$total_distance, ':'), function(x) x[2])))
 traccar$motion <- as.character(unlist(lapply(strsplit(traccar$motion, ':'), function(x) x[2])))
 
-
 traccar_moz <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country == 'Mozambique'])
 traccar_tza <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country == 'Tanzania'])
-```
-
-## Tracking Mozambique
-
-### Aggreage maps
-```{r}
-
-# map of all fw
-pts = st_as_sf(data.frame(traccar_moz), coords = c("longitude", "latitude"), crs = 4326)
-l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)%>%
-        addGlPoints(data = pts,
-                    fillColor = 'black',
-                    popup = pts %>% dplyr::select(devicetime, deviceid),
-                    group = "pts")
-
-# map of fw stops over time
-l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)%>%
-        addGlPoints(data = pts %>% filter(motion=='false'),
-                    fillColor = 'black',
-                    popup = pts %>% dplyr::select(devicetime, deviceid, motion),
-                    group = "pts")
-
-# map of fw by battery
-l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)%>%
-        addGlPoints(data = pts,
-                    fillColor = ~battery,
-                    popup = pts %>% dplyr::select(devicetime, deviceid, battery),
-                    group = "pts")
-
 
 ```
 
-### Aggregate tables
+### Mozambique overview
 ```{r}
 # get dat object using mozambique timezone
 traccar_moz$date <- as.Date(traccar_moz$devicetime, "GMT+2")
@@ -119,54 +72,69 @@ moz_tab <- traccar_moz %>% group_by(date) %>% summarise(`Numer of active FW` = n
 # get table
 bohemia::prettify(moz_tab, nrows = 10,
                   download_options = TRUE)
+
 ```
 
-### Individual maps
-
+### Tanzania overview
 ```{r}
-# examine device id 195
-sub_moz <- traccar_moz %>% filter(deviceid=='195')
-pts = st_as_sf(data.frame(sub_moz), coords = c("longitude", "latitude"), crs = 4326)
+# get dat object using mozambique timezone
+traccar_tza$date <- as.Date(traccar_tza$devicetime, "GMT+2")
 
-# total movements color by date
-l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)%>%
-        addGlPoints(data = pts,
-                    fillColor = ~date,
-                    fillOpacity = 1,
-                    popup = pts %>% dplyr::select(devicetime, deviceid,date),
-                    group = "pts")
-l
+# groupby date get number of people with their average total disance, battery, and number of stops
+moz_tab <- traccar_tza %>% group_by(date) %>% summarise(`Numer of active FW` = n(), `Average total distance traveled` = mean(total_distance, na.rm=TRUE), `Average battery life` = mean(battery, na.rm = TRUE), `Number of stops` = sum(motion=='true'))
 
-# total movements color by battery
-l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)%>%
-        addGlPoints(data = pts,
-                    fillColor = ~battery,
-                    fillOpacity = 1,
-                    popup = pts %>% dplyr::select(devicetime, deviceid,battery),
-                    group = "pts")
-l
-# total movements color by total distance
-l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)%>%
-        addGlPoints(data = pts,
-                    fillColor = ~total_distance,
-                    fillOpacity = 1,
-                    popup = pts %>% dplyr::select(devicetime, deviceid,total_distance),
-                    group = "pts")
-l
-
-# total movements color by stops
-l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)%>%
-        addGlPoints(data = pts %>% filter(motion='false'),
-                    fillColor = ~date,
-                    fillOpacity = 1,
-                    popup = pts %>% dplyr::select(devicetime, deviceid,date),
-                    group = "pts")
-l
-
-
+# get table
+bohemia::prettify(moz_tab, nrows = 10,
+                  download_options = TRUE)
 
 ```
+
+
+# Mozambique Fieldworkder maps
+```{r}
+
+# map of all fw
+unique_ids <- unique(traccar_moz$deviceid)
+map_list <- list()
+for(i in 1:length(unique_ids)){
+  this_id <- unique_ids[i]
+  sub_dat <- traccar_moz %>% filter(deviceid==this_id)
+  # pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
+  l <- leaflet() %>% 
+      addProviderTiles(providers$Esri.WorldImagery)%>%
+        addGlPoints(data = pts,
+                    fillColor = 'black',
+                    popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
+                    group = "pts")
+  
+  map_list[[i]]<- l
+
+}
+
+tagList(map_list)
+```
+
+# Tanzania Fieldworkder maps
+```{r}
+
+# map of all fw
+unique_ids <- unique(traccar_tza$deviceid)
+map_list <- list()
+for(i in 1:length(unique_ids)){
+  this_id <- unique_ids[i]
+  sub_dat <- traccar_tza %>% filter(deviceid==this_id)
+  # pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
+  l <- leaflet() %>% 
+      addProviderTiles(providers$Esri.WorldImagery)%>%
+        addGlPoints(data = pts,
+                    fillColor = 'black',
+                    popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
+                    group = "pts")
+  
+  map_list[[i]]<- l
+
+}
+
+tagList(map_list)
+```
+
