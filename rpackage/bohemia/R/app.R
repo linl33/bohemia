@@ -202,62 +202,8 @@ app_ui <- function(request) {
           tabItem(
             tabName="tracking_tools",
             fluidPage(
-              fluidRow(
-                column(4,
-                       radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
-                       uiOutput('region_ui'),
-                       uiOutput('district_ui'),
-                       uiOutput('ward_ui'),
-                       uiOutput('village_ui'),
-                       uiOutput('hamlet_ui'),
-                       h4('Location code:'),
-                       h3(textOutput('location_code_text'))),
-                column(8,
-                       navbarPage(title = 'Sheets',
-                                  tabPanel("Visit control sheet", 
-                                           fluidPage(
-                                             h3("Visit control sheet"),
-                                             uiOutput('ui_enumeration_n_hh'),
-                                             helpText('The default numbers shown are 25% higher than the number estimated by the village leader.'),
-                                             textInput('enumeration_n_teams',
-                                                       'Number of teams',
-                                                       value = 2),
-                                             radioButtons('enumeration_or_minicensus',
-                                                          'Type',
-                                                          choices = c('Enumeration visit',
-                                                                      'Data collection visit')),
-                                             helpText('In the case of Mozambique, "Data collection visit" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
-                                             
-                                             uiOutput('ui_id_limit'),
-                                             br(), br(),
-                                             downloadButton('render_visit_control_sheet',
-                                                            'Generate visit control sheet(s)')
-                                           )),
-                                  tabPanel("File index and folder location",
-                                           fluidPage(
-                                             h3("File index and folder location"),
-                                             uiOutput('ui_id_limit_file'),
-                                             br(), br(),
-                                             downloadButton('render_file_index_list',
-                                                            'Generate file index and folder location list(s)')
-                                           )),
-                                  tabPanel('Consent verification list',
-                                           fluidPage(
-                                             fluidRow(
-                                               column(6, checkboxInput('verification_all',
-                                                                       'All fieldworkers?',
-                                                                       value = TRUE)),
-                                               column(6, 
-                                                      uiOutput('ui_verification_text_filter'))
-                                             ),
-                                             checkboxInput('use_eldo_format', 'Use "Eldo format"',
-                                                           value = TRUE),
-                                             helpText('The "Eldo format" is based on an excel being used operationally. It has different columns, such as "verificado por", etc.'),
-                                             
-                                             uiOutput('ui_consent_verification_list_a'),
-                                             uiOutput('ui_consent_verification_list')
-                                           ))))
-              )
+              checkboxInput('all_locations','All locations', value = FALSE),
+              uiOutput('all_locations_ui')
             )
           ),
           tabItem(
@@ -585,6 +531,73 @@ app_server <- function(input, output, session) {
       }
     }
   })
+  output$all_locations_ui <- renderUI({
+    all_locations <- input$all_locations
+    if(all_locations){
+      fluidRow(
+        h3('You have selected all locations')
+      )
+    } else {
+      fluidRow(
+        column(4,
+               radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
+               uiOutput('region_ui'),
+               uiOutput('district_ui'),
+               uiOutput('ward_ui'),
+               uiOutput('village_ui'),
+               uiOutput('hamlet_ui'),
+               h4('Location code:'),
+               h3(textOutput('location_code_text'))),
+        column(8,
+               navbarPage(title = 'Sheets',
+                          tabPanel("Visit control sheet", 
+                                   fluidPage(
+                                     h3("Visit control sheet"),
+                                     uiOutput('ui_enumeration_n_hh'),
+                                     helpText('The default numbers shown are 25% higher than the number estimated by the village leader.'),
+                                     textInput('enumeration_n_teams',
+                                               'Number of teams',
+                                               value = 2),
+                                     radioButtons('enumeration_or_minicensus',
+                                                  'Type',
+                                                  choices = c('Enumeration visit',
+                                                              'Data collection visit')),
+                                     helpText('In the case of Mozambique, "Data collection visit" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
+                                     
+                                     uiOutput('ui_id_limit'),
+                                     br(), br(),
+                                     downloadButton('render_visit_control_sheet',
+                                                    'Generate visit control sheet(s)')
+                                   )),
+                          tabPanel("File index and folder location",
+                                   fluidPage(
+                                     h3("File index and folder location"),
+                                     uiOutput('ui_id_limit_file'),
+                                     br(), br(),
+                                     downloadButton('render_file_index_list',
+                                                    'Generate file index and folder location list(s)')
+                                   )),
+                          tabPanel('Consent verification list',
+                                   fluidPage(
+                                     fluidRow(
+                                       column(6, checkboxInput('verification_all',
+                                                               'All fieldworkers?',
+                                                               value = TRUE)),
+                                       column(6, 
+                                              uiOutput('ui_verification_text_filter'))
+                                     ),
+                                     checkboxInput('use_eldo_format', 'Use "Eldo format"',
+                                                   value = TRUE),
+                                     helpText('The "Eldo format" is based on an excel being used operationally. It has different columns, such as "verificado por", etc.'),
+                                     
+                                     uiOutput('ui_consent_verification_list_a'),
+                                     uiOutput('ui_consent_verification_list')
+                                   ))))
+      )
+    }
+   
+  })
+  
   
   observeEvent(c(input$country,
                  input$region,
