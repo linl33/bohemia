@@ -1222,7 +1222,7 @@ app_server <- function(input, output, session) {
         mutate(denom = target) %>%
         mutate(cs = cumsum(n)) %>%
         mutate(p = cs / denom * 100)
-      ggplot(data = x,
+      g <- ggplot(data = x,
              aes(x = date,
                  y = p)) +
         geom_point() +
@@ -1233,10 +1233,10 @@ app_server <- function(input, output, session) {
              title = 'Cumulative percent of target completed') +
         ylim(0,100)
     } else {
-      ggplot() 
+      g <- ggplot() 
     }
     message('---Created overall progress plot ')
-    
+    return(g)
   })
   output$gt_progress_table <- gt::render_gt({
       
@@ -1260,10 +1260,10 @@ app_server <- function(input, output, session) {
                                  `Estimated forms remaining` = target - nrow(pd),
                                  `Estimated % finished` = round(nrow(pd) / target * 100, digits = 2))
       } else {
-        data.frame(a = 0)
+        progress_table <- data.frame(a = 0)
       }
       message('---Created overall progress table ')
-      
+      return(progress_table)
   })
   
   output$ui_overall_progress <- renderUI({
@@ -1324,7 +1324,6 @@ app_server <- function(input, output, session) {
         time_period <- c(min(pd$todays_date), max(pd$todays_date))
       }
       time_range = time_period
-      save(pd, file='temp_pd.rda')
       pd <- pd %>%
         mutate(end_time = lubridate::as_datetime(end_time)) %>%
         filter(todays_date >= time_range[1],
@@ -1334,7 +1333,6 @@ app_server <- function(input, output, session) {
       if(is.null(who)){
         who <- 0 
       }
-      message('hrerererere')
       id <- who
       last_upload <- as.character(max(pd$end_time[pd$wid == id], na.rm = TRUE))
       sup_name <- as.character(fids$supervisor[fids$bohemia_id == id])
