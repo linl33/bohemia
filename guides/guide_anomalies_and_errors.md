@@ -147,6 +147,6 @@ The developer now has an object named `data` to be operated on.
     
 ## Detailed Schema Focused on the Tables Affected By Script
 
-![](img/anomalies_detail_schema.svg)
+![](img/anomalies_detail_schema.png)
 
 
