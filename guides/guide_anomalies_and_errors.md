@@ -114,7 +114,8 @@ The developer now has an object named `data` to be operated on.
 3. The result of `identify_anomalies_and_errors` (ie, a long list of errors and anomalies) is exposed in a table in the web-app  
 4. Data managers go row-by-row in the table and submit corrections / confirmations (ie, semi-structured comments regarding which remediative action should be taken).  
 5. The corrections / confirmations submitted by the data managers get stored in the `corrections` table in the Bohemia database.  
-6. Databrew codifies corrections in the `scripts/clean_database.R` script. This serves as both (a) a functional script to implement corrections, (b) a log of all changes to "raw" data.
+6. Databrew codifies corrections in the `scripts/clean_database.R` script. This serves as a functional script to implement corrections.
+7. The output of the `scripts/clean_database.R` is stored in the `anomalies_corrections_log` table which acts a log of all changes to "raw" data.
 
 ## The `corrections` table  
 
@@ -135,4 +136,17 @@ The developer now has an object named `data` to be operated on.
 ## Code standards for database "cleaning" code  
 
 - Corrections are codified in `scripts/clean_database.R`  
-- Running this script takes the "raw" data, modifies it (individual entries, each corresponding to an entry in the `corrections` table), and then generates "clean" data with `clean_` prefixes in the database.
+- Running this script takes:
+
+    - the "raw" data (individual entries, each corresponding to an entry in the `corrections` table), 
+    - checks the `response_details` specified in the `corrections` entry
+    - if the `response_detail` is already available in the `preset_correction_steps` applies these steps,
+    - if the `response_detail` is not available, the user creates a custom query and applies it.
+    - then generates "clean" data with `clean_` prefixes in the database.
+    - and saves the actual query used in the correction in the `anomaly_corrections_log` table.
+    
+## Detailed Schema Focused on the Tables Affected By Script
+
+![](img/anomalies_detail_schema.svg)
+
+
