@@ -353,9 +353,9 @@ if(new_data){
 
 # REFUSALS MOZAMBIQUE######################################################################
 message('PULLING REFUSALS (MOZAMBIQUE)')
-url <- creds$databrew_odk_server
-user = creds$databrew_odk_user
-password = creds$databrew_odk_pass
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
 id = 'refusals'
 suppressWarnings({
   existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
