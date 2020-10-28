@@ -5,6 +5,7 @@ params:
   enumeration: TRUE
   use_previous: FALSE
   enumerations_data: NULL
+  minicensus_main_data: NULL
   refusals_data: NULL
   include_name: FALSE
   li: FALSE
@@ -107,7 +108,8 @@ if(country == 'Tanzania'){
   } else {
   out <- tibble(`Código do agregado` = paste0(lc, '-', bohemia::add_zero(id_vals, n = 3)),
               team = team_numbers)
-}
+  }
+# save.image('/tmp/visit_control.RData')
 ```
 
 ```{r}
@@ -122,7 +124,7 @@ if(country == 'Mozambique'){
     for(i in 1:n_teams){
       chunk_list[[i]] <-
         paste0("Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
-               "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = '", "', `Localização do Numero de Agregado` = '",   ' ', "', `Data de enumeração` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 9) %>% kable_styling(latex_options = c('repeat_header')) %>% column_spec(1:4,width = '2.5cm')   \n```\n\\newpage\n")
+               "kable(out %>% filter(team == ", i, ") %>% tibble %>% dplyr::select(-team) %>% dplyr::mutate(`Nome de chefe de agregado` = '", "', `Localização do Numero de Agregado` = '",   ' ', "', `Data de enumeração` = ' '), 'latex', longtable = T, booktabs=FALSE, caption = 'Team ", i,"')  %>%   kable_styling(font_size = 9) %>% kable_styling(latex_options = c('repeat_header')) %>% column_spec(1:4,width = '4.5cm')   \n```\n\\newpage\n")
     }
   } else {
     if(use_previous){
@@ -139,6 +141,9 @@ if(country == 'Mozambique'){
       # Define those who should not be visited again
       remove_these <- refusals %>% filter(reason_no_participate == 'refused' | length(which(reason_no_participate == 'not_present')) >= 3) %>%
         .$hh_id
+      # Define those which have already been mini-censed (and can therefore be removed)
+      remove_these_mc <- minicensus_main_data$hh_id
+      remove_these <- unique(c(remove_these, remove_these_mc))
       # Define those with previous absences
       previous_absences <- refusals %>%
         group_by(agregado = hh_id) %>%

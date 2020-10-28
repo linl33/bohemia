@@ -1,6 +1,6 @@
-# Data access
+## Data access
 
-## Set up your credentials file
+### Set up your credentials file
 
 To use the Bohemia data access tools, it is advisable to first:
 - Clone the Bohemia code repository: `git clone https://github.com/databrew/bohemia`
@@ -46,9 +46,9 @@ aws_default_region_name: eu-west-3
 
 - Henceforth, references in this guide wrapped in `<>` refer to variables from this credentials file.
 
-## Access data
+### Access data
 
-### Tablet locations
+#### Tablet locations
 
 - Tablet locations are stored in a MySQL database running on a server located at `<traccar_server>`
 - To access the database directly via the MySQL CLI, one can run:
@@ -82,7 +82,7 @@ LEFT JOIN tc_devices d ON p.deviceid = d.id;
 mysql mysql <traccar_db> -h <traccar_mysql_remote_host> -u <traccar_mysql_remote_user> -p<traccar_mysql_remote_pass> -e "select * from tc_devices limit 5;";
 ```
 
-### ODK Aggregate data
+#### ODK Aggregate data
 
 - ODK Aggregate data is stored in a PostgreSQL database running on a server located at `<databrew_odk_server>`
 - To access the database directly, one should first ssh into the ODK Aggregate server
@@ -95,4 +95,17 @@ select * from aggregate."RECON_CORE" ;
 - To see all the tables:
 ```
 \dt aggregate.*;
+```
+
+#### The "Bohemia database"
+
+The study database can be accessed programatically via the following:
+
+```
+psql \
+   --host=<HOST> \
+   --port=5432 \
+   --username=<USERNAME>\
+   --dbname=bohemia\
+   --password
 ```

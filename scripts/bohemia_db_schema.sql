@@ -841,3 +841,15 @@ CREATE TABLE traccar (
     unique_id  INT,
     PRIMARY KEY(id)
 );
+
+-- Anomalies
+
+CREATE TABLE anomalies (
+  type  VARCHAR(64),
+  id   TEXT,
+  description   TEXT,
+  incident   TEXT,
+  wid   INT,
+  date   DATE,
+  instance_id   text
+);

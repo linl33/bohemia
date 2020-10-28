@@ -26,6 +26,11 @@ identify_anomalies_and_errors <- function(data,
     locs <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit#gid=1134589765')
   }  
   
+  # library(DBI); library(RPostgres)
+  # source('app_functions.R')
+  # source('load_odk_data.R')
+  # data <- load_odk_data(the_country = 'Mozambique', credentials_path = '../dev/credentials/credentials.yaml',
+  #                       users_path = '../dev/credentials/users.yaml')
   
   message('...', nrow(ae), ' anomalies and errors in the registry')
   

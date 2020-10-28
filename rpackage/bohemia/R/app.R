@@ -88,13 +88,7 @@ app_ui <- function(request) {
                      icon=icon("procedures"))),
           menuItem('Tracking tools',
                    tabName = 'tracking_tools',
-                   icon = icon('list'),
-                   startExpanded = FALSE,
-                   menuSubItem(
-                     text="Visit control sheet",
-                     tabName="visit_control_sheet",
-                     icon=icon("users"))
-          ),
+                   icon = icon('list')),
           menuItem('Alerts',
                    tabName = 'alerts',
                    icon = icon('exclamation-circle')),
@@ -206,67 +200,59 @@ app_ui <- function(request) {
             tabName="server_status",
             uiOutput('ui_server_status')),
           tabItem(
-            tabName="visit_control_sheet",
+            tabName="tracking_tools",
             fluidPage(
-              fluidRow(h2('Visit control sheet and file index and folder location')),
+              checkboxInput('all_locations','All locations', value = FALSE),
               fluidRow(
                 column(4,
-                       radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
-                       uiOutput('region_ui'),
-                       uiOutput('district_ui'),
-                       uiOutput('ward_ui'),
-                       uiOutput('village_ui'),
-                       uiOutput('hamlet_ui'),
-                       h4('Location code:'),
-                       h3(textOutput('location_code_text'))),
+                       uiOutput('all_locations_ui')),
                 column(8,
-                       navbarPage(title = 'Sheets',
-                                  tabPanel("Visit control sheet", 
-                                           fluidPage(
-                                             h3("Visit control sheet"),
-                                             uiOutput('ui_enumeration_n_hh'),
-                                             helpText('The default numbers shown are 25% higher than the number estimated by the village leader.'),
-                                             textInput('enumeration_n_teams',
-                                                       'Number of teams',
-                                                       value = 2),
-                                             checkboxInput('enumeration', 'Enumeration?', value = FALSE),
-                                             
-                                             helpText('MOZ only. Tick "Enumeration" box if you want to generate a list for enumerators'),
-                                             
-                                             helpText('Usually, in order to avoid duplicated household IDs, there should just be one team. In the case of multiple teams, it is assumed that each team will enumerate a similar number of forms.'),
-                                             uiOutput('ui_id_limit'),
-                                             checkboxInput('use_previous', 'Use previous', value = FALSE),
-                                             helpText('"Use previous" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs). This is only relevant to Mozambique, where enumerations are carried out separately from minicensus interviews.'),
-                                             br(), br(),
-                                             downloadButton('render_visit_control_sheet',
-                                                            'Generate visit control sheet(s)')
-                                           )),
-                                  tabPanel("File index and folder location",
-                                           fluidPage(
-                                             h3("File index and folder location"),
-                                             uiOutput('ui_id_limit_file'),
-                                             br(), br(),
-                                             downloadButton('render_file_index_list',
-                                                            'Generate file index and folder location list(s)')
-                                           )),
-                                  tabPanel('Consent verification list',
-                                           fluidPage(
-                                             fluidRow(
-                                               column(6, checkboxInput('verification_all',
-                                                                       'All fieldworkers?',
-                                                                       value = TRUE)),
-                                               column(6, 
-                                                      uiOutput('ui_verification_text_filter'))
-                                             ),
-                                             checkboxInput('use_eldo_format', 'Use "Eldo format"',
-                                                           value = TRUE),
-                                             helpText('The "Eldo format" is based on an excel being used operationally. It has different columns, such as "verificado por", etc.'),
-                                             
-                                             uiOutput('ui_consent_verification_list_a'),
-                                             uiOutput('ui_consent_verification_list')
-                                           ))))
-              )
-            )
+                       column(8,
+                              navbarPage(title = 'Sheets',
+                                         tabPanel("Visit control sheet", 
+                                                  fluidPage(
+                                                    h3("Visit control sheet"),
+                                                    uiOutput('ui_enumeration_n_hh'),
+                                                    helpText('The default numbers shown are 25% higher than the number estimated by the village leader.'),
+                                                    textInput('enumeration_n_teams',
+                                                              'Number of teams',
+                                                              value = 2),
+                                                    radioButtons('enumeration_or_minicensus',
+                                                                 'Type',
+                                                                 choices = c('Enumeration visit',
+                                                                             'Data collection visit')),
+                                                    helpText('In the case of Mozambique, "Data collection visit" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
+                                                    
+                                                    uiOutput('ui_id_limit'),
+                                                    br(), br(),
+                                                    downloadButton('render_visit_control_sheet',
+                                                                   'Generate visit control sheet(s)')
+                                                  )),
+                                         tabPanel("File index and folder location",
+                                                  fluidPage(
+                                                    h3("File index and folder location"),
+                                                    uiOutput('ui_id_limit_file'),
+                                                    br(), br(),
+                                                    downloadButton('render_file_index_list',
+                                                                   'Generate file index and folder location list(s)')
+                                                  )),
+                                         tabPanel('Consent verification list',
+                                                  fluidPage(
+                                                    fluidRow(
+                                                      column(6, checkboxInput('verification_all',
+                                                                              'All fieldworkers?',
+                                                                              value = TRUE)),
+                                                      column(6, 
+                                                             uiOutput('ui_verification_text_filter'))
+                                                    ),
+                                                    checkboxInput('use_eldo_format', 'Use "Eldo format"',
+                                                                  value = TRUE),
+                                                    helpText('The "Eldo format" is based on an excel being used operationally. It has different columns, such as "verificado por", etc.'),
+                                                    
+                                                    uiOutput('ui_consent_verification_list_a'),
+                                                    uiOutput('ui_consent_verification_list')
+                                                  )))))
+              ))
           ),
           tabItem(
             tabName="demography",
@@ -419,7 +405,8 @@ app_server <- function(input, output, session) {
                                  anomalies = data.frame(),
                                  fieldworkers = default_fieldworkers,
                                  traccar = data.frame(),
-                                 traccar_summary = data.frame())
+                                 traccar_summary = data.frame(),
+                                 va_table = data.frame())
   odk_data <- reactiveValues(data = NULL)
   
   
@@ -534,7 +521,6 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       out <- load_odk_data(the_country = the_country)
-      # save(out, file = '/tmp/out.RData')
       odk_data$data <- out
     }
   })
@@ -546,6 +532,9 @@ app_server <- function(input, output, session) {
     if(li){
       message('Logged in. Loading data for ', the_country)
       out <- load_odk_data(the_country = the_country)
+      if(grepl('joebrew', getwd())){
+        save(out, file = '~/Desktop/out.RData')
+      }
       odk_data$data <- out
     }
   })
@@ -570,19 +559,47 @@ app_server <- function(input, output, session) {
       if(li){
         out <- odk_data$data
         
-        anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
-        # save(out, file = '/tmp/out.RData')
-        suppressWarnings({
-          suppressMessages({
-            anomalies <- identify_anomalies_and_errors(data = out,
-                                                       anomalies_registry = anomaly_and_error_registry,
-                                                       locs = locations)
-          })
-        })
+        ## OLD WAY: GENERATING IN SESSION
+        # anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
+        # # save(out, file = '/tmp/out.RData')
+        # suppressWarnings({
+        #   suppressMessages({
+        #     anomalies <- identify_anomalies_and_errors(data = out,
+        #                                                anomalies_registry = anomaly_and_error_registry,
+        #                                                locs = locations)
+        #   })
+        # })
+        
+        ### NEW WAY: ALREADY GENERATED IN DB
+        con <- get_db_connection()
+        anomalies <- dbGetQuery(conn = con,
+                                statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
         session_data$anomalies <- anomalies
+        dbDisconnect(con)
       }
     }
   })
+  output$all_locations_ui <- renderUI({
+    all_locations <- input$all_locations
+    if(all_locations){
+      fluidRow(
+        h3('You have selected all locations. This feature is under construction / not yet ready.')
+      )
+    } else {
+      fluidRow(
+               radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
+               uiOutput('region_ui'),
+               uiOutput('district_ui'),
+               uiOutput('ward_ui'),
+               uiOutput('village_ui'),
+               uiOutput('hamlet_ui'),
+               h4('Location code:'),
+               h3(textOutput('location_code_text'))
+      )
+    }
+   
+  })
+  
   
   observeEvent(c(input$country,
                  input$region,
@@ -1221,7 +1238,7 @@ app_server <- function(input, output, session) {
         mutate(denom = target) %>%
         mutate(cs = cumsum(n)) %>%
         mutate(p = cs / denom * 100)
-      ggplot(data = x,
+      g <- ggplot(data = x,
              aes(x = date,
                  y = p)) +
         geom_point() +
@@ -1232,10 +1249,10 @@ app_server <- function(input, output, session) {
              title = 'Cumulative percent of target completed') +
         ylim(0,100)
     } else {
-      ggplot() 
+      g <- ggplot() 
     }
     message('---Created overall progress plot ')
-    
+    return(g)
   })
   output$gt_progress_table <- gt::render_gt({
       
@@ -1259,10 +1276,10 @@ app_server <- function(input, output, session) {
                                  `Estimated forms remaining` = target - nrow(pd),
                                  `Estimated % finished` = round(nrow(pd) / target * 100, digits = 2))
       } else {
-        data.frame(a = 0)
+        progress_table <- data.frame(a = 0)
       }
       message('---Created overall progress table ')
-      
+      return(progress_table)
   })
   
   output$ui_overall_progress <- renderUI({
@@ -1289,7 +1306,39 @@ app_server <- function(input, output, session) {
   
   # Individual data
   output$leaf_fid <- renderLeaflet({
-    leaflet() %>% addProviderTiles(providers$Stamen.Toner)
+    # Get the odk data
+    who <- input$fid
+    pd <- odk_data$data
+    pd <- pd$minicensus_main
+    co <- country()
+    pd <- pd %>% filter(hh_country == co)
+    save(pd, file = 'fid_pd.rda')
+    if(is.null(who)){
+      who <- 0
+    }
+    pd <- pd %>% filter(wid==who)
+    
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      ll <- extract_ll(pd$hh_geo_location)
+      pd$lng <- ll$lng; pd$lat <- ll$lat
+      # round table not here, and here make sure map works (not saving data below)
+      l <- leaflet() %>%
+        addProviderTiles(providers$Stamen.Toner) %>%
+        clearMarkers() %>%
+        addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
+
+    } else {
+     l <- leaflet() %>% addProviderTiles(providers$Stamen.Toner)
+      
+    }
+   l
+
   })
   output$table_individual_details <- renderTable({
     
@@ -1320,12 +1369,13 @@ app_server <- function(input, output, session) {
       }
       time_period <- input$fw_time_period
       if(is.null(time_period)){
-        time_period <- 7
+        time_period <- c(min(pd$todays_date), max(pd$todays_date))
       }
+      time_range = time_period
       pd <- pd %>%
-        mutate(time_range = Sys.Date() - time_period) %>%
         mutate(end_time = lubridate::as_datetime(end_time)) %>%
-        filter(end_time >= time_range)
+        filter(todays_date >= time_range[1],
+               todays_date <= time_range[2])
       # HERE need to incorporate this into pd (filter)
       who <- input$fid
       if(is.null(who)){
@@ -1339,12 +1389,13 @@ app_server <- function(input, output, session) {
       daily_work_hours <- 'pending'
       week_per = round(total_forms/weekly_forms_fw,2)
       total_per = round(total_forms/total_forms_fw,2)
-      last_days <-paste0('Last ', time_period, ' days')
-      tibble(key = c('Supervisor','Time period','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(sup_name,last_days, week_per, total_per, total_forms, average_time, daily_work_hours))
+      message('---Created FW performance individual table ')
+      
+      # last_days <-paste0('Last ', time_period, ' days')
+      tibble(key = c('Supervisor','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(sup_name, week_per, total_per, total_forms, average_time, daily_work_hours))
     } else {
       NULL
     }
-    message('---Created FW performance individual table ')
     
   })
   
@@ -1422,9 +1473,10 @@ app_server <- function(input, output, session) {
             })
   })
   
-  # Via list generation table
+  # VA list generation table
   output$table_va_list_generation <- DT::renderDataTable({
     # Get the odk data
+    
     pd <- odk_data$data
     pd <- pd$minicensus_main
     cn <- country()
@@ -1438,12 +1490,14 @@ app_server <- function(input, output, session) {
     }
     if(pd_ok){
       # va table
+      people <- odk_data$data$minicensus_people
       deaths <- odk_data$data$minicensus_repeat_death_info
       deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
       # Conditional mourning period
       mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
       va <- left_join(deaths %>% 
-                        left_join(pd %>% dplyr::select(instance_id, todays_date), by = 'instance_id') %>%
+                        left_join(pd %>% 
+                                    dplyr::select(instance_id, todays_date), by = 'instance_id') %>%
                         mutate(todays_date = as.Date(todays_date),
                                death_dod = as.Date(death_dod)) %>%
                         mutate(old = (todays_date - death_dod) > mourning_period) %>%
@@ -1456,12 +1510,19 @@ app_server <- function(input, output, session) {
                         mutate(xx = ifelse(is.na(xx), safe_bet, xx)) %>%
                         mutate(xx = as.Date(xx, origin = '1970-01-01')) %>%
                         mutate(yy = Sys.Date() - xx) %>% # "time elapsed" means time between lastest date to collect and today
+                        mutate(death_initials = paste0(
+                          ifelse(is.na(death_name), '.',
+                                 death_name), 
+                          ifelse(is.na(death_surname),
+                                 '.', death_surname))) %>%
                         dplyr::select(instance_id,
+                                      death_initials,
                                       `Date of death` = death_dod,
                                       `Latest date to collect VA form` = xx,
-                                      `PERM ID` = death_id,
+                                      `ID of deceased person` = death_id,
                                       `Time elapsed` = yy),
                       pd %>%
+                        mutate(num = as.numeric(hh_head_id)) %>%
                         dplyr::select(instance_id,
                                       District = hh_district,
                                       Ward = hh_ward,
@@ -1469,30 +1530,65 @@ app_server <- function(input, output, session) {
                                       Hamlet = hh_hamlet,
                                       `HH ID` = hh_id,
                                       `FW ID` = wid,
+                                      num, # for getting the initials of household head
                                       `HH visit date` = todays_date), by = 'instance_id') %>%
+        left_join(people %>% dplyr::select(instance_id,
+                                           first_name,
+                                           last_name,
+                                           pid,
+                                           num), by = c('instance_id', 'num')) %>%
         mutate(`FW ID` = ' ') %>%
-        dplyr::select(-instance_id)
+        dplyr::select(-instance_id) %>%
+        mutate(`HH head ID and initials` = paste0(pid, ' (', first_name, last_name, ')'))
+      
+      # Remove those which have already been collected
+      already_done <- unique(odk_data$data$va$death_id)
+      va <- va %>% filter(!`ID of deceased person` %in% already_done)
       
       if(nrow(va) > 0){
-        va <- va %>% dplyr::select(District, Ward, Village, Hamlet,
-                                   `HH ID`, `FW ID`, `PERM ID`,
-                                   `HH visit date`, `Date of death`,
-                                   `Latest date to collect VA form`,
-                                   `Time elapsed`
+        va <- va %>% dplyr::select(District, 
+                                   Ward, 
+                                   Village, 
+                                   Hamlet,
+                                   `HH ID`, 
+                                   `HH head ID and initials`,
+                                   # `FW ID`, 
+                                   `Name of deceased person` = death_initials,
+                                   `ID of deceased person`,
+                                   `Date of death`,
+                                   `Latest date to collect VA form`
         ) %>%
-          arrange(desc(`HH visit date`))
+          mutate(`FW / Supervisor ID` = ' ',
+                 `Date of VA visit` = ' ',
+                 `Was the ICF signed?` = 'Yes__ No__',
+                 `Was the VA form completed?` = 'Yes__ No__',
+                 `If this HH was not visited or the VA form was not completed, explain why` = '                 ')
         if(cn=='Mozambique'){
           va <- va %>%  rename(Distrito = District,
-                               `Posto administrativo/localidade`=Ward,
+                               `PA / Localidade`=Ward,
                                Povoado=Village,
                                Bairro=Hamlet)
         }
-        va$`Time elapsed` <- NULL
-        print(head(va))        
-        message('---Created list generatioon table for VA')
-        return(bohemia::prettify(va, nrows = nrow(va), download_options = TRUE))
+        
+        message('---Created list generation table for VA')
+        # Save for use in other places
+        session_data$va_table <- va
+        # Make datatable
+        final <- DT::datatable(va, 
+                               options = list(pageLength = nrow(va), 
+                                              dom = "Bfrtip", buttons = list("copy", "print", 
+                                                                             list(extend = "collection", buttons = "csv", 
+                                                                                  text = "Download"))), rownames = FALSE, extensions = "Buttons") %>%
+          formatStyle(names(va)[1:6],
+                      backgroundColor = '#ffcccb') %>%
+          formatStyle(names(va)[7:10],
+                      backgroundColor = '#fed8b1') %>%
+          formatStyle(names(va)[11:ncol(va)],
+                      backgroundColor = '#ADD8E6')
+        return(final)
       } 
     } else {
+      session_data$va_table <- data.frame()
       return(NULL)
     }
 
@@ -1508,6 +1604,8 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               fluidPage(
+                downloadButton('render_control_sheet',
+                               'Generate control sheet(s)'),
                 DT::dataTableOutput('table_va_list_generation')
                 )
             })
@@ -1886,14 +1984,20 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
+              pd <- odk_data$data
+              pd <- pd$minicensus_main
+              co <- country()
+              # save(pd, file = '/tmp/pd.RData')
+              pd <- pd %>% filter(hh_country == co)
+              
               fluidPage(
                 fluidRow(
                   column(6,
                          sliderInput(inputId = 'fw_time_period', 
                                      label = 'Previous days to include:', 
-                                     min = 0, 
-                                     max=14, 
-                                     value = 7))
+                                     min = min(pd$todays_date), 
+                                     max=max(pd$todays_date), 
+                                     value = c(min(pd$todays_date), max(pd$todays_date))))
                 )
               ) 
             })
@@ -1956,20 +2060,20 @@ app_server <- function(input, output, session) {
                             `# of errors` = 0)
                 time_period <- input$fw_time_period
                 if(is.null(time_period)){
-                  time_period <- 7
+                  time_period <- c(min(pd$todays_date), max(pd$todays_date))
+                  
                 } 
                 time_range <- time_period
                 
                 fwt_daily <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
-                  mutate(time_range = Sys.Date() - time_range) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
-                  filter(end_time >= time_range)%>%
+                  filter(todays_date >= time_range,
+                         todays_date <=time_range)%>%
                   group_by(`FW ID` = wid,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `Time period` = paste0('Last ', time_period, ' days'),
                             `% complete daily` = `Forms`/daily_forms_fw,
                             `# of anomalies` = 0,
                             `# of errors` = 0) 
@@ -2038,7 +2142,8 @@ app_server <- function(input, output, session) {
                             `# of errors` = 0)
                 time_period <- input$fw_time_period
                 if(is.null(time_period)){
-                  time_period <- 7
+                  time_period <- c(min(pd$todays_date), max(pd$todays_date))
+                  
                 } 
                 time_range <- time_period
 
@@ -3204,6 +3309,31 @@ app_server <- function(input, output, session) {
     }
   )
   
+  output$render_control_sheet <-
+    downloadHandler(filename = "sheet.pdf",
+                    content = function(file){
+                      # Get whether logged in
+                      si <- session_info
+                      li <- si$logged_in
+                      xdata <- session_data$va_table
+                     
+                      out_file <- paste0(getwd(), '/control_sheet.pdf')
+                      rmarkdown::render(input = 
+                                          paste0(system.file('rmd', package = 'bohemia'), '/control_sheet.Rmd'),
+                                        # '../inst/rmd/control_sheet.Rmd',
+                                        output_file = out_file,
+                                        params = list(xdata = xdata,
+                                                      li = li))
+                      
+                      # copy html to 'file'
+                      file.copy(out_file, file)
+                      
+                      # # delete folder with plots
+                      # unlink("figure", recursive = TRUE)
+                    },
+                    contentType = "application/pdf"
+    )
+  
   output$render_visit_control_sheet <-
     downloadHandler(filename = "visit_control_sheet.pdf",
                     content = function(file){
@@ -3213,13 +3343,15 @@ app_server <- function(input, output, session) {
                       # Get the location code
                       lc <- location_code()
                       # Get other details
-                      enum <- input$enumeration
-                      use_previous <- input$use_previous
+                      enumeration_or_minicensus <- input$enumeration_or_minicensus
+                      enum <- enumeration_or_minicensus == 'Enumeration visit'
+                      use_previous <- enumeration_or_minicensus == 'Data collection visit'
                       xdata <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
                                           n_teams = as.numeric(as.character(input$enumeration_n_teams)),
                                           id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                           id_limit_upr = as.numeric(as.character(input$id_limit[2])))
                       enumerations_data = odk_data$data$enumerations
+                      minicensus_main_data <- odk_data$data$minicensus_main
                       refusals_data = odk_data$data$refusals
                       
                       # tmp <- list(data = data,
@@ -3237,6 +3369,7 @@ app_server <- function(input, output, session) {
                                                       use_previous = use_previous,
                                                       enumerations_data = enumerations_data,
                                                       refusals_data = refusals_data,
+                                                      minicensus_main_data = minicensus_main_data,
                                                       li = li))
                       
                       # copy html to 'file'
@@ -3254,7 +3387,8 @@ app_server <- function(input, output, session) {
                       # Get the location code
                       lc <- location_code()
                       # Get other details
-                      enum <- input$enumeration
+                      enumeration_or_minicensus <- input$enumeration_or_minicensus
+                      enum <- enumeration_or_minicensus == 'Enumeration visit'
                       data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
                                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
                                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))

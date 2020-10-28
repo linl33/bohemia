@@ -353,9 +353,9 @@ if(new_data){
 
 # REFUSALS MOZAMBIQUE######################################################################
 message('PULLING REFUSALS (MOZAMBIQUE)')
-url <- creds$databrew_odk_server
-user = creds$databrew_odk_user
-password = creds$databrew_odk_pass
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
 id = 'refusals'
 suppressWarnings({
   existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
@@ -408,22 +408,25 @@ for(i in 1:nrow(dat)){
   this_id <- dat$id[i]
   unique_id <- dat$uniqueId[i]
   # message(i, '. ', this_id)
-  suppressMessages({
-    this_position <- bohemia::get_positions_from_device_id(url = creds$traccar_server,
-                                                           user = creds$traccar_user,
-                                                           pass = creds$traccar_pass,
-                                                           device_id = this_id) %>%
-      mutate(unique_id = unique_id) %>%
-      mutate(accuracy = as.numeric(accuracy),
-             altitude = as.numeric(altitude),
-             course = as.numeric(course),
-             deviceId = as.numeric(deviceId),
-             deviceTime = lubridate::as_datetime(deviceTime),
-             fixTime = lubridate::as_datetime(fixTime),
-             latitude = as.numeric(latitude),
-             longitude = as.numeric(longitude),
-             id = as.numeric(id))
+  suppressWarnings({
+    suppressMessages({
+      this_position <- bohemia::get_positions_from_device_id(url = creds$traccar_server,
+                                                             user = creds$traccar_user,
+                                                             pass = creds$traccar_pass,
+                                                             device_id = this_id) %>%
+        mutate(unique_id = unique_id) %>%
+        mutate(accuracy = as.numeric(accuracy),
+               altitude = as.numeric(altitude),
+               course = as.numeric(course),
+               deviceId = as.numeric(deviceId),
+               deviceTime = lubridate::as_datetime(deviceTime),
+               fixTime = lubridate::as_datetime(fixTime),
+               latitude = as.numeric(latitude),
+               longitude = as.numeric(longitude),
+               id = as.numeric(id))
+    })
   })
+  
   
   if(!is.null(this_position)){
     if(nrow(this_position) > 0){
@@ -468,8 +471,31 @@ dbAppendTable(conn = con,
               value = positions)
 message('...done adding positions to traccar table.')
 
-
-
+####### ANOMALIES CREATION ##################################################
+data_moz <- load_odk_data(the_country = 'Mozambique', 
+                      credentials_path = '../credentials/credentials.yaml',
+                      users_path = '../credentials/users.yaml')
+data_tza <- load_odk_data(the_country = 'Tanzania', 
+                          credentials_path = '../credentials/credentials.yaml',
+                          users_path = '../credentials/users.yaml')
+# Run anomaly detection
+anomalies_moz <- identify_anomalies_and_errors(data = data_moz,
+                                           anomalies_registry = bohemia::anomaly_and_error_registry,
+                                           locs = bohemia::locations)
+anomalies_tza <- identify_anomalies_and_errors(data = data_tza,
+                                               anomalies_registry = bohemia::anomaly_and_error_registry,
+                                               locs = bohemia::locations)
+anomalies <- bind_rows(
+  anomalies_moz %>% mutate(country = 'Mozambique'),
+  anomalies_tza %>% mutate(country = 'Tanzania')
+)
+# Drop old anomalies and add these ones to the database
+# dbSendQuery(conn = con,
+#             statement = 'DELETE FROM anomalies;')
+dbWriteTable(conn = con,
+             name = 'anomalies',
+             value = anomalies,
+             overwrite = TRUE)
 x = dbDisconnect(con)
 
 # #Execute cleaning code

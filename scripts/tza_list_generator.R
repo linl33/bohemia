@@ -96,7 +96,7 @@ pd <- out %>%
                 hh_hamlet_code,
                 hh_head_permid = permid,
                 hh_id,
-                # name,
+                name,
                 firma,
                 age,
                 todays_date,
@@ -147,6 +147,7 @@ if(co == 'Mozambique'){
                  'Hamlet code',
                  'ExtID HH member',
                  'Household ID',
+                 'Name',
                  "Person who signed consent",
                  'Age of household member',
                  'Recruitment date',
@@ -187,7 +188,6 @@ if(!is.null(eldo_format)){
     )
   }  
 }
-message('---Created visit control sheet')
 
 qc
 pdx <- pd
