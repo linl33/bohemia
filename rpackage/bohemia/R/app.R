@@ -1310,7 +1310,7 @@ app_server <- function(input, output, session) {
     pd <- pd$minicensus_main
     co <- country()
     pd <- pd %>% filter(hh_country == co)
-    save(pd, file = 'fid_pd.rda')
+    # save(pd, file = 'fid_pd.rda')
     if(is.null(who)){
       who <- 0
     }
@@ -1339,13 +1339,19 @@ app_server <- function(input, output, session) {
 
   })
   output$table_individual_details <- renderTable({
-    
+   
     # Get the odk data
     pd <- odk_data$data
     pd <- pd$minicensus_main
     co <- country()
     pd <- pd %>% filter(hh_country == co)
+    # get anomaly dataset
+    con <- get_db_connection()
+    an <- dbGetQuery(conn = con,
+                     statement = paste0("SELECT * FROM anomalies WHERE country = '", co, "'"))
+    dbDisconnect(con)
     
+    save(an,file = 'an.rda')
     pd_ok <- FALSE
     if(!is.null(pd)){
       if(nrow(pd) > 0){
@@ -1374,12 +1380,19 @@ app_server <- function(input, output, session) {
         mutate(end_time = lubridate::as_datetime(end_time)) %>%
         filter(todays_date >= time_range[1],
                todays_date <= time_range[2])
+      an$date <- as.Date(an$date, format='%Y-%m-%d')
+      an <- an %>% filter(date >=time_range[1],
+                          date <= time_range[2])
       # HERE need to incorporate this into pd (filter)
       who <- input$fid
       if(is.null(who)){
         who <- 0 
       }
+      
       id <- who
+      an <- an %>% filter(wid==who)
+      num_anomaly <- length(which(an$type=='anomaly'))
+      num_error <- length(which(an$type=='error'))
       last_upload <- as.character(max(pd$end_time[pd$wid == id], na.rm = TRUE))
       sup_name <- as.character(fids$supervisor[fids$bohemia_id == id])
       total_forms <- length(which(pd$wid == id))
@@ -1390,7 +1403,7 @@ app_server <- function(input, output, session) {
       message('---Created FW performance individual table ')
       
       # last_days <-paste0('Last ', time_period, ' days')
-      tibble(key = c('Supervisor','% of weekly target','% of total target','# forms','Average time/form', 'Daily work hours'), value = c(sup_name, week_per, total_per, total_forms, average_time, daily_work_hours))
+      tibble(key = c('Supervisor','% of weekly target','% of total target','# forms','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), value = c(sup_name, week_per, total_per, total_forms, num_anomaly, num_error,average_time, daily_work_hours))
     } else {
       NULL
     }
@@ -1431,19 +1444,19 @@ app_server <- function(input, output, session) {
               }
               
               fluidPage(
-                fluidRow(
-                  infoBox(title = 'Number of detected anomalies',
-                          icon = icon('microscope'),
-                          color = 'black',
-                          width = 6,
-                          h1(0)),
-                  infoBox(title = 'Number of detected errors',
-                          icon = icon('address-book'),
-                          color = 'black',
-                          width = 6,
-                          h1('0%'))
-                ),
-                fluidRow(p('The above section is not yet functional. Under construction.')),
+                # fluidRow(
+                #   infoBox(title = 'Number of detected anomalies',
+                #           icon = icon('microscope'),
+                #           color = 'black',
+                #           width = 6,
+                #           h1(0)),
+                #   infoBox(title = 'Number of detected errors',
+                #           icon = icon('address-book'),
+                #           color = 'black',
+                #           width = 6,
+                #           h1('0%'))
+                # ),
+                # fluidRow(p('The above section is not yet functional. Under construction.')),
                 fluidRow(
                   column(12,
                          selectInput('fid',
