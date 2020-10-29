@@ -2028,6 +2028,14 @@ app_server <- function(input, output, session) {
               # save(pd, file = '/tmp/pd.RData')
               pd <- pd %>% filter(hh_country == co)
               
+              # get anomaly dataset
+              con <- get_db_connection()
+              an <- dbGetQuery(conn = con,
+                               statement = paste0("SELECT * FROM anomalies WHERE country = '", co, "'"))
+              dbDisconnect(con)
+              an$date <- as.Date(an$date, format = '%Y-%m-%d')
+              # save(an, file='temp_an.rda')
+              
               pd_ok <- FALSE
               if(!is.null(pd)){
                 if(nrow(pd) > 0){
@@ -2054,7 +2062,8 @@ app_server <- function(input, output, session) {
                   weekly_forms_fw <- daily_forms_fw*5
                   total_forms_fw <- 599
                 }
-                # save(pd, file = 'fwt_temp.rda')
+                
+                # save(pd, file = 'temp_pd.rda')
                 fwt <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   group_by(`FW ID` = wid,
@@ -2074,19 +2083,27 @@ app_server <- function(input, output, session) {
                   
                 } 
                 time_range <- time_period
+                an <- an %>% group_by(wid) %>% 
+                  filter(date >= time_range[1],
+                         date <=time_range[2]) %>%
+                  summarise(num_errors = sum(type=='error'),
+                            num_anomalies = sum(type == 'anomaly'))
+                pd <- left_join(pd, an, by ='wid')
                 
                 fwt_daily <- pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
-                  filter(todays_date >= time_range,
-                         todays_date <=time_range)%>%
+                  filter(todays_date >= time_range[1],
+                         todays_date <=time_range[2])%>%
                   group_by(`FW ID` = wid,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `% complete daily` = `Forms`/daily_forms_fw,
-                            `# of anomalies` = 0,
-                            `# of errors` = 0) 
+                            `# of anomalies` = max(num_anomalies),
+                            `# of errors` = max(num_errors)) 
+                fwt_daily$`# of errors`[is.na(fwt_daily$`# of errors`)] <- 0
+                fwt_daily$`# of anomalies`[is.na(fwt_daily$`# of anomalies`)] <- 0
               }
               fluidPage(
                 bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
@@ -2109,6 +2126,14 @@ app_server <- function(input, output, session) {
               co <- country()
               # save(pd, file = '/tmp/pd.RData')
               pd <- pd %>% filter(hh_country == co)
+              
+              # get anomaly dataset
+              con <- get_db_connection()
+              an <- dbGetQuery(conn = con,
+                               statement = paste0("SELECT * FROM anomalies WHERE country = '", co, "'"))
+              dbDisconnect(con)
+              an$date <- as.Date(an$date, format = '%Y-%m-%d')
+              # save(an, file='temp_an.rda')
               
               pd_ok <- FALSE
               if(!is.null(pd)){
@@ -2156,7 +2181,9 @@ app_server <- function(input, output, session) {
                   
                 } 
                 time_range <- time_period
-
+                an <- an %>% group_by(wid) %>% summarise(num_errors = sum(type=='error'),
+                                                         num_anomalies = sum(type == 'anomaly'))
+                pd <- left_join(pd, an, by ='wid')
                 fwt_overall <-  pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
@@ -2166,8 +2193,11 @@ app_server <- function(input, output, session) {
                             `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `% complete total` = `Forms`/total_forms_fw,
                             `Daily work hours` = '(Pending feature)',
-                            `# of anomalies` = 0,
-                            `# of errors` = 0)
+                            `# of anomalies` = max(num_anomalies),
+                            `# of errors` = max(num_errors))
+                fwt_overall$`# of errors`[is.na(fwt_overall$`# of errors`)] <- 0
+                fwt_overall$`# of anomalies`[is.na(fwt_overall$`# of anomalies`)] <- 0
+                
               }
               fluidPage(
                 bohemia::prettify(fwt_overall, nrows = nrow(fwt_overall),
