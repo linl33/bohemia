@@ -807,10 +807,31 @@ app_server <- function(input, output, session) {
   
   # sneak peek #############################################
   output$average_time <- renderPlot({
+    
+    # temporary function until we find a dplyr solution
+    cummean_date <- function(temp_data, var_name){
+      # loop through each date and get mean of variable up until that date
+      names(temp_data)[which(names(temp_data)==var_name)] <- 'y'
+      unique_dates <- sort(unique(temp_data$todays_date))
+      loop_list <- list()
+      for(i in 1:length(unique_dates)){
+        this_date <- unique_dates[i]
+        
+        sub_temp_data <- temp_data %>% dplyr::filter(todays_date<=this_date)
+        y_value <- round(mean(sub_temp_data$y, na.rm = TRUE),2)
+        temp <- tibble('date'= this_date, 
+                       'y_value'= y_value)
+        loop_list[[i]] <- temp
+      }
+      plot_data <- do.call('rbind', loop_list)
+      return(plot_data)
+    }
+    
+    # get data
     indic <- input$indicator_time
     pd <- odk_data$data
     # save(pd, file='odk_data.rda')
-    # pd_people <- pd$minicensus_people
+    pd_people <- pd$minicensus_people
     pd <- pd$minicensus_main
     pd_ok <- FALSE
     if(!is.null(pd)){
@@ -820,37 +841,17 @@ app_server <- function(input, output, session) {
     }
     if(pd_ok){
       
-      # loop through each date and get mean of variable up until that date
-      unique_dates <- sort(unique(pd$todays_date))
-      loop_list <- list()
-      for(i in 1:length(unique_dates)){
-        this_date <- unique_dates[i]
-
-        sub_pd <- pd %>% dplyr::filter(todays_date<=this_date)
-        mean_hh_size <- round(mean(sub_pd$hh_size, na.rm = TRUE),2)
-        mean_num_cattle <- round(mean(sub_pd$hh_n_cows_less_than_1_year, na.rm = TRUE), 2)
-        mean_num_pig <-  round(mean(sub_pd$hh_n_pigs_less_than_6_weeks, na.rm = TRUE), 2)
-        mean_num_mos <-  round(mean(sub_pd$n_nets_in_hh, na.rm = TRUE), 2)
-        temp <- tibble('date'= this_date, 
-                       'mean_hh_size'= mean_hh_size,
-                       'mean_num_cattle'=mean_num_cattle, 
-                       'mean_num_pig'=mean_num_pig,
-                       'mean_num_mos'=mean_num_mos)
-        loop_list[[i]] <- temp
-      }
-      plot_data <- do.call('rbind', loop_list)
-      
       if(indic=='Household size'){
-        names(plot_data)[2] <- 'y'
+        plot_data <- cummean_date(pd, var_name = 'hh_size')
       } else if(indic=='Number of cattle per household'){
-        names(plot_data)[3] <- 'y'
+        plot_data <- cummean_date(pd, var_name = 'hh_n_cows_less_than_1_year')
       } else if(indic=='Number of pigs per household'){
-        names(plot_data)[4] <- 'y'
+        plot_data <- cummean_date(pd, var_name = 'hh_n_pigs_less_than_6_weeks')
       } else if(indic=='Number of mosquito nets per household'){
-        names(plot_data)[5] <- 'y'
+        plot_data <- cummean_date(pd, var_name = 'n_nets_in_hh')
       }
      
-      ggplot(plot_data, aes(date,y)) + 
+      ggplot(plot_data, aes(date,y_value)) + 
         geom_point() + 
         geom_line() +
         labs(x = 'Date',
