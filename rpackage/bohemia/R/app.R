@@ -3358,8 +3358,8 @@ app_server <- function(input, output, session) {
                       
                       out_file <- paste0(getwd(), '/control_sheet.pdf')
                       rmarkdown::render(input = 
-                                          # paste0(system.file('rmd', package = 'bohemia'), '/control_sheet.Rmd'),
-                                        '../inst/rmd/control_sheet.Rmd',
+                                          paste0(system.file('rmd', package = 'bohemia'), '/control_sheet.Rmd'),
+                                        # '../inst/rmd/control_sheet.Rmd',
                                         output_file = out_file,
                                         params = list(xdata = xdata,
                                                       li = li))
