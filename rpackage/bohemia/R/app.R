@@ -262,7 +262,7 @@ app_ui <- function(request) {
             fluidPage(
               fluidRow(
                 column(4,
-                       selectInput('indicator_time', 'Choose variable', choices = c('Household size','Number of children per household', ' Ratio of children to adults', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosiquito nets per household'))),
+                       selectInput('indicator_time', 'Choose variable', choices = c('Household size', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosquito nets per household'))),
               ),
               fluidRow(
                 column(6, 
@@ -807,15 +807,11 @@ app_server <- function(input, output, session) {
   
   # sneak peek #############################################
   output$average_time <- renderPlot({
-    # c('Household size','Number of children per household', ' Ratio of children to adults', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosiquito nets per household')
-    # Get the odk data
-    # HERE use the minicensus_people dataset to to get children data (maybe peoples data set is all you need?, compare to minicensus_main)
+    indic <- input$indicator_time
     pd <- odk_data$data
+    # save(pd, file='odk_data.rda')
+    # pd_people <- pd$minicensus_people
     pd <- pd$minicensus_main
-    co <- country()
-    the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
-    # save(pd, file = '/tmp/pd.RData')
-    pd <- pd %>% filter(hh_country == co)
     pd_ok <- FALSE
     if(!is.null(pd)){
       if(nrow(pd) > 0){
@@ -823,34 +819,47 @@ app_server <- function(input, output, session) {
       }
     }
     if(pd_ok){
-      # 06 = 5.4913
-      # 07 = 5
-     #  temp <- pd %>% group_by(todays_date) %>% summarise(cum_mean = cummean(hh_size))
-     #  
-     # temp <-  pd %>% group_by(todays_date, wid,,hh_id) %>% summarise(mean_hh_size =mean(hh_size),counts = n())
-     # 
-     # %>% group_by(todays_date) %>% summarise(cum_mean = cummean(mean_hh_size))
-     #  
-      # c('Household size','Number of children per household', ' Ratio of children to adults', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosiquito nets per household')
+      
+      # loop through each date and get mean of variable up until that date
       unique_dates <- sort(unique(pd$todays_date))
-      for(i in 1:length(unique(dates))){
+      loop_list <- list()
+      for(i in 1:length(unique_dates)){
         this_date <- unique_dates[i]
-        sub_date <- pd %>% filter(todays_date==this_date)
-        sub_date$mean_hh_size <- mean(sub_date$hh_size)
-        sub_date$mean_hh_children <- 
-        
+
+        sub_pd <- pd %>% dplyr::filter(todays_date<=this_date)
+        mean_hh_size <- round(mean(sub_pd$hh_size, na.rm = TRUE),2)
+        mean_num_cattle <- round(mean(sub_pd$hh_n_cows_less_than_1_year, na.rm = TRUE), 2)
+        mean_num_pig <-  round(mean(sub_pd$hh_n_pigs_less_than_6_weeks, na.rm = TRUE), 2)
+        mean_num_mos <-  round(mean(sub_pd$n_nets_in_hh, na.rm = TRUE), 2)
+        temp <- tibble('date'= this_date, 
+                       'mean_hh_size'= mean_hh_size,
+                       'mean_num_cattle'=mean_num_cattle, 
+                       'mean_num_pig'=mean_num_pig,
+                       'mean_num_mos'=mean_num_mos)
+        loop_list[[i]] <- temp
       }
-      indic <- 'Household size'
-      indic <- input$indicator_time
-      if(indic =='Household size'){
-        
-        
+      plot_data <- do.call('rbind', loop_list)
+      
+      if(indic=='Household size'){
+        names(plot_data)[2] <- 'y'
+      } else if(indic=='Number of cattle per household'){
+        names(plot_data)[3] <- 'y'
+      } else if(indic=='Number of pigs per household'){
+        names(plot_data)[4] <- 'y'
+      } else if(indic=='Number of mosquito nets per household'){
+        names(plot_data)[5] <- 'y'
       }
+     
+      ggplot(plot_data, aes(date,y)) + 
+        geom_point() + 
+        geom_line() +
+        labs(x = 'Date',
+             y='Average at each date') +
+        theme_bohemia()
+      
     } else {
       NULL
     }
-   
-    
   })
   
   output$dis_time <- renderPlot({
