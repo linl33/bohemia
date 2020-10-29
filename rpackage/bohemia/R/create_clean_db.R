@@ -37,7 +37,7 @@ create_clean_db <- function(credentials_file = 'credentials/credentials.yaml',
   for(i in 1:length(copy_these)){
     this_table <- copy_these[i]
     if(drop_all){
-      message('Dropping clean_', this_table')
+      message('Dropping clean_', this_table)
       dbExecute(conn = con,
                 statement = paste0('drop table clean_', this_table))
     } else {
