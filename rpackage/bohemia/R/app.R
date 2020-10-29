@@ -521,6 +521,14 @@ app_server <- function(input, output, session) {
     if(li){
       out <- load_odk_data(the_country = the_country)
       odk_data$data <- out
+      
+      # Get anomalies
+      con <- get_db_connection()
+      anomalies <- dbGetQuery(conn = con,
+                              statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
+      session_data$anomalies <- anomalies
+      dbDisconnect(con)
+      
     }
   })
   
@@ -532,6 +540,13 @@ app_server <- function(input, output, session) {
       message('Logged in. Loading data for ', the_country)
       out <- load_odk_data(the_country = the_country)
       
+      # Get anomalies
+      con <- get_db_connection()
+      anomalies <- dbGetQuery(conn = con,
+                              statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
+      session_data$anomalies <- anomalies
+      dbDisconnect(con)
+      
       odk_data$data <- out
       if(grepl('joebrew', getwd())){
         save(out, file = '~/Desktop/odk_data_data.RData')
@@ -542,41 +557,12 @@ app_server <- function(input, output, session) {
   
   # Error and anomaly detection
   observeEvent(input$sidebar, {
-    ok <- FALSE
     sidebar <- input$sidebar
     message('Clicked on sidebar: ', sidebar)
-    if(sidebar == 'alerts'){
-      # Check to see if the errors have already been loaded or not
-      already_loaded_errors <- session_info$already_loaded_errors
-      if(!already_loaded_errors){
-        ok <- TRUE
-      }
-    }
-    
-    if(ok){
-      the_country <- country()
-      li <- session_info$logged_in
-      if(li){
-        out <- odk_data$data
-        
-        ## OLD WAY: GENERATING IN SESSION
-        # anomaly_and_error_registry <- bohemia::anomaly_and_error_registry
-        # # save(out, file = '/tmp/out.RData')
-        # suppressWarnings({
-        #   suppressMessages({
-        #     anomalies <- identify_anomalies_and_errors(data = out,
-        #                                                anomalies_registry = anomaly_and_error_registry,
-        #                                                locs = locations)
-        #   })
-        # })
-        
-        ### NEW WAY: ALREADY GENERATED IN DB
-        con <- get_db_connection()
-        anomalies <- dbGetQuery(conn = con,
-                                statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
-        session_data$anomalies <- anomalies
-        dbDisconnect(con)
-      }
+    li <- session_info$logged_in
+    if(!li){
+      info_text <- reactive_log_in_text()
+      make_log_in_modal(info_text = info_text)
     }
   })
   output$all_locations_ui <- renderUI({
@@ -1329,29 +1315,32 @@ app_server <- function(input, output, session) {
       pd$lng <- ll$lng; pd$lat <- ll$lat
       # round table not here, and here make sure map works (not saving data below)
       l <- leaflet() %>%
-        addProviderTiles(providers$Stamen.Toner) %>%
+        # addProviderTiles(providers$Stamen.Toner) %>%
+        # addProviderTiles(providers$Esri.WorldImagery) %>%
+        addTiles() %>%
         clearMarkers() %>%
         addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
 
     } else {
-     l <- leaflet() %>% addProviderTiles(providers$Stamen.Toner)
+     l <- leaflet() %>% addProviderTiles(providers$Esri.WorldImagery)# addProviderTiles(providers$Stamen.Toner)
       
     }
    l
-
   })
+  
+
+  
   output$table_individual_details <- renderTable({
-   
+
     # Get the odk data
     pd <- odk_data$data
     pd <- pd$minicensus_main
     co <- country()
     pd <- pd %>% filter(hh_country == co)
     # get anomaly dataset
-    con <- get_db_connection()
-    an <- dbGetQuery(conn = con,
-                     statement = paste0("SELECT * FROM anomalies WHERE country = '", co, "'"))
-    dbDisconnect(con)
+    an <- session_data$anomalies
+    # save(pd, co, an,
+    #      file = '/tmp/fw.RData')
     
     pd_ok <- FALSE
     if(!is.null(pd)){
@@ -1372,44 +1361,93 @@ app_server <- function(input, output, session) {
         weekly_forms_fw <- daily_forms_fw*5
         total_forms_fw <- 500
       }
-      time_period <- input$fw_time_period
-      if(is.null(time_period)){
-        time_period <- c(min(pd$todays_date), max(pd$todays_date))
-      }
-      time_range = time_period
-      pd <- pd %>%
-        mutate(end_time = lubridate::as_datetime(end_time)) %>%
-        filter(todays_date >= time_range[1],
-               todays_date <= time_range[2])
-      an$date <- as.Date(an$date, format='%Y-%m-%d')
-      an <- an %>% filter(date >=time_range[1],
-                          date <= time_range[2])
-      # HERE need to incorporate this into pd (filter)
       who <- input$fid
+      
+      pd <- pd %>%
+        mutate(end_time = lubridate::as_datetime(end_time))
+      if(nrow(an) > 0){
+        an$date <- as.Date(an$date, format='%Y-%m-%d')
+        an <- an %>% filter(wid==who)
+        num_anomaly <- length(which(an$type=='anomaly'))
+        num_error <- length(which(an$type=='error'))
+      } else {
+        num_anomaly <- 0
+        num_error <- 0
+      }
+
       if(is.null(who)){
         who <- 0 
       }
       
       id <- who
-      an <- an %>% filter(wid==who)
-      num_anomaly <- length(which(an$type=='anomaly'))
-      num_error <- length(which(an$type=='error'))
-      last_upload <- as.character(max(pd$end_time[pd$wid == id], na.rm = TRUE))
+      pd <- pd %>% filter(wid == who)
+
+      last_upload <- as.character(max(pd$end_time, na.rm = TRUE))
       sup_name <- as.character(fids$supervisor[fids$bohemia_id == id])
-      total_forms <- length(which(pd$wid == id))
-      average_time <- 63
-      daily_work_hours <- 'pending'
+      total_forms <- nrow(pd)
+      average_time <- mean(pd$end_time - pd$start_time)
+      average_time <- paste0(round(as.numeric(average_time), digits = 2), ' ', attr(average_time, 'units'))
+      daily_work_hours <- '(pending)'
       week_per = round(total_forms/weekly_forms_fw,2)
       total_per = round(total_forms/total_forms_fw,2)
       message('---Created FW performance individual table ')
       
       # last_days <-paste0('Last ', time_period, ' days')
-      tibble(key = c('Supervisor','% of weekly target','% of total target','# forms','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), value = c(sup_name, week_per, total_per, total_forms, num_anomaly, num_error,average_time, daily_work_hours))
+      tibble(` ` = c('Supervisor','% of weekly target','% of total target','# forms','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), `   ` = c(sup_name, week_per, total_per, total_forms, num_anomaly, num_error,average_time, daily_work_hours))
     } else {
       NULL
     }
     
   })
+  
+  output$plot_individual_details <- renderPlot({
+    
+    # Get the odk data
+    pd <- odk_data$data
+    pd <- pd$minicensus_main
+    co <- country()
+    pd <- pd %>% filter(hh_country == co)
+  
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      who <- input$fid
+      if(is.null(who)){
+        who <- 0 
+      }
+      plot_data <- pd %>% filter(wid == who)
+      if(nrow(plot_data) > 0){
+      plot_data <- plot_data %>%
+          group_by(date = todays_date) %>%
+          tally
+      
+      g <- ggplot(data = plot_data,
+             aes(x = date,
+                 y = n)) +
+        geom_bar(stat = 'identity',
+                 fill = 'black') +
+        labs(x = 'Date',
+             y = 'Forms collected',
+             title = 'Forms collected by date') +
+        theme_bohemia()
+      
+      
+      } else {
+        g <- NULL
+      }
+      
+    } else {
+      g <- NULL
+    }
+    return(g)
+    
+    
+  })
+  
   
   output$ui_individual_data <- renderUI({
     # See if the user is logged in and has access
@@ -1427,22 +1465,15 @@ app_server <- function(input, output, session) {
               # save(pd, file = '/tmp/pd.RData')
               pd <- pd %>% filter(hh_country == co)
               
-              pd_ok <- FALSE
-              if(!is.null(pd)){
-                if(nrow(pd) > 0){
-                  pd_ok <- TRUE
-                }
-              }
-              if(pd_ok){
-                fid_options <- sort(unique(pd$wid))
-                fid_choices <- session_data$fieldworkers
-                fid_choices <- fid_choices %>% dplyr::filter(as.numeric(id) %in% as.numeric(fid_options))
-                x = as.character(fid_choices$name)
-                y = as.character(fid_choices$id)
-                fid_choices <- as.numeric(y)
-              } else {
-                fid_choices <- 0
-              }
+              # Define choices for leaflet fw selection
+              co <- country()
+              sub_fids <- fids %>% 
+                filter(country == co)
+              the_choices <- sub_fids$bohemia_id
+              names(the_choices) <- paste0(sub_fids$bohemia_id, '. ',
+                                           sub_fids$first_name, ' ',
+                                           sub_fids$last_name)
+              
               
               fluidPage(
                 # fluidRow(
@@ -1457,12 +1488,11 @@ app_server <- function(input, output, session) {
                 #           width = 6,
                 #           h1('0%'))
                 # ),
-                # fluidRow(p('The above section is not yet functional. Under construction.')),
                 fluidRow(
                   column(12,
                          selectInput('fid',
                                      'Fieldworker ID',
-                                     choices = fid_choices)))
+                                     choices = the_choices)))
               )
             })
   })
@@ -1476,13 +1506,22 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               fluidPage(
-                fluidRow(tableOutput('table_individual_details')),
-                fluidRow(box(width = 12,
-                             title = 'Location of forms submitted by this worker',
-                             leafletOutput('leaf_fid',
-                                           height = 500))
-              ))
-            })
+                fluidRow(
+                  column(6,
+                         tableOutput('table_individual_details')),
+                  column(6,
+                         plotOutput('plot_individual_details'))
+                ),
+                fluidRow(column(6, align = 'center',
+                                h3('All locations visited by FW'),
+                                leafletOutput('traccar_leaf',
+                                              height = 500)),
+                         column(6,
+                                h3('Locations of forms submitted by FW'),
+                                leafletOutput('leaf_fid',
+                                              height = 500)
+                                ))
+              )})
   })
   
   # VA list generation table
@@ -2031,12 +2070,11 @@ app_server <- function(input, output, session) {
               pd <- pd %>% filter(hh_country == co)
               
               # get anomaly dataset
-              con <- get_db_connection()
-              an <- dbGetQuery(conn = con,
-                               statement = paste0("SELECT * FROM anomalies WHERE country = '", co, "'"))
-              dbDisconnect(con)
-              an$date <- as.Date(an$date, format = '%Y-%m-%d')
-              # save(an, file='temp_an.rda')
+              an <- session_data$anomalies
+              if(nrow(an) > 0){
+                an$date <- as.Date(an$date, format = '%Y-%m-%d')
+              }
+              # save(an, pd, co, file='/tmp/temp_an.rda')
               
               pd_ok <- FALSE
               if(!is.null(pd)){
@@ -2047,13 +2085,13 @@ app_server <- function(input, output, session) {
               if(pd_ok){
                 # join fids with pd to ge supervisor info
                 # Get the fieldworkers for the country in question
-                co <- country()
                 sub_fids <- fids %>% filter(country == co)
-                pd <- left_join(pd, sub_fids, by=c('wid'= 'bohemia_id'))
-                # Create fieldworkers table
-                pd$end_time <- lubridate::as_datetime(pd$end_time)
-                pd$start_time <- lubridate::as_datetime(pd$start_time)
-                pd$time <- pd$end_time - pd$start_time
+                pd <- left_join(pd, sub_fids, by=c('wid'= 'bohemia_id')) 
+                pd <- pd %>% filter(!is.na(country)) %>%
+                  filter(country == co) %>%
+                  mutate(end_time = lubridate::as_datetime(end_time),
+                         start_time = lubridate::as_datetime(start_time)) %>%
+                  mutate(time = end_time - start_time)
                 
                 if(co=='Mozambique'){
                   daily_forms_fw <- 10
@@ -2065,20 +2103,6 @@ app_server <- function(input, output, session) {
                   total_forms_fw <- 599
                 }
                 
-                # save(pd, file = 'temp_pd.rda')
-                fwt <- pd %>%
-                  mutate(todays_date = as.Date(todays_date)) %>%
-                  group_by(`FW ID` = wid,
-                           `Supervisor` = supervisor) %>%
-                  mutate(nd = as.numeric(max(todays_date, na.rm = TRUE) - min(todays_date, na.rm = TRUE) + 1)) %>%
-                  ungroup %>%
-                  group_by(`FW ID`,
-                           `Supervisor`) %>%
-                  summarise(`Daily forms` = round(n() / dplyr::first(nd), digits = 1),
-                            `Weekly forms` = round(`Daily forms` * 7, digits = 1),
-                            `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `# of anomalies` = 0,
-                            `# of errors` = 0)
                 time_period <- input$fw_time_period
                 if(is.null(time_period)){
                   time_period <- c(min(pd$todays_date), max(pd$todays_date))
@@ -2093,19 +2117,20 @@ app_server <- function(input, output, session) {
                 pd <- left_join(pd, an, by ='wid')
                 
                 fwt_daily <- pd %>%
+                  mutate(fw_name = paste0(first_name, ' ', last_name)) %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   filter(todays_date >= time_range[1],
                          todays_date <=time_range[2])%>%
                   group_by(`FW ID` = wid,
+                           FW = fw_name,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `% complete daily` = `Forms`/daily_forms_fw,
                             `# of anomalies` = max(num_anomalies),
                             `# of errors` = max(num_errors)) 
-                fwt_daily$`# of errors`[is.na(fwt_daily$`# of errors`)] <- 0
-                fwt_daily$`# of anomalies`[is.na(fwt_daily$`# of anomalies`)] <- 0
+
               }
               fluidPage(
                 bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
@@ -2130,13 +2155,8 @@ app_server <- function(input, output, session) {
               pd <- pd %>% filter(hh_country == co)
               
               # get anomaly dataset
-              con <- get_db_connection()
-              an <- dbGetQuery(conn = con,
-                               statement = paste0("SELECT * FROM anomalies WHERE country = '", co, "'"))
-              dbDisconnect(con)
-              an$date <- as.Date(an$date, format = '%Y-%m-%d')
-              # save(an, file='temp_an.rda')
-              
+              an <- session_data$anomalies %>%
+                mutate(date = as.Date(date, format = '%Y-%m-%d'))
               pd_ok <- FALSE
               if(!is.null(pd)){
                 if(nrow(pd) > 0){
@@ -2148,7 +2168,9 @@ app_server <- function(input, output, session) {
                 # Get the fieldworkers for the country in question
                 co <- country()
                 sub_fids <- fids %>% filter(country == co)
-                pd <- left_join(pd, sub_fids, by=c('wid'= 'bohemia_id'))
+                pd <- left_join(pd, sub_fids, by=c('wid'= 'bohemia_id')) %>%
+                  filter(!is.na(country)) %>%
+                  filter(country == co)
                 # Create fieldworkers table
                 pd$end_time <- lubridate::as_datetime(pd$end_time)
                 pd$start_time <- lubridate::as_datetime(pd$start_time)
@@ -2163,20 +2185,7 @@ app_server <- function(input, output, session) {
                   weekly_forms_fw <- daily_forms_fw*5
                   total_forms_fw <- 599
                 }
-                # save(pd, file = 'fwt_temp.rda')
-                fwt <- pd %>%
-                  mutate(todays_date = as.Date(todays_date)) %>%
-                  group_by(`FW ID` = wid,
-                           `Supervisor` = supervisor) %>%
-                  mutate(nd = as.numeric(max(todays_date, na.rm = TRUE) - min(todays_date, na.rm = TRUE) + 1)) %>%
-                  ungroup %>%
-                  group_by(`FW ID`,
-                           `Supervisor`) %>%
-                  summarise(`Daily forms` = round(n() / dplyr::first(nd), digits = 1),
-                            `Weekly forms` = round(`Daily forms` * 7, digits = 1),
-                            `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `# of anomalies` = 0,
-                            `# of errors` = 0)
+
                 time_period <- input$fw_time_period
                 if(is.null(time_period)){
                   time_period <- c(min(pd$todays_date), max(pd$todays_date))
@@ -2188,8 +2197,10 @@ app_server <- function(input, output, session) {
                 pd <- left_join(pd, an, by ='wid')
                 fwt_overall <-  pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
+                  mutate(fw_name = paste0(first_name, ' ', last_name)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   group_by(`FW ID` = wid,
+                           `FW` = fw_name,
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
@@ -2282,14 +2293,14 @@ app_server <- function(input, output, session) {
   output$traccar_leaf <- renderLeaflet({
     # Get the traccar data for that country
     traccar <- session_data$traccar
-    the_worker <- input$fid_leaf_traccar
+    the_worker <- input$fid
     if(!is.null(the_worker)){
       sub_traccar <- traccar %>% filter(unique_id == the_worker)
       pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
     }
     # Make the plot
     l <- leaflet() %>% 
-      addProviderTiles(providers$Esri.WorldImagery)
+      addTiles()
     if(nrow(sub_traccar) > 0){
       l <- l %>%
         addGlPoints(data = pts,
@@ -2322,25 +2333,13 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
-              
-              # Define choices for leaflet fw selection
-              co <- country()
-              sub_fids <- fids %>% 
-                filter(country == co)
-              the_choices <- sub_fids$bohemia_id
-              names(the_choices) <- paste0(sub_fids$bohemia_id, '. ',
-                                           sub_fids$first_name, ' ',
-                                           sub_fids$last_name)
+
               
               fluidPage(
                 fluidRow(h1('GPS tracking')),
-                fluidRow(column(6, align = 'center',
-                                plotOutput('traccar_plot_1')),
-                         column(6,
-                                selectInput('fid_leaf_traccar',
-                                            'FW',
-                                            choices = the_choices),
-                                leafletOutput('traccar_leaf'))),
+                fluidRow(column(12, align = 'center',
+                                
+                                plotOutput('traccar_plot_1'))),
                 fluidRow((column(12, align = 'center',
                                  DT::dataTableOutput('traccar_table'))))
               )
@@ -2919,11 +2918,11 @@ app_server <- function(input, output, session) {
                           by = c('instance_id', 'hh_sub_id')) %>%
               dplyr::select(
                   todays_date,
-                  hh_id,
                   wid,
                   wid_name,
                   hh_hamlet,
                   hh_hamlet_code,
+                  hh_id,
                   permid,
                   person_name,
                   sub_id,
@@ -2933,7 +2932,10 @@ app_server <- function(input, output, session) {
                        icf_correct = 'Sim__ Não__',
                        reason_no_correct = '',
                        error_resolved = 'Sim__ Não__',
-                       verified_by = '')
+                       verified_by = '') %>%
+                # Hide names
+                mutate(sub_name = ' ') %>%
+                mutate(person_name = ' ')
               
               verification_all <- input$verification_all
               if(!verification_all){
@@ -2969,11 +2971,11 @@ app_server <- function(input, output, session) {
               if(co == 'Mozambique'){
                 names(out) <- c(
                   'Data de recolha de dados',
-                  'Agregado',
                   'ID do inquiridor',
                   'Nome do inquiridor',
                   'Bairro',
                   'ID Bairro',
+                  'Agregado',
                   'ID chefe de agregado',
                   'Nome chefe de agregado',
                   'ID chefe de agregado substituto',
@@ -2993,11 +2995,11 @@ app_server <- function(input, output, session) {
                 names(out) <- 
                   c(
                     'Data collection date',
-                    'HH',
                     'FW ID',
                     'FW name',
                     'Hamlet',
                     'Hamlet ID',
+                    'HH',
                     'HH head ID',
                     'HH head name',
                     'HH head sub ID',
@@ -3356,8 +3358,8 @@ app_server <- function(input, output, session) {
                       
                       out_file <- paste0(getwd(), '/control_sheet.pdf')
                       rmarkdown::render(input = 
-                                          paste0(system.file('rmd', package = 'bohemia'), '/control_sheet.Rmd'),
-                                        # '../inst/rmd/control_sheet.Rmd',
+                                          # paste0(system.file('rmd', package = 'bohemia'), '/control_sheet.Rmd'),
+                                        '../inst/rmd/control_sheet.Rmd',
                                         output_file = out_file,
                                         params = list(xdata = xdata,
                                                       li = li))

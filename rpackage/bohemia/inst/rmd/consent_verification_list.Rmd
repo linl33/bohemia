@@ -54,7 +54,7 @@ dfx <- data
 
 ```{r}
 chunk_list <- list()
-dfx$wid <- unlist(dfx[,3])
+dfx$wid <- unlist(dfx[,2])
 fwids <- sort(unique(dfx$wid))
 name1 <- 'FW'
 
@@ -67,12 +67,12 @@ if(workers_on_separate_pages){
       longtable = T)  %>%   
   kable_styling(latex_options = c('repeat_header')) %>%
     kable_styling(font_size = 7)  %>%
-  column_spec(1:2, width = '1cm') %>%
-  column_spec(3, width = '0.7cm') %>%
+  column_spec(1:2, width = '1.5cm') %>%
+  column_spec(3, width = '1.7cm') %>%
   column_spec(4:5, width = '1.2cm') %>%
-  column_spec(6, width = '0.7cm') %>%
+  column_spec(6, width = '1.7cm') %>%
   column_spec(7, width = '1.2cm') %>%
-  column_spec(8, width = '0.7cm') %>%
+  column_spec(8, width = '1.7cm') %>%
   column_spec(9:ncol(dfx), width = '1.3cm')\n```\n\\newpage\n"
     )
   chunk_list[[i]] <- this_chunk
@@ -84,12 +84,12 @@ if(workers_on_separate_pages){
       longtable = T)  %>%   
   kable_styling(latex_options = c('repeat_header')) %>%
     kable_styling(font_size = 7)  %>%
-column_spec(1:2, width = '1cm') %>%
-  column_spec(3, width = '0.7cm') %>%
+  column_spec(1:2, width = '1.5cm') %>%
+  column_spec(3, width = '1.7cm') %>%
   column_spec(4:5, width = '1.2cm') %>%
-  column_spec(6, width = '0.7cm') %>%
+  column_spec(6, width = '1.7cm') %>%
   column_spec(7, width = '1.2cm') %>%
-  column_spec(8, width = '0.7cm') %>%
+  column_spec(8, width = '1.7cm') %>%
   column_spec(9:ncol(dfx), width = '1.3cm')\n```\n\\newpage\n"
   )
 }
