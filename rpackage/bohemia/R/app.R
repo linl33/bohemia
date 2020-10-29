@@ -224,7 +224,9 @@ app_ui <- function(request) {
                                                     helpText('In the case of Mozambique, "Data collection visit" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
                                                     
                                                     uiOutput('ui_id_limit'),
-                                                    br(), br(),
+                                                    br(), 
+                                                    downloadButton("download_visit_control_data", "Download spreadsheet of visit control data"),
+                                                    br(),
                                                     downloadButton('render_visit_control_sheet',
                                                                    'Generate visit control sheet(s)')
                                                   )),
@@ -402,7 +404,8 @@ app_server <- function(input, output, session) {
                                  fieldworkers = default_fieldworkers,
                                  traccar = data.frame(),
                                  traccar_summary = data.frame(),
-                                 va_table = data.frame())
+                                 va_table = data.frame(),
+                                 visit_control_data = data.frame())
   odk_data <- reactiveValues(data = NULL)
   
   
@@ -522,16 +525,17 @@ app_server <- function(input, output, session) {
   })
   
   # Observe log in and load data
-  observeEvent(input$confirm_log_in, {
+  observeEvent(session_info$logged_in, {
     the_country <- country()
     li <- session_info$logged_in
     if(li){
       message('Logged in. Loading data for ', the_country)
       out <- load_odk_data(the_country = the_country)
-      if(grepl('joebrew', getwd())){
-        save(out, file = '~/Desktop/out.RData')
-      }
+      
       odk_data$data <- out
+      if(grepl('joebrew', getwd())){
+        save(out, file = '~/Desktop/odk_data_data.RData')
+      }
     }
   })
 
@@ -3307,6 +3311,8 @@ app_server <- function(input, output, session) {
             })
   })
   
+
+  
   output$download_dataset <- downloadHandler(
     filename = function(){
       paste0(input$which_download, ".csv", sep = "")
@@ -3347,7 +3353,7 @@ app_server <- function(input, output, session) {
                       si <- session_info
                       li <- si$logged_in
                       xdata <- session_data$va_table
-                     
+                      
                       out_file <- paste0(getwd(), '/control_sheet.pdf')
                       rmarkdown::render(input = 
                                           paste0(system.file('rmd', package = 'bohemia'), '/control_sheet.Rmd'),
@@ -3364,6 +3370,150 @@ app_server <- function(input, output, session) {
                     },
                     contentType = "application/pdf"
     )
+  
+  output$download_visit_control_data <- downloadHandler(
+    filename = function(){
+      paste0('visit_control_sheet', ".csv", sep = "")
+    },
+    content = function(file){
+      si <- session_info
+      
+      li <- si$logged_in
+      #Processing of visit control data
+      lc <- location_code()
+      # Get other details
+      enumeration_or_minicensus <- input$enumeration_or_minicensus
+      enum <- enumeration_or_minicensus == 'Enumeration visit'
+      use_previous <- enumeration_or_minicensus == 'Data collection visit'
+      xdata <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
+                          n_teams = as.numeric(as.character(input$enumeration_n_teams)),
+                          id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
+                          id_limit_upr = as.numeric(as.character(input$id_limit[2])))
+      enumerations_data = odk_data$data$enumerations
+      minicensus_main_data <- odk_data$data$minicensus_main
+      refusals_data = odk_data$data$refusals
+      loc_id = lc
+      enumeration = enum
+      
+      
+      x <- bohemia::locations
+      x <- x %>% filter(code == loc_id)
+      if(nrow(x) > 0){
+        loc_name <- paste0(x$Ward, ', ', x$Village, ', ', x$Hamlet)
+      } else {
+        loc_name <- ' '
+      }
+      include_name <- FALSE
+      
+      
+      lc <- loc_id
+      n_hh <- as.numeric(xdata$n_hh)
+      n_teams <- as.numeric(xdata$n_teams)
+      id_limit_lwr <- as.numeric(xdata$id_limit_lwr)
+      id_limit_upr <- as.numeric(xdata$id_limit_upr)
+      
+      # Get country
+      country <- 'Mozambique'
+      if(lc %in% locations$code[locations$Country == 'Tanzania']){
+        country <- 'Tanzania'
+      }
+      
+      id_vals <- 1:n_hh
+      id_vals <- id_vals[id_vals %in% id_limit_lwr:id_limit_upr]
+      n_hh <- length(id_vals)
+      
+      team_numbers <- rep(1:n_teams, each = round(n_hh / n_teams))
+      while(length(team_numbers) < n_hh){
+        team_numbers <- c(team_numbers, team_numbers[length(team_numbers)])
+      }
+      
+      while(length(team_numbers) > n_hh){
+        team_numbers <- team_numbers[1:n_hh]
+      }
+      
+      
+      if(country == 'Tanzania'){
+        out <- tibble(`HHID` = paste0(lc, '-', bohemia::add_zero(id_vals, n = 3)),
+                      team = team_numbers)
+        
+        left <- locations %>% filter(code == lc) %>% dplyr::select(District, Ward, Village, Hamlet)
+        out = bind_cols(left, out)
+      } else {
+        out <- tibble(`Código do agregado` = paste0(lc, '-', bohemia::add_zero(id_vals, n = 3)),
+                      team = team_numbers)
+      }
+
+      this_df <- gps %>% dplyr::filter(code == lc) %>% left_join(locations %>% dplyr::select(code,Village, Hamlet))
+      
+      
+      if(li){
+        if(country == 'Mozambique'){
+          if(enumeration){
+            # ENUMERATION
+            df <- out %>% dplyr::mutate(`Nome de chefe de agregado` = ' ', `Localização do Numero de Agregado` = ' ', `Data de enumeração` = ' ')
+          } else {
+            # NON ENUMERATION
+            # We use the previously enumerated data then and have to remove absences / etc
+            refusals <- refusals_data %>%
+              mutate(reason_no_participate = ifelse(reason_no_participate %in% c('SEM COMENTARIO',
+                                                                                 'He didnt want to do it',
+                                                                                 'Dont know'),
+                                                    'refused',
+                                                    'not_present')) %>%
+              group_by(hh_id, reason_no_participate) %>%
+              tally
+            # Define those who should not be visited again
+            remove_these <- refusals %>% filter(reason_no_participate == 'refused' | length(which(reason_no_participate == 'not_present')) >= 3) %>%
+              .$hh_id
+            # Define those which have already been mini-censed (and can therefore be removed)
+            remove_these_mc <- minicensus_main_data$hh_id
+            remove_these <- unique(c(remove_these, remove_these_mc))
+            # Define those with previous absences
+            previous_absences <- refusals %>%
+              group_by(agregado = hh_id) %>%
+              filter(length(which(reason_no_participate == 'refused')) == 0) %>%
+              filter(reason_no_participate == 'not_present') %>%
+              summarise(n = n())
+            this_df <- enumerations_data %>% dplyr::filter(hamlet_code == lc) %>% dplyr::select(
+              agregado, village, ward, hamlet, hamlet_code, localizacao_agregado, todays_date, chefe_name, wid, hamlet_code) %>%
+              filter(!is.na(agregado)) %>%
+              dplyr::distinct(agregado, .keep_all = TRUE) %>%
+              left_join(previous_absences) %>%
+              mutate(`Ausências anteriores` = ifelse(is.na(n), 0, n)) %>%
+              dplyr::select(-n) %>%
+              filter(!agregado %in% remove_these) %>%
+              arrange(agregado)
+            
+            if(!is.null(df)){
+              if(!include_name & nrow(this_df) > 0){
+                this_df$chefe_name <- ' '
+              }
+            }
+            
+            # Add team numbers
+            nr = nrow(this_df)
+            if(nr > 0){
+              team_vals <- sort(((1:nr) %% n_teams) + 1)
+              this_df$team <- team_vals
+              df <- this_df %>%
+                dplyr::select(-team) %>% dplyr::select(`Data de enumeração` = todays_date, `ID agregado` = agregado, `Posto administrativo e Localidade` = ward, `Povoado` = village, `Bairro` = hamlet, `ID Bairro` = hamlet_code, `Nome de chefe de agregado` = chefe_name, `Ausências anteriores`) %>% dplyr::mutate(`Data da visita` = ' ') %>%  dplyr::mutate(`O chefe de agregado ou Chefe de agregado sustituto assino o consentimento informado?` = 'Sim__Não__', `Foi realizado o formulario?` = 'Sim__Não__',  `Se Não foi visitado ou entrevistado, explique o porque?` = ' ')
+            } else{
+              df <- data.frame(a = paste0('No previous enumerated households for ', lc))
+            }
+          }
+        } else {
+          # TANZANIA
+          df <- out  %>% dplyr::mutate(`Status` = ' ', `Comments` = ' ')
+        }
+      } else {
+        # Not logged in
+        df <- data.frame(a = 'Log in first.')
+      }
+      write.csv(df,
+                file,
+                row.names = FALSE)
+    }
+  )
   
   output$render_visit_control_sheet <-
     downloadHandler(filename = "visit_control_sheet.pdf",
