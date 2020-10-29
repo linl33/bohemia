@@ -45,9 +45,9 @@ refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
 data$refusals <- refusals
 
 # Drop the previously cleaned data
-message('------DROPPING OLD CLEAN_ DATA DEPRECATED')
+message('------DROPPING OLD CLEAN_ DATA')
 create_clean_db(credentials_file = '../credentials/credentials.yaml', 
-                drop_all = TRUE)
+                drop_all = FALSE)
 # Create new clean tables
 message('------CREATING NEW CLEAN_ DATA')
 create_clean_db(credentials_file = '../credentials/credentials.yaml')
@@ -66,17 +66,11 @@ corrections <- dbReadTable(conn = con,
                            name = 'corrections')
 corrections %>% filter(!done)
 
-# NOTE The first step is manual review of the correction. This means:
-#    1. Examine the response_details provided
-#    2. Add classification for it i.e. resolution_category
-#    3. Add the corrective action label for it i.e. resolution_action
-#    4. If the resolution_category and resolution_action match an entry in the preset_correction_steps proceed with step 2
-#    5. If they don't exist, then add an entry to the preset_correction_steps and add the query to apply in the correction_steps 
-
-# Step 2: 
-# Now that the correction has a preset_correction_steps entry for its resolution_category and resolution_action
-# Check if the preset_correction_steps have a corresponding function in R and call it with the required params if it does.
-# If no specific function exists:
+# NOTE:  
+#  Please refer to the guide https://github.com/databrew/bohemia/blob/master/guides/guide_anomalies_and_errors.md for detailed instructions
+#
+# Provided that the `corrections` entry has a `preset_correction_steps` entry for its `resolution_category` and `resolution_action`
+# To run the updates manually, when no specific function exists, use these example steps:
 # Populate the following variables:
     # anomaly_id
     # correction_id
@@ -87,10 +81,10 @@ corrections %>% filter(!done)
 
 # Run the correction_steps keeping in line with the example change described below:
 #
-#   anomaly_id <- fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e
-#   correction_id <- 776627ac-1c8c-4fd7-92f0-529a7f2749e8
+#   anomaly_id <- 'fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e'
+#   correction_id <- '776627ac-1c8c-4fd7-92f0-529a7f2749e8'
 #   user_email <- 'joe@brew.cc'
-#   preset_correction_steps_id <- 5e86ee69-76a4-46a7-bdd1-6a5464d38b70
+#   preset_correction_steps_id <- '5e86ee69-76a4-46a7-bdd1-6a5464d38b70'
 #   correction_steps_list <- c(
 #     "UPDATE %s SET hh_possessions = %s WHERE instance_id= %s", 
 #     "UPDATE %s SET done = %s, done_by = %s WHERE id=%s"
@@ -101,7 +95,7 @@ corrections %>% filter(!done)
 #
 #   # This part executes the change
 #   for (i in 1:length(correction_steps_list)){
-#     statement <- paste0(corrections_steps_list[i], correction_query_param_list[i])
+#     statement <- paste0(corrections_steps_list[[i]], correction_query_param_list[[i]])
 #     dbExecute(conn = con,
 #           statement = statement)
 #     # This part logs the action in the log table and is standard for all actions therefore this query should not be in the list

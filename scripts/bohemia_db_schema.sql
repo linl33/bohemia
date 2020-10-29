@@ -870,7 +870,7 @@ CREATE TABLE anomaly_corrections_log (
 CREATE TABLE preset_correction_steps (
     id  UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
     date_created    TIMESTAMP NOT NULL DEFAULT now(),
-    status  VARCHAR(64), -- Options are active or archived
+    status  VARCHAR(64) NOT NULL DEFAULT 'active', -- Options are active or archived
     created_by  VARCHAR(256) NOT NULL,
     date_updated    TIMESTAMP,
     updated_by  VARCHAR(256), -- Expected only to be for setting an entry to archive state
