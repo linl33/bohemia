@@ -95,6 +95,9 @@ app_ui <- function(request) {
           menuItem('Download data',
                    tabName = 'download_data',
                    icon = icon('download')),
+          menuItem('Sneak peek',
+                   tabName = 'sneak_peek',
+                   icon = icon('server')),
           menuItem(
             text = 'About',
             tabName = 'about',
@@ -253,6 +256,21 @@ app_ui <- function(request) {
                                                     uiOutput('ui_consent_verification_list')
                                                   )))))
               ))
+          ),
+          tabItem(
+            tabName="sneak_peek",
+            fluidPage(
+              fluidRow(
+                column(4,
+                       selectInput('indicator_time', 'Choose variable', choices = c('Household size','Number of children per household', ' Ratio of children to adults', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosiquito nets per household'))),
+              ),
+              fluidRow(
+                column(6, 
+                       plotOutput('average_time')),
+                column(6,
+                       plotOutput('dis_time'))
+              )
+            )
           ),
           tabItem(
             tabName="demography",
@@ -787,6 +805,58 @@ app_server <- function(input, output, session) {
     # }
   })
   
+  # sneak peek #############################################
+  output$average_time <- renderPlot({
+    # c('Household size','Number of children per household', ' Ratio of children to adults', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosiquito nets per household')
+    # Get the odk data
+    # HERE use the minicensus_people dataset to to get children data (maybe peoples data set is all you need?, compare to minicensus_main)
+    pd <- odk_data$data
+    pd <- pd$minicensus_main
+    co <- country()
+    the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
+    # save(pd, file = '/tmp/pd.RData')
+    pd <- pd %>% filter(hh_country == co)
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      # 06 = 5.4913
+      # 07 = 5
+     #  temp <- pd %>% group_by(todays_date) %>% summarise(cum_mean = cummean(hh_size))
+     #  
+     # temp <-  pd %>% group_by(todays_date, wid,,hh_id) %>% summarise(mean_hh_size =mean(hh_size),counts = n())
+     # 
+     # %>% group_by(todays_date) %>% summarise(cum_mean = cummean(mean_hh_size))
+     #  
+      # c('Household size','Number of children per household', ' Ratio of children to adults', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosiquito nets per household')
+      unique_dates <- sort(unique(pd$todays_date))
+      for(i in 1:length(unique(dates))){
+        this_date <- unique_dates[i]
+        sub_date <- pd %>% filter(todays_date==this_date)
+        sub_date$mean_hh_size <- mean(sub_date$hh_size)
+        sub_date$mean_hh_children <- 
+        
+      }
+      indic <- 'Household size'
+      indic <- input$indicator_time
+      if(indic =='Household size'){
+        
+        
+      }
+    } else {
+      NULL
+    }
+   
+    
+  })
+  
+  output$dis_time <- renderPlot({
+    
+  })
+  
   
   # Field monitoring UI  #############################################
   field_monitoring_geo <- reactiveVal('Ward')
@@ -836,7 +906,6 @@ app_server <- function(input, output, session) {
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
     # save(pd, file = '/tmp/pd.RData')
     pd <- pd %>% filter(hh_country == co)
-    
     pd_ok <- FALSE
     if(!is.null(pd)){
       if(nrow(pd) > 0){
