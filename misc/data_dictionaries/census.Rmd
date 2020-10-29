@@ -1,0 +1,98 @@
+---
+title: "Mini-census"
+output: html_document
+params:
+    language: 'English'
+    relevant: FALSE
+    include_variable_names: FALSE
+    choice_names_too: FALSE
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = FALSE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+library(bohemia)
+```
+
+
+2020-10-28
+
+(... = list of options continues)
+
+```{r}
+source('../../rpackage/bohemia/R/generate_data_dictionary.R')
+library(readxl)
+library(dplyr)
+library(knitr)
+library(stringr)
+library(kableExtra)
+lang <- params$language
+rel <- params$relevant
+var <- params$include_variable_names
+cn <- params$choice_names_too
+data_dict <- generate_data_dictionary(path = '../../forms/census/census.xlsx',
+                                      language = lang, 
+                                      include_variable_names = var, 
+                                      include_relevant = rel, 
+                                      shorten_many = 10, 
+                                      choice_names_too = cn)
+# Identify which are 
+```
+
+```{r}
+
+# dt_lb <- data.frame(
+# Item = c("Hello\nWorld", "This\nis a cat"),
+# Value = c(10, 100)
+# )
+# dt_lb %>%
+# mutate_all(linebreak) %>%
+# kable("latex", booktabs = T, escape = F,
+# col.names = linebreak(c("Item\n(Name)", "Value\n(Number)"), align = "c"))
+
+# Get rid of repeat rows
+
+# Define the right columns to look for
+if(var){
+  col_numbers <- 2:3
+} else {
+  col_numbers <-1:2
+}
+deletesa <-  rep(FALSE, nrow(data_dict))
+for(i in 2:nrow(data_dict)){
+  # message(i)
+  samea <- as.character(unlist(data_dict[i,col_numbers[1]])) == as.character(unlist(data_dict[i-1,col_numbers[1]]))
+      sameb <- as.character(unlist(data_dict[i,col_numbers[2]])) == as.character(unlist(data_dict[i-1,col_numbers[2]]))
+
+  if(!is.na(samea) & !is.na(sameb)){
+    if(samea & sameb){
+    deletesa[i] <- TRUE
+  }
+  }
+}
+
+data_dict[deletesa,1] <- ' '
+data_dict[deletesa,2] <- ' '
+
+dd <- data_dict
+
+question_var <- which(names(dd) %in% c('Questão', 'Swali', 'Question'))[1]
+if(rel){
+  rel_var <- which(names(dd) %in% c('Relevance'))[1]
+  dd[,rel_var] <- clean_up(dd[,rel_var])
+}
+bohemia::prettify(dd, nrows = nrow(dd), download_options = TRUE)
+```

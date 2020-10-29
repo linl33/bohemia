@@ -4,6 +4,17 @@ author: "Databrew"
 output: html_document
 ---
 
+```{r setup, include=FALSE}
+library(knitr)# Basic knitr options
+opts_chunk$set(comment = NA, 
+               echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = F,
+               fig.height = 6)
+```
+
 ```{r}
 library(bohemia)
 library(tidyverse)
@@ -13,7 +24,11 @@ creds <- yaml::yaml.load_file('../../credentials/credentials.yaml')
 suppressMessages({
   library(RPostgres)
   library(bohemia)
+  library(leafgl)
+  library(htmltools)
+  library(sf)
   library(yaml)
+  library(leaflet)
   library(readr)
 }
 )
@@ -44,23 +59,113 @@ if(!'fids.csv' %in% dir('/tmp')){
 }
 ```
 
-```{r}
-# get traccar data - one row per ID 
-dat <- get_traccar_data(url = creds$traccar_server,
-                        user = creds$traccar_user,
-                        pass = creds$traccar_pass)
-pd <- dat %>%
-  mutate(uniqueId = as.numeric(uniqueId)) %>%
-  dplyr::arrange(uniqueId) %>%
-  dplyr::select(`Bohemia ID` = uniqueId,
-                status,
-                name,
-                lastUpdate)
-bohemia::prettify(pd, nrows = nrow(dat),
-                  download_options = TRUE)
-```
 
 ```{r}
+traccar <- separate(data = traccar, col = 'valid', into = c('battery', 'distance', 'total_distance', 'motion'), sep = ' ')
+traccar$battery <- as.numeric(unlist(lapply(strsplit(traccar$battery, ':'), function(x) x[2])))
+traccar$distance <- as.numeric(unlist(lapply(strsplit(traccar$distance, ':'), function(x) x[2])))
+traccar$total_distance <- as.numeric(unlist(lapply(strsplit(traccar$total_distance, ':'), function(x) x[2])))
+traccar$motion <- as.character(unlist(lapply(strsplit(traccar$motion, ':'), function(x) x[2])))
+
 traccar_moz <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country == 'Mozambique'])
 traccar_tza <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country == 'Tanzania'])
+
 ```
+
+### Mozambique overview
+```{r}
+# get dat object using mozambique timezone
+traccar_moz$date <- as.Date(traccar_moz$devicetime, "GMT+2")
+
+# groupby date get number of people with their average total disance, battery, and number of stops
+moz_tab <- traccar_moz %>% group_by(date) %>% summarise(`Numer of active FW` = length(unique(unique_id)), `Average battery life` = mean(battery, na.rm = TRUE), `Number of stops` = sum(motion=='true'))
+
+# get table
+bohemia::prettify(moz_tab, nrows = 10,
+                  download_options = TRUE)
+
+```
+
+### Tanzania overview
+```{r}
+# get dat object using mozambique timezone
+traccar_tza$date <- as.Date(traccar_tza$devicetime, "GMT+2")
+
+# groupby date get number of people with their average total disance, battery, and number of stops
+moz_tab <- traccar_tza %>% group_by(date) %>% summarise(`Numer of active FW` = length(unique(unique_id)), `Average battery life` = mean(battery, na.rm = TRUE), `Number of stops` = sum(motion=='true'))
+
+# get table
+bohemia::prettify(moz_tab, nrows = 10,
+                  download_options = TRUE)
+
+```
+
+
+# Mozambique Fieldworker maps
+```{r}
+# map of all fw
+traccar_moz <- traccar_moz %>%
+  arrange(desc(devicetime)) %>%
+  mutate(dummy = 1) %>%
+  group_by(unique_id) %>%
+  mutate(cs = cumsum(dummy)) %>%
+  ungroup %>% filter(cs <=100)
+unique_ids <- unique(traccar_moz$unique_id)
+map_list <- list()
+for(i in 1:length(unique_ids)){
+  this_id <- unique_ids[i]
+  sub_dat <- traccar_moz %>% filter(unique_id==this_id)
+  pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
+  l <- leaflet() %>% 
+      addProviderTiles(providers$OpenStreetMap)%>%
+        addMarkers(data = sub_dat, popup = paste0(sub_dat$deviceid,
+                                              ' ',
+                                              sub_dat$battery,
+                                              ' ',
+                                              sub_dat$total_distance))
+        # addGlPoints(data = pts,
+        #             fillColor = 'black',
+        #             popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
+        #             group = "pts")
+  
+  map_list[[i]]<- l
+
+}
+
+tagList(map_list)
+```
+
+# Tanzania Fieldworkder maps
+```{r}
+traccar_tza <- traccar_tza %>%
+    arrange(desc(devicetime)) %>%
+  mutate(dummy = 1) %>%
+  group_by(unique_id) %>%
+  mutate(cs = cumsum(dummy)) %>%
+  ungroup %>% filter(cs <=100)
+# map of all fw
+unique_ids <- unique(traccar_tza$unique_id)
+map_list <- list()
+for(i in 1:length(unique_ids)){
+  this_id <- unique_ids[i]
+  sub_dat <- traccar_moz %>% filter(unique_id==this_id)
+  pts = st_as_sf(data.frame(sub_dat), coords = c("longitude", "latitude"))
+  l <- leaflet() %>% 
+      addProviderTiles(providers$OpenStreetMap)%>%
+        addMarkers(data = sub_dat, popup = paste0(sub_dat$deviceid,
+                                              ' ',
+                                              sub_dat$battery,
+                                              ' ',
+                                              sub_dat$total_distance))
+        # addGlPoints(data = pts,
+        #             fillColor = 'black',
+        #             popup = pts %>% dplyr::select(devicetime, deviceid, battery, distance, total_distance, motion),
+        #             group = "pts")
+  
+  map_list[[i]]<- l
+
+}
+
+tagList(map_list)
+```
+
