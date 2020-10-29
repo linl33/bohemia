@@ -37,13 +37,13 @@ create_clean_db <- function(credentials_file = 'credentials/credentials.yaml',
   for(i in 1:length(copy_these)){
     this_table <- copy_these[i]
     if(drop_all){
-      message('Dropping clean_', this_table)
-      dbExecute(conn = con,
-                statement = paste0('drop table clean_', this_table))
+      message('Dropping tables deprecated')
+      # dbExecute(conn = con,
+      #           statement = paste0('drop table clean_', this_table))
     } else {
-      message('Creating clean_', this_table)
+      message('Creating clean_', this_table, 'if not already existing. Otherwise only adding the new rows not previously copied')
       dbExecute(conn = con,
-                statement = paste0('create table clean_', this_table, ' as (select * from ', this_table, ')')) 
+                statement = paste0('create table clean_', this_table, 'if not exists; insert into clean_', this_table' select * from ', this_table, 'on conflict do nothing;')) 
     }
   }
   

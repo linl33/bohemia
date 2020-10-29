@@ -144,9 +144,68 @@ The developer now has an object named `data` to be operated on.
     - if the `response_detail` is not available, the user creates a custom query and applies it.
     - then generates "clean" data with `clean_` prefixes in the database.
     - and saves the actual query used in the correction in the `anomaly_corrections_log` table.
+
+### Detailed Execution Steps for the Script
+
+Step 1:
+NOTE The first step is manual review of the correction. This means:
+   1. Examine the response_details provided
+   2. Add classification for it i.e. `resolution_category`
+   3. Add the corrective action label for it i.e. `resolution_action`
+   4. If the `resolution_category` and `resolution_action` match an entry in the `preset_correction_steps` proceed with Step 2
+   5. If they don't exist, then add an entry to the `preset_correction_steps` and add the query to apply in the `correction_steps` 
+
+Step 2: 
+Now that the correction has a `preset_correction_steps` entry for its `resolution_category` and `resolution_action`.
+Check if the `preset_correction_steps` have a corresponding function in R and call it with the required params if it does.
+If no specific function exists:
+  - Populate the following variables:
+      - anomaly_id
+      - correction_id
+      - user_email
+      - preset_correction_steps_id
+      - correction_steps_list
+      - correction_query_params_list
+  - Run the correction_steps keeping in line with the example change described below:
+```
+  anomaly_id <- fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e
+  correction_id <- 776627ac-1c8c-4fd7-92f0-529a7f2749e8
+  user_email <- 'joe@brew.cc'
+  preset_correction_steps_id <- 5e86ee69-76a4-46a7-bdd1-6a5464d38b70
+  correction_steps_list <- c(
+    "UPDATE %s SET hh_possessions = %s WHERE instance_id= %s", 
+    "UPDATE %s SET done = %s, done_by = %s WHERE id=%s"
+  )
+  correction_query_params_list <- c(
+    c(clean_minicensus_main, 'joetest', '0017eea6-7239-433d-827a-3bd3d4c65c4e' ), 
+    c(corrections, 'true', 'Joe Brew', 'fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e'))
+
+  # This part executes the change
+  for (i in 1:length(correction_steps_list)){
+    statement <- paste0(corrections_steps_list[i], correction_query_param_list[i])
+    dbExecute(conn = con,
+          statement = statement)
+    # This part logs the action in the log table and is standard for all actions therefore this query should not be in the list
+    dbExecute(conn = con,
+          statement = paste0("INSERT INTO anomaly_corrections_log 
+                                (anomaly_id, correction_id, preset_steps_id, user_id, log_details) VALUES 
+                                (anomaly_id, correction_id, preset_correction_steps_id, user_email, statement)))
+```
+
     
-## Detailed Schema Focused on the Tables Affected By Script
+### Detailed Schema Focused on the Tables Affected By Script
+
+_NOTE The green labels indicate the new columns and models_
 
 ![](img/anomalies_detail_schema.png)
 
 
+## TODO 
+
+[] Add example query for insertion to the `preset_correction_steps`
+
+[] Add a migration process to move the anomalies to the database table
+
+[] Define the rules for the `resolution_category` and `resolution_action` values (_should be pre-agreed to be in a lookup list for the user applying them to reference_)
+
+[] Iterate on the better way to separate the manual step 1 and formalize it for eventually having step 2 be fully automated as a batch job.
