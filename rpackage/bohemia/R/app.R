@@ -202,7 +202,7 @@ app_ui <- function(request) {
           tabItem(
             tabName="tracking_tools",
             fluidPage(
-              checkboxInput('all_locations','All locations', value = FALSE),
+              checkboxInput('all_locations','All locations (under construction)', value = FALSE),
               fluidRow(
                 column(4,
                        uiOutput('all_locations_ui')),
@@ -245,10 +245,6 @@ app_ui <- function(request) {
                                                       column(6, 
                                                              uiOutput('ui_verification_text_filter'))
                                                     ),
-                                                    checkboxInput('use_eldo_format', 'Use "Eldo format"',
-                                                                  value = TRUE),
-                                                    helpText('The "Eldo format" is based on an excel being used operationally. It has different columns, such as "verificado por", etc.'),
-                                                    
                                                     uiOutput('ui_consent_verification_list_a'),
                                                     uiOutput('ui_consent_verification_list')
                                                   )))))
@@ -2887,6 +2883,7 @@ app_server <- function(input, output, session) {
               # Get the odk data
               pd <- odk_data$data
               people <- pd$minicensus_people
+              subs <- pd$minicensus_repeat_hh_sub
               pd <- pd$minicensus_main
               # Get the country
               co <- input$geo
@@ -2895,133 +2892,125 @@ app_server <- function(input, output, session) {
               # save(pd, co, people, file = '/tmp/joe.RData')
               # Get hh head
               out <- pd %>%
-                dplyr::select(num = hh_head_id,
-                              instance_id,
-                              todays_date,
-                              hh_head_dob,
-                              wid,
-                              hh_hamlet_code) %>%
-                mutate(num = as.character(num)) %>%
-                left_join(people %>% mutate(num = as.character(num)),
-                          by = c('instance_id', 'num'))
-              pd <- out %>%
-                mutate(name = paste0(first_name, ' ', last_name),
-                       age = floor(as.numeric(as.Date(todays_date) - as.Date(hh_head_dob))/ 365.25)) %>%
-                mutate(consent = 'HoH (minicensus)') %>%
-                mutate(x = ' ',y = ' ', z = ' ') %>%
-                mutate(hh_id = substr(permid, 1, 7)) %>%
-                mutate(firma = '  ') %>%
-                dplyr::select(wid,
-                              hh_hamlet_code,
-                              hh_head_permid = permid,
-                              hh_id,
-                              # name,
-                              firma,
-                              age,
-                              todays_date,
-                              consent,
-                              x,y,z) %>%
-                mutate(todays_date = as.Date(todays_date)) %>%
-                arrange(wid, todays_date)
+                dplyr::mutate(num = as.character(hh_head_id)) %>%
+                # get info on heads
+                left_join(people %>% 
+                            mutate(num = as.character(num)) %>%
+                            mutate(person_name = paste0(first_name, '.', last_name, '.')),
+                          by = c('instance_id', 'num')) %>%
+                # get info on fieldworkers
+                left_join(fids %>% 
+                            mutate(wid_name = paste0(first_name, ' ', last_name)) %>%
+                            dplyr::select(wid = bohemia_id, wid_name)) %>%
+                # get info on hh head subs
+                left_join(subs %>% filter(!is.na(hh_sub_id)) %>%  
+                            mutate(hh_sub_id = as.character(hh_sub_id)) %>%
+                            dplyr::distinct(instance_id, .keep_all = TRUE) %>%
+                            dplyr::select(instance_id, hh_sub_id)) %>%
+                left_join(people %>% 
+                            mutate(hh_sub_id = as.character(num)) %>%
+                            mutate(sub_id = permid) %>%
+                            mutate(sub_name = paste0(first_name, '.', last_name, '.')) %>%
+                            dplyr::select(instance_id, hh_sub_id, sub_name, sub_id),
+                          by = c('instance_id', 'hh_sub_id')) %>%
+              dplyr::select(
+                  todays_date,
+                  hh_id,
+                  wid,
+                  wid_name,
+                  hh_hamlet,
+                  hh_hamlet_code,
+                  permid,
+                  person_name,
+                  sub_id,
+                  sub_name) %>%
+                mutate(icf_exists = 'Sim__ Não__',
+                       reason_no_exists = '',
+                       icf_correct = 'Sim__ Não__',
+                       reason_no_correct = '',
+                       error_resolved = 'Sim__ Não__',
+                       verified_by = '')
               
               verification_all <- input$verification_all
               if(!verification_all){
                 text_filter <- input$verification_text_filter
                 if(!is.null(text_filter)){
-                  pd <- pd %>%
+                  out <- out %>%
                     dplyr::filter(wid %in% text_filter)
                 }
               }
               
               date_filter <- input$verification_date_filter
               if(!is.null(date_filter)){
-                pd <- pd %>%
+                out <- out %>%
                   dplyr::filter(
                     todays_date <= date_filter[2],
                     todays_date >= date_filter[1]
                   )
               }
               
-              # get date closest to today
-              qc <- pd
-              # only keep hh_id and permid
-              # save(qc, file = '/tmp/qc.RData')
-              qc <- qc %>%  
+              # Render QC stuf
+              qc <- out %>%  
                 dplyr::select(`Hamlet code` = hh_hamlet_code,
                               `Worker code` = wid,
                               `Household ID` = hh_id, 
-                              `HH Head ID` = hh_head_permid,
-                              Age = age,
+                              `HH Head ID` = permid,
                               Date = todays_date)
+              quality_control_list_reactive$data <- qc
+              
               # get inputs for slider to control sample size
               min_value <- 1
               max_value <- nrow(qc)
               selected_value <- sample(min_value:max_value, 1)
               if(co == 'Mozambique'){
-                names(pd) <- c('Código TC',
-                               'Código Bairro',
-                               'ExtID (número de identificão do participante)',
-                               'ID Agregado',
-                               'Pessoa que assino o consentimiento',
-                               'Idade do membro do agregado',
-                               'Data de recrutamento',
-                               'Consentimento/ Assentimento informado (marque se estiver correto e completo)',
-                               'Se o documento não estiver preenchido correitamente, indicar o error',
-                               'O error foi resolvido (sim/não)',
-                               'Verificado por (iniciais do arquivista) e data')
+                names(out) <- c(
+                  'Data de recolha de dados',
+                  'Agregado',
+                  'ID do inquiridor',
+                  'Nome do inquiridor',
+                  'Bairro',
+                  'ID Bairro',
+                  'ID chefe de agregado',
+                  'Nome chefe de agregado',
+                  'ID chefe de agregado substituto',
+                  'Nome chefe de agregado substituto',
+                  'O consentimento informado existe?',
+                  'Se não existe, verifique com o supervisor e escreva a data caso encontre o consentimento informado',
+                  'O consentimento informado esta preenchido correctamente?',
+                  'Se não estiver preenchido correctramente, indicar o erro (colocar o número que aparece na tabela de tipos de erros',
+                  'O erro foi resolvido?',
+                  'Verificado por (iniciais da arquivista e data)')
                 
               } else {
-                names(pd) <- c('FW code',
-                               'Hamlet code',
-                               'ExtID HH member',
-                               'Household ID',
-                               "Person who signed consent",
-                               'Age of household member',
-                               'Recruitment date',
-                               'Informed consent/assent type (check off if correct and complete)',
-                               'If not correct, please enter type of error',
-                               'Was the error resolved (Yes/No)?',
-                               'Verified by (archivist initials) and date',
-                               'Signature')
-              }
-              
-              eldo_format <- input$use_eldo_format
-              if(!is.null(eldo_format)){
-                if(eldo_format){
-                  pd <- pd %>%
-                    left_join(fids %>%
-                                dplyr::mutate(fid_name = paste0(first_name, ' ', last_name)) %>%
-                                dplyr::select(`Código TC` = bohemia_id,
-                                              `Nome do inquiridor` = fid_name))
-                  pd <- pd %>%
-                    left_join(locations %>%
-                                dplyr::select(`Código Bairro` = code,
-                                              Hamlet))
-                  pd <- pd %>%
-                    mutate(xxx = ' ', yyy = ' ', zzz = ' ')
+                out <- out %>%
+                  mutate(icf_exists = 'Y__ N__',
+                         icf_correct = 'Y__ N__',
+                         error_resolved = 'Y__ N__')
+                names(out) <- 
+                  c(
+                    'Data collection date',
+                    'HH',
+                    'FW ID',
+                    'FW name',
+                    'Hamlet',
+                    'Hamlet ID',
+                    'HH head ID',
+                    'HH head name',
+                    'HH head sub ID',
+                    'HH head sub name',
+                    'ICF exists?',
+                    'If not, verify with supervisor and write date of retrieval',
+                    'ICF correctly filled?',
+                    'If not, indicate error',
+                    'Error resolved?',
+                    'Verified by (initials of archivist and date)')
                   
-                  pd <- pd %>% dplyr::select(
-                    `Data`= `Data de recrutamento`,
-                    `ID`= `Código TC`,
-                    `Nome do inquiridor`,
-                    `Bairro` = Hamlet,
-                    `ID Bairro` = `Código Bairro`,
-                    `ID Agregado`,
-                    `Idade do chefe(a)` = `Idade do membro do agregado`,
-                    `O consentimento existe?` = xxx,
-                    `O ICF esta preenchido correctamente?` = yyy,
-                    `Se o documento não estiver preenchido correitamente, indicar o error`,
-                    `O error foi resolvido (sim/não)`,
-                    `Verificado por (iniciais do arquivista) e data`
-                  )
-                }  
+                  
               }
               message('---Created visit control sheet')
               
               
-              consent_verification_list_reactive$data <- pd
-              # save(pd, file = '/tmp/dfx.RData')
-              quality_control_list_reactive$data <- qc
+              consent_verification_list_reactive$data <- out
               fluidPage(
                 fluidRow(
                   checkboxInput('workers_on_separate_pages',
