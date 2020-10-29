@@ -1351,7 +1351,6 @@ app_server <- function(input, output, session) {
                      statement = paste0("SELECT * FROM anomalies WHERE country = '", co, "'"))
     dbDisconnect(con)
     
-    save(an,file = 'an.rda')
     pd_ok <- FALSE
     if(!is.null(pd)){
       if(nrow(pd) > 0){
