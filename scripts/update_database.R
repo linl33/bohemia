@@ -1,3 +1,4 @@
+
 #!/usr/bin/Rscript
 start_time <- Sys.time()
 message('System time is: ', as.character(start_time))
@@ -8,6 +9,7 @@ suppressMessages({
   library(RPostgres)
   library(bohemia)
   library(yaml)
+  library(dplyr)
 }
 )
 psql_end_point = creds$endpoint

@@ -27,7 +27,7 @@ app_ui <- function(request) {
                 tags$style(type='text/css', "#log_ui {margin-right: 10px; margin-left: 10px; font-size:80%; margin-top: 10px; margin-bottom: -12px;}"),
                 tags$li(class = 'dropdown',
                         radioButtons('geo', ' ',
-                                     choices = c(#'Tanzania' = 'Rufiji',
+                                     choices = c('Tanzania' = 'Rufiji',
                                        'Mozambique' = 'Mopeia'
                                      ),
                                      inline = TRUE,
