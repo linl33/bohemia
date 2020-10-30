@@ -262,7 +262,7 @@ app_ui <- function(request) {
             fluidPage(
               fluidRow(
                 column(4,
-                       selectInput('indicator_time', 'Choose variable', choices = c('Household size', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosquito nets per household'))),
+                       selectInput('indicator_time', 'Choose variable', choices = c('Household size','Number of children', 'Ratio of children to adults', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosquito nets per household'))),
               ),
               fluidRow(
                 column(6, 
@@ -803,64 +803,79 @@ app_server <- function(input, output, session) {
     # }
   })
   
-  # sneak peek #############################################
-  output$average_time <- renderPlot({
-    
-    # temporary function until we find a dplyr solution
-    cummean_date <- function(temp_data, var_name){
-      # loop through each date and get mean of variable up until that date
-      names(temp_data)[which(names(temp_data)==var_name)] <- 'y'
-      unique_dates <- sort(unique(temp_data$todays_date))
-      loop_list <- list()
-      for(i in 1:length(unique_dates)){
-        this_date <- unique_dates[i]
-        
-        sub_temp_data <- temp_data %>% dplyr::filter(todays_date<=this_date)
-        y_value <- round(mean(sub_temp_data$y, na.rm = TRUE),2)
-        temp <- tibble('date'= this_date, 
-                       'y_value'= y_value)
-        loop_list[[i]] <- temp
-      }
-      plot_data <- do.call('rbind', loop_list)
-      return(plot_data)
-    }
-    
-    # get data
-    indic <- input$indicator_time
-    pd <- odk_data$data
-    # save(pd, file='odk_data.rda')
-    pd_people <- pd$minicensus_people
-    pd <- pd$minicensus_main
-    pd_ok <- FALSE
-    if(!is.null(pd)){
-      if(nrow(pd) > 0){
-        pd_ok <- TRUE
-      }
-    }
-    if(pd_ok){
-      
-      if(indic=='Household size'){
-        plot_data <- cummean_date(pd, var_name = 'hh_size')
-      } else if(indic=='Number of cattle per household'){
-        plot_data <- cummean_date(pd, var_name = 'hh_n_cows_less_than_1_year')
-      } else if(indic=='Number of pigs per household'){
-        plot_data <- cummean_date(pd, var_name = 'hh_n_pigs_less_than_6_weeks')
-      } else if(indic=='Number of mosquito nets per household'){
-        plot_data <- cummean_date(pd, var_name = 'n_nets_in_hh')
-      }
-     
-      ggplot(plot_data, aes(date,y_value)) + 
-        geom_point() + 
-        geom_line() +
-        labs(x = 'Date',
-             y='Average at each date') +
-        theme_bohemia()
-      
-    } else {
-      NULL
-    }
-  })
-  
+  # # sneak peek #############################################
+  # output$average_time <- renderPlot({
+  #   
+  #   # temporary function until we find a dplyr solution
+  #   cummean_date <- function(temp_data, var_name){
+  #     # loop through each date and get mean of variable up until that date
+  #     names(temp_data)[which(names(temp_data)==var_name)] <- 'y'
+  #     unique_dates <- sort(unique(temp_data$todays_date))
+  #     loop_list <- list()
+  #     for(i in 1:length(unique_dates)){
+  #       this_date <- unique_dates[i]
+  #       
+  #       sub_temp_data <- temp_data %>% dplyr::filter(todays_date<=this_date)
+  #       y_value <- round(mean(sub_temp_data$y, na.rm = TRUE),2)
+  #       temp <- tibble('date'= this_date, 
+  #                      'y_value'= y_value)
+  #       loop_list[[i]] <- temp
+  #     }
+  #     plot_data <- do.call('rbind', loop_list)
+  #     return(plot_data)
+  #   }
+  #   
+  #   # get data
+  #   indic <- input$indicator_time
+  #   pd <- odk_data$data
+  #   # save(pd, file='odk_data.rda')
+  #   pd_people <- pd$minicensus_people
+  #   pd <- pd$minicensus_main
+  #   
+  #   # for the people dataset, group by instance id and summarise
+  #   pd_people <- pd_people %>% group_by(instance_id) %>% 
+  #     mutate(age = floor(as.numeric(as.Date(Sys.Date()) - as.Date(dob))/ 365.25)) %>%
+  #     summarise(total_people = n(),
+  #               sum_children = length(which(age<18)),
+  #               sum_adults = length(which(age>=18))) %>%
+  #     mutate(child_to_adult = round(sum_children/sum_adults, 2))
+  #   pd_people$child_to_adult[is.infinite(pd_people$child_to_adult)] <- 0
+  #   
+  #   pd <- left_join(pd, pd_people, by = 'instance_id')
+  #   # join pd and pd_people by 
+  #   pd_ok <- FALSE
+  #   if(!is.null(pd)){
+  #     if(nrow(pd) > 0){
+  #       pd_ok <- TRUE
+  #     }
+  #   }
+  #   if(pd_ok){
+  #     if(indic=='Household size'){
+  #       plot_data <- cummean_date(pd, var_name = 'hh_size')
+  #     } else if(indic=='Number of cattle per household'){
+  #       plot_data <- cummean_date(pd, var_name = 'hh_n_cows_less_than_1_year')
+  #     } else if(indic=='Number of pigs per household'){
+  #       plot_data <- cummean_date(pd, var_name = 'hh_n_pigs_less_than_6_weeks')
+  #     } else if(indic=='Number of mosquito nets per household'){
+  #       plot_data <- cummean_date(pd, var_name = 'n_nets_in_hh')
+  #     } else if(indic=='Ratio of children to adults'){
+  #       plot_data <- cummean_date(pd, var_name = 'child_to_adult')
+  #     } else if(indic=='Number of children'){
+  #       plot_data <- cummean_date(pd, var_name = 'sum_children')
+  #     }
+  #    
+  #     ggplot(plot_data, aes(date,y_value)) + 
+  #       geom_point() + 
+  #       geom_line() +
+  #       labs(x = 'Date',
+  #            y='Average at each date') +
+  #       theme_bohemia()
+  #     
+  #   } else {
+  #     NULL
+  #   }
+  # })
+  # 
   # Field monitoring UI  #############################################
   field_monitoring_geo <- reactiveVal('Ward')
   output$ui_field_monitoring_by <- renderUI({
