@@ -42,11 +42,24 @@ create_clean_db <- function(credentials_file = 'credentials/credentials.yaml',
                 statement = paste0('drop table clean_', this_table))
     } else {
       message('Creating clean_', this_table, 'if not already existing. Otherwise only adding the new rows not previously copied')
-      dbExecute(conn = con,
-                statement = paste0('create table clean_', this_table, 'if not exists; insert into clean_', this_table, ' select * from ', this_table, 'on conflict do nothing;')) 
+      tbl_name <- paste0('clean_', this_table)
+
+      tbl_exists <- dbGetQuery(
+        conn = con, 
+        statement = paste0("select exists (
+          select from information_schema.tables where table_schema = 'public' and table_name ='", tbl_name,"'
+          )")
+        )
+
+      if(tbl_exists$exists){
+        dbExecute(conn = con,
+                statement = paste0('insert into clean_', this_table, ' select * from ', this_table, 'on conflict do nothing;')
+        ) 
+      }else{
+        dbExecute(conn = con,
+                  statement = paste0('create table clean_', this_table, ' as select * from ', this_table)) 
     }
   }
-  
   
   dbDisconnect(con)
 }
