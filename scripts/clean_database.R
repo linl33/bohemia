@@ -95,7 +95,7 @@ corrections %>% filter(!done)
 #
 #   # This part executes the change
 #   for (i in 1:length(correction_steps_list)){
-#     statement <- paste0(corrections_steps_list[[i]], correction_query_param_list[[i]])
+#     statement <- paste0(corrections_steps_list[[i]], correction_query_param_list[[i]]) -- @joe Please confirm the correct R syntax for this
 #     dbExecute(conn = con,
 #           statement = statement)
 #     # This part logs the action in the log table and is standard for all actions therefore this query should not be in the list
