@@ -266,9 +266,7 @@ app_ui <- function(request) {
               ),
               fluidRow(
                 column(6, 
-                       plotOutput('average_time')),
-                column(6,
-                       plotOutput('dis_time'))
+                       plotOutput('average_time'))
               )
             )
           ),
@@ -862,11 +860,6 @@ app_server <- function(input, output, session) {
       NULL
     }
   })
-  
-  output$dis_time <- renderPlot({
-    
-  })
-  
   
   # Field monitoring UI  #############################################
   field_monitoring_geo <- reactiveVal('Ward')
