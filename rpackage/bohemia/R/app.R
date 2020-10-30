@@ -2981,8 +2981,20 @@ app_server <- function(input, output, session) {
               pd <- odk_data$data
               the_country <- country()
               # save(pd, file = '/tmp/tmp.RData')
-              
+              # save(pd, file='temp_pd.rda')
               # end time analysis
+              
+              # create data to visualize number of active FW per day. active being submitted a form.
+              pd_fw <- pd$minicensus_main %>% group_by(todays_date) %>% summarise(counts=n())
+             fw_active_daily_plot<-  ggplot(pd_fw, aes(todays_date, counts)) + 
+                geom_bar(stat = 'identity') +
+                geom_label(aes(label=counts)) +
+                labs(x = 'Date', 
+                     y = 'Number of active FW') +
+                theme_bohemia()
+              
+              output$active_fw_per_day <- renderPlot({fw_active_daily_plot})
+              
               end_times <- pd$minicensus_main %>%
                 group_by(date_time = lubridate::round_date(end_time, unit = 'hour'),
                          country = hh_country) %>%
@@ -3058,12 +3070,20 @@ app_server <- function(input, output, session) {
               
               
               fluidPage(
-                h3('Plot of form end times (minicensus)'),
-                plotOutput('end_times_plot'),
-                h3('Summary table'),
-                bohemia::prettify(joined,
-                                  nrows = nrow(joined),
-                                  download_options = TRUE)
+                fluidRow(
+                  h3('Plot of form end times (minicensus)'),
+                  plotOutput('end_times_plot'),
+                ),
+                fluidRow(
+                  h3('Active FWs per day'),
+                  plotOutput('active_fw_per_day')
+                ),
+                fluidRow(
+                  h3('Summary table'),
+                  bohemia::prettify(joined,
+                                    nrows = nrow(joined),
+                                    download_options = TRUE)
+                )
               ) 
             }
               
