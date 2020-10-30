@@ -1751,9 +1751,9 @@ app_server <- function(input, output, session) {
                                               height = 500)
                                 )),
                 fluidRow(
-                  column(4,
+                  column(6,
                          plotOutput('plot_individual_details')),
-                  column(4,
+                  column(6,
                          plotOutput('plot_individual_form_time'))
                 )
               )})
@@ -2633,16 +2633,17 @@ app_server <- function(input, output, session) {
                               `Visits` = n,
                               `Last visit` = date)
                 
-              fluidPage(
-                h2('Refusals'),
-                bohemia::prettify(out_rf,
-                                  nrows = nrow(out_rf),
-                                  download_options = TRUE),
-                h2('Absences'),
-                bohemia::prettify(out_ab,
-                                  nrows = nrow(out_ab),
-                                  download_options = TRUE)
+              tabsetPanel(
+                tabPanel(title = 'Refusals',
+                         bohemia::prettify(out_rf,
+                                           nrows = nrow(out_rf),
+                                           download_options = TRUE)),
+                tabPanel(title = 'Absences',
+                         bohemia::prettify(out_ab,
+                                           nrows = nrow(out_ab),
+                                           download_options = TRUE))
               )
+
             })
   })
   
