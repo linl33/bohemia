@@ -2,7 +2,6 @@
 params:
   data: !r data.frame(f = 'acéntõ', a = 1, b = 2, x = 4, xx=5,xy=6,xyz=8, yy=9,yz=11,zz=12) 
   workers_on_separate_pages: True
-  eldo_format: False
 output:
   pdf_document:
     keep_tex: yes
@@ -55,16 +54,9 @@ dfx <- data
 
 ```{r}
 chunk_list <- list()
-if(names(dfx)[2] == 'ID'){
-  dfx$wid <- unlist(dfx[,2])
-  name1 <- names(dfx)[2]
-} else {
-  dfx$wid <- unlist(dfx[,1])
-  name1 <- names(dfx)[1]
-}
-
+dfx$wid <- unlist(dfx[,2])
 fwids <- sort(unique(dfx$wid))
-
+name1 <- 'FW'
 
 if(workers_on_separate_pages){
   for(i in 1:length(fwids)){
@@ -74,11 +66,14 @@ if(workers_on_separate_pages){
       "kable(dfx  %>% dplyr::filter(wid == ", fwids[i], ") %>% dplyr::select(-wid), 'latex',  
       longtable = T)  %>%   
   kable_styling(latex_options = c('repeat_header')) %>%
-    kable_styling(font_size = 10)  %>%
-  column_spec(1:2, width = '1.2cm') %>%
-  column_spec(3, width = '1.5cm') %>%
-  column_spec(4, width = '1.7cm') %>%
-  column_spec(5:ncol(dfx), width = '1.7cm')\n```\n\\newpage\n"
+    kable_styling(font_size = 7)  %>%
+  column_spec(1:2, width = '1.5cm') %>%
+  column_spec(3, width = '1.7cm') %>%
+  column_spec(4:5, width = '1.2cm') %>%
+  column_spec(6, width = '1.7cm') %>%
+  column_spec(7, width = '1.2cm') %>%
+  column_spec(8, width = '1.7cm') %>%
+  column_spec(9:ncol(dfx), width = '1.3cm')\n```\n\\newpage\n"
     )
   chunk_list[[i]] <- this_chunk
 }
@@ -88,11 +83,14 @@ if(workers_on_separate_pages){
     "kable(dfx %>% dplyr::select(-wid), 'latex',  
       longtable = T)  %>%   
   kable_styling(latex_options = c('repeat_header')) %>%
-    kable_styling(font_size = 10)  %>%
-  column_spec(1:2, width = '1.2cm') %>%
-  column_spec(3, width = '1.5cm') %>%
-  column_spec(4, width = '1.7cm') %>%
-  column_spec(5:ncol(dfx), width = '1.7cm')\n```\n\\newpage\n"
+    kable_styling(font_size = 7)  %>%
+  column_spec(1:2, width = '1.5cm') %>%
+  column_spec(3, width = '1.7cm') %>%
+  column_spec(4:5, width = '1.2cm') %>%
+  column_spec(6, width = '1.7cm') %>%
+  column_spec(7, width = '1.2cm') %>%
+  column_spec(8, width = '1.7cm') %>%
+  column_spec(9:ncol(dfx), width = '1.3cm')\n```\n\\newpage\n"
   )
 }
 

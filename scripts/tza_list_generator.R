@@ -7,6 +7,9 @@ library(rmarkdown)
 # creds$user <- creds$databrew_odk_user
 # creds$password <- creds$databrew_odk_pass
 # creds$url <- creds$databrew_odk_server
+# creds$user <- creds$tza_odk_user
+# creds$password <- creds$tza_odk_pass
+# creds$url <- creds$tza_odk_server
 creds <- list(
   user = '<USERNAME GOES HERE>',
   password = '<PASSWORD GOES HERE>',
@@ -15,10 +18,12 @@ creds <- list(
 
 # Define other parameters
 refresh <- TRUE # do you want to fetch new data (TRUE) or just use previously fetched data (FALSE)
-lc <- 'MKU' # 3 letter location code
+lc <- 'MKM' # 3 letter location code
 n_teams <- 3 # Number of enumeration teams
 enum <- TRUE # whether to generate a list for enumerators (true) or not (false). For TZA, always TRUE
 use_previous <- FALSE # whether to use previous data on households collected through enumeration (true) or guess households based on recon (false). For tza, always false
+date_range <- as.Date(c('2020-01-01',
+                        '2020-12-31')) # the min and max dates to filter for consent verification list
 
 ############# MINICENSUS
 # Read in the "minicensus" data
@@ -67,7 +72,9 @@ message('PDF produced at ', out_file)
 ######## CONSENT VERIFICATION LIST
 # Get the data
 # Get the odk data
-pd <- minicensus$non_repeats
+pd <- minicensus$non_repeats %>%
+  filter(todays_date >= date_range[1],
+         todays_date <= date_range[2])
 people <- minicensus$repeats$repeat_household_members_enumeration
 # Get the country
 co <- 'Tanzania'
@@ -104,17 +111,6 @@ pd <- out %>%
                 x,y,z) %>%
   mutate(todays_date = as.Date(todays_date)) %>%
   arrange(wid, todays_date)
-
-
-
-date_filter <- as.Date(c('2020-01-01', '2030-01-01')) # change date range if desired
-if(!is.null(date_filter)){
-  pd <- pd %>%
-    dplyr::filter(
-      todays_date <= date_filter[2],
-      todays_date >= date_filter[1]
-    )
-}
 
 # get date closest to today
 qc <- pd
