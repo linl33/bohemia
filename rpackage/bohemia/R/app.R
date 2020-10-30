@@ -1440,6 +1440,11 @@ app_server <- function(input, output, session) {
     pd <- pd$minicensus_main
     co <- country()
     pd <- pd %>% filter(hh_country == co)
+    min_date <- min(pd$todays_date, na.rm = TRUE)
+    max_date <- max(pd$todays_date, na.rm = TRUE)
+    seq_days <- seq(min_date, max_date, by = 1)
+    seq_days <- seq_days[!weekdays(seq_days) %in% c('Saturday', 'Sunday')]
+    n_days <- length(seq_days)
     # get anomaly dataset
     an <- session_data$anomalies
     # save(pd, co, an,
@@ -1491,15 +1496,89 @@ app_server <- function(input, output, session) {
       average_time <- mean(pd$end_time - pd$start_time)
       average_time <- paste0(round(as.numeric(average_time), digits = 2), ' ', attr(average_time, 'units'))
       daily_work_hours <- '(pending)'
-      week_per = round(total_forms/weekly_forms_fw,2)
-      total_per = round(total_forms/total_forms_fw,2)
+      rolling_per = round((total_forms / n_days) / daily_forms_fw * 100, digits = 2)
+      total_per = round(total_forms/total_forms_fw * 100,2)
       message('---Created FW performance individual table ')
       
       # last_days <-paste0('Last ', time_period, ' days')
-      tibble(` ` = c('Supervisor','% of weekly target','% of total target','# forms','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), `   ` = c(sup_name, week_per, total_per, total_forms, num_anomaly, num_error,average_time, daily_work_hours))
+      tibble(` ` = c('Supervisor','% of rolling target','% of total target','# forms','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), `   ` = c(sup_name, rolling_per, total_per, total_forms, num_anomaly, num_error,average_time, daily_work_hours))
     } else {
       NULL
     }
+    
+  })
+  
+  output$plot_individual_target <- renderPlot({
+    
+    # Get the odk data
+    pd <- odk_data$data
+    pd <- pd$minicensus_main
+    co <- country()
+    pd <- pd %>% filter(hh_country == co)
+    
+    if(co=='Mozambique'){
+      daily_forms_fw <- 10
+      total_forms_fw <- 500
+    } else {
+      daily_forms_fw <- 13
+      total_forms_fw <- 599
+    }
+    
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      who <- input$fid
+      if(is.null(who)){
+        who <- 0 
+      }
+      
+      min_date <- min(pd$todays_date, na.rm = TRUE)
+      max_date <- max(pd$todays_date, na.rm = TRUE)
+      seq_days <- seq(min_date, max_date, by = 1)
+      seq_days <- seq_days[!weekdays(seq_days) %in% c('Saturday', 'Sunday')]
+      
+      left <- tibble(date = seq_days) %>%
+        mutate(target = daily_forms_fw *(1:length(seq_days)))
+
+      plot_data <- pd %>% filter(wid == who)
+      if(nrow(plot_data) > 0){
+        plot_data <- plot_data %>%
+          group_by(date = todays_date) %>%
+          tally %>%
+          ungroup 
+        joined <- left_join(left, plot_data) %>%
+          mutate(n = ifelse(is.na(n), 0, n)) %>%
+          mutate(cs = cumsum(n)) %>%
+          dplyr::select(date, Target = target, Observed = cs ) %>%
+          tidyr::gather(key, value, Target:Observed)
+        
+        g <- ggplot(data = joined,
+                    aes(x = date,
+                        y = value)) +
+          geom_step(aes(color = key,
+                        group = key)) +
+          geom_point(aes(color = key)) +
+          labs(x = 'Date',
+               y = 'Forms collected',
+               title = 'Forms collected by date') +
+          theme_bohemia() +
+          scale_color_manual(name = '',
+                             values = c('red', 'blue')) +
+          theme(legend.position = 'bottom')
+        
+        
+      } else {
+        g <- NULL
+      }
+      
+    } else {
+      g <- NULL
+    }
+    return(g)
     
   })
   
@@ -1659,10 +1738,8 @@ app_server <- function(input, output, session) {
                 fluidRow(
                   column(4,
                          tableOutput('table_individual_details')),
-                  column(4,
-                         plotOutput('plot_individual_details')),
-                  column(4,
-                         plotOutput('plot_individual_form_time'))
+                  column(8,
+                         plotOutput('plot_individual_target'))
                 ),
                 fluidRow(column(6, align = 'center',
                                 h3('All locations visited by FW'),
@@ -1672,7 +1749,13 @@ app_server <- function(input, output, session) {
                                 h3('Locations of forms submitted by FW'),
                                 leafletOutput('leaf_fid',
                                               height = 500)
-                                ))
+                                )),
+                fluidRow(
+                  column(4,
+                         plotOutput('plot_individual_details')),
+                  column(4,
+                         plotOutput('plot_individual_form_time'))
+                )
               )})
   })
   
@@ -2221,6 +2304,11 @@ app_server <- function(input, output, session) {
               # save(pd, file = '/tmp/pd.RData')
               pd <- pd %>% filter(hh_country == co)
               
+              min_date <- min(pd$todays_date, na.rm = TRUE)
+              max_date <- max(pd$todays_date, na.rm = TRUE)
+              seq_days <- seq(min_date, max_date, by = 1)
+              seq_days <- seq_days[!weekdays(seq_days) %in% c('Saturday', 'Sunday')]
+              n_days <- length(seq_days)
               # get anomaly dataset
               an <- session_data$anomalies
               if(nrow(an) > 0){
@@ -2279,7 +2367,7 @@ app_server <- function(input, output, session) {
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `% complete daily` = `Forms`/daily_forms_fw,
+                            `% rolling target` = (`Forms` / n_days) / daily_forms_fw * 100,
                             `# of anomalies` = max(num_anomalies),
                             `# of errors` = max(num_errors)) 
 
