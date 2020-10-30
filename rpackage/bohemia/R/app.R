@@ -2986,7 +2986,8 @@ app_server <- function(input, output, session) {
               # end time analysis
               
               # create data to visualize number of active FW per day. active being submitted a form.
-              pd_fw <- pd$minicensus_main %>% group_by(todays_date) %>% summarise(counts=n())
+              pd_fw <- pd$minicensus_main %>% group_by(todays_date,wid) %>% summarise(counts=n()) %>%
+                group_by(todays_date) %>% summarise(counts = n())
              fw_active_daily_plot<-  ggplot(pd_fw, aes(todays_date, counts)) + 
                 geom_bar(stat = 'identity') +
                 geom_label(aes(label=counts)) +
