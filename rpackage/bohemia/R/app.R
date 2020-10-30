@@ -62,6 +62,9 @@ app_ui <- function(request) {
                    tabName = 'research',
                    icon = icon('microscope'),
                    startExpanded = FALSE,
+                   menuSubItem(text = 'Sneak peek',
+                            tabName = 'sneak_peek',
+                            icon = icon('glasses')),
                    menuSubItem(
                      text="Demography",
                      tabName="demography",
@@ -95,9 +98,6 @@ app_ui <- function(request) {
           menuItem('Download data',
                    tabName = 'download_data',
                    icon = icon('download')),
-          menuItem('Sneak peek',
-                   tabName = 'sneak_peek',
-                   icon = icon('server')),
           menuItem(
             text = 'About',
             tabName = 'about',
@@ -798,17 +798,21 @@ app_server <- function(input, output, session) {
       names(temp_data)[which(names(temp_data)==var_name)] <- 'y'
       unique_dates <- sort(unique(temp_data$todays_date))
       loop_list <- list()
+      raw_list <- list()
       for(i in 1:length(unique_dates)){
         this_date <- unique_dates[i]
 
         sub_temp_data <- temp_data %>% dplyr::filter(todays_date<=this_date)
-        y_value <- round(mean(sub_temp_data$y, na.rm = TRUE),2)
+        y_value <- mean(sub_temp_data$y, na.rm = TRUE)
         temp <- tibble('date'= this_date,
                        'y_value'= y_value)
         loop_list[[i]] <- temp
+        raw_list[[i]] <- sub_temp_data %>% dplyr::select(date = todays_date, y)
       }
-      plot_data <- do.call('rbind', loop_list)
-      return(plot_data)
+      part1 <- bind_rows(loop_list)
+      part2 <- bind_rows(raw_list)
+      out <- list(part1, part2)
+      return(out)
     }
 
     # get data
@@ -836,25 +840,38 @@ app_server <- function(input, output, session) {
     }
     if(pd_ok){
       if(indic=='Household size'){
-        plot_data <- cummean_date(pd, var_name = 'hh_size')
+        var_name <- 'hh_size'
       } else if(indic=='Number of cattle per household'){
-        plot_data <- cummean_date(pd, var_name = 'hh_n_cows_less_than_1_year')
+        var_name <- 'hh_n_cows_less_than_1_year'
       } else if(indic=='Number of pigs per household'){
-        plot_data <- cummean_date(pd, var_name = 'hh_n_pigs_less_than_6_weeks')
+        var_name <- 'hh_n_pigs_less_than_6_weeks'
       } else if(indic=='Number of mosquito nets per household'){
-        plot_data <- cummean_date(pd, var_name = 'n_nets_in_hh')
+        var_name <- 'n_nets_in_hh'
       } else if(indic=='Ratio of children to adults'){
-        plot_data <- cummean_date(pd, var_name = 'child_to_adult')
+        var_name <- 'child_to_adult'
       } else if(indic=='Number of children'){
-        plot_data <- cummean_date(pd, var_name = 'sum_children')
+        var_name <- 'sum_children'
       }
+      plot_data <- cummean_date(pd, var_name = var_name)[[1]]
+      raw_data <- cummean_date(pd, var_name = var_name)[[2]]
 
-      ggplot(plot_data, aes(date,y_value)) +
-        geom_point() +
-        geom_line() +
+      ggplot() +
+        geom_jitter(data = raw_data,
+                    aes(x = date,
+                        y = y),
+                    size = 0.2,
+                    alpha = 0.2,
+                    height = 0.5) +
+        geom_line(data = plot_data, aes(date,y_value),
+                  color = 'darkred') +
+        geom_point(data = plot_data, aes(date,y_value)) +
         labs(x = 'Date',
-             y='Average at each date') +
-        theme_bohemia()
+             y='Average up until date') +
+        theme_bohemia() +
+        geom_label(data = plot_data,
+                   aes(x = date,
+                       y = y_value,
+                       label = round(y_value, 2)))
 
     } else {
       NULL
@@ -1531,8 +1548,55 @@ app_server <- function(input, output, session) {
     }
     return(g)
     
+  })
+  
+  output$plot_individual_form_time <- renderPlot({
+    
+    # Get the odk data
+    pd <- odk_data$data
+    pd <- pd$minicensus_main
+    co <- country()
+    pd <- pd %>% filter(hh_country == co)
+    
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      who <- input$fid
+      if(is.null(who)){
+        who <- 0 
+      }
+      plot_data <- pd %>% filter(wid == who)
+      if(nrow(plot_data) > 0){
+        plot_data$time_taken <- plot_data$end_time - plot_data$start_time
+        units_taken <- attr(plot_data$time_taken, 'units')
+        avg <- mean(plot_data$time_taken)
+        avg <- round(avg, digits = 2)
+        n <- nrow(plot_data)
+        g <- ggplot(data = plot_data,
+                    aes(x = time_taken)) +
+          geom_histogram(fill = 'darkred', alpha = 0.6, color = 'black') +
+          labs(x = paste0('Time per form (', units_taken, ')'),
+               y = 'Density',
+               title = paste0('Distribution of time taken per form for FW ',
+                              who, '; ', n, ' forms, ', avg, ' ', units_taken)) +
+          theme_bohemia()
+        
+        
+      } else {
+        g <- NULL
+      }
+      
+    } else {
+      g <- NULL
+    }
+    return(g)
     
   })
+  
   
   
   output$ui_individual_data <- renderUI({
@@ -1593,10 +1657,12 @@ app_server <- function(input, output, session) {
             ok = {
               fluidPage(
                 fluidRow(
-                  column(6,
+                  column(4,
                          tableOutput('table_individual_details')),
-                  column(6,
-                         plotOutput('plot_individual_details'))
+                  column(4,
+                         plotOutput('plot_individual_details')),
+                  column(4,
+                         plotOutput('plot_individual_form_time'))
                 ),
                 fluidRow(column(6, align = 'center',
                                 h3('All locations visited by FW'),
