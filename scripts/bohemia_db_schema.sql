@@ -1,8 +1,3 @@
--- TODO review non nullable fields,
--- inspect full dataframe labels,
--- whats with the repeat_id and repeat_counts?,
--- what is the lgl type ideal to match in sql? currently using BOOLEAN.
-
 -- CREATE DATABASE bohemia;
 -- NOTE switch to the bohemia database before proceeding with the following queries execution.
 -- psql command `\c bohemia`
@@ -853,3 +848,70 @@ CREATE TABLE anomalies (
   date   DATE,
   instance_id   text
 );
+
+-- Enable UUID extension
+
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- Anomaly Corrections Log
+
+CREATE TABLE anomaly_corrections_log (
+    id  UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    anomaly_id  TEXT NOT NULL,
+    correction_id   TEXT NOT NULL,
+    preset_steps_id     UUID,
+    date_created    TIMESTAMP DEFAULT now(),
+    user_id     VARCHAR(256),
+    log_detail  TEXT NOT NULL
+);
+
+-- Preset Correction Steps
+
+CREATE TABLE preset_correction_steps (
+    id  UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
+    date_created    TIMESTAMP NOT NULL DEFAULT now(),
+    status  VARCHAR(64) NOT NULL DEFAULT 'active', -- Options are active or archived
+    created_by  VARCHAR(256) NOT NULL,
+    date_updated    TIMESTAMP,
+    updated_by  VARCHAR(256), -- Expected only to be for setting an entry to archive state
+    resolution_category     VARCHAR(128) NOT NULL,
+    resolution_action   VARCHAR(128) NOT NULL,
+    correction_steps    TEXT NOT NULL -- Actual query to be applied for fix
+);
+
+-- MODIFICATIONS
+
+-- Anomalies modification
+---- Add Primary Key
+
+CREATE UNIQUE INDEX CONCURRENTLY pk_anomalies_id_idx ON anomalies (id);
+
+ALTER TABLE anomalies ADD CONSTRAINT pk_anomalies PRIMARY KEY USING INDEX pk_anomalies_id_idx;
+
+---- Add new columns
+
+ALTER TABLE anomalies
+    ADD COLUMN correction_id TEXT,
+    ADD COLUMN anomaly_correction_log_id UUID,
+    ADD COLUMN supervisor_id VARCHAR(8),
+    ADD COLUMN country_id VARCHAR(32),
+    ADD COLUMN date_triggered TIMESTAMP;
+
+-- Corrections modification
+---- Add Primary Key
+
+CREATE UNIQUE INDEX CONCURRENTLY pk_corrections_id_idx ON corrections (id);
+
+ALTER TABLE corrections ADD CONSTRAINT pk_corrections PRIMARY KEY USING INDEX pk_corrections_id_idx;
+
+---- Add new columns and relationships
+
+ALTER TABLE corrections 
+    ADD COLUMN resolution_category VARCHAR(128),
+    ADD COLUMN resolution_action   VARCHAR(128),
+    ADD COLUMN anomaly_id  TEXT,
+    ADD CONSTRAINT fk_anomalies FOREIGN KEY (anomaly_id) REFERENCES anomalies(id);
+    
+-- Anomalies modification to add relationship to corrections
+
+ALTER TABLE anomalies ADD CONSTRAINT fk_corrections FOREIGN KEY (correction_id) REFERENCES corrections(id);

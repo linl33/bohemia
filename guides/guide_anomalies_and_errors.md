@@ -114,7 +114,8 @@ The developer now has an object named `data` to be operated on.
 3. The result of `identify_anomalies_and_errors` (ie, a long list of errors and anomalies) is exposed in a table in the web-app  
 4. Data managers go row-by-row in the table and submit corrections / confirmations (ie, semi-structured comments regarding which remediative action should be taken).  
 5. The corrections / confirmations submitted by the data managers get stored in the `corrections` table in the Bohemia database.  
-6. Databrew codifies corrections in the `scripts/clean_database.R` script. This serves as both (a) a functional script to implement corrections, (b) a log of all changes to "raw" data.
+6. Databrew codifies corrections in the `scripts/clean_database.R` script. This serves as a functional script to implement corrections.
+7. The output of the `scripts/clean_database.R` is stored in the `anomaly_corrections_log` table which acts a log of all changes to "raw" data.
 
 ## The `corrections` table  
 
@@ -135,4 +136,95 @@ The developer now has an object named `data` to be operated on.
 ## Code standards for database "cleaning" code  
 
 - Corrections are codified in `scripts/clean_database.R`  
-- Running this script takes the "raw" data, modifies it (individual entries, each corresponding to an entry in the `corrections` table), and then generates "clean" data with `clean_` prefixes in the database.
+- Running this script takes:
+
+    - the "raw" data (individual entries, each corresponding to an entry in the `corrections` table), 
+    - checks the `response_details` specified in the `corrections` entry
+    - if the `response_detail` is already available in the `preset_correction_steps` applies these steps,
+    - if the `response_detail` is not available, the user creates a custom query and applies it.
+    - then generates "clean" data with `clean_` prefixes in the database.
+    - and saves the actual query used in the correction in the `anomaly_corrections_log` table.
+
+### Detailed Execution Steps for the Script
+
+Step 1:
+NOTE The first step is manual review of the correction. This means:
+   1. Examine the response_details provided
+   2. Add classification for it i.e. `resolution_category`
+   3. Add the corrective action label for it i.e. `resolution_action`
+   4. If the `resolution_category` and `resolution_action` match an entry in the `preset_correction_steps` proceed with Step 2
+      - Check the existence of this by running a query similar to:
+      
+        `SELECT correction_steps FROM preset_correction_steps WHERE resolution_category = 'test_hh_too_young' AND resolution_action = 'test_update_dob' AND status = 'active';`
+   5. If the preset steps don't exist, then add an entry to the `preset_correction_steps` and add the query to apply in the `correction_steps`.
+      - Example query:
+
+        `INSERT INTO preset_correction_steps (created_by, status, resolution_category, resolution_action, correction_steps) VALUES ('you@your.email', 'active', 'test_hh_too_young', 'test_update_dob', ARRAY ['UPDATE clean_minicensus_main SET hh_head_dob = %s WHERE instance_id = %s', 'UPDATE corrections SET done = TRUE and done_by = %s']);`
+
+Step 2: 
+Now that the correction has a `preset_correction_steps` entry for its `resolution_category` and `resolution_action`.
+Retrieve the entry using the same query as above and save the details in a param i.e. 
+```
+  -- After the correction entry has been retrieved and it in a param e.g. 'correction_resp'
+  preset_step_details <- dbGetQuery(test_con, "SELECT correction_steps FROM preset_correction_steps WHERE resolution_category = ", correction_resp$resolution_category, " AND resolution_action = ", correction_resp$resolution_action, "AND status = 'active';")
+```
+
+Check if the `preset_correction_steps` have a corresponding function in R and call it with the required params if it does. _NOTE the specific example to check to be added once this option is added_
+
+If no specific function exists:
+  - Populate the following variables:
+      - anomaly_id 
+        - _This should be retrieved from the `corrections` entry's `anomaly_id` column._
+      - correction_id
+        - _This should be retrieved from the `corrections` entry being applied._
+      - user_email
+        - _This is the user running the function to apply the fix._
+      - preset_correction_steps_id
+        - _This should be retrieved from the queried entry param i.e. for example `preset_step_details$id`_ 
+      - correction_steps_list
+        - _This should be retrieved from the queried entry param i.e. for example `preset_step_details$correction_steps`_
+        - _NOTE The response will look like `{"UPDATE clean_minicensus_main SET hh_head_dob = %s WHERE instance_id = %s","UPDATE corrections SET done = TRUE and done_by = %s"}` casting to R data types will be required._
+      - correction_query_params_list
+        - _This should be manually populated based on the params expected in the SQL query set. i.e for example `c(c('2000-03-29', '0017eea6-7239-433d-827a-3bd3d4c65c4e'), c('Joe Brew'))`_
+  - Run the correction_steps keeping in line with the example change described below:
+
+```
+  anomaly_id <- 'fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e'
+  correction_id <- '776627ac-1c8c-4fd7-92f0-529a7f2749e8'
+  user_email <- 'joe@brew.cc'
+  preset_correction_steps_id <- '5e86ee69-76a4-46a7-bdd1-6a5464d38b70'
+  correction_steps_list <- c(
+    "UPDATE %s SET hh_possessions = %s WHERE instance_id= %s", 
+    "UPDATE %s SET done = %s, done_by = %s WHERE id=%s"
+  )
+  correction_query_params_list <- c(
+    c(clean_minicensus_main, 'joetest', '0017eea6-7239-433d-827a-3bd3d4c65c4e' ), 
+    c(corrections, 'true', 'Joe Brew', 'fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e'))
+
+  # This part executes the change
+  for (i in 1:length(correction_steps_list)){
+    statement <- paste0(corrections_steps_list[[i]], correction_query_param_list[[i]])
+    dbExecute(conn = con,
+          statement = statement)
+    # This part logs the action in the log table and is standard for all actions therefore this query should not be in the list
+    dbExecute(conn = con,
+          statement = paste0("INSERT INTO anomaly_corrections_log 
+                                (anomaly_id, correction_id, preset_steps_id, user_id, log_details) VALUES 
+                                (anomaly_id, correction_id, preset_correction_steps_id, user_email, statement)))
+```
+
+    
+### Detailed Schema Focused on the Tables Affected By Script
+
+_NOTE The green labels indicate the new columns and models_
+
+![](img/anomalies_detail_schema.png)
+
+
+## TODO 
+
+[] Add a migration process to move the anomalies to the database table
+
+[] Define the rules for the `resolution_category` and `resolution_action` values (_should be pre-agreed to be in a lookup list for the user applying them to reference_)
+
+[] Iterate on the better way to separate the manual step 1 and formalize it for eventually having step 2 be fully automated as a batch job.

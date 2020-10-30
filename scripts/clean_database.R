@@ -44,9 +44,9 @@ data$va <- va
 refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
 data$refusals <- refusals
 
-# Drop the previously cleaned data
+# # Drop the previously cleaned data
 message('------DROPPING OLD CLEAN_ DATA')
-create_clean_db(credentials_file = '../credentials/credentials.yaml', 
+create_clean_db(credentials_file = '../credentials/credentials.yaml',
                 drop_all = TRUE)
 # Create new clean tables
 message('------CREATING NEW CLEAN_ DATA')
@@ -66,17 +66,46 @@ corrections <- dbReadTable(conn = con,
                            name = 'corrections')
 corrections %>% filter(!done)
 
-# # Example change
-# # This is just an example
-# # This part executes the change
-# # Anomaly ID: fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e
-# dbExecute(conn = con,
-#           statement = paste0("UPDATE clean_minicensus_main SET hh_possessions = 'joetest' WHERE instance_id='0017eea6-7239-433d-827a-3bd3d4c65c4e'"))
-# # This part modifies the corrections table
-# dbExecute(conn = con,
-#           statement = paste0("UPDATE corrections SET done = 'true', done_by = 'Joe Brew' WHERE id='fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e'"))
+# NOTE:  
+#  Please refer to the guide https://github.com/databrew/bohemia/blob/master/guides/guide_anomalies_and_errors.md for detailed instructions
+#
+# Provided that the `corrections` entry has a `preset_correction_steps` entry for its `resolution_category` and `resolution_action`
+# To run the updates manually, when no specific function exists, use these example steps:
+# Populate the following variables:
+    # anomaly_id
+    # correction_id
+    # user_email
+    # preset_correction_steps_id
+    # correction_steps_list
+    # correction_query_params_list
 
+# Run the correction_steps keeping in line with the example change described below:
+#
+#   anomaly_id <- 'fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e'
+#   correction_id <- '776627ac-1c8c-4fd7-92f0-529a7f2749e8'
+#   user_email <- 'joe@brew.cc'
+#   preset_correction_steps_id <- '5e86ee69-76a4-46a7-bdd1-6a5464d38b70'
+#   correction_steps_list <- c(
+#     "UPDATE %s SET hh_possessions = %s WHERE instance_id= %s", 
+#     "UPDATE %s SET done = %s, done_by = %s WHERE id=%s"
+#   )
+#   correction_query_params_list <- c(
+#     c(clean_minicensus_main, 'joetest', '0017eea6-7239-433d-827a-3bd3d4c65c4e' ), 
+#     c(corrections, 'true', 'Joe Brew', 'fake_error_type_0017eea6-7239-433d-827a-3bd3d4c65c4e'))
+#
+#   # This part executes the change
+#   for (i in 1:length(correction_steps_list)){
+#     statement <- paste0(corrections_steps_list[[i]], correction_query_param_list[[i]]) -- @joe Please confirm the correct R syntax for this
+#     dbExecute(conn = con,
+#           statement = statement)
+#     # This part logs the action in the log table and is standard for all actions therefore this query should not be in the list
+#     dbExecute(conn = con,
+#           statement = paste0("INSERT INTO anomaly_corrections_log 
+#                                 (anomaly_id, correction_id, preset_steps_id, user_id, log_details) VALUES 
+#                                 (anomaly_id, correction_id, preset_correction_steps_id, user_email, statement)))
+#    }
 #######################
+
 # hh_head_too_young_old_ade9172b-3b03-4254-b252-54e92b9a63e4
 dbExecute(con,
           statement = paste0("UPDATE clean_minicensus_people SET dob = '2000-01-01' WHERE instance_id = 'ade9172b-3b03-4254-b252-54e92b9a63e4'"))

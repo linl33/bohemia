@@ -474,6 +474,7 @@ if(new_data){
 # message('...done adding positions to traccar table.')
 
 ####### ANOMALIES CREATION ##################################################
+library(dplyr)
 data_moz <- load_odk_data(the_country = 'Mozambique', 
                       credentials_path = '../credentials/credentials.yaml',
                       users_path = '../credentials/users.yaml')
