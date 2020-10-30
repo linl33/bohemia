@@ -1116,8 +1116,8 @@ app_server <- function(input, output, session) {
       
       # save(pd, file = 'temp_pd.rda')
       # create a placeholder for number of fieldworkers. 
-      # elena said 12 are doing enumerations, so im subtracting 12 from the total
-      num_fws <- length(unique(pd$wid)) -12
+      num_fws <- length(unique(pd$wid)) #-12 - get average number of unique fieldworkers per day
+      
       # Create table of overview
       overview <- pd %>%
         summarise(Type = 'Observed',

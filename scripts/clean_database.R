@@ -45,9 +45,9 @@ refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
 data$refusals <- refusals
 
 # # Drop the previously cleaned data
-# message('------DROPPING OLD CLEAN_ DATA')
-# create_clean_db(credentials_file = '../credentials/credentials.yaml', 
-#                 drop_all = FALSE)
+message('------DROPPING OLD CLEAN_ DATA')
+create_clean_db(credentials_file = '../credentials/credentials.yaml',
+                drop_all = TRUE)
 # Create new clean tables
 message('------CREATING NEW CLEAN_ DATA')
 create_clean_db(credentials_file = '../credentials/credentials.yaml')
