@@ -343,38 +343,6 @@ sudo a2enmod proxy_wstunnel
 sudo service apache2 restart
 ```
 
-```
-sudo nano /etc/apache2/sites-available/traccar.conf
-```
-Edit as follows
-```
-<IfModule mod_ssl.c>
-        <VirtualHost _default_:443>
-
-                ServerName bohemia.fun
-                ServerAdmin webmaster@localhost
-
-                DocumentRoot /var/www/html
-
-                ProxyPass /api/socket ws://localhost:8082/api/socket
-                ProxyPassReverse /api/socket ws://localhost:8082/api/socket
-
-                ProxyPass / http://localhost:8082/
-                ProxyPassReverse / http://localhost:8082/
-
-                SSLEngine on
-                SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
-                SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
-
-        </VirtualHost>
-</IfModule>
-```
-
-```
-sudo a2ensite traccar
-sudo service apache2 restart
-```
-
 SSL / https
 
 ```
