@@ -2595,6 +2595,7 @@ app_server <- function(input, output, session) {
               # includeHTML(paste0(system.file('app', package = 'bohemia'), '/www/traccar.html'))
               tags$iframe(
                 seamless="seamless",
+                # src = content(r, "text")
                 src = 'http://bohemia.fun/?token=A2EfrXVYD6uXFNaDvXQxL5oXhIs0BBd2'
                 # src = paste0(system.file('app', package = 'bohemia'), '/www/traccar.html'),
                 # src=paste0(system.file('shiny', package = 'bohemia'), '/bohemiapp/www/traccar.html')
