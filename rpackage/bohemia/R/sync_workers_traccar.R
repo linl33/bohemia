@@ -65,6 +65,7 @@ sync_workers_traccar <- function(credentials = NULL,
     go <- TRUE
     message('Porting data from the google registration sheet to the Traccar server:')
   } else {
+    message('No new registrations')
     go <- FALSE
   }
   if(go){
@@ -92,6 +93,7 @@ sync_workers_traccar <- function(credentials = NULL,
     if(nrow(delete_these) > 0){
       message('For now, you can manually delete the following users from the web interface at ',
               credentials$traccar_server)
+      message(paste0(delete_these$name, collapse = '\n'))
     } else {
       message('But don\'t worry, there are no users to delete anyway')
     }

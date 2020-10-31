@@ -389,12 +389,40 @@ sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --re
 ```
 
 
-
 ```
 sudo systemctl start traccar.service
 ```
 
+In /etc/nginx/sites-available/datacat.cc, add the following:
 
+```
+# redirect from http to https for bohemia.fun
+server {
+   listen 80;
+   listen [::]:80;
+   server_name bohemia.fun www.bohemia.fun;
+   return 301 https://$server_name$request_uri;
+}
+```
+
+
+```
+sudo ln -s /etc/nginx/sites-available/bohemia.fun /etc/nginx/sites-enabled/
+```
+
+Disable the default block since our server now handles all incoming traffic
+```
+sudo rm -f /etc/nginx/sites-enabled/default
+```
+
+Test the config:
+```
+sudo nginx -t
+```
+Restart nginx
+```
+sudo systemctl restart nginx
+```
 
 ### Data extraction
 
@@ -402,7 +430,7 @@ sudo systemctl start traccar.service
 
 - Get a list of devices:
 ```
-http://bohemia.fun/api/devices
+https://bohemia.fun/api/devices
 ```
 etc.
 
