@@ -329,13 +329,108 @@ mysql -h 3.21.67.128 -u traccarremoteuser -p
 <traccarremotepass>
 ```
 
+### Secure connection (serving over https)
+
+https://www.traccar.org/secure-connection/
+
+
+```
+sudo apt-get install apache2 # temporarily stop
+sudo apt-get install apache2
+sudo a2enmod ssl
+sudo a2enmod proxy_http
+sudo a2enmod proxy_wstunnel
+sudo service apache2 restart
+```
+
+```
+sudo nano /etc/apache2/sites-available/traccar.conf
+```
+Edit as follows
+```
+<IfModule mod_ssl.c>
+        <VirtualHost _default_:443>
+
+                ServerName bohemia.fun
+                ServerAdmin webmaster@localhost
+
+                DocumentRoot /var/www/html
+
+                ProxyPass /api/socket ws://localhost:8082/api/socket
+                ProxyPassReverse /api/socket ws://localhost:8082/api/socket
+
+                ProxyPass / http://localhost:8082/
+                ProxyPassReverse / http://localhost:8082/
+
+                SSLEngine on
+                SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
+                SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+
+        </VirtualHost>
+</IfModule>
+```
+
+```
+sudo a2ensite traccar
+sudo service apache2 restart
+```
+
+SSL / https
+
+```
+sudo apt install nginx
+sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install certbot python-certbot-nginx
+sudo certbot run --nginx --non-interactive --agree-tos -m joebrew@gmail.com --redirect -d bohemia.fun
+```
+
+
+```
+sudo systemctl start traccar.service
+```
+
+In /etc/nginx/sites-available/datacat.cc, add the following:
+
+```
+# redirect from http to https for bohemia.fun
+server {
+   listen 80;
+   listen [::]:80;
+   server_name bohemia.fun www.bohemia.fun;
+   return 301 https://$server_name$request_uri;
+}
+```
+
+
+```
+sudo ln -s /etc/nginx/sites-available/bohemia.fun /etc/nginx/sites-enabled/
+```
+
+Disable the default block since our server now handles all incoming traffic
+```
+sudo rm -f /etc/nginx/sites-enabled/default
+```
+
+Test the config:
+```
+sudo nginx -t
+```
+Restart nginx
+```
+sudo systemctl restart nginx
+```
+
 ### Data extraction
 
 - The [API](https://www.traccar.org/api-reference/) should be used for data extraction
 
 - Get a list of devices:
 ```
-http://bohemia.fun/api/devices
+https://bohemia.fun/api/devices
 ```
 etc.
 

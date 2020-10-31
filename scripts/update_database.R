@@ -395,83 +395,92 @@ if(new_data){
 ## TRACCAR LOCATIONS ##############################################
 
 # get traccar data - one row per ID 
-# message('Syncing traccar workers')
-# sync_workers_traccar(credentials = creds)
+message('Syncing traccar workers')
+sync_workers_traccar(credentials = creds)
 # 
-# message('Retrieving information on workers from traccar')
-# dat <- get_traccar_data(url = creds$traccar_server,
-#                         user = creds$traccar_user,
-#                         pass = creds$traccar_pass)
+message('Retrieving information on workers from traccar')
+dat <- get_traccar_data(url = creds$traccar_server,
+                        user = creds$traccar_user,
+                        pass = creds$traccar_pass)
 # 
-# message('Retrieving information on positions from traccar')
-# library(dplyr)
-# position_list <- list()
-# for(i in 1:nrow(dat)){
-#   this_id <- dat$id[i]
-#   unique_id <- dat$uniqueId[i]
-#   # message(i, '. ', this_id)
-#   suppressWarnings({
-#     suppressMessages({
-#       this_position <- bohemia::get_positions_from_device_id(url = creds$traccar_server,
-#                                                              user = creds$traccar_user,
-#                                                              pass = creds$traccar_pass,
-#                                                              device_id = this_id) %>%
-#         mutate(unique_id = unique_id) %>%
-#         mutate(accuracy = as.numeric(accuracy),
-#                altitude = as.numeric(altitude),
-#                course = as.numeric(course),
-#                deviceId = as.numeric(deviceId),
-#                deviceTime = lubridate::as_datetime(deviceTime),
-#                fixTime = lubridate::as_datetime(fixTime),
-#                latitude = as.numeric(latitude),
-#                longitude = as.numeric(longitude),
-#                id = as.numeric(id))
-#     })
-#   })
-#   
-#   
-#   if(!is.null(this_position)){
-#     if(nrow(this_position) > 0){
-#       position_list[[i]] <- this_position
-#     }
-#   }
-# }
-# message('Finished retrieving positions. Combining...')
-# positions <- bind_rows(position_list)
-# message('Finished combining. Adding to database...')
-# names(positions) <- tolower(names(positions))
-# positions <- positions %>%
-#   dplyr::select(
-#     accuracy,
-#     altitude,
-#     course,
-#     deviceid,
-#     devicetime,
-#     id,
-#     latitude,
-#     longitude,
-#     valid ,
-#     unique_id)
-# message('...', nrow(positions), ' positions retrieved from traccar server.')
-# 
-# # Get existing ids
-# existing_ids <- dbGetQuery(con, 'SELECT id FROM traccar')
-# 
-# # Subset to remove those which are in existing ids
-# if(nrow(existing_ids) > 0){
-#   existing_ids <- existing_ids$id
-#   message('...', length(existing_ids), ' positions already in database.')
-#   positions <- positions %>%
-#     filter(!id %in% existing_ids)
-#     message('...filtered. going to add ', nrow(positions), ' new positions to database.')
-#   
-# }
-# message('...going to add ', nrow(positions), ' positions to traccar table')
-# # Update the database
-# dbAppendTable(conn = con,
-#               name = 'traccar',
-#               value = positions)
-# message('...done adding positions to traccar table.')
+
+# Get existing max date
+max_date <- dbGetQuery(con, 'SELECT max(devicetime) FROM traccar')
+# fetch data only from one week prior to max date
+fetch_date <- max_date$max - lubridate::days(7)
+fetch_date <- as.character(as.Date(fetch_date))
+fetch_path <- paste0("api/positions?from=", fetch_date, "T22%3A00%3A00Z&to=2022-12-31T22%3A00%3A00Z")
+
+message('Retrieving information on positions from traccar (takes a while)')
+library(dplyr)
+position_list <- list()
+for(i in 1:nrow(dat)){
+  this_id <- dat$id[i]
+  unique_id <- dat$uniqueId[i]
+  # message(i, '. ', this_id)
+  suppressWarnings({
+    suppressMessages({
+      this_position <- bohemia::get_positions_from_device_id(url = creds$traccar_server,
+                                                             user = creds$traccar_user,
+                                                             pass = creds$traccar_pass,
+                                                             device_id = this_id,
+                                                             path = fetch_path) %>%
+        mutate(unique_id = unique_id) %>%
+        mutate(accuracy = as.numeric(accuracy),
+               altitude = as.numeric(altitude),
+               course = as.numeric(course),
+               deviceId = as.numeric(deviceId),
+               deviceTime = lubridate::as_datetime(deviceTime),
+               fixTime = lubridate::as_datetime(fixTime),
+               latitude = as.numeric(latitude),
+               longitude = as.numeric(longitude),
+               id = as.numeric(id))
+    })
+  })
+
+
+  if(!is.null(this_position)){
+    if(nrow(this_position) > 0){
+      position_list[[i]] <- this_position
+    }
+  }
+}
+message('Finished retrieving positions. Combining...')
+positions <- bind_rows(position_list)
+message('Finished combining. Adding to database...')
+names(positions) <- tolower(names(positions))
+positions <- positions %>%
+  dplyr::select(
+    accuracy,
+    altitude,
+    course,
+    deviceid,
+    devicetime,
+    id,
+    latitude,
+    longitude,
+    valid ,
+    unique_id)
+message('...', nrow(positions), ' positions retrieved from traccar server.')
+
+# Get existing ids
+existing_ids <- dbGetQuery(con, 'SELECT id FROM traccar')
+
+# Subset to remove those which are in existing ids
+if(nrow(existing_ids) > 0){
+  existing_ids <- existing_ids$id
+  message('...', length(existing_ids), ' positions already in database.')
+  positions <- positions %>%
+    filter(!id %in% existing_ids)
+    message('...filtered. going to add ', nrow(positions), ' new positions to database.')
+
+}
+message('...going to add ', nrow(positions), ' positions to traccar table')
+# Update the database
+dbAppendTable(conn = con,
+              name = 'traccar',
+              value = positions)
+message('...done adding positions to traccar table.')
 
 ####### ANOMALIES CREATION ##################################################
 library(dplyr)
