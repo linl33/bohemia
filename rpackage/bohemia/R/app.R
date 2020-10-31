@@ -2576,8 +2576,8 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
-              user = creds$traccar_read_only_user,
-              password = creds$traccar_read_only_pass,
+              user = creds$traccar_read_only_user
+              password = creds$traccar_read_only_pass
               rurl <- paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token)
               r = GET(rurl,
                       authenticate(user = user,
