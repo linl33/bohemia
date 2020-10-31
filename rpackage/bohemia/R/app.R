@@ -2576,32 +2576,36 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
-              go <- TRUE
-              if(grepl('brew', getwd())){
-                go <- FALSE
-              }
-              if(go){
-                creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-                user = creds$traccar_read_only_user
-                password = creds$traccar_read_only_pass
-                rurl <- paste0('https://bohemia.fun/?token=', creds$traccar_read_only_token)
-                r = GET(rurl,
-                        authenticate(user = user,
-                                     password = password, 
-                                     type = 'basic'),
-                        accept_json())
-                rcontent <- content(r)
-                tags$iframe(
-                  seamless="seamless",
-                  height = 600,
-                  width = 1000,
-                  # src = content(r, "text")
-                  src = paste0('https://bohemia.fun/?token=', creds$traccar_read_only_token))
-              } else {
-                h5('You are in development mode. This stuff only shows up in production.')
-              }
-              
+              creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+              user = creds$traccar_read_only_user
+              password = creds$traccar_read_only_pass
+              rurl <- paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token)
+              r = GET(rurl,
+                      authenticate(user = user,
+                                   password = password, 
+                                   type = 'basic'),
+                      accept_json())
+              rcontent <- content(r)
+              ## Only need to do the below once so as to get the html file written
+              # html_lines <- paste0(content(r, "text"), collapse = "\n")
+              # file_connection <- file('../inst/shiny/bohemiapp/www/traccar.html')
+              # writeLines(text = html_lines,
+              #            file_connection)
+              # close(file_connection)
 
+              # includeHTML(paste0(system.file('app', package = 'bohemia'), '/www/traccar.html'))
+              tags$iframe(
+                seamless="seamless",
+                # src = content(r, "text")
+                src = paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token)
+                # src = paste0(system.file('app', package = 'bohemia'), '/www/traccar.html'),
+                # src=paste0(system.file('shiny', package = 'bohemia'), '/bohemiapp/www/traccar.html')
+                )
+              
+              # my_test <- tags$iframe(seamless="seamless",
+              #                        src=paste0(system.file('shiny', package = 'bohemia'), '/bohemiapp/www/traccar.html'), height=600, width=1000)
+              # print(my_test)
+              # my_test
             })})
   
   output$ui_gps <- renderUI({
@@ -2696,6 +2700,20 @@ app_server <- function(input, output, session) {
     sr <- input$anomalies_table_rows_selected
     action <- session_data$anomalies
     this_row <- action[sr,]
+    # fids <- read.csv('/tmp/fids.csv')
+    gg <- input$geo
+    if(gg=='Mopeia'){
+      co <- 'Mozambique'
+    } else {
+      co <- 'Tanzania'
+    }
+
+    fids <- fids %>% 
+      filter(country==co)
+    the_choices <- fids$bohemia_id
+    names(the_choices) <- paste0(fids$bohemia_id, '. ',
+                                 fids$first_name, ' ',
+                                 fids$last_name)
     
     # Must be just one row
     just_one <- FALSE
@@ -2715,7 +2733,8 @@ app_server <- function(input, output, session) {
             fluidRow(HTML(knitr::kable(this_row, format = 'html'))),
             fluidRow(h3('The response:')),
             fluidRow(textAreaInput('response_details', 'Response details:')),
-            fluidRow(textInput('fix_source', 'Resolved by')),
+            fluidRow(selectizeInput('fix_source', 'Resolved by', choices = the_choices,
+                                    options = list(create=TRUE))),
             fluidRow(selectizeInput('fix_method', 'Method of resolution',
                                     choices = c('By going to HH', 'By phone', 'Self-resolved'),
                                     options = list(create = TRUE))),
@@ -3024,10 +3043,26 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               pd <- odk_data$data
+              an <- session_data$anomalies
               the_country <- country()
               # save(pd, file = '/tmp/tmp.RData')
-              # save(pd, file='temp_pd.rda')
-              # end time analysis
+              
+              # for every date that has mulitple dates seperated by comma, split and create new row.
+              an <- an %>% 
+                mutate(date = strsplit(as.character(date), ",")) %>% 
+                unnest(date) %>%
+                group_by(date) %>% 
+                summarise(`# of anomalies` = sum(type == 'error', na.rm=TRUE),
+                          `# of errors` = sum(type == 'anomaly', na.rm=TRUE)) %>%
+                gather(key=key, value=value, -date) %>%
+                mutate(date = as.Date(date))
+              a_and_e_plot <- ggplot(an, aes(date, value, fill=key)) +
+                geom_bar(stat = 'identity', position = 'dodge') +
+                scale_fill_manual(name = '', 
+                                  values = c('black', 'grey')) +
+                labs(x='Date', y='') +
+                theme_bohemia()
+              output$e_and_a_per_day <- renderPlot({a_and_e_plot})
               
               # create data to visualize number of active FW per day. active being submitted a form.
               pd_fw <- pd$minicensus_main %>% group_by(todays_date,wid) %>% summarise(counts=n()) %>%
@@ -3123,6 +3158,10 @@ app_server <- function(input, output, session) {
                 fluidRow(
                   h3('Active FWs per day'),
                   plotOutput('active_fw_per_day')
+                ),
+                fluidRow(
+                  h3('Errors and Anomalies per day'),
+                  plotOutput('e_and_a_per_day')
                 ),
                 fluidRow(
                   h3('Summary table'),
