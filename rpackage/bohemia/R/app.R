@@ -2596,7 +2596,7 @@ app_server <- function(input, output, session) {
                   height = 600,
                   width = 1000,
                   # src = content(r, "text")
-                  src = paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token))
+                  src = paste0('https://bohemia.fun/?token=', creds$traccar_read_only_token))
               } else {
                 h5('You are in development mode. This stuff only shows up in production.')
               }
