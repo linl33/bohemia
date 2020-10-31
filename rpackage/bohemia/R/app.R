@@ -2700,6 +2700,20 @@ app_server <- function(input, output, session) {
     sr <- input$anomalies_table_rows_selected
     action <- session_data$anomalies
     this_row <- action[sr,]
+    # fids <- read.csv('/tmp/fids.csv')
+    gg <- input$geo
+    if(gg=='Mopeia'){
+      co <- 'Mozambique'
+    } else {
+      co <- 'Tanzania'
+    }
+
+    fids <- fids %>% 
+      filter(country==co)
+    the_choices <- fids$bohemia_id
+    names(the_choices) <- paste0(fids$bohemia_id, '. ',
+                                 fids$first_name, ' ',
+                                 fids$last_name)
     
     # Must be just one row
     just_one <- FALSE
@@ -2719,7 +2733,8 @@ app_server <- function(input, output, session) {
             fluidRow(HTML(knitr::kable(this_row, format = 'html'))),
             fluidRow(h3('The response:')),
             fluidRow(textAreaInput('response_details', 'Response details:')),
-            fluidRow(textInput('fix_source', 'Resolved by')),
+            fluidRow(selectizeInput('fix_source', 'Resolved by', choices = the_choices,
+                                    options = list(create=TRUE))),
             fluidRow(selectizeInput('fix_method', 'Method of resolution',
                                     choices = c('By going to HH', 'By phone', 'Self-resolved'),
                                     options = list(create = TRUE))),
