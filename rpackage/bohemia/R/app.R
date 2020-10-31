@@ -171,8 +171,6 @@ app_ui <- function(request) {
                                    fluidPage(
                                      # br(), br(),
                                      navbarPage(title = 'VA',
-                                                tabPanel('List generation',
-                                                         uiOutput('ui_va_list_generation')),
                                                 tabPanel('VA progress',
                                                          tabsetPanel(
                                                            tabPanel('VA Overall progress',
@@ -205,12 +203,11 @@ app_ui <- function(request) {
           tabItem(
             tabName="tracking_tools",
             fluidPage(
-              checkboxInput('all_locations','All locations (under construction)', value = FALSE),
               fluidRow(
-                column(4,
-                       uiOutput('all_locations_ui')),
-                column(8,
-                       column(8,
+                column(12,
+                       checkboxInput('all_locations','All locations (under construction)', value = FALSE),
+                       uiOutput('all_locations_ui'))),
+              fluidRow(column(12, align = 'center',
                               navbarPage(title = 'Sheets',
                                          tabPanel("Visit control sheet", 
                                                   fluidPage(
@@ -252,13 +249,15 @@ app_ui <- function(request) {
                                                     ),
                                                     uiOutput('ui_consent_verification_list_a'),
                                                     uiOutput('ui_consent_verification_list')
-                                                  )))))
-              ))
-          ),
-          tabItem(
-            tabName="sneak_peek",
-            fluidPage(
-              fluidRow(
+                                                  )),
+                                         tabPanel('VA list',
+                                                  uiOutput('ui_va_list_generation'))
+                              )))
+            )),
+        tabItem(
+          tabName="sneak_peek",
+          fluidPage(
+            fluidRow(
                 column(4,
                        selectInput('indicator_time', 'Choose variable', choices = c('Household size','Number of children', 'Ratio of children to adults', 'Number of cattle per household', 'Number of pigs per household', 'Number of mosquito nets per household'))),
               ),
@@ -589,14 +588,17 @@ app_server <- function(input, output, session) {
       )
     } else {
       fluidRow(
+        column(4, 
                radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
                uiOutput('region_ui'),
-               uiOutput('district_ui'),
+               uiOutput('district_ui')),
+        column(4,
                uiOutput('ward_ui'),
                uiOutput('village_ui'),
-               uiOutput('hamlet_ui'),
+               uiOutput('hamlet_ui')),
+        column(4, align = 'center',
                h4('Location code:'),
-               h3(textOutput('location_code_text'))
+               h3(textOutput('location_code_text')))
       )
     }
    
@@ -1890,10 +1892,11 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               fluidPage(
-                downloadButton('render_control_sheet',
-                               'Generate control sheet(s)'),
-                DT::dataTableOutput('table_va_list_generation')
-                )
+                column(12, align = 'center',
+                       downloadButton('render_control_sheet',
+                                      'Print VA control sheet'),
+                       br(), br(),
+                       DT::dataTableOutput('table_va_list_generation')))
             })
   })
   
