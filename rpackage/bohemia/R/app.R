@@ -2576,36 +2576,32 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
-              creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-              user = creds$traccar_read_only_user
-              password = creds$traccar_read_only_pass
-              rurl <- paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token)
-              r = GET(rurl,
-                      authenticate(user = user,
-                                   password = password, 
-                                   type = 'basic'),
-                      accept_json())
-              rcontent <- content(r)
-              ## Only need to do the below once so as to get the html file written
-              # html_lines <- paste0(content(r, "text"), collapse = "\n")
-              # file_connection <- file('../inst/shiny/bohemiapp/www/traccar.html')
-              # writeLines(text = html_lines,
-              #            file_connection)
-              # close(file_connection)
-
-              # includeHTML(paste0(system.file('app', package = 'bohemia'), '/www/traccar.html'))
-              tags$iframe(
-                seamless="seamless",
-                # src = content(r, "text")
-                src = paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token)
-                # src = paste0(system.file('app', package = 'bohemia'), '/www/traccar.html'),
-                # src=paste0(system.file('shiny', package = 'bohemia'), '/bohemiapp/www/traccar.html')
-                )
+              go <- TRUE
+              if(grepl('brew', getwd())){
+                go <- FALSE
+              }
+              if(go){
+                creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+                user = creds$traccar_read_only_user
+                password = creds$traccar_read_only_pass
+                rurl <- paste0('https://bohemia.fun/?token=', creds$traccar_read_only_token)
+                r = GET(rurl,
+                        authenticate(user = user,
+                                     password = password, 
+                                     type = 'basic'),
+                        accept_json())
+                rcontent <- content(r)
+                tags$iframe(
+                  seamless="seamless",
+                  height = 600,
+                  width = 1000,
+                  # src = content(r, "text")
+                  src = paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token))
+              } else {
+                h5('You are in development mode. This stuff only shows up in production.')
+              }
               
-              # my_test <- tags$iframe(seamless="seamless",
-              #                        src=paste0(system.file('shiny', package = 'bohemia'), '/bohemiapp/www/traccar.html'), height=600, width=1000)
-              # print(my_test)
-              # my_test
+
             })})
   
   output$ui_gps <- renderUI({
