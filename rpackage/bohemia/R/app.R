@@ -2593,7 +2593,7 @@ app_server <- function(input, output, session) {
                 tags$iframe(
                   height = 800, width = 1200,
                   seamless="seamless",
-                  src = paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token))
+                  src = paste0('https://bohemia.fun/?token=', creds$traccar_read_only_token))
               }
               
             })})
