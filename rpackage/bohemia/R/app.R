@@ -204,55 +204,56 @@ app_ui <- function(request) {
             tabName="tracking_tools",
             fluidPage(
               fluidRow(
-                column(12,
+                column(3,
                        checkboxInput('all_locations','All locations (under construction)', value = FALSE),
-                       uiOutput('all_locations_ui'))),
-              fluidRow(column(12, align = 'center',
-                              navbarPage(title = 'Sheets',
-                                         tabPanel("Visit control sheet", 
-                                                  fluidPage(
-                                                    h3("Visit control sheet"),
-                                                    uiOutput('ui_enumeration_n_hh'),
-                                                    helpText('The default numbers shown are 25% higher than the number estimated by the village leader.'),
-                                                    textInput('enumeration_n_teams',
-                                                              'Number of teams',
-                                                              value = 2),
-                                                    radioButtons('enumeration_or_minicensus',
-                                                                 'Type',
-                                                                 choices = c('Enumeration visit',
-                                                                             'Data collection visit')),
-                                                    helpText('In the case of Mozambique, "Data collection visit" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
-                                                    
-                                                    uiOutput('ui_id_limit'),
-                                                    br(), 
-                                                    downloadButton("download_visit_control_data", "Download spreadsheet of visit control data"),
-                                                    br(),
-                                                    downloadButton('render_visit_control_sheet',
-                                                                   'Generate visit control sheet(s)')
-                                                  )),
-                                         tabPanel("File index and folder location",
-                                                  fluidPage(
-                                                    h3("File index and folder location"),
-                                                    uiOutput('ui_id_limit_file'),
-                                                    br(), br(),
-                                                    downloadButton('render_file_index_list',
-                                                                   'Generate file index and folder location list(s)')
-                                                  )),
-                                         tabPanel('Consent verification list',
-                                                  fluidPage(
-                                                    fluidRow(
-                                                      column(6, checkboxInput('verification_all',
-                                                                              'All fieldworkers?',
-                                                                              value = TRUE)),
-                                                      column(6, 
-                                                             uiOutput('ui_verification_text_filter'))
-                                                    ),
-                                                    uiOutput('ui_consent_verification_list_a'),
-                                                    uiOutput('ui_consent_verification_list')
-                                                  )),
-                                         tabPanel('VA list',
-                                                  uiOutput('ui_va_list_generation'))
-                              )))
+                       uiOutput('all_locations_ui')),
+                column(9, align = 'center',
+                       navbarPage(title = 'Sheets',
+                                  tabPanel("Visit control sheet", 
+                                           fluidPage(
+                                             h3("Visit control sheet"),
+                                             uiOutput('ui_enumeration_n_hh'),
+                                             helpText('The default numbers shown are 25% higher than the number estimated by the village leader.'),
+                                             textInput('enumeration_n_teams',
+                                                       'Number of teams',
+                                                       value = 2),
+                                             radioButtons('enumeration_or_minicensus',
+                                                          'Type',
+                                                          choices = c('Enumeration visit',
+                                                                      'Data collection visit')),
+                                             helpText('In the case of Mozambique, "Data collection visit" means that the visit control sheet will be populated based only on previously enumerated households from the hamlet (thereby ignoring the estimated number of forms or ID limitations inputs).'),
+                                             
+                                             uiOutput('ui_id_limit'),
+                                             br(), 
+                                             downloadButton("download_visit_control_data", "Download spreadsheet of visit control data"),
+                                             br(),
+                                             downloadButton('render_visit_control_sheet',
+                                                            'Generate visit control sheet(s)')
+                                           )),
+                                  tabPanel("File index and folder location",
+                                           fluidPage(
+                                             h3("File index and folder location"),
+                                             # uiOutput('ui_id_limit_file'),
+                                             br(), br(),
+                                             downloadButton('render_file_index_list',
+                                                            'Generate file index and folder location list(s)')
+                                           )),
+                                  tabPanel('Consent verification list',
+                                           fluidPage(
+                                             fluidRow(
+                                               column(6, checkboxInput('verification_all',
+                                                                       'All fieldworkers?',
+                                                                       value = TRUE)),
+                                               column(6, 
+                                                      uiOutput('ui_verification_text_filter'))
+                                             ),
+                                             uiOutput('ui_consent_verification_list_a'),
+                                             uiOutput('ui_consent_verification_list')
+                                           )),
+                                  tabPanel('VA list',
+                                           uiOutput('ui_va_list_generation'))
+                       ))
+              )
             )),
         tabItem(
           tabName="sneak_peek",
@@ -588,15 +589,13 @@ app_server <- function(input, output, session) {
       )
     } else {
       fluidRow(
-        column(4, 
+        column(12, 
                radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
                uiOutput('region_ui'),
-               uiOutput('district_ui')),
-        column(4,
+               uiOutput('district_ui'),
                uiOutput('ward_ui'),
                uiOutput('village_ui'),
-               uiOutput('hamlet_ui')),
-        column(4, align = 'center',
+               uiOutput('hamlet_ui'),
                h4('Location code:'),
                h3(textOutput('location_code_text')))
       )
@@ -742,17 +741,17 @@ app_server <- function(input, output, session) {
     )
   })
   
-  output$ui_id_limit_file <- renderUI({
-    val <- hamlet_num_hh()
-    fluidPage(
-      sliderInput('id_limit', 'Limit IDs to:',
-                  min = 1,
-                  max = val, # round(num_houses),
-                  value = c(1, val), # c(1, num_houses),
-                  step = 1),
-      helpText('Normally, do not touch this slider. Adjust it only if you want to exclude certain IDs (ie, in the case of having already printed numbers 1-50, you might set the lower limit of the slider to 51).')
-    )
-  })
+  # output$ui_id_limit_file <- renderUI({
+  #   val <- hamlet_num_hh()
+  #   fluidPage(
+  #     sliderInput('id_limit', 'Limit IDs to:',
+  #                 min = 1,
+  #                 max = val, # round(num_houses),
+  #                 value = c(1, val), # c(1, num_houses),
+  #                 step = 1),
+  #     helpText('Normally, do not touch this slider. Adjust it only if you want to exclude certain IDs (ie, in the case of having already printed numbers 1-50, you might set the lower limit of the slider to 51).')
+  #   )
+  # })
   
   
   
@@ -3905,25 +3904,49 @@ app_server <- function(input, output, session) {
                       
                       # Get the location code
                       lc <- location_code()
-                      # Get other details
-                      enumeration_or_minicensus <- input$enumeration_or_minicensus
-                      enum <- enumeration_or_minicensus == 'Enumeration visit'
-                      data <- data.frame(n_hh = as.numeric(as.character(input$enumeration_n_hh)),
-                                         id_limit_lwr = as.numeric(as.character(input$id_limit[1])),
-                                         id_limit_upr = as.numeric(as.character(input$id_limit[2])))
-                      # generate html
-                      # out_file <- paste0(system.file('shiny/operations/rmds', package = 'bohemia'), '/list.pdf')
+                      # Get data
+                      pd <- odk_data$data
+                      pd <- pd$minicensus_main
+                      pd <- pd %>% filter(hh_hamlet_code == lc)
+
+                      # Get country
+                      # Get country
+                      country <- 'Mozambique'
+                      if(lc %in% locations$code[locations$Country == 'Tanzania']){
+                        country <- 'Tanzania'
+                      }
+                      save(pd, file = '/tmp/pd.RData')
+                      
+                      
+                      out <- pd %>%
+                        dplyr::select(
+                          Ward = hh_ward,
+                          Village = hh_village,
+                          Hamlet = hh_hamlet,
+                          `Hamlet code` = hh_hamlet_code,
+                          `HH ID` = hh_id
+                        ) %>%
+                        mutate(Observations = '  ',
+                               `Location of file` =  '   ') %>%
+                        dplyr::arrange(`HH ID`)
+                      
+                      
+                      if(country == 'Mozambique'){
+                        names(out) <- c("Posto administrativo", "Localidade", "Bairro", "Código Bairro",
+                                        "Número do Agregado Familiar",
+                                        "Observações",
+                                        "Localização da pasta de arquivo")
+                      }
                       out_file <- paste0(getwd(), '/file_list.pdf')
-                      rmarkdown::render(input = paste0(system.file('rmd', package = 'bohemia'), '/file_list.Rmd'),
+                      rmarkdown::render(
+                        input = paste0(system.file('rmd', package = 'bohemia'), '/file_list.Rmd'),
+                        # input = '../inst/rmd/file_list.Rmd',
                                         output_file = out_file,
-                                        params = list(data = data,
-                                                      loc_id = lc))
+                                        params = list(xdata = out))
                       
                       # copy html to 'file'
                       file.copy(out_file, file)
-                      
-                      # # delete folder with plots
-                      # unlink("figure", recursive = TRUE)
+
                     },
                     contentType = "application/pdf"
     )
