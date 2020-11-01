@@ -2567,36 +2567,37 @@ app_server <- function(input, output, session) {
                       download_options = TRUE)
   })
   
-  output$traccar_live_view <- renderUI({
-    # See if the user is logged in and has access
-    si <- session_info
-    li <- si$logged_in
-    ac <- TRUE
-    # Generate the ui
-    make_ui(li = li,
-            ac = ac,
-            ok = {
-              if(grepl('brew', getwd())){
-                fluidRow(h3('You are in dev mode. Not showing up here.'))
-              } else {
-                creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-                user = creds$traccar_read_only_user
-                password = creds$traccar_read_only_pass
-                rurl <- paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token)
-                r = GET(rurl,
-                        authenticate(user = user,
-                                     password = password, 
-                                     type = 'basic'),
-                        accept_json())
-                rcontent <- content(r)
-                
-                tags$iframe(
-                  height = 800, width = 1200,
-                  seamless="seamless",
-                  src = paste0('https://bohemia.fun/?token=', creds$traccar_read_only_token))
-              }
-              
-            })})
+  ### 401 errors, just commenting out for now
+  # output$traccar_live_view <- renderUI({
+  #   # See if the user is logged in and has access
+  #   si <- session_info
+  #   li <- si$logged_in
+  #   ac <- TRUE
+  #   # Generate the ui
+  #   make_ui(li = li,
+  #           ac = ac,
+  #           ok = {
+  #             if(grepl('brew', getwd())){
+  #               fluidRow(h3('You are in dev mode. Not showing up here.'))
+  #             } else {
+  #               creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+  #               user = creds$traccar_read_only_user
+  #               password = creds$traccar_read_only_pass
+  #               rurl <- paste0('http://bohemia.fun/?token=', creds$traccar_read_only_token)
+  #               r = GET(rurl,
+  #                       authenticate(user = user,
+  #                                    password = password, 
+  #                                    type = 'basic'),
+  #                       accept_json())
+  #               rcontent <- content(r)
+  #               
+  #               tags$iframe(
+  #                 height = 800, width = 1200,
+  #                 seamless="seamless",
+  #                 src = paste0('https://bohemia.fun/?token=', creds$traccar_read_only_token))
+  #             }
+  #             
+  #           })})
   
   output$ui_gps <- renderUI({
     # See if the user is logged in and has access
@@ -2612,9 +2613,9 @@ app_server <- function(input, output, session) {
               
               fluidPage(
                 fluidRow(h1('GPS tracking')),
-                fluidRow(column(12, align = 'center',
-                                h3('Live view'),
-                                uiOutput('traccar_live_view'))),
+                # fluidRow(column(12, align = 'center',
+                #                 h3('Live view'),
+                #                 uiOutput('traccar_live_view'))),
                 fluidRow(column(12, align = 'center',
                                 
                                 plotOutput('traccar_plot_1'))),
