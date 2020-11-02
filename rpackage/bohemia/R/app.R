@@ -480,13 +480,13 @@ app_server <- function(input, output, session) {
       # Get traccar summary data
       message('Retrieving information on workers from traccar')
       creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      dat <- get_traccar_data(url = creds$traccar_server,
-                              user = creds$traccar_user,
-                              pass = creds$traccar_pass)
-      # Keep only the summary data for the country
-      dat$uniqueId <- as.numeric(dat$uniqueId)
-      dat <- dat %>% filter(uniqueId %in% keep_ids)
-      session_data$traccar_summary <- dat
+      # dat <- get_traccar_data(url = creds$traccar_server,
+      #                         user = creds$traccar_user,
+      #                         pass = creds$traccar_pass)
+      # # Keep only the summary data for the country
+      # dat$uniqueId <- as.numeric(dat$uniqueId)
+      # dat <- dat %>% filter(uniqueId %in% keep_ids)
+      # session_data$traccar_summary <- dat
       session_info$logged_in <- TRUE
       reactive_log_in_text('')
       removeModal()
@@ -2557,11 +2557,10 @@ app_server <- function(input, output, session) {
 
   
   output$traccar_table <- DT::renderDataTable({
-    traccar_summary <- session_data$traccar_summary
-    out <- traccar_summary %>%
-      mutate(lastUpdate = lubridate::as_datetime(lastUpdate)) %>%
-      dplyr::select(name, lastUpdate,
-                    status, uniqueId)
+    out <- session_data$traccar %>%
+      arrange(desc(devicetime)) %>%
+      group_by(unique_id) %>%
+      dplyr::distinct(unique_id, id, valid, devicetime, longitude, latitude)
     bohemia::prettify(out, nrows = nrow(out),
                       download_options = TRUE)
   })

@@ -230,3 +230,13 @@ odk_create_location_choices <- function(country = NULL,
 # x <- odk_create_location_choices()
 # write_csv(x$survey, '~/Desktop/1.csv', na = '')
 # write_csv(x$choices, '~/Desktop/2.csv')
+
+# # VA (extra other choices)
+# library(readr); library(dplyr); library(bohemia)
+# x <- odk_create_location_choices(
+#   other_only_levels = NULL
+# )
+# write_csv(x$survey, '~/Desktop/1.csv', na = '')
+# write_csv(x$choices, '~/Desktop/2.csv')
+
+
