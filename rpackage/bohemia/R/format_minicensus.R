@@ -156,6 +156,9 @@ format_minicensus <- function(data){
                                           mutate(pid = permid))
     people$invisible_non_resident_count <- NULL
     people$invisible_resident_count <- NULL
+    people$member_resident_head <- NULL
+    people$member_resident_non_head <- NULL
+    
   }
     
 

@@ -463,22 +463,24 @@ app_server <- function(input, output, session) {
       dbAppendTable(conn = con,
                     name = 'sessions',
                     value = sesh)
-      # Read in the traccar data (could speed this up by not reading all in)
-      message('Reading in traccar table')
-      # Get the country
-      co <- the_country
-      # Get fieldworkers for this country
-      these_fids <- fids %>% filter(country == co)
-      keep_ids <- these_fids$bohemia_id
-      these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
-      # Get traccar data for those fieldworkers
-      traccar <- dbGetQuery(conn = con,
-                             statement = paste0('SELECT * FROM traccar WHERE unique_id IN ', these_fids))
-      session_data$traccar <- traccar
-      dbDisconnect(con)
-      # Get traccar summary data
-      message('Retrieving information on workers from traccar')
-      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+      
+      # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
+      # # Read in the traccar data (could speed this up by not reading all in)
+      # message('Reading in traccar table')
+      # # Get the country
+      # co <- the_country
+      # # Get fieldworkers for this country
+      # these_fids <- fids %>% filter(country == co)
+      # keep_ids <- these_fids$bohemia_id
+      # these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
+      # # Get traccar data for those fieldworkers
+      # traccar <- dbGetQuery(conn = con,
+      #                        statement = paste0('SELECT * FROM traccar WHERE unique_id IN ', these_fids))
+      # session_data$traccar <- traccar
+      # dbDisconnect(con)
+      # # Get traccar summary data
+      # message('Retrieving information on workers from traccar')
+      # creds <- yaml::yaml.load_file('credentials/credentials.yaml')
       # dat <- get_traccar_data(url = creds$traccar_server,
       #                         user = creds$traccar_user,
       #                         pass = creds$traccar_pass)
@@ -2505,63 +2507,68 @@ app_server <- function(input, output, session) {
   
   # TRACCAR GPS UI
   output$traccar_plot_1 <- renderPlot({
-    # Get the traccar data for that country
-    traccar <- session_data$traccar
-    # Get the fortified shapefile
-    shp_fortified <- bohemia::mop2_fortified
-    geo <- input$geo
-    if(geo == 'Rufiji'){
-      shp_fortified <- bohemia::ruf2_fortified
-    }
-    ggplot(data = traccar) +
-      geom_polygon(data = shp_fortified,
-                   aes(x = long,
-                       y = lat),
-                   fill = 'black') +
-      # geom_path(aes(x = longitude,
-      #               y = latitude,
-      #               group = unique_id),
-      #           color = 'red',
-      #           size = 0.2,
-      #           alpha = 0.5) +
-      geom_point(aes(x = longitude,
-                     y = latitude),
-                 color = 'red',
-                 size = 0.2,
-                 alpha = 0.5) +
-      theme_bohemia()
+    ggplot() +
+      theme_bohemia() +
+      labs(title = 'Undergoing changes')
+    # # Get the traccar data for that country
+    # traccar <- session_data$traccar
+    # # Get the fortified shapefile
+    # shp_fortified <- bohemia::mop2_fortified
+    # geo <- input$geo
+    # if(geo == 'Rufiji'){
+    #   shp_fortified <- bohemia::ruf2_fortified
+    # }
+    # ggplot(data = traccar) +
+    #   geom_polygon(data = shp_fortified,
+    #                aes(x = long,
+    #                    y = lat),
+    #                fill = 'black') +
+    #   # geom_path(aes(x = longitude,
+    #   #               y = latitude,
+    #   #               group = unique_id),
+    #   #           color = 'red',
+    #   #           size = 0.2,
+    #   #           alpha = 0.5) +
+    #   geom_point(aes(x = longitude,
+    #                  y = latitude),
+    #              color = 'red',
+    #              size = 0.2,
+    #              alpha = 0.5) +
+    #   theme_bohemia()
   })
   output$traccar_leaf <- renderLeaflet({
-    # Get the traccar data for that country
-    traccar <- session_data$traccar
-    the_worker <- input$fid
-    if(!is.null(the_worker)){
-      sub_traccar <- traccar %>% filter(unique_id == the_worker)
-      pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
-    }
-    # Make the plot
-    l <- leaflet() %>% 
-      addTiles()
-    if(nrow(sub_traccar) > 0){
-      l <- l %>%
-        addGlPoints(data = pts,
-                    fillColor = 'red',
-                    # fillColor = pts$status,
-                    popup = pts %>% dplyr::select(devicetime, valid),
-                    group = "pts")
-    }
-    l
+    leaflet() %>% addProviderTiles()
+    # # Get the traccar data for that country
+    # traccar <- session_data$traccar
+    # the_worker <- input$fid
+    # if(!is.null(the_worker)){
+    #   sub_traccar <- traccar %>% filter(unique_id == the_worker)
+    #   pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
+    # }
+    # # Make the plot
+    # l <- leaflet() %>% 
+    #   addTiles()
+    # if(nrow(sub_traccar) > 0){
+    #   l <- l %>%
+    #     addGlPoints(data = pts,
+    #                 fillColor = 'red',
+    #                 # fillColor = pts$status,
+    #                 popup = pts %>% dplyr::select(devicetime, valid),
+    #                 group = "pts")
+    # }
+    # l
   })
   
 
   
   output$traccar_table <- DT::renderDataTable({
-    out <- session_data$traccar %>%
-      arrange(desc(devicetime)) %>%
-      group_by(unique_id) %>%
-      dplyr::distinct(unique_id, id, valid, devicetime, longitude, latitude)
-    bohemia::prettify(out, nrows = nrow(out),
-                      download_options = TRUE)
+    data.frame(a = 'Undergoing changes')
+    # out <- session_data$traccar %>%
+    #   arrange(desc(devicetime)) %>%
+    #   group_by(unique_id) %>%
+    #   dplyr::distinct(unique_id, id, valid, devicetime, longitude, latitude)
+    # bohemia::prettify(out, nrows = nrow(out),
+    #                   download_options = TRUE)
   })
   
   ### 401 errors, just commenting out for now
