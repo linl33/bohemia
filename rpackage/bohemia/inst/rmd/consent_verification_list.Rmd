@@ -50,7 +50,6 @@ for (i in 1:length(params)){
 dfx <- data
 ```
 
-\pagenumbering{arabic} 
 
 ```{r}
 chunk_list <- list()
@@ -67,7 +66,8 @@ if(workers_on_separate_pages){
       longtable = T)  %>%   
   kable_styling(latex_options = c('repeat_header')) %>%
     kable_styling(font_size = 7)  %>%
-  column_spec(1:2, width = '1.5cm') %>%
+  column_spec(1, width = '1.5cm') %>%
+  column_spec(2, width = '1.0cm') %>%
   column_spec(3, width = '1.7cm') %>%
   column_spec(4:5, width = '1.2cm') %>%
   column_spec(6, width = '1.7cm') %>%
@@ -84,7 +84,8 @@ if(workers_on_separate_pages){
       longtable = T)  %>%   
   kable_styling(latex_options = c('repeat_header')) %>%
     kable_styling(font_size = 7)  %>%
-  column_spec(1:2, width = '1.5cm') %>%
+  column_spec(1, width = '1.5cm') %>%
+  column_spec(2, width = '1.0cm') %>%
   column_spec(3, width = '1.7cm') %>%
   column_spec(4:5, width = '1.2cm') %>%
   column_spec(6, width = '1.7cm') %>%

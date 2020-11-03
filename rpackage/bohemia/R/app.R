@@ -376,12 +376,10 @@ app_server <- function(input, output, session) {
   
   message('Working directory is :', getwd())
   
-  
   # Define a summary data table (from which certain high-level indicators read)
   default_aggregate_table <- tibble(forms_submitted = 538,
                                     active_fieldworkers = 51,
                                     most_recent_submission = 12.6)
-  
   
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
@@ -422,6 +420,7 @@ app_server <- function(input, output, session) {
                                  traccar_summary = data.frame(),
                                  va_table = data.frame(),
                                  visit_control_data = data.frame())
+  # create reactive object to store odk_data.
   odk_data <- reactiveValues(data = NULL)
   
   
@@ -3303,21 +3302,22 @@ app_server <- function(input, output, session) {
               max_value <- nrow(qc)
               selected_value <- sample(min_value:max_value, 1)
               if(co == 'Mozambique'){
+                # here
                 names(out) <- c(
                   'Data de recolha de dados',
-                  'ID do inquiridor',
+                  'ID inquiridor',
                   'Nome do inquiridor',
                   'Bairro',
-                  'ID Bairro',
+                  'ID_Bairro',
                   'Agregado',
-                  'ID chefe de agregado',
-                  'Nome chefe de agregado',
-                  'ID chefe de agregado substituto',
-                  'Nome chefe de agregado substituto',
-                  'O consentimento informado existe?',
-                  'Se não existe, verifique com o supervisor e escreva a data caso encontre o consentimento informado',
-                  'O consentimento informado esta preenchido correctamente?',
-                  'Se não estiver preenchido correctramente, indicar o erro (colocar o número que aparece na tabela de tipos de erros',
+                  'ID_Chefe de agregado',
+                  'Nome do Chefe de Agregado',
+                  'ID_Chefe de Agregado Substituto',
+                  'Nome do Chefe de Agregado Substituto',
+                  'O Consentimento Informado(CI) existe?',
+                  'Se não existe, verifique com o supervisor e escreva a data caso encontre o CI',
+                  'CI preenchido correctamente?',
+                  'Se não estiver preenchido correctramente, indicar o erro (ver tabela tipos de erros)',
                   'O erro foi resolvido?',
                   'Verificado por (iniciais da arquivista e data)')
                 
@@ -3958,6 +3958,7 @@ app_server <- function(input, output, session) {
                       # Get the data
                       pdx <- consent_verification_list_reactive$data
                       # Get page numbering system
+  
                       workers_on_separate_pages <- input$workers_on_separate_pages
                       # save(pdx, file = '/tmp/data.RData')
                       
