@@ -1,0 +1,772 @@
+name_key,hamlet,village,ward,district,region,country
+MKU,Mkundi,Bungu A,Bungu,Kibiti DC,Pwani,Tanzania
+MWE,Mwenge,Bungu A,Bungu,Kibiti DC,Pwani,Tanzania
+MWO,Muongozo,Bungu A,Bungu,Kibiti DC,Pwani,Tanzania
+KIB,Kibaoni,Bungu B,Bungu,Kibiti DC,Pwani,Tanzania
+KKW,Kibwibwi,Bungu B,Bungu,Kibiti DC,Pwani,Tanzania
+KIN,Kinyamale,Bungu B,Bungu,Kibiti DC,Pwani,Tanzania
+KIP,Kipenya,Bungu B,Bungu,Kibiti DC,Pwani,Tanzania
+KIT,Kitula,Bungu B,Bungu,Kibiti DC,Pwani,Tanzania
+AZI,Azimio,Mangombela,Bungu,Kibiti DC,Pwani,Tanzania
+NYM,Nyamango,Mangombela,Bungu,Kibiti DC,Pwani,Tanzania
+BUN,Bungu B,Msafiri,Bungu,Kibiti DC,Pwani,Tanzania
+MSA,Msafiri,Msafiri,Bungu,Kibiti DC,Pwani,Tanzania
+NGO,Ngongoroka,Msafiri,Bungu,Kibiti DC,Pwani,Tanzania
+NYK,Nyakilo,Msafiri,Bungu,Kibiti DC,Pwani,Tanzania
+ZUM,Zumbe,Msafiri,Bungu,Kibiti DC,Pwani,Tanzania
+DUN,Dungutu,Nyambili,Bungu,Kibiti DC,Pwani,Tanzania
+NYB,Nyambili Kaskazini,Nyambili,Bungu,Kibiti DC,Pwani,Tanzania
+NYL,Nyambili Kusini,Nyambili,Bungu,Kibiti DC,Pwani,Tanzania
+BES,Besabu,Nyambunda,Bungu,Kibiti DC,Pwani,Tanzania
+MKW,Mkwandara,Nyambunda,Bungu,Kibiti DC,Pwani,Tanzania
+NAN,Nyangundu,Nyambunda,Bungu,Kibiti DC,Pwani,Tanzania
+LUG,Lugome,Pagae,Bungu,Kibiti DC,Pwani,Tanzania
+MKA,Mkale,Pagae,Bungu,Kibiti DC,Pwani,Tanzania
+NYY,Nyameku,Pagae,Bungu,Kibiti DC,Pwani,Tanzania
+UND,Undembo,Pagae,Bungu,Kibiti DC,Pwani,Tanzania
+BON,Bondeni,Bondeni,Dimani,Kibiti DC,Pwani,Tanzania
+DIM,Dimani,Dimani,Dimani,Kibiti DC,Pwani,Tanzania
+DIA,Dimani A,Dimani A,Dimani,Kibiti DC,Pwani,Tanzania
+DIN,Dimani B,Dimani B,Dimani,Kibiti DC,Pwani,Tanzania
+KIL,Kilimbili,Kilimbili,Dimani,Kibiti DC,Pwani,Tanzania
+KIM,Kimbuga,Kimbuga,Dimani,Kibiti DC,Pwani,Tanzania
+NGA,Ng'ambo,Ng'ambo,Dimani,Kibiti DC,Pwani,Tanzania
+NGU,Ngulakula,Ngulakula,Dimani,Kibiti DC,Pwani,Tanzania
+NYN,Nyambangala,Nyambangala,Dimani,Kibiti DC,Pwani,Tanzania
+PED,Penda Kimbuga,Penda Kimbuga,Dimani,Kibiti DC,Pwani,Tanzania
+PEA,Penda Miwaga,Penda Miwaga,Dimani,Kibiti DC,Pwani,Tanzania
+KKB,Kibiti Kati,Kibiti Kati,Kibiti,Kibiti DC,Pwani,Tanzania
+KIU,Kibiti Kusini,Kibiti Kusini,Kibiti,Kibiti DC,Pwani,Tanzania
+KIR,Kingwira,Kingwira,Kibiti,Kibiti DC,Pwani,Tanzania
+KBI,Kitembo,Kitembo,Kibiti,Kibiti DC,Pwani,Tanzania
+LUM,Lumyonzi,Lumyonzi,Kibiti,Kibiti DC,Pwani,Tanzania
+MAK,Makaoni,Makaoni,Kibiti,Kibiti DC,Pwani,Tanzania
+MBE,Mbebetini,Mbebetini,Kibiti,Kibiti DC,Pwani,Tanzania
+MKB,Mkubuge,Mkubuge,Kibiti,Kibiti DC,Pwani,Tanzania
+MKN,Mkundi,Mkundi,Kibiti,Kibiti DC,Pwani,Tanzania
+NYG,Nyamakingili,Nyamakingili,Kibiti,Kibiti DC,Pwani,Tanzania
+NYW,Nyangwego,Nyangwego,Kibiti,Kibiti DC,Pwani,Tanzania
+NYT,Nyatanga,Nyatanga,Kibiti,Kibiti DC,Pwani,Tanzania
+SOK,Sokoni,Sokoni,Kibiti,Kibiti DC,Pwani,Tanzania
+ZIM,Zimbwini,Zimbwini,Kibiti,Kibiti DC,Pwani,Tanzania
+BUM,Bumbuamani,Jaja,Kiongoroni,Kibiti DC,Pwani,Tanzania
+KGT,Kitongani,Jaja,Kiongoroni,Kibiti DC,Pwani,Tanzania
+MJI,Mjimwema,Jaja,Kiongoroni,Kibiti DC,Pwani,Tanzania
+BWE,Bweni,Kiongoroni,Kiongoroni,Kibiti DC,Pwani,Tanzania
+MAE,Makwende,Kiongoroni,Kiongoroni,Kibiti DC,Pwani,Tanzania
+NYO,Nyaobe,Kiongoroni,Kiongoroni,Kibiti DC,Pwani,Tanzania
+KAI,Kilambani,Pombwe,Kiongoroni,Kibiti DC,Pwani,Tanzania
+MBU,Mbungwi,Pombwe,Kiongoroni,Kibiti DC,Pwani,Tanzania
+POM,Pombwe kubwa,Pombwe,Kiongoroni,Kibiti DC,Pwani,Tanzania
+SUN,Suni,Pombwe,Kiongoroni,Kibiti DC,Pwani,Tanzania
+BAN,Bandarini,Ruma,Kiongoroni,Kibiti DC,Pwani,Tanzania
+EME,Emelwa,Ruma,Kiongoroni,Kibiti DC,Pwani,Tanzania
+KKG,King'ongo,Ruma,Kiongoroni,Kibiti DC,Pwani,Tanzania
+MTA,Mtanga,Ruma,Kiongoroni,Kibiti DC,Pwani,Tanzania
+NNY,Nyamikamba,Ruma,Kiongoroni,Kibiti DC,Pwani,Tanzania
+KOK,Kimbogo,Hanga,Mahege,Kibiti DC,Pwani,Tanzania
+MKI,Mkima,Hanga,Mahege,Kibiti DC,Pwani,Tanzania
+NGM,Ngambe,Hanga,Mahege,Kibiti DC,Pwani,Tanzania
+NYD,Nyambwanda,Hanga,Mahege,Kibiti DC,Pwani,Tanzania
+MAW,Mawichi,Mahege,Mahege,Kibiti DC,Pwani,Tanzania
+MTM,Mtembwe,Mahege,Mahege,Kibiti DC,Pwani,Tanzania
+NMY,Nyamkingia,Mahege,Mahege,Kibiti DC,Pwani,Tanzania
+UMB,Umba,Mahege,Mahege,Kibiti DC,Pwani,Tanzania
+NGN,Mlete Soso/Ngondae,Nyakinyo,Mahege,Kibiti DC,Pwani,Tanzania
+SOS,Nyakinyo,Nyakinyo,Mahege,Kibiti DC,Pwani,Tanzania
+MAP,Mapinduzi,Nyanjati,Mahege,Kibiti DC,Pwani,Tanzania
+MRE,Mrema,Nyanjati,Mahege,Kibiti DC,Pwani,Tanzania
+MWI,Mwinyi,Nyanjati,Mahege,Kibiti DC,Pwani,Tanzania
+NYE,Nyerere,Nyanjati,Mahege,Kibiti DC,Pwani,Tanzania
+SAU,Saudia,Nyanjati,Mahege,Kibiti DC,Pwani,Tanzania
+SOO,Sokoine,Nyanjati,Mahege,Kibiti DC,Pwani,Tanzania
+HAL,Halisi,Tomoni,Mahege,Kibiti DC,Pwani,Tanzania
+MIB,Mibuyusaba,Tomoni,Mahege,Kibiti DC,Pwani,Tanzania
+MKL,Mkali,Tomoni,Mahege,Kibiti DC,Pwani,Tanzania
+NOI,Nyakikongo,Tomoni,Mahege,Kibiti DC,Pwani,Tanzania
+KAT,Kati,Kiechuru,Maparoni,Kibiti DC,Pwani,Tanzania
+KIY,Kityanga,Kiechuru,Maparoni,Kibiti DC,Pwani,Tanzania
+KOR,Korango,Kiechuru,Maparoni,Kibiti DC,Pwani,Tanzania
+MGA,Mgambo,Kiechuru,Maparoni,Kibiti DC,Pwani,Tanzania
+GIN,Gingi,Maparoni,Maparoni,Kibiti DC,Pwani,Tanzania
+MBN,Mbangani,Maparoni,Maparoni,Kibiti DC,Pwani,Tanzania
+TUW,Tuwa,Maparoni,Maparoni,Kibiti DC,Pwani,Tanzania
+USI,Usimbe kiwanjani,Maparoni,Maparoni,Kibiti DC,Pwani,Tanzania
+USM,Usimbe kidoga,Maparoni,Maparoni,Kibiti DC,Pwani,Tanzania
+BAA,Barabarani,Mbuchi,Mbuchi,Kibiti DC,Pwani,Tanzania
+KAP,Kipoka,Mbuchi,Mbuchi,Kibiti DC,Pwani,Tanzania
+KKI,Kitingi,Mbuchi,Mbuchi,Kibiti DC,Pwani,Tanzania
+MAO,Makongoro,Mbuchi,Mbuchi,Kibiti DC,Pwani,Tanzania
+MIK,Mikwang'ombe,Mbuchi,Mbuchi,Kibiti DC,Pwani,Tanzania
+MNG,Mnganje/Nganje,Mbuchi,Mbuchi,Kibiti DC,Pwani,Tanzania
+DOK,Doka,Mbwera Magharibi,Mbuchi,Kibiti DC,Pwani,Tanzania
+KBR,Kibumbulo/Kimburu,Mbwera Magharibi,Mbuchi,Kibiti DC,Pwani,Tanzania
+KII,Kiiongoro,Mbwera Magharibi,Mbuchi,Kibiti DC,Pwani,Tanzania
+KUM,Kumbacha,Mbwera Magharibi,Mbuchi,Kibiti DC,Pwani,Tanzania
+MKE,Mkepa,Mbwera Magharibi,Mbuchi,Kibiti DC,Pwani,Tanzania
+MKR,Mkurumu,Mbwera Magharibi,Mbuchi,Kibiti DC,Pwani,Tanzania
+MTW,Mtawatawa,Mbwera Magharibi,Mbuchi,Kibiti DC,Pwani,Tanzania
+MAR,Marongoni,Mbwera Mashariki,Mbuchi,Kibiti DC,Pwani,Tanzania
+MBM,Mbumburu,Mbwera Mashariki,Mbuchi,Kibiti DC,Pwani,Tanzania
+MDA,Mdai,Mbwera Mashariki,Mbuchi,Kibiti DC,Pwani,Tanzania
+MKK,Mkirika,Mbwera Mashariki,Mbuchi,Kibiti DC,Pwani,Tanzania
+MIS,Misimbo,Mangwi,Mchukwi,Kibiti DC,Pwani,Tanzania
+MNY,Miyogoya,Mangwi,Mchukwi,Kibiti DC,Pwani,Tanzania
+RON,Rondo,Mangwi,Mchukwi,Kibiti DC,Pwani,Tanzania
+MAT,Matimbwani,Mchukwi A,Mchukwi,Kibiti DC,Pwani,Tanzania
+NMN,Nyakaumbanga,Mchukwi A,Mchukwi,Kibiti DC,Pwani,Tanzania
+NYJ,Nyamanjenga,Mchukwi A,Mchukwi,Kibiti DC,Pwani,Tanzania
+UJO,Ujongoni,Mchukwi A,Mchukwi,Kibiti DC,Pwani,Tanzania
+UKI,Kitomondo,Mchukwi A,Mchukwi,Kibiti DC,Pwani,Tanzania
+KIC,Kichangani,Mchukwi B,Mchukwi,Kibiti DC,Pwani,Tanzania
+MBI,Mbindia,Mchukwi B,Mchukwi,Kibiti DC,Pwani,Tanzania
+MIE,Miembeni,Mchukwi B,Mchukwi,Kibiti DC,Pwani,Tanzania
+MSI,Msikitini,Mchukwi B,Mchukwi,Kibiti DC,Pwani,Tanzania
+NNI,Nyaubi,Mchukwi B,Mchukwi,Kibiti DC,Pwani,Tanzania
+SON,Songa,Mchukwi B,Mchukwi,Kibiti DC,Pwani,Tanzania
+BAI,Bani,Mkupuka,Mchukwi,Kibiti DC,Pwani,Tanzania
+MKM,Mkupuka,Mkupuka,Mchukwi,Kibiti DC,Pwani,Tanzania
+NYU,Nyunga,Mkupuka,Mchukwi,Kibiti DC,Pwani,Tanzania
+JIW,Jiweni,Jaribu Magharibi,Mjawa,Kibiti DC,Pwani,Tanzania
+KNB,Kibuyuni,Jaribu Magharibi,Mjawa,Kibiti DC,Pwani,Tanzania
+MID,Mapinduzi,Jaribu Magharibi,Mjawa,Kibiti DC,Pwani,Tanzania
+MKO,Mkongoni,Jaribu Magharibi,Mjawa,Kibiti DC,Pwani,Tanzania
+MII,Mikwala,Jaribu Mpakani,Mjawa,Kibiti DC,Pwani,Tanzania
+MOT,Motomoto,Jaribu Mpakani,Mjawa,Kibiti DC,Pwani,Tanzania
+MTU,Mtunda,Jaribu Mpakani,Mjawa,Kibiti DC,Pwani,Tanzania
+MUU,Muungano,Jaribu Mpakani,Mjawa,Kibiti DC,Pwani,Tanzania
+UJA,Ujamaa,Jaribu Mpakani,Mjawa,Kibiti DC,Pwani,Tanzania
+BOJ,Bonjo,Mjawa,Mjawa,Kibiti DC,Pwani,Tanzania
+DUT,Dutani,Mjawa,Mjawa,Kibiti DC,Pwani,Tanzania
+GOS,Gosa,Mjawa,Mjawa,Kibiti DC,Pwani,Tanzania
+MTE,Mtetani,Mjawa,Mjawa,Kibiti DC,Pwani,Tanzania
+NGL,Ngalemwa,Mjawa,Mjawa,Kibiti DC,Pwani,Tanzania
+GOL,Goloatanga,Motomoto,Mjawa,Kibiti DC,Pwani,Tanzania
+MIO,Misogole,Motomoto,Mjawa,Kibiti DC,Pwani,Tanzania
+MSE,Msega,Ngalengwa,Mjawa,Kibiti DC,Pwani,Tanzania
+MTL,Mtuluma,Ngalengwa,Mjawa,Kibiti DC,Pwani,Tanzania
+UCH,Uchembe Chini,Uchembe,Mjawa,Kibiti DC,Pwani,Tanzania
+UCE,Uchembe Juu,Uchembe,Mjawa,Kibiti DC,Pwani,Tanzania
+UCM,Uchembe Njianne,Uponda,Mjawa,Kibiti DC,Pwani,Tanzania
+UPO,Uponda Chini,Uponda,Mjawa,Kibiti DC,Pwani,Tanzania
+UPN,Uponda Juu,Uponda,Mjawa,Kibiti DC,Pwani,Tanzania
+KBN,Kibuni,Machipi,Mlanzi,Kibiti DC,Pwani,Tanzania
+MAB,Mangimbwage,Machipi,Mlanzi,Kibiti DC,Pwani,Tanzania
+MSK,Msikitini,Machipi,Mlanzi,Kibiti DC,Pwani,Tanzania
+NGJ,Ngonja,Machipi,Mlanzi,Kibiti DC,Pwani,Tanzania
+RUA,Ruanda,Machipi,Mlanzi,Kibiti DC,Pwani,Tanzania
+KIK,Kikimbili,Mlanzi,Mlanzi,Kibiti DC,Pwani,Tanzania
+KID,Kimbindu,Mlanzi,Mlanzi,Kibiti DC,Pwani,Tanzania
+KGI,Kingweti,Mlanzi,Mlanzi,Kibiti DC,Pwani,Tanzania
+MIZ,Milonzi,Mlanzi,Mlanzi,Kibiti DC,Pwani,Tanzania
+MLA,Mlanzi Magharibi,Mlanzi,Mlanzi,Kibiti DC,Pwani,Tanzania
+MLN,Mlanzi Mashariki,Mlanzi,Mlanzi,Kibiti DC,Pwani,Tanzania
+BOA,Bora,Ngondae,Mlanzi,Kibiti DC,Pwani,Tanzania
+LIK,Like,Ngondae,Mlanzi,Kibiti DC,Pwani,Tanzania
+MKJ,Mkwajuni,Ngondae,Mlanzi,Kibiti DC,Pwani,Tanzania
+MNL,Malenda,Nyamwimbe,Mlanzi,Kibiti DC,Pwani,Tanzania
+MMN,Malenda Halisi,Nyamwimbe,Mlanzi,Kibiti DC,Pwani,Tanzania
+MRP,Miparani,Nyamwimbe,Mlanzi,Kibiti DC,Pwani,Tanzania
+NNE,Nyelelo,Nyamwimbe,Mlanzi,Kibiti DC,Pwani,Tanzania
+UMT,Umtanga,Nyamwimbe,Mlanzi,Kibiti DC,Pwani,Tanzania
+NUN,Nunu,Kiasi,Msala,Kibiti DC,Pwani,Tanzania
+NNG,Nyunguni,Kiasi,Msala,Kibiti DC,Pwani,Tanzania
+PLO,Ploti,Kiasi,Msala,Kibiti DC,Pwani,Tanzania
+UWA,Uwandani,Kiasi,Msala,Kibiti DC,Pwani,Tanzania
+MMA,Majaliwa,Msala,Msala,Kibiti DC,Pwani,Tanzania
+MBL,Mbaleni,Msala,Msala,Kibiti DC,Pwani,Tanzania
+MBO,Mbomboni,Msala,Msala,Kibiti DC,Pwani,Tanzania
+UKO,Ukongoro,Msala,Msala,Kibiti DC,Pwani,Tanzania
+WAS,Wasamande,Msala,Msala,Kibiti DC,Pwani,Tanzania
+DOW,Domwe,Twasalie,Msala,Kibiti DC,Pwani,Tanzania
+KIS,Kisimbya,Twasalie,Msala,Kibiti DC,Pwani,Tanzania
+NYH,Nyahimba,Twasalie,Msala,Kibiti DC,Pwani,Tanzania
+PLT,Poloti,Twasalie,Msala,Kibiti DC,Pwani,Tanzania
+TAR,Tarachu,Twasalie,Msala,Kibiti DC,Pwani,Tanzania
+BUB,Bumba,Bumba,Mtawanya,Kibiti DC,Pwani,Tanzania
+KYK,Kinyanya Kati,Kinyanya Kati,Mtawanya,Kibiti DC,Pwani,Tanzania
+MOM,Magogo matatu,Magogo Matatu,Mtawanya,Kibiti DC,Pwani,Tanzania
+MBT,Umatumbi,Umatumbi,Mtawanya,Kibiti DC,Pwani,Tanzania
+MEM,Mikendo,Mikendo,Mtawanya,Kibiti DC,Pwani,Tanzania
+MSO,Msoro,Msoro,Mtawanya,Kibiti DC,Pwani,Tanzania
+MUE,Mulandecha,Mulandecha,Mtawanya,Kibiti DC,Pwani,Tanzania
+ROJ,Roja,Roja,Mtawanya,Kibiti DC,Pwani,Tanzania
+UGE,Ugezi,Ugezi,Mtawanya,Kibiti DC,Pwani,Tanzania
+UMI,Umikendo,Umikendo,Mtawanya,Kibiti DC,Pwani,Tanzania
+UMK,Mkunama,Mkunama,Mtawanya,Kibiti DC,Pwani,Tanzania
+UNY,Unyamlani,Unyamlani,Mtawanya,Kibiti DC,Pwani,Tanzania
+UPA,Upazi,Upazi,Mtawanya,Kibiti DC,Pwani,Tanzania
+ZOM,Uzomboko,Uzomboko,Mtawanya,Kibiti DC,Pwani,Tanzania
+KLA,Kikale Mjini,Kikale,Mtunda,Kibiti DC,Pwani,Tanzania
+KLN,Mtandu,Kikale,Mtunda,Kibiti DC,Pwani,Tanzania
+MEG,Makoge,Kikale,Mtunda,Kibiti DC,Pwani,Tanzania
+MBG,Mbongola,Mtunda A,Mtunda,Kibiti DC,Pwani,Tanzania
+MBB,Mbumi,Mtunda A,Mtunda,Kibiti DC,Pwani,Tanzania
+MIU,Mikunguni,Mtunda A,Mtunda,Kibiti DC,Pwani,Tanzania
+MTN,Mtunda A,Mtunda A,Mtunda,Kibiti DC,Pwani,Tanzania
+NGR,Ngualo,Mtunda A,Mtunda,Kibiti DC,Pwani,Tanzania
+BET,Beta,Mtunda B,Mtunda,Kibiti DC,Pwani,Tanzania
+MCH,Mchikichini,Mtunda B,Mtunda,Kibiti DC,Pwani,Tanzania
+MTD,Mtunda B,Mtunda B,Mtunda,Kibiti DC,Pwani,Tanzania
+NGY,Nganyanga,Mtunda B,Mtunda,Kibiti DC,Pwani,Tanzania
+NYF,Nyafeda,Mtunda B,Mtunda,Kibiti DC,Pwani,Tanzania
+MGM,Magomeni,Muyuyu,Mtunda,Kibiti DC,Pwani,Tanzania
+MMS,Misuguli,Muyuyu,Mtunda,Kibiti DC,Pwani,Tanzania
+MKT,Mkata,Muyuyu,Mtunda,Kibiti DC,Pwani,Tanzania
+MUY,Muyuyu mjini,Muyuyu,Mtunda,Kibiti DC,Pwani,Tanzania
+NJI,Njianne,Muyuyu,Mtunda,Kibiti DC,Pwani,Tanzania
+NBM,Nyambele,Muyuyu,Mtunda,Kibiti DC,Pwani,Tanzania
+SOY,Sonywe,Muyuyu,Mtunda,Kibiti DC,Pwani,Tanzania
+MOE,Mkole,Kigunguli,Mwambao,Kibiti DC,Pwani,Tanzania
+MPA,Mpafuni,Kigunguli,Mwambao,Kibiti DC,Pwani,Tanzania
+MSL,Mselema,Kigunguli,Mwambao,Kibiti DC,Pwani,Tanzania
+KAR,Kariakoo,Kivinja A,Mwambao,Kibiti DC,Pwani,Tanzania
+KJN,Kisanjani,Kivinja A,Mwambao,Kibiti DC,Pwani,Tanzania
+MAS,Masakwi,Kivinja A,Mwambao,Kibiti DC,Pwani,Tanzania
+MFE,Mfenesini,Kivinja B,Mwambao,Kibiti DC,Pwani,Tanzania
+MKG,Mkegetoni,Kivinja B,Mwambao,Kibiti DC,Pwani,Tanzania
+MWY,Mweyubaruti,Kivinja B,Mwambao,Kibiti DC,Pwani,Tanzania
+MIT,Mititimbo,Mchungu,Mwambao,Kibiti DC,Pwani,Tanzania
+MPE,Mpekeso,Mchungu,Mwambao,Kibiti DC,Pwani,Tanzania
+KBO,Kikombe,Mkenda,Mwambao,Kibiti DC,Pwani,Tanzania
+MKD,Mkenda Mnazi,Mkenda,Mwambao,Kibiti DC,Pwani,Tanzania
+NGG,Ngungule,Mkenda,Mwambao,Kibiti DC,Pwani,Tanzania
+GEN,Genju,Msindaji,Mwambao,Kibiti DC,Pwani,Tanzania
+MAD,Madukani,Msindaji,Mwambao,Kibiti DC,Pwani,Tanzania
+KTI,Kilulatambwe Kati,Kilulatambwe,Ruaruke,Kibiti DC,Pwani,Tanzania
+MBS,Mbusi,Kilulatambwe,Ruaruke,Kibiti DC,Pwani,Tanzania
+MGL,Milonzi,Kilulatambwe,Ruaruke,Kibiti DC,Pwani,Tanzania
+MOI,Mkopi,Nyamatanga,Ruaruke,Kibiti DC,Pwani,Tanzania
+MTO,Mtomboloka,Nyamatanga,Ruaruke,Kibiti DC,Pwani,Tanzania
+NMG,Nyamatanga,Nyamatanga,Ruaruke,Kibiti DC,Pwani,Tanzania
+KAD,Kindande,Ruaruke A,Ruaruke,Kibiti DC,Pwani,Tanzania
+KIW,Kiwaga,Ruaruke A,Ruaruke,Kibiti DC,Pwani,Tanzania
+MWN,Mwenge,Ruaruke A,Ruaruke,Kibiti DC,Pwani,Tanzania
+NYP,Nyambalapi,Ruaruke A,Ruaruke,Kibiti DC,Pwani,Tanzania
+KIF,Kimbwere famiti,Ruaruke B,Ruaruke,Kibiti DC,Pwani,Tanzania
+MWB,Mbawa,Ruaruke B,Ruaruke,Kibiti DC,Pwani,Tanzania
+MFU,Mfule Mkumbini,Ruaruke B,Ruaruke,Kibiti DC,Pwani,Tanzania
+MGE,Mgerezini,Ruaruke B,Ruaruke,Kibiti DC,Pwani,Tanzania
+NEK,Nyanindi - Makoge,Ruaruke B,Ruaruke,Kibiti DC,Pwani,Tanzania
+SAW,Sangweni Matosa,Ruaruke B,Ruaruke,Kibiti DC,Pwani,Tanzania
+GAR,Garibovu,Rungungu,Ruaruke,Kibiti DC,Pwani,Tanzania
+MIW,Miwaleni,Rungungu,Ruaruke,Kibiti DC,Pwani,Tanzania
+MWK,Mkwende,Rungungu,Ruaruke,Kibiti DC,Pwani,Tanzania
+MUN,Mungutwa,Rungungu,Ruaruke,Kibiti DC,Pwani,Tanzania
+RUN,Rungungu,Rungungu,Ruaruke,Kibiti DC,Pwani,Tanzania
+KIO,Pwani,Kiomboni,Salale,Kibiti DC,Pwani,Tanzania
+TWA,Twana,Kiomboni,Salale,Kibiti DC,Pwani,Tanzania
+URO,Urongoni,Kiomboni,Salale,Kibiti DC,Pwani,Tanzania
+KLI,Kilwani,Mchinga,Salale,Kibiti DC,Pwani,Tanzania
+MCI,Mchinga,Mchinga,Salale,Kibiti DC,Pwani,Tanzania
+SAL,Salale,Mchinga,Salale,Kibiti DC,Pwani,Tanzania
+SAI,Saninga,Mchinga,Salale,Kibiti DC,Pwani,Tanzania
+SIB,Simba Ulanga,Mchinga,Salale,Kibiti DC,Pwani,Tanzania
+MFI,Mfisini A,Mfisini,Salale,Kibiti DC,Pwani,Tanzania
+MFS,Mfisini B,Mfisini,Salale,Kibiti DC,Pwani,Tanzania
+MFN,Mfisini kati,Mfisini,Salale,Kibiti DC,Pwani,Tanzania
+KIH,Kihingi Shule,Nyamisati,Salale,Kibiti DC,Pwani,Tanzania
+KKP,Kihingi Pwani,Nyamisati,Salale,Kibiti DC,Pwani,Tanzania
+MJE,Mjengea,Nyamisati,Salale,Kibiti DC,Pwani,Tanzania
+GOA,Golani,Golani,Chemchem,Rufiji DC,Pwani,Tanzania
+KWI,Kindwiti/Kidwitwi,Kindwiti/Kidwitwi,Chemchem,Rufiji DC,Pwani,Tanzania
+KEI,Kipei,Kipei,Chemchem,Rufiji DC,Pwani,Tanzania
+NTY,Nyandakatundu,Nyandakatundu,Chemchem,Rufiji DC,Pwani,Tanzania
+NUD,Nyandumbi,Nyandumbi,Chemchem,Rufiji DC,Pwani,Tanzania
+NIY,Nyangwai,Nyangwai,Chemchem,Rufiji DC,Pwani,Tanzania
+NNB,Nyawanje/ngwembele,Nyawanje/Ngwembele,Chemchem,Rufiji DC,Pwani,Tanzania
+IPE,Ipengo,Chumbi A,Chumbi,Rufiji DC,Pwani,Tanzania
+KIE,Kiegele,Chumbi A,Chumbi,Rufiji DC,Pwani,Tanzania
+KGO,Kigogo,Chumbi A,Chumbi,Rufiji DC,Pwani,Tanzania
+TAN,Tangini,Chumbi A,Chumbi,Rufiji DC,Pwani,Tanzania
+BOT,Boto,Chumbi B,Chumbi,Rufiji DC,Pwani,Tanzania
+KKN,Kilindi,Chumbi B,Chumbi,Rufiji DC,Pwani,Tanzania
+KKO,Kipoka,Chumbi B,Chumbi,Rufiji DC,Pwani,Tanzania
+KSP,Kipoka msomeni,Chumbi B,Chumbi,Rufiji DC,Pwani,Tanzania
+MST,Msikitini,Chumbi B,Chumbi,Rufiji DC,Pwani,Tanzania
+CHG,Chumbi Magharibi,Chumbi C,Chumbi,Rufiji DC,Pwani,Tanzania
+KAN,Kanga,Chumbi C,Chumbi,Rufiji DC,Pwani,Tanzania
+NLG,Ngaro,Chumbi C,Chumbi,Rufiji DC,Pwani,Tanzania
+NDK,Nyakipande,Chumbi C,Chumbi,Rufiji DC,Pwani,Tanzania
+KAU,Kaunda,Ikwiriri Kaskazini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+KAZ,Kazamoyo,Ikwiriri Kaskazini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+MPR,Mparange,Ikwiriri Kaskazini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+MTK,Mtakuja,Ikwiriri Kaskazini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+MWG,Mwenge,Ikwiriri Kaskazini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+UJM,Ujamaa,Ikwiriri Kaskazini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+MSN,Msikitini,Ikwiriri Kati,Ikwiriri,Rufiji DC,Pwani,Tanzania
+MWW,Mwenge,Ikwiriri Kati,Ikwiriri,Rufiji DC,Pwani,Tanzania
+SID,SIDO,Ikwiriri Kati,Ikwiriri,Rufiji DC,Pwani,Tanzania
+SIS,Sisi kwa Sisi,Ikwiriri Kati,Ikwiriri,Rufiji DC,Pwani,Tanzania
+TAG,Tangimoja,Ikwiriri Kati,Ikwiriri,Rufiji DC,Pwani,Tanzania
+UJI,Ujirani Mwema,Ikwiriri Kati,Ikwiriri,Rufiji DC,Pwani,Tanzania
+UMO,Umoja,Ikwiriri Kati,Ikwiriri,Rufiji DC,Pwani,Tanzania
+UPE,Upendo,Ikwiriri Kati,Ikwiriri,Rufiji DC,Pwani,Tanzania
+KAM,Karume,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+KAW,Kawawa,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+MLM,Malemba,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+MPM,Mpima,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+MOU,Muungano,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+NYR,Nyerere,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+PKI,P/Kisumo,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+POT,Posta,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+TAB,Tangimbili Kusini,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+UHU,Uhuru,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+UJJ,Ujamaa,Ikwiriri Kusini,Ikwiriri,Rufiji DC,Pwani,Tanzania
+MOL,Mawilo,Kipo,Kipugira,Rufiji DC,Pwani,Tanzania
+MGO,Mgohori,Kipo,Kipugira,Rufiji DC,Pwani,Tanzania
+MPN,Mpande,Kipo,Kipugira,Rufiji DC,Pwani,Tanzania
+NYI,Nyikanza,Ndundunyikanza,Kipugira,Rufiji DC,Pwani,Tanzania
+KUK,Kipugira,Kipugira,Kipugira,Rufiji DC,Pwani,Tanzania
+PAG,Pangapanga,Kipugira,Kipugira,Rufiji DC,Pwani,Tanzania
+TET,Tetema,Ndundunyikanza,Kipugira,Rufiji DC,Pwani,Tanzania
+MTT,Mtalula,Nyaminywili,Kipugira,Rufiji DC,Pwani,Tanzania
+NAY,Nyaminywili,Nyaminywili,Kipugira,Rufiji DC,Pwani,Tanzania
+KTA,Kitapi Magharibi,Kitapi,Mbwara,Rufiji DC,Pwani,Tanzania
+KTH,Kitapi Mashariki,Kitapi,Mbwara,Rufiji DC,Pwani,Tanzania
+NAH,Namahamba,Kitapi,Mbwara,Rufiji DC,Pwani,Tanzania
+MBW,Mbwara magharibi,Mbwara,Mbwara,Rufiji DC,Pwani,Tanzania
+MBR,Mbwara Mashariki,Mbwara,Mbwara,Rufiji DC,Pwani,Tanzania
+MMI,Misimbo,Mbwara,Mbwara,Rufiji DC,Pwani,Tanzania
+KBU,Kikibu,Nambunju,Mbwara,Rufiji DC,Pwani,Tanzania
+MIA,Miangalaya,Nambunju,Mbwara,Rufiji DC,Pwani,Tanzania
+NAK,Namakono,Nambunju,Mbwara,Rufiji DC,Pwani,Tanzania
+NAB,Nambunju Magharibi,Nambunju,Mbwara,Rufiji DC,Pwani,Tanzania
+NAU,Nambunju mashariki,Nambunju,Mbwara,Rufiji DC,Pwani,Tanzania
+NNR,Nyamwage Magharibi,Nyamwage,Mbwara,Rufiji DC,Pwani,Tanzania
+NYS,Nyamwage Mashariki,Nyamwage,Mbwara,Rufiji DC,Pwani,Tanzania
+SHA,Shauri moyo,Nyamwage,Mbwara,Rufiji DC,Pwani,Tanzania
+GEG,Gege,Tawi,Mbwara,Rufiji DC,Pwani,Tanzania
+KOB,Kikobo,Tawi,Mbwara,Rufiji DC,Pwani,Tanzania
+MMK,Mkukiki,Tawi,Mbwara,Rufiji DC,Pwani,Tanzania
+MMW,Mkwiri,Tawi,Mbwara,Rufiji DC,Pwani,Tanzania
+JIT,Jitegemee,Mgomba Kaskazini,Mgomba,Rufiji DC,Pwani,Tanzania
+MPP,Mpima,Mgomba Kaskazini,Mgomba,Rufiji DC,Pwani,Tanzania
+SEK,Sekondari,Mgomba Kaskazini,Mgomba,Rufiji DC,Pwani,Tanzania
+UJU,Ujamaa,Mgomba Kaskazini,Mgomba,Rufiji DC,Pwani,Tanzania
+KIA,Kiapo,Mgomba Kati,Mgomba,Rufiji DC,Pwani,Tanzania
+MNM,Malenda,Mgomba Kati,Mgomba,Rufiji DC,Pwani,Tanzania
+MDE,Masenda,Mgomba Kati,Mgomba,Rufiji DC,Pwani,Tanzania
+MTP,Mtupa,Mgomba Kati,Mgomba,Rufiji DC,Pwani,Tanzania
+KIJ,Kijonjo,Mgomba Kusini,Mgomba,Rufiji DC,Pwani,Tanzania
+KWN,Kingwande,Mgomba Kusini,Mgomba,Rufiji DC,Pwani,Tanzania
+MLP,Malipia,Mgomba Kusini,Mgomba,Rufiji DC,Pwani,Tanzania
+NON,Nongwa,Mgomba Kusini,Mgomba,Rufiji DC,Pwani,Tanzania
+MBJ,Mbunju,Mbunju Mvuleni,Mkongo,Rufiji DC,Pwani,Tanzania
+MVU,Mvuleni,Mbunju Mvuleni,Mkongo,Rufiji DC,Pwani,Tanzania
+KAA,Karakana,Mkongo Kaskazini,Mkongo,Rufiji DC,Pwani,Tanzania
+NRN,Nyipara,Mkongo Kaskazini,Mkongo,Rufiji DC,Pwani,Tanzania
+RUS,Rusende,Mkongo Kaskazini,Mkongo,Rufiji DC,Pwani,Tanzania
+KTK,Kitundu,Mkongo Kusini,Mkongo,Rufiji DC,Pwani,Tanzania
+KLK,Kiwili,Mkongo Kusini,Mkongo,Rufiji DC,Pwani,Tanzania
+MME,Makonge,Mkongo Kusini,Mkongo,Rufiji DC,Pwani,Tanzania
+MGN,Mkunga,Mkongo Kusini,Mkongo,Rufiji DC,Pwani,Tanzania
+BEA,Beta,Ruwe,Mkongo,Rufiji DC,Pwani,Tanzania
+KRE,Kipera,Ruwe,Mkongo,Rufiji DC,Pwani,Tanzania
+NWE,Nyaringwe,Ruwe,Mkongo,Rufiji DC,Pwani,Tanzania
+CHY,Chayonge,King'ong'o,Mohoro,Rufiji DC,Pwani,Tanzania
+KNK,King'ong'o,King'ong'o,Mohoro,Rufiji DC,Pwani,Tanzania
+KNI,Kisangi,King'ong'o,Mohoro,Rufiji DC,Pwani,Tanzania
+KWA,Kwampakwila,King'ong'o,Mohoro,Rufiji DC,Pwani,Tanzania
+MPL,Mpilipili,King'ong'o,Mohoro,Rufiji DC,Pwani,Tanzania
+KAG,Kiwanga,Kiwanga,Mohoro,Rufiji DC,Pwani,Tanzania
+LON,Londondo,Kiwanga,Mohoro,Rufiji DC,Pwani,Tanzania
+MIH,Mihiru,Kiwanga,Mohoro,Rufiji DC,Pwani,Tanzania
+MWA,Mwanani,Mohoro Magharibi,Mohoro,Rufiji DC,Pwani,Tanzania
+NKA,Nyakikai,Mohoro Magharibi,Mohoro,Rufiji DC,Pwani,Tanzania
+NOD,Nyandote,Mohoro Magharibi,Mohoro,Rufiji DC,Pwani,Tanzania
+OLD,Oldmohoro,Mohoro Magharibi,Mohoro,Rufiji DC,Pwani,Tanzania
+SUG,Sunga Bara,Mohoro Magharibi,Mohoro,Rufiji DC,Pwani,Tanzania
+SUA,Sungapwani,Mohoro Magharibi,Mohoro,Rufiji DC,Pwani,Tanzania
+NEI,Nyamidege/Chamwenge,Mohoro Mashariki,Mohoro,Rufiji DC,Pwani,Tanzania
+NBN,Nyampaku bara,Mohoro Mashariki,Mohoro,Rufiji DC,Pwani,Tanzania
+NIK,Nyampaku mashariki,Mohoro Mashariki,Mohoro,Rufiji DC,Pwani,Tanzania
+NIM,Nyampaku pwani,Mohoro Mashariki,Mohoro,Rufiji DC,Pwani,Tanzania
+NAT,Nyautika,Mohoro Mashariki,Mohoro,Rufiji DC,Pwani,Tanzania
+MNE,Makenzi,Ndundutawa,Mohoro,Rufiji DC,Pwani,Tanzania
+MSM,Msikitini,Ndundutawa,Mohoro,Rufiji DC,Pwani,Tanzania
+NDU,Ndundutawa,Ndundutawa,Mohoro,Rufiji DC,Pwani,Tanzania
+NDA,Nyalindi,Ndundutawa,Mohoro,Rufiji DC,Pwani,Tanzania
+KKT,Kindwitwi,Shela,Mohoro,Rufiji DC,Pwani,Tanzania
+MOW,Mikolwa,Shela,Mohoro,Rufiji DC,Pwani,Tanzania
+RAN,Rangitatu,Shela,Mohoro,Rufiji DC,Pwani,Tanzania
+STE,Stendi,Shela,Mohoro,Rufiji DC,Pwani,Tanzania
+KWG,Kwangwazi,Mloka,Mwaseni,Rufiji DC,Pwani,Tanzania
+MNA,Mkange,Mloka,Mwaseni,Rufiji DC,Pwani,Tanzania
+MPG,Mpanganya,Mloka,Mwaseni,Rufiji DC,Pwani,Tanzania
+NKY,Nyakisiku,Mloka,Mwaseni,Rufiji DC,Pwani,Tanzania
+BIZ,Bizi,Mtanza /Msona,Mwaseni,Rufiji DC,Pwani,Tanzania
+MSG,Msiga,Mtanza /Msona,Mwaseni,Rufiji DC,Pwani,Tanzania
+MTZ,Mtanza,Mtanza /Msona,Mwaseni,Rufiji DC,Pwani,Tanzania
+MTR,Mturuma,Mtanza /Msona,Mwaseni,Rufiji DC,Pwani,Tanzania
+MIY,Mibuyusaba,Mwaseni,Mwaseni,Rufiji DC,Pwani,Tanzania
+MWS,Mwaseni,Mwaseni,Mwaseni,Rufiji DC,Pwani,Tanzania
+ZOB,Zombe,Mwaseni,Mwaseni,Rufiji DC,Pwani,Tanzania
+KUN,Kungulwe,Kungulwe,Ngarambe,Rufiji DC,Pwani,Tanzania
+NAO,Namakono,Namakono,Ngarambe,Rufiji DC,Pwani,Tanzania
+NGB,Ngarambe Mashariki,Ngarambe Mashariki,Ngarambe,Rufiji DC,Pwani,Tanzania
+NGE,NgarambeMagharibi,Ngarambemagharibi,Ngarambe,Rufiji DC,Pwani,Tanzania
+TAP,Tapika,Tapika,Ngarambe,Rufiji DC,Pwani,Tanzania
+KLB,Kilombero,Kilimani Magharibi,Ngorongo,Rufiji DC,Pwani,Tanzania
+KSG,Kisagai,Kilimani Magharibi,Ngorongo,Rufiji DC,Pwani,Tanzania
+MBY,Mbuyuni,Kilimani Magharibi,Ngorongo,Rufiji DC,Pwani,Tanzania
+MPY,Mpanganya,Kilimani Magharibi,Ngorongo,Rufiji DC,Pwani,Tanzania
+TAT,Tangini,Kilimani Magharibi,Ngorongo,Rufiji DC,Pwani,Tanzania
+GEU,Gefu,Kilimani Mashariki,Ngorongo,Rufiji DC,Pwani,Tanzania
+GIE,Ginnery,Kilimani Mashariki,Ngorongo,Rufiji DC,Pwani,Tanzania
+MEN,Mkongeni,Kilimani Mashariki,Ngorongo,Rufiji DC,Pwani,Tanzania
+MNK,Mkunga,Kilimani Mashariki,Ngorongo,Rufiji DC,Pwani,Tanzania
+UNO,Unyonge,Kilimani Mashariki,Ngorongo,Rufiji DC,Pwani,Tanzania
+KOG,Kikongono,Ngorongo Magharibi,Ngorongo,Rufiji DC,Pwani,Tanzania
+NNS,Nyasungwi,Ngorongo Magharibi,Ngorongo,Rufiji DC,Pwani,Tanzania
+KAK,Kipenda moyo,Ngorongo Mashariki,Ngorongo,Rufiji DC,Pwani,Tanzania
+NRI,Nyarwiru,Ngorongo Mashariki,Ngorongo,Rufiji DC,Pwani,Tanzania
+KLD,Kilwa road,Umwe Kaskazini,Umwe,Rufiji DC,Pwani,Tanzania
+MCK,Mchikichini,Umwe Kaskazini,Umwe,Rufiji DC,Pwani,Tanzania
+MJM,Mjimwema,Umwe Kaskazini,Umwe,Rufiji DC,Pwani,Tanzania
+MMR,Mparange,Umwe Kaskazini,Umwe,Rufiji DC,Pwani,Tanzania
+MSS,Msikitini,Umwe Kaskazini,Umwe,Rufiji DC,Pwani,Tanzania
+VIW,Viwandani,Umwe Kaskazini,Umwe,Rufiji DC,Pwani,Tanzania
+AMA,Amani,Umwe Kati,Umwe,Rufiji DC,Pwani,Tanzania
+AZM,Azimio,Umwe Kati,Umwe,Rufiji DC,Pwani,Tanzania
+MTS,Msikitini,Umwe Kati,Umwe,Rufiji DC,Pwani,Tanzania
+SIA,Siasa,Umwe Kati,Umwe,Rufiji DC,Pwani,Tanzania
+SOI,Sokoni,Umwe Kati,Umwe,Rufiji DC,Pwani,Tanzania
+UMA,Ujamaa,Umwe Kati,Umwe,Rufiji DC,Pwani,Tanzania
+UMJ,Umoja,Umwe Kati,Umwe,Rufiji DC,Pwani,Tanzania
+UMW,Umwe,Umwe Kati,Umwe,Rufiji DC,Pwani,Tanzania
+MAF,Makaravati,Umwe Kusini,Umwe,Rufiji DC,Pwani,Tanzania
+MEK,Makombe,Umwe Kusini,Umwe,Rufiji DC,Pwani,Tanzania
+MOB,Makumbusho,Umwe Kusini,Umwe,Rufiji DC,Pwani,Tanzania
+MYU,Mbuyuni,Umwe Kusini,Umwe,Rufiji DC,Pwani,Tanzania
+MTI,Msikitini,Umwe Kusini,Umwe,Rufiji DC,Pwani,Tanzania
+MWU,Mwembe Muhoro,Umwe Kusini,Umwe,Rufiji DC,Pwani,Tanzania
+NGS,Ngasinda,Umwe Kusini,Umwe,Rufiji DC,Pwani,Tanzania
+NJO,Njogoro,Umwe Kusini,Umwe,Rufiji DC,Pwani,Tanzania
+KTU,Kitundu,Kitundu,Utete,Rufiji DC,Pwani,Tanzania
+KWL,Kiwili,Kiwili,Utete,Rufiji DC,Pwani,Tanzania
+SII,Siasa,Siasa,Utete,Rufiji DC,Pwani,Tanzania
+ZVA,Zona Verde A,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+ZVB,Zona Verde B,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+EDU,Eduardo Mondlane,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+DEX,25 de Setembro,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+AMB,Ambrosio,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CHT,Chitequeteque,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NXG,Nhangona,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MUR,Muriwa,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+XAM,Bone,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CHZ,Chizimba,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+TEW,Tewe,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NOR,Norte,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NDI,Ndima Mangaze,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MUT,Muto A,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MUB,Muto B,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MAL,Malulo,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CHM,Chimpene,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+DAN,Dande,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MUX,Cua cua muana,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+TCH,Mitchiu,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NMX,Namacheta,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+GMX,Gemusse,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CHP,Chipire,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NHX,Nhaminga,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MSC,Massancare,Chamanga,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+ALF,Alfredo,Dombe,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MBZ,Mbalame,Dombe,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CUB,Cubalalica,Dombe,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+BEN,Benejuaque,Dombe,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+POS,Posso,Dombe,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CHU,Chunga,Dombe,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+SAB,Sabesse,Dombe,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CHI,Chicote,Dombe,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+ZOD,Nzondoene,Dombe,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+DEJ,24 de Julho,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+SMZ,Samora Machel,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+BBB,24 de Julho B,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CIM,Cimento,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+DEO,4 de Outubro,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+DEA,7 de Abril,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+LUT,Luta Continua,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MIF,Mifarinha,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+DEU,25 de Junho,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+FFF,Forca da Mudanca,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+JSA,Josina Machel,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+LIB,Liberdade A,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+LIE,Liberdade B,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NHM,Nhamissundo,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CHV,Chiverano,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+DEM,8 de Marco,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+AGO,Agostinho Neto,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MMZ,Mazembe,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NHA,Nhalumbanda,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+SER,Serracao,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NTA,Ntada,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+BAX,Mbaua,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MAG,Magamba,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MAN,Mangala,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CAP,Capece,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+TES,Tesoura,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+TIQ,Tiquita,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MIG,Migoa,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+MUL,Mulaira,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CUN,Cunhanhassa,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+TAM,Tambalico,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+VEM,Vembe,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+VUM,Vumbe,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NOT,Nota,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+GAL,Gale,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+GMI,Gomoi,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NTG,Ntongolo,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+NNX,N'goma,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+BRS,Barroso,Sangalaza,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+CUM,Cumbalenga,Majambe,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+LOT,Lota,Majambe,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+NTR,Ntruzao,Majambe,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+MAJ,Majambe,Majambe,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+ALR,Alfredo,Majambe,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+NSZ,Nsanzo,Majambe,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+NNU,Nhangu,Majambe,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+LGZ,Longodze,Ndingo,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+DNG,Ndingo,Ndingo,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+TAO,Botao,Ndingo,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+VDA,Vundo A,Ndingo,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+VDB,Vundo B,Ndingo,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+GNG,Ngangane,Ndingo,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+SAE,Sambalendo,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+TAI,Taibo,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+SAS,Sassune,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+CHB,Chizimba,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+SAN,Sangate,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+MAA,Magaio,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+VNT,Vinte,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+DDS,7 de Setembro,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+JUL,Julius Nyerere,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+ACD,Acordos de Lusaka,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+SOM,Somopo,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+DFO,3 de Fevereiro,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+JSB,Josina Machel,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+JON,Josina Machel,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+DRX,25 de Setembro,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+EDX,Eduardo Mondlane,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+MDM,Mandawa,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+CHS,Chimuara Sede,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+DDE,1 de Maio,Chimuara,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+BRA,Braz,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+MNI,Muntaia,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+MIN,Minjale,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+QUE,Quembo,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+SOA,Soares,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+LIX,Liberdade,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+MAM,Mambucha,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+NOE,Noere,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+NHZ,Nhamizinga,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+FAR,Fardo,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+VAL,Valeta,Noere,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+MRT,Murato,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+RPO,Rapoio,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+SRD,Sassune Raunde (3 de Fevereiro),Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+SSS,Sassanha,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+DLO,Dolo,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+BTE,Bote,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+CNG,9 Congresso,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+JEI,Massonjoeira,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+VDJ,25 de Junho,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+COY,Coyowe,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+NHU,Nhamingulo,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+NAG,Nhamigonhane,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+GUL,Gulamo,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+CIE,Cimento,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+LIZ,Liberdade,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+NSU,Nsussa,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+DER,25 de Setembro,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+CHC,Chitucotuco,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+EDZ,Eduardo Mondlane,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+NCO,Ncomati,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+AGX,Agostinho Neto,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+SEA,Sambane,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+NHP,Nhamipama,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+NAV,Navena,Nzero,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+DDO,12 de Outubro,Veloso,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+SAX,Samora Machel,Veloso,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+DEZ,7 de Abril,Veloso,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+GNX,Gundagunda,Veloso,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NHC,Nhacolo,Veloso,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+WAX,Waia,Veloso,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+MDX,Muabado,Veloso,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+SAO,Samora Machel,Nhamirere,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+DRM,Acordo de Roma,Nhamirere,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+FVX,3 de Fevereiro,Nhamirere,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NRA,Nhamirere A,Nhamirere,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+DMI,1 de Maio,Nhamirere,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+MDL,Eduardo Mondlane,Nhamirere,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+JSC,Josina Machel,Nhamirere,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+DXX,25 de Junho,Nhamirere,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+CMX,Cimento,Nhacatundo,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+CCC,Cua-cua,Nhacatundo,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+AEG,Armando Emilio Guebuza,Nhacatundo,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+LRX,Liberdade,Nhacatundo,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+EMX,Eduardo Mondlane,Nhacatundo,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+JSD,Josina Machel,Nhacatundo,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+SMX,Samora Machel,Nhacatundo,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+JAN,Janeiro,Nhacatundo,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NDM,1 de Maio,Nzanza,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NZA,Nzanza Sede,Nzanza,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+FRX,Forca da Mudanca,Nzanza,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+OBX,Obra,Nzanza,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+MTX,Matantune,Nzanza,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+JSE,Josina Machel,Nzanza,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+TFX,3 de Fevereiro,Nzanza,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+MZM,Mazembe,Nhanga,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NNZ,Nsanze,Nhanga,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NSD,Nsondera,Mefula,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+LLE,Liberdade,Mefula,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+MIX,Mirui,Mefula,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NSG,Nsalange,Mefula,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+TLE,Tole,Cocorico,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NFI,Nhafimbo,Cocorico,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+SNG,Sanguimbe,Cocorico,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NGX,Ngimbe,Cocorico,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+COC,Cocorico,Cocorico,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+MEF,Mefula,Cocorico,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+PZX,Paz,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+MAU,Mauia,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+MIC,Micombezi,Caline,Campo | Luala,Mopeia,Zambezia,Mozambique
+LMA,Lima A,Lima,Campo | Luala,Mopeia,Zambezia,Mozambique
+LMB,Lima B,Lima,Campo | Luala,Mopeia,Zambezia,Mozambique
+NNN,Namitangurine,Lima,Campo | Luala,Mopeia,Zambezia,Mozambique
+RIM,Rimba,Rimba,Campo | Luala,Mopeia,Zambezia,Mozambique
+LSX,Acordos de Lusaka,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+CAA,Caline A,Caline,Campo | Luala,Mopeia,Zambezia,Mozambique
+CAB,Caline B,Caline,Campo | Luala,Mopeia,Zambezia,Mozambique
+XNN,Nansenguene,Caline,Campo | Luala,Mopeia,Zambezia,Mozambique
+MIR,Mirrongone,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+AAA,7 de Abril A,Simogo,Campo | Luala,Mopeia,Zambezia,Mozambique
+AAB,7 de Abril B,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+XSO,Samora Machel,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+ADM,3 de Marco,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+CRB,Cuerelo B,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+JJJ,Julius Nyerere,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+CTA,Ceta A,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+CTB,Ceta B,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+MUD,Mudiba,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+RFX,3 de Fevereiro,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+VVJ,25 de Junho,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+XMM,1 de Maio,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+LRD,Liberdade,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+DEH,1 de Junho,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+NAS,Nasarone,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+CXA,Cuerelo A,Lua lua,Campo | Luala,Mopeia,Zambezia,Mozambique
+SXA,7 de Abril C,Simogo,Campo | Luala,Mopeia,Zambezia,Mozambique
+PXA,1 de Junho A,Simogo,Campo | Luala,Mopeia,Zambezia,Mozambique
+MPX,Mpolossa,Mpiaeca,Campo | Luala,Mopeia,Zambezia,Mozambique
+NUX,Nuando,Mpiaeca,Campo | Luala,Mopeia,Zambezia,Mozambique
+MPI,Mpiaeca,Mpiaeca,Campo | Luala,Mopeia,Zambezia,Mozambique
+MRX,Mirebe,Mpiaeca,Campo | Luala,Mopeia,Zambezia,Mozambique
+NZZ,Nhamazemba,Lima,Campo | Luala,Mopeia,Zambezia,Mozambique
+CHR,Chiurine,Chiurine,Campo | Luala,Mopeia,Zambezia,Mozambique
+SIT,Sitone,Sitone,Campo | Luala,Mopeia,Zambezia,Mozambique
+CAD,Cadongo,Cadongo,Campo | Luala,Mopeia,Zambezia,Mozambique
+NTX,Ntxenga,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+BAR,Bariela,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+JOR,Jorissa,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+SOL,Sololo,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+CAI,Caixote,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+CUD,Cundine,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+VDX,25 de Setembro,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+TDX,3 de Fevereiro,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+ADX,Acordos de Lusaka,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+FDX,4 de Outubro sede,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+MVX,Mucombezi velho,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+PMP,Pempe,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+CUX,Cuerelo A,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+MSX,Mussampnia,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+FNX,Filipe Nyusi,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+SAC,Sacuane,Sacuane,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+MMX,1 de Maio,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+JJX,25 de Junho,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+DDX,4 de Outubro,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+JSG,Josina Machel,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+EEX,Eduardo Mondlane,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+AEX,Armando E Guebuza,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+SAA,Samaral,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+ASS,Assiate,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+MAI,Maina,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+MIL,Milange,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+NAM,Namitala,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+BAJ,Bajone,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+JCX,Joaquim Chissano,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+DDD,8 de Marco,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+PZS,Paz,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XNZ,Nhungulo,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+LJX,LiconJe,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+FYX,Filipe Nyusi,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XSA,Samora Machel,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+DNX,19 de Outubro,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+MUG,Mugurrumba Sede,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+DAH,Danhau,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XGN,Nhanga,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+GON,Gonda,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+BAT,Batelao,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+NSN,Nsando,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XNH,Nhando,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XBA,Bantene,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XAR,Arvai,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XMA,Maliganpase,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XHC,Chimindwe,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XPR,Prego,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XTO,Tonganhica,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XGA,Gamba-Draban,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XNA,Nhamicoco,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XLH,Lhendha,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XJU,Junca,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XND,Nhambade,Mugurrumba,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XDU,Dula,Samurrenge,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XTX,Txicalo,Samurrenge,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XCA,Calongola,Samurrenge,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XNO,Nolie,Samurrenge,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XCH,China,Samurrenge,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+XNG,Ngunguline,Samurrenge,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+MUM,Muanamaino,Biringuinho,Campo | Mungane,Mopeia,Zambezia,Mozambique
+XAV,Avareia,Biringuinho,Campo | Mungane,Mopeia,Zambezia,Mozambique
+XMU,Mungombe,Biringuinho,Campo | Mungane,Mopeia,Zambezia,Mozambique
+PAM,Pambane,Biringuinho,Campo | Mungane,Mopeia,Zambezia,Mozambique
+COM,Compone,Biringuinho,Campo | Mungane,Mopeia,Zambezia,Mozambique
+MIJ,Micajune,Avalinho,Campo | Mungane,Mopeia,Zambezia,Mozambique
+NAI,Namicole,Avalinho,Campo | Mungane,Mopeia,Zambezia,Mozambique
+XMI,Mipurune,Avalinho,Campo | Mungane,Mopeia,Zambezia,Mozambique
+LUA,Luala,Chirama,Campo | Mungane,Mopeia,Zambezia,Mozambique
+GUI,Guia,Chirama,Campo | Mungane,Mopeia,Zambezia,Mozambique
+MIM,Mirerene,Chirama,Campo | Mungane,Mopeia,Zambezia,Mozambique
+ZEN,Zengue,Chirama,Campo | Mungane,Mopeia,Zambezia,Mozambique
+CHA,Changaue,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+MAH,Manhai,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+PAN,Panela,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+ANT,Antonio,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+RAP,Raposo,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+NAA,Namaria,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+MUA,Muacaniua,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+MUO,Murrongone,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+AND,Andale,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+MBA,Mbawala,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+LIC,Licasse,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+NHO,Nhagoanine,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+MOR,Morais,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+WAL,Waluto,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+XSE,25 de Setembro,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+XOU,4 de Outubro,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+XAB,7 de Abril,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+XMO,1 de Maio,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+XJN,25 de Junho,Catale,Campo | Catale,Mopeia,Zambezia,Mozambique
+NXX,Nhamirimba,Luala,Campo | Luala,Mopeia,Zambezia,Mozambique
+CFE,Cafe,Mongana,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+SDS,7 de Setembro,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+MHA,Mocha,Mocha,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+AGG,Armando Emilio Guebuza,Marruma,Mopeia sede | Cuacua,Mopeia,Zambezia,Mozambique
+ZZE,7 de abril,Zuze,Campo | Campo sede,Mopeia,Zambezia,Mozambique
+NOB,Ngombe,Cocorico,Mopeia sede | Nzanza,Mopeia,Zambezia,Mozambique
+NIB,Nhamirere,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+SMG,Simogo,Luala,Campo | Luala,Mopeia,Zambezia,Mozambique
+MOO,Misao,Majambe,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+NHB,Nhangu B,Majambe,Mopeia sede | Rovuma/Conho,Mopeia,Zambezia,Mozambique
+AGZ,Armando Emilio Guebuza,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
+SMM,Samora Machel,Sambalendo,Mopeia sede | Sambalendo,Mopeia,Zambezia,Mozambique
