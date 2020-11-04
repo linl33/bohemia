@@ -272,15 +272,21 @@ fake_data <- function(){
 }
 
 # Get database connection
-get_db_connection <- function(){
+get_db_connection <- function(local = FALSE){
   creds <- yaml::yaml.load_file('credentials/credentials.yaml')
   users <- yaml::yaml.load_file('credentials/users.yaml')
-  psql_end_point = creds$endpoint
-  psql_user = creds$psql_master_username
-  psql_pass = creds$psql_master_password
   drv <- RPostgres::Postgres()
-  con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
-                   port=5432,
-                   user=psql_user, password=psql_pass)
+  
+  if(local){
+    con <- dbConnect(drv, dbname = 'bohemia')
+  } else {
+    psql_end_point = creds$endpoint
+    psql_user = creds$psql_master_username
+    psql_pass = creds$psql_master_password
+    con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                     port=5432,
+                     user=psql_user, password=psql_pass)
+  }
+
   return(con)
 }

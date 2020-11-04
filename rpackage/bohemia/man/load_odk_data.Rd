@@ -7,7 +7,8 @@
 load_odk_data(
   the_country = "Mozambique",
   credentials_path = "credentials/credentials.yaml",
-  users_path = "credentials/users.yaml"
+  users_path = "credentials/users.yaml",
+  local = FALSE
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ load_odk_data(
 \item{credentials_path}{The path to the credentials.yaml file}
 
 \item{users_path}{The path to the users.yaml file}
+
+\item{local}{Whether to use the local database}
 
 \item{the_tables}{The names of tables to be loaded}
 }

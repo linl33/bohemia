@@ -376,6 +376,15 @@ app_server <- function(input, output, session) {
   
   message('Working directory is :', getwd())
   
+  # Define whether local or not
+  if(grepl('brew', getwd())){
+    is_local <- TRUE
+    message('Using local database')
+  } else {
+    is_local <- FALSE
+    message('Using remote database')
+  }
+  
   # Define a summary data table (from which certain high-level indicators read)
   default_aggregate_table <- tibble(forms_submitted = 538,
                                     active_fieldworkers = 51,
@@ -458,7 +467,7 @@ app_server <- function(input, output, session) {
                      start_time = Sys.time(),
                      end_time = NA,
                      web = grepl('/srv/shiny-server', getwd(), fixed = TRUE))
-      con <- get_db_connection()
+      con <- get_db_connection(local = is_local)
       message('Writing session info to sessions table.')
       dbAppendTable(conn = con,
                     name = 'sessions',
@@ -499,7 +508,7 @@ app_server <- function(input, output, session) {
                      start_time = Sys.time(),
                      end_time = NA,
                      web = grepl('ubuntu', getwd()))
-      con <- get_db_connection()
+      con <- get_db_connection(local = is_local)
       dbAppendTable(conn = con,
                     name = 'sessions',
                     value = sesh)
@@ -536,11 +545,11 @@ app_server <- function(input, output, session) {
     # Load data     
     li <- session_info$logged_in
     if(li){
-      out <- load_odk_data(the_country = the_country)
+      out <- load_odk_data(local = is_local, the_country = the_country)
       odk_data$data <- out
       
       # Get anomalies
-      con <- get_db_connection()
+      con <- get_db_connection(local = is_local)
       anomalies <- dbGetQuery(conn = con,
                               statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
       session_data$anomalies <- anomalies
@@ -555,10 +564,10 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       message('Logged in. Loading data for ', the_country)
-      out <- load_odk_data(the_country = the_country)
+      out <- load_odk_data(local = is_local, the_country = the_country)
       
       # Get anomalies
-      con <- get_db_connection()
+      con <- get_db_connection(local = is_local)
       anomalies <- dbGetQuery(conn = con,
                               statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
       session_data$anomalies <- anomalies
@@ -2801,7 +2810,7 @@ app_server <- function(input, output, session) {
     # CONNECT TO THE DATABASE AND ADD FIX
     message('Connecting to the database in order to add a fix to the corrections table')
     # save(fix, fix_source, fix_method, resolution_date, log_in_user, response_details, this_row, action, sr, file = '/tmp/sunday.RData')
-    con <- get_db_connection()
+    con <- get_db_connection(local = is_local)
     dbAppendTable(conn = con,
                   name = 'corrections',
                   value = fix)

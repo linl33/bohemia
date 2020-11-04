@@ -5,6 +5,7 @@
 #' @param credentials_path The path to the credentials.yaml file 
 #' @param users_path The path to the users.yaml file
 #' @param the_tables The names of tables to be loaded
+#' @param local Whether to use the local database
 #' @import yaml
 #' @import dplyr
 #' @import DBI
@@ -13,7 +14,8 @@
 
 load_odk_data <- function(the_country = 'Mozambique',
                           credentials_path = 'credentials/credentials.yaml',
-                          users_path = 'credentials/users.yaml'){
+                          users_path = 'credentials/users.yaml',
+                          local = FALSE){
   
   creds <- yaml::yaml.load_file(credentials_path)
   users <- yaml::yaml.load_file(users_path)
@@ -21,9 +23,14 @@ load_odk_data <- function(the_country = 'Mozambique',
   psql_user = creds$psql_master_username
   psql_pass = creds$psql_master_password
   drv <- RPostgres::Postgres()
-  con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
-                   port=5432,
-                   user=psql_user, password=psql_pass)
+  if(local){
+    con <- dbConnect(drv, dbname='bohemia')
+  } else {
+    con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                     port=5432,
+                     user=psql_user, password=psql_pass)
+  } 
+
   # Read in data
   data <- list()
   if(!is.null(the_country)){
