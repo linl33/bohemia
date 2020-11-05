@@ -7,11 +7,11 @@ s = ezsheets.Spreadsheet('https://docs.google.com/spreadsheets/d/1CqKEzs0tiIMnwd
 s.downloadAsExcel()
 
 ## Convert to xml
-os.system('xls2xform refusals.xlsx refusals.xml ')
+os.system('xls2xform refusalsb.xlsx refusalsb.xml ')
 
 # Move
-shutil.move('refusals.xlsx', '../forms/refusals/refusals.xlsx')
-shutil.move('refusals.xml',  '../forms/refusals/refusals.xml')
-shutil.move('itemsets.csv', '../forms/refusals/itemsets.csv')
+shutil.move('refusalsb.xlsx', '../forms/refusalsb/refusalsb.xlsx')
+shutil.move('refusalsb.xml',  '../forms/refusalsb/refusalsb.xml')
+shutil.move('itemsets.csv', '../forms/refusalsb/itemsets.csv')
 
 print('Done. Docs in forms/refusals.')

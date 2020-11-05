@@ -7,11 +7,11 @@ s = ezsheets.Spreadsheet('https://docs.google.com/spreadsheets/d/1r9v4lJHvMYxMZp
 s.downloadAsExcel()
 
 ## Convert to xml
-os.system('xls2xform smallcensusa.xlsx smallcensusa.xml ')
+os.system('xls2xform smallcensusb.xlsx smallcensusb.xml ')
 
 # Move
-shutil.move('smallcensusa.xlsx', '../forms/smallcensusa/smallcensusa.xlsx')
-shutil.move('smallcensusa.xml',  '../forms/smallcensusa/smallcensusa.xml')
-shutil.move('itemsets.csv', '../forms/smallcensusa/itemsets.csv')
+shutil.move('smallcensusb.xlsx', '../forms/smallcensusb/smallcensusb.xlsx')
+shutil.move('smallcensusb.xml',  '../forms/smallcensusb/smallcensusb.xml')
+shutil.move('itemsets.csv', '../forms/smallcensusb/itemsets.csv')
 
 print('Done. Docs in forms/smallcensusa.')

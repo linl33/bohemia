@@ -14,16 +14,16 @@ df = pd.read_csv('https://raw.githubusercontent.com/databrew/bohemia/master/form
 df.to_csv('locations.csv', index=False)
 
 ## Convert to xml
-os.system('xls2xform va153.xlsx va153.xml')
+os.system('xls2xform va153b.xlsx va153b.xml')
 
 # Move
-shutil.move('va153.xlsx', '../forms/va153/va153.xlsx')
-shutil.move('va153.xml',  '../forms/va153/va153.xml')
-shutil.move('itemsets.csv', '../forms/va153/itemsets.csv')
-shutil.move('locations.csv', '../forms/va153/locations.csv')
+shutil.move('va153b.xlsx', '../forms/va153b/va153b.xlsx')
+shutil.move('va153b.xml',  '../forms/va153b/va153b.xml')
+shutil.move('itemsets.csv', '../forms/va153b/itemsets.csv')
+shutil.move('locations.csv', '../forms/va153b/locations.csv')
 
 # Zip
-os.chdir('../forms/va153/')
+os.chdir('../forms/va153b/')
 if os.path.exists('metadata'):
     shutil.rmtree('metadata')
 os.mkdir('metadata')

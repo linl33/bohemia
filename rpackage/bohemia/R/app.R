@@ -384,6 +384,7 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
+  is_local <- FALSE
   
   # Define a summary data table (from which certain high-level indicators read)
   default_aggregate_table <- tibble(forms_submitted = 538,
@@ -3534,7 +3535,7 @@ app_server <- function(input, output, session) {
       # dplyr::filter(!done)
       dplyr::select(-done, -done_by)
 
-    joined$technical_date <- unlist(lapply(strsplit(joined$date, ','), function(x){x[length(x)]}))
+    joined$technical_date <- unlist(lapply(strsplit(as.character(joined$date), ','), function(x){x[length(x)]}))
     joined$days_ago <- Sys.Date() - as.Date(joined$technical_date)
     joined$technical_date <- NULL
     bohemia::prettify(joined, 

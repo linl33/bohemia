@@ -75,7 +75,7 @@ CREATE TABLE minicensus_main (
     wid   INT,
     wid_manual   VARCHAR(32),
     wid_qr   VARCHAR(32),
-    server   VARCHAR(32),
+    server   VARCHAR(256),
     PRIMARY KEY(instance_id)
 );
 
@@ -191,7 +191,7 @@ CREATE TABLE enumerations (
     wid   INT,
     wid_manual   VARCHAR(32),
     wid_qr   VARCHAR(32),
-    server   VARCHAR(32),
+    server   VARCHAR(256),
     PRIMARY KEY(instance_id)
 );
 
@@ -221,7 +221,7 @@ CREATE TABLE refusals (
     wid   INT,
     wid_manual   VARCHAR(32),
     wid_qr   VARCHAR(32),
-    server   VARCHAR(32),
+    server   VARCHAR(256),
     PRIMARY KEY(instance_id)
     );
 
@@ -821,7 +821,7 @@ CREATE TABLE va (
   tz005   TEXT,
   tz005_a   TEXT,
   vaid   TEXT,
-  server   VARCHAR(32),
+  server   VARCHAR(256),
   PRIMARY KEY(instance_id)
 );
 
@@ -850,7 +850,8 @@ CREATE TABLE anomalies (
   incident   TEXT,
   wid   INT,
   date   DATE,
-  instance_id   text
+  instance_id   text,
+  country  text
 );
 
 -- Enable UUID extension

@@ -7,10 +7,10 @@ s = ezsheets.Spreadsheet('https://docs.google.com/spreadsheets/d/1rPBLjrto66gAmb
 s.downloadAsExcel()
 
 ## Convert to xml
-os.system('xls2xform enumerations.xlsx enumerations.xml ')
+os.system('xls2xform enumerationsb.xlsx enumerationsb.xml ')
 
 # Move
-shutil.move('enumerations.xlsx', '../forms/enumerations/enumerations.xlsx')
-shutil.move('enumerations.xml',  '../forms/enumerations/enumerations.xml')
+shutil.move('enumerationsb.xlsx', '../forms/enumerationsb/enumerationsb.xlsx')
+shutil.move('enumerationsb.xml',  '../forms/enumerationsb/enumerationsb.xml')
 
-print('Done. Docs in forms/enumerations.')
+print('Done. Docs in forms/enumerationsb.')
