@@ -1231,7 +1231,13 @@ app_server <- function(input, output, session) {
       
       # save(pd, file = 'temp_pd.rda')
       # create a placeholder for number of fieldworkers. 
-      num_fws <- length(unique(pd$wid)) #-12 - get average number of unique fieldworkers per day
+      # num_fws <- length(unique(pd$wid)) #-12 - get average number of unique fieldworkers per day
+      if(co == 'Tanzania'){
+        num_fws <- 77
+      } else {
+        num_fws <- 86
+      }
+      
       
       # Create table of overview
       overview <- pd %>%
@@ -1261,7 +1267,7 @@ app_server <- function(input, output, session) {
         total_days <- total_weeks*7
         est_date <- Sys.Date()+total_days
       } else {
-        num_fws <- 100
+        num_fws <- 86
         daily_forms_fw <- 10
         weekly_forms_fw <- daily_forms_fw*5
         total_forms_fw <- 500
