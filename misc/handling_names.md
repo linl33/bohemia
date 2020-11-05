@@ -58,9 +58,8 @@ D. Wanjiru Kimani
 
 ## Comment on the "de-encryption key"
 
-- The "de-encryption key" is essentially a (very long) password.  
-- Two options for ownership / access to the de-encryption key:
-  - Only site has a de-encryption key. Databrew cannot de-encrypt.
-  - Both site and Databrew have a copy. Databrew can de-encrypt in case a site loses their key
-- The first option is more secure in terms of protecting names from being disclosed
-- The second option is more secure in terms of recovering names in case a site loses the de-encryption key
+- The "de-encryption key" is essentially a (very long) password. Without it, names are indecipherable.  
+- Databrew generates the de-encryption key and gives one copy to each site (3 copies total).  
+- Databrew retains a copy of the key only for the purpose of ensuring that data is not lost in the case of a site mishap. Only one Databrew team member will have access to the key.
+- Databrew will not use the key; it is retained solely for the purpose of supplying to the site.
+- If the database is accessed using the de-encryption key, the event will be logged, considered a breach, and reported to the sponsor.  
