@@ -1,11 +1,16 @@
 #!/usr/bin/python
-import pyscopg2
+import psycopg2
 import pandas as pd
+import logging
+
+# Set up log file for job
+logging.basicConfig(filename='logs/apply_corrections.log', level=logging.DEBUG)
 
 # Initialize connection to the database
-dbconn = pyscopg2.connect("dbname=bohemia user=bohemia_app")
+dbconn = psycopg2.connect(dbname='bohemia', user='bohemia_app', password='')
 cur = dbconn.cursor()
 
+# NOTE: Make sure to run this once only then comment out the code to prevent duplicated entries
 preset_corrections_dict = {
     "strange_hh_code": {
         "strange_hh_code_update_code_hamlet_only": "UPDATE clean_minicensus_main SET hh_hamlet_code = %s, hh_hamlet = %s WHERE instance_id = %s;",
@@ -33,64 +38,99 @@ for key, values in preset_corrections_dict.items():
 dbconn.commit()
 
 # read excel or csv file
-file_path = '/tmp/fixes_20201031_for_Databrew.xlsx'
-df = pd.read_excel(file_path)
+xlsheets = ['alert1', 'alert2', 'VA_IDmiss', 'alert4']
+file_path = 'tmp/fixes_20201031_for_Databrew_updated.xlsx'
 
-# for each row, extract anomaly_id, instance_id, resolution_category, resolution_action, data in alerts* column
-for entry in df:
-    anomaly_id = entry['id']
-    resp_detail = entry['responsedetails']
-    resolved_by = entry['resolvedby']
-    res_date = entry['resolutiondate']
-    res_method = entry['resolutionmethod']
-    submitted_at = "2020-10-31"
-    resolution_category = entry['resolution_category']
-    resolution_action = entry['resolution_action']
-    instance_id = entry['instance_id']
+for sheet in xlsheets:
+    logging.debug(f"Reading sheet {sheet}\n")
+    df = pd.read_excel(file_path, sheet_name=sheet)
     
-    cur.execute("""
-        INSERT INTO corrections (anomaly_id, response_details, resolved_by, resolution_date, resolution_method, submitted_by, submitted_at, resolution_category, resolution_action)
-        VALUES (%(anomaly_id)s, %(resp_detail)s, %(resolved_by)s, %(res_date)s, %(res_method)s, %(submitted_by)s, %(submitted_at)s, %(res_category)s, %(res_action)s);
-        """, {'anomaly_id': anomaly_id, 
-              'resp_detail': response_details, 
-              'resolved_by': resolved_by, 
-              'res_date': res_date,
-              'res_method': resolution_method, 
-              'submitted_by': resolved_by,
-              'submitted_at': submitted_at,
-              'res_category': resolution_category,
-              'res_action': resolution_action,
-              })
+    correction_steps_values = {
+            "strange_hh_code_update_code_hamlet_only": ['fix_alert4a', 'fix_alert4b', 'instance_id'],
+            "strange_hh_code_update_code_hamlet_village": ['fix_alert4a', 'fix_alert4b', 'fix_alert4d', 'instance_id'],
+            "strange_hh_code_update_code_hamlet_village_ward": ['fix_alert4a', 'fix_alert4b', 'fix_alert4d', 'fix_alert4e', 'instance_id'],
+            "strange_hh_code_update_code_hamlet_hhid": ['fix_alert4a', 'fix_alert4b', 'fix_alert4c', 'instance_id'],
+            "no_va_id_update": ['fix_VA_IDmiss', 'instance_id'],
+            "missing_wid_update": ['fix_alert2', 'instance_id'],
+            "strange_wid_update": ['fix_alert1', 'instance_id'],
+        }
 
-    cur.execute("""SELECT correction_steps 
-                                      FROM preset_correction_steps 
-                                      WHERE resolution_category = %s 
-                                      AND resolution_action = %s 
-                                      AND status = 'active';
-                                   """, (resolution_category, resolution_action,)
-    )
+    # for each row, extract anomaly_id, instance_id, resolution_category, resolution_action, data in alerts* column
+    for idx, entry in df.iterrows():
+        try:
+            anomaly_id = entry['id']
+            resp_detail = entry['responsedetails']
+            resolved_by = entry['resolvedby']
+            res_date = entry['resolutiondate']
+            res_method = entry['resolutionmethod']
+            submitted_at = "2020-10-31"
+            resolution_category = entry['resolution_category']
+            resolution_action = entry['resolution_action']
+            instance_id = entry['instance_id']
 
-    correction_steps = cur.fetchone()[0]
+            logging.debug(f"Correction in progress for anomaly : {anomaly_id}")
+            cur.execute("""
+                INSERT INTO corrections (instance_id, response_details, resolved_by, resolution_date, resolution_method, submitted_by, submitted_at, resolution_category, resolution_action)
+                VALUES (%(instance_id)s, %(resp_detail)s, %(resolved_by)s, %(res_date)s, %(res_method)s, %(submitted_by)s, %(submitted_at)s, %(res_category)s, %(res_action)s) RETURNING id;
+                """, { 
+                    'resp_detail': resp_detail, 
+                    'resolved_by': resolved_by, 
+                    'res_date': res_date,
+                    'res_method': res_method, 
+                    'submitted_by': resolved_by,
+                    'submitted_at': submitted_at,
+                    'res_category': resolution_category,
+                    'res_action': resolution_action,
+                    'instance_id': instance_id,
+                    })
+            
+            correction_id = cur.fetchone()[0]
+            logging.debug(f"Correction entry created: {correction_id}")
 
-    stmt = f"{correction_steps},{entry['fix_alert1']}"
+            cur.execute("""SELECT id, correction_steps 
+                                            FROM preset_correction_steps 
+                                            WHERE resolution_category = %s 
+                                            AND resolution_action = %s 
+                                            AND status = 'active';
+                                        """, (resolution_category, resolution_action,)
+            )
+            
+            preset_entry = cur.fetchone()
+            preset_steps_id, correction_steps = preset_entry[0], preset_entry[1]
+            logging.debug(f"Preset correction steps retrieved: {preset_entry}")
 
-    cur.execute("""
-        UPDATE corrections SET done = TRUE, done_by = 'pyscript' WHERE anomaly_id = %(anomaly_id)s;
-        """, {'anomaly_id': anomaly_id, 
-    })
+            correct_data = correction_steps_values.get(resolution_action)
+            corrections = [entry[x] for x in correct_data]
+            corrections = tuple(corrections)
+            statement = f"{correction_steps} % {corrections}"
 
+            logging.debug(f"Applying correction step: {statement}\n")
+            cur.execute(correction_steps, corrections)
+            
+            logging.debug(f"Updating corrections to Done")
+            cur.execute("""
+                UPDATE corrections SET done = TRUE, done_by = 'pyscript' WHERE id = %(correction_id)s;
+                """, {'correction_id': correction_id, 
+            })
 
-    cur.execute("""
-        INSERT INTO anomaly_corrections_log (anomaly_id, correction_id, preset_steps_id, user_id, log_details)
-        VALUES (%(anomaly_id)s, %(correction_id)s, %(preset_correction_steps_id)s, %(user_email)s, %(statement)s);
-        """, {'anomaly_id': anomaly_id, 
-              'correction_id': correction_id, 
-              'preset_correction_steps_id': preset_correction_steps_id, 
-              'user_email': user_email,
-              'statement': statement, 
-              })
-
-dbconn.commit()
+            logging.debug(f"Creating log table entry")
+            cur.execute("""
+                INSERT INTO anomaly_corrections_log (anomaly_id, correction_id, preset_steps_id, user_id, log_detail)
+                VALUES (%(anomaly_id)s, %(correction_id)s, %(preset_correction_steps_id)s, %(user_email)s, %(statement)s)
+                RETURNING id;
+                """, {'anomaly_id': anomaly_id, 
+                    'correction_id': correction_id, 
+                    'preset_correction_steps_id': preset_steps_id, 
+                    'user_email': 'pyscript',
+                    'statement': statement, 
+                    })
+            log_id = cur.fetchone()[0]
+            logging.debug(f"Correction action successfully logged: {log_id}\nCommitting transaction\n\n")
+            dbconn.commit()
+        except Exception as e:
+            logging.exception(f"Exception raised: {e} \n")
+            dbconn.rollback()
+            continue
 
 cur.close()
 dbconn.close()

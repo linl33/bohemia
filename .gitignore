@@ -12,3 +12,5 @@ analyses/distances/distances.html
 scripts/local_dev_data_setup.txt
 .venv
 .vscode
+logs
+tmp
