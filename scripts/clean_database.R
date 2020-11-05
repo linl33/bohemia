@@ -1,7 +1,5 @@
-#!/usr/bin/Rscript
-# start_time <- Sys.time()
-# message('------System time is: ', as.character(start_time))
-# message('------Timezone: ', as.character(Sys.timezone()))
+# This script is meant to be sourced from "update_database.R" and will therefore have
+# objects like "con" already created
 creds_fpath <- '../credentials/credentials.yaml'
 creds <- yaml::yaml.load_file(creds_fpath)
 suppressMessages({
@@ -10,47 +8,48 @@ suppressMessages({
   library(yaml)
 }
 )
-psql_end_point = creds$endpoint
-psql_user = creds$psql_master_username
-psql_pass = creds$psql_master_password
-drv <- RPostgres::Postgres()
-con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
-                 port=5432,
-                 user=psql_user, password=psql_pass)
+# psql_end_point = creds$endpoint
+# psql_user = creds$psql_master_username
+# psql_pass = creds$psql_master_password
+# drv <- RPostgres::Postgres()
+# con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+#                  port=5432,
+#                  user=psql_user, password=psql_pass)
 
 
-# Read in raw data
-data <- list()
-main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main"))
-data$minicensus_main <- main
-ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
-repeat_names <- c("minicensus_people",
-                  "minicensus_repeat_death_info",
-                  "minicensus_repeat_hh_sub",
-                  "minicensus_repeat_mosquito_net",
-                  "minicensus_repeat_water")
-for(i in 1:length(repeat_names)){
-  this_name <- repeat_names[i]
-  this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
-  data[[this_name]] <- this_data
-}
-# Read in enumerations data
-enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
-data$enumerations <- enumerations
-# # Read in va data
-va <- dbGetQuery(con, "SELECT * FROM clean_va")
-data$va <- va
-# Read in refusals data
-refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
-data$refusals <- refusals
+# # Read in raw data
+# data <- list()
+# main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main"))
+# data$minicensus_main <- main
+# ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
+# repeat_names <- c("minicensus_people",
+#                   "minicensus_repeat_death_info",
+#                   "minicensus_repeat_hh_sub",
+#                   "minicensus_repeat_mosquito_net",
+#                   "minicensus_repeat_water")
+# for(i in 1:length(repeat_names)){
+#   this_name <- repeat_names[i]
+#   this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+#   data[[this_name]] <- this_data
+# }
+# # Read in enumerations data
+# enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
+# data$enumerations <- enumerations
+# # # Read in va data
+# va <- dbGetQuery(con, "SELECT * FROM clean_va")
+# data$va <- va
+# # Read in refusals data
+# refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
+# data$refusals <- refusals
 
 # # Drop the previously cleaned data
 message('------DROPPING OLD CLEAN_ DATA')
 create_clean_db(credentials_file = '../credentials/credentials.yaml',
-                drop_all = TRUE)
+                drop_all = TRUE, con = con)
 # Create new clean tables
 message('------CREATING NEW CLEAN_ DATA')
-create_clean_db(credentials_file = '../credentials/credentials.yaml')
+create_clean_db(credentials_file = '../credentials/credentials.yaml',
+                con = con)
 
 # Process / clean data
 # This should line by line SQL statements acting on tables beginning with the "clean_" prefix
@@ -122,4 +121,4 @@ dbExecute(con,
 dbExecute(con,
           statement = paste0("UPDATE corrections SET done = 'true', done_by = 'Joe Brew' WHERE id = 'hh_head_too_young_old_425f18cd-e4a0-42e6-b496-8093b69fe69a'"))
 
-dbDisconnect(con)
+# dbDisconnect(con)

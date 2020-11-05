@@ -75,6 +75,7 @@ CREATE TABLE minicensus_main (
     wid   INT,
     wid_manual   VARCHAR(32),
     wid_qr   VARCHAR(32),
+    server   VARCHAR(32),
     PRIMARY KEY(instance_id)
 );
 
@@ -190,6 +191,7 @@ CREATE TABLE enumerations (
     wid   INT,
     wid_manual   VARCHAR(32),
     wid_qr   VARCHAR(32),
+    server   VARCHAR(32),
     PRIMARY KEY(instance_id)
 );
 
@@ -219,6 +221,7 @@ CREATE TABLE refusals (
     wid   INT,
     wid_manual   VARCHAR(32),
     wid_qr   VARCHAR(32),
+    server   VARCHAR(32),
     PRIMARY KEY(instance_id)
     );
 
@@ -818,6 +821,7 @@ CREATE TABLE va (
   tz005   TEXT,
   tz005_a   TEXT,
   vaid   TEXT,
+  server   VARCHAR(32),
   PRIMARY KEY(instance_id)
 );
 
@@ -906,12 +910,12 @@ ALTER TABLE corrections ADD CONSTRAINT pk_corrections PRIMARY KEY USING INDEX pk
 
 ---- Add new columns and relationships
 
-ALTER TABLE corrections 
+ALTER TABLE corrections
     ADD COLUMN resolution_category VARCHAR(128),
     ADD COLUMN resolution_action   VARCHAR(128),
     ADD COLUMN anomaly_id  TEXT,
     ADD CONSTRAINT fk_anomalies FOREIGN KEY (anomaly_id) REFERENCES anomalies(id);
-    
+
 -- Anomalies modification to add relationship to corrections
 
 ALTER TABLE anomalies ADD CONSTRAINT fk_corrections FOREIGN KEY (correction_id) REFERENCES corrections(id);

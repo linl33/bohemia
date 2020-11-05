@@ -114,6 +114,7 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   # Combine all of the data into respective dataframes
   repeats <- bind_rows(lapply(data_list, function(x){x$repeats}))
   non_repeats <- bind_rows(lapply(data_list, function(x){x$non_repeats}))
+  non_repeats$server <- url
   # Combine into one list
   combined <- list()
   combined$repeats <- repeats

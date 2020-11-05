@@ -30,16 +30,28 @@ load_odk_data <- function(the_country = 'Mozambique',
                      port=5432,
                      user=psql_user, password=psql_pass)
   } 
-
+  
+  # Define server
+  if(the_country == 'Mozambique'){
+    server_url <- 'https://sap.manhica.net:4442/ODKAggregate'
+  } else {
+    server_url <- 'https://bohemia.ihi.or.tz'
+  }
+  
   # Read in data
   data <- list()
   if(!is.null(the_country)){
-    main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where hh_country='", the_country, "'"))
+    main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where server='", server_url, "'"))
   } else {
     main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main"))
   }
   data$minicensus_main <- main
-  ok_uuids <- paste0("(",paste0("'",main$instance_id,"'", collapse=","),")")
+  ok_ids <- main$instance_id
+  ok <- TRUE
+  if(length(ok_ids) == 0){
+    ok_ids <- '86ff878c-1f45-11eb-adc1-0242ac120002' # fake
+  }
+  ok_uuids <- paste0("(",paste0("'",ok_ids,"'", collapse=","),")")
   
   repeat_names <- c("minicensus_people", 
                     "minicensus_repeat_death_info",
@@ -51,21 +63,25 @@ load_odk_data <- function(the_country = 'Mozambique',
     this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
     data[[this_name]] <- this_data
   }
-  # Read in enumerations data
-  enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
-  data$enumerations <- enumerations
+  # Read in enumerations, va, and refusals data
+  if(!is.null(the_country)){
+    enumerations <- dbGetQuery(con, paste0("SELECT * FROM clean_enumerations where server='", server_url, "'"))
+    va <- dbGetQuery(con, paste0("SELECT * FROM clean_va where server='", server_url, "'"))
+    refusals <- dbGetQuery(con, paste0("SELECT * FROM clean_refusals where server='", server_url, "'"))
+  } else {
+    enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
+    va <- dbGetQuery(con, "SELECT * FROM clean_va")
+    refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
+  }
   
-  # Read in va data
-  va <- dbGetQuery(con, "SELECT * FROM clean_va")
+  data$enumerations <- enumerations
   data$va <- va
-  # 
-  # Read in refusals data
-  refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
   data$refusals <- refusals
   
   # Read in corrections data
   corrections <- dbGetQuery(con, "SELECT * FROM corrections")
   data$corrections <- corrections
+  
   
   dbDisconnect(con)
   

@@ -5,11 +5,14 @@
 \title{Create clean DB}
 \usage{
 create_clean_db(
+  con = NULL,
   credentials_file = "credentials/credentials.yaml",
   drop_all = FALSE
 )
 }
 \arguments{
+\item{con}{A connection}
+
 \item{credentials_file}{Path to a credentials.yaml}
 
 \item{drop_all}{Whether to, instead of creating clean tables, drop them}
