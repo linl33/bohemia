@@ -1754,6 +1754,7 @@ app_server <- function(input, output, session) {
                 ),
                 fluidRow(column(6, align = 'center',
                                 h3('All locations visited by FW'),
+                                p('Currently undergoing modifications'),
                                 leafletOutput('traccar_leaf',
                                               height = 500)),
                          column(6,
