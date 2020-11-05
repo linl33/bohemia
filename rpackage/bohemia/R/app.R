@@ -2457,7 +2457,7 @@ app_server <- function(input, output, session) {
                            `Supervisor` = supervisor) %>%
                   summarise(`Forms` = n(),
                             `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `% complete total` = `Forms`/total_forms_fw,
+                            `% complete total` = round(`Forms`/total_forms_fw * 100, digits = 2),
                             `Daily work hours` = '(Pending feature)',
                             `# of anomalies` = max(num_anomalies),
                             `# of errors` = max(num_errors))
@@ -2547,7 +2547,7 @@ app_server <- function(input, output, session) {
     #   theme_bohemia()
   })
   output$traccar_leaf <- renderLeaflet({
-    leaflet() %>% addProviderTiles()
+    leaflet() %>% addTiles()
     # # Get the traccar data for that country
     # traccar <- session_data$traccar
     # the_worker <- input$fid
