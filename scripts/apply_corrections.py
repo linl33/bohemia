@@ -95,8 +95,8 @@ for sheet in xlsheets:
             logging.debug(f"Correction in progress for anomaly : {anomaly_id}")
             cur.execute(
                 """
-                INSERT INTO corrections (instance_id, response_details, resolved_by, resolution_date, resolution_method, submitted_by, submitted_at, resolution_category, resolution_action)
-                VALUES (%(instance_id)s, %(resp_detail)s, %(resolved_by)s, %(res_date)s, %(res_method)s, %(submitted_by)s, %(submitted_at)s, %(res_category)s, %(res_action)s) RETURNING id;
+                INSERT INTO corrections (instance_id, anomaly_id, response_details, resolved_by, resolution_date, resolution_method, submitted_by, submitted_at, resolution_category, resolution_action)
+                VALUES (%(instance_id)s, %(anomaly_id)s, %(resp_detail)s, %(resolved_by)s, %(res_date)s, %(res_method)s, %(submitted_by)s, %(submitted_at)s, %(res_category)s, %(res_action)s) RETURNING id;
                 """,
                 {
                     "resp_detail": resp_detail,
@@ -108,6 +108,7 @@ for sheet in xlsheets:
                     "res_category": resolution_category,
                     "res_action": resolution_action,
                     "instance_id": instance_id,
+                    "anomaly_id": anomaly_id,
                 },
             )
 
