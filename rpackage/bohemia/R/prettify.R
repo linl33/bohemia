@@ -12,6 +12,7 @@
 #' @param remove_line_breaks Whether to remove line breaks from the elements of columns
 #' @param nrows The number of rows to show
 #' @param download_options Whether to show options for downloading the table
+#' @param scroll_x Whether to enable x scrolling
 #' @return A data table ready for inclusion in an .Rmd to be knitted to HTML
 #' @importFrom Hmisc capitalize
 #' @importFrom DT datatable
@@ -29,7 +30,8 @@ prettify <- function(the_table,
                      remove_line_breaks = TRUE,
                      data_table = TRUE,
                      nrows = 5,
-                     download_options = FALSE){
+                     download_options = FALSE,
+                     scroll_x = TRUE){
   
   column_names <- names(the_table)
   the_table <- data.frame(the_table)
@@ -77,6 +79,7 @@ prettify <- function(the_table,
                                                 #             'excel',
                                                 #             'pdf'),
                                                 dom = 'Bfrtip',
+                                                scrollX = scroll_x,
                                                 buttons = 
                                                   list('copy', 'print', list(
                                                     extend = 'collection',
@@ -88,6 +91,7 @@ prettify <- function(the_table,
     } else {
       the_table <- DT::datatable(the_table,
                                  options = list(pageLength = nrows,
+                                                scrollX = scroll_x,
                                                 columnDefs = list(list(className = 'dt-right', 
                                                                        targets = 0:(ncol(the_table) - 1)))),
                                  rownames = FALSE)

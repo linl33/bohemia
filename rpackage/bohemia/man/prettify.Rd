@@ -16,7 +16,8 @@ prettify(
   remove_line_breaks = TRUE,
   data_table = TRUE,
   nrows = 5,
-  download_options = FALSE
+  download_options = FALSE,
+  scroll_x = TRUE
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ prettify(
 \item{nrows}{The number of rows to show}
 
 \item{download_options}{Whether to show options for downloading the table}
+
+\item{scroll_x}{Whether to enable x scrolling}
 }
 \value{
 A data table ready for inclusion in an .Rmd to be knitted to HTML
