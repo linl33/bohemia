@@ -384,7 +384,7 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
-  is_local <- FALSE
+  # is_local <- FALSE
 
   # Define a summary data table (from which certain high-level indicators read)
   default_aggregate_table <- tibble(forms_submitted = 538,
@@ -3541,7 +3541,7 @@ save(rf, file = '/tmp/rf.RData')
     action <- action %>% dplyr::rename(FW = wid)
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
-    save(action, corrections, file = '/tmp/this.RData')
+    # save(action, corrections, file = '/tmp/this.RData')
     if(nrow(corrections) == 0){
       corrections <- dplyr::tibble(id = '',
                                    response_details = '',
