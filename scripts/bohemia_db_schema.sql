@@ -920,3 +920,9 @@ ALTER TABLE corrections
 -- Anomalies modification to add relationship to corrections
 
 ALTER TABLE anomalies ADD CONSTRAINT fk_corrections FOREIGN KEY (correction_id) REFERENCES corrections(id);
+
+-- Corrections add workaround to use unique PK 
+
+ALTER TABLE corrections
+    ADD COLUMN instance_id TEXT NOT NULL,
+    ALTER COLUMN id SET DEFAULT gen_random_uuid();

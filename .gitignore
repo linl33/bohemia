@@ -9,3 +9,8 @@ rpackage/bohemia/inst/rmd/children.Rmd
 analyses/distances/figures/
 analyses/distances/distances.html
 *.RData
+scripts/local_dev_data_setup.txt
+.venv
+.vscode
+logs
+tmp

@@ -106,6 +106,43 @@ if(new_data){
             con = con)
 }
 
+# REFUSALS TANZANIA ######################################################################
+message('PULLING REFUSALS (TANZANIA)')
+url <- creds$tza_odk_server
+user = creds$tza_odk_user
+password = creds$tza_odk_pass
+id = 'refusals'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+} 
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+  message('---', nrow(data$non_repeats), ' new data points.')
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_refusals(data = data)
+  # Update data
+  update_refusals(formatted_data = formatted_data,
+                  con = con)
+}
 
 # MINICENSUS MOZAMBIQUE #######################################################################
 message('PULLING DEPRECATED MINICENSUS (MOZAMBIQUE')
@@ -410,12 +447,16 @@ max_date <- dbGetQuery(con, 'SELECT max(devicetime) FROM traccar')
 # fetch data only from one week prior to max date
 fetch_date <- max_date$max - lubridate::days(7)
 fetch_date <- as.character(as.Date(fetch_date))
+if(is.na(fetch_date)){
+  fetch_date <- '2020-01-01'
+}
 fetch_path <- paste0("api/positions?from=", fetch_date, "T22%3A00%3A00Z&to=2022-12-31T22%3A00%3A00Z")
 
 message('Retrieving information on positions from traccar (takes a while)')
 library(dplyr)
 position_list <- list()
 for(i in 1:nrow(dat)){
+  message(i, ' of ', nrow(dat))
   this_id <- dat$id[i]
   unique_id <- dat$uniqueId[i]
   # message(i, '. ', this_id)

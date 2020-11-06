@@ -384,6 +384,7 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
+  # is_local <- FALSE
 
   # Define a summary data table (from which certain high-level indicators read)
   default_aggregate_table <- tibble(forms_submitted = 538,
@@ -2685,12 +2686,13 @@ app_server <- function(input, output, session) {
 
               # # get refusals data
               rf = odk_data$data$refusals
-
+save(rf, file = '/tmp/rf.RData')
               # Keep only the country in question
               rf <- rf %>% dplyr::filter(country == co)
 
               # Get agg
               rf_agg <- rf %>%
+                mutate(free_text = reason_no_participate) %>%
                 mutate(reason_no_participate = ifelse(reason_no_participate %in% 
                                                         c('SEM COMENTARIO',
                                                           'He didnt want to do it',
@@ -2698,7 +2700,7 @@ app_server <- function(input, output, session) {
                                                           'refused'),
                                                       'refused',
                                                       'not_present')) %>%
-                group_by(district, ward, village, hamlet, hh_id, reason_no_participate) %>%
+                group_by(district, ward, village, hamlet, hh_id, reason_no_participate, free_text) %>%
                 summarise(n = n(),
                           date = max(as.Date(todays_date), na.rm = TRUE)) %>%
                 ungroup
@@ -2706,7 +2708,8 @@ app_server <- function(input, output, session) {
               out_rf <- rf_agg %>%
                 filter(reason_no_participate == 'refused') %>%
                 dplyr::select(district, ward, village, hamlet, hh_id,
-                              `Refusal date` = date)
+                              `Refusal date` = date,
+                              `Description` = free_text)
               
               out_ab <- rf_agg %>%
                 filter(reason_no_participate == 'not_present',
@@ -2717,13 +2720,21 @@ app_server <- function(input, output, session) {
                 
               tabsetPanel(
                 tabPanel(title = 'Refusals',
-                         bohemia::prettify(out_rf,
-                                           nrows = nrow(out_rf),
-                                           download_options = TRUE)),
+                         fluidPage(
+                           fluidRow(
+                             bohemia::prettify(out_rf,
+                                               nrows = nrow(out_rf),
+                                               download_options = TRUE)
+                           )
+                         )),
                 tabPanel(title = 'Absences',
-                         bohemia::prettify(out_ab,
-                                           nrows = nrow(out_ab),
-                                           download_options = TRUE))
+                         fluidPage(
+                           fluidRow(
+                             bohemia::prettify(out_ab,
+                                               nrows = nrow(out_ab),
+                                               download_options = TRUE)
+                           )
+                         ))
               )
 
             })
@@ -2995,7 +3006,12 @@ app_server <- function(input, output, session) {
                             # fillColor = 'red',
                             fillColor = pts$status,
                             popup = pts,
-                            group = "pts") #%>%
+                            group = "pts") %>%
+                addLegend("bottomright", 
+                              colors =c("#FFFF00",  "#871F78", "#00FFFF"),
+                              labels= c("Refused", "Enumerated","Minicensed"),
+                              title= "Status",
+                              opacity = 1)
               # setView(lng = 35.7, lat = 18, zoom = 4) %>%
               # addLayersControl(overlayGroups = "pts")
               # # Add markers
@@ -3051,10 +3067,11 @@ app_server <- function(input, output, session) {
                          br(),
                          h2('Enrollment map'),
                          p('Under construction'),
-                         leafglOutput('dat_leaf_output'),
-                         h2('De-aggregated enrollment data'),
-                         p('The below table shows the status of each household'),
-                         prettify(dat, download_options = TRUE)),
+                         leafglOutput('dat_leaf_output')#,
+                         # h2('De-aggregated enrollment data'),
+                         # p('The below table shows the status of each household'),
+                         # prettify(dat, download_options = TRUE)
+                         ),
                   
                   
                 )
@@ -3559,7 +3576,7 @@ app_server <- function(input, output, session) {
                                    done = FALSE,
                                    done_by = ' ')
     }
-    joined <- dplyr::left_join(action, corrections) %>%
+    joined <- dplyr::left_join(action, corrections %>% dplyr::mutate(id = paste0(resolution_category, '_', instance_id))) %>%
       # dplyr::filter(!done)
       dplyr::select(-done, -done_by)
 
@@ -3573,8 +3590,15 @@ app_server <- function(input, output, session) {
         'Type',
         backgroundColor = styleEqual(c('Error'),
                                      c('red'))
+      ) %>%
+      DT::formatStyle(
+        'Resolved by',
+        backgroundColor = styleEqual(c('Julia'),
+                                     c('#98AFC7')),
+        target = 'row'
       )
-  })
+  },
+  options = list(scrollX = TRUE))
   
   
   # Map of all forms filled out
