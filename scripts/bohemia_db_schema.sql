@@ -926,3 +926,9 @@ ALTER TABLE anomalies ADD CONSTRAINT fk_corrections FOREIGN KEY (correction_id) 
 ALTER TABLE corrections
     ADD COLUMN instance_id TEXT NOT NULL,
     ALTER COLUMN id SET DEFAULT gen_random_uuid();
+
+-- Anomalies make id independent of instance_id
+
+ALTER TABLE anomalies ADD COLUMN anomaly_reference_key TEXT;
+UPDATE anomalies SET anomaly_reference_key = id WHERE anomaly_reference_key IS NULL;
+ALTER TABLE anomalies ALTER COLUMN anomaly_reference_key SET NOT NULL;
