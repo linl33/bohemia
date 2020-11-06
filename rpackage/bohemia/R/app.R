@@ -932,11 +932,16 @@ app_server <- function(input, output, session) {
     
     # Get the odk data
     pd <- odk_data$data
+    enum <- pd$enumerations
+    va <- pd$va
+    # save(pd, file='temp_odk_dat.rda')
     pd <- pd$minicensus_main
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
     # save(pd, file = '/tmp/pd.RData')
-    pd <- pd %>% filter(hh_country == co)
+    pd <- pd %>% filter(hh_country==co)
+    enum <- enum %>% filter(country==co)
+    va <- va %>% filter(the_country==co)
     pd_ok <- FALSE
     if(!is.null(pd)){
       if(nrow(pd) > 0){
@@ -960,15 +965,33 @@ app_server <- function(input, output, session) {
       right <- pd %>%
         group_by(code = hh_hamlet_code) %>%
         summarise(numerator = n())
+      right_enum <-enum%>%
+        group_by(code = hamlet_code) %>%
+        summarise(numerator = n())
+      right_va <-va%>%
+        group_by(code = hamlet_code) %>%
+        summarise(numerator = n())
+      
       joined <- left_join(left, right, by = 'code') %>%
         mutate(numerator = ifelse(is.na(numerator), 0, numerator)) %>%
         mutate(p = numerator / n_households * 100) %>%
         mutate(p = round(p, digits = 2))
+      joined_enum <-  left_join(left, right_enum, by = 'code') %>%
+        mutate(numerator = ifelse(is.na(numerator), 0, numerator)) %>%
+        mutate(p = numerator / n_households * 100) %>%
+        mutate(p = round(p, digits = 2))
+      progress_by_hamlet_enum <- joined_enum %>%
+        left_join(locations %>% dplyr::select(code, Hamlet), by = 'code') %>%
+        dplyr::select(code, Hamlet, `Enumerations Forms done` = numerator,
+                      `Estimated number of forms` = n_households,
+                      `Enumerations Estimated percent finished` = p)
       progress_by_hamlet <- joined %>%
         left_join(locations %>% dplyr::select(code, Hamlet), by = 'code') %>%
-        dplyr::select(code, Hamlet, `Forms done` = numerator,
+        dplyr::select(code, Hamlet, `Minicensus Forms done` = numerator,
                       `Estimated number of forms` = n_households,
-                      `Estimated percent finished` = p)
+                      `Minicensus Estimated percent finished` = p) %>% 
+        inner_join(progress_by_hamlet_enum)
+      
       
       # Transform the estimated number of forms (will be lower for MOZ than TZA since MOZ did buildings, not households)
       transformer <- ifelse(co == 'Mozambique', 0.55, 1)
