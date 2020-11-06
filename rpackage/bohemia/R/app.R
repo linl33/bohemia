@@ -959,9 +959,10 @@ app_server <- function(input, output, session) {
     
     # Get the odk data
     pd <- odk_data$data
+    
     enum <- pd$enumerations
     va <- pd$va
-    # save(pd, file='temp_odk_dat.rda')
+    # ref <- pd$refusals
     pd <- pd$minicensus_main
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
@@ -971,6 +972,7 @@ app_server <- function(input, output, session) {
     pd <- pd %>% filter(hh_country==co)
     enum <- enum %>% filter(country==co)
     va <- va %>% filter(the_country==co)
+    # ref <- ref %>% filter(country==co)
     
     # subset by date
     time_period <- input$progress_by_date
@@ -1131,7 +1133,6 @@ app_server <- function(input, output, session) {
       progress_by_village <- va %>% group_by(hh_village) %>% summarise(`VA Forms done` = n()) %>%
         right_join(progress_by_village, by=c('hh_village'='Village'))
       progress_by_village$`VA Forms done`[is.na(progress_by_village$`VA Forms done`)] <- 0
-      
       # reoder and rename columns for all "progress by" data so they are the same 
       progress_by_district <- progress_by_district %>% select(District, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`, `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`)
       names(progress_by_ward)[1] <- 'Ward'
@@ -1139,7 +1140,6 @@ app_server <- function(input, output, session) {
       names(progress_by_village)[1] <- 'Village'
       progress_by_village <- progress_by_village %>% select(Village, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`)
       progress_by_hamlet$hh_hamlet_code <- NULL
-      
       progress_by_hamlet <- progress_by_hamlet %>% select(Hamlet, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`)
       
       by_geo <- field_monitoring_geo() 
@@ -1601,9 +1601,16 @@ app_server <- function(input, output, session) {
 
     # Get the odk data
     pd <- odk_data$data
+    # save(pd, file='temp_odk_dat.rda')
+    enum <- pd$enumerations
+    va <- pd$va
+    ref <- pd$refusals
     pd <- pd$minicensus_main
     co <- country()
     pd <- pd %>% filter(hh_country == co)
+    enum <- enum %>% filter(country==co)
+    va <- va %>% filter(the_country==co)
+    ref <- ref %>% filter(country==co)
     min_date <- min(pd$todays_date, na.rm = TRUE)
     max_date <- max(pd$todays_date, na.rm = TRUE)
     seq_days <- seq(min_date, max_date, by = 1)
@@ -1652,7 +1659,10 @@ app_server <- function(input, output, session) {
       }
       
       id <- who
-      pd <- pd %>% filter(wid == who)
+      pd <- pd %>% filter(wid == id)
+      enum <- enum %>% filter(wid==id)
+      va <- va %>% filter(wid==id)
+      ref <- ref %>% filter(wid==id)
 
       last_upload <- as.character(max(pd$end_time, na.rm = TRUE))
       sup_name <- as.character(fids$supervisor[fids$bohemia_id == id])
@@ -1664,8 +1674,13 @@ app_server <- function(input, output, session) {
       total_per = round(total_forms/total_forms_fw * 100,2)
       message('---Created FW performance individual table ')
       
+      # get number of enumeration, refusals, and va forms filled 
+      num_enum = nrow(enum)
+      num_va = nrow(va)
+      num_ref = nrow(ref)
+      
       # last_days <-paste0('Last ', time_period, ' days')
-      tibble(` ` = c('Supervisor','% of rolling target','% of total target','# forms','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), `   ` = c(sup_name, rolling_per, total_per, total_forms, num_anomaly, num_error,average_time, daily_work_hours))
+      tibble(` ` = c('Supervisor','% of rolling target','% of total target','# of minicensus forms','# of enumeration forms','# of va forms','# of refusals','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), `   ` = c(sup_name, rolling_per, total_per, total_forms, num_enum, num_va, num_ref,num_anomaly, num_error,average_time, daily_work_hours))
     } else {
       NULL
     }
