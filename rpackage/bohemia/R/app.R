@@ -3553,7 +3553,7 @@ save(rf, file = '/tmp/rf.RData')
                                    done = FALSE,
                                    done_by = ' ')
     }
-    joined <- dplyr::left_join(action, corrections %>% dplyr::mutate(id = paste0(resolution_category, '_', instance_id))) %>%
+    joined <- dplyr::left_join(action, corrections %>% dplyr::mutate(anomaly_reference_key = paste0(resolution_category, '_', instance_id))) %>%
       # dplyr::filter(!done)
       dplyr::select(-done, -done_by)
 
