@@ -410,12 +410,16 @@ max_date <- dbGetQuery(con, 'SELECT max(devicetime) FROM traccar')
 # fetch data only from one week prior to max date
 fetch_date <- max_date$max - lubridate::days(7)
 fetch_date <- as.character(as.Date(fetch_date))
+if(is.na(fetch_date)){
+  fetch_date <- '2020-01-01'
+}
 fetch_path <- paste0("api/positions?from=", fetch_date, "T22%3A00%3A00Z&to=2022-12-31T22%3A00%3A00Z")
 
 message('Retrieving information on positions from traccar (takes a while)')
 library(dplyr)
 position_list <- list()
 for(i in 1:nrow(dat)){
+  message(i, ' of ', nrow(dat))
   this_id <- dat$id[i]
   unique_id <- dat$uniqueId[i]
   # message(i, '. ', this_id)
