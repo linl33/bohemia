@@ -1687,6 +1687,37 @@ app_server <- function(input, output, session) {
     
   })
   
+  output$plot_individual_errors <- renderPlot({
+    an <- session_data$anomalies
+    who <- input$fid
+    the_country <- country()
+    
+    an <- an %>% filter(wid==who)
+    an <- an %>% filter(country==the_country)
+    
+    if(nrow(an)>0){
+      an <- an %>%
+        mutate(date = strsplit(as.character(date), ",")) %>%
+        unnest(date) %>%
+        group_by(date) %>%
+        summarise(`# of anomalies` = sum(type == 'error', na.rm=TRUE),
+                  `# of errors` = sum(type == 'anomaly', na.rm=TRUE)) %>%
+        gather(key=key, value=value, -date) %>%
+        mutate(date = as.Date(date))
+    ggplot(an, aes(date, value, fill=key)) +
+        geom_bar(stat = 'identity', position = 'dodge') +
+        scale_fill_manual(name = '',
+                          values = c('black', 'grey')) +
+        labs(x='Date', y='', title='Number of errors and anomalies') +
+        theme_bohemia()
+    } else {
+      NULL
+    }
+
+   
+  })
+  
+  
   output$plot_individual_target <- renderPlot({
     
     # Get the odk data
@@ -1915,10 +1946,13 @@ app_server <- function(input, output, session) {
             ok = {
               fluidPage(
                 fluidRow(
-                  column(4,
-                         tableOutput('table_individual_details')),
-                  column(8,
-                         plotOutput('plot_individual_target'))
+                  column(6,
+                         tableOutput('table_individual_details'))),
+                fluidRow(
+                  column(6,
+                         plotOutput('plot_individual_target')),
+                  column(6,
+                         plotOutput('plot_individual_errors'))
                 ),
                 fluidRow(column(6, align = 'center',
                                 h3('All locations visited by FW'),
