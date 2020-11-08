@@ -3736,7 +3736,7 @@ save(rf, file = '/tmp/rf.RData')
     action <- action %>% dplyr::rename(FW = wid)
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
-    # save(action, corrections, file = '/tmp/this.RData')
+    save(action, corrections, file = '/tmp/this.RData')
     if(nrow(corrections) == 0){
       corrections <- dplyr::tibble(id = '',
                                    response_details = '',
@@ -3748,7 +3748,10 @@ save(rf, file = '/tmp/rf.RData')
                                    done = FALSE,
                                    done_by = ' ')
     }
-    joined <- dplyr::left_join(action, corrections %>% dplyr::mutate(anomaly_reference_key = paste0(resolution_category, '_', instance_id))) %>%
+    joined <- dplyr::left_join(action, 
+                               corrections %>% 
+                                 dplyr::mutate(anomaly_reference_key = paste0(resolution_category, '_', instance_id)) %>%
+                                 dplyr::select(-id, -instance_id)) %>%
       # dplyr::filter(!done)
       dplyr::select(-done, -done_by)
 
