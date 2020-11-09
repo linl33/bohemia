@@ -294,6 +294,7 @@ app_ui <- function(request) {
           ),
           tabItem(
             tabName = 'alerts',
+            
             fluidPage(
               # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
               p('Note: this page can take a long time to load'),
@@ -3927,19 +3928,27 @@ save(rf, file = '/tmp/rf.RData')
             ac = ac,
             ok = {
               fluidPage(
-                fluidRow(column(6,
-                                p('Select a row and then click one of the below:')),
-                         column(6,
-                                actionButton('submit_fix',
-                                             'Submit response',
-                                             style='padding:=8px; font-size:180%'))),
-                fluidRow(
-                  box(width = 12,
-                      # icon = icon('table'),
-                      color = 'orange',
-                      div(DT::dataTableOutput('anomalies_table'), style = "font-size:60%"))
-                
-              ))
+                h1('Temporarily down for maintenance'),
+                add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", 
+                             position = 'bottom-right',
+                             height = '100px',
+                             width = '100px',
+                             margins = c(350, 350))
+              )
+              # fluidPage(
+              #   fluidRow(column(6,
+              #                   p('Select a row and then click one of the below:')),
+              #            column(6,
+              #                   actionButton('submit_fix',
+              #                                'Submit response',
+              #                                style='padding:=8px; font-size:180%'))),
+              #   fluidRow(
+              #     box(width = 12,
+              #         # icon = icon('table'),
+              #         color = 'orange',
+              #         div(DT::dataTableOutput('anomalies_table'), style = "font-size:60%"))
+              #   
+              # ))
             }
     )
   })
