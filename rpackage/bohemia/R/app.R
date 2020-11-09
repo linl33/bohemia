@@ -204,8 +204,10 @@ app_ui <- function(request) {
             tabName="tracking_tools",
             fluidPage(
               fluidRow(
+                p('NOTE: the "all" functionality for locations is not yet implemented on the back-end (even though it appears in location drop-downs).')
+              ),
+              fluidRow(
                 column(3,
-                       checkboxInput('all_locations','All locations (under construction)', value = FALSE),
                        uiOutput('all_locations_ui')),
                 column(9, align = 'center',
                        navbarPage(title = 'Sheets',
@@ -385,11 +387,6 @@ app_server <- function(input, output, session) {
     message('Using remote database')
   }
   # is_local <- FALSE
-
-  # Define a summary data table (from which certain high-level indicators read)
-  default_aggregate_table <- tibble(forms_submitted = 538,
-                                    active_fieldworkers = 51,
-                                    most_recent_submission = 12.6)
   
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
@@ -593,12 +590,6 @@ app_server <- function(input, output, session) {
     }
   })
   output$all_locations_ui <- renderUI({
-    all_locations <- input$all_locations
-    if(all_locations){
-      fluidRow(
-        h3('You have selected all locations. This feature is under construction / not yet ready.')
-      )
-    } else {
       fluidRow(
         column(12, 
                radioButtons('country', 'Country', choices = c('Tanzania', 'Mozambique'), inline = TRUE, selected = 'Mozambique'), 
@@ -610,8 +601,6 @@ app_server <- function(input, output, session) {
                h4('Location code:'),
                h3(textOutput('location_code_text')))
       )
-    }
-   
   })
   
   
@@ -633,11 +622,29 @@ app_server <- function(input, output, session) {
                                             district = district,
                                             ward = ward,
                                             village = village,
-                                            hamlet = hamlet)
+                                            hamlet = hamlet,
+                                            allow_all = TRUE)
+                   print('GLC IS')
+                   print(glc)
+                   print(
+                     paste0('country: ', country, '\n',
+                            'region: ', region, '\n',
+                            'district: ', district, '\n',
+                            'ward: ', ward, '\n',
+                            'village: ', village, '\n',
+                            'hamlet: ', hamlet, '\n')
+                   )
+                   
+                   # glc <- 'NGO'
                    location_code(glc)
                  })
   output$location_code_text <- renderText({
     lc <- location_code()
+    if(!is.null(lc)){
+      if(length(lc) > 1){
+        lc <- paste0(sort(lc), collapse = ', ')
+      }
+    }
     lc
   })
   
@@ -645,6 +652,7 @@ app_server <- function(input, output, session) {
     sub_locations <- filter_locations(locations = locations,
                                       country = input$country)
     choices <- sort(unique(sub_locations$Region))
+    choices <- c(choices, 'All')
     country_name <- input$country
     if(country_name == 'Mozambique'){
       selectInput('region', 'Região', choices = choices)
@@ -654,62 +662,139 @@ app_server <- function(input, output, session) {
   })
   
   output$district_ui <- renderUI({
-    sub_locations <- filter_locations(locations = locations,
-                                      country = input$country,
-                                      region = input$region)
-    choices <- sort(unique(sub_locations$District))
-    country_name <- input$country
-    if(country_name == 'Mozambique'){
-      selectInput('district', 'Distrito', choices = choices)
+    selected <- input$region
+    ok <- FALSE
+    if(!is.null(selected)){
+      if(selected != 'All'){
+        ok <- TRUE
+      }
+    }
+    if(ok){
+      sub_locations <- filter_locations(locations = locations,
+                                        country = input$country,
+                                        region = input$region)
+      choices <- sort(unique(sub_locations$District))
+      choices <- c(choices, 'All')
+      country_name <- input$country
+      if(country_name == 'Mozambique'){
+        selectInput('district', 'Distrito', choices = choices)
+      } else {
+        selectInput('district', 'District', choices = choices)
+      }
     } else {
-      selectInput('district', 'District', choices = choices)
+      NULL
     }
   })
   
   output$ward_ui <- renderUI({
-    sub_locations <- filter_locations(locations = locations,
-                                      country = input$country,
-                                      region = input$region,
-                                      district = input$district)
-    choices <- sort(unique(sub_locations$Ward))
-    country_name <- input$country
-    if(country_name == 'Mozambique'){
-      selectInput('ward', 'Posto administrativo/localidade', choices = choices)
+    selected <- input$district
+    ok <- FALSE
+    if(!is.null(selected)){
+      if(selected != 'All'){
+        selected <- input$region
+        if(!is.null(selected)){
+          if(selected != 'All'){
+            ok <- TRUE
+          }
+        }
+      }
+    }
+    if(ok){
+      sub_locations <- filter_locations(locations = locations,
+                                        country = input$country,
+                                        region = input$region,
+                                        district = input$district)
+      choices <- sort(unique(sub_locations$Ward))
+      choices <- c(choices, 'All')
+      country_name <- input$country
+      if(country_name == 'Mozambique'){
+        selectInput('ward', 'Posto administrativo/localidade', choices = choices)
+      } else {
+        selectInput('ward', 'Ward', choices = choices)
+      } 
     } else {
-      selectInput('ward', 'Ward', choices = choices)
-    }  
+      NULL
+    }
   })
   
   output$village_ui <- renderUI({
-    sub_locations <- filter_locations(locations = locations,
-                                      country = input$country,
-                                      region = input$region,
-                                      district = input$district,
-                                      ward = input$ward)
-    choices <- sort(unique(sub_locations$Village))
-    country_name <- input$country
-    if(country_name == 'Mozambique'){
-      selectInput('village', 'Povoado', choices = choices)
+    selected <- input$ward
+    ok <- FALSE
+    if(!is.null(selected)){
+      if(selected != 'All'){
+        selected <- input$district
+        if(!is.null(selected)){
+          if(selected != 'All'){
+            selected <- input$region
+            if(!is.null(selected)){
+              if(selected != 'All'){
+                ok <- TRUE
+              }
+            }
+          }
+        }
+      }
+    }
+    if(ok){
+      sub_locations <- filter_locations(locations = locations,
+                                        country = input$country,
+                                        region = input$region,
+                                        district = input$district,
+                                        ward = input$ward)
+      choices <- sort(unique(sub_locations$Village))
+      choices <- c(choices, 'All')
+      country_name <- input$country
+      if(country_name == 'Mozambique'){
+        selectInput('village', 'Povoado', choices = choices)
+      } else {
+        selectInput('village', 'Village', choices = choices)
+      }
     } else {
-      selectInput('village', 'Village', choices = choices)
-    }  
+      NULL
+    }
   })
   
   output$hamlet_ui <- renderUI({
-    sub_locations <- filter_locations(locations = locations,
-                                      country = input$country,
-                                      region = input$region,
-                                      district = input$district,
-                                      ward = input$ward,
-                                      village = input$village)
-    choices <- sort(unique(sub_locations$Hamlet))
-    country_name <- input$country
-    if(country_name == 'Mozambique'){
-      selectInput('hamlet', 'Bairro', choices = choices)
+    selected <- input$village
+    ok <- FALSE
+    if(!is.null(selected)){
+      if(selected != 'All'){
+        selected <- input$ward
+        if(!is.null(selected)){
+          if(selected != 'All'){
+            selected <- input$district
+            if(!is.null(selected)){
+              if(selected != 'All'){
+                selected <- input$region
+                if(!is.null(selected)){
+                  if(selected != 'All'){
+                    ok <- TRUE
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    if(ok){
+      sub_locations <- filter_locations(locations = locations,
+                                        country = input$country,
+                                        region = input$region,
+                                        district = input$district,
+                                        ward = input$ward,
+                                        village = input$village)
+      choices <- sort(unique(sub_locations$Hamlet))
+      choices <- c(choices, 'All')
+      country_name <- input$country
+      if(country_name == 'Mozambique'){
+        selectInput('hamlet', 'Bairro', choices = choices)
+      } else {
+        selectInput('hamlet', 'Hamlet', choices = choices)
+      } 
     } else {
-      selectInput('hamlet', 'Hamlet', choices = choices)
-    } 
-    
+      NULL
+    }
   })
   
   # Get number of households for hamlet selected
@@ -721,8 +806,8 @@ app_server <- function(input, output, session) {
       ok <- TRUE
     }
     if(ok){
-      num_houses <- gps %>% filter(code == lc) %>% .$n_households
-      num_houses <- round(num_houses * 1.25)
+      num_houses <- gps %>% filter(code %in% lc) %>% .$n_households
+      num_houses <- round(sum(num_houses) * 1.25)
     } else {
       num_houses <- 500
     }
@@ -3978,7 +4063,7 @@ save(rf, file = '/tmp/rf.RData')
       
       
       x <- bohemia::locations
-      x <- x %>% filter(code == loc_id)
+      x <- x %>% filter(code %in% loc_id)
       if(nrow(x) > 0){
         loc_name <- paste0(x$Ward, ', ', x$Village, ', ', x$Hamlet)
       } else {

@@ -204,33 +204,35 @@ filter_locations <- function(locations,
                              village = NULL,
                              hamlet = NULL){
   out <- locations
+  
+
   if(!is.null(country)){
-    if(country != ''){
+    if(!country %in% c('', 'All')){
       out <- out %>% filter(Country %in% country) 
     }
   }
   if(!is.null(region)){
-    if(region != ''){
+    if(!region %in% c('', 'All')){
       out <- out %>% filter(Region %in% region)
     }
   }
   if(!is.null(district)){
-    if(district != ''){
+    if(!district %in% c('', 'All')){
       out <- out %>% filter(District %in% district)
     }
   }
   if(!is.null(ward)){
-    if(ward != ''){
+    if(!ward %in% c('', 'All')){
       out <- out %>% filter(Ward %in% ward) 
     }
   }
   if(!is.null(village)){
-    if(village != ''){
+    if(!village %in% c('', 'All')){
       out <- out %>% filter(Village %in% village)
     }
   }
   if(!is.null(hamlet)){
-    if(hamlet != ''){
+    if(!hamlet %in% c('', 'All')){
       out <- out %>% filter(Hamlet %in% hamlet) 
     }
   }
