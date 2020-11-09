@@ -46,6 +46,7 @@ format_refusals <- function(data){
                                           reason_no_participate_other,
                                          reason_no_participate)) %>%
     dplyr::select(-reason_no_participate_other) 
+  df$hamlet_code_from_hhid <- NULL
   
   # NO REPEATS IN refusalS
   # Return the formatted data

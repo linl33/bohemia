@@ -224,6 +224,7 @@ CREATE TABLE refusals (
     server   VARCHAR(256),
     PRIMARY KEY(instance_id)
     );
+ALTER TABLE refusals ADD COLUMN activity TEXT;
 
 -- Sessions
 

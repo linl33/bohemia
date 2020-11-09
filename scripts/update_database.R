@@ -429,6 +429,45 @@ if(new_data){
                     con = con)
 }
 
+############# SMALLCENSUSb MOZAMBIQUE
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'smallcensusb'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+}
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = FALSE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_minicensus(data = data)
+  # Update data
+  update_minicensus(formatted_data = formatted_data,
+                    con = con)
+}
+
+
 
 ############### MOZAMBIQUE VA
 message('PULLING MOZAMBIQUE VA')
@@ -469,6 +508,45 @@ if(new_data){
                     con = con)
 }
 
+############### MOZAMBIQUE VA B
+message('PULLING MOZAMBIQUE VA B')
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'va153b'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM va')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+}
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = FALSE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_va(data = data)
+  # Update data
+  update_va(formatted_data = formatted_data,
+            con = con)
+}
+
 # ENUMERATIONS MOZAMBIQUE######################################################################
 message('PULLING ENUMERATIONS (MOZAMBIQUE')
 url <- creds$moz_odk_server
@@ -506,6 +584,45 @@ if(new_data){
   update_enumerations(formatted_data = formatted_data,
                       con = con)
 }
+
+# ENUMERATIONS MOZAMBIQUE######################################################################
+message('PULLING ENUMERATIONS b (MOZAMBIQUE')
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'enumerationsb'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM enumerations')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+} 
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+  # message('---', nrow(data$non_repeats), ' new data points.')
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_enumerations(data = data)
+  # Update data
+  update_enumerations(formatted_data = formatted_data,
+                      con = con)
+}
+
 
 # REFUSALS MOZAMBIQUE######################################################################
 message('PULLING REFUSALS (MOZAMBIQUE)')
@@ -545,6 +662,47 @@ if(new_data){
   update_refusals(formatted_data = formatted_data,
                   con = con)
 }
+
+
+# REFUSALS MOZAMBIQUE######################################################################
+message('PULLING REFUSALS b (MOZAMBIQUE)')
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'refusalsb'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+} 
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password, 
+  pre_auth = TRUE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+  message('---', nrow(data$non_repeats), ' new data points.')
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_refusals(data = data)
+  # Update data
+  update_refusals(formatted_data = formatted_data,
+                  con = con)
+}
+
 
 
 ## TRACCAR LOCATIONS ##############################################
@@ -646,7 +804,6 @@ message('...done adding positions to traccar table.')
 # create_clean_db(credentials_file = '../credentials/credentials.yaml')
 message('--- NOW EXECUTING CLEANING CODE ---')
 source('clean_database.R') # this drops clean and creates new ones
-system('python clean_database_fixes.py')
 
 
 ####### ANOMALIES CREATION ##################################################

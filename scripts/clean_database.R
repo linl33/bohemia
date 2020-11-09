@@ -53,7 +53,6 @@ create_clean_db(credentials_file = '../credentials/credentials.yaml',
 
 
 # Create the fixes (both populating the fixes table and actually implementing them on clean data)
-source('clean_database_fixes.py')
 library(reticulate)
 # Drop the old fixes before creating the new ones
 dbExecute(conn = con,

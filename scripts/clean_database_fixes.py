@@ -15,12 +15,12 @@ with open(r'../credentials/credentials.yaml') as file:
     creds = yaml.load(file, Loader=yaml.FullLoader)
 
 # Define whether working locally or not
-is_local = True
+is_local = False
 if is_local:
     dbconn = psycopg2.connect(dbname="bohemia") #psycopg2.connect(dbname="bohemia", user="bohemia_app", password="")
     engine_string = "postgresql:///bohemia"
 else:
-    dbconn = psycopg2.connect(dbname='bohemia', user = creds['psql_master_username'], password = creds['psql_master_password'], host = psql['endpoint'], port = 5432)
+    dbconn = psycopg2.connect(dbname='bohemia', user = creds['psql_master_username'], password = creds['psql_master_password'], host = creds['endpoint'], port = 5432)
     engine_string = "postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}".format(
         user=creds['psql_master_username'],
         password=creds['psql_master_password'],
