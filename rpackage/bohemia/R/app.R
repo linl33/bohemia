@@ -297,7 +297,7 @@ app_ui <- function(request) {
             
             fluidPage(
               # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
-              p('Note: this page can take a long time to load'),
+              uiOutput('anomalies_ui_a'),
               uiOutput('anomalies_ui')
             )
           ),
@@ -3024,6 +3024,7 @@ save(rf, file = '/tmp/rf.RData')
       just_one <- TRUE
     }
     if(just_one){
+      this_row <- tidyr::gather(this_row, key, value)
       showModal(
         modalDialog(
           title = 'Anomaly/error resolution',
@@ -3098,14 +3099,13 @@ save(rf, file = '/tmp/rf.RData')
     log_in_user <- input$log_in_user
     fix <-
       tibble(id = this_row$id,
+             instance_id = this_row$instance_id,
              response_details = response_details,
              resolved_by = fix_source,
              resolution_method = fix_method,
              resolution_date = as.character(resolution_date),
              submitted_by = log_in_user,
-             submitted_at = Sys.time(),
-             done = FALSE,
-             done_by = ' ')
+             submitted_at = Sys.time())
     # CONNECT TO THE DATABASE AND ADD FIX
     message('Connecting to the database in order to add a fix to the corrections table')
     # save(fix, fix_source, fix_method, resolution_date, log_in_user, response_details, this_row, action, sr, file = '/tmp/sunday.RData')
@@ -3818,32 +3818,44 @@ save(rf, file = '/tmp/rf.RData')
     action <- session_data$anomalies
     # Get supervisor
     action <- action %>%
-      left_join(fids %>% dplyr::mutate(fw_name = paste0(first_name, ' ', last_name)) %>% dplyr::select(wid = bohemia_id, supervisor))
+      left_join(fids %>% dplyr::mutate(fw_name = paste0(first_name, ' ', last_name))  %>%
+                  mutate(wid = as.character(bohemia_id)) %>%
+                  dplyr::select(wid, supervisor))
     action <- action %>% dplyr::rename(FW = wid)
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
-    save(action, corrections, file = '/tmp/this.RData')
-    if(nrow(corrections) == 0){
-      corrections <- dplyr::tibble(id = '',
-                                   response_details = '',
-                                   resolved_by = '',
-                                   resolution_method = '',
-                                   resolution_date = '',
-                                   submitted_by = '',
-                                   submitted_at = Sys.time(),
-                                   done = FALSE,
-                                   done_by = ' ')
-    }
-    joined <- dplyr::left_join(action, 
-                               corrections %>% 
-                                 dplyr::mutate(anomaly_reference_key = paste0(resolution_category, '_', instance_id)) %>%
-                                 dplyr::select(-id, -instance_id)) %>%
-      # dplyr::filter(!done)
-      dplyr::select(-done, -done_by)
+    fixes <- odk_data$data$fixes
+    # odk_data <- odk_data$data
+    save(action, corrections, fixes, odk_data, file = '/tmp/this.RData')
+    
+    # Join tables together
+    joined <- left_join(action,
+                        corrections %>% dplyr::select(-instance_id))
+    joined <- left_join(joined, fixes)
 
     joined$technical_date <- unlist(lapply(strsplit(as.character(joined$date), ','), function(x){x[length(x)]}))
     joined$days_ago <- Sys.Date() - as.Date(joined$technical_date)
     joined$technical_date <- NULL
+    joined$resolution_submitted <- !is.na(joined$submitted_at)
+    joined$fix_implemented <- !is.na(joined$done_by)
+    # Reorder a bit
+    joined <- joined %>% 
+      dplyr::select(type, days_ago, country, FW, date, id, description, incident, instance_id, supervisor,
+                    response_details,
+                    resolved_by,
+                    resolution_method,
+                    submitted_by,
+                    submitted_at,
+                    done_by,
+                    done_at,
+                    resolution_submitted,
+                    fix_implemented)
+    hide_submitted <- input$hide_submitted
+    if(!is.null(hide_submitted)){
+      if(hide_submitted){
+       joined <- joined %>% filter(!resolution_submitted) 
+      }
+    }
     bohemia::prettify(joined, 
              download_options = TRUE,
              nrows = nrow(joined)) %>%
@@ -3853,9 +3865,15 @@ save(rf, file = '/tmp/rf.RData')
                                      c('red'))
       ) %>%
       DT::formatStyle(
-        'Resolved by',
-        backgroundColor = styleEqual(c('Julia'),
-                                     c('#98AFC7')),
+        'Resolution submitted',
+        backgroundColor = styleEqual(c(TRUE),
+                                     c('#FFFACD')),
+        target = 'row'
+      ) %>%
+      DT::formatStyle(
+        'Fix implemented',
+        backgroundColor = styleEqual(c(TRUE),
+                                     c('#98FB98')),
         target = 'row'
       )
   },
@@ -3917,6 +3935,44 @@ save(rf, file = '/tmp/rf.RData')
   })
   
   # Alert ui
+  output$anomalies_ui_a <- renderUI({
+    
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'malaria' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              # fluidPage(
+              #   h1('Temporarily down for maintenance'),
+              #   add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", 
+              #                position = 'bottom-right',
+              #                height = '100px',
+              #                width = '100px',
+              #                margins = c(350, 350))
+              # )
+              fluidPage(
+                fluidRow(column(6,
+                                p('Select a row and then click one of the below:')),
+                         column(6,
+                                actionButton('submit_fix',
+                                             'Submit response',
+                                             style='padding:=8px; font-size:120%'))),
+                fluidRow(
+                  column(12,
+                         checkboxInput('hide_submitted', 
+                                       'Hide rows for which a resolution has already been submitted?',
+                                       value = FALSE))
+
+                  
+                ))
+            }
+    )
+  })
+  
+  
   output$anomalies_ui <- renderUI({
     
     # See if the user is logged in and has access
@@ -3927,28 +3983,22 @@ save(rf, file = '/tmp/rf.RData')
     make_ui(li = li,
             ac = ac,
             ok = {
-              fluidPage(
-                h1('Temporarily down for maintenance'),
-                add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", 
-                             position = 'bottom-right',
-                             height = '100px',
-                             width = '100px',
-                             margins = c(350, 350))
-              )
               # fluidPage(
-              #   fluidRow(column(6,
-              #                   p('Select a row and then click one of the below:')),
-              #            column(6,
-              #                   actionButton('submit_fix',
-              #                                'Submit response',
-              #                                style='padding:=8px; font-size:180%'))),
-              #   fluidRow(
-              #     box(width = 12,
-              #         # icon = icon('table'),
-              #         color = 'orange',
-              #         div(DT::dataTableOutput('anomalies_table'), style = "font-size:60%"))
-              #   
-              # ))
+              #   h1('Temporarily down for maintenance'),
+              #   add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", 
+              #                position = 'bottom-right',
+              #                height = '100px',
+              #                width = '100px',
+              #                margins = c(350, 350))
+              # )
+              fluidPage(
+                fluidRow(
+                  box(width = 12,
+                      # icon = icon('table'),
+                      color = 'orange',
+                      div(DT::dataTableOutput('anomalies_table'), style = "font-size:60%"))
+
+              ))
             }
     )
   })
@@ -3975,7 +4025,8 @@ save(rf, file = '/tmp/rf.RData')
                                                  'Minicensus HH subs',
                                                  'Minicensus mosquito nets',
                                                  'Minicensus water',
-                                                 'VA'
+                                                 'VA',
+                                                 'Modifications'
                                      ))
                   ),
                   column(6,
@@ -4014,6 +4065,8 @@ save(rf, file = '/tmp/rf.RData')
         df <- odk_data$data$minicensus_repeat_water
       } else if(which_download == 'VA'){
         df <- odk_data$data$va
+      } else if(which_download == 'Modifications'){
+        df <- odk_data$data$fixes
       } 
       write.csv(df,
                 file,

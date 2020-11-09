@@ -80,8 +80,9 @@ load_odk_data <- function(the_country = 'Mozambique',
   
   # Read in corrections data
   corrections <- dbGetQuery(con, "SELECT * FROM corrections")
+  fixes <- dbGetQuery(con, "SELECT * FROM fixes")
+  data$fixes <- fixes
   data$corrections <- corrections
-  
   
   dbDisconnect(con)
   

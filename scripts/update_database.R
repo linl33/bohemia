@@ -645,7 +645,8 @@ message('...done adding positions to traccar table.')
 # #Execute cleaning code
 # create_clean_db(credentials_file = '../credentials/credentials.yaml')
 message('--- NOW EXECUTING CLEANING CODE ---')
-source('clean_database.R')
+source('clean_database.R') # this drops clean and creates new ones
+system('python clean_database_fixes.py')
 
 
 ####### ANOMALIES CREATION ##################################################
@@ -675,19 +676,46 @@ anomalies$date <- as.Date(anomalies$date)
 #             statement = 'DELETE FROM anomalies;')
 # dbSendQuery(conn = con,
 #             statement = 'DROP FROM anomalies CASCADE;')
-anomalies <- anomalies%>% 
-  mutate(anomaly_reference_key = id) %>%
-  filter(!duplicated(anomaly_reference_key)) # need to check on this!
+
 already_keys <- dbGetQuery(conn = con,
-                           statement = 'SELECT anomaly_reference_key from anomalies;')
-already_keys <- already_keys$anomaly_reference_key
-anomalies <- anomalies %>% filter(!anomaly_reference_key %in% already_keys)
+                           statement = 'SELECT id from anomalies;')
+
+already_keys <- already_keys$id
+anomalies <- anomalies %>% filter(!id %in% already_keys)
+  
+
 if(nrow(anomalies) > 0){
   dbWriteTable(conn = con,
                name = 'anomalies',
                value = anomalies,
                append = TRUE)
 }
+
+# # One-off migration of corrections
+# for(i in 1:4){
+#   message(i)
+#   a = readxl::read_excel('~/Desktop/a.xlsx',
+#                          sheet = i)
+#   a <- a %>%
+#     mutate(submitted_by = 'Julia Montaña',
+#            submitted_at = '2020-10-31',
+#            resolution_code = NA) %>%
+#     mutate(id = tolower(id)) %>%
+#     dplyr::select(id,
+#                   instance_id,
+#                   response_details = responsedetails,
+#                   resolved_by = resolvedby,
+#                   resolution_method = resolutionmethod,
+#                   resolution_date = resolutiondate,
+#                   submitted_by,
+#                   submitted_at)
+#   # Update the database
+#   dbAppendTable(conn = con,
+#                 name = 'corrections',
+#                 value = a)
+# 
+# }
+
 x = dbDisconnect(con)
 
 
