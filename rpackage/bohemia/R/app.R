@@ -3826,7 +3826,7 @@ save(rf, file = '/tmp/rf.RData')
     corrections <- odk_data$data$corrections
     fixes <- odk_data$data$fixes
     # odk_data <- odk_data$data
-    save(action, corrections, fixes, odk_data, file = '/tmp/this.RData')
+    # save(action, corrections, fixes, odk_data, file = '/tmp/this.RData')
     
     # Join tables together
     joined <- left_join(action,
