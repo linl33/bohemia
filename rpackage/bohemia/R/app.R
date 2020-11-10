@@ -32,7 +32,7 @@ app_ui <- function(request) {
                                        'Mozambique' = 'Mopeia'
                                      ),
                                      inline = TRUE,
-                                     selected = 'Mopeia')),
+                                     selected = 'Rufiji')),
                 tags$li(class = 'dropdown',
                         uiOutput('log_ui')))),
       dashboardSidebar(
