@@ -207,7 +207,7 @@ implement(id = 'no_va_id_c5caa4f7-ae42-45d9-a363-7f24a541807f', query = "UPDATE 
 implement(id = 'no_va_id_f6c4ed2f-012a-4025-b8b5-e7d23ec8d06b', query = "UPDATE clean_va SET death_id='XAM-051-701' WHERE instance_id='f6c4ed2f-012a-4025-b8b5-e7d23ec8d06b'")
 implement(id = 'no_va_id_9a3207b7-6925-4441-b834-723ae93af283', query = "UPDATE clean_va SET death_id='ZVB-263-701' WHERE instance_id='9a3207b7-6925-4441-b834-723ae93af283'")
 implement(id = 'no_va_id_c6a098bb-55f8-4160-a6e5-5f2afbe9082e', query = "UPDATE clean_va SET death_id='ZVB-286-701' WHERE instance_id='c6a098bb-55f8-4160-a6e5-5f2afbe9082e'")
-
+implement(id = 'no_va_id_f754caea-0a7d-42c9-a6af-a52d18a1e8ae', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='f754caea-0a7d-42c9-a6af-a52d18a1e8ae'")
 
 
 # TZA

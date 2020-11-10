@@ -1469,7 +1469,7 @@ app_server <- function(input, output, session) {
       # create a placeholder for number of fieldworkers. 
       # num_fws <- length(unique(pd$wid)) #-12 - get average number of unique fieldworkers per day
       if(co == 'Tanzania'){
-        num_fws <- 77
+        num_fws <- 73
       } else {
         num_fws <- 86
       }
