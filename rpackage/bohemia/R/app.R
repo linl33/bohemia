@@ -15,6 +15,7 @@
 #' @import leafgl
 #' @import sf
 #' @import shinybusy
+#' @import ggrepel
 app_ui <- function(request) {
   options(scipen = '999')
   
@@ -296,6 +297,7 @@ app_ui <- function(request) {
             tabName = 'alerts',
             
             fluidPage(
+              tags$img(src = "www/alerts_legend.png"),
               # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
               uiOutput('anomalies_ui_a'),
               uiOutput('anomalies_ui')
@@ -3470,8 +3472,16 @@ save(rf, file = '/tmp/rf.RData')
                   plotOutput('active_fw_per_day')
                 ),
                 fluidRow(
-                  h3('Errors and Anomalies per day'),
+                  h3('Errors and anomalies per day'),
                   plotOutput('e_and_a_per_day')
+                ),
+                fluidRow(
+                  h3('Errors and Anomalies resolutions'),
+                  column(6,
+                         plotOutput('ea1')),
+                  column(6,
+                         plotOutput('ea2'))
+                  
                 ),
                 fluidRow(
                   h3('Summary table'),
@@ -3862,8 +3872,8 @@ save(rf, file = '/tmp/rf.RData')
              nrows = nrow(joined)) %>%
       DT::formatStyle(
         'Type',
-        backgroundColor = styleEqual(c('Error'),
-                                     c('red'))
+        backgroundColor = styleEqual(c('Error', 'Anomaly'),
+                                     c('red', 'orange'))
       ) %>%
       DT::formatStyle(
         'Resolution submitted',
@@ -3935,7 +3945,103 @@ save(rf, file = '/tmp/rf.RData')
     }
   })
   
+  # Errors and anomalies charts
+  output$ea1 <- renderPlot({
+    anomalies <- session_data$anomalies
+    # # Get supervisor
+    # anomalies <- anomalies %>%
+    #   left_join(fids %>% dplyr::mutate(fw_name = paste0(first_name, ' ', last_name))  %>%
+    #               mutate(wid = as.character(bohemia_id)) %>%
+    #               dplyr::select(wid, supervisor))
+    # anomalies <- anomalies %>% dplyr::rename(FW = wid)
+    # Join with the already existing fixes and remove those for which a fix has already been submitted
+    corrections <- odk_data$data$corrections
+    fixes <- odk_data$data$fixes
+    # save(anomalies, corrections, fixes, odk_data, file = '/tmp/this.RData')
+    
+    joined <- left_join(anomalies,
+                        corrections %>% dplyr::select(-instance_id))
+    joined <- left_join(joined, fixes)
+    
+    pd <- joined %>%
+      mutate(status = ifelse(!is.na(done_by), 'Done',
+                             ifelse(!is.na(response_details), 'Response submitted',
+                                    'Needs response'))) %>%
+      group_by(category = status) %>%
+      tally %>%
+      ungroup %>%
+      mutate(fraction = n/ sum(n)) %>%
+      mutate(p = paste0(round(fraction * 100, digits = 1), '%')) %>%
+      mutate(ymax = cumsum(fraction)) %>%
+      mutate(ymin = c(0, head(ymax, n = -1))) %>%
+      mutate(label_position = (ymax + ymin) / 2) %>%
+      mutate(label = paste0(category, '\nN: ', n, ' (', p, ')'))
+    
+    cols <- c('darkgreen', grey(0.5),'darkorange')
+    ggplot(data = pd, aes(ymax=ymax, ymin=ymin, xmax=4, xmin=2, fill=category)) +
+      geom_rect(alpha = 0.6) +
+      ggrepel::geom_text_repel( x=5, aes(y=label_position, label=label, color = category), size=4) +
+      coord_polar(theta="y") +
+      xlim(c(-1, 4)) +
+      theme_void() +
+      # scale_fill_brewer(palette=4) +
+      scale_fill_manual(name = '',
+                        values = cols) +
+      scale_color_manual(name = '',
+                        values = cols) +
+      theme(legend.position = "none") +
+      labs(x = '',
+           y = '',
+           title = 'Anomalies/errors status')
+  })
+  output$ea2 <- renderPlot({
+    anomalies <- session_data$anomalies
+    # # Get supervisor
+    # anomalies <- anomalies %>%
+    #   left_join(fids %>% dplyr::mutate(fw_name = paste0(first_name, ' ', last_name))  %>%
+    #               mutate(wid = as.character(bohemia_id)) %>%
+    #               dplyr::select(wid, supervisor))
+    # anomalies <- anomalies %>% dplyr::rename(FW = wid)
+    # Join with the already existing fixes and remove those for which a fix has already been submitted
+    corrections <- odk_data$data$corrections
+    fixes <- odk_data$data$fixes
+    
+    joined <- left_join(anomalies,
+                        corrections %>% dplyr::select(-instance_id))
+    joined <- left_join(joined, fixes)
+    
+    pd <- joined %>%
+      mutate(status = ifelse(!is.na(done_by), 'Done',
+                             ifelse(!is.na(response_details), 'Response submitted',
+                                    'Needs response'))) %>%
+      mutate(week = lubridate::week(date)) %>%
+      group_by(week) %>%
+      mutate(week_label = paste0(min(date), '-\n', max(date))) %>%
+      group_by(category = status, date = week_label) %>%
+      tally %>%
+      ungroup 
+    cols <- c(grey(0.5),'darkorange', 'darkgreen')
+    pd$category <- factor(pd$category,
+                          levels = c('Needs response',
+                                     'Response submitted',
+                                     'Done'))
+    ggplot(data = pd,
+           aes(x = date,
+               y = n,
+               group = category,
+               fill = category)) +
+      geom_bar(stat = 'identity') +
+      scale_fill_manual(name = '',
+                        values = cols,
+                        guide = guide_legend(reverse = TRUE)) +
+      labs(x = 'Week of anomaly occurrence',
+           y = 'Number of anomalies',
+           title = 'Anomalies/errors and status over time') +
+      theme_bohemia()
+  })
+  
   # Alert ui
+  
   output$anomalies_ui_a <- renderUI({
     
     # See if the user is logged in and has access
