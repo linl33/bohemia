@@ -197,7 +197,13 @@ app_ui <- function(request) {
           ),
           tabItem(
             tabName="enrollment",
-            uiOutput('ui_enrollment')),
+            navbarPage(
+              title = 'Enrollment data',
+              tabPanel('Aggregated',
+                       uiOutput('ui_enrollment')),
+              tabPanel('Data managers',
+                       uiOutput('ui_data_managers'))
+            )),
           tabItem(
             tabName="server_status",
             uiOutput('ui_server_status')),
@@ -3251,31 +3257,17 @@ save(rf, file = '/tmp/rf.RData')
                           `Households enumerated but not minicensed` = length(which(enumeration_wo_minicensus))) %>%
                 mutate(`%` = `Unique minicensus HH IDs` / `Unique enumeration HH IDs` * 100)
               message('---Created table for aggregated enrollment data')
-              
+              # save(dat, file = 'temp_dat.rda')
               sub_stats <- dat %>%
-                summarise(`Minicensus forms collected` = sum(num_mini, na.rm = TRUE),
-                          `Unique minicensus HH IDs` = length(which(!is.na(last_date_mini))),
-                          `Enumeration forms collected` = sum(num_enum, na.rm = TRUE),
-                          `Unique enumeration HH IDs` = length(which(!is.na(last_date_enum))),
-                          `Refusals` = sum(num_ref[reason_no_participate %in% c('SEM COMENTARIO',
-                                                                                'He didnt want to do it',
-                                                                                'Dont know',
-                                                                                'refused')], na.rm = TRUE),
-                          `Refusals due to absence` = sum(num_ref[reason_no_participate %in% c("Wasnt there",
-                                                                                'not_present' )], na.rm = TRUE),
-                          `Unique households` = nrow(all_hh_ids),
-                          `Minicensus response rate`= (`Minicensus forms collected`/nrow(dat))*100,
+                summarise(`Minicensus response rate`= (length(which(!is.na(num_mini)))/nrow(dat))*100,
                           `# of enumeration refusals` = length(which(is.na(num_enum)&is.na(num_mini))),
                           `# of minicensus refusals`= length(which(!is.na(num_enum)&is.na(num_mini)&!is.na(num_ref))),
-                          `# of refusals due to 3 absences` = length(which(`Refusals due to absence`>3)),
+                          `# of hh ever absent` = sum(num_ref[reason_no_participate %in% c("Wasnt there",
+                                                                                           'not_present' )], na.rm = TRUE),
+                          `# of refusals due to 3 absences` = length(which(`# of hh ever absent`>3)),
                           `% refused` = (sum(`# of enumeration refusals`,`# of minicensus refusals`,`# of refusals due to 3 absences`)/nrow(dat))*100,
-                          `# of households eabsent then present` = 0,
-                          `% successful follow up`=0,
-                          `Households geocoded` = length(which(any_geocode)),
-                          `Avg days between enumeration and minicensus` = mean(time_bw_enumeration_and_minicensus, na.rm = TRUE),
-                          `Households enumerated but not minicensed` = length(which(enumeration_wo_minicensus))) %>%
-                mutate(`%` = `Unique minicensus HH IDs` / `Unique enumeration HH IDs` * 100) 
-              
+                          `# of households absent then present` = length(which(last_date_ref>last_date_mini)),
+                          `% successful follow up`=(`# of households absent then present`/`# of hh ever absent`))
               # Get raw data table for display
               dat <- dat %>%
                 mutate(lng = ifelse(is.na(lng_minicensus),
@@ -3385,6 +3377,44 @@ save(rf, file = '/tmp/rf.RData')
                          ),
                   
                   
+                )
+              )
+              
+              
+            }
+            
+    )
+  })
+  
+  output$ui_data_managers <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'enrollment' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              
+              # Get the country
+              co <- input$geo
+              co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
+              loc <- bohemia::locations
+              loc <- loc %>% filter(Country==co)
+              
+              fluidPage(
+                fluidRow(
+                  column(6,
+                         selectInput('Choose location', 'choose_location', choices=unique(loc$code))
+                  ),
+                  column(6,
+                         selectInput('Choose activity', 'choose_activity', choices=c('Enumerations', 'Minicensus'))
+                  )
+                ),
+                fluidRow(
+                  column(12,
+                         actionButton(inputId = 'activity_done', label = 'Activity done')
+                         )
                 )
               )
               
