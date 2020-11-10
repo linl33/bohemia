@@ -1684,7 +1684,25 @@ app_server <- function(input, output, session) {
    l
   })
   
-
+  # table for anomaly description
+  output$table_individual_errors <- renderTable({
+    an <- session_data$anomalies
+    who <- input$fid
+    the_country <- country()
+    
+    an <- an %>% filter(wid==who)
+    # an <- an %>% filter(country==the_country)
+    
+    if(nrow(an)>0){
+      save(an, file ='temp_an.rda')
+      an <- an %>% select(type, wid, description)
+      names(an) <- Hmisc::capitalize(names(an))
+      an <- tibble(an)
+      an
+    } else {
+      NULL
+    }
+  })
   
   output$table_individual_details <- renderTable({
 
@@ -2036,7 +2054,9 @@ app_server <- function(input, output, session) {
               fluidPage(
                 fluidRow(
                   column(6,
-                         tableOutput('table_individual_details'))),
+                         tableOutput('table_individual_details')),
+                  column(6,
+                         tableOutput('table_individual_errors'))),
                 fluidRow(
                   column(6,
                          plotOutput('plot_individual_target')),
