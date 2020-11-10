@@ -1095,6 +1095,7 @@ app_server <- function(input, output, session) {
       
       # Create a detailed progress table (by hamlet)
       left <- gps %>%
+        filter(clinical_trial != 1) %>%
         filter(iso == the_iso) %>%
         dplyr::select(code, n_households)
       right <- pd %>%
@@ -1268,7 +1269,7 @@ app_server <- function(input, output, session) {
       # reorder columns
       
       message('---created progess table for Overview by geography')
-      out <- bohemia::prettify(monitor_by_table, download_options = TRUE)
+      out <- bohemia::prettify(monitor_by_table, download_options = TRUE, nrows = nrow(monitor_by_table))
     }
     return(out)
   })
@@ -1322,7 +1323,7 @@ app_server <- function(input, output, session) {
         addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
         addCircleMarkers(data = lxd_all, lng = ~lng, lat = ~lat,label = hamlet_text, stroke=FALSE, color=~pal_hamlet(p), fillOpacity = 0.6, 
                          radius = 10) %>%
-        addLegend(position = c("bottomleft"), pal = pal_hamlet, values = lxd_all$p)
+        addLegend(title = '% completed', position = c("bottomleft"), pal = pal_hamlet, values = lxd_all$p)
       
       # create map for village
       lxd_village <- lxd_all %>% group_by(hh_village) %>%
@@ -1341,7 +1342,7 @@ app_server <- function(input, output, session) {
       lxd_village <- leaflet(data = lxd_village, height = leaflet_height) %>% 
         addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
         addCircleMarkers(data = lxd_village, lng = ~lng, lat = ~lat,label = village_text, stroke=FALSE, color=~pal_village(p), fillOpacity = 0.6) %>%
-        addLegend(position = c("bottomleft"), pal = pal_village, values = lxd_village$p)
+        addLegend(title = '% completed', position = c("bottomleft"), pal = pal_village, values = lxd_village$p)
       
       # create map for ward 
       lxd_ward <- lxd_all %>% group_by(hh_ward) %>%
@@ -1360,7 +1361,7 @@ app_server <- function(input, output, session) {
       lxd_ward <- leaflet(data = lxd_ward, height = leaflet_height) %>% 
         addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
         addCircleMarkers(data = lxd_ward, lng = ~lng, lat = ~lat,label = ward_text, stroke=FALSE, color=~pal_ward(p), fillOpacity = 0.6) %>%
-        addLegend(position = c("bottomleft"), pal = pal_ward, values = lxd_ward$p)
+        addLegend(title = '% completed', position = c("bottomleft"), pal = pal_ward, values = lxd_ward$p)
       
       # create map for district 
       lxd_district <- lxd_all %>% ungroup %>%
@@ -1379,7 +1380,7 @@ app_server <- function(input, output, session) {
       lxd_district <- leaflet(data = lxd_district, height = leaflet_height) %>% 
         addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
         addCircleMarkers(data = lxd_district, lng = ~lng, lat = ~lat, label = district_text,stroke=FALSE, color=~pal_district(p), fillOpacity = 0.6) %>%
-        addLegend(position = c("bottomleft"), pal = pal_district, values = lxd_district$p) %>%
+        addLegend(title = '% completed', position = c("bottomleft"), pal = pal_district, values = lxd_district$p) %>%
         setView(lng = lxd_district$lng,
                 lat = lxd_district$lat,
                 zoom = 8)
