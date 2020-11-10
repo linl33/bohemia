@@ -3247,6 +3247,29 @@ save(rf, file = '/tmp/rf.RData')
                 mutate(`%` = `Unique minicensus HH IDs` / `Unique enumeration HH IDs` * 100)
               message('---Created table for aggregated enrollment data')
               
+              sub_stats <- dat %>%
+                summarise(`Minicensus forms collected` = sum(num_mini, na.rm = TRUE),
+                          `Unique minicensus HH IDs` = length(which(!is.na(last_date_mini))),
+                          `Enumeration forms collected` = sum(num_enum, na.rm = TRUE),
+                          `Unique enumeration HH IDs` = length(which(!is.na(last_date_enum))),
+                          `Refusals` = sum(num_ref[reason_no_participate %in% c('SEM COMENTARIO',
+                                                                                'He didnt want to do it',
+                                                                                'Dont know',
+                                                                                'refused')], na.rm = TRUE),
+                          `Refusals due to absence` = sum(num_ref[reason_no_participate %in% c("Wasnt there",
+                                                                                'not_present' )], na.rm = TRUE),
+                          `Unique households` = nrow(all_hh_ids),
+                          `Minicensus response rate`= (`Minicensus forms collected`/nrow(dat))*100,
+                          `# of enumeration refusals` = length(which(is.na(num_enum)&is.na(num_mini))),
+                          `# of minicensus refusals`= length(which(!is.na(num_enum)&is.na(num_mini)&!is.na(num_ref))),
+                          `# of refusals due to 3 absences` = length(which(`Refusals due to absence`>3)),
+                          `% refused` = (sum(`# of enumeration refusals`,`# of minicensus refusals`,`# of refusals due to 3 absences`)/nrow(dat))*100,
+                          `# of households eabsent then present` = 0,
+                          `% successful follow up`=0,
+                          `Households geocoded` = length(which(any_geocode)),
+                          `Avg days between enumeration and minicensus` = mean(time_bw_enumeration_and_minicensus, na.rm = TRUE),
+                          `Households enumerated but not minicensed` = length(which(enumeration_wo_minicensus))) %>%
+                mutate(`%` = `Unique minicensus HH IDs` / `Unique enumeration HH IDs` * 100) 
               
               # Get raw data table for display
               dat <- dat %>%
@@ -3345,6 +3368,8 @@ save(rf, file = '/tmp/rf.RData')
                          h2('Aggregated enrollment data'),
                          p('The below table shows a summary of enrollment'),
                          prettify(sub_dat, download_options = TRUE),
+                         h2('Enrollment stats'),
+                         prettify(sub_stats, download_options = TRUE),
                          br(),
                          h2('Enrollment map'),
                          p('Under construction'),
