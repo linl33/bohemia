@@ -13,7 +13,7 @@ encrypt_private_data <- function(data='Wanjiru Kimani', keyfile='bohemia_pub.pem
   pub.k <- PKI.load.key(pub.pem)
   # encrypt with the public key
   x <- PKI.encrypt(charToRaw(data), pub.k)
-  print(x)
+  # print(x) TODO: Find correct stdout command
   return x
 }
   
