@@ -3957,7 +3957,7 @@ save(rf, file = '/tmp/rf.RData')
     # Join with the already existing fixes and remove those for which a fix has already been submitted
     corrections <- odk_data$data$corrections
     fixes <- odk_data$data$fixes
-    # save(anomalies, corrections, fixes, odk_data, file = '/tmp/this.RData')
+    # save(anomalies, corrections, fixes, file = '/tmp/this.RData')
     
     joined <- left_join(anomalies,
                         corrections %>% dplyr::select(-instance_id))
