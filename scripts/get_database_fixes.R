@@ -8,7 +8,7 @@ creds <- yaml::yaml.load_file(creds_fpath)
 is_local <- FALSE
 
 # load data from odk for both countries
-odk_data <- load_odk_data(the_country = 'Mozambique', 
+odk_data <- load_odk_data(the_country = NULL, 
                           credentials_path = '../credentials/credentials.yaml',
                           users_path = '../credentials/users.yaml',
                           local = is_local)
