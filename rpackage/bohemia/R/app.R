@@ -32,7 +32,7 @@ app_ui <- function(request) {
                                        'Mozambique' = 'Mopeia'
                                      ),
                                      inline = TRUE,
-                                     selected = 'Mopeia')),
+                                     selected = 'Rufiji')),
                 tags$li(class = 'dropdown',
                         uiOutput('log_ui')))),
       dashboardSidebar(
@@ -2650,7 +2650,11 @@ app_server <- function(input, output, session) {
                 # join fids with pd to ge supervisor info
                 # Get the fieldworkers for the country in question
                 sub_fids <- fids %>% filter(country == co)
-                pd <- left_join(pd, sub_fids, by=c('wid'= 'bohemia_id')) 
+                pd <- left_join(pd %>%
+                                  mutate(wid = as.character(wid)), 
+                                sub_fids %>%
+                                mutate(bohemia_id = as.character(bohemia_id)),
+                                by=c('wid'= 'bohemia_id')) 
                 pd <- pd %>% filter(!is.na(country)) %>%
                   filter(country == co) %>%
                   mutate(end_time = lubridate::as_datetime(end_time),
@@ -2732,7 +2736,8 @@ app_server <- function(input, output, session) {
                 # Get the fieldworkers for the country in question
                 co <- country()
                 sub_fids <- fids %>% filter(country == co)
-                pd <- left_join(pd, sub_fids, by=c('wid'= 'bohemia_id')) %>%
+                pd <- left_join(pd %>% mutate(wid = as.character(wid)), 
+                                sub_fids %>% mutate(bohemia_id = as.character(bohemia_id)), by=c('wid'= 'bohemia_id')) %>%
                   filter(!is.na(country)) %>%
                   filter(country == co)
                 # Create fieldworkers table
