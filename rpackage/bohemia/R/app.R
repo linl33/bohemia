@@ -478,29 +478,33 @@ app_server <- function(input, output, session) {
                     value = sesh)
       
       # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
-      # # Read in the traccar data (could speed this up by not reading all in)
-      # message('Reading in traccar table')
-      # # Get the country
-      # co <- the_country
-      # # Get fieldworkers for this country
-      # these_fids <- fids %>% filter(country == co)
-      # keep_ids <- these_fids$bohemia_id
-      # these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
-      # # Get traccar data for those fieldworkers
-      # traccar <- dbGetQuery(conn = con,
-      #                        statement = paste0('SELECT * FROM traccar WHERE unique_id IN ', these_fids))
-      # session_data$traccar <- traccar
-      # dbDisconnect(con)
-      # # Get traccar summary data
-      # message('Retrieving information on workers from traccar')
-      # creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      # dat <- get_traccar_data(url = creds$traccar_server,
-      #                         user = creds$traccar_user,
-      #                         pass = creds$traccar_pass)
-      # # Keep only the summary data for the country
-      # dat$uniqueId <- as.numeric(dat$uniqueId)
-      # dat <- dat %>% filter(uniqueId %in% keep_ids)
-      # session_data$traccar_summary <- dat
+      # Read in the traccar data (could speed this up by not reading all in)
+      message('Reading in traccar table')
+      # Get the country
+      co <- the_country
+      lat_string <- ifelse(co == 'Mozambique',
+                           'latitude < -15',
+                           'latitude > -9')
+      # Get fieldworkers for this country
+      these_fids <- fids %>% filter(country == co)
+      keep_ids <- these_fids$bohemia_id
+      these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
+      # Get traccar data for those fieldworkers
+      device_time <- paste0(Sys.Date() - 7, ' 01:01:01')
+      traccar <- dbGetQuery(conn = con,
+                             statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
+      session_data$traccar <- traccar
+      dbDisconnect(con)
+      # Get traccar summary data
+      message('Retrieving information on workers from traccar')
+      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+      dat <- get_traccar_data(url = creds$traccar_server,
+                              user = creds$traccar_user,
+                              pass = creds$traccar_pass)
+      # Keep only the summary data for the country
+      dat$uniqueId <- as.numeric(dat$uniqueId)
+      dat <- dat %>% filter(uniqueId %in% keep_ids)
+      session_data$traccar_summary <- dat
       session_info$logged_in <- TRUE
       reactive_log_in_text('')
       removeModal()
@@ -557,6 +561,32 @@ app_server <- function(input, output, session) {
       anomalies <- dbGetQuery(conn = con,
                               statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
       session_data$anomalies <- anomalies
+      
+      # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
+      # Read in the traccar data (could speed this up by not reading all in)
+      message('Reading in traccar table')
+      # Get the country
+      the_country <- country()
+      co <- the_country
+      lat_string <- ifelse(co == 'Mozambique',
+                           'latitude < -15',
+                           'latitude > -9')
+      # Get fieldworkers for this country
+      these_fids <- fids %>% filter(country == co)
+      keep_ids <- these_fids$bohemia_id
+      these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
+      # Get traccar data for those fieldworkers
+      device_time <- paste0(Sys.Date() - 7, ' 01:01:01')
+      traccar <- dbGetQuery(conn = con,
+                            statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
+      session_data$traccar <- traccar
+      # Get traccar summary data
+      message('Retrieving information on workers from traccar')
+      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+      dat <- get_traccar_data(url = creds$traccar_server,
+                              user = creds$traccar_user,
+                              pass = creds$traccar_pass)
+      
       dbDisconnect(con)
       
     }
@@ -575,6 +605,32 @@ app_server <- function(input, output, session) {
       anomalies <- dbGetQuery(conn = con,
                               statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
       session_data$anomalies <- anomalies
+      
+      # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
+      # Read in the traccar data (could speed this up by not reading all in)
+      message('Reading in traccar table')
+      # Get the country
+      the_country <- country()
+      co <- the_country
+      lat_string <- ifelse(co == 'Mozambique',
+                           'latitude < -15',
+                           'latitude > -9')
+      # Get fieldworkers for this country
+      these_fids <- fids %>% filter(country == co)
+      keep_ids <- these_fids$bohemia_id
+      these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
+      # Get traccar data for those fieldworkers
+      device_time <- paste0(Sys.Date() - 7, ' 01:01:01')
+      traccar <- dbGetQuery(conn = con,
+                            statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
+      session_data$traccar <- traccar
+      # Get traccar summary data
+      message('Retrieving information on workers from traccar')
+      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+      dat <- get_traccar_data(url = creds$traccar_server,
+                              user = creds$traccar_user,
+                              pass = creds$traccar_pass)
+      
       dbDisconnect(con)
       
       odk_data$data <- out
@@ -1692,11 +1748,11 @@ app_server <- function(input, output, session) {
     # an <- an %>% filter(country==the_country)
     
     if(nrow(an)>0){
-      # save(an, file ='temp_an.rda')
-      an <- an %>% select(type, wid, description)
-      names(an) <- Hmisc::capitalize(names(an))
-      an <- tibble(an)
-      an
+      pd <- an %>%
+        group_by(type, description) %>%
+        summarise(Occurrences = n()) %>%
+        dplyr::arrange(desc(Occurrences))
+      pd
     } else {
       NULL
     }
@@ -2062,8 +2118,7 @@ app_server <- function(input, output, session) {
                          plotOutput('plot_individual_errors'))
                 ),
                 fluidRow(column(6, align = 'center',
-                                h3('All locations visited by FW'),
-                                p('Currently undergoing modifications'),
+                                h3('Locations visited by FW over last 7 days'),
                                 leafletOutput('traccar_leaf',
                                               height = 500)),
                          column(6,
@@ -2873,68 +2928,70 @@ app_server <- function(input, output, session) {
   
   # TRACCAR GPS UI
   output$traccar_plot_1 <- renderPlot({
+    # ggplot() +
+    #   theme_bohemia() +
+    #   labs(title = 'Undergoing changes')
+    # Get the traccar data for that country
+    traccar <- session_data$traccar
+    # Get the fortified shapefile
+    shp_fortified <- bohemia::mop2_fortified
+    geo <- input$geo
+    if(geo == 'Rufiji'){
+      shp_fortified <- bohemia::ruf2_fortified
+    }
     ggplot() +
-      theme_bohemia() +
-      labs(title = 'Undergoing changes')
-    # # Get the traccar data for that country
-    # traccar <- session_data$traccar
-    # # Get the fortified shapefile
-    # shp_fortified <- bohemia::mop2_fortified
-    # geo <- input$geo
-    # if(geo == 'Rufiji'){
-    #   shp_fortified <- bohemia::ruf2_fortified
-    # }
-    # ggplot(data = traccar) +
-    #   geom_polygon(data = shp_fortified,
-    #                aes(x = long,
-    #                    y = lat),
-    #                fill = 'black') +
-    #   # geom_path(aes(x = longitude,
-    #   #               y = latitude,
-    #   #               group = unique_id),
-    #   #           color = 'red',
-    #   #           size = 0.2,
-    #   #           alpha = 0.5) +
-    #   geom_point(aes(x = longitude,
-    #                  y = latitude),
-    #              color = 'red',
-    #              size = 0.2,
-    #              alpha = 0.5) +
-    #   theme_bohemia()
+      geom_polygon(data = shp_fortified,
+                   aes(x = long,
+                       y = lat,
+                       group = group),
+                   fill = 'black') +
+      # geom_path(aes(x = longitude,
+      #               y = latitude,
+      #               group = unique_id),
+      #           color = 'red',
+      #           size = 0.2,
+      #           alpha = 0.5) +
+      geom_point(data = traccar,
+                 aes(x = longitude,
+                     y = latitude),
+                 color = 'red',
+                 size = 0.2,
+                 alpha = 0.5) +
+      theme_bohemia()
   })
   output$traccar_leaf <- renderLeaflet({
-    leaflet() %>% addTiles()
-    # # Get the traccar data for that country
-    # traccar <- session_data$traccar
-    # the_worker <- input$fid
-    # if(!is.null(the_worker)){
-    #   sub_traccar <- traccar %>% filter(unique_id == the_worker)
-    #   pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
-    # }
-    # # Make the plot
-    # l <- leaflet() %>% 
-    #   addTiles()
-    # if(nrow(sub_traccar) > 0){
-    #   l <- l %>%
-    #     addGlPoints(data = pts,
-    #                 fillColor = 'red',
-    #                 # fillColor = pts$status,
-    #                 popup = pts %>% dplyr::select(devicetime, valid),
-    #                 group = "pts")
-    # }
-    # l
+    # leaflet() %>% addTiles()
+    # Get the traccar data for that country
+    traccar <- session_data$traccar
+    the_worker <- input$fid
+    if(!is.null(the_worker)){
+      sub_traccar <- traccar %>% filter(unique_id == the_worker)
+      pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
+    }
+    # Make the plot
+    l <- leaflet() %>%
+      addTiles()
+    if(nrow(sub_traccar) > 0){
+      l <- l %>%
+        addGlPoints(data = pts,
+                    fillColor = 'red',
+                    # fillColor = pts$status,
+                    popup = pts %>% dplyr::select(devicetime, valid),
+                    group = "pts")
+    }
+    l
   })
   
   
   
   output$traccar_table <- DT::renderDataTable({
-    data.frame(a = 'Undergoing changes')
-    # out <- session_data$traccar %>%
-    #   arrange(desc(devicetime)) %>%
-    #   group_by(unique_id) %>%
-    #   dplyr::distinct(unique_id, id, valid, devicetime, longitude, latitude)
-    # bohemia::prettify(out, nrows = nrow(out),
-    #                   download_options = TRUE)
+    # data.frame(a = 'Undergoing changes')
+    out <- session_data$traccar %>%
+      arrange(desc(devicetime)) %>%
+      group_by(unique_id) %>%
+      dplyr::distinct(unique_id, id, valid, devicetime, longitude, latitude)
+    bohemia::prettify(out,
+                      download_options = FALSE)
   })
   
   ### 401 errors, just commenting out for now
@@ -2987,6 +3044,7 @@ app_server <- function(input, output, session) {
                 #                 h3('Live view'),
                 #                 uiOutput('traccar_live_view'))),
                 fluidRow(column(12, align = 'center',
+                                h3('Map of locations visited, last 7 days'),
                                 
                                 plotOutput('traccar_plot_1'))),
                 fluidRow((column(12, align = 'center',
