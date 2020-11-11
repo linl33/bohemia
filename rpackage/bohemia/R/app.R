@@ -211,9 +211,6 @@ app_ui <- function(request) {
             tabName="tracking_tools",
             fluidPage(
               fluidRow(
-                p('NOTE: the "all" functionality for locations is not yet implemented on the back-end (even though it appears in location drop-downs).')
-              ),
-              fluidRow(
                 column(3,
                        uiOutput('all_locations_ui')),
                 column(9, align = 'center',
