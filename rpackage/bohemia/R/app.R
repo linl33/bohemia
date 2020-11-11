@@ -270,7 +270,7 @@ app_ui <- function(request) {
                                              uiOutput('ui_consent_verification_list_a'),
                                              uiOutput('ui_consent_verification_list')
                                            )),
-                                  tabPanel('VA list',
+                                  tabPanel('VA control sheet',
                                            uiOutput('ui_va_list_generation'))
                        ))
               )
