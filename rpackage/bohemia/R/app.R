@@ -1122,7 +1122,7 @@ app_server <- function(input, output, session) {
     pd <- pd$minicensus_main
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
-    # save(pd, file = '/tmp/pd.RData')
+    # save(pd, enum, va, co, the_iso, file = '/tmp/pd.RData')
     
     # get country
     pd <- pd %>% filter(hh_country==co)
@@ -1133,7 +1133,7 @@ app_server <- function(input, output, session) {
     # subset by date
     time_period <- input$progress_by_date
     if(is.null(time_period)){
-      time_period <- c(min(pd$todays_date), max(pd$todays_date))
+      time_period <- c(as.Date('2020-01-01'), Sys.Date())
     } 
     
     pd <- pd %>% filter(todays_date >= time_period[1],
@@ -1142,9 +1142,6 @@ app_server <- function(input, output, session) {
                             todays_date <=time_period[2]) 
     va <- va %>% filter(todays_date >= time_period[1],
                         todays_date <=time_period[2]) 
-    
-    # join va with pd to get locations 
-    va <- inner_join(va, pd, by='hh_id')
     
     pd_ok <- FALSE
     
@@ -1157,7 +1154,9 @@ app_server <- function(input, output, session) {
       out <- NULL
     } else {
       # Create a progress table
-      target <- ifelse(co == 'Tanzania', 46105, 30467)
+      target <- ifelse(co == 'Tanzania', 
+                       gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
+                       30467)
       progress_table <- tibble(`Forms finished` = nrow(pd),
                                `Estimated total forms` = target,
                                `Estimated forms remaining` = target - nrow(pd),
@@ -1174,9 +1173,10 @@ app_server <- function(input, output, session) {
       right_enum <-enum%>%
         group_by(code = hamlet_code) %>%
         summarise(numerator = n())
-      # right_va <-va%>%
-      #   group_by(code = hamlet_code) %>%
-      #   summarise(numerator = n())
+      right_va <-va%>%
+        mutate(hamlet_code = substr(death_id, 1, 3)) %>%
+        group_by(code = hamlet_code) %>%
+        summarise(`VA Forms done` = n())
       joined <- left_join(left, right, by = 'code') %>%
         mutate(numerator = ifelse(is.na(numerator), 0, numerator)) %>%
         mutate(p = numerator / n_households * 100) %>%
@@ -1197,120 +1197,43 @@ app_server <- function(input, output, session) {
                       `Minicensus Estimated percent finished` = p) %>% 
         inner_join(progress_by_hamlet_enum) %>%
         # Get % minicensed of enumerated
-        mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)
-      
-      # add va
-      progress_by_hamlet <- va %>% group_by(hh_hamlet_code) %>% summarise(`VA Forms done` = n()) %>%
-        right_join(progress_by_hamlet, by=c('hh_hamlet_code'='code'))
-      progress_by_hamlet$`VA Forms done`[is.na(progress_by_hamlet$`VA Forms done`)] <- 0
-      
+        mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)  %>%
+        # add va
+      left_join(right_va) %>%
+        mutate(`VA Forms done` = ifelse(is.na(`VA Forms done`), 0, `VA Forms done`))
+
       # Transform the estimated number of forms (will be lower for MOZ than TZA since MOZ did buildings, not households)
       transformer <- ifelse(co == 'Mozambique', 0.55, 1)
       
       # Create a progress by geo tables
-      progress_by <- joined %>% left_join(locations %>% 
-                                            dplyr::select(code, District, Ward, Village, Hamlet), by = 'code')
-      
-      progress_by_enum <- joined_enum %>% left_join(locations %>% 
-                                                      dplyr::select(code, District, Ward, Village, Hamlet), by = 'code')
-      
-      progress_by_district <- progress_by %>% group_by(District) %>% 
-        summarise(numerator = sum(numerator, na.rm  = TRUE),
-                  n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
-        mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
-        dplyr::select(District, `Minicensus Forms done` = numerator,
-                      `Estimated number of forms` = n_households,
-                      `Minicensus Estimated percent finished` = p)
-      progress_by_district$`Minicensus Forms done` = nrow(pd)
-      
-      # progress by district for enumerations
-      progress_by_district_enum <- progress_by_enum %>% group_by(District) %>% 
-        summarise(numerator = sum(numerator, na.rm  = TRUE),
-                  n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
-        mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
-        dplyr::select(District, `Enumerations Forms done` = numerator,
-                      `Estimated number of forms` = n_households,
-                      `Enumerations Estimated percent finished` = p)
-      progress_by_district_enum$`Enumerations Forms done` = nrow(enum)
-      
-      # joine with progress by district
-      progress_by_district <- inner_join(progress_by_district, progress_by_district_enum) %>%
-      # Get % minicensed of enumerated
-        mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)
+      apply_summary <- function(df){
+        df %>%
+          summarise(`Minicensus Forms done` = sum(`Minicensus Forms done`, na.rm = TRUE),
+                    `Estimated number of forms` = sum(`Estimated number of forms`, na.rm = TRUE),
+                    `Enumerations Forms done` = sum(`Enumerations Forms done`, na.rm = TRUE),
+                    `VA Forms done` = sum(`VA Forms done`, na.rm = TRUE)) %>%
+          ungroup %>%
+          mutate(`Minicensus Estimated percent finished`  = round(`Minicensus Forms done` / `Estimated number of forms` * 100, digits = 2),
+                 `Enumerations Estimated percent finished` = round(`Enumerations Forms done` / `Estimated number of forms` * 100, digits = 2),
+                 `% minicensed of enumerated` = round(`Minicensus Forms done` / `Enumerations Forms done` * 100, digits = 2))
+      }
+      progress_by <- progress_by_hamlet %>% left_join(locations %>% 
+                                            dplyr::select(code, District, Ward, Village), by = 'code')
       
       
-      # add va
-      progress_by_district$`VA Forms done` <- nrow(va)
+      progress_by_district <- progress_by %>% group_by(District) %>%
+        apply_summary
       
       progress_by_ward <- progress_by %>% 
         group_by(Ward) %>% 
-        summarise(numerator = sum(numerator, na.rm  = TRUE),
-                  n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
-        mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
-        dplyr::select(Ward, 
-                      `Minicensus Forms done` = numerator,
-                      `Estimated number of forms` = n_households,
-                      `Minicensus Estimated percent finished` = p)
-      
-      progress_by_ward_enum <- progress_by_enum %>% 
-        group_by(Ward) %>% 
-        summarise(numerator = sum(numerator, na.rm  = TRUE),
-                  n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
-        mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
-        dplyr::select(Ward, 
-                      `Enumerations Forms done` = numerator,
-                      `Estimated number of forms` = n_households,
-                      `Enumerations Estimated percent finished` = p)
-      
-      # join with enum
-      progress_by_ward <- inner_join(progress_by_ward, progress_by_ward_enum) %>%
-        # Get % minicensed of enumerated
-        mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)
-      
-      
-      # add va
-      progress_by_ward <- va %>% group_by(hh_ward) %>% summarise(`VA Forms done` = n()) %>%
-        right_join(progress_by_ward, by=c('hh_ward'='Ward'))
-      progress_by_ward$`VA Forms done`[is.na(progress_by_ward$`VA Forms done`)] <- 0
-      
-      # progress by village for minicensus
+        apply_summary
       progress_by_village <- progress_by %>% 
         group_by(Village) %>% 
-        summarise(numerator = sum(numerator, na.rm  = TRUE),
-                  n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
-        mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
-        dplyr::select(Village, 
-                      `Minicensus Forms done` = numerator,
-                      `Estimated number of forms` = n_households,
-                      `Minicensus Estimated percent finished` = p)
+        apply_summary
+      progress_by_hamlet <- progress_by %>% 
+        group_by(Hamlet) %>% 
+        apply_summary
       
-      progress_by_village_enum <- progress_by_enum %>% 
-        group_by(Village) %>% 
-        summarise(numerator = sum(numerator, na.rm  = TRUE),
-                  n_households = round(transformer * sum(n_households, na.rm = TRUE), digits = 0)) %>%
-        mutate(p = round(numerator / n_households * 100, digits = 2)) %>%
-        dplyr::select(Village, 
-                      `Enumerations Forms done` = numerator,
-                      `Estimated number of forms` = n_households,
-                      `Enumerations Estimated percent finished` = p)
-      
-      progress_by_village <- inner_join(progress_by_village, progress_by_village_enum) %>%
-        # Get % minicensed of enumerated
-        mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)
-      
-      # add va
-      progress_by_village <- va %>% group_by(hh_village) %>% summarise(`VA Forms done` = n()) %>%
-        right_join(progress_by_village, by=c('hh_village'='Village'))
-      progress_by_village$`VA Forms done`[is.na(progress_by_village$`VA Forms done`)] <- 0
-      
-      # reoder and rename columns for all "progress by" data so they are the same 
-      progress_by_district <- progress_by_district %>% select(District, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`, `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`, `% minicensed of enumerated`)
-      names(progress_by_ward)[1] <- 'Ward'
-      progress_by_ward <- progress_by_ward %>% select(Ward, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`, `% minicensed of enumerated`)
-      names(progress_by_village)[1] <- 'Village'
-      progress_by_village <- progress_by_village %>% select(Village, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`, `% minicensed of enumerated`)
-      progress_by_hamlet$hh_hamlet_code <- NULL
-      progress_by_hamlet <- progress_by_hamlet %>% select(Hamlet, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`, `% minicensed of enumerated`)
       
       by_geo <- field_monitoring_geo() 
       
@@ -1342,7 +1265,7 @@ app_server <- function(input, output, session) {
           }
         } else if(by_geo == 'Hamlet'){
           if(cn == 'Mozambique'){
-            names(progress_by_hamlet)[1] <- 'Bairro'
+            names(progress_by_hamlet)[2] <- 'Bairro'
             monitor_by_table <- progress_by_hamlet
           } else {
             monitor_by_table <- progress_by_hamlet
@@ -1544,7 +1467,9 @@ app_server <- function(input, output, session) {
       n_days = as.numeric(1 + (max(dr)-min(dr)))
       the_iso <- iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
       # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
-      target <- ifelse(iso == 'TZA', 46105, 30467)
+      target <- ifelse(iso == 'TZA', 
+                       gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
+                       30467)
       
       # save(pd, file = 'temp_pd.rda')
       # create a placeholder for number of fieldworkers. 
@@ -1579,7 +1504,7 @@ app_server <- function(input, output, session) {
         total_forms_fw <- 599
         total_daily_country <- 1001
         total_weekly_country <- total_daily_country*5
-        total_forms <- 41605
+        total_forms <- gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x
         total_weeks <- round(total_forms/total_weekly_country,2)
         total_days <- total_weeks*7
         est_date <- Sys.Date()+total_days
@@ -1654,7 +1579,9 @@ app_server <- function(input, output, session) {
       }
     }
     if(pd_ok){
-      target <- ifelse(co == 'Tanzania', 46105, 30467)
+      target <- ifelse(co == 'Tanzania', 
+                       gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
+                       30467)
       x <- pd %>%
         group_by(date = as.Date(todays_date)) %>%
         tally %>%
@@ -1693,7 +1620,9 @@ app_server <- function(input, output, session) {
       }
     }
     if(pd_ok){
-      target <- ifelse(co == 'Tanzania', 46105, 30467)
+      target <- ifelse(co == 'Tanzania', 
+                       gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
+                       30467)
       progress_table <- tibble(`Forms finished` = nrow(pd),
                                `Estimated total forms` = target,
                                `Estimated forms remaining` = target - nrow(pd),
