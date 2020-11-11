@@ -1193,8 +1193,7 @@ app_server <- function(input, output, session) {
       progress_by_hamlet <- joined %>%
         left_join(locations %>% dplyr::select(code, Hamlet), by = 'code') %>%
         dplyr::select(code, Hamlet, `Minicensus Forms done` = numerator,
-                      `Estimated number of forms` = n_households,
-                      `Minicensus Estimated percent finished` = p) %>% 
+                      `Estimated number of forms` = n_households) %>% 
         inner_join(progress_by_hamlet_enum) %>%
         # Get % minicensed of enumerated
         mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)  %>%
@@ -1213,7 +1212,7 @@ app_server <- function(input, output, session) {
                     `Enumerations Forms done` = sum(`Enumerations Forms done`, na.rm = TRUE),
                     `VA Forms done` = sum(`VA Forms done`, na.rm = TRUE)) %>%
           ungroup %>%
-          mutate(`Minicensus Estimated percent finished`  = round(`Minicensus Forms done` / `Estimated number of forms` * 100, digits = 2),
+          mutate(#`Minicensus Estimated percent finished`  = round(`Minicensus Forms done` / `Estimated number of forms` * 100, digits = 2),
                  `Enumerations Estimated percent finished` = round(`Enumerations Forms done` / `Estimated number of forms` * 100, digits = 2),
                  `% minicensed of enumerated` = round(`Minicensus Forms done` / `Enumerations Forms done` * 100, digits = 2))
       }
@@ -1797,7 +1796,7 @@ app_server <- function(input, output, session) {
       num_ref = nrow(ref)
       
       # last_days <-paste0('Last ', time_period, ' days')
-      tibble(` ` = c('Supervisor','% of rolling target','% of total target','# of minicensus forms','# of enumeration forms','# of va forms','# of refusals','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), `   ` = c(sup_name, rolling_per, total_per, total_forms, num_enum, num_va, num_ref,num_anomaly, num_error,average_time, daily_work_hours))
+      tibble(` ` = c('Supervisor','% of rolling minicensus target','% of total minicensus target','# of minicensus forms','# of enumeration forms','# of va forms','# of refusals','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), `   ` = c(sup_name, rolling_per, total_per, total_forms, num_enum, num_va, num_ref,num_anomaly, num_error,average_time, daily_work_hours))
     } else {
       NULL
     }
