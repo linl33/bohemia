@@ -25,3 +25,6 @@ write.csv(corrections, '~/Desktop/temporary_corrections.csv')
 
 
 
+minicensus_main <- odk_data$minicensus_main
+people <- odk_data$minicensus_people
+subs <- odk_data$minicensus_repeat_hh_sub

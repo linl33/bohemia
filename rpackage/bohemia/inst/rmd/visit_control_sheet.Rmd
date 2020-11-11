@@ -53,18 +53,19 @@ for (i in 1:length(params)){
          params[[i]],
          env = .GlobalEnv)
 }
-# save.image('/tmp/image.RData')
+save.image('/tmp/image.RData')
 x <- bohemia::locations
-x <- x %>% filter(code == loc_id)
+x <- x %>% filter(code %in% loc_id)
 if(nrow(x) > 0){
   loc_name <- paste0(x$Ward, ', ', x$Village, ', ', x$Hamlet)
+  loc_name <- paste0(sort(loc_name), collapse = '; ')
 } else {
   loc_name <- ' '
 }
 include_name <- FALSE
 ```
 
-Visit control sheet for `r paste0(loc_id, ' (', loc_name, ')')`
+Visit control sheet for `r paste0(paste0(loc_id, collapse = ';'), ifelse(length(loc_id) == 1, paste0(' (', loc_name, ')'), ''))`
 
 \pagenumbering{gobble}
 
@@ -72,13 +73,16 @@ Visit control sheet for `r paste0(loc_id, ' (', loc_name, ')')`
 ```{r}
 lc <- loc_id
 n_hh <- as.numeric(xdata$n_hh)
+if(is.na(n_hh)){
+  n_hh <- 1000
+}
 n_teams <- as.numeric(xdata$n_teams)
 id_limit_lwr <- as.numeric(xdata$id_limit_lwr)
 id_limit_upr <- as.numeric(xdata$id_limit_upr)
 
 # Get country
 country <- 'Mozambique'
-if(lc %in% locations$code[locations$Country == 'Tanzania']){
+if(lc[1] %in% locations$code[locations$Country == 'Tanzania']){
   country <- 'Tanzania'
 }
 ```
@@ -100,16 +104,27 @@ while(length(team_numbers) > n_hh){
 
 
 if(country == 'Tanzania'){
-  out <- tibble(`HHID` = paste0(lc, '-', bohemia::add_zero(id_vals, n = 3)),
-              team = team_numbers) 
-  
-  left <- locations %>% filter(code == lc) %>% dplyr::select(District, Ward, Village, Hamlet)
-  out = bind_cols(left, out)
-  } else {
-  out <- tibble(`Código do agregado` = paste0(lc, '-', bohemia::add_zero(id_vals, n = 3)),
-              team = team_numbers)
+  out_list <- list()
+  for(lcx in 1:length(lc)){
+    this_out <- tibble(`HHID` = paste0(lc[lcx], '-', bohemia::add_zero(id_vals, n = 3)),
+                  team = team_numbers)
+    out_list[[lcx]] <- this_out
   }
-# save.image('/tmp/visit_control.RData')
+  out <-bind_rows(out_list)
+
+  left <- locations %>% filter(code %in% lc) %>% dplyr::select(code, District, Ward, Village, Hamlet)
+  out$code <- substr(out$`HHID`, 1, 3)
+  out = left_join(out, left, by = 'code') %>% dplyr::select(-code)
+} else {
+  out_list <- list()
+  for(lcx in 1:length(lc)){
+    this_out <- tibble(`Código do agregado` = paste0(lc[lcx], '-', bohemia::add_zero(id_vals, n = 3)),
+                       team = team_numbers) %>%
+      arrange(`Código do agregado`)
+    out_list[[lcx]] <- this_out
+  }
+  out <-bind_rows(out_list)
+}
 ```
 
 ```{r}
@@ -119,8 +134,7 @@ if(!li){
 } else {
 if(country == 'Mozambique'){
   if(enumeration){
-    this_df <- gps %>% dplyr::filter(code == lc) %>% left_join(locations %>% dplyr::select(code,Village, Hamlet))
-    
+
     for(i in 1:n_teams){
       chunk_list[[i]] <-
         paste0("Team ", i, "\n\n\nNome/Código do Inquiridor:\n\n\n```{r}\n",
