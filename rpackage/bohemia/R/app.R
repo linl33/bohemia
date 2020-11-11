@@ -91,8 +91,18 @@ app_ui <- function(request) {
                      tabName="malaria",
                      icon=icon("procedures"))),
           menuItem('Tracking tools',
-                   tabName = 'tracking_tools',
-                   icon = icon('list')),
+                   tabName = 'tracking',
+                   icon = icon('list'),
+                   startExpanded = FALSE,
+                   menuSubItem(
+                     text = 'Sheets',
+                     tabName = 'tracking_tools',
+                     icon = icon('list')
+                   ),
+                   menuSubItem(
+                     text = 'Mark as done',
+                     tabName = 'done_hamlets',
+                     icon = icon('list'))),
           menuItem('Alerts',
                    tabName = 'alerts',
                    icon = icon('exclamation-circle')),
@@ -207,6 +217,10 @@ app_ui <- function(request) {
           tabItem(
             tabName="server_status",
             uiOutput('ui_server_status')),
+          tabItem(
+            tabName = 'done_hamlets',
+            uiOutput('ui_done_hamlets')
+          ),
           tabItem(
             tabName="tracking_tools",
             fluidPage(
@@ -1181,7 +1195,10 @@ app_server <- function(input, output, session) {
         dplyr::select(code, Hamlet, `Minicensus Forms done` = numerator,
                       `Estimated number of forms` = n_households,
                       `Minicensus Estimated percent finished` = p) %>% 
-        inner_join(progress_by_hamlet_enum)
+        inner_join(progress_by_hamlet_enum) %>%
+        # Get % minicensed of enumerated
+        mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)
+      
       # add va
       progress_by_hamlet <- va %>% group_by(hh_hamlet_code) %>% summarise(`VA Forms done` = n()) %>%
         right_join(progress_by_hamlet, by=c('hh_hamlet_code'='code'))
@@ -1217,7 +1234,10 @@ app_server <- function(input, output, session) {
       progress_by_district_enum$`Enumerations Forms done` = nrow(enum)
       
       # joine with progress by district
-      progress_by_district <- inner_join(progress_by_district, progress_by_district_enum)
+      progress_by_district <- inner_join(progress_by_district, progress_by_district_enum) %>%
+      # Get % minicensed of enumerated
+        mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)
+      
       
       # add va
       progress_by_district$`VA Forms done` <- nrow(va)
@@ -1243,7 +1263,10 @@ app_server <- function(input, output, session) {
                       `Enumerations Estimated percent finished` = p)
       
       # join with enum
-      progress_by_ward <- inner_join(progress_by_ward, progress_by_ward_enum)
+      progress_by_ward <- inner_join(progress_by_ward, progress_by_ward_enum) %>%
+        # Get % minicensed of enumerated
+        mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)
+      
       
       # add va
       progress_by_ward <- va %>% group_by(hh_ward) %>% summarise(`VA Forms done` = n()) %>%
@@ -1271,19 +1294,23 @@ app_server <- function(input, output, session) {
                       `Estimated number of forms` = n_households,
                       `Enumerations Estimated percent finished` = p)
       
-      progress_by_village <- inner_join(progress_by_village, progress_by_village_enum)
+      progress_by_village <- inner_join(progress_by_village, progress_by_village_enum) %>%
+        # Get % minicensed of enumerated
+        mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)
+      
       # add va
       progress_by_village <- va %>% group_by(hh_village) %>% summarise(`VA Forms done` = n()) %>%
         right_join(progress_by_village, by=c('hh_village'='Village'))
       progress_by_village$`VA Forms done`[is.na(progress_by_village$`VA Forms done`)] <- 0
+      
       # reoder and rename columns for all "progress by" data so they are the same 
-      progress_by_district <- progress_by_district %>% select(District, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`, `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`)
+      progress_by_district <- progress_by_district %>% select(District, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`, `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`, `% minicensed of enumerated`)
       names(progress_by_ward)[1] <- 'Ward'
-      progress_by_ward <- progress_by_ward %>% select(Ward, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`)
+      progress_by_ward <- progress_by_ward %>% select(Ward, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`, `% minicensed of enumerated`)
       names(progress_by_village)[1] <- 'Village'
-      progress_by_village <- progress_by_village %>% select(Village, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`)
+      progress_by_village <- progress_by_village %>% select(Village, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`, `% minicensed of enumerated`)
       progress_by_hamlet$hh_hamlet_code <- NULL
-      progress_by_hamlet <- progress_by_hamlet %>% select(Hamlet, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`)
+      progress_by_hamlet <- progress_by_hamlet %>% select(Hamlet, `Minicensus Forms done`, `Enumerations Forms done`, `Estimated number of forms`,  `Minicensus Estimated percent finished`, `Enumerations Estimated percent finished`, `VA Forms done`, `% minicensed of enumerated`)
       
       by_geo <- field_monitoring_geo() 
       
@@ -1481,7 +1508,7 @@ app_server <- function(input, output, session) {
                 uiOutput('ui_field_monitoring_by'),
                 uiOutput('ui_progress_by_date'),
                 column(12, align = 'center',
-                       DT::dataTableOutput('dt_monitor_by_table'),
+                       div(DT::dataTableOutput('dt_monitor_by_table'), style = "font-size:80%"),
                        leafletOutput('leaf_lx', height = 800))
               )
             })
@@ -2718,9 +2745,14 @@ app_server <- function(input, output, session) {
             ok = {
               # Get the odk data
               pd <- odk_data$data
-              pd <- pd$minicensus_main
+              an <- session_data$anomalies
+              
               co <- country()
-              # save(pd, file = '/tmp/pd.RData')
+              # save(pd, co, an, file = '/tmp/pd.RData')
+              enumerations <- pd$enumerations
+              va <- pd$va
+              pd <- pd$minicensus_main
+              
               pd <- pd %>% filter(hh_country == co)
               
               min_date <- min(pd$todays_date, na.rm = TRUE)
@@ -2729,7 +2761,6 @@ app_server <- function(input, output, session) {
               seq_days <- seq_days[!weekdays(seq_days) %in% c('Saturday', 'Sunday')]
               n_days <- length(seq_days)
               # get anomaly dataset
-              an <- session_data$anomalies
               if(nrow(an) > 0){
                 an$date <- as.Date(an$date, format = '%Y-%m-%d')
               }
@@ -2769,15 +2800,47 @@ app_server <- function(input, output, session) {
                 time_period <- input$fw_time_period
                 if(is.null(time_period)){
                   time_period <- c(min(pd$todays_date), max(pd$todays_date))
-                  
                 } 
                 time_range <- time_period
-                an <- an %>% group_by(wid) %>% 
+                an <- an %>% group_by(wid = as.character(wid)) %>% 
                   filter(date >= time_range[1],
                          date <=time_range[2]) %>%
                   summarise(num_errors = sum(type=='error'),
                             num_anomalies = sum(type == 'anomaly'))
-                pd <- left_join(pd, an, by ='wid')
+                if(nrow(enumerations) > 0){
+                  enumerations <- enumerations %>% 
+                    filter(todays_date >= time_range[1],
+                           todays_date <=time_range[2]) %>%
+                    group_by(wid = as.character(wid)) %>%
+                    summarise(num_enumerations = n())
+                }
+                if(nrow(va) > 0){
+                  va <- va %>% 
+                    filter(todays_date >= time_range[1],
+                           todays_date <=time_range[2]) %>%
+                    group_by(wid = as.character(wid)) %>%
+                    summarise(num_va = n())
+                }
+                
+                if(nrow(va) > 0){
+                  pd <- left_join(pd %>% mutate(wid = as.character(wid)), va, by ='wid')
+                } else {
+                  pd <- pd %>% mutate(num_va = 0)
+                }
+                if(nrow(enumerations) > 0){
+                  pd <- pd %>% left_join(enumerations, by ='wid')
+                } else {
+                  pd <- pd %>% mutate(num_enumerations = 0)
+                }
+                if(nrow(an) > 0){
+                  pd <- pd %>% left_join(an, by ='wid')
+                } else {
+                  pd <- pd %>% mutate(
+                    num_anomalies = 0,
+                    num_errors = 0
+                  )
+                }
+                 
                 
                 fwt_daily <- pd %>%
                   mutate(fw_name = paste0(first_name, ' ', last_name)) %>%
@@ -2788,16 +2851,18 @@ app_server <- function(input, output, session) {
                   group_by(`FW ID` = wid,
                            FW = fw_name,
                            `Supervisor` = supervisor) %>%
-                  summarise(`Forms` = n(),
-                            `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `% rolling target` = (`Forms` / n_days) / daily_forms_fw * 100,
+                  summarise(`Minicensus forms` = n(),
+                            `Average time per minicensus form (minutes)` = round(mean(time, na.rm = TRUE), 1),
+                            `% rolling target (minicensus)` = (`Minicensus forms` / n_days) / daily_forms_fw * 100,
+                            `Enumeration forms` = sum(num_enumerations),
+                            `VA forms` = sum(num_va),
                             `# of anomalies` = max(num_anomalies),
                             `# of errors` = max(num_errors)) 
                 
               }
               fluidPage(
-                bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
-                                  download_options = TRUE)
+                div(bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
+                                  download_options = TRUE), style = "font-size:80%")
               ) 
             })
   })
@@ -2812,8 +2877,14 @@ app_server <- function(input, output, session) {
             ok = {
               # Get the odk data
               pd <- odk_data$data
-              pd <- pd$minicensus_main
               co <- country()
+              # save(pd, co, an, file = '/tmp/pd.RData')
+              enumerations <- pd$enumerations
+              va <- pd$va
+              pd <- pd$minicensus_main
+              
+              pd <- pd %>% filter(hh_country == co)
+              
               # save(pd, file = '/tmp/pd.RData')
               pd <- pd %>% filter(hh_country == co)
               
@@ -2849,16 +2920,37 @@ app_server <- function(input, output, session) {
                   weekly_forms_fw <- daily_forms_fw*5
                   total_forms_fw <- 599
                 }
-                
-                time_period <- input$fw_time_period
-                if(is.null(time_period)){
-                  time_period <- c(min(pd$todays_date), max(pd$todays_date))
-                  
-                } 
-                time_range <- time_period
-                an <- an %>% group_by(wid) %>% summarise(num_errors = sum(type=='error'),
+
+                an <- an %>% group_by(wid = as.character(wid)) %>% summarise(num_errors = sum(type=='error'),
                                                          num_anomalies = sum(type == 'anomaly'))
-                pd <- left_join(pd, an, by ='wid')
+                if(nrow(an) > 0){
+                  pd <- pd %>% left_join(an, by ='wid')
+                } else {
+                  pd <- pd %>% mutate(
+                    num_anomalies = 0,
+                    num_errors = 0
+                  )
+                }
+                if(nrow(enumerations) > 0){
+                  enumerations <- enumerations %>% 
+                    group_by(wid = as.character(wid)) %>%
+                    summarise(num_enumerations = n())
+                }
+                if(nrow(va) > 0){
+                  va <- va %>% 
+                    group_by(wid = as.character(wid)) %>%
+                    summarise(num_va = n())
+                }
+                if(nrow(va) > 0){
+                  pd <- left_join(pd %>% mutate(wid = as.character(wid)), va, by ='wid')
+                } else {
+                  pd <- pd %>% mutate(num_va = 0)
+                }
+                if(nrow(enumerations) > 0){
+                  pd <- pd %>% left_join(enumerations, by ='wid')
+                } else {
+                  pd <- pd %>% mutate(num_enumerations = 0)
+                }
                 fwt_overall <-  pd %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(fw_name = paste0(first_name, ' ', last_name)) %>%
@@ -2866,10 +2958,11 @@ app_server <- function(input, output, session) {
                   group_by(`FW ID` = wid,
                            `FW` = fw_name,
                            `Supervisor` = supervisor) %>%
-                  summarise(`Forms` = n(),
+                  summarise(`Minicensus forms` = n(),
                             `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `% complete total` = round(`Forms`/total_forms_fw * 100, digits = 2),
-                            `Daily work hours` = '(Pending feature)',
+                            `% complete total (minicensus)` = round(`Minicensus forms`/total_forms_fw * 100, digits = 2),
+                            `Enumeration forms` = sum(num_enumerations),
+                            `VA forms` = sum(num_va),
                             `# of anomalies` = max(num_anomalies),
                             `# of errors` = max(num_errors))
                 fwt_overall$`# of errors`[is.na(fwt_overall$`# of errors`)] <- 0
@@ -2877,8 +2970,8 @@ app_server <- function(input, output, session) {
                 
               }
               fluidPage(
-                bohemia::prettify(fwt_overall, nrows = nrow(fwt_overall),
-                                  download_options = TRUE)
+                div(bohemia::prettify(fwt_overall, nrows = nrow(fwt_overall),
+                                  download_options = TRUE), style = "font-size:80%")
               ) 
             })
   })
@@ -3514,6 +3607,87 @@ app_server <- function(input, output, session) {
             }
             
     )
+  })
+  
+  
+  # Done hamlets UI  ################################################
+  output$done_hamlet_table <- DT::renderDataTable({
+    sb <- input$sidebar
+    liu <- input$log_in_user
+    done_button <- input$mark_done
+    the_authorized_users <- c("iirema@ihi.or.tz",
+                              "eldo.elobolobo@manhica.net",
+                              "joe@databrew.cc")
+    if(liu %in% the_authorized_users){
+      con <- get_db_connection(local = is_local)
+      done_hamlets <- dbGetQuery(conn = con,
+                              statement = paste0("SELECT * FROM done_hamlets"))
+      dbDisconnect(con)
+      bohemia::prettify(done_hamlets,
+                        nrows = nrow(done_hamlets))
+    } else {
+      bohemia::prettify(data.frame(o = 'You are not authorized to mark hamlets as done.'))
+    }
+  })
+  
+  output$ui_done_hamlets <- renderUI({
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'server_status' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              
+              liu <- input$log_in_user
+              the_authorized_users <- c("iirema@ihi.or.tz",
+                                        "eldo.elobolobo@manhica.net",
+                                        "joe@databrew.cc")
+              if(liu %in% the_authorized_users){
+                ok_to_mark <- TRUE
+              } else {
+                ok_to_mark <- FALSE
+              }
+              if(ok_to_mark){
+                mark_button <- actionButton('mark_done',
+                                           'Mark as done')
+              } else {
+                mark_button <- actionButton('mark_done_fake',
+                                            'Clicking here will do nothing')
+              }
+              
+              pd <- odk_data$data
+              the_country <- country()
+              the_choices <- bohemia::locations$code
+              the_choices <- sort(unique(the_choices))
+              fluidPage(
+                fluidRow(h3('Mark a hamlet as done')),
+                fluidRow(
+                  column(6,
+                         selectInput('the_done_hamlet',
+                                     'Hamlet',
+                                     choices = the_choices)),
+                  column(6,
+                         DT::dataTableOutput('done_hamlet_table'))
+                ),
+                fluidRow(
+                  mark_button
+                )
+                
+              )
+            })
+  })
+  observeEvent(input$mark_done, {
+    the_hamlet <- input$the_done_hamlet
+    liu <- input$log_in_user
+    the_data <- tibble(code = the_hamlet,
+                       done_by = liu,
+                       done_at = Sys.time())
+    con <- get_db_connection(local = is_local)
+    done_hamlets <- dbAppendTable(conn = con,
+                                        name = 'done_hamlets',
+                                        value = the_data)
+    dbDisconnect(con)
   })
   
   # Server status UI  ################################################

@@ -863,6 +863,12 @@ CREATE TABLE fixes (
   resolution_code TEXT
 );
 
+CREATE TABLE done_hamlets (
+  code TEXT,
+  done_by TEXT,
+  done_at TIMESTAMP
+);
+
 
 -- Enable UUID extension
 
