@@ -312,13 +312,33 @@ app_ui <- function(request) {
           ),
           tabItem(
             tabName = 'alerts',
-            
-            fluidPage(
-              tags$img(src = "www/alerts_legend.png"),
-              # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
-              uiOutput('anomalies_ui_a'),
-              uiOutput('anomalies_ui')
+            navbarPage(
+              title = 'Errors & anomalies',
+              tabPanel('Alert table',
+                       fluidPage(
+                         tags$img(src = "www/alerts_legend.png"),
+                         # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
+                         uiOutput('anomalies_ui_a'),
+                         uiOutput('anomalies_ui')
+                       )),
+              tabPanel('Alert upload',
+                       fluidPage(
+                         fluidRow(
+                           column(6,
+                                  fileInput("upload_data", "Choose CSV File",
+                                            accept = c(
+                                              "text/csv",
+                                              "text/comma-separated-values,text/plain",
+                                              ".csv")
+                                  ))
+                         ),
+                         fluidRow(
+                           column(12,
+                                  tableOutput("upload_data_message"))
+                         )
+                       ))
             )
+           
           ),
           tabItem(
             tabName = 'about',
@@ -4315,7 +4335,41 @@ app_server <- function(input, output, session) {
   })
   
   # Alert ui
+  uploaded_data <- reactiveValues(data_text ='No data uploaded')
   
+  observeEvent(input$upload_data, {
+    if (is.null(input$upload_data)){
+      NULL
+    } else {
+      inFile <- input$upload_data
+      dat <- read.csv(inFile$datapath, check.names = FALSE)
+      # save(dat, file='temp_upload.rda')
+      
+      # create valid names 
+      valid_names <- c("Type","Days ago", "Country","FW", "Date", "Id", "Description","Incident","Instance id","Supervisor", "Response details", "Resolved by", "Resolution method", "Submitted by", "Submitted at" ,        "Done by", "Done at", "Resolution submitted","Fix implemented")  
+      
+      if(!all(names(dat) == valid_names)){
+        wrong_name <- names(dat)[!names(dat) %in% valid_names]
+        right_name <- valid_names[!valid_names %in% names(dat)]
+        out_text <- paste0('Column discrepancy! WRONG COLUMN NAMES: ', paste0(wrong_name, collapse = ', '), '\n','. CORRECT COLUMN NAMES: ', paste0(right_name, collapse = ', '), '.')
+      } else {
+        out_text<- 'Column names match.'
+        if(any(is.na(dat))){
+          missing_ind <- apply(dat, 2, function(x) any(is.na(x)))
+          missing_column_names <- names(dat)[missing_ind]
+          missing_column_names <- toupper(missing_column_names)
+          out_text <- paste0(out_text, ' But the following columns have missing data: ', paste0(missing_column_names, collapse = ' , '))
+        } 
+      }
+      uploaded_data$data_text <- out_text
+    }
+  })
+  
+  output$upload_data_message <- renderTable({
+    this_text <- uploaded_data$data_text
+    data_frame(' '=this_text)
+  })
+  # sh
   output$anomalies_ui_a <- renderUI({
     
     # See if the user is logged in and has access
