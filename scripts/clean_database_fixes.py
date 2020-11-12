@@ -213,13 +213,13 @@ implement(id = 'strange_hh_code_0f15fdb4-3b7a-41a3-8fa4-1abe03849212', query = "
 implement(id = 'strange_hh_code_1b6a9ce2-8d36-4136-869d-a117f0192449', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='AMB', hh_village='Chamanga', hh_hamlet='Ambrosio' WHERE instance_id='1b6a9ce2-8d36-4136-869d-a117f0192449'")
 implement(id = 'strange_hh_code_2624afc1-f262-4bda-b20f-34176ed1c13b', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma, hh_hamlet='Mifarinha' WHERE instance_id='2624afc1-f262-4bda-b20f-34176ed1c13b'")
 implement(id = 'strange_hh_code_287b28f8-c6ba-4b4e-bd6f-b6778a729d93', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='DEO', hh_village='Marruma, hh_hamlet='4 de Outubro', hh_id='DEO-033' WHERE instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'"; 
-    "UPDATE clean_minicensus_people SET pid='DEO-033-001' WHERE num='1' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
-    "UPDATE clean_minicensus_people SET pid='DEO-033-002' WHERE num='2' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
-    "UPDATE clean_minicensus_people SET pid='DEO-033-003' WHERE num='3' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
-    "UPDATE clean_minicensus_people SET pid='DEO-033-004' WHERE num='4' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
-    "UPDATE clean_minicensus_people SET pid='DEO-033-005' WHERE num='5' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
-    "UPDATE clean_minicensus_people SET pid='DEO-033-006' WHERE num='6' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
-    "UPDATE clean_minicensus_people SET pid='DEO-033-007' WHERE num='7' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'")
+    "UPDATE clean_minicensus_people SET pid='DEO-033-001', permid='DEO-033-001' WHERE num='1' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
+    "UPDATE clean_minicensus_people SET pid='DEO-033-002', permid='DEO-033-002' WHERE num='2' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
+    "UPDATE clean_minicensus_people SET pid='DEO-033-003', permid='DEO-033-003' WHERE num='3' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
+    "UPDATE clean_minicensus_people SET pid='DEO-033-004', permid='DEO-033-004' WHERE num='4' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
+    "UPDATE clean_minicensus_people SET pid='DEO-033-005', permid='DEO-033-005' WHERE num='5' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
+    "UPDATE clean_minicensus_people SET pid='DEO-033-006', permid='DEO-033-006' WHERE num='6' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'";
+    "UPDATE clean_minicensus_people SET pid='DEO-033-007', permid='DEO-033-007' WHERE num='7' and instance_id='287b28f8-c6ba-4b4e-bd6f-b6778a729d93'")
 implement(id = 'strange_hh_code_2c54e783-2281-429f-9896-060261a148db', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma, hh_hamlet='Mifarinha' WHERE instance_id='2c54e783-2281-429f-9896-060261a148db'")
 implement(id = 'strange_hh_code_3f6c7281-a596-43cb-9af5-d7ef71858b3d', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma, hh_hamlet='Mifarinha' WHERE instance_id='3f6c7281-a596-43cb-9af5-d7ef71858b3d'")
 implement(id = 'strange_hh_code_4320edeb-a6b7-4142-8cd5-c99b697ab8b1', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma, hh_hamlet='Mifarinha' WHERE instance_id='4320edeb-a6b7-4142-8cd5-c99b697ab8b1'")
