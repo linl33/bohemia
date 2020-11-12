@@ -6,12 +6,11 @@
 #' @import PKI
 #' @export
 
-decrypt_private_data <- function(data, keyfile='bohemia_priv.pem'){
-  priv.pem <- read.delim(keyfile)
-  # load the public key
-  priv.k <- PKI.load.key(priv.pem)
+decrypt_private_data <- function(data, keyfile){
+  # load the private key
+  priv_key <- PKI.load.key(format="PEM", file=keyfile)
   # decrypt with private key
-  x <- rawToChar(PKI.decrypt(data, priv.k))
-  print(x)
-  return x
+  plain_d <- rawToChar(PKI.decrypt(data, priv_key))
+  
+  return plain_d
 }
