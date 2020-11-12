@@ -314,15 +314,19 @@ app_ui <- function(request) {
             tabName = 'alerts',
             navbarPage(
               title = 'Errors & anomalies',
-              tabPanel('Alert table',
+              tabPanel('Alerts table',
                        fluidPage(
                          tags$img(src = "www/alerts_legend.png"),
                          # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
                          uiOutput('anomalies_ui_a'),
                          uiOutput('anomalies_ui')
                        )),
-              tabPanel('Alert upload',
+              tabPanel('Bulk uploader',
                        fluidPage(
+                         fluidRow(
+                           p('Upload a .csv file of your corrections with at least the following 5 columns: "Instance id", "Id", "Response details", "Resolved by", "Resolution method"')
+                         ),
+                         
                          fluidRow(
                            column(6,
                                   fileInput("upload_data", "Choose CSV File",
@@ -4341,27 +4345,94 @@ app_server <- function(input, output, session) {
     if (is.null(input$upload_data)){
       NULL
     } else {
+      ok <- TRUE
       inFile <- input$upload_data
       dat <- read.csv(inFile$datapath, check.names = FALSE)
-      # save(dat, file='temp_upload.rda')
+      previous_corrections <- odk_data$data$corrections
+      save(dat, previous_corrections, file='/tmp/temp_upload.rda')
       
       # create valid names 
-      valid_names <- c("Type","Days ago", "Country","FW", "Date", "Id", "Description","Incident","Instance id","Supervisor", "Response details", "Resolved by", "Resolution method", "Submitted by", "Submitted at" ,        "Done by", "Done at", "Resolution submitted","Fix implemented")  
+      log_in_user <- input$log_in_user
       
-      if(!all(names(dat) == valid_names)){
-        wrong_name <- names(dat)[!names(dat) %in% valid_names]
-        right_name <- valid_names[!valid_names %in% names(dat)]
-        out_text <- paste0('Column discrepancy! WRONG COLUMN NAMES: ', paste0(wrong_name, collapse = ', '), '\n','. CORRECT COLUMN NAMES: ', paste0(right_name, collapse = ', '), '.')
+      valid_names <- c("Instance id", "Id", "Response details", "Resolved by", "Resolution method")  
+      
+      # Check column names
+      if(all(valid_names %in% names(dat))){
+        ok_names <- TRUE
       } else {
-        out_text<- 'Column names match.'
-        if(any(is.na(dat))){
-          missing_ind <- apply(dat, 2, function(x) any(is.na(x)))
-          missing_column_names <- names(dat)[missing_ind]
-          missing_column_names <- toupper(missing_column_names)
-          out_text <- paste0(out_text, ' But the following columns have missing data: ', paste0(missing_column_names, collapse = ' , '))
-        } 
+        ok_names <- FALSE
+        ok <- FALSE
       }
+      if(!ok_names){
+        out_text <- paste0('ERROR! The following required columns are missing: ', paste0(valid_names[which(!valid_names %in% names(dat))], collapse = '; '), collapse = ' ')
+      }
+      
+      # Check duplicates
+      if(ok){
+        any_duplicates <- any(duplicated(dat$Id))
+        if(any_duplicates){
+          ok <- FALSE
+          out_text <- 'ERROR! Multiple entries per anomaly. No duplicated "Ids" allowed.'
+        }
+      }
+      
+      # Check to see if everything is complete
+      if(ok){
+        sub_dat <- dat[,valid_names]
+        any_nas <- as.numeric(which(apply(sub_dat, 2, function(x){any(is.na(x))})))
+        any_empties <- as.numeric(which(apply(sub_dat, 2, function(x){any(x == '')})))
+        any_nas <- any_nas | any_empties
+        if(length(any_nas) > 0){
+          ok <- FALSE
+          out_text <- paste0('ERROR! Empty values are not permitted. There are empty values in the following ', length(any_nas), ' columns. Fill out all cells in these columns and then re-upload: ', paste0(paste0(names(sub_dat)[any_nas], collapse = '; ')))
+        }
+      }
+      
+      # Check to see if anything has already been resolved
+      if(ok){
+        sub_dat <- dat[,valid_names]
+        sub_dat$Id <- tolower(sub_dat$Id)
+        already_ids <- previous_corrections$id
+        already <- which(sub_dat$Id %in% already_ids)
+        if(length(already) > 0){
+          ok <- FALSE
+          out_text <- paste0('ERROR! Column names are correct, but there are entries for anomalies which have ALREADY been correted. Please remove rows with the following', length(already),  ' IDs and then re-upload: ', paste0(paste0(sub_dat$Id[already], collapse = ', ')))
+        }
+      }
+      if(ok){
+        out_text <- 'Successfully uploaded corrections requests.'
+
+        fix <- dat %>%
+          mutate(id = tolower(Id),
+                 instance_id = tolower(`Instance id`),
+                 response_details = `Response details`,
+                 resolved_by = `Resolved by`,
+                 resolution_method = `Resolution method`,
+                 resolution_date = as.character(Sys.Date()),
+                 submitted_by = log_in_user,
+                 submitted_at = Sys.time()) %>%
+          dplyr::select(id, instance_id, response_details, resolved_by,
+                        resolution_method, resolution_date, submitted_by, submitted_at)
+        con <- get_db_connection(local = is_local)
+        dbAppendTable(conn = con,
+                      name = 'corrections',
+                      value = fix)
+        message('Done. now disconnecting from database')
+        dbDisconnect(con)
+        # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
+        message('Now uploading the in-session data')
+        old_corrections <- odk_data$data$corrections 
+        new_correction <- fix
+        new_corrections <- bind_rows(old_corrections, new_correction)
+        odk_data$data$corrections  <- new_corrections
+      } 
       uploaded_data$data_text <- out_text
+      showModal(modalDialog(
+        title = "ERROR",
+        paste0(uploaded_data$data_text),
+        easyClose = TRUE,
+        footer = NULL
+      ))
     }
   })
   
