@@ -161,4 +161,36 @@ There may be cases where it is more practical for the data manager to work offli
 - No duplicate `Id` fields are permitted  
 - If an `Id` exists in the spreadsheet for which a correction has already been submitted previously, the upload will fail
 
-### Bulk uploading: work flow
+### Bulk uploading: work flow  
+
+**Step 1: Download spreadsheet of anomalies**  
+
+The data manager goes to https://bohemia.team/app and downloads a spreadsheet of anomalies and errors which have not yet had a response associated with them (below button). In order to remove anomalies and errors which already have a response, the tickbox above the download button can be used:
+
+![](img/anomalies/a.png)
+
+**Step 2: Manually enter responses**
+
+The data manager should make no changes to the column names or formatting of the spreadsheet. Rather, he/she should simply fill out the below 3 columns:
+
+- `Response details`
+- `Resolved by`
+- `Resolution method`
+
+In the case of a very large spreadsheet, if the data manager wishes to upload only some responses, he/she should delete those rows which do not have the above 3 columns filled our prior to uploading.
+
+Once ready to upload, use the "Choose CSV File" input block in the "Bulk uploader" tab:
+
+![](img/anomalies/b.png)
+
+**Step 3: Receive response and act accordingly**
+
+Following upload, the spreadsheet will be run across a series of checks in order to ensure correct formatting, non-duplication, and completeness. In the case of any problems, an error message will be displayed:
+
+![](img/anomalies/c.png)
+
+The error message will contain text indicating the cause of the error. The data manager should edit the spreadsheet to resolve the error, and then re-upload.
+
+**Important**: If a data manager receives an error message after uploading, it means that NONE of the uploaded data has been entered into the database. The spreadsheet must be corrected and then re-uploaded.
+
+Upon uploading correctly formatted, non-duplicated, non-empty data, a message will be displayed saying "SUCCESS! Successfully uploaded corrections requests." At this point, the process is finished.

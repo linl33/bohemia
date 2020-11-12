@@ -4426,9 +4426,10 @@ app_server <- function(input, output, session) {
         new_corrections <- bind_rows(old_corrections, new_correction)
         odk_data$data$corrections  <- new_corrections
       } 
+      status_text <- ifelse(ok, 'SUCCESS!', 'ERROR!')
       uploaded_data$data_text <- out_text
       showModal(modalDialog(
-        title = "ERROR",
+        title = status_text,
         paste0(uploaded_data$data_text),
         easyClose = TRUE,
         footer = NULL
