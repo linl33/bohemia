@@ -24,5 +24,5 @@ corrections <- corrections %>% filter(!id %in% fixes_ids) %>% select(id, instanc
 write.csv(corrections, '~/Desktop/temporary_corrections.csv')
 
 # check data associated with a certain instance_id
-temp <- odk_data$minicensus_main[odk_data$minicensus_main$instance_id=='877f5c2a-1598-429c-98a1-5791976378e2',]
-temp1 <- odk_data$minicensus_people[odk_data$minicensus_people$instance_id=='877f5c2a-1598-429c-98a1-5791976378e2',]
+# temp <- odk_data$minicensus_main[odk_data$minicensus_main$instance_id=='877f5c2a-1598-429c-98a1-5791976378e2',]
+# temp1 <- odk_data$minicensus_people[odk_data$minicensus_people$instance_id=='877f5c2a-1598-429c-98a1-5791976378e2',]
