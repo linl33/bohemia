@@ -210,9 +210,7 @@ app_ui <- function(request) {
             navbarPage(
               title = 'Enrollment data',
               tabPanel('Aggregated',
-                       uiOutput('ui_enrollment')),
-              tabPanel('Data managers',
-                       uiOutput('ui_data_managers'))
+                       uiOutput('ui_enrollment'))
             )),
           tabItem(
             tabName="server_status",
@@ -3523,45 +3521,7 @@ app_server <- function(input, output, session) {
     )
   })
   
-  output$ui_data_managers <- renderUI({
-    # See if the user is logged in and has access
-    si <- session_info
-    li <- si$logged_in
-    ac <- 'enrollment' %in% si$access
-    # Generate the ui
-    make_ui(li = li,
-            ac = ac,
-            ok = {
-              
-              # Get the country
-              co <- input$geo
-              co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
-              loc <- bohemia::locations
-              loc <- loc %>% filter(Country==co)
-              
-              fluidPage(
-                fluidRow(
-                  column(6,
-                         selectInput('Choose location', 'choose_location', choices=unique(loc$code))
-                  ),
-                  column(6,
-                         selectInput('Choose activity', 'choose_activity', choices=c('Enumerations', 'Minicensus'))
-                  )
-                ),
-                fluidRow(
-                  column(12,
-                         actionButton(inputId = 'activity_done', label = 'Activity done')
-                  )
-                )
-              )
-              
-              
-            }
-            
-    )
-  })
-  
-  
+ 
   # Done hamlets UI  ################################################
   output$done_hamlet_table <- DT::renderDataTable({
     sb <- input$sidebar
