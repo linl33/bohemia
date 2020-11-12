@@ -53,9 +53,10 @@ format_minicensus <- function(data){
   people_part$member_resident_non_head <- NULL
   
   # Remove names
+  keyfile <- "../bohemia_pub.pem"
   people_part$name_label <- NULL
-  people_part$first_name <- substr(people_part$first_name, 1, 1)
-  people_part$last_name <- substr(people_part$last_name, 1, 1)
+  people_part$first_name <- encrypt_private_data(data = people_part$first_name, keyfile = keyfile)
+  people_part$last_name <- encrypt_private_data(data = people_part$last_name, keyfile = keyfile)
   
   # Clean up some variables
   if('hh_main_wall_material_free' %in% names(df)){
