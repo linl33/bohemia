@@ -312,13 +312,37 @@ app_ui <- function(request) {
           ),
           tabItem(
             tabName = 'alerts',
-            
-            fluidPage(
-              tags$img(src = "www/alerts_legend.png"),
-              # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
-              uiOutput('anomalies_ui_a'),
-              uiOutput('anomalies_ui')
+            navbarPage(
+              title = 'Errors & anomalies',
+              tabPanel('Alerts table',
+                       fluidPage(
+                         tags$img(src = "www/alerts_legend.png"),
+                         # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
+                         uiOutput('anomalies_ui_a'),
+                         uiOutput('anomalies_ui')
+                       )),
+              tabPanel('Bulk uploader',
+                       fluidPage(
+                         fluidRow(
+                           p('Upload a .csv file of your corrections with at least the following 5 columns: "Instance id", "Id", "Response details", "Resolved by", "Resolution method"')
+                         ),
+                         
+                         fluidRow(
+                           column(6,
+                                  fileInput("upload_data", "Choose CSV File",
+                                            accept = c(
+                                              "text/csv",
+                                              "text/comma-separated-values,text/plain",
+                                              ".csv")
+                                  ))
+                         ),
+                         fluidRow(
+                           column(12,
+                                  tableOutput("upload_data_message"))
+                         )
+                       ))
             )
+           
           ),
           tabItem(
             tabName = 'about',
@@ -4315,7 +4339,108 @@ app_server <- function(input, output, session) {
   })
   
   # Alert ui
+  uploaded_data <- reactiveValues(data_text ='No data uploaded')
   
+  observeEvent(input$upload_data, {
+    if (is.null(input$upload_data)){
+      NULL
+    } else {
+      ok <- TRUE
+      inFile <- input$upload_data
+      dat <- read.csv(inFile$datapath, check.names = FALSE)
+      previous_corrections <- odk_data$data$corrections
+      save(dat, previous_corrections, file='/tmp/temp_upload.rda')
+      
+      # create valid names 
+      log_in_user <- input$log_in_user
+      
+      valid_names <- c("Instance id", "Id", "Response details", "Resolved by", "Resolution method")  
+      
+      # Check column names
+      if(all(valid_names %in% names(dat))){
+        ok_names <- TRUE
+      } else {
+        ok_names <- FALSE
+        ok <- FALSE
+      }
+      if(!ok_names){
+        out_text <- paste0('ERROR! The following required columns are missing: ', paste0(valid_names[which(!valid_names %in% names(dat))], collapse = '; '), collapse = ' ')
+      }
+      
+      # Check duplicates
+      if(ok){
+        any_duplicates <- any(duplicated(dat$Id))
+        if(any_duplicates){
+          ok <- FALSE
+          out_text <- 'ERROR! Multiple entries per anomaly. No duplicated "Ids" allowed.'
+        }
+      }
+      
+      # Check to see if everything is complete
+      if(ok){
+        sub_dat <- dat[,valid_names]
+        any_nas <- as.numeric(which(apply(sub_dat, 2, function(x){any(is.na(x))})))
+        any_empties <- as.numeric(which(apply(sub_dat, 2, function(x){any(x == '')})))
+        any_nas <- any_nas | any_empties
+        if(length(any_nas) > 0){
+          ok <- FALSE
+          out_text <- paste0('ERROR! Empty values are not permitted. There are empty values in the following ', length(any_nas), ' columns. Fill out all cells in these columns and then re-upload: ', paste0(paste0(names(sub_dat)[any_nas], collapse = '; ')))
+        }
+      }
+      
+      # Check to see if anything has already been resolved
+      if(ok){
+        sub_dat <- dat[,valid_names]
+        sub_dat$Id <- tolower(sub_dat$Id)
+        already_ids <- previous_corrections$id
+        already <- which(sub_dat$Id %in% already_ids)
+        if(length(already) > 0){
+          ok <- FALSE
+          out_text <- paste0('ERROR! Column names are correct, but there are entries for anomalies which have ALREADY been correted. Please remove rows with the following', length(already),  ' IDs and then re-upload: ', paste0(paste0(sub_dat$Id[already], collapse = ', ')))
+        }
+      }
+      if(ok){
+        out_text <- 'Successfully uploaded corrections requests.'
+
+        fix <- dat %>%
+          mutate(id = tolower(Id),
+                 instance_id = tolower(`Instance id`),
+                 response_details = `Response details`,
+                 resolved_by = `Resolved by`,
+                 resolution_method = `Resolution method`,
+                 resolution_date = as.character(Sys.Date()),
+                 submitted_by = log_in_user,
+                 submitted_at = Sys.time()) %>%
+          dplyr::select(id, instance_id, response_details, resolved_by,
+                        resolution_method, resolution_date, submitted_by, submitted_at)
+        con <- get_db_connection(local = is_local)
+        dbAppendTable(conn = con,
+                      name = 'corrections',
+                      value = fix)
+        message('Done. now disconnecting from database')
+        dbDisconnect(con)
+        # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
+        message('Now uploading the in-session data')
+        old_corrections <- odk_data$data$corrections 
+        new_correction <- fix
+        new_corrections <- bind_rows(old_corrections, new_correction)
+        odk_data$data$corrections  <- new_corrections
+      } 
+      uploaded_data$data_text <- out_text
+      showModal(modalDialog(
+        title = "ERROR",
+        paste0(uploaded_data$data_text),
+        easyClose = TRUE,
+        footer = NULL
+      ))
+    }
+  })
+  
+  output$upload_data_message <- renderTable({
+    this_text <- uploaded_data$data_text
+    data_frame(' '=this_text)
+  })
+  # sh
   output$anomalies_ui_a <- renderUI({
     
     # See if the user is logged in and has access
