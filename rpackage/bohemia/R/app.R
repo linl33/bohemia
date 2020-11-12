@@ -1164,7 +1164,7 @@ app_server <- function(input, output, session) {
                             todays_date <=time_period[2]) 
     va <- va %>% filter(todays_date >= time_period[1],
                         todays_date <=time_period[2]) 
-    
+    # save(pd, enum, va, file = 'temp_gps.rda')
     pd_ok <- FALSE
     
     if(!is.null(pd)){
@@ -1230,13 +1230,14 @@ app_server <- function(input, output, session) {
       apply_summary <- function(df){
         df %>%
           summarise(`Minicensus Forms done` = sum(`Minicensus Forms done`, na.rm = TRUE),
-                    `Estimated number of forms` = sum(`Estimated number of forms`, na.rm = TRUE),
-                    `Enumerations Forms done` = sum(`Enumerations Forms done`, na.rm = TRUE),
+                    `Enumeration Forms done` = sum(`Enumerations Forms done`, na.rm = TRUE),
+                    `Target forms (recon)` = sum(`Estimated number of forms`, na.rm = TRUE),
                     `VA Forms done` = sum(`VA Forms done`, na.rm = TRUE)) %>%
           ungroup %>%
           mutate(#`Minicensus Estimated percent finished`  = round(`Minicensus Forms done` / `Estimated number of forms` * 100, digits = 2),
-                 `Enumerations Estimated percent finished` = round(`Enumerations Forms done` / `Estimated number of forms` * 100, digits = 2),
-                 `% minicensed of enumerated` = round(`Minicensus Forms done` / `Enumerations Forms done` * 100, digits = 2))
+                 `% Enumerated of target` = round(`Enumeration Forms done` / `Target forms (recon)` * 100, digits = 2),
+                 `% Minicensed of enumerated` = round(`Minicensus Forms done` / `Enumeration Forms done` * 100, digits = 2)) %>%
+          select(`Minicensus Forms done`, `Enumeration Forms done`, `Target forms (recon)`,`% Enumerated of target`,`% Minicensed of enumerated`  , `VA Forms done`)
       }
       progress_by <- progress_by_hamlet %>% left_join(locations %>% 
                                             dplyr::select(code, District, Ward, Village), by = 'code')
