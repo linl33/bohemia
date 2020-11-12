@@ -4362,11 +4362,9 @@ app_server <- function(input, output, session) {
       } else {
         ok_names <- FALSE
         ok <- FALSE
-      }
-      if(!ok_names){
         out_text <- paste0('ERROR! The following required columns are missing: ', paste0(valid_names[which(!valid_names %in% names(dat))], collapse = '; '), collapse = ' ')
       }
-      
+
       # Check duplicates
       if(ok){
         any_duplicates <- any(duplicated(dat$Id))
@@ -4381,7 +4379,7 @@ app_server <- function(input, output, session) {
         sub_dat <- dat[,valid_names]
         any_nas <- as.numeric(which(apply(sub_dat, 2, function(x){any(is.na(x))})))
         any_empties <- as.numeric(which(apply(sub_dat, 2, function(x){any(x == '')})))
-        any_nas <- any_nas | any_empties
+        any_nas <- sort(unique(c(any_nas, any_empties)))
         if(length(any_nas) > 0){
           ok <- FALSE
           out_text <- paste0('ERROR! Empty values are not permitted. There are empty values in the following ', length(any_nas), ' columns. Fill out all cells in these columns and then re-upload: ', paste0(paste0(names(sub_dat)[any_nas], collapse = '; ')))
