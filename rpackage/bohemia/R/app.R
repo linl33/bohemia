@@ -1233,19 +1233,29 @@ app_server <- function(input, output, session) {
           summarise(`Minicensus Forms done` = sum(`Minicensus Forms done`, na.rm = TRUE),
                     `Enumeration Forms done` = sum(`Enumerations Forms done`, na.rm = TRUE),
                     `Target forms (recon)` = sum(`Estimated number of forms`, na.rm = TRUE),
-                    `VA Forms done` = sum(`VA Forms done`, na.rm = TRUE)) %>%
+                    `VA Forms done` = sum(`VA Forms done`, na.rm = TRUE),
+                    .groups = 'keep') %>%
           ungroup %>%
           mutate(#`Minicensus Estimated percent finished`  = round(`Minicensus Forms done` / `Estimated number of forms` * 100, digits = 2),
-                 `% Enumerated of target` = round(`Enumeration Forms done` / `Target forms (recon)` * 100, digits = 2),
-                 `% Minicensed of enumerated` = round(`Minicensus Forms done` / `Enumeration Forms done` * 100, digits = 2)) %>%
-          select(`Minicensus Forms done`, `Enumeration Forms done`, `Target forms (recon)`,`% Enumerated of target`,`% Minicensed of enumerated`  , `VA Forms done`)
+            `% Enumerated of target` = 
+              round(`Enumeration Forms done` / `Target forms (recon)` * 100, digits = 2),
+            `% Minicensed of enumerated` = 
+              round(`Minicensus Forms done` / `Enumeration Forms done` * 100, digits = 2))# %>%
+          # select(`Minicensus Forms done`,
+          #        `Enumeration Forms done`,
+          #        `Target forms (recon)`,
+          #        `% Enumerated of target`,
+          #        `% Minicensed of enumerated`,
+          #        `VA Forms done`)
       }
+      
+      
       progress_by <- progress_by_hamlet %>% left_join(locations %>% 
                                             dplyr::select(code, District, Ward, Village), by = 'code')
       
       
       progress_by_district <- progress_by %>% group_by(District) %>%
-        apply_summary
+        apply_summary()
       
       progress_by_ward <- progress_by %>% 
         group_by(Ward) %>% 
@@ -1295,8 +1305,7 @@ app_server <- function(input, output, session) {
           }
         }
       }
-      # reorder columns
-      
+
       message('---created progess table for Overview by geography')
       out <- bohemia::prettify(monitor_by_table, download_options = TRUE, nrows = nrow(monitor_by_table))
     }
@@ -3565,6 +3574,7 @@ app_server <- function(input, output, session) {
     sb <- input$sidebar
     liu <- input$log_in_user
     done_button <- input$mark_done
+    not_done_button <- input$mark_undone
     the_authorized_users <- c("iirema@ihi.or.tz",
                               "eldo.elobolobo@manhica.net",
                               "joe@databrew.cc")
@@ -3593,18 +3603,39 @@ app_server <- function(input, output, session) {
               the_authorized_users <- c("iirema@ihi.or.tz",
                                         "eldo.elobolobo@manhica.net",
                                         "joe@databrew.cc")
+              
+              # See if the selected hamlet has already been marked as done or not
+              the_hamlet <- input$the_done_hamlet
+              # con <- get_db_connection(local = is_local)
+              # already <- dbReadTable(conn = con, 'done_hamlets')
+              # already_done <- the_hamlet %in% already$code
+              # dbDisconnect(con)
+              # if(is.null(already_done)){
+              #   already_done <- FALSE
+              # }
+              # if(is.na(already_done)){
+              #   already_done <- FALSE
+              # }
               if(liu %in% the_authorized_users){
                 ok_to_mark <- TRUE
               } else {
                 ok_to_mark <- FALSE
               }
               if(ok_to_mark){
-                mark_button <- actionButton('mark_done',
-                                           'Mark as done')
+                # if(already_done){
+                  mark_button <- actionButton('mark_done',
+                                              'Mark as done')
+                # } else {
+                #   mark_button <- actionButton('mark_undone',
+                #                               'Change to NOT done')
+                # }
+                
               } else {
                 mark_button <- actionButton('mark_done_fake',
                                             'Clicking here will do nothing')
               }
+              
+              
               
               pd <- odk_data$data
               the_country <- country()
@@ -3612,6 +3643,8 @@ app_server <- function(input, output, session) {
               the_choices <- sort(unique(the_choices))
               fluidPage(
                 fluidRow(h3('Mark a hamlet as done')),
+                fluidRow(p('MOZ: "Done" means that all enumerations for that hamlet have been finished.')),
+                fluidRow(p('TZA: "Done" means that all minicensus forms for that hamlet have been finished.')),
                 fluidRow(
                   column(6,
                          selectInput('the_done_hamlet',
@@ -3637,6 +3670,15 @@ app_server <- function(input, output, session) {
     done_hamlets <- dbAppendTable(conn = con,
                                         name = 'done_hamlets',
                                         value = the_data)
+    dbDisconnect(con)
+  })
+  
+  observeEvent(input$mark_undone, {
+    the_hamlet <- input$the_done_hamlet
+    liu <- input$log_in_user
+    con <- get_db_connection(local = is_local)
+    dbSendQuery(conn = con,
+                statement = paste0("DELETE FROM done_hamlets WHERE code ='", the_hamlet, "'"))
     dbDisconnect(con)
   })
   
