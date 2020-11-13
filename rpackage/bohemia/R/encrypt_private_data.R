@@ -12,6 +12,6 @@ encrypt_private_data <- function(data, keyfile){
   # encrypt with the public key
   anon_d <- PKI.encrypt(charToRaw(data), pub_key)
 
-  return anon_d
+  return(anon_d)
 }
   

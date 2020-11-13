@@ -12,5 +12,5 @@ decrypt_private_data <- function(data, keyfile){
   # decrypt with private key
   plain_d <- rawToChar(PKI.decrypt(data, priv_key))
   
-  return plain_d
+  return(plain_d)
 }
