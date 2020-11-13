@@ -2,7 +2,7 @@
 start_time <- Sys.time()
 message('System time is: ', as.character(start_time))
 message('---Timezone: ', as.character(Sys.timezone()))
-keyfile_path <- '../bohemia_pub.pem'
+keyfile_path <- '../credentials/bohemia_pub.pem'
 creds_fpath <- '../credentials/credentials.yaml'
 creds <- yaml::yaml.load_file(creds_fpath)
 suppressMessages({

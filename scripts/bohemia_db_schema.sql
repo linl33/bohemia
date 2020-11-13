@@ -81,8 +81,8 @@ CREATE TABLE minicensus_main (
 
 CREATE TABLE minicensus_people (
     instance_id    uuid,
-    first_name   VARCHAR(256),
-    last_name   VARCHAR(256),
+    first_name   TEXT,
+    last_name   TEXT,
     pid   VARCHAR(12),
     --name_label   VARCHAR(128),
     num  INT,
@@ -116,10 +116,10 @@ CREATE TABLE minicensus_repeat_death_info (
     death_id  TEXT,
     death_location    VARCHAR(128),
     death_location_location   VARCHAR(128),
-    death_name    VARCHAR(256),
+    death_name    TEXT,
     death_number  INT,
     death_number_size     VARCHAR(64),
-    death_surname     VARCHAR(64),
+    death_surname     TEXT,
     non_default_death_id  TEXT,
     note_death_id     TEXT,
     repeat_death_info_count   INT,
@@ -162,7 +162,7 @@ CREATE TABLE minicensus_repeat_water (
 CREATE TABLE enumerations (
     instance_id   uuid,
     agregado   VARCHAR(256),
-    chefe_name   VARCHAR(128),
+    chefe_name   TEXT,
     construction_material   VARCHAR(256),
     construction_type   VARCHAR(256),
     country   VARCHAR(32),
@@ -180,7 +180,7 @@ CREATE TABLE enumerations (
     n_total_constructions   INT,
     region   VARCHAR(64),
     start_time   TIMESTAMP,
-    sub_name   VARCHAR(256),
+    TEXT,
     todays_date   DATE,
     village   VARCHAR(256),
     vizinho1   VARCHAR(256),
@@ -921,7 +921,7 @@ ALTER TABLE corrections
 
 ALTER TABLE anomalies ADD CONSTRAINT fk_corrections FOREIGN KEY (correction_id) REFERENCES corrections(id);
 
--- Corrections add workaround to use unique PK 
+-- Corrections add workaround to use unique PK
 
 ALTER TABLE corrections
     ADD COLUMN instance_id TEXT NOT NULL,
