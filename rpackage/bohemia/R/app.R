@@ -2221,9 +2221,9 @@ app_server <- function(input, output, session) {
               ) %>%
                 mutate(`FW / Supervisor ID` = ' ',
                        `Date of VA visit` = ' ',
-                       `Was the ICF signed?` = 'Yes__ No__',
-                       `Was the VA form completed?` = 'Yes__ No__',
-                       `If this HH was not visited or the VA form was not completed, explain why` = '                 ')
+                       `ICF signed?` = 'Yes__ No__',
+                       `VA form completed?` = 'Yes__ No__',
+                       `If HH not visited or VA form not completed, why` = '                 ')
               if(cn=='Mozambique'){
                 va <- va %>%  
                   dplyr::mutate(
@@ -2241,9 +2241,9 @@ app_server <- function(input, output, session) {
                                      `Última data para VA` = `Latest date to collect VA form`,
                                      `ID Inquiridor` = `FW / Supervisor ID`,
                                      `Data da visita` = `Date of VA visit`,
-                                     `Consentimiento informado assinado?`= `Was the ICF signed?`,
-                                     `Formulária realizado` = `Was the VA form completed?`,
-                                     `Se não foi visitado ou entrevistado, porque?` = `If this HH was not visited or the VA form was not completed, explain why`)
+                                     `Consentimiento informado assinado?`= `ICF signed?`,
+                                     `Formulária realizado` = `VA form completed?`,
+                                     `Se não foi visitado ou entrevistado, porque?` = `If HH not visited or VA form not completed, why`)
               }
 
               # Capture n teams
