@@ -621,10 +621,10 @@ app_server <- function(input, output, session) {
       # Get traccar summary data
       message('Retrieving information on workers from traccar')
       creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      dat <- get_traccar_data(url = creds$traccar_server,
-                              user = creds$traccar_user,
-                              pass = creds$traccar_pass)
-      
+      # dat <- get_traccar_data(url = creds$traccar_server,
+      #                         user = creds$traccar_user,
+      #                         pass = creds$traccar_pass)
+      # 
       dbDisconnect(con)
       
     }
@@ -665,9 +665,9 @@ app_server <- function(input, output, session) {
       # Get traccar summary data
       message('Retrieving information on workers from traccar')
       creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      dat <- get_traccar_data(url = creds$traccar_server,
-                              user = creds$traccar_user,
-                              pass = creds$traccar_pass)
+      # dat <- get_traccar_data(url = creds$traccar_server,
+      #                         user = creds$traccar_user,
+      #                         pass = creds$traccar_pass)
       
       dbDisconnect(con)
       
