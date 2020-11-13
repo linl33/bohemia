@@ -4163,6 +4163,11 @@ app_server <- function(input, output, session) {
         joined <- joined %>% filter(!resolution_submitted) 
       }
     }
+    anomalies_show <- input$anomalies_show
+    message('anomalies show is:')
+    if(!is.null(anomalies_show)){
+      joined <- joined %>% filter(type %in% anomalies_show)
+    }
     bohemia::prettify(joined, 
                       download_options = TRUE,
                       nrows = nrow(joined)) %>%
@@ -4457,17 +4462,31 @@ app_server <- function(input, output, session) {
               #                margins = c(350, 350))
               # )
               fluidPage(
-                fluidRow(column(6,
-                                p('Select a row and then click one of the below:')),
-                         column(6,
+                fluidRow(column(12, align = 'center',
+                                'Select one row and then click "Submit response"',
                                 actionButton('submit_fix',
                                              'Submit response',
                                              style='padding:=8px; font-size:120%'))),
                 fluidRow(
-                  column(12,
+                  column(3),
+                  column(3, align = 'center',
                          checkboxInput('hide_submitted', 
                                        'Hide rows for which a resolution has already been submitted?',
-                                       value = FALSE))
+                                       value = FALSE)),
+                  column(3,align = 'center',
+                         checkboxGroupInput('anomalies_show',
+                                            '',
+                                            choices = c('Anomalies' = 'anomaly', 
+                                                        'Errors' = 'error'),
+                                            selected = c('anomaly', 'error'),
+                                            inline = TRUE
+                                            # choiceNames = list(
+                                            #   icon('exclamation-circle'),
+                                            #   icon('question-circle')
+                                            # ),
+                                            # choiceValues = c('anomaly', 'error')
+                                            )),
+                  column(3)
                   
                   
                 ))
