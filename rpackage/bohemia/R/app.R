@@ -315,11 +315,12 @@ app_ui <- function(request) {
               title = 'Errors & anomalies',
               tabPanel('Alerts table',
                        fluidPage(
-                         tags$img(src = "www/alerts_legend.png"),
+                         column(12, align = 'center',
+                         tags$img(src = "www/alerts_legend.png", style="width: 600px"),
                          # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
                          uiOutput('anomalies_ui_a'),
                          uiOutput('anomalies_ui')
-                       )),
+                       ))),
               tabPanel('Bulk uploader',
                        fluidPage(
                          fluidRow(
