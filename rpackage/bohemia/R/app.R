@@ -2196,7 +2196,7 @@ app_server <- function(input, output, session) {
                                                  num), by = c('instance_id', 'num')) %>%
               mutate(`FW ID` = ' ') %>%
               dplyr::select(-instance_id) %>%
-              mutate(`HH head ID and initials` = paste0(pid, ' (', first_name, last_name, ')'))
+              mutate(`HH head initials and ID` = paste0(pid, ' (', first_name, last_name, ')'))
 
             # Remove those which have already been collected
             already_done <- unique(odk_data$data$va$death_id)
@@ -2212,9 +2212,9 @@ app_server <- function(input, output, session) {
                                          Village,
                                          Hamlet,
                                          `HH ID`,
-                                         `HH head ID and initials`,
+                                         `HH head initials and ID`,
                                          # `FW ID`,
-                                         `Name of deceased person` = death_initials,
+                                         `Initials of deceased person` = death_initials,
                                          `ID of deceased person`,
                                          `Date of death`,
                                          `Latest date to collect VA form`
@@ -2234,8 +2234,8 @@ app_server <- function(input, output, session) {
                                      `PA / Localidade`=Ward,
                                      Povoado=Village,
                                      Bairro=Hamlet,
-                                     `Chefe do agregado e Ext_ID` = `HH head ID and initials`,
-                                     `Nome do(a) falecido(a)` = `Name of deceased person`,
+                                     `Iniciais do chefe do agregado e Ext_ID` = `HH head initials and ID`,
+                                     `Iniciais do(a) falecido(a)` = `Initials of deceased person`,
                                      `Ext_ID Falecido(a)` = `ID of deceased person`,
                                      `Data da morte` = `Date of death`,
                                      `Última data para VA` = `Latest date to collect VA form`,
