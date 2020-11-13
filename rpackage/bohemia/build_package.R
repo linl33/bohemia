@@ -3,6 +3,7 @@ make_it <- function(){
   library(roxygen2)
   library(rmarkdown)
   library(usethis)
+  
   usethis::use_package('grid')
   usethis::use_package('scales')
   usethis::use_package('grDevices')
