@@ -2225,15 +2225,29 @@ app_server <- function(input, output, session) {
                        `Was the VA form completed?` = 'Yes__ No__',
                        `If this HH was not visited or the VA form was not completed, explain why` = '                 ')
               if(cn=='Mozambique'){
-                va <- va %>%  rename(Distrito = District,
+                va <- va %>%  
+                  dplyr::mutate(
+                    `Was the ICF signed?` = 'Sim__ Não__',
+                    `Was the VA form completed?` = 'Sim__ Não__',
+                  ) %>%
+                  rename(Distrito = District,
                                      `PA / Localidade`=Ward,
                                      Povoado=Village,
-                                     Bairro=Hamlet)
+                                     Bairro=Hamlet,
+                                     `Chefe do agregado e Ext_ID` = `HH head ID and initials`,
+                                     `Nome do(a) falecido(a)` = `Name of deceased person`,
+                                     `Ext_ID Falecido(a)` = `ID of deceased person`,
+                                     `Data da morte` = `Date of death`,
+                                     `Última data para VA` = `Latest date to collect VA form`,
+                                     `ID Inquiridor` = `FW / Supervisor ID`,
+                                     `Data da visita` = `Date of VA visit`,
+                                     `Consentimiento informado assinado?`= `Was the ICF signed?`,
+                                     `Formulária realizado` = `Was the VA form completed?`,
+                                     `Se não foi visitado ou entrevistado, porque?` = `If this HH was not visited or the VA form was not completed, explain why`)
               }
 
               # Capture n teams
               n_teams <- input$va_n_teams
-              save(n_teams, va, file = '/tmp/vax.RData')
               if(is.null(n_teams)){
                 n_teams <- 1
               }
@@ -2285,7 +2299,8 @@ app_server <- function(input, output, session) {
     }
     
     return(final)
-  })
+  },
+  options = list(scrollX = TRUE))
   # VA List Generation UI
   output$ui_va_list_generation <- renderUI({
     # See if the user is logged in and has access
