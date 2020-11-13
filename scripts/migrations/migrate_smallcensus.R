@@ -3,6 +3,7 @@
 # CISM ODK server.
 # This is necessary because the smallcensus form got corrupted.
 
+keyfile_path <- '../bohemia_pub.pem'
 creds_fpath <- '../../credentials/credentials.yaml'
 creds <- yaml::yaml.load_file(creds_fpath)
 suppressMessages({
@@ -68,7 +69,7 @@ if(!is.null(data)){
 }
 if(new_data){
   # Format data
-  formatted_data <- format_minicensus(data = data)
+  formatted_data <- format_minicensus(data = data, keyfile = keyfile_path)
   # Update data
   update_minicensus(formatted_data = formatted_data,
                     con = con)

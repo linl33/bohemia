@@ -2,6 +2,7 @@
 start_time <- Sys.time()
 message('System time is: ', as.character(start_time))
 message('---Timezone: ', as.character(Sys.timezone()))
+keyfile_path <- '../bohemia_pub.pem'
 creds_fpath <- '../credentials/credentials.yaml'
 creds <- yaml::yaml.load_file(creds_fpath)
 suppressMessages({
@@ -61,7 +62,7 @@ if(!is.null(data)){
 }
 if(new_data){
   # Format data
-  formatted_data <- format_minicensus(data = data)
+  formatted_data <- format_minicensus(data = data, keyfile = keyfile_path)
   # Update data
   update_minicensus(formatted_data = formatted_data,
                     con = con)
@@ -100,7 +101,7 @@ if(!is.null(data)){
 }
 if(new_data){
   # Format data
-  formatted_data <- format_va(data = data)
+  formatted_data <- format_va(data = data, keyfile = keyfile_path)
   # Update data
   update_va(formatted_data = formatted_data,
             con = con)
@@ -178,7 +179,7 @@ if(!skip_deprecated){
   }
   if(new_data){
     # Format data
-    formatted_data <- format_minicensus(data = data)
+    formatted_data <- format_minicensus(data = data, keyfile = keyfile_path)
     # Update data
     update_minicensus(formatted_data = formatted_data,
                       con = con)
@@ -267,7 +268,7 @@ if(!skip_deprecated){
   }
   if(new_data){
     # Format data
-    formatted_data <- format_minicensus(data = data)
+    formatted_data <- format_minicensus(data = data, keyfile = keyfile_path)
     # Update data
     update_minicensus(formatted_data = formatted_data,
                       con = con)
@@ -306,7 +307,7 @@ if(!is.null(data)){
 }
 if(new_data){
   # Format data
-  formatted_data <- format_minicensus(data = data)
+  formatted_data <- format_minicensus(data = data, keyfile = keyfile_path)
   # Update data
   update_minicensus(formatted_data = formatted_data,
                     con = con)
@@ -346,7 +347,7 @@ if(!is.null(data)){
 }
 if(new_data){
   # Format data
-  formatted_data <- format_va(data = data)
+  formatted_data <- format_va(data = data, keyfile = keyfile_path)
   # Update data
   update_va(formatted_data = formatted_data,
                     con = con)
@@ -384,7 +385,7 @@ if(!is.null(data)){
 }
 if(new_data){
   # Format data
-  formatted_data <- format_enumerations(data = data)
+  formatted_data <- format_enumerations(data = data, keyfile = keyfile_path)
   # Update data
   update_enumerations(formatted_data = formatted_data,
                       con = con)
