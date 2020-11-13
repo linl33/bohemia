@@ -269,6 +269,7 @@ app_ui <- function(request) {
                                              uiOutput('ui_consent_verification_list')
                                            )),
                                   tabPanel('VA control sheet',
+                                           textInput('va_n_teams', 'Number of teams', value = "1"),
                                            uiOutput('ui_va_list_generation'))
                        ))
               )
@@ -2123,8 +2124,11 @@ app_server <- function(input, output, session) {
     return(out)
   })
   
-  # Va data
-  observeEvent(location_code(),{
+# VA DATA
+  observeEvent({
+    x = location_code()
+    y = input$va_n_teams
+  },{
     
     # See if the user is logged in and has access
     si <- session_info
@@ -2227,6 +2231,21 @@ app_server <- function(input, output, session) {
                                      Bairro=Hamlet)
               }
 
+              # Capture n teams
+              n_teams <- input$va_n_teams
+              save(n_teams, va, file = '/tmp/vax.RData')
+              if(is.null(n_teams)){
+                n_teams <- 1
+              }
+              n_teams <- as.numeric(n_teams)
+              if(n_teams < 1 | n_teams > 100){
+                n_teams <- 1
+              }
+              if(is.na(n_teams)){
+                n_teams <- 1
+              }
+              team_vector <- sort(rep(1:n_teams, length = nrow(va)))
+              va$`Team` <- team_vector
               message('---Created list generation table for VA')
               # Save for use in other places
               session_data$va_table <- va
@@ -2244,6 +2263,7 @@ app_server <- function(input, output, session) {
   
   # VA list generation table
   output$table_va_list_generation <- DT::renderDataTable({
+    x <- input$va_n_teams
     va <- session_data$va_table
     if(nrow(va) > 0){
       # Make datatable
@@ -2256,8 +2276,10 @@ app_server <- function(input, output, session) {
                     backgroundColor = '#ffcccb') %>%
         formatStyle(names(va)[7:10],
                     backgroundColor = '#fed8b1') %>%
-        formatStyle(names(va)[11:ncol(va)],
-                    backgroundColor = '#ADD8E6')
+        formatStyle(names(va)[11:(ncol(va)-1)],
+                    backgroundColor = '#ADD8E6') %>%
+        formatStyle(names(va)[ncol(va)],
+                    backgroundColor = 'white')
     } else {
       final <- DT::datatable(data.frame(`O` = 'No data'))
     }
@@ -4554,7 +4576,8 @@ app_server <- function(input, output, session) {
                                         # '../inst/rmd/control_sheet.Rmd',
                                         output_file = out_file,
                                         params = list(xdata = xdata,
-                                                      li = li))
+                                                      li = li, font_size = 5.5,
+                                                      column_spec = "column_spec(1:6, background = '#ffcccb') %>% column_spec(7:10, background = '#fed8b1') %>% column_spec(11:(ncol(xdata)-1), background = '#ADD8E6') %>% column_spec(1:ncol(xdata),width = '1.1cm')"))
                       
                       # copy html to 'file'
                       file.copy(out_file, file)
