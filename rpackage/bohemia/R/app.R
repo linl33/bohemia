@@ -535,13 +535,13 @@ app_server <- function(input, output, session) {
       # Get traccar summary data
       message('Retrieving information on workers from traccar')
       creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      dat <- get_traccar_data(url = creds$traccar_server,
-                              user = creds$traccar_user,
-                              pass = creds$traccar_pass)
-      # Keep only the summary data for the country
-      dat$uniqueId <- as.numeric(dat$uniqueId)
-      dat <- dat %>% filter(uniqueId %in% keep_ids)
-      session_data$traccar_summary <- dat
+      # dat <- get_traccar_data(url = creds$traccar_server,
+      #                         user = creds$traccar_user,
+      #                         pass = creds$traccar_pass)
+      # # Keep only the summary data for the country
+      # dat$uniqueId <- as.numeric(dat$uniqueId)
+      # dat <- dat %>% filter(uniqueId %in% keep_ids)
+      # session_data$traccar_summary <- dat
       session_info$logged_in <- TRUE
       reactive_log_in_text('')
       removeModal()
