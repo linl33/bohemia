@@ -63,3 +63,29 @@ D. Wanjiru Kimani
 - Databrew retains a copy of the key only for the purpose of ensuring that data is not lost in the case of a site mishap. Only one Databrew team member will have access to the key.
 - Databrew will not use the key; it is retained solely for the purpose of supplying to the site.
 - If the database is accessed using the de-encryption key, the event will be logged, considered a breach, and reported to the sponsor.  
+
+# Encryption key generation  
+
+The databrew `bohemia` package includes utilites for generating encryption / de-encryption keys. Below is a walk-through.
+
+```
+library(bohemia)
+
+# Generate encryption keys
+generate_keys(dir = '../credentials/')
+
+```
+
+Once the public and private keys have been generated, they can be used to encrypt and de-encrypt data, respectively. For example:
+
+```
+library(bohemia)
+
+some_names <- c('Joe Brew', 'Wanjiru Kimani', 'Jaume Rovirosa')
+encrypted <- encrypt_private_data(data = some_names,
+                                                keyfile = '../credentials/bohemia_pub.pem')
+print(encrypted)
+decrypted <- decrypt_private_data(encrypted,
+                                           keyfile = '../credentials/bohemia_priv.pem')
+print(decrypted)
+```

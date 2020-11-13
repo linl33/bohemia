@@ -9,9 +9,14 @@
 encrypt_private_data <- function(data, keyfile){
   # load the public key
   pub_key <- PKI.load.key(format="PEM", private="FALSE", file=keyfile)
-  # encrypt with the public key
-  anon_d <- PKI.encrypt(charToRaw(data), pub_key)
-
-  return(anon_d)
-}
   
+  ll <- length(data)
+  out_vector <- c()
+  for(j in 1:ll){
+    this_data <- data[j]
+    this_encrypted <- PKI.encrypt(charToRaw(this_data), pub_key)
+    this_encrypted <- paste0(this_encrypted, collapse = ' ')
+    out_vector[j] <- this_encrypted
+  }
+  return(out_vector)
+}

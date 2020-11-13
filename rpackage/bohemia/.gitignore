@@ -3,3 +3,5 @@ R/list.pdf
 R/list.tex
 list.pdf
 list.tex
+*.pem
+*.idea

@@ -10,7 +10,14 @@ decrypt_private_data <- function(data, keyfile){
   # load the private key
   priv_key <- PKI.load.key(format="PEM", file=keyfile)
   # decrypt with private key
-  plain_d <- rawToChar(PKI.decrypt(data, priv_key))
-  
-  return(plain_d)
+  ll <- length(data)
+  out_vector <- c()
+  for(j in 1:ll){
+    this_data <- data[j]
+    this_data <- unlist(strsplit(this_data, ' '))
+    this_data <- as.raw(as.hexmode(this_data))
+    this_decrypted <- rawToChar(PKI.decrypt(this_data, priv_key), multiple = FALSE)
+    out_vector[j] <- this_decrypted
+  }
+  return(out_vector)
 }
