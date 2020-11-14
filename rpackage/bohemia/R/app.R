@@ -484,6 +484,11 @@ app_server <- function(input, output, session) {
   # create reactive object to store odk_data.
   odk_data <- reactiveValues(data = NULL)
   
+  # estimated households data
+  estimated_households <- reactiveValues(data = bohemia::gps)
+  
+  
+  
   
   # Text for incorrect log-in, etc.
   reactive_log_in_text <- reactiveVal(value = '')
@@ -496,6 +501,10 @@ app_server <- function(input, output, session) {
   })
   
   country <- reactiveVal(value = 'Tanzania')
+  
+  
+  
+  
   observeEvent(input$confirm_log_in,{
     # Run a check on the credentials
     users <- yaml::yaml.load_file('credentials/users.yaml')
@@ -583,6 +592,72 @@ app_server <- function(input, output, session) {
     session_info$logged_in <- FALSE
     removeModal()
   })
+  
+  ##################
+  # Estimated number of households
+  ##################
+  listen_estimated_hh <- reactive({
+    list(
+      odk_data$data,
+      input$mark_done,
+      input$mark_undone
+    )
+    
+  })
+  observeEvent(listen_estimated_hh(), {
+    li <- session_info$logged_in
+    if(li){
+      # Update the in-session estimated_households$data table to make sure values are right
+      message('Overwriting GPS!')
+      co <- country()
+      if(co == 'Mozambique'){
+        pd <- odk_data$data$enumerations
+        estimated_hh_per_collection <- pd %>%
+          group_by(code = hamlet_code) %>%
+          summarise(done_hh = length(unique(agregado)))
+      } else {
+        pd <- odk_data$data$minicensus_main
+        estimated_hh_per_collection <- pd %>%
+          group_by(code = hh_hamlet_code) %>%
+          summarise(done_hh = length(unique(hh_id)))
+      }
+      # Join with the estimated_households$data object
+      left <- estimated_households$data
+      
+      # filter to only keep those which are already marked as done
+      out <- already_done_hamlets()
+      
+      # save(pd, estimated_hh_per_collection, co, li, out,
+      #      file = '/tmp/joe2020.RData')
+      
+      # Fill in any empties
+      if(length(out) > 0){
+        for(i in 1:length(out)){
+          if(!out[i] %in% estimated_hh_per_collection$code){
+            message('Marking ', out[i], ' as done despite having no forms collected...')
+            new_row <- tibble(code = out,
+                              done_hh = 0)
+            estimated_hh_per_collection <- 
+              bind_rows(estimated_hh_per_collection,
+                        new_row)
+          }
+        }
+      }
+      
+      
+      estimated_hh_per_collection <- estimated_hh_per_collection %>%
+        filter(code %in% out)
+      if(nrow(estimated_hh_per_collection) > 0){
+        joined <- left_join(left, estimated_hh_per_collection) %>%
+          mutate(n_households = ifelse(is.na(done_hh),
+                                       n_households,
+                                       done_hh)) %>%
+          dplyr::select(-done_hh)
+        estimated_households$data <- joined
+      } 
+    }
+  })
+  
   
   ##################
   # LOCATION HIERARCHY UTILITIES
@@ -905,7 +980,7 @@ app_server <- function(input, output, session) {
       ok <- TRUE
     }
     if(ok){
-      num_houses <- gps %>% filter(code %in% lc) %>% .$n_households
+      num_houses <- estimated_households$data %>% filter(code %in% lc) %>% .$n_households
       num_houses <- round(sum(num_houses) * 1.25)
     } else {
       num_houses <- 500
@@ -1189,7 +1264,7 @@ app_server <- function(input, output, session) {
     } else {
       # Create a progress table
       target <- ifelse(co == 'Tanzania', 
-                       gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
+                       estimated_households$data %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
                        30467)
       progress_table <- tibble(`Forms finished` = nrow(pd),
                                `Estimated total forms` = target,
@@ -1197,7 +1272,7 @@ app_server <- function(input, output, session) {
                                `Estimated % finished` = round(nrow(pd) / target * 100, digits = 2))
       
       # Create a detailed progress table (by hamlet)
-      left <- gps %>%
+      left <- estimated_households$data %>%
         filter(clinical_trial != 1) %>%
         filter(iso == the_iso) %>%
         dplyr::select(code, n_households)
@@ -1352,9 +1427,9 @@ app_server <- function(input, output, session) {
       #########   percent complete map - create dataframe grouped by all locations together
       lxd_all <- pd %>% group_by(hh_ward, hh_village, code = hh_hamlet_code) %>%
         tally %>%
-        left_join(gps %>% dplyr::select(code, n_households), by = 'code') %>%
+        left_join(estimated_households$data %>% dplyr::select(code, n_households), by = 'code') %>%
         mutate(p = n / n_households * 100)
-      lxd_all <- left_join(gps %>% filter(iso == the_iso) %>% 
+      lxd_all <- left_join(estimated_households$data %>% filter(iso == the_iso) %>% 
                              dplyr::select(code, lng, lat), lxd_all, by = 'code') %>%
         mutate(p = ifelse(is.na(p), 0, p))
       pal_all <- pal_hamlet <- colorNumeric(
@@ -1511,7 +1586,7 @@ app_server <- function(input, output, session) {
       the_iso <- iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
       # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
       target <- ifelse(iso == 'TZA', 
-                       gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
+                       estimated_households$data %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
                        30467)
       
       # save(pd, file = 'temp_pd.rda')
@@ -1547,7 +1622,7 @@ app_server <- function(input, output, session) {
         total_forms_fw <- 599
         total_daily_country <- 1001
         total_weekly_country <- total_daily_country*5
-        total_forms <- gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x
+        total_forms <- estimated_households$data %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x
         total_weeks <- round(total_forms/total_weekly_country,2)
         total_days <- total_weeks*7
         est_date <- Sys.Date()+total_days
@@ -1623,7 +1698,7 @@ app_server <- function(input, output, session) {
     }
     if(pd_ok){
       target <- ifelse(co == 'Tanzania', 
-                       gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
+                       estimated_households$data %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
                        30467)
       x <- pd %>%
         group_by(date = as.Date(todays_date)) %>%
@@ -1664,7 +1739,7 @@ app_server <- function(input, output, session) {
     }
     if(pd_ok){
       target <- ifelse(co == 'Tanzania', 
-                       gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
+                       estimated_households$data %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
                        30467)
       progress_table <- tibble(`Forms finished` = nrow(pd),
                                `Estimated total forms` = target,
@@ -3600,20 +3675,24 @@ app_server <- function(input, output, session) {
   })
   
   already_done_hamlets <- reactiveVal(value = c())
-  observeEvent({
-    c(as.character(input$mark_done),
-    as.character(input$mark_undone),
-    as.character(input$the_done_hamlet))
-  },{
-    message('Updating the already_done_hamlets object')
-    
-    con <- get_db_connection(local = is_local)
-    already <- dbReadTable(conn = con, 'done_hamlets')
-    print(already)
-    out <- as.character(already$code)
-    print(out)
-    already_done_hamlets(out)
-    dbDisconnect(con)
+  listen_already_done <- reactive({
+    list(as.character(input$mark_done),
+      as.character(input$mark_undone),
+      as.character(input$the_done_hamlet))
+  })
+  observeEvent(listen_already_done(),{
+    sidebar <- input$sidebar
+    # if(sidebar == 'done_hamlets'){
+      message('Updating the already_done_hamlets object')
+      
+      con <- get_db_connection(local = is_local)
+      already <- dbReadTable(conn = con, 'done_hamlets')
+      print(already)
+      out <- as.character(already$code)
+      print(out)
+      already_done_hamlets(out)
+      dbDisconnect(con)
+    # }
   })
   
   output$ui_done_hamlets_choices <- renderUI({
@@ -3663,8 +3742,8 @@ app_server <- function(input, output, session) {
               
               adh <- already_done_hamlets()
               already_done <- the_hamlet %in% adh
-              save(already_done, adh, the_hamlet, the_authorized_users, liu,
-                   file = '/tmp/done_hamlets.RData')
+              # save(already_done, adh, the_hamlet, the_authorized_users, liu,
+              #      file = '/tmp/done_hamlets.RData')
               if(is.null(already_done)){
                 already_done <- FALSE
               }
@@ -3722,9 +3801,12 @@ app_server <- function(input, output, session) {
                        done_by = liu,
                        done_at = Sys.time())
     con <- get_db_connection(local = is_local)
-    done_hamlets <- dbAppendTable(conn = con,
-                                        name = 'done_hamlets',
-                                        value = the_data)
+    dbAppendTable(conn = con,
+                  name = 'done_hamlets',
+                  value = the_data)
+    already <- dbReadTable(conn = con, 'done_hamlets')
+    out <- as.character(already$code)
+    already_done_hamlets(out)
     dbDisconnect(con)
   })
   
@@ -3734,6 +3816,9 @@ app_server <- function(input, output, session) {
     con <- get_db_connection(local = is_local)
     dbSendQuery(conn = con,
                 statement = paste0("DELETE FROM done_hamlets WHERE code ='", the_hamlet, "'"))
+    already <- dbReadTable(conn = con, 'done_hamlets')
+    out <- as.character(already$code)
+    already_done_hamlets(out)
     dbDisconnect(con)
   })
   
