@@ -430,7 +430,7 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
-  # is_local <- FALSE
+  is_local <- FALSE
   
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
@@ -2237,8 +2237,8 @@ app_server <- function(input, output, session) {
               if(cn=='Mozambique'){
                 va <- va %>%  
                   dplyr::mutate(
-                    `Was the ICF signed?` = 'Sim__ Não__',
-                    `Was the VA form completed?` = 'Sim__ Não__',
+                    `ICF signed?` = 'Sim__ Não__',
+                    `VA form completed?` = 'Sim__ Não__',
                   ) %>%
                   rename(Distrito = District,
                                      `PA / Localidade`=Ward,
@@ -4644,6 +4644,11 @@ app_server <- function(input, output, session) {
                       si <- session_info
                       li <- si$logged_in
                       xdata <- session_data$va_table
+                      co <- country()
+                      cs <-
+                        ifelse(co == 'Tanzania',
+                               "column_spec(1:ncol(xdata),width = '1.5cm')",
+                               "column_spec(1:ncol(xdata),width = '1.5cm')")
                       
                       out_file <- paste0(getwd(), '/control_sheet.pdf')
                       rmarkdown::render(input = 
@@ -4653,7 +4658,7 @@ app_server <- function(input, output, session) {
                                         params = list(xdata = xdata,
                                                       li = li, font_size = 6,
                                                       # column_spec = "column_spec(1:6, background = '#ffcccb') %>% column_spec(7:10, background = '#fed8b1') %>% column_spec(11:(ncol(xdata)-1), background = '#ADD8E6') %>% column_spec(1:ncol(xdata),width = '1.1cm')"))
-                                                      column_spec = "column_spec(1:ncol(xdata),width = '1.5cm')"))
+                                                      column_spec = cs))
                       
                       # copy html to 'file'
                       file.copy(out_file, file)
