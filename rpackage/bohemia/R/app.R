@@ -217,7 +217,17 @@ app_ui <- function(request) {
             uiOutput('ui_server_status')),
           tabItem(
             tabName = 'done_hamlets',
-            uiOutput('ui_done_hamlets')
+            fluidPage(
+              fluidRow(
+                uiOutput('ui_done_hamlets_choices')
+              ),
+              fluidRow(
+                column(6,
+                       uiOutput('ui_done_hamlets')),
+                column(6,
+                       uiOutput('ui_done_hamlets2'))
+              )
+            )
           ),
           tabItem(
             tabName="tracking_tools",
@@ -3589,6 +3599,51 @@ app_server <- function(input, output, session) {
     }
   })
   
+  already_done_hamlets <- reactiveVal(value = c())
+  observeEvent({
+    c(as.character(input$mark_done),
+    as.character(input$mark_undone),
+    as.character(input$the_done_hamlet))
+  },{
+    message('Updating the already_done_hamlets object')
+    
+    con <- get_db_connection(local = is_local)
+    already <- dbReadTable(conn = con, 'done_hamlets')
+    print(already)
+    out <- as.character(already$code)
+    print(out)
+    already_done_hamlets(out)
+    dbDisconnect(con)
+  })
+  
+  output$ui_done_hamlets_choices <- renderUI({
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'server_status' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              
+              the_country <- country()
+              the_choices <- bohemia::locations$code[bohemia::locations$Country == the_country]
+              the_choices <- sort(unique(the_choices))
+              
+              fluidPage(
+                fluidRow(h3('Mark a hamlet as done')),
+                fluidRow(p('MOZ: "Done" means that all enumerations for that hamlet have been finished.')),
+                fluidRow(p('TZA: "Done" means that all minicensus forms for that hamlet have been finished.')),
+                fluidRow(
+                  column(12,
+                         selectInput('the_done_hamlet',
+                                     'Hamlet',
+                                     choices = the_choices))
+                  
+                )
+              )
+            })
+  })
+  
   output$ui_done_hamlets <- renderUI({
     si <- session_info
     li <- si$logged_in
@@ -3605,53 +3660,40 @@ app_server <- function(input, output, session) {
               
               # See if the selected hamlet has already been marked as done or not
               the_hamlet <- input$the_done_hamlet
-              # con <- get_db_connection(local = is_local)
-              # already <- dbReadTable(conn = con, 'done_hamlets')
-              # already_done <- the_hamlet %in% already$code
-              # dbDisconnect(con)
-              # if(is.null(already_done)){
-              #   already_done <- FALSE
-              # }
-              # if(is.na(already_done)){
-              #   already_done <- FALSE
-              # }
+              
+              adh <- already_done_hamlets()
+              already_done <- the_hamlet %in% adh
+              save(already_done, adh, the_hamlet, the_authorized_users, liu,
+                   file = '/tmp/done_hamlets.RData')
+              if(is.null(already_done)){
+                already_done <- FALSE
+              }
+              if(length(already_done) == 0){
+                already_done <- FALSE
+              }
+              if(is.na(already_done)){
+                already_done <- FALSE
+              }
               if(liu %in% the_authorized_users){
                 ok_to_mark <- TRUE
               } else {
                 ok_to_mark <- FALSE
               }
               if(ok_to_mark){
-                # if(already_done){
+                if(!already_done){
                   mark_button <- actionButton('mark_done',
                                               'Mark as done')
-                # } else {
-                #   mark_button <- actionButton('mark_undone',
-                #                               'Change to NOT done')
-                # }
+                } else {
+                  mark_button <- actionButton('mark_undone',
+                                              'Change to NOT done')
+                }
                 
               } else {
                 mark_button <- actionButton('mark_done_fake',
                                             'Clicking here will do nothing')
               }
-              
-              
-              
-              pd <- odk_data$data
-              the_country <- country()
-              the_choices <- bohemia::locations$code
-              the_choices <- sort(unique(the_choices))
+
               fluidPage(
-                fluidRow(h3('Mark a hamlet as done')),
-                fluidRow(p('MOZ: "Done" means that all enumerations for that hamlet have been finished.')),
-                fluidRow(p('TZA: "Done" means that all minicensus forms for that hamlet have been finished.')),
-                fluidRow(
-                  column(6,
-                         selectInput('the_done_hamlet',
-                                     'Hamlet',
-                                     choices = the_choices)),
-                  column(6,
-                         DT::dataTableOutput('done_hamlet_table'))
-                ),
                 fluidRow(
                   mark_button
                 )
@@ -3659,6 +3701,20 @@ app_server <- function(input, output, session) {
               )
             })
   })
+  
+  output$ui_done_hamlets2 <- renderUI({
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'server_status' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              DT::dataTableOutput('done_hamlet_table')
+            })})
+  
+
+  
   observeEvent(input$mark_done, {
     the_hamlet <- input$the_done_hamlet
     liu <- input$log_in_user
