@@ -440,7 +440,7 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
-  is_local <- FALSE
+  # is_local <- FALSE
   
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
