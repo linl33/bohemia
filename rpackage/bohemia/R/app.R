@@ -2339,6 +2339,12 @@ app_server <- function(input, output, session) {
                                      `Consentimiento informado assinado?`= `ICF signed?`,
                                      `Formulária realizado` = `VA form completed?`,
                                      `Se não foi visitado ou entrevistado, porque?` = `If HH not visited or VA form not completed, why`)
+              } else {
+                # TZA, populate ward supervisors automatically
+                va <- va %>%
+                  left_join(tza_ward_supervisors) %>%
+                  mutate(`FW / Supervisor ID` = paste0(Supervisor_Name, ' (id:', wid, ')')) %>%
+                  dplyr::select(-wid, -Supervisor_Name)
               }
 
               # # Capture n teams
