@@ -55,6 +55,11 @@ format_minicensus <- function(data, keyfile){
   
   # Remove names
   people_part$name_label <- NULL
+  people_part$initials <- 
+    paste0(
+      substr(as.character(people_part$first_name, 1, 1)),
+      substr(as.character(people_part$last_name, 1, 1))
+    )
   people_part$first_name <- encrypt_private_data(data = people_part$first_name, keyfile = keyfile)
   people_part$last_name <- encrypt_private_data(data = people_part$last_name, keyfile = keyfile)
   
@@ -114,8 +119,11 @@ format_minicensus <- function(data, keyfile){
       repeat_death_info$repeat_name <- NULL
       repeat_death_info$repeated_id <- NULL
       repeat_death_info$death_adjustment <- NULL
-      repeat_death_info$death_name <- substr(repeat_death_info$death_name, 1, 1)
-      repeat_death_info$death_surname <- substr(repeat_death_info$death_surname, 1, 1)
+      death_first_initials <- substr(repeat_death_info$death_name, 1, 1)
+      death_second_initials <- substr(repeat_death_info$death_surname, 1, 1)
+      repeat_death_info$death_initials <- paste0(death_first_initials, ' ', death_second_initials)
+      repeat_death_info$death_name <- encrypt_private_data(data = repeat_death_info$death_name, keyfile = keyfile)
+      repeat_death_info$death_surname <- encrypt_private_data(data = repeat_death_info$death_surname, keyfile = keyfile)
       repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
     } else {
       repeat_death_info <- NULL

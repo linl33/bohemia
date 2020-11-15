@@ -20,19 +20,27 @@ format_va <- function(data, keyfile){
   names(df) <- tolower(names(df))
   
   # Hide names
+  make_initials <- function(a){
+    unlist(lapply(lapply(strsplit(a, ' '), function(x){substr(x, 1, 1)}), function(y){toupper(paste0(y, collapse = ''))}))
+  }
   if('id10007' %in% names(df)){
+    df$id10007_initials <- make_initials(df$id10007_initials)
     df$id10007 <- encrypt_private_data(data = df$id10007, keyfile = keyfile)
   }
   if('id10017' %in% names(df)){
+    df$id10017_initials <- make_initials(df$id10017_initials)
     df$id10017 <- encrypt_private_data(data = df$id10017, keyfile = keyfile)
   }
   if('id10018' %in% names(df)){
+    df$id10018_initials <- make_initials(df$id10018_initials)
     df$id10018 <- encrypt_private_data(data = df$id10018, keyfile = keyfile)
   }
   if('id10061' %in% names(df)){
+    df$id10061_initials <- make_initials(df$id10061_initials)
     df$id10061 <- encrypt_private_data(data = df$id10061, keyfile = keyfile)
   }
   if('id10062' %in% names(df)){
+    df$id10062_initials <- make_initials(df$id10062_initials)
     df$id10062 <- encrypt_private_data(data = df$id10062, keyfile = keyfile)
   }
   
