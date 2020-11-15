@@ -27,6 +27,7 @@ format_minicensus <- function(data, keyfile){
   df$non_residents_filled_out <- NULL
   df$residents_filled_out <- NULL
   df$hh_head_gender_local_language <- NULL
+  df$hamlet_code_from_hhid <- NULL
   
   # Clean up the people part
   people_list <- list()
@@ -57,8 +58,8 @@ format_minicensus <- function(data, keyfile){
   people_part$name_label <- NULL
   people_part$initials <- 
     paste0(
-      substr(as.character(people_part$first_name, 1, 1)),
-      substr(as.character(people_part$last_name, 1, 1))
+      substr(as.character(people_part$first_name), 1, 1),
+      substr(as.character(people_part$last_name), 1, 1)
     )
   people_part$first_name <- encrypt_private_data(data = people_part$first_name, keyfile = keyfile)
   people_part$last_name <- encrypt_private_data(data = people_part$last_name, keyfile = keyfile)

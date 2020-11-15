@@ -19,7 +19,7 @@ suppressMessages({
 
 
 # Loop through each form and modify slightly
-the_dir <- '~/Desktop/ODK Briefcase Storage/forms/bohemia_smallcensus/instances/'
+the_dir <- '~/Desktop/ODK Briefcase Storage/forms/bohemia_smallcensus_b/instances/'
 # dir.create(out_dir)
 files <- dir(the_dir)
 
@@ -29,7 +29,15 @@ id2 = NULL
 url <- creds$moz_odk_server
 user = creds$moz_odk_user
 password = creds$moz_odk_pass
-id = 'smallcensus'
+
+# url = creds$databrew_odk_server
+# user = creds$databrew_odk_user
+# password = creds$databrew_odk_pass
+# url <- creds$moz_odk_server
+# user = creds$moz_odk_user
+# password = creds$moz_odk_pass
+
+id = 'smallcensusb'
 already_on_server <- odk_list_submissions(
   url = url,
   id = id,
@@ -41,12 +49,15 @@ already_on_server <- odk_list_submissions(
 still <- files[!gsub('uuid', 'uuid:', files, fixed = TRUE) %in% already_on_server]
 
 # Delete everything except for still
-for(i in 1:lenth(files)){
+for(i in 1:length(files)){
   this_dir <- paste0(the_dir, files[i])
   this_id <- files[i]#gsub('uuid', 'uuid:', files[i], fixed = T)
   delete <- !this_id %in% still
   if(delete){
-    file.remove(this_dir)
+    message('removing')
+    unlink(this_dir, recursive = TRUE)
+  } else {
+    message('not removing')
   }
 }
 

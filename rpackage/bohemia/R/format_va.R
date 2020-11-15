@@ -21,7 +21,7 @@ format_va <- function(data, keyfile){
   
   # Hide names
   make_initials <- function(a){
-    unlist(lapply(lapply(strsplit(a, ' '), function(x){substr(x, 1, 1)}), function(y){toupper(paste0(y, collapse = ''))}))
+    unlist(lapply(lapply(strsplit(as.character(a), ' '), function(x){substr(as.character(x), 1, 1)}), function(y){toupper(paste0(y, collapse = ''))}))
   }
   if('id10007' %in% names(df)){
     df$id10007_initials <- make_initials(df$id10007_initials)
@@ -43,7 +43,7 @@ format_va <- function(data, keyfile){
     df$id10062_initials <- make_initials(df$id10062_initials)
     df$id10062 <- encrypt_private_data(data = df$id10062, keyfile = keyfile)
   }
-  
+  df$hamlet_code <- df$hamlet_code_from_death_id <- df$hh_id_from_death_id <- df$the_district <- df$the_ward <- df$the_region <- df$the_country <- df$the_village <- df$the_hamlet <- NULL
   # NO REPEATS IN va
   # Return the formatted data
   out <- list(df)
