@@ -457,7 +457,10 @@ anomalies$date <- as.Date(anomalies$date)
 #             statement = 'DELETE FROM anomalies;')
 # dbSendQuery(conn = con,
 #             statement = 'DROP FROM anomalies CASCADE;')
-anomalies <- anomalies %>% filter(!duplicated(id)) # need to check on this!
+already_in <- dbGetQuery(conn = con, 'select id from anomalies;')
+
+anomalies <- anomalies %>% filter(!duplicated(id),
+                                  !id %in% already_in$id) # need to check on this!
 dbWriteTable(conn = con,
              name = 'anomalies',
              value = anomalies,

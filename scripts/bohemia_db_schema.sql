@@ -845,6 +845,7 @@ CREATE TABLE anomalies (
   description   TEXT,
   incident   TEXT,
   wid   TEXT,
+  category  TEXT,
   date   DATE,
   instance_id   text,
   country  text,
