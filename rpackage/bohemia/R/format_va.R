@@ -14,6 +14,9 @@ format_va <- function(data){
   names(df) <- tolower(names(df))
   # Remove all the notes
   df <- df[,!grepl('note_', names(df))]
+  df$hamlet_code <- NULL
+  df$hamlet_code_from_death_id <- NULL
+  df$hh_id_from_death_id <- NULL
   
   # Make all names lowercase
   names(df) <- tolower(names(df))
@@ -34,6 +37,43 @@ format_va <- function(data){
   if('id10062' %in% names(df)){
     df$id10062 <- substr(as.character(df$id10062), 1, 1)
   }
+  if('id10054d_other' %in% names(df)){
+    df$id10054d <- ifelse(!is.na(df$id10054d_other),
+                          df$id10054d_other,
+                          df$id10054d)
+    df$id10054d_other <- NULL
+  }
+  if('id10054r_other' %in% names(df)){
+    df$id10054r <- ifelse(!is.na(df$id10054r_other),
+                          df$id10054r_other,
+                          df$id10054r)
+    df$id10054r_other <- NULL
+  }
+  if('id10057d_other' %in% names(df)){
+    df$id10057d <- ifelse(!is.na(df$id10057d_other),
+                          df$id10057d_other,
+                          df$id10057d)
+    df$id10057d_other <- NULL
+  }
+  if('id10057r_other' %in% names(df)){
+    df$id10057r <- ifelse(!is.na(df$id10057r_other),
+                          df$id10057r_other,
+                          df$id10057r)
+    df$id10057r_other <- NULL
+  }
+  if('id10058c_other' %in% names(df)){
+    df$id10058c <- ifelse(!is.na(df$id10058c_other),
+                          df$id10058c_other,
+                          df$id10058c)
+    df$id10058c_other <- NULL
+  }
+  if('id10434_other' %in% names(df)){
+    df$id10434 <- ifelse(!is.na(df$id10434_other),
+                          df$id10434_other,
+                          df$id10434)
+    df$id10434_other <- NULL
+  }
+  df$the_district <- df$the_hamlet <- df$the_country <- df$the_ward <- df$the_village <- df$the_region <-  NULL
   
   # NO REPEATS IN va
   # Return the formatted data

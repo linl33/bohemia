@@ -101,6 +101,7 @@ format_minicensus <- function(data){
            hh_contact_info_number = as.character(hh_contact_info_number))
   df$hh_cattle_count <- df$hh_pigs_count <- df$hh_head_age <- df$hh_health_permission_count <- 
     df$wall_material_count <- NULL
+  df$hamlet_code_from_hhid <- NULL
   
   # REPEATS
   # death

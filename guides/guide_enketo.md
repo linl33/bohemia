@@ -8,7 +8,7 @@
 ## Launch an instance
 
 -Follow the steps in the [ODK set up guide](guide_odk_setup.md). Small, 15 gb, open security.
--For this example, we'll use the domain papu.us
+-For this example, we'll use the domain papu.us.
 
 ## Set up with domain
 
@@ -17,6 +17,7 @@
 ## Set up the enketo user
 
 -SSH into the machine:
+
 ```
 ssh -i "/home/joebrew/.ssh/odkkey.pem" ubuntu@papu.us
 ```
@@ -31,7 +32,7 @@ sudo chmod 600 /home/enketo/.ssh/authorized_keys;
 sudo usermod -a -G sudo enketo;
 ```
 
-Now type `sudo visudo` and add the following line to the end of the file
+Now type `sudo visudo` and add this line to the end of the file:
 ```
 enketo     ALL=(ALL) NOPASSWD:ALL
 ```
@@ -59,18 +60,14 @@ exit
 ~~~
 
 
-
-
-
-
 ## Set up shortcut
 
-On local machine, add this to ~/.bashrc
+On local machine, add the following to ~/.bashrc:
 ```
 alias enketo='ssh -i "/home/joebrew/.ssh/odkkey.pem" enketo@papu.us'
 ```
 
-Then run:
+Then run the below:
 ```
 source ~/.bashrc
 ```
@@ -99,7 +96,7 @@ sudo npm install -g pm2 npm
 sudo dpkg-reconfigure -plow unattended-upgrades
 ```
 
-## Installing Enketo Express and its dependencies
+## Installing Enketo Express and  dependencies
 
 - Run the following, line by line:
 ```

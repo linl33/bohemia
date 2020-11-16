@@ -14,3 +14,4 @@ scripts/local_dev_data_setup.txt
 .vscode
 logs
 tmp
+*.pem

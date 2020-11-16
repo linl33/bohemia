@@ -15,7 +15,8 @@ odk_get_data(
   password = NULL,
   widen = TRUE,
   pre_auth = FALSE,
-  use_data_id = FALSE
+  use_data_id = FALSE,
+  sleeper = 0.25
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ odk_get_data(
 \item{widen}{Whether to widen}
 
 \item{use_data_id}{Whether to substitute the id2 field with "data" in the submission retrieval URL}
+
+\item{sleeper}{How long to sleep between requests (seconds)}
 
 \item{pre-auth}{Pre-authenticate (needed for Manhica server)}
 }

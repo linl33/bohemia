@@ -29,7 +29,7 @@ if(is_local){
 id2 = NULL
 skip_deprecated <- FALSE
 
-############# SMALLCENSUSA TANZANIA
+############# SMALLCENSUSA TANZANIA DEPRECATED (SMALLCENSUSA)
 url <- creds$tza_odk_server
 user = creds$tza_odk_user
 password = creds$tza_odk_pass
@@ -67,7 +67,7 @@ if(new_data){
                     con = con)
 }
 
-############### TANZANIA VA
+############### TANZANIA VA DEPRECATED
 message('PULLING TANZANIA VA')
 url <- creds$tza_odk_server
 user = creds$tza_odk_user
@@ -107,7 +107,7 @@ if(new_data){
 }
 
 # REFUSALS TANZANIA ######################################################################
-message('PULLING REFUSALS (TANZANIA)')
+message('PULLING REFUSALS (TANZANIA) DEPRECATED')
 url <- creds$tza_odk_server
 user = creds$tza_odk_user
 password = creds$tza_odk_pass
@@ -143,6 +143,123 @@ if(new_data){
   update_refusals(formatted_data = formatted_data,
                   con = con)
 }
+
+############# SMALLCENSUSB TANZANIA
+url <- creds$tza_odk_server
+user = creds$tza_odk_user
+password = creds$tza_odk_pass
+id = 'smallcensusb'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+}
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = FALSE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_minicensus(data = data)
+  # Update data
+  update_minicensus(formatted_data = formatted_data,
+                    con = con)
+}
+
+############### TANZANIA VA153B
+message('PULLING TANZANIA VA153B')
+url <- creds$tza_odk_server
+user = creds$tza_odk_user
+password = creds$tza_odk_pass
+id = 'va153b'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM va')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+}
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = FALSE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_va(data = data)
+  # Update data
+  update_va(formatted_data = formatted_data,
+            con = con)
+}
+
+# REFUSALS TANZANIA ######################################################################
+message('PULLING REFUSALSB FOR TZA')
+url <- creds$tza_odk_server
+user = creds$tza_odk_user
+password = creds$tza_odk_pass
+id = 'refusalsb'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+} 
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+  message('---', nrow(data$non_repeats), ' new data points.')
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_refusals(data = data)
+  # Update data
+  update_refusals(formatted_data = formatted_data,
+                  con = con)
+}
+
+
 
 # MINICENSUS MOZAMBIQUE #######################################################################
 message('PULLING DEPRECATED MINICENSUS (MOZAMBIQUE')
@@ -312,6 +429,45 @@ if(new_data){
                     con = con)
 }
 
+############# SMALLCENSUSb MOZAMBIQUE
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'smallcensusb'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM minicensus_main')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+}
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = FALSE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_minicensus(data = data)
+  # Update data
+  update_minicensus(formatted_data = formatted_data,
+                    con = con)
+}
+
+
 
 ############### MOZAMBIQUE VA
 message('PULLING MOZAMBIQUE VA')
@@ -352,6 +508,45 @@ if(new_data){
                     con = con)
 }
 
+############### MOZAMBIQUE VA B
+message('PULLING MOZAMBIQUE VA B')
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'va153b'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM va')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+}
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password,
+  pre_auth = TRUE,
+  use_data_id = FALSE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_va(data = data)
+  # Update data
+  update_va(formatted_data = formatted_data,
+            con = con)
+}
+
 # ENUMERATIONS MOZAMBIQUE######################################################################
 message('PULLING ENUMERATIONS (MOZAMBIQUE')
 url <- creds$moz_odk_server
@@ -389,6 +584,45 @@ if(new_data){
   update_enumerations(formatted_data = formatted_data,
                       con = con)
 }
+
+# ENUMERATIONS MOZAMBIQUE######################################################################
+message('PULLING ENUMERATIONS b (MOZAMBIQUE')
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'enumerationsb'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM enumerations')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+} 
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+  # message('---', nrow(data$non_repeats), ' new data points.')
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_enumerations(data = data)
+  # Update data
+  update_enumerations(formatted_data = formatted_data,
+                      con = con)
+}
+
 
 # REFUSALS MOZAMBIQUE######################################################################
 message('PULLING REFUSALS (MOZAMBIQUE)')
@@ -430,6 +664,47 @@ if(new_data){
 }
 
 
+# REFUSALS MOZAMBIQUE######################################################################
+message('PULLING REFUSALS b (MOZAMBIQUE)')
+url <- creds$moz_odk_server
+user = creds$moz_odk_user
+password = creds$moz_odk_pass
+id = 'refusalsb'
+suppressWarnings({
+  existing_uuids <- dbGetQuery(con, 'SELECT instance_id FROM refusals')
+})
+if (nrow(existing_uuids)< 0){
+  existing_uuids <- c()
+} else {
+  existing_uuids <- existing_uuids$instance_id
+} 
+# Get data
+data <- odk_get_data(
+  url = url,
+  id = id,
+  id2 = id2,
+  unknown_id2 = FALSE,
+  uuids = NULL,
+  exclude_uuids = existing_uuids,
+  user = user,
+  password = password, 
+  pre_auth = TRUE
+)
+new_data <- FALSE
+if(!is.null(data)){
+  new_data <- TRUE
+  message('---', nrow(data$non_repeats), ' new data points.')
+}
+if(new_data){
+  # Format data
+  formatted_data <- format_refusals(data = data)
+  # Update data
+  update_refusals(formatted_data = formatted_data,
+                  con = con)
+}
+
+
+
 ## TRACCAR LOCATIONS ##############################################
 
 # get traccar data - one row per ID 
@@ -444,8 +719,8 @@ dat <- get_traccar_data(url = creds$traccar_server,
 
 # Get existing max date
 max_date <- dbGetQuery(con, 'SELECT max(devicetime) FROM traccar')
-# fetch data only from one week prior to max date
-fetch_date <- max_date$max - lubridate::days(7)
+# fetch data only from 2 days prior to max date
+fetch_date <- max_date$max - lubridate::days(2)
 fetch_date <- as.character(as.Date(fetch_date))
 if(is.na(fetch_date)){
   fetch_date <- '2020-01-01'
@@ -528,7 +803,7 @@ message('...done adding positions to traccar table.')
 # #Execute cleaning code
 # create_clean_db(credentials_file = '../credentials/credentials.yaml')
 message('--- NOW EXECUTING CLEANING CODE ---')
-source('clean_database.R')
+source('clean_database.R') # this drops clean and creates new ones
 
 
 ####### ANOMALIES CREATION ##################################################
@@ -558,11 +833,46 @@ anomalies$date <- as.Date(anomalies$date)
 #             statement = 'DELETE FROM anomalies;')
 # dbSendQuery(conn = con,
 #             statement = 'DROP FROM anomalies CASCADE;')
-anomalies <- anomalies %>% filter(!duplicated(id)) # need to check on this!
-dbWriteTable(conn = con,
-             name = 'anomalies',
-             value = anomalies,
-             append = TRUE)
+
+already_keys <- dbGetQuery(conn = con,
+                           statement = 'SELECT id from anomalies;')
+
+already_keys <- already_keys$id
+anomalies <- anomalies %>% filter(!id %in% already_keys)
+  
+
+if(nrow(anomalies) > 0){
+  dbWriteTable(conn = con,
+               name = 'anomalies',
+               value = anomalies,
+               append = TRUE)
+}
+
+# # One-off migration of corrections
+# for(i in 1:4){
+#   message(i)
+#   a = readxl::read_excel('~/Desktop/a.xlsx',
+#                          sheet = i)
+#   a <- a %>%
+#     mutate(submitted_by = 'Julia Montaña',
+#            submitted_at = '2020-10-31',
+#            resolution_code = NA) %>%
+#     mutate(id = tolower(id)) %>%
+#     dplyr::select(id,
+#                   instance_id,
+#                   response_details = responsedetails,
+#                   resolved_by = resolvedby,
+#                   resolution_method = resolutionmethod,
+#                   resolution_date = resolutiondate,
+#                   submitted_by,
+#                   submitted_at)
+#   # Update the database
+#   dbAppendTable(conn = con,
+#                 name = 'corrections',
+#                 value = a)
+# 
+# }
+
 x = dbDisconnect(con)
 
 

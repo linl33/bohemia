@@ -74,12 +74,28 @@ identify_anomalies_and_errors <- function(data,
           eval(parse(text = this_instance_id_code))
         })
         out <- this_row %>%
-          dplyr::mutate(id = paste0(this_row$name, '_',result_row$instance_id)) %>%
+          dplyr::mutate(id = paste0(name, '_',instance_id)) %>%
           dplyr::select(type, id,  description) %>%
-          mutate(incident = incident) %>%
-          mutate(wid = fid) %>%
+          mutate(incident = as.character(incident)) %>%
+          mutate(wid = as.character(fid)) %>%
           mutate(date = as.character(date)) %>%
-          mutate(instance_id = instance_id)
+          mutate(instance_id = as.character(instance_id))
+        # Check for completeness
+        if(is.na(out$type)){
+          message('------PROBLEM: type missing in snippet ', i, ' of ', nrow(ae), ': ', this_row$name, '. Element number j: ', j)
+        }
+        if(is.na(out$id)){
+          message('------PROBLEM: id missing in snippet ', i, ' of ', nrow(ae), ': ', this_row$name, '. Element number j: ', j)
+        }
+        if(is.na(out$incident)){
+          message('------PROBLEM: incident missing in snippet ', i, ' of ', nrow(ae), ': ', this_row$name, '. Element number j: ', j)
+        }
+        # if(is.na(out$wid)){
+        #   message('------PROBLEM: wid missing in snippet ', i, ' of ', nrow(ae), ': ', this_row$name, '. Element number j: ', j)
+        # }
+        if(is.na(out$instance_id)){
+          message('------PROBLEM: instance_id missing in snippet ', i, ' of ', nrow(ae), ': ', this_row$name, '. Element number j: ', j)
+        }
         out_list[[counter]] <- out
       }
     }

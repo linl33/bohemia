@@ -1,6 +1,7 @@
 # How to set up ODK Briefcase
 
 - Create a directory for placing the Briefcase `.jar` file:
+
 ```
 cd ~/Documents
 mkdir briefcase
@@ -14,7 +15,7 @@ mkdir exports
 wget https://github.com/opendatakit/briefcase/releases/download/v1.16.1/ODK-Briefcase-v1.16.1.jar
 ```
 
-- Create an alias to easily open the Briefcase program by coping the below line into `~/.bashrc`:
+- Create an alias to open the Briefcase program by coping the below line into `~/.bashrc`:
 ```
 alias briefcase='java -jar ~/Documents/briefcase/ODK-Briefcase-v1.16.1.jar &'
 ```
