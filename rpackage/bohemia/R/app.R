@@ -58,7 +58,11 @@ app_ui <- function(request) {
             menuSubItem(
               text="Server status",
               tabName="server_status",
-              icon=icon("server"))),
+              icon=icon("server")),
+            menuSubItem(
+              text="Geographical tables",
+              tabName="geo_tables",
+              icon=icon("globe"))),
           menuItem('Research',
                    tabName = 'research',
                    icon = icon('microscope'),
@@ -215,6 +219,9 @@ app_ui <- function(request) {
           tabItem(
             tabName="server_status",
             uiOutput('ui_server_status')),
+          tabItem(
+            tabName="geo_tables",
+            uiOutput('ui_geo_tables')),
           tabItem(
             tabName = 'done_hamlets',
             fluidPage(
@@ -440,7 +447,7 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
-  # is_local <- FALSE
+  is_local <- FALSE
   
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
@@ -1316,17 +1323,18 @@ app_server <- function(input, output, session) {
       # Create a progress by geo tables
       apply_summary <- function(df){
         df %>%
-          summarise(`Minicensus Forms done` = sum(`Minicensus Forms done`, na.rm = TRUE),
-                    `Enumeration Forms done` = sum(`Enumerations Forms done`, na.rm = TRUE),
+          summarise(`Minicensus done` = sum(`Minicensus Forms done`, na.rm = TRUE),
+                    `Enumeration done` = sum(`Enumerations Forms done`, na.rm = TRUE),
                     `Target forms (recon)` = sum(`Estimated number of forms`, na.rm = TRUE),
                     `VA Forms done` = sum(`VA Forms done`, na.rm = TRUE),
                     .groups = 'keep') %>%
           ungroup %>%
           mutate(#`Minicensus Estimated percent finished`  = round(`Minicensus Forms done` / `Estimated number of forms` * 100, digits = 2),
             `% Enumerated of target` = 
-              round(`Enumeration Forms done` / `Target forms (recon)` * 100, digits = 2),
+              round(`Enumeration done` / `Target forms (recon)` * 100, digits = 2),
             `% Minicensed of enumerated` = 
-              round(`Minicensus Forms done` / `Enumeration Forms done` * 100, digits = 2))# %>%
+              round(`Minicensus done` / `Enumeration done` * 100, digits = 2),
+            `% minicensus forms done` = round(`Minicensus done` / `Target forms (recon)` * 100, digits = 2))# %>%
           # select(`Minicensus Forms done`,
           #        `Enumeration Forms done`,
           #        `Target forms (recon)`,
@@ -1344,13 +1352,13 @@ app_server <- function(input, output, session) {
         apply_summary()
       
       progress_by_ward <- progress_by %>% 
-        group_by(Ward) %>% 
+        group_by(District, Ward) %>% 
         apply_summary
       progress_by_village <- progress_by %>% 
-        group_by(Village) %>% 
+        group_by(District, Ward, Village) %>% 
         apply_summary
       progress_by_hamlet <- progress_by %>% 
-        group_by(Hamlet) %>% 
+        group_by(District, Ward, Village, Hamlet) %>% 
         apply_summary
       
       
@@ -1370,21 +1378,21 @@ app_server <- function(input, output, session) {
           }
         } else if(by_geo == 'Ward'){
           if(cn == 'Mozambique'){
-            names(progress_by_ward)[1] <- 'Posto administrativo/localidade'
+            names(progress_by_ward)[1:2] <- c('Distrito', 'Posto administrativo/localidade')
             monitor_by_table <- progress_by_ward
           } else {
             monitor_by_table <- progress_by_ward
           }
         } else if(by_geo == 'Village'){
           if(cn == 'Mozambique'){
-            names(progress_by_village)[1] <- 'Povoado'
+            names(progress_by_village)[1:3] <- c('Distrito', 'Posto administrativo/localidade', 'Povoado')
             monitor_by_table <- progress_by_village
           } else {
             monitor_by_table <- progress_by_village
           }
         } else if(by_geo == 'Hamlet'){
           if(cn == 'Mozambique'){
-            names(progress_by_hamlet)[2] <- 'Bairro'
+            names(progress_by_village)[1:4] <- c('Distrito', 'Posto administrativo/localidade', 'Povoado', 'Bairro')
             monitor_by_table <- progress_by_hamlet
           } else {
             monitor_by_table <- progress_by_hamlet
@@ -3826,6 +3834,41 @@ app_server <- function(input, output, session) {
     out <- as.character(already$code)
     already_done_hamlets(out)
     dbDisconnect(con)
+  })
+  
+  # GEO TABLES UI ######################################################
+  output$ui_geo_tables <- renderUI({
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'server_status' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              the_country <- country()
+              pd <- bohemia::gps %>% left_join(bohemia::locations %>% dplyr::select(-clinical_trial))
+              the_iso <- ifelse(the_country == 'Tanzania', 'TZA', 'MOZ')
+              pdx <- pd <- pd %>%
+                filter(iso == the_iso,
+                       clinical_trial == 0)
+              pdx <- pdx %>%
+                dplyr::select(code, District, Region, Ward, village, hamlet, n_households)
+              
+              pd <- pd %>%
+                summarise(Hamlets = length(unique(code)),
+                          Villages = length(unique(village)),
+                          Wards = length(unique(ward)),
+                          Districts = length(unique(District)),
+                          `HH (estimated from recon)` = sum(n_households))
+              
+              fluidPage(
+                fluidRow(h3('Overview')),
+                fluidRow(bohemia::prettify(pd)),
+                fluidRow(h3('Locations hierarchy')),
+                fluidRow(bohemia::prettify(pdx, nrows = nrow(pdx), download_options = TRUE))
+              )
+              
+            })
   })
   
   # Server status UI  ################################################
