@@ -14,8 +14,12 @@ encrypt_private_data <- function(data, keyfile){
   out_vector <- c()
   for(j in 1:ll){
     this_data <- data[j]
-    this_encrypted <- PKI.encrypt(charToRaw(this_data), pub_key)
-    this_encrypted <- paste0(this_encrypted, collapse = ' ')
+    if(is.na(this_data)){
+      this_encrypted <- ''
+    } else {
+      this_encrypted <- PKI.encrypt(charToRaw(this_data), pub_key)
+      this_encrypted <- paste0(this_encrypted, collapse = ' ') 
+    }
     out_vector[j] <- this_encrypted
   }
   return(out_vector)

@@ -14,9 +14,13 @@ decrypt_private_data <- function(data, keyfile){
   out_vector <- c()
   for(j in 1:ll){
     this_data <- data[j]
-    this_data <- unlist(strsplit(this_data, ' '))
-    this_data <- as.raw(as.hexmode(this_data))
-    this_decrypted <- rawToChar(PKI.decrypt(this_data, priv_key), multiple = FALSE)
+    if(this_data == ''){
+      this_decrypted <- ''
+    } else {
+      this_data <- unlist(strsplit(this_data, ' '))
+      this_data <- as.raw(as.hexmode(this_data))
+      this_decrypted <- rawToChar(PKI.decrypt(this_data, priv_key), multiple = FALSE) 
+    }
     out_vector[j] <- this_decrypted
   }
   return(out_vector)
