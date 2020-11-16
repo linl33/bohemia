@@ -873,3 +873,4 @@ CREATE TABLE done_hamlets (
 -- Enable UUID extension
 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
