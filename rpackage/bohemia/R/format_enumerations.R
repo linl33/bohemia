@@ -45,6 +45,7 @@ format_enumerations <- function(data, keyfile){
     dplyr::select(-wall_material_free,
                   -instancename,
                   -construction_material_free)
+  df$hamlet_code_from_hhid <- df$hamlet_code_from_vizinho1 <- df$hamlet_code_from_vizinho2 <- NULL
   
   # Clean up characters in names
   df <- df %>%

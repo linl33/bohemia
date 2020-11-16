@@ -4,7 +4,15 @@
 \alias{get_location_code}
 \title{Get location code}
 \usage{
-get_location_code(country, region, district, ward, village, hamlet)
+get_location_code(
+  country = NULL,
+  region = NULL,
+  district = NULL,
+  ward = NULL,
+  village = NULL,
+  hamlet = NULL,
+  allow_all = FALSE
+)
 }
 \arguments{
 \item{country}{Country}
@@ -18,6 +26,8 @@ get_location_code(country, region, district, ward, village, hamlet)
 \item{village}{Village}
 
 \item{hamlet}{Hamlet}
+
+\item{allow_all}{Allow the all option}
 }
 \value{
 A character vector of length 1 or a NULL object

@@ -200,8 +200,6 @@ CREATE TABLE enumerations (
 );
 
 -- Refusals
-
-
 CREATE TABLE refusals (
     activity  text,
     instance_id   uuid,
@@ -239,24 +237,6 @@ CREATE TABLE sessions (
     end_time    TIMESTAMP,
     web   BOOLEAN
 );
-
-
--- Corrections
-
-
-CREATE TABLE corrections (
-    id  TEXT,
-    response_details  TEXT,
-    resolved_by   TEXT,
-    resolution_method   TEXT,
-    resolution_date   TEXT,
-    submitted_by   VARCHAR(128),
-    submitted_at   TIMESTAMP,
-    done    BOOLEAN DEFAULT false,
-    done_by     VARCHAR(128)
-);
-
-
 
 -- VA 153
 
@@ -859,93 +839,47 @@ CREATE TABLE traccar (
 );
 
 -- Anomalies
-
 CREATE TABLE anomalies (
-  type  VARCHAR(64),
+  type  VARCHAR(128),
   id   TEXT,
   description   TEXT,
   incident   TEXT,
-  wid   INT,
+  wid   TEXT,
   date   DATE,
   instance_id   text,
-  country  text
+  country  text,
+  correction_id TEXT,
+  supervisor_id VARCHAR(8),
+  country_id VARCHAR(32),
+  date_triggered TIMESTAMP
 );
+
+-- Corrections
+CREATE TABLE corrections (
+    id  TEXT,
+    instance_id TEXT,
+    response_details  TEXT,
+    resolved_by   TEXT,
+    resolution_method   TEXT,
+    resolution_date   TEXT,
+    submitted_by   VARCHAR(128),
+    submitted_at   TIMESTAMP
+);
+
+CREATE TABLE fixes (
+  id  TEXT,
+  done_by TEXT,
+  done_at TIMESTAMP,
+  resolution_code TEXT
+);
+
+CREATE TABLE done_hamlets (
+  code TEXT,
+  done_by TEXT,
+  done_at TIMESTAMP
+);
+
 
 -- Enable UUID extension
 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
--- Anomaly Corrections Log
-
-CREATE TABLE anomaly_corrections_log (
-    id  UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
-    anomaly_id  TEXT NOT NULL,
-    correction_id   TEXT NOT NULL,
-    preset_steps_id     UUID,
-    date_created    TIMESTAMP DEFAULT now(),
-    user_id     VARCHAR(256),
-    log_detail  TEXT NOT NULL
-);
-
--- Preset Correction Steps
-
-CREATE TABLE preset_correction_steps (
-    id  UUID PRIMARY KEY NOT NULL DEFAULT gen_random_uuid(),
-    date_created    TIMESTAMP NOT NULL DEFAULT now(),
-    status  VARCHAR(64) NOT NULL DEFAULT 'active', -- Options are active or archived
-    created_by  VARCHAR(256) NOT NULL,
-    date_updated    TIMESTAMP,
-    updated_by  VARCHAR(256), -- Expected only to be for setting an entry to archive state
-    resolution_category     VARCHAR(128) NOT NULL,
-    resolution_action   VARCHAR(128) NOT NULL,
-    correction_steps    TEXT NOT NULL -- Actual query to be applied for fix
-);
-
--- MODIFICATIONS
-
--- Anomalies modification
----- Add Primary Key
-
-CREATE UNIQUE INDEX CONCURRENTLY pk_anomalies_id_idx ON anomalies (id);
-
-ALTER TABLE anomalies ADD CONSTRAINT pk_anomalies PRIMARY KEY USING INDEX pk_anomalies_id_idx;
-
----- Add new columns
-
-ALTER TABLE anomalies
-    ADD COLUMN correction_id TEXT,
-    ADD COLUMN anomaly_correction_log_id UUID,
-    ADD COLUMN supervisor_id VARCHAR(8),
-    ADD COLUMN country_id VARCHAR(32),
-    ADD COLUMN date_triggered TIMESTAMP;
-
--- Corrections modification
----- Add Primary Key
-
-CREATE UNIQUE INDEX CONCURRENTLY pk_corrections_id_idx ON corrections (id);
-
-ALTER TABLE corrections ADD CONSTRAINT pk_corrections PRIMARY KEY USING INDEX pk_corrections_id_idx;
-
----- Add new columns and relationships
-
-ALTER TABLE corrections
-    ADD COLUMN resolution_category VARCHAR(128),
-    ADD COLUMN resolution_action   VARCHAR(128),
-    ADD COLUMN anomaly_id  TEXT,
-    ADD CONSTRAINT fk_anomalies FOREIGN KEY (anomaly_id) REFERENCES anomalies(id);
-
--- Anomalies modification to add relationship to corrections
-
-ALTER TABLE anomalies ADD CONSTRAINT fk_corrections FOREIGN KEY (correction_id) REFERENCES corrections(id);
-
--- Corrections add workaround to use unique PK
-
-ALTER TABLE corrections
-    ADD COLUMN instance_id TEXT NOT NULL,
-    ALTER COLUMN id SET DEFAULT gen_random_uuid();
-
--- Anomalies make id independent of instance_id
-
-ALTER TABLE anomalies ADD COLUMN anomaly_reference_key TEXT;
-UPDATE anomalies SET anomaly_reference_key = id WHERE anomaly_reference_key IS NULL;
-ALTER TABLE anomalies ALTER COLUMN anomaly_reference_key SET NOT NULL;

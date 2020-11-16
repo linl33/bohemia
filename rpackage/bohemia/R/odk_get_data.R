@@ -12,6 +12,7 @@
 #' @param widen Whether to widen
 #' @param pre-auth Pre-authenticate (needed for Manhica server)
 #' @param use_data_id Whether to substitute the id2 field with "data" in the submission retrieval URL
+#' @param sleeper How long to sleep between requests (seconds)
 #' @import httr
 #' @import xml2
 #' @import dplyr
@@ -29,7 +30,8 @@ odk_get_data <- function(url = 'https://bohemia.systems',
                               password = NULL,
                               widen = TRUE,
                          pre_auth = FALSE,
-                         use_data_id = FALSE){
+                         use_data_id = FALSE, 
+                         sleeper = 0.25){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){
@@ -93,7 +95,7 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   # Now loop through each uuid and get the data
   data_list <- list()
   for(i in 1:length(submissions)){
-    Sys.sleep(0.02)
+    Sys.sleep(sleeper)
     message('| Working on retrieving submission ', i, ' of ', length(submissions))
     this_uuid <- submissions[i]
     # Capture the data for this uuid

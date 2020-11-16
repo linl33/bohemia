@@ -7,6 +7,7 @@ library(tidyverse)
 library(RColorBrewer)
 library(raster)
 library(sf)
+library(readxl)
 
 # GPS data
 url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit#gid=1016618615'
@@ -19,6 +20,9 @@ url <- 'https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9Mb
 anomaly_and_error_registry <- gsheet::gsheet2tbl(url)
 use_data(anomaly_and_error_registry, overwrite = TRUE)
 
+# Read in ward / supervisor matching for TZA
+tza_ward_supervisors <- read_excel('Supervisor Ward.xlsx')
+use_data(tza_ward_supervisors, overwrite = TRUE)
 
 # Read in the location hierachy
 library(gsheet)

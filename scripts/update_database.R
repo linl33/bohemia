@@ -367,8 +367,8 @@ for(i in 1:nrow(dat)){
                id = as.numeric(id))
     })
   })
-
-
+  
+  
   if(!is.null(this_position)){
     if(nrow(this_position) > 0){
       position_list[[i]] <- this_position
@@ -402,8 +402,8 @@ if(nrow(existing_ids) > 0){
   message('...', length(existing_ids), ' positions already in database.')
   positions <- positions %>%
     filter(!id %in% existing_ids)
-    message('...filtered. going to add ', nrow(positions), ' new positions to database.')
-
+  message('...filtered. going to add ', nrow(positions), ' new positions to database.')
+  
 }
 message('...going to add ', nrow(positions), ' positions to traccar table')
 # Update the database
@@ -422,17 +422,17 @@ source('clean_database.R')
 ####### ANOMALIES CREATION ##################################################
 library(dplyr)
 data_moz <- load_odk_data(the_country = 'Mozambique', 
-                      credentials_path = '../credentials/credentials.yaml',
-                      users_path = '../credentials/users.yaml',
-                      local = is_local)
+                          credentials_path = '../credentials/credentials.yaml',
+                          users_path = '../credentials/users.yaml',
+                          local = is_local)
 data_tza <- load_odk_data(the_country = 'Tanzania', 
                           credentials_path = '../credentials/credentials.yaml',
                           users_path = '../credentials/users.yaml',
                           local = is_local)
 # Run anomaly detection
 anomalies_moz <- identify_anomalies_and_errors(data = data_moz,
-                                           anomalies_registry = bohemia::anomaly_and_error_registry,
-                                           locs = bohemia::locations)
+                                               anomalies_registry = bohemia::anomaly_and_error_registry,
+                                               locs = bohemia::locations)
 anomalies_tza <- identify_anomalies_and_errors(data = data_tza,
                                                anomalies_registry = bohemia::anomaly_and_error_registry,
                                                locs = bohemia::locations)
