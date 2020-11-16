@@ -50,7 +50,7 @@ format_enumerations <- function(data, keyfile){
   # Clean up characters in names
   df <- df %>%
     mutate(initials_chefe = unlist(lapply(lapply(strsplit(chefe_name, ' '), function(x){substr(x, 1, 1)}), function(y){toupper(paste0(y, collapse = ''))}))) %>%
-    mutate(initials_sub = unlist(lapply(lapply(strsplit(sub_name, ' '), function(x){substr(x, 1, 1)}), function(y){toupper(paste0(y, collapse = ''))})))
+    mutate(initials_sub = unlist(lapply(lapply(strsplit(sub_name, ' '), function(x){substr(x, 1, 1)}), function(y){toupper(paste0(y, collapse = ''))}))) %>%
     mutate(sub_name = encrypt_private_data(data = sub_name, keyfile = keyfile),
            chefe_name = encrypt_private_data(data = chefe_name, keyfile = keyfile))
   

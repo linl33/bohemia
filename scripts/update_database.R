@@ -13,7 +13,7 @@ suppressMessages({
 }
 )
 
-is_local <- FALSE
+is_local <- TRUE
 drv <- RPostgres::Postgres()
 
 if(is_local){
@@ -174,6 +174,10 @@ for(id in c('minicensus', 'minicensusb', 'smallcensus', 'smallcensusa', 'smallce
   } else {
     id2 = NULL
     use_data_id = TRUE
+  }
+  if(id %in% c('smallcensus', 'smallcensusa', 'smallcensusb')){
+    id2 = NULL
+    use_data_id = FALSE
   }
   # Get data
   data <- odk_get_data(
