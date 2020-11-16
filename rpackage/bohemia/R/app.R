@@ -447,7 +447,7 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
-  is_local <- FALSE
+  # is_local <- FALSE
   
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
@@ -2253,6 +2253,7 @@ app_server <- function(input, output, session) {
             people <- odk_data$data$minicensus_people
             deaths <- odk_data$data$minicensus_repeat_death_info
             deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
+            save(people, deaths, pd, cn, file = '/tmp/va.RData')
             # Conditional mourning period
             mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
             va <- left_join(deaths %>%
@@ -2270,11 +2271,6 @@ app_server <- function(input, output, session) {
                               mutate(xx = ifelse(is.na(xx), safe_bet, xx)) %>%
                               mutate(xx = as.Date(xx, origin = '1970-01-01')) %>%
                               mutate(yy = Sys.Date() - xx) %>% # "time elapsed" means time between lastest date to collect and today
-                              mutate(death_initials = paste0(
-                                ifelse(is.na(death_name), '.',
-                                       death_name),
-                                ifelse(is.na(death_surname),
-                                       '.', death_surname))) %>%
                               dplyr::select(instance_id,
                                             death_initials,
                                             `Date of death` = death_dod,
@@ -2293,13 +2289,12 @@ app_server <- function(input, output, session) {
                                             num, # for getting the initials of household head
                                             `HH visit date` = todays_date), by = 'instance_id') %>%
               left_join(people %>% dplyr::select(instance_id,
-                                                 first_name,
-                                                 last_name,
+                                                 initials,
                                                  pid,
                                                  num), by = c('instance_id', 'num')) %>%
               mutate(`FW ID` = ' ') %>%
               dplyr::select(-instance_id) %>%
-              mutate(`HH head initials and ID` = paste0(pid, ' (', first_name, last_name, ')'))
+              mutate(`HH head initials and ID` = paste0(pid, ' (',initials, ')'))
 
             # Remove those which have already been collected
             already_done <- unique(odk_data$data$va$death_id)
@@ -4091,7 +4086,7 @@ app_server <- function(input, output, session) {
                 # get info on heads
                 left_join(people %>% 
                             mutate(num = as.character(num)) %>%
-                            mutate(person_name = paste0(first_name, '.', last_name, '.')),
+                            mutate(person_name = initials),
                           by = c('instance_id', 'num')) %>%
                 # get info on fieldworkers
                 left_join(fids %>% 
@@ -4105,7 +4100,7 @@ app_server <- function(input, output, session) {
                 left_join(people %>% 
                             mutate(hh_sub_id = as.character(num)) %>%
                             mutate(sub_id = permid) %>%
-                            mutate(sub_name = paste0(first_name, '.', last_name, '.')) %>%
+                            mutate(sub_name = initials) %>%
                             dplyr::select(instance_id, hh_sub_id, sub_name, sub_id),
                           by = c('instance_id', 'hh_sub_id')) %>%
                 dplyr::select(
@@ -5039,10 +5034,10 @@ app_server <- function(input, output, session) {
                       minicensus_main_data <- odk_data$data$minicensus_main
                       refusals_data = odk_data$data$refusals
                       
-                      # tmp <- list(data = data,
-                      #             loc_id = lc,
-                      #             enumeration = enum)
-                      # save(tmp, file = '/tmp/tmp.RData')
+
+                      # save(refusals_data, minicensus_main_data, enumerations_data,
+                      #      xdata, use_previous, enum, enumeration_or_minicensus, lc, li, si, 
+                      #      file = '/tmp/tmp.RData')
                       out_file <- paste0(getwd(), '/visit_control_sheet.pdf')
                       rmarkdown::render(input = 
                                           paste0(system.file('rmd', package = 'bohemia'), '/visit_control_sheet.Rmd'),

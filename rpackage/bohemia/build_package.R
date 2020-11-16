@@ -34,6 +34,7 @@ make_it <- function(){
   usethis::use_package('rgdal')
   usethis::use_package('deldir')
   usethis::use_package('kableExtra')
+  usethis::use_package('PKI')
   
   document()
   # build

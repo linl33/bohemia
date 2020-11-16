@@ -50,15 +50,19 @@ odk_get_submission <- function(url = 'https://bohemia.systems',
                 "%5B@key=",
                 uuid,
                 "%5D")
-  r = GET(rurl,
-          authenticate(user = user,
-                       password = password, 
-                       type = 'digest'))
+  suppressMessages({
+    suppressWarnings({
+      r = GET(rurl,
+              authenticate(user = user,
+                           password = password, 
+                           type = 'digest'))
+    })
+  })
   
   # Provide info on the request (and stop if error)
   stop_for_status(r) 
-  warn_for_status(r)
-  message_for_status(r)
+  # warn_for_status(r)
+  # message_for_status(r)
   
   # Return the fetched submission
   return(r)

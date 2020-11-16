@@ -81,8 +81,9 @@ CREATE TABLE minicensus_main (
 
 CREATE TABLE minicensus_people (
     instance_id    uuid,
-    first_name   VARCHAR(256),
-    last_name   VARCHAR(256),
+    first_name   TEXT,
+    last_name   TEXT,
+    initials  VARCHAR(10),
     pid   VARCHAR(12),
     --name_label   VARCHAR(128),
     num  INT,
@@ -116,10 +117,11 @@ CREATE TABLE minicensus_repeat_death_info (
     death_id  TEXT,
     death_location    VARCHAR(128),
     death_location_location   VARCHAR(128),
-    death_name    VARCHAR(256),
+    death_name    TEXT,
+    death_initials  VARCHAR(10),
     death_number  INT,
     death_number_size     VARCHAR(64),
-    death_surname     VARCHAR(64),
+    death_surname     TEXT,
     non_default_death_id  TEXT,
     note_death_id     TEXT,
     repeat_death_info_count   INT,
@@ -162,7 +164,8 @@ CREATE TABLE minicensus_repeat_water (
 CREATE TABLE enumerations (
     instance_id   uuid,
     agregado   VARCHAR(256),
-    chefe_name   VARCHAR(128),
+    chefe_name   TEXT,
+    initials_chefe  VARCHAR(10),
     construction_material   VARCHAR(256),
     construction_type   VARCHAR(256),
     country   VARCHAR(32),
@@ -180,7 +183,8 @@ CREATE TABLE enumerations (
     n_total_constructions   INT,
     region   VARCHAR(64),
     start_time   TIMESTAMP,
-    sub_name   VARCHAR(256),
+    sub_name  TEXT,
+    initials_sub  VARCHAR(10),
     todays_date   DATE,
     village   VARCHAR(256),
     vizinho1   VARCHAR(256),
@@ -196,9 +200,8 @@ CREATE TABLE enumerations (
 );
 
 -- Refusals
-
-
 CREATE TABLE refusals (
+    activity  text,
     instance_id   uuid,
     device_id   VARCHAR(64),
     end_time   TIMESTAMP,
@@ -224,7 +227,6 @@ CREATE TABLE refusals (
     server   VARCHAR(256),
     PRIMARY KEY(instance_id)
     );
-ALTER TABLE refusals ADD COLUMN activity TEXT;
 
 -- Sessions
 
@@ -235,10 +237,6 @@ CREATE TABLE sessions (
     end_time    TIMESTAMP,
     web   BOOLEAN
 );
-
-
-
-
 
 -- VA 153
 
@@ -280,6 +278,7 @@ CREATE TABLE va (
   id10003   TEXT,
   id10004   TEXT,
   id10007   TEXT,
+  id10007_initials  TEXT,
   id10007a   TEXT,
   id10007b   TEXT,
   id10008   TEXT,
@@ -293,7 +292,9 @@ CREATE TABLE va (
   id10012   TEXT,
   id10013   TEXT,
   id10017   TEXT,
+  id10017_initials  TEXT,
   id10018   TEXT,
+  id10018_initials  TEXT,
   id10018_id   TEXT,
   id10019   TEXT,
   id10020   TEXT,
@@ -308,24 +309,32 @@ CREATE TABLE va (
   id10053   TEXT,
   id10054_born_outside   TEXT,
   id10054d   TEXT,
+  id10054d_other  TEXT,
   id10054r   TEXT,
+  id10054r_other   TEXT,
   id10054v   TEXT,
   id10055   TEXT,
   id10055b   TEXT,
   id10057   TEXT,
   id10057_death_outside   TEXT,
   id10057d   TEXT,
+  id10057d_other   TEXT,
   id10057r   TEXT,
+  id10057r_other   TEXT,
   id10057v   TEXT,
   id10058   TEXT,
   id10058_other   TEXT,
   id10058b   TEXT,
+  id10058b_other   TEXT,
   id10058c   TEXT,
+  id10058c_other   TEXT,
   id10059   TEXT,
   id10060   TEXT,
   id10060_check   TEXT,
   id10061   TEXT,
+  id10061_initials  TEXT,
   id10062   TEXT,
+  id10062_initials  TEXT,
   id10063   TEXT,
   id10064   TEXT,
   id10065   TEXT,
@@ -736,6 +745,7 @@ CREATE TABLE va (
   id10432   TEXT,
   id10433   TEXT,
   id10434   TEXT,
+  id10434_other   TEXT,
   id10435   TEXT,
   id10436   TEXT,
   id10437   TEXT,

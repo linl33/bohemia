@@ -13,25 +13,28 @@
 #' @param pre-auth Pre-authenticate (needed for Manhica server)
 #' @param use_data_id Whether to substitute the id2 field with "data" in the submission retrieval URL
 #' @param sleeper How long to sleep between requests (seconds)
+#' @param use_progress_bar Whether to show a progress bar instead of messages for each form
 #' @import httr
 #' @import xml2
 #' @import dplyr
 #' @return A list of dataframes
+#' @import progress
 #' @export
 
 
 odk_get_data <- function(url = 'https://bohemia.systems',
-                              id = 'recon',
-                              id2 = NULL,
-                              unknown_id2 = FALSE,
-                              uuids = NULL,
-                              exclude_uuids = NULL,
-                              user = NULL,
-                              password = NULL,
-                              widen = TRUE,
+                         id = 'recon',
+                         id2 = NULL,
+                         unknown_id2 = FALSE,
+                         uuids = NULL,
+                         exclude_uuids = NULL,
+                         user = NULL,
+                         password = NULL,
+                         widen = TRUE,
                          pre_auth = FALSE,
                          use_data_id = FALSE, 
-                         sleeper = 0.25){
+                         sleeper = 0.25,
+                         use_progress_bar = TRUE){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){
@@ -94,24 +97,48 @@ odk_get_data <- function(url = 'https://bohemia.systems',
   
   # Now loop through each uuid and get the data
   data_list <- list()
-  for(i in 1:length(submissions)){
-    Sys.sleep(sleeper)
-    message('| Working on retrieving submission ', i, ' of ', length(submissions))
-    this_uuid <- submissions[i]
-    # Capture the data for this uuid
-    submission <- odk_get_submission(url = url, 
-                                     id = id,
-                                     id2 = id2,
-                                     uuid = this_uuid, 
-                                     user = user, 
-                                     password = password,
-                                     use_data_id = use_data_id)
-    # Parse the submission into R format
-    parsed <- odk_parse_submission(xml = submission)
-   
-    # Pop reformatted data into list
-    data_list[[i]] <- parsed
+  if(use_progress_bar){
+    pb <- txtProgressBar(min = 0, max = length(submissions), style = 3)
+    # pb <- progress::progress_bar$new(format = "[:bar] :current/:total (:percent)", total = length(submissions))
+    # pb$tick(0)
   }
+  
+  counter <- 0
+  message('Going to attempt to retrieve ', length(submissions), ' submissions.')
+  for(i in 1:length(submissions)){
+    
+    if(use_progress_bar){
+      # pb$tick(i)
+      setTxtProgressBar(pb, i)
+    } else {
+      message('| Working on retrieving submission ', i, ' of ', length(submissions))
+    }
+    
+    Sys.sleep(sleeper)
+    this_uuid <- submissions[i]
+    
+    res <- try({
+      # Capture the data for this uuid
+      submission <- odk_get_submission(url = url, 
+                                       id = id,
+                                       id2 = id2,
+                                       uuid = this_uuid, 
+                                       user = user, 
+                                       password = password,
+                                       use_data_id = use_data_id)
+      # Parse the submission into R format
+      parsed <- odk_parse_submission(xml = submission)
+    })
+    if(inherits(res, "try-error")){
+      next
+    } else {
+      counter <- counter + 1
+      # Pop reformatted data into list
+      data_list[[counter]] <- parsed
+    }
+  }
+  
+  message(counter, ' of ', length(submissions), ' submissions retrieved.')
   
   # Combine all of the data into respective dataframes
   repeats <- bind_rows(lapply(data_list, function(x){x$repeats}))

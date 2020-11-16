@@ -54,6 +54,7 @@ Imports:
     rgeos,
     deldir,
     geosphere,
-    htmlTable
+    htmlTable,
+    PKI
 Depends: 
     R (>= 2.10)

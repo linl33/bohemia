@@ -16,7 +16,8 @@ odk_get_data(
   widen = TRUE,
   pre_auth = FALSE,
   use_data_id = FALSE,
-  sleeper = 0.25
+  sleeper = 0.25,
+  use_progress_bar = TRUE
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ odk_get_data(
 \item{use_data_id}{Whether to substitute the id2 field with "data" in the submission retrieval URL}
 
 \item{sleeper}{How long to sleep between requests (seconds)}
+
+\item{use_progress_bar}{Whether to show a progress bar instead of messages for each form}
 
 \item{pre-auth}{Pre-authenticate (needed for Manhica server)}
 }
