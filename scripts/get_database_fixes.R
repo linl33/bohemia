@@ -23,7 +23,13 @@ fixes_ids <- fixes$id
 corrections <- corrections %>% filter(!id %in% fixes_ids) %>% select(id, instance_id, response_details)
 write.csv(corrections, '~/Desktop/temporary_corrections.csv')
 
+minicensus_main <- odk_data$minicensus_main
+people <- odk_data$minicensus_people
+subs <- odk_data$minicensus_repeat_hh_sub
 
+# check data associated with a certain instance_id
+#temp <- odk_data$minicensus_main[odk_data$minicensus_main$instance_id=='',]
+#temp1 <- odk_data$minicensus_people[odk_data$minicensus_people$instance_id=='',]
 
 minicensus_main <- odk_data$minicensus_main
 people <- odk_data$minicensus_people
