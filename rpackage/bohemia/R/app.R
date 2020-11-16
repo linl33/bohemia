@@ -447,7 +447,7 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
-  is_local <- FALSE
+  # is_local <- FALSE
   
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
@@ -4086,7 +4086,7 @@ app_server <- function(input, output, session) {
                 # get info on heads
                 left_join(people %>% 
                             mutate(num = as.character(num)) %>%
-                            mutate(person_name = paste0(first_name, '.', last_name, '.')),
+                            mutate(person_name = initials),
                           by = c('instance_id', 'num')) %>%
                 # get info on fieldworkers
                 left_join(fids %>% 
@@ -4100,7 +4100,7 @@ app_server <- function(input, output, session) {
                 left_join(people %>% 
                             mutate(hh_sub_id = as.character(num)) %>%
                             mutate(sub_id = permid) %>%
-                            mutate(sub_name = paste0(first_name, '.', last_name, '.')) %>%
+                            mutate(sub_name = initials) %>%
                             dplyr::select(instance_id, hh_sub_id, sub_name, sub_id),
                           by = c('instance_id', 'hh_sub_id')) %>%
                 dplyr::select(

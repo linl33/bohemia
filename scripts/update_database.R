@@ -13,7 +13,7 @@ suppressMessages({
 }
 )
 
-is_local <- TRUE
+is_local <- FALSE
 drv <- RPostgres::Postgres()
 
 if(is_local){
