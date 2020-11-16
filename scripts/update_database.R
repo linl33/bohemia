@@ -168,6 +168,13 @@ for(id in c('minicensus', 'minicensusb', 'smallcensus', 'smallcensusa', 'smallce
   } else {
     existing_uuids <- existing_uuids$instance_id
   }
+  if(id == 'minicensusb'){
+    id2 = 'minicensus'
+    use_data_id = FALSE
+  } else {
+    id2 = NULL
+    use_data_id = TRUE
+  }
   # Get data
   data <- odk_get_data(
     url = url,
@@ -179,7 +186,7 @@ for(id in c('minicensus', 'minicensusb', 'smallcensus', 'smallcensusa', 'smallce
     user = user,
     password = password,
     pre_auth = TRUE,
-    use_data_id = TRUE
+    use_data_id = use_data_id
   )
   new_data <- FALSE
   if(!is.null(data)){
