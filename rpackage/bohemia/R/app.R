@@ -1323,24 +1323,15 @@ app_server <- function(input, output, session) {
       # Create a progress by geo tables
       apply_summary <- function(df){
         df %>%
-          summarise(`Minicensus done` = sum(`Minicensus Forms done`, na.rm = TRUE),
-                    `Enumeration done` = sum(`Enumerations Forms done`, na.rm = TRUE),
-                    `Target forms (recon)` = sum(`Estimated number of forms`, na.rm = TRUE),
-                    `VA Forms done` = sum(`VA Forms done`, na.rm = TRUE),
-                    .groups = 'keep') %>%
-          ungroup %>%
-          mutate(#`Minicensus Estimated percent finished`  = round(`Minicensus Forms done` / `Estimated number of forms` * 100, digits = 2),
-            `% Enumerated of target` = 
-              round(`Enumeration done` / `Target forms (recon)` * 100, digits = 2),
-            `% Minicensed of enumerated` = 
-              round(`Minicensus done` / `Enumeration done` * 100, digits = 2),
-            `% minicensus forms done` = round(`Minicensus done` / `Target forms (recon)` * 100, digits = 2))# %>%
-          # select(`Minicensus Forms done`,
-          #        `Enumeration Forms done`,
-          #        `Target forms (recon)`,
-          #        `% Enumerated of target`,
-          #        `% Minicensed of enumerated`,
-          #        `VA Forms done`)
+          summarise(
+            `Target forms (recon)` = sum(`Estimated number of forms`, na.rm = TRUE),
+            `Enumeration forms done` = sum(`Enumerations Forms done`, na.rm = TRUE),
+            `% Enumerated of target` = round(`Enumeration forms done` / `Target forms (recon)` * 100, digits = 2),
+            `Minicensus forms done` = sum(`Minicensus Forms done`, na.rm = TRUE),
+            `% Minicensus of enumerated` = round(`Minicensus forms done` / `Enumeration forms done` * 100, digits = 2),
+            `% Minicensus form done from the total planned`  = round(sum(`Minicensus Forms done` ) / sum(`Target forms (recon)`) * 100, digits = 2),
+            `VA forms done` = sum(`VA Forms done`, na.rm = TRUE),
+            .groups = 'keep')
       }
       
       
