@@ -453,8 +453,8 @@ anomalies <- bind_rows(
 )
 anomalies$date <- as.Date(anomalies$date)
 # Drop old anomalies and add these ones to the database
-# dbSendQuery(conn = con,
-#             statement = 'DELETE FROM anomalies;')
+dbSendStatement(conn = con,
+            statement = 'DELETE FROM anomalies;')
 # dbSendQuery(conn = con,
 #             statement = 'DROP FROM anomalies CASCADE;')
 already_in <- dbGetQuery(conn = con, 'select id from anomalies;')

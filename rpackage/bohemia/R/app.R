@@ -4686,23 +4686,23 @@ app_server <- function(input, output, session) {
                                              style='padding:=8px; font-size:120%'))),
                 fluidRow(
                   column(3),
-                  column(3, align = 'center',
-                         checkboxInput('hide_submitted', 
-                                       'Hide rows for which a resolution has already been submitted?',
-                                       value = FALSE)),
-                  column(3,align = 'center',
-                         checkboxGroupInput('anomalies_show',
-                                            '',
-                                            choices = c('Anomalies' = 'anomaly', 
-                                                        'Errors' = 'error'),
-                                            selected = c('anomaly', 'error'),
-                                            inline = TRUE
-                                            # choiceNames = list(
-                                            #   icon('exclamation-circle'),
-                                            #   icon('question-circle')
-                                            # ),
-                                            # choiceValues = c('anomaly', 'error')
-                                            )),
+                  # column(3, align = 'center',
+                  #        checkboxInput('hide_submitted', 
+                  #                      'Hide rows for which a resolution has already been submitted?',
+                  #                      value = FALSE)),
+                  # column(3,align = 'center',
+                  #        checkboxGroupInput('anomalies_show',
+                  #                           '',
+                  #                           choices = c('Anomalies' = 'anomaly', 
+                  #                                       'Errors' = 'error'),
+                  #                           selected = c('anomaly', 'error'),
+                  #                           inline = TRUE
+                  #                           # choiceNames = list(
+                  #                           #   icon('exclamation-circle'),
+                  #                           #   icon('question-circle')
+                  #                           # ),
+                  #                           # choiceValues = c('anomaly', 'error')
+                  #                           )),
                   column(3)
                   
                   
