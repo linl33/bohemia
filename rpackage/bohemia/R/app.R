@@ -1383,12 +1383,16 @@ app_server <- function(input, output, session) {
           }
         } else if(by_geo == 'Hamlet'){
           if(cn == 'Mozambique'){
-            names(progress_by_village)[1:4] <- c('Distrito', 'Posto administrativo/localidade', 'Povoado', 'Bairro')
+            names(progress_by_hamlet)[1:4] <- c('Distrito', 'Posto administrativo/localidade', 'Povoado', 'Bairro')
             monitor_by_table <- progress_by_hamlet
           } else {
             monitor_by_table <- progress_by_hamlet
           }
         }
+      }
+      
+      if(cn == 'Tanzania'){
+        monitor_by_table <- monitor_by_table[,!grepl('enumer', tolower(names(monitor_by_table)))]
       }
 
       message('---created progess table for Overview by geography')
