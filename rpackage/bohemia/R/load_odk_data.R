@@ -15,7 +15,8 @@
 load_odk_data <- function(the_country = 'Mozambique',
                           credentials_path = 'credentials/credentials.yaml',
                           users_path = 'credentials/users.yaml',
-                          local = FALSE){
+                          local = FALSE, 
+                          efficient=TRUE){
   
   creds <- yaml::yaml.load_file(credentials_path)
   users <- yaml::yaml.load_file(users_path)
@@ -41,9 +42,19 @@ load_odk_data <- function(the_country = 'Mozambique',
   # Read in data
   data <- list()
   if(!is.null(the_country)){
-    main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where server='", server_url, "'"))
+    if(efficient){
+      main <- dbGetQuery(con, paste0("SELECT instance_id,wid, device_id, start_time,end_time,hh_head_id,hh_hamlet_code, hh_hamlet,hh_id, hh_size, hh_n_cows_less_than_1_year, hh_n_pigs_less_than_6_weeks, n_nets_in_hh, todays_date, hh_country, hh_geo_location, hh_ward, hh_village, hh_district FROM clean_minicensus_main where server='", server_url, "'"))
+    } else {
+      main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where server='", server_url, "'"))
+    }
+   
   } else {
-    main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main"))
+    if(efficient){
+      main <- dbGetQuery(con, paste0("SELECT instance_id, wid,device_id, start_time,end_time,hh_head_id,hh_hamlet_code, hh_hamlet,hh_id, hh_size, hh_n_cows_less_than_1_year, hh_n_pigs_less_than_6_weeks, n_nets_in_hh, todays_date, hh_country, hh_geo_location, hh_ward, hh_village, hh_district FROM clean_minicensus_main"))
+    } else {
+      main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main"))
+      
+    }
   }
   data$minicensus_main <- main
   ok_ids <- main$instance_id
