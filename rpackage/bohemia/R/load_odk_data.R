@@ -69,21 +69,57 @@ load_odk_data <- function(the_country = 'Mozambique',
                     "minicensus_repeat_hh_sub", 
                     "minicensus_repeat_mosquito_net", 
                     "minicensus_repeat_water")
-  for(i in 1:length(repeat_names)){
-    this_name <- repeat_names[i]
-    this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
-    data[[this_name]] <- this_data
-  }
-  # Read in enumerations, va, and refusals data
-  if(!is.null(the_country)){
-    enumerations <- dbGetQuery(con, paste0("SELECT * FROM clean_enumerations where server='", server_url, "'"))
-    va <- dbGetQuery(con, paste0("SELECT * FROM clean_va where server='", server_url, "'"))
-    refusals <- dbGetQuery(con, paste0("SELECT * FROM clean_refusals where server='", server_url, "'"))
+  if(efficient){
+    for(i in 1:length(repeat_names)){
+      this_name <- repeat_names[i]
+      if(this_name =='minicensus_people'){
+        
+        this_data <- dbGetQuery(con, paste0("SELECT instance_id, dob, permid, first_name, last_name FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+        
+      } else  if(this_name == 'minicensus_repeat_death_info'){
+        
+        this_data <- dbGetQuery(con, paste0("SELECT instance_id, death_id, death_dod, death_number FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+        
+      } else if(this_name =='minicensus_repeat_hh_sub'){
+        this_data <- dbGetQuery(con, paste0("SELECT instance_id, hh_sub_id FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+      } else if(this_name =='minicensus_repeat_mosquito_net'){
+        this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+      } else if(this_name == 'minicensus_repeat_water'){
+        this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+      }
+      data[[this_name]] <- this_data
+    }
   } else {
-    enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
-    va <- dbGetQuery(con, "SELECT * FROM clean_va")
-    refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
+    for(i in 1:length(repeat_names)){
+      this_name <- repeat_names[i]
+      this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+      data[[this_name]] <- this_data
+    }
   }
+  
+  # Read in enumerations, va, and refusals data
+  if(efficient){
+    if(!is.null(the_country)){
+      enumerations <- dbGetQuery(con, paste0("SELECT instance_id, agregado, village, ward, hamlet, hamlet_code,country, todays_date, chefe_name,localizacao_agregado, wid, start_time, end_time, location_gps FROM clean_enumerations where server='", server_url, "'"))
+      va <- dbGetQuery(con, paste0("SELECT * FROM clean_va where server='", server_url, "'"))
+      refusals <- dbGetQuery(con, paste0("SELECT * FROM clean_refusals where server='", server_url, "'"))
+    } else {
+      enumerations <- dbGetQuery(con, "SELECT instance_id, agregado, village, ward, hamlet, hamlet_code,country, todays_date, chefe_name,localizacao_agregado, wid, start_time, end_time, location_gps FROM clean_enumerations")
+      va <- dbGetQuery(con, "SELECT * FROM clean_va")
+      refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
+    }
+  } else {
+    if(!is.null(the_country)){
+      enumerations <- dbGetQuery(con, paste0("SELECT * FROM clean_enumerations where server='", server_url, "'"))
+      va <- dbGetQuery(con, paste0("SELECT * FROM clean_va where server='", server_url, "'"))
+      refusals <- dbGetQuery(con, paste0("SELECT * FROM clean_refusals where server='", server_url, "'"))
+    } else {
+      enumerations <- dbGetQuery(con, "SELECT * FROM clean_enumerations")
+      va <- dbGetQuery(con, "SELECT * FROM clean_va")
+      refusals <- dbGetQuery(con, "SELECT * FROM clean_refusals")
+    }
+  }
+  
   
   data$enumerations <- enumerations
   data$va <- va
