@@ -3301,7 +3301,8 @@ app_server <- function(input, output, session) {
   # Observe the fix submission
   observeEvent(input$submit_fix,{
     sr <- input$anomalies_table_rows_selected
-    action <- session_data$anomalies
+    action <- anomalies_dt()
+    # save(action, file = '/tmp/action.RData')
     this_row <- action[sr,]
     # fids <- read.csv('/tmp/fids.csv')
     gg <- input$geo
@@ -3324,7 +3325,12 @@ app_server <- function(input, output, session) {
       just_one <- TRUE
     }
     if(just_one){
+      this_row$date <- as.character(this_row$date)
       this_row <- tidyr::gather(this_row, key, value)
+      this_row <- this_row %>%
+        dplyr::filter(key %in% c('type', 'days_ago', 'FW', 'id', 'description', 'incident',
+                                 'instance_id', 'supervisor'))
+      this_row$key <- toupper(this_row$key)
       showModal(
         modalDialog(
           title = 'Anomaly/error resolution',
@@ -3388,6 +3394,20 @@ app_server <- function(input, output, session) {
   observeEvent(input$send_fix,{
     sr <- input$anomalies_table_rows_selected
     action <- session_data$anomalies
+    
+    # Apply the filters
+    hide_submitted <- input$hide_submitted
+    if(!is.null(hide_submitted)){
+      if(hide_submitted){
+        joined <- joined %>% filter(!resolution_submitted) 
+      }
+    }
+    anomalies_show <- input$anomalies_show
+    message('anomalies show is:')
+    if(!is.null(anomalies_show)){
+      joined <- joined %>% filter(type %in% anomalies_show)
+    }
+    
     
     # Get the fix row
     this_row <- action[sr,]
@@ -4332,13 +4352,7 @@ app_server <- function(input, output, session) {
     make_log_in_button(li)
   })
   
-  # Main UI elements ####################################################
-  
-  
-  # Field monitoring UI elements ########################################
-  
-  # Action table
-  output$anomalies_table <- DT::renderDataTable({
+  anomalies_dt <- reactive({
     action <- session_data$anomalies
     # Get supervisor
     action <- action %>%
@@ -4382,9 +4396,16 @@ app_server <- function(input, output, session) {
     }
     anomalies_show <- input$anomalies_show
     message('anomalies show is:')
-    if(!is.null(anomalies_show)){
+    # if(!is.null(anomalies_show)){
       joined <- joined %>% filter(type %in% anomalies_show)
-    }
+    # }
+    # save(joined, file = '/tmp/anomalies_dt.RData')
+    return(joined)
+  })
+  
+  # Action table
+  output$anomalies_table <- DT::renderDataTable({
+    joined <- anomalies_dt()
     bohemia::prettify(joined, 
                       download_options = TRUE,
                       nrows = nrow(joined)) %>%
@@ -4686,23 +4707,23 @@ app_server <- function(input, output, session) {
                                              style='padding:=8px; font-size:120%'))),
                 fluidRow(
                   column(3),
-                  # column(3, align = 'center',
-                  #        checkboxInput('hide_submitted', 
-                  #                      'Hide rows for which a resolution has already been submitted?',
-                  #                      value = FALSE)),
-                  # column(3,align = 'center',
-                  #        checkboxGroupInput('anomalies_show',
-                  #                           '',
-                  #                           choices = c('Anomalies' = 'anomaly', 
-                  #                                       'Errors' = 'error'),
-                  #                           selected = c('anomaly', 'error'),
-                  #                           inline = TRUE
-                  #                           # choiceNames = list(
-                  #                           #   icon('exclamation-circle'),
-                  #                           #   icon('question-circle')
-                  #                           # ),
-                  #                           # choiceValues = c('anomaly', 'error')
-                  #                           )),
+                  column(3, align = 'center',
+                         checkboxInput('hide_submitted',
+                                       'Hide rows for which a resolution has already been submitted?',
+                                       value = FALSE)),
+                  column(3,align = 'center',
+                         checkboxGroupInput('anomalies_show',
+                                            '',
+                                            choices = c('Anomalies' = 'anomaly',
+                                                        'Errors' = 'error'),
+                                            selected = c('anomaly', 'error'),
+                                            inline = TRUE
+                                            # choiceNames = list(
+                                            #   icon('exclamation-circle'),
+                                            #   icon('question-circle')
+                                            # ),
+                                            # choiceValues = c('anomaly', 'error')
+                                            )),
                   column(3)
                   
                   
