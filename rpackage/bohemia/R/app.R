@@ -3398,6 +3398,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$send_fix,{
     sr <- input$anomalies_table_rows_selected
     action <- session_data$anomalies
+    joined <- anomalies_dt()
     
     # Apply the filters
     hide_submitted <- input$hide_submitted
@@ -3414,7 +3415,7 @@ app_server <- function(input, output, session) {
     
     
     # Get the fix row
-    this_row <- action[sr,]
+    this_row <- joined[sr,]
     # Get the fix text
     response_details <- paste0(input$response_details)
     fix_source <- input$fix_source
