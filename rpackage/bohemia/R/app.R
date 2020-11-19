@@ -684,7 +684,6 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE)
-      save(out, file='test_load_odk_eff.rda')
       odk_data$data <- out
       
       # Get anomalies
@@ -2249,7 +2248,7 @@ app_server <- function(input, output, session) {
             people <- odk_data$data$minicensus_people
             deaths <- odk_data$data$minicensus_repeat_death_info
             deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
-            save(people, deaths, pd, cn, file = '/tmp/va.RData')
+            # save(people, deaths, pd, cn, file = '/tmp/va.RData')
             # Conditional mourning period
             mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
             va <- left_join(deaths %>%
