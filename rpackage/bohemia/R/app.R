@@ -2318,7 +2318,8 @@ app_server <- function(input, output, session) {
                 # TZA, populate ward supervisors automatically
                 va <- va %>%
                   left_join(tza_ward_supervisors) %>%
-                  mutate(`Supervisor name (ID)` = paste0(Supervisor_Name, ' (id:', wid, ')')) %>%
+                  mutate(`FW / Supervisor ID` =  paste0(Supervisor_Name, ' (id:', wid, ')')) %>%
+                  dplyr::rename(`Supervisor name (ID)` = `FW / Supervisor ID`) %>%
                   dplyr::select(-wid, -Supervisor_Name)
               }
 
