@@ -10,15 +10,17 @@
 #' @import sp
 #' @import DT
 #' @import lubridate
+#' @import mapview
 #' @import RPostgres
 #' @import yaml
 #' @import leafgl
+#' @import stplanr
+#' @import osmextract
 #' @import sf
 #' @import shinybusy
 #' @import ggrepel
 app_ui <- function(request) {
   options(scipen = '999')
-  
   tagList(
     mobile_golem_add_external_resources(),
     
@@ -3124,22 +3126,33 @@ app_server <- function(input, output, session) {
     # Get the traccar data for that country
     traccar <- session_data$traccar
     the_worker <- input$fid
+    # save(traccar, file='temp_traccar.rda')
     if(!is.null(the_worker)){
       sub_traccar <- traccar %>% filter(unique_id == the_worker)
-      pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
+      # get date 
+      sub_traccar$date <- as.Date(sub_traccar$devicetime, 'EST')
+      points_to_line <- function(data, group = "date"){
+        data <- data %>% 
+          group_by_at(group) %>%
+          summarise(do_union = FALSE) %>%
+          st_cast("LINESTRING") %>%
+          ungroup 
+      }
+      
+      pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line()
+      pts$groups <- stplanr::rnet_group(pts, igraph::cluster_fast_greedy)
+
     }
+   
+  
+    save(pts, file='temp_pts.rda')
     # Make the plot
-    l <- leaflet() %>%
-      addTiles()
+    l <- mapview::mapview()
     if(nrow(sub_traccar) > 0){
-      l <- l %>%
-        addGlPoints(data = pts,
-                    fillColor = 'red',
-                    # fillColor = pts$status,
-                    popup = pts %>% dplyr::select(devicetime, valid),
-                    group = "pts")
+     l <- mapview::mapview(pts["groups"])
+      
     }
-    l
+    l@map
   })
   
   
