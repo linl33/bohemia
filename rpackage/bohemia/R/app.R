@@ -2191,7 +2191,7 @@ app_server <- function(input, output, session) {
     pd <- session_data$va_table
     out <- NULL
     if(nrow(pd) == 0){
-      out <- 'No unfinished VA forms for the location(s) selected. Consider modifying locations (left).'
+      out <- 'No unfinished VA forms for the location(s) selected. Consider modifying locations (left) and then clicking "Update VA sheet" above.'
     }
     return(out)
   })
