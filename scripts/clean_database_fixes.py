@@ -233,7 +233,26 @@ implement(id = 'strange_hh_code_bda16440-1171-4691-95a1-0e55527e0c33', query = "
 implement(id = 'strange_hh_code_c867866e-b703-4fe2-a9a7-50d31cfdea09', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='DEO', hh_village='Marruma', hh_hamlet='4 de Outubro' WHERE instance_id='c867866e-b703-4fe2-a9a7-50d31cfdea09'", who = 'Xing Brew')
 implement(id = 'strange_hh_code_cc891eb8-e320-4272-a490-ad8045dc1689', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma', hh_hamlet='Mifarinha' WHERE instance_id='cc891eb8-e320-4272-a490-ad8045dc1689'", who = 'Xing Brew')
 implement(id = 'strange_wid_enumerations_2939b05a-3bbe-4c1b-81fe-6eac54d47dc9', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='2939b05a-3bbe-4c1b-81fe-6eac54d47dc9'", who = 'Xing Brew')
- 
+# jaume
+implement(id = 'no_va_id_bbdbf1a0-f892-49d7-b8d0-dc176042d734', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='bbdbf1a0-f892-49d7-b8d0-dc176042d734'")
+implement(id = 'no_va_id_3bf921f9-dc51-4f88-baea-8f588074b7bf', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='3bf921f9-dc51-4f88-baea-8f588074b7bf'")
+implement(id = 'no_va_id_d969f990-5e43-4e0a-8df9-e8c13ea78fa9', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='d969f990-5e43-4e0a-8df9-e8c13ea78fa9'")
+implement(id = 'no_va_id_2c064504-fa15-4672-9815-ca9f9ca852c8', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='2c064504-fa15-4672-9815-ca9f9ca852c8'")
+implement(id = 'no_va_id_f5912455-1921-4632-9007-45d8300e7f3e', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='f5912455-1921-4632-9007-45d8300e7f3e'")
+implement(id = 'no_va_id_e45d94f8-c4ce-4d8d-bfe2-20a9704a3863', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='e45d94f8-c4ce-4d8d-bfe2-20a9704a3863'")
+implement(id = 'no_va_id_d5b4442c-af42-411c-ab25-5b2641681c52', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='d5b4442c-af42-411c-ab25-5b2641681c52'")
+implement(id = 'no_va_id_ab45b465-93b8-4884-b03f-4615c5ea1af6', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='ab45b465-93b8-4884-b03f-4615c5ea1af6'")
+implement(id = 'strange_hh_code_1e0e5093-ac9e-4f24-aedb-5c1fc18b9439', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma', hh_hamlet='Mifarinha' WHERE instance_id='1e0e5093-ac9e-4f24-aedb-5c1fc18b9439'")
+implement(id = 'strange_wid_4eed4b20-6197-4694-9359-b19708e692bc', query = "UPDATE clean_minicensus_main SET wid='392' WHERE instance_id='4eed4b20-6197-4694-9359-b19708e692bc'")
+implement(id = 'strange_wid_73cea41e-c35f-4d8a-823c-d3780e41c510', query = "UPDATE clean_minicensus_main SET wid='28' WHERE instance_id='73cea41e-c35f-4d8a-823c-d3780e41c510'")
+
+# jaume not sure
+implement(id = 'missing_wid_va_83ce759a-3e04-49c1-9ddd-a2f1d73ffe47', query = "UPDATE clean_va_main SET wid='DEX-140-701' WHERE instance_id='83ce759a-3e04-49c1-9ddd-a2f1d73ffe47'")
+
+
+
+
+
 
 # TZA
 implement(id = 'strange_wid_5f466226-1d75-40a9-97fc-5e8cd84448c9', query = "UPDATE clean_minicensus_main SET wid='37' WHERE instance_id='5f466226-1d75-40a9-97fc-5e8cd84448c9'")
