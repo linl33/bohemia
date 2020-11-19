@@ -1409,7 +1409,7 @@ app_server <- function(input, output, session) {
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
     pd <- pd %>% filter(hh_country == co)
-    
+    save(pd, the_iso, co, file = '/tmp/leaf.RData')
     pd_ok <- FALSE
     if(!is.null(pd)){
       if(nrow(pd) > 0){
@@ -1421,119 +1421,91 @@ app_server <- function(input, output, session) {
     } else {
       ll <- extract_ll(pd$hh_geo_location)
       pd$lng <- ll$lng; pd$lat <- ll$lat
-      l <- leaflet() %>% addTiles()
-      if(!all(is.na(pd$lng))){
-        l <- l %>%
-          addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
-      }
+      pdx <- pd %>%
+        mutate(x = lng,
+               y = lat)
       
-      #########   percent complete map - create dataframe grouped by all locations together
-      lxd_all <- pd %>% group_by(hh_ward, hh_village, code = hh_hamlet_code) %>%
-        tally %>%
-        left_join(estimated_households$data %>% dplyr::select(code, n_households), by = 'code') %>%
-        mutate(p = n / n_households * 100)
-      lxd_all <- left_join(estimated_households$data %>% filter(iso == the_iso) %>% 
-                             dplyr::select(code, lng, lat), lxd_all, by = 'code') %>%
-        mutate(p = ifelse(is.na(p), 0, p))
-      pal_all <- pal_hamlet <- colorNumeric(
-        palette = c("black","darkred", 'red', 'darkorange', 'blue'),
-        domain = 0:ceiling(max(lxd_all$p))
-      )
-      hamlet_text <- paste(
-        "Percent finished: ",  round(ifelse(is.na(lxd_all$p), 0, lxd_all$p),2),"<br>",
-        as.character(lxd_all$code),"<br/>",
-        sep="") %>%
-        lapply(htmltools::HTML)
-      # create map for hamlet
-      leaflet_height <- 1000
-      lxd_hamlet <- leaflet(data = lxd_all, height = leaflet_height) %>% 
-        addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-        addCircleMarkers(data = lxd_all, lng = ~lng, lat = ~lat,label = hamlet_text, stroke=FALSE, color=~pal_hamlet(p), fillOpacity = 0.6, 
-                         radius = 10) %>%
-        addLegend(title = '% completed', position = c("bottomleft"), pal = pal_hamlet, values = lxd_all$p)
-      
-      # create map for village
-      lxd_village <- lxd_all %>% group_by(hh_village) %>%
-        summarise(p = mean(p),
-                  lat =mean(lat),
-                  lng=mean(lng))
-      pal_village <- colorNumeric(
-        palette = c("black","darkred", 'red', 'darkorange', 'blue'),
-        domain = 0:ceiling(max(lxd_village$p))
-      )
-      village_text <- paste(
-        "Percent finished: ", round(lxd_village$p,2),"<br>",
-        as.character(lxd_village$hh_village),"<br/>",
-        sep="") %>%
-        lapply(htmltools::HTML)
-      lxd_village <- leaflet(data = lxd_village, height = leaflet_height) %>% 
-        addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-        addCircleMarkers(data = lxd_village, lng = ~lng, lat = ~lat,label = village_text, stroke=FALSE, color=~pal_village(p), fillOpacity = 0.6) %>%
-        addLegend(title = '% completed', position = c("bottomleft"), pal = pal_village, values = lxd_village$p)
-      
-      # create map for ward 
-      lxd_ward <- lxd_all %>% group_by(hh_ward) %>%
-        summarise(p = mean(p),
-                  lat =mean(lat),
-                  lng=mean(lng))
-      pal_ward <- colorNumeric(
-        palette = c("black","darkred", 'red', 'darkorange', 'blue'),
-        domain = 0:ceiling(max(lxd_ward$p))
-      )
-      ward_text <- paste(
-        "Percent finished: ",  round(lxd_ward$p,2),"<br>",
-        as.character(lxd_ward$hh_ward),"<br/>",
-        sep="") %>%
-        lapply(htmltools::HTML)
-      lxd_ward <- leaflet(data = lxd_ward, height = leaflet_height) %>% 
-        addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-        addCircleMarkers(data = lxd_ward, lng = ~lng, lat = ~lat,label = ward_text, stroke=FALSE, color=~pal_ward(p), fillOpacity = 0.6) %>%
-        addLegend(title = '% completed', position = c("bottomleft"), pal = pal_ward, values = lxd_ward$p)
-      
-      # create map for district 
-      lxd_district <- lxd_all %>% ungroup %>%
-        summarise(p = mean(p),
-                  lat =mean(lat),
-                  lng=mean(lng))
-      pal_district <- colorNumeric(
-        palette = c("black","darkred", 'red', 'darkorange', 'blue'),
-        domain = 0:ceiling(max(lxd_district$p))
-      )
-      district_text <- paste(
-        "Percent finished: ",  round(lxd_district$p,2),"<br>",
-        input$geo,"<br>",
-        sep="") %>%
-        lapply(htmltools::HTML)
-      lxd_district <- leaflet(data = lxd_district, height = leaflet_height) %>% 
-        addProviderTiles(providers$Esri.NatGeoWorldMap) %>%
-        addCircleMarkers(data = lxd_district, lng = ~lng, lat = ~lat, label = district_text,stroke=FALSE, color=~pal_district(p), fillOpacity = 0.6) %>%
-        addLegend(title = '% completed', position = c("bottomleft"), pal = pal_district, values = lxd_district$p) %>%
-        setView(lng = lxd_district$lng,
-                lat = lxd_district$lat,
-                zoom = 8)
+      # Get location level
       # get input for which location to view
       map_location = field_monitoring_geo()
       message('---Field monitoring map location level is ', map_location)
       # get country to translate names for map title
       cn <- input$geo
       cn <- ifelse(cn == 'Rufiji', 'Tanzania', 'Mozambique')
+      right <- estimated_households$data %>% left_join(locations %>% dplyr::select(code, district = District))
       if(is.null(map_location)){
-        lx <- lxd_hamlet
+        pdx$id <- paste0(pdx$hh_ward, ' ', pdx$hh_village, ' ', pdx$hh_hamlet)
+        right$id <- paste0(right$ward, ' ', right$village, ' ', right$hamlet)
       } else {
         if(map_location == 'District'){
-          lx <- lxd_district
+          pdx$id <- pdx$hh_district
+          right$id <- right$district
         }
         if(map_location=='Hamlet'){
-          lx <- lxd_hamlet
+          pdx$id <- paste0(pdx$hh_ward, ' ', pdx$hh_village, ' ', pdx$hh_hamlet)
+          right$id <- paste0(right$ward, ' ', right$village, ' ', right$hamlet)
         } else if(map_location=='Village'){
-          lx <- lxd_village
+          pdx$id <- paste0(pdx$hh_ward, ' ', pdx$hh_village)
+          right$id <- paste0(right$ward, ' ', right$village)
         } else if(map_location=='Ward'){
-          lx <- lxd_ward
+          pdx$id <- pdx$hh_ward
+          right$id <- right$ward
         }
       }
-      message('---Created map of progess by geography')
+  
       
-      out <- lx
+      # Group by id and get number done
+      df_pdx <-
+        pdx %>%
+        group_by(id) %>%
+        tally %>%
+        left_join(right %>% dplyr::group_by(id) %>% summarise(n_households = sum(n_households, na.rm = TRUE)), by = 'id') %>%
+        mutate(p = n / n_households * 100) %>%
+        mutate(p = ifelse(is.na(p), 0, p))
+      
+      coordinates(pdx) <- ~x+y
+      proj4string(pdx) <- proj4string(moz1)
+      out <- voronoi(pdx)
+      out@data <- left_join(out@data, df_pdx)
+      
+      l <- leaflet() %>% addTiles()
+
+      # pal_all <- pal_hamlet <- colorNumeric(
+      #   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
+      #   domain = 0:ceiling(max(out@data$p))
+      # )
+      bins <- c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, Inf)
+      pal_all <- colorBin("Spectral", domain = out@data$p, bins = bins)
+      map_text <- paste(
+        "Percent finished: ",  round(ifelse(is.na(out@data$p), 0, out@data$p),2),"<br>",
+        as.character(out@data$id),"<br/>",
+        sep="") %>%
+        lapply(htmltools::HTML)
+      # create map for hamlet
+      leaflet_height <- 1000
+      lxd <- leaflet(data = out, height = leaflet_height) %>%
+        addProviderTiles(providers$Stamen.Toner) %>%
+        addPolygons(
+          fillColor = ~pal_all(p),
+          opacity = 0.5,
+          weight = 0.5,
+          color = 'white',
+          dashArray = '3',
+          fillOpacity = 0.5,
+          highlight = highlightOptions(
+            weight = 5,
+            color = "#666",
+            dashArray = "",
+            fillOpacity = 0.7,
+            bringToFront = TRUE),
+          label = map_text,
+          labelOptions = labelOptions(
+            style = list("font-weight" = "normal", padding = "3px 8px"),
+            textsize = "15px",
+            direction = "auto")) %>%
+        addLegend(pal = pal_all, values = ~p, opacity = 0.7, title = NULL,
+                  position = "bottomright")
+      out <- lxd
     }
     return(out)
   })
@@ -1552,9 +1524,11 @@ app_server <- function(input, output, session) {
                 uiOutput('ui_field_monitoring_by'),
                 uiOutput('ui_progress_by_date'),
                 column(12, align = 'center',
-                       div(DT::dataTableOutput('dt_monitor_by_table'), style = "font-size:80%"),
-                       leafletOutput('leaf_lx', height = 800))
-              )
+                       tabsetPanel(
+                         tabPanel('Table',
+                                  div(DT::dataTableOutput('dt_monitor_by_table'), style = "font-size:80%")),
+                         tabPanel('Map',
+                                  leafletOutput('leaf_lx', height = 800)))))
             })
   })
   

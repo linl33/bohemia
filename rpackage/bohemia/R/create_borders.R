@@ -37,7 +37,7 @@ create_borders <- function(df, voronoi = FALSE){
     this_boundary <- rgeos::gConvexHull(spgeom = this_sub_data)
     # eval(parse(text = eval(expression(paste(pasted_slot_path, "<-", value)))))
 
-      slot(slot(this_boundary, "polygons")[[1]], "ID") <- as.character(this_cluster)
+    # slot(slot(this_boundary, "polygons")[[1]], "ID") <- as.character(this_cluster)
     
     out_list[[i]] <- this_boundary
   }
