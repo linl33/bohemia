@@ -1409,7 +1409,7 @@ app_server <- function(input, output, session) {
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
     pd <- pd %>% filter(hh_country == co)
-    save(pd, the_iso, co, file = '/tmp/leaf.RData')
+    # save(pd, the_iso, co, file = '/tmp/leaf.RData')
     pd_ok <- FALSE
     if(!is.null(pd)){
       if(nrow(pd) > 0){
@@ -2197,8 +2197,11 @@ app_server <- function(input, output, session) {
   })
   
 # VA DATA
+  
+  
   observeEvent({
-    x = location_code()
+    # x = location_code()
+    input$update_va_sheet
     # y = input$va_n_teams
   },{
     
@@ -2222,7 +2225,7 @@ app_server <- function(input, output, session) {
             people <- odk_data$data$minicensus_people
             deaths <- odk_data$data$minicensus_repeat_death_info
             deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
-            save(people, deaths, pd, cn, file = '/tmp/va.RData')
+            # save(people, deaths, pd, cn, file = '/tmp/va.RData')
             # Conditional mourning period
             mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
             va <- left_join(deaths %>%
@@ -2315,7 +2318,7 @@ app_server <- function(input, output, session) {
                 # TZA, populate ward supervisors automatically
                 va <- va %>%
                   left_join(tza_ward_supervisors) %>%
-                  mutate(`FW / Supervisor ID` = paste0(Supervisor_Name, ' (id:', wid, ')')) %>%
+                  mutate(`Supervisor name (ID)` = paste0(Supervisor_Name, ' (id:', wid, ')')) %>%
                   dplyr::select(-wid, -Supervisor_Name)
               }
 
@@ -2384,8 +2387,11 @@ app_server <- function(input, output, session) {
             ok = {
               pd <- session_data$va_table
               any_va <- nrow(pd) > 0
+              update_va_button <- actionButton('update_va_sheet',
+                                               'Update VA sheet')
               if(any_va){
                 fluidPage(
+                  update_va_button, br(),
                   column(12, align = 'center',
                          downloadButton('render_control_sheet',
                                         'Print VA control sheet'),
@@ -2396,6 +2402,7 @@ app_server <- function(input, output, session) {
               } else {
                 fluidPage(
                   column(12, align = 'center',
+                         update_va_button, br(),
                          textOutput('va_text'),
                   ))
               }
