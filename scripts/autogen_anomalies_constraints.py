@@ -1,30 +1,28 @@
-import pygsheets
 import pandas as pd 
+import ezsheets
+import os
 
-
-def get_anomalies_constraints(creds_file: str, gbook_url: str, gsheet_name='survey'):
+def get_anomalies_constraints(creds_dir = '../credentials', gbook_url ='https://docs.google.com/spreadsheets/d/1r9v4lJHvMYxMZpwdwdlb6nkTe9cQrpLlHEmfJbQ4kjw/edit#gid=141178862', gsheet_name='smallcensusb'):
     """
     This function parses a given xls worksheet to copy the anomalies and warnings defined in it.
 
     Args:
-        creds_file: String indicating the path to the json credentials file.
+        creds_dir: String indicating location of credentials folder
         gbook_url: String indicating the url to the google sheets workbook. 
         gsheet_name: [Optional] String indicating the label for the worksheet to be parsed.
 
     Returns:
         Pandas dataframe 
     """
-
-    # Authorize by using this: https://pygsheets.readthedocs.io/en/latest/authorization.html
-    gc = pygsheets.authorize(creds_file)
-
-    workbook = gc.open_by_url(gbook_url)
-    worksheet = workbook.get_worksheet(gsheet_name)
-
-    xlsdata = worksheet.get_all_values()
+    this_dir = os.getcwd()
+    os.chdir(creds_dir)
+    s = ezsheets.Spreadsheet(gbook_url)
+    s.downloadAsExcel()
+    x = pd.read_excel(gsheet_name + '.xlsx')
+    os.chdir(this_dir)
+    xlsdata = x
 
     tbl = []
-    # xlsdata = pd.read_excel('/home/katekimani/projects/databrew/bohemia/tmp/smallcensusb.xlsx') TODO: Delete once PR is approved
     for idx, entry in xlsdata.iterrows():
         tblrow = {'row': idx}
         if type(entry['constraint']) != float:
@@ -51,6 +49,5 @@ def get_anomalies_constraints(creds_file: str, gbook_url: str, gsheet_name='surv
 
 
 if __name__ == "__main__":
-    # creds_file='/home/katekimani/projects/databrew/bohemia/credentials/gsheets_oauth.json' TODO: Delete once PR is approved
-    # gbook_url='https://docs.google.com/spreadsheets/d/1WkY4iOUU-cI4cepMOiBu16wPnXG3yRSOTyp3_9K-zLo/edit#gid=141178862' TODO: Delete once PR is approved
-    data = get_anomalies_constraints(creds_file, gbook_url)
+    data = get_anomalies_constraints(creds_dir = '../credentials', gbook_url = 'https://docs.google.com/spreadsheets/d/1r9v4lJHvMYxMZpwdwdlb6nkTe9cQrpLlHEmfJbQ4kjw/edit#gid=141178862', gsheet_name='smallcensusb')
+    data.to_csv('/tmp/done.csv')
