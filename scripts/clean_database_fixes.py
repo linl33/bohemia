@@ -234,23 +234,32 @@ implement(id = 'strange_hh_code_c867866e-b703-4fe2-a9a7-50d31cfdea09', query = "
 implement(id = 'strange_hh_code_cc891eb8-e320-4272-a490-ad8045dc1689', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma', hh_hamlet='Mifarinha' WHERE instance_id='cc891eb8-e320-4272-a490-ad8045dc1689'", who = 'Xing Brew')
 implement(id = 'strange_wid_enumerations_2939b05a-3bbe-4c1b-81fe-6eac54d47dc9', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='2939b05a-3bbe-4c1b-81fe-6eac54d47dc9'", who = 'Xing Brew')
 # jaume
-implement(id = 'no_va_id_bbdbf1a0-f892-49d7-b8d0-dc176042d734', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='bbdbf1a0-f892-49d7-b8d0-dc176042d734'", who = 'Jaume Rovirosa')
-implement(id = 'no_va_id_3bf921f9-dc51-4f88-baea-8f588074b7bf', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='3bf921f9-dc51-4f88-baea-8f588074b7bf'")
-implement(id = 'no_va_id_d969f990-5e43-4e0a-8df9-e8c13ea78fa9', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='d969f990-5e43-4e0a-8df9-e8c13ea78fa9'")
-implement(id = 'no_va_id_2c064504-fa15-4672-9815-ca9f9ca852c8', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='2c064504-fa15-4672-9815-ca9f9ca852c8'")
-implement(id = 'no_va_id_f5912455-1921-4632-9007-45d8300e7f3e', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='f5912455-1921-4632-9007-45d8300e7f3e'")
-implement(id = 'no_va_id_e45d94f8-c4ce-4d8d-bfe2-20a9704a3863', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='e45d94f8-c4ce-4d8d-bfe2-20a9704a3863'")
-implement(id = 'no_va_id_d5b4442c-af42-411c-ab25-5b2641681c52', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='d5b4442c-af42-411c-ab25-5b2641681c52'")
-implement(id = 'no_va_id_ab45b465-93b8-4884-b03f-4615c5ea1af6', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='ab45b465-93b8-4884-b03f-4615c5ea1af6'")
-implement(id = 'strange_hh_code_1e0e5093-ac9e-4f24-aedb-5c1fc18b9439', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma', hh_hamlet='Mifarinha' WHERE instance_id='1e0e5093-ac9e-4f24-aedb-5c1fc18b9439'")
-implement(id = 'strange_wid_4eed4b20-6197-4694-9359-b19708e692bc', query = "UPDATE clean_minicensus_main SET wid='392' WHERE instance_id='4eed4b20-6197-4694-9359-b19708e692bc'")
-implement(id = 'strange_wid_73cea41e-c35f-4d8a-823c-d3780e41c510', query = "UPDATE clean_minicensus_main SET wid='28' WHERE instance_id='73cea41e-c35f-4d8a-823c-d3780e41c510'")
+implement(id = 'no_va_id_bbdbf1a0-f892-49d7-b8d0-dc176042d734', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='bbdbf1a0-f892-49d7-b8d0-dc176042d734'", who = 'Jaume')
+implement(id = 'no_va_id_3bf921f9-dc51-4f88-baea-8f588074b7bf', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='3bf921f9-dc51-4f88-baea-8f588074b7bf'", who = 'Jaume')
+implement(id = 'no_va_id_d969f990-5e43-4e0a-8df9-e8c13ea78fa9', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='d969f990-5e43-4e0a-8df9-e8c13ea78fa9'", who = 'Jaume')
+implement(id = 'no_va_id_2c064504-fa15-4672-9815-ca9f9ca852c8', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='2c064504-fa15-4672-9815-ca9f9ca852c8'", who = 'Jaume')
+implement(id = 'no_va_id_f5912455-1921-4632-9007-45d8300e7f3e', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='f5912455-1921-4632-9007-45d8300e7f3e'", who = 'Jaume')
+implement(id = 'no_va_id_e45d94f8-c4ce-4d8d-bfe2-20a9704a3863', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='e45d94f8-c4ce-4d8d-bfe2-20a9704a3863'", who = 'Jaume')
+implement(id = 'no_va_id_d5b4442c-af42-411c-ab25-5b2641681c52', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='d5b4442c-af42-411c-ab25-5b2641681c52'", who = 'Jaume')
+implement(id = 'no_va_id_ab45b465-93b8-4884-b03f-4615c5ea1af6', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='ab45b465-93b8-4884-b03f-4615c5ea1af6'", who = 'Jaume')
+implement(id = 'strange_hh_code_1e0e5093-ac9e-4f24-aedb-5c1fc18b9439', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma', hh_hamlet='Mifarinha' WHERE instance_id='1e0e5093-ac9e-4f24-aedb-5c1fc18b9439'", who = 'Jaume')
+implement(id = 'strange_wid_4eed4b20-6197-4694-9359-b19708e692bc', query = "UPDATE clean_minicensus_main SET wid='392' WHERE instance_id='4eed4b20-6197-4694-9359-b19708e692bc'", who = 'Jaume')
+implement(id = 'strange_wid_73cea41e-c35f-4d8a-823c-d3780e41c510', query = "UPDATE clean_minicensus_main SET wid='28' WHERE instance_id='73cea41e-c35f-4d8a-823c-d3780e41c510'", who = 'Jaume')
+
+## the instructions in the response_details do not make sense given the anomaly id in the following:
+#implement(id = 'cook_time_to_water_mismatch_87ce2b74-e8bc-4d77-9c73-05a70f3c9c5b', query = "UPDATE clean_minicensus_main SET ???='DEX-089-701' WHERE instance_id='87ce2b74-e8bc-4d77-9c73-05a70f3c9c5b'")
 #implement(id = 'missing_wid_va_83ce759a-3e04-49c1-9ddd-a2f1d73ffe47', query = "UPDATE clean_va_main SET wid='DEX-140-701' WHERE instance_id='83ce759a-3e04-49c1-9ddd-a2f1d73ffe47'")
+#implement(id = 'missing_wid_va_ea7fb4ca-ee7f-4fb3-abd9-f46fa0c63fff', query = "UPDATE clean_va_main SET wid='NXG-013-702' WHERE instance_id='ea7fb4ca-ee7f-4fb3-abd9-f46fa0c63fff'")
 
+## Joe, please confirm format for the following type of correction: 
 implement(id = 'repeat_hh_id_b1b160bd-8616-4a13-a001-903fd94daffa,e7263ebd-ae5e-4493-b053-b2148796507f', query = "DELETE FROM clean_minicensus_main WHERE instance_id='b1b160bd-8616-4a13-a001-903fd94daffa'", who = 'Xing Brew')
-
-
-
+implement(id = 'repeat_hh_id_f105ac83-1ef5-445a-ae5f-62f9e49a97c0,f3c073b4-e0b5-4027-9527-996861dd1b80', query = "DELETE FROM clean_minicensus_main WHERE instance_id='f3c073b4-e0b5-4027-9527-996861dd1b80'", who = 'Xing Brew')
+implement(id = 'repeat_hh_id_6d0a71d0-8dff-4ae7-a82c-7b861ab05a7b,f64247c8-cd98-4221-b7de-60d9d310b3a1', query = "DELETE FROM clean_minicensus_main WHERE instance_id='6d0a71d0-8dff-4ae7-a82c-7b861ab05a7b'", who = 'Xing Brew')
+implement(id = 'repeat_hh_id_32338a6c-29b4-4e19-8476-916fdb54848d,78c379a5-b886-490e-8f19-b1c766077f31', query = "DELETE FROM clean_minicensus_main WHERE instance_id='32338a6c-29b4-4e19-8476-916fdb54848d'", who = 'Xing Brew')
+implement(id = 'repeat_hh_id_eafbc597-74ca-4dbc-84e5-4529ff3d5a15,fcdda43d-821f-4fda-bfbc-ed94cb7fa0ba', query = "DELETE FROM clean_minicensus_main WHERE instance_id='eafbc597-74ca-4dbc-84e5-4529ff3d5a15'", who = 'Xing Brew')
+implement(id = 'repeat_hh_id_0462b38a-738b-4bef-baad-7157b4368790,7207712b-c086-4b04-ad4b-2bc85f9065ea', query = "DELETE FROM clean_minicensus_main WHERE instance_id='0462b38a-738b-4bef-baad-7157b4368790'", who = 'Xing Brew')
+implement(id = 'repeat_hh_id_2f9f04fd-b9a2-45e7-ab66-62c647ed350a,a0bdbe89-b911-4e15-b1de-adc3fd90fa00', query = "DELETE FROM clean_minicensus_main WHERE instance_id='2f9f04fd-b9a2-45e7-ab66-62c647ed350a'", who = 'Xing Brew')
+implement(id = 'repeat_hh_id_2b0e0656-6be8-4fd5-a97a-74b9cb544a2b,ca0a830a-cb97-4e89-a8f5-a9ed940de44b', query = "DELETE FROM clean_minicensus_main WHERE instance_id='2b0e0656-6be8-4fd5-a97a-74b9cb544a2b'", who = 'Xing Brew')
 
 
 # TZA
