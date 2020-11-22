@@ -685,7 +685,7 @@ app_server <- function(input, output, session) {
     # Load data     
     li <- session_info$logged_in
     if(li){
-      out <- load_odk_data(local = is_local, the_country = the_country)
+      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE)
       odk_data$data <- out
       
       # Get anomalies
