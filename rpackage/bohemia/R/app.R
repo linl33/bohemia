@@ -9,6 +9,7 @@
 #' @import gt
 #' @import sp
 #' @import DT
+#' @import mapview
 #' @import stplanr
 #' @import osmextract
 #' @import lubridate
@@ -3091,49 +3092,20 @@ app_server <- function(input, output, session) {
   })
   
   # TRACCAR GPS UI
-  output$traccar_plot_1 <- renderPlot({
-    # ggplot() +
-    #   theme_bohemia() +
-    #   labs(title = 'Undergoing changes')
+  output$traccar_plot_1 <- renderLeaflet({
+    
     # Get the traccar data for that country
     traccar <- session_data$traccar
-    # Get the fortified shapefile
-    shp_fortified <- bohemia::mop2_fortified
-    geo <- input$geo
-    if(geo == 'Rufiji'){
-      shp_fortified <- bohemia::ruf2_fortified
-    }
-    ggplot() +
-      geom_polygon(data = shp_fortified,
-                   aes(x = long,
-                       y = lat,
-                       group = group),
-                   fill = 'black') +
-      # geom_path(aes(x = longitude,
-      #               y = latitude,
-      #               group = unique_id),
-      #           color = 'red',
-      #           size = 0.2,
-      #           alpha = 0.5) +
-      geom_point(data = traccar,
-                 aes(x = longitude,
-                     y = latitude),
-                 color = 'red',
-                 size = 0.2,
-                 alpha = 0.5) +
-      theme_bohemia()
-  })
-  output$traccar_leaf <- renderLeaflet({
-    # leaflet() %>% addTiles()
-    # Get the traccar data for that country
-    traccar <- session_data$traccar
-    the_worker <- input$fid
-    # save(traccar, file='temp_traccar.rda')
-    if(!is.null(the_worker)){
-      sub_traccar <- traccar %>% filter(unique_id == the_worker)
+    date_slider <- input$gps_slider
+    save(traccar, file='temp_traccar.rda')
+    save(date_slider, file='temp_date.rda')
+    
+    if(!nrow(traccar)==0 | !is.null(date_slider)){
       # get date 
-      sub_traccar$date <- as.Date(sub_traccar$devicetime, 'EST')
-      points_to_line <- function(data, group = "date"){
+      traccar$date <- as.Date(traccar$devicetime, 'EST')
+      traccar <- traccar %>% filter(date >= date_slider[1], 
+                                    date <= date_slider[2])
+      points_to_line <- function(data, group = "unique_id"){
         data <- data %>% 
           group_by_at(group) %>%
           summarise(do_union = FALSE) %>%
@@ -3141,20 +3113,42 @@ app_server <- function(input, output, session) {
           ungroup 
       }
       
-      pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line()
-      pts$groups <- stplanr::rnet_group(pts, igraph::cluster_fast_greedy)
+      pts = st_as_sf(data.frame(traccar), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line()
+      pts$unique_id <- as.character(pts$unique_id)
+      # pts <- pts[-15,]
+      # pts$groups <- stplanr::rnet_group(pts)
       
     }
-    
-    
-    save(pts, file='temp_pts.rda')
+    # save(pts, file='temp_pts.rda')
     # Make the plot
     l <- mapview::mapview()
-    if(nrow(sub_traccar) > 0){
-      l <- mapview::mapview(pts["groups"])
+    if(nrow(traccar) > 0){
+      l <- mapview::mapview(pts["unique_id"])
       
     }
     l@map
+  })
+  output$traccar_leaf <- renderLeaflet({
+    # leaflet() %>% addTiles()
+    # Get the traccar data for that country
+    traccar <- session_data$traccar
+    the_worker <- input$fid
+    if(!is.null(the_worker)){
+      sub_traccar <- traccar %>% filter(unique_id == the_worker)
+      pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
+    }
+    # Make the plot
+    l <- leaflet() %>%
+      addTiles()
+    if(nrow(sub_traccar) > 0){
+      l <- l %>%
+        addGlPoints(data = pts,
+                    fillColor = 'red',
+                    # fillColor = pts$status,
+                    popup = pts %>% dplyr::select(devicetime, valid),
+                    group = "pts")
+    }
+    l
   })
   
   
@@ -3206,7 +3200,10 @@ app_server <- function(input, output, session) {
     si <- session_info
     li <- si$logged_in
     ac <- TRUE
-    
+    pd <- odk_data$data
+    pd <- pd$minicensus_main
+    co <- country()
+    pd <- pd %>% filter(hh_country==co)
     # Generate the ui
     make_ui(li = li,
             ac = ac,
@@ -3215,13 +3212,21 @@ app_server <- function(input, output, session) {
               
               fluidPage(
                 fluidRow(h1('GPS tracking')),
+                fluidRow(
+                  column(12,
+                         sliderInput(inputId = 'gps_slider', 
+                                     label = 'Select dates', 
+                                     min = min(pd$todays_date), 
+                                     max=max(pd$todays_date), 
+                                     value = c(max(pd$todays_date) -1, max(pd$todays_date))))
+                ),
                 # fluidRow(column(12, align = 'center',
                 #                 h3('Live view'),
                 #                 uiOutput('traccar_live_view'))),
                 fluidRow(column(12, align = 'center',
                                 h3('Map of locations visited, last 7 days'),
                                 
-                                plotOutput('traccar_plot_1'))),
+                                leafletOutput('traccar_plot_1'))),
                 fluidRow((column(12, align = 'center',
                                  DT::dataTableOutput('traccar_table'))))
               )
