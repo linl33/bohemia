@@ -138,7 +138,27 @@ app_ui <- function(request) {
         tabItems(
           tabItem(
             tabName="main",
-            ui_main),
+            fluidPage(
+              fluidRow(column(12, align = 'center',
+                              h3('The Bohemia Data Portal'))),
+              fluidRow(box(width = 6, 
+                           column(12,
+                              plotOutput('landing_plot_1'),
+                              plotOutput('landing_plot_2'))),
+                       box(width = 6,
+                           column(12,
+                             div(tableOutput('landing_box_mini'),style='font-size:30px'),
+                             br(),
+                             div(tableOutput('landing_box_va'),style='font-size:30px'),
+                             br(),
+                             div(tableOutput('landing_box_error'),style='font-size:30px'),
+                             br(),
+                             div(tableOutput('landing_box_anom'),style='font-size:30px')
+                             
+                              ))
+                       )
+              )
+            ),
           tabItem(
             tabName = 'field_monitoring',
             tabsetPanel(tabPanel('Overview',
@@ -1055,6 +1075,119 @@ app_server <- function(input, output, session) {
   ###########################################################################
   
   # # Main UI ##########################################################
+
+  output$landing_plot_1 <- renderPlot({
+    pd <- odk_data$data
+    if(is.null(pd)){
+      NULL
+    } else {
+      pd <- pd$minicensus_main
+      plot_data <- pd %>% group_by(todays_date) %>% summarise(num_forms = n()) %>%
+        mutate(cum_forms = cumsum(num_forms))
+      ggplot(plot_data, aes(todays_date, cum_forms)) +
+        geom_point() +
+        geom_line() + 
+        labs(x='Date',
+             y= 'Number of forms',
+             title = 'Cumulative minicensus forms') +
+        theme_bohemia()
+    }
+    
+  })
+  
+  output$landing_plot_2 <- renderPlot({
+    
+    an <- session_data$anomalies
+
+    if(is.null(an) | nrow(an)==0){
+      NULL
+    } else {
+      plot_data <- an %>% group_by(date) %>% summarise(sum_error = sum(type == 'error', na.rm = TRUE),
+                                                       sum_anomaly = sum(type == 'anomaly', na.rm = TRUE)) %>%
+        gather(key = key, value=value, -date)
+      ggplot(plot_data, aes(date, value, fill = key)) +
+        geom_bar(position='dodge', stat='identity', alpha = 0.75) +
+        scale_fill_manual(name = '',
+                          label = c('# of Anomalies', '# of Errors'),
+                          values = c('black', 'grey')) +
+        labs(x='Date',
+             y= '#',
+             title = 'Errors and Anomalies') +
+        theme_bohemia() +
+        theme(legend.position="bottom")
+    }
+    
+  })
+  
+  output$landing_box_mini <- renderTable({
+    pd <- odk_data$data
+    if(is.null(pd)){
+      NULL
+    } else {
+      save(pd, file='odk_data_table.rda')
+      pd <- pd$minicensus_main
+      forms_complete <- nrow(pd)
+      date_today <- Sys.Date()
+      seconds_in_day <- 86400
+      forms_complete_24_hours <- pd %>% filter(end_time >= Sys.time() - (seconds_in_day))
+      forms_complete_24_hours <- nrow(forms_complete_24_hours)
+      title_text <- paste0('Minicensus forms finished: ', forms_complete)
+      sub_title_text <- paste0('Last 24 hours: ', forms_complete_24_hours)
+     return(tibble(` ` = title_text,
+                          `  `= sub_title_text))
+    }
+  })
+  
+  output$landing_box_va <- renderTable({
+    pd <- odk_data$data
+    if(is.null(pd)){
+      NULL
+    } else {
+      pd <- pd$va
+      forms_complete <- nrow(pd)
+      date_today <- Sys.Date()
+      seconds_in_day <- 86400
+      forms_complete_24_hours <- pd %>% filter(todays_date >= Sys.time() - (seconds_in_day))
+      forms_complete_24_hours <- nrow(forms_complete_24_hours)
+      title_text <- paste0('VA forms finished: ', forms_complete)
+      sub_title_text <- paste0('Last 24 hours: ', forms_complete_24_hours)
+      return(tibble(` ` = title_text,
+                    `  `= sub_title_text))
+    }
+  })
+  # 
+  # 
+  output$landing_box_error <- renderTable({
+    an <- session_data$anomalies
+    if(is.null(an) | nrow(an)==0){
+      NULL
+    } else {
+      seconds_in_day <- 86400
+      total_errors <- length(which(an$type=='error'))
+      total_errors_24 <- length(which(an$type=='error' & an$date>= Sys.time() - (seconds_in_day)))
+      title_text <- paste0('Total errors reported: ', total_errors)
+      sub_title_text <- paste0('Last 24 hours: ', total_errors_24)
+      return(tibble(` ` = title_text,
+                    `  `= sub_title_text))
+    }
+  })
+  
+  output$landing_box_anom <- renderTable({
+    an <- session_data$anomalies
+    if(is.null(an) | nrow(an)==0){
+      NULL
+    } else {
+      seconds_in_day <- 86400
+      total_anom <- length(which(an$type=='anomaly'))
+      total_anom_24 <- length(which(an$type=='anomaly' & an$date>= Sys.time() - (seconds_in_day)))
+      title_text <- paste0('Total anomalies reported: ', total_anom)
+      sub_title_text <- paste0('Last 24 hours: ', total_anom_24)
+      return(tibble(` ` = title_text,
+                    `  `= sub_title_text))
+    }
+  })
+ 
+  
   
   output$main_plot <- renderPlot({
     shp <- bohemia::mop2
@@ -1104,7 +1237,7 @@ app_server <- function(input, output, session) {
     # get data
     indic <- input$indicator_time
     pd <- odk_data$data
-    # save(pd, file='odk_data.rda')
+    save(pd, file='odk_data.rda')
     pd_people <- pd$minicensus_people
     pd <- pd$minicensus_main
     
@@ -1164,6 +1297,9 @@ app_server <- function(input, output, session) {
     }
   })
   
+  
+  
+
   # Field monitoring UI  #############################################
   field_monitoring_geo <- reactiveVal('Ward')
   output$ui_field_monitoring_by <- renderUI({
@@ -1402,6 +1538,7 @@ app_server <- function(input, output, session) {
     }
     return(out)
   })
+  
   
   # Map of progress by geography
   output$leaf_lx <- renderLeaflet({
