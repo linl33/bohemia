@@ -2480,12 +2480,12 @@ app_server <- function(input, output, session) {
               va <- odk_data$data$va
               # save(va, pd, co, deaths, file = '/tmp/tmp.RData')
               
-              grouper <- 'district'
+              # grouper <- 'district'
               
               va_progress <- deaths %>%
                 left_join(pd) %>%
                 filter(!is.na(hamlet)) %>%
-                group_by_(grouper) %>%
+                # group_by_(grouper) %>%
                 summarise(`VA forms collected` = nrow(va),
                           `Deaths reported` = n()) %>%
                 mutate(`% VA forms completed` = round(`VA forms collected` / 
