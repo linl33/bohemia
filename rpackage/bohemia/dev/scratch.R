@@ -23,3 +23,6 @@ corrections_sub <- corrections
 corrections_sub$is_in <- corrections_sub$id %in% anomalies$id
 
 corrections_sub %>% filter(!is_in) %>% View
+
+x = anomalies %>%
+  left_join(corrections)
