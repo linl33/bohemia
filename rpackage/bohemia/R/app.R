@@ -1810,7 +1810,7 @@ app_server <- function(input, output, session) {
     
     # Get the odk data
     pd <- odk_data$data
-    # save(pd, file='/tmp/temp_odk_dat.rda')
+    # save(pd, file='/tmp/temp_ odk_dat.rda')
     enum <- pd$enumerations
     va <- pd$va
     ref <- pd$refusals
@@ -1856,7 +1856,7 @@ app_server <- function(input, output, session) {
         mutate(end_time = lubridate::as_datetime(end_time))
       if(nrow(an) > 0){
         an$date <- as.Date(an$date, format='%Y-%m-%d')
-        an <- an %>% filter(as.character(wid==who))
+        an <- an %>% filter(as.character(wid)==who)
         num_anomaly <- length(which(an$type=='anomaly'))
         num_error <- length(which(an$type=='error'))
       } else {
@@ -2514,11 +2514,13 @@ app_server <- function(input, output, session) {
               
               # Get the overall va progress table
               pd <- odk_data$data
+              va <- pd$va
+              deaths <- pd$minicensus_repeat_death_info
               pd <- pd$minicensus_main
               co <- country()
+              save(pd, va, deaths, file = '/tmp/va.RData')
               pd <- pd %>%
                 filter(hh_country == co)
-              deaths <- odk_data$data$minicensus_repeat_death_info
               
               deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
                                           !is.na(death_number))
@@ -2529,9 +2531,10 @@ app_server <- function(input, output, session) {
                               hamlet = hh_hamlet, instance_id)
               
               grouper <- input$va_monitor_by
+              save(grouper, file = '/tmp/grouper.RData')
               
               
-              va <- odk_data$data$va
+              
               # Get location in va
               va <- va %>%
                 mutate(code = substr(hh_id, 1, 3)) %>%
@@ -2821,7 +2824,7 @@ app_server <- function(input, output, session) {
               enumerations <- pd$enumerations
               va <- pd$va
               pd <- pd$minicensus_main
-              # save(pd, co, an, va, file = '/tmp/pd.RData')
+              # save(pd, co, an,enumerations, va, file = '/tmp/pd.RData')
               
               # pd <- pd %>% filter(hh_country == co)
               
@@ -2869,7 +2872,8 @@ app_server <- function(input, output, session) {
                 
                 time_period <- input$fw_time_period
                 if(is.null(time_period)){
-                  time_period <- c(min(pd$todays_date), max(pd$todays_date))
+                  time_period <- c(min_date,
+                                   max_date)
                 } 
                 time_range <- time_period
                 an <- an %>% group_by(wid = as.character(wid)) %>% 
@@ -2892,42 +2896,62 @@ app_server <- function(input, output, session) {
                     summarise(num_va = n())
                 }
                 
+                # Get all fieldworkers
+                left <- 
+                  sub_fids %>%
+                  dplyr::rename(wid = bohemia_id) %>%
+                  dplyr::select(-country) %>%
+                  mutate(wid = as.character(wid))
+                
                 if(nrow(va) > 0){
-                  pd <- left_join(pd %>% mutate(wid = as.character(wid)), va, by ='wid')
+                  left <- left %>% left_join(va, by = 'wid')
                 } else {
-                  pd <- pd %>% mutate(num_va = 0)
+                  left <- left %>% mutate(num_va = 0)
                 }
                 if(nrow(enumerations) > 0){
-                  pd <- pd %>% left_join(enumerations, by ='wid')
+                  left <- left %>% left_join(enumerations, by = 'wid')
                 } else {
-                  pd <- pd %>% mutate(num_enumerations = 0)
+                  left <- left %>% mutate(num_enumerations = 0)
                 }
                 if(nrow(an) > 0){
-                  pd <- pd %>% left_join(an, by ='wid')
+                  left <- left %>% left_join(an, by ='wid')
                 } else {
-                  pd <- pd %>% mutate(
+                  left <- left %>% mutate(
                     num_anomalies = 0,
                     num_errors = 0
                   )
                 }
-                 
                 
-                fwt_daily <- pd %>%
+                right <- 
+                  pd %>%
                   mutate(fw_name = paste0(first_name, ' ', last_name)) %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   filter(todays_date >= time_range[1],
                          todays_date <=time_range[2])%>%
-                  group_by(`FW ID` = wid,
-                           FW = fw_name,
-                           `Supervisor` = supervisor) %>%
+                  group_by(wid = as.character(wid)) %>%
                   summarise(`Minicensus forms` = n(),
                             `Average time per minicensus form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `% rolling target (minicensus)` = (`Minicensus forms` / n_days) / daily_forms_fw * 100,
-                            `Enumeration forms` = dplyr::first(num_enumerations),
-                            `VA forms` = dplyr::first(num_va),
-                            `# of anomalies` = dplyr::first(num_anomalies),
-                            `# of errors` = dplyr::first(num_errors)) 
+                            `% rolling target (minicensus)` = (`Minicensus forms` / n_days) / daily_forms_fw * 100) 
+                
+                 
+                make_na <- function(x){ifelse(is.na(x), 0, x)}
+                fwt_daily <-left_join(left, right) %>%
+                  mutate(num_enumerations = make_na(num_enumerations),
+                         num_va = make_na(num_va),
+                         num_anomalies = make_na(num_anomalies),
+                         num_errors = make_na(num_errors)) %>%
+                  mutate(fw = paste0(first_name, ' ', last_name)) %>%
+                  dplyr::select(`FW ID` = wid,
+                                `FW` = fw,
+                                Supervisor = supervisor,
+                                `Minicensus forms`,
+                                `Average time per minicensus form (minutes)`,
+                                `% rolling target (minicensus)`,
+                                `Enumeration forms` = num_enumerations,
+                                `VA forms` = num_va,
+                                `Anomalies` = num_anomalies,
+                                `Errors` = num_errors) 
                 
               }
               fluidPage(
