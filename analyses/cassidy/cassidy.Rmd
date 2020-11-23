@@ -1,0 +1,92 @@
+---
+title: "Cassidy ad-hoc"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = TRUE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+library(dplyr)
+library(bohemia)
+library(leaflet)
+```
+
+```{r}
+if('data.RData' %in% dir()){
+  load('data.RData')
+} else {
+  pd_moz <- load_odk_data(the_country = 'Mozambique',
+                    credentials_path = '../../credentials/credentials.yaml',
+                    users_path = '../../credentials/users.yaml')
+  pd_tza <- load_odk_data(the_country = 'Tanzania',
+                      credentials_path = '../../credentials/credentials.yaml',
+                      users_path = '../../credentials/users.yaml')
+  save(pd_moz,
+       pd_tza,
+       file = 'data.RData')
+}
+minicensus_main <- bind_rows(
+  pd_moz$minicensus_main,
+  pd_tza$minicensus_main
+)
+minicensus_people <- bind_rows(
+  pd_moz$minicensus_people,
+  pd_tza$minicensus_people
+)
+```
+
+```{r}
+people <- minicensus_people %>%
+  group_by(instance_id) %>%
+  summarise(n_residents = n(),
+            n_females = length(which(gender == 'female')),
+            n_children = length(which((Sys.Date() - as.Date(dob)) < (18 * 365.25) )))
+na_to_zero <- function(x){ifelse(is.na(x), 0, x)}
+houses <- minicensus_main %>%
+  dplyr::select(instance_id,
+                country = hh_country,
+                hh_n_cows_greater_than_1_year,
+                hh_n_cows_less_than_1_year,
+                hh_n_pigs_greater_than_6_weeks,
+                hh_n_pigs_less_than_6_weeks) %>%
+  mutate(hh_n_cows_greater_than_1_year = na_to_zero(hh_n_cows_greater_than_1_year),
+                hh_n_cows_less_than_1_year = na_to_zero(hh_n_cows_less_than_1_year),
+                hh_n_pigs_greater_than_6_weeks = na_to_zero(hh_n_pigs_greater_than_6_weeks),
+                hh_n_pigs_less_than_6_weeks = na_to_zero(hh_n_pigs_less_than_6_weeks))
+joined <- left_join(people, houses) %>%
+  mutate(any_cows = hh_n_cows_greater_than_1_year >0 | hh_n_cows_less_than_1_year > 0,
+         any_pigs = hh_n_pigs_greater_than_6_weeks >0 | hh_n_pigs_less_than_6_weeks > 0,
+         any_kids = n_children > 0)
+```
+
+
+```{r}
+out <- joined %>%
+  group_by(country) %>%
+  summarise(households = n(),
+            has_kids = length(which(any_kids)),
+            has_cows = length(which(any_cows)),
+            has_pigs = length(which(any_pigs)),
+            has_kids_and_cows = length(which(any_cows & any_kids)),
+            has_kids_but_not_cows = length(which(!any_cows & any_kids)),
+            has_cows_but_not_kids = length(which(any_cows & !any_kids)),
+            has_kids_and_pigs = length(which(any_pigs & any_kids)),
+            has_kids_but_not_pigs = length(which(!any_pigs & any_kids)),
+            has_pigs_but_not_kids = length(which(any_pigs & !any_kids)))
+out <- tidyr::gather(out, key = key, value = value, households:has_pigs_but_not_kids) %>%
+  tidyr::spread(key = country, value = value) %>%
+  mutate(key = gsub('_', ' ', key))
+bohemia::prettify(out, nrows = nrow(out))
+```

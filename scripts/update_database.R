@@ -435,11 +435,13 @@ library(dplyr)
 data_moz <- load_odk_data(the_country = 'Mozambique', 
                           credentials_path = '../credentials/credentials.yaml',
                           users_path = '../credentials/users.yaml',
-                          local = is_local)
+                          local = is_local,
+                          efficient = FALSE)
 data_tza <- load_odk_data(the_country = 'Tanzania', 
                           credentials_path = '../credentials/credentials.yaml',
                           users_path = '../credentials/users.yaml',
-                          local = is_local)
+                          local = is_local,
+                          efficient = FALSE)
 # Run anomaly detection
 anomalies_moz <- identify_anomalies_and_errors(data = data_moz,
                                                anomalies_registry = bohemia::anomaly_and_error_registry,
@@ -452,11 +454,14 @@ anomalies <- bind_rows(
   anomalies_tza %>% mutate(country = 'Tanzania')
 )
 anomalies$date <- as.Date(anomalies$date)
-# Drop old anomalies and add these ones to the database
-# dbSendQuery(conn = con,
-#             statement = 'DELETE FROM anomalies;')
-# dbSendQuery(conn = con,
-#             statement = 'DROP FROM anomalies CASCADE;')
+  # Drop old anomalies and add these ones to the database
+# however, we don't want to drop any old anomalies that have a correction already
+# associated (since we want to give the site "credit" for that)
+corrections <- dbGetQuery(conn = con, "SELECT * FROM corrections;")
+keep_these <- paste0('(', paste0("'", corrections$id, "'", collapse = ', '), ')', collapse = '')
+dbExecute(conn = con,
+          statement = paste0('DELETE FROM anomalies WHERE id NOT IN ', keep_these, ';'))
+
 already_in <- dbGetQuery(conn = con, 'select id from anomalies;')
 
 anomalies <- anomalies %>% filter(!duplicated(id),
