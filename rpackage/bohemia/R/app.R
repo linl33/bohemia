@@ -2148,6 +2148,101 @@ app_server <- function(input, output, session) {
               )
             })
   })
+  
+  output$plot_individual_time_matrix <- renderPlot({
+
+    # Get the odk data
+    pd <- odk_data$data
+    enum <- pd$enumerations
+    # refs <- pd$refusals
+    va <- pd$va
+    pd <- pd$minicensus_main
+    co <- country()
+    pd <- pd %>% filter(hh_country == co)
+    
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      who <- input$fid
+      if(is.null(who)){
+        who <- 0 
+      }
+      save(pd, co, pd_ok, enum, refs, va, who, file = '/tmp/time_matrix.RData')
+      plot_data <- 
+        bind_rows(
+          pd %>% filter(wid == who) %>% dplyr::select(start_time, end_time) %>% mutate(Form = 'Minicensus'),
+          enum %>% filter(wid == who) %>% dplyr::select(start_time, end_time) %>% mutate(Form = 'Enumerations'),
+          # refs %>% filter(wid == who) %>% mutate(Form = 'Refusals'),
+          va %>% filter(wid == who) %>% dplyr::select(start_time, end_time) %>% mutate(Form = 'VA'),
+        )
+      if(nrow(plot_data) > 0){
+        plot_data$time_taken <- plot_data$end_time - plot_data$start_time
+        units_taken <- attr(plot_data$time_taken, 'units')
+        plot_data$date <- as.Date(plot_data$start_time)
+        plot_data$end_date <- as.Date(plot_data$end_time)
+        plot_data$start_val <- lubridate::hour(plot_data$start_time) +
+          (lubridate::minute(plot_data$start_time)/60)
+        plot_data$end_val <- lubridate::hour(plot_data$end_time) +
+          (lubridate::minute(plot_data$end_time)/60)
+        plot_data$start_val <- round(plot_data$start_val, 1)
+        plot_data$end_val <- round(plot_data$end_val, 1)
+        plot_data$end_val <- ifelse(plot_data$end_val == plot_data$start_val,
+                                    plot_data$end_val + 0.1, plot_data$end_val)
+        plot_data$end_val <- ifelse(plot_data$end_date != plot_data$date,
+                                    24, plot_data$end_val)
+        expanded_list <- list()
+        for(i in 1:nrow(plot_data)){
+          print(i)
+          this_row <- plot_data[i,]
+          these_times <- seq(this_row$start_val, this_row$end_val, by = 0.1)
+          this_out <- tibble(times = these_times,
+                             Form = this_row$Form,
+                             date = this_row$date)
+          expanded_list[[i]] <- this_out
+        }
+        expanded <- bind_rows(expanded_list)
+        right <- expanded %>%
+          group_by(hour = times, Form, date) %>%
+          tally
+        
+        date_seq <- seq(min(plot_data$date),
+                        max(plot_data$date),
+                        by = 1)
+        left <- expand.grid(hour = seq(0, 24, by = 0.1),
+                            date = date_seq,
+                            Form = sort(unique(right$Form)))
+        joined <- left_join(left, right)# %>%
+          # mutate(n = ifelse(is.na(n), 0, n))
+        
+        g <- ggplot(data = joined,
+                    aes(x = hour,
+                        y = date,
+                        color = Form,
+                        size = n)) +
+          geom_point() +
+          theme_bohemia() +
+          scale_y_date(breaks = date_seq, labels = date_seq) +
+          labs(x = 'Hour of day',
+               y = 'Date') +
+          scale_size_area(name = 'Number of open forms')
+      
+      } else {
+        g <- NULL
+      }
+      
+    } else {
+      g <- NULL
+    }
+    return(g)
+    
+    
+    
+  })
+  
   output$ui_individual_out <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -2163,6 +2258,11 @@ app_server <- function(input, output, session) {
                          DT::dataTableOutput('table_individual_details')),
                   column(6,
                          tableOutput('table_individual_errors'))),
+                fluidRow(
+                  column(12,
+                         plotOutput('plot_individual_time_matrix',
+                                    height = '600px'))
+                ),
                 fluidRow(
                   column(6,
                          plotOutput('plot_individual_target')),
@@ -4001,7 +4101,7 @@ app_server <- function(input, output, session) {
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
               pd <- pd %>% dplyr::filter(hh_country == co)
-              save(pd, people, subs, co, people, file = '/tmp/joe.RData')
+              # save(pd, people, subs, co, people, file = '/tmp/joe.RData')
               # Get hh head
               out <- pd %>%
                 dplyr::mutate(num = as.character(hh_head_id)) %>%
