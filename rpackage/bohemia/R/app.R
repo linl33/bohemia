@@ -449,11 +449,11 @@ app_server <- function(input, output, session) {
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0'
-    fids1 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor) %>% dplyr::mutate(country = 'Tanzania')
+    fids1 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor, Role = details) %>% dplyr::mutate(country = 'Tanzania')
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130'
-    fids2 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor) %>% dplyr::mutate(country = 'Mozambique')
+    fids2 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor, Role = details) %>% dplyr::mutate(country = 'Mozambique')
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=179257508'
-    fids3 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor) %>% dplyr::mutate(country = 'Catalonia')
+    fids3 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor, Role = details) %>% dplyr::mutate(country = 'Catalonia')
     fids <- bind_rows(fids1, fids2, fids3)
     readr::write_csv(fids, '/tmp/fids.csv')
   } else {
@@ -2876,6 +2876,12 @@ app_server <- function(input, output, session) {
                                    max_date)
                 } 
                 time_range <- time_period
+                
+                seq_days <- seq(min(time_period), max(time_period), by = 1)
+                seq_days <- seq_days[!weekdays(seq_days) %in% c('Saturday', 'Sunday')]
+                n_days <- length(seq_days)
+                n_days <- ifelse(n_days < 1, 1, n_days)
+                
                 an <- an %>% group_by(wid = as.character(wid)) %>% 
                   filter(date >= time_range[1],
                          date <=time_range[2]) %>%
@@ -2945,6 +2951,7 @@ app_server <- function(input, output, session) {
                   dplyr::select(`FW ID` = wid,
                                 `FW` = fw,
                                 Supervisor = supervisor,
+                                Role,
                                 `Minicensus forms`,
                                 `Average time per minicensus form (minutes)`,
                                 `% rolling target (minicensus)`,
@@ -3994,7 +4001,7 @@ app_server <- function(input, output, session) {
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
               pd <- pd %>% dplyr::filter(hh_country == co)
-              # save(pd, co, people, file = '/tmp/joe.RData')
+              save(pd, people, subs, co, people, file = '/tmp/joe.RData')
               # Get hh head
               out <- pd %>%
                 dplyr::mutate(num = as.character(hh_head_id)) %>%
@@ -4034,10 +4041,7 @@ app_server <- function(input, output, session) {
                        icf_correct = 'Sim__ Não__',
                        reason_no_correct = '',
                        error_resolved = 'Sim__ Não__',
-                       verified_by = '') %>%
-                # Hide names
-                mutate(sub_name = ' ') %>%
-                mutate(person_name = ' ')
+                       verified_by = '') 
               
               verification_all <- input$verification_all
               if(!verification_all){
