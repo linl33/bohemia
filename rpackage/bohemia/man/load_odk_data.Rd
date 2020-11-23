@@ -8,7 +8,8 @@ load_odk_data(
   the_country = "Mozambique",
   credentials_path = "credentials/credentials.yaml",
   users_path = "credentials/users.yaml",
-  local = FALSE
+  local = FALSE,
+  efficient = TRUE
 )
 }
 \arguments{
