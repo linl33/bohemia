@@ -3119,7 +3119,6 @@ app_server <- function(input, output, session) {
       # pts$groups <- stplanr::rnet_group(pts)
       
     }
-    # save(pts, file='temp_pts.rda')
     # Make the plot
     l <- mapview::mapview()
     if(nrow(traccar) > 0){
