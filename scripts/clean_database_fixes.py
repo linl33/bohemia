@@ -228,8 +228,6 @@ implement(id = 'strange_hh_code_1e0e5093-ac9e-4f24-aedb-5c1fc18b9439', query = "
 implement(id = 'strange_wid_4eed4b20-6197-4694-9359-b19708e692bc', query = "UPDATE clean_minicensus_main SET wid='392' WHERE instance_id='4eed4b20-6197-4694-9359-b19708e692bc'", who = 'Jaume')
 implement(id = 'strange_wid_73cea41e-c35f-4d8a-823c-d3780e41c510', query = "UPDATE clean_minicensus_main SET wid='28' WHERE instance_id='73cea41e-c35f-4d8a-823c-d3780e41c510'", who = 'Jaume')
 
-
-## Joe, please confirm format for the following type of correction:
 iid = "'b1b160bd-8616-4a13-a001-903fd94daffa'"
 implement(id = 'repeat_hh_id_b1b160bd-8616-4a13-a001-903fd94daffa,e7263ebd-ae5e-4493-b053-b2148796507f', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";", who = 'Xing Brew')
 
