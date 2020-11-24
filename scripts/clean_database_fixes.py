@@ -268,31 +268,33 @@ implement(id = 'repeat_hh_id_36527774-d88c-4b97-8722-b881171ff77c,3be77a06-5646-
 implement(id = 'missing_wid_6de89fa4-8933-4486-931d-7fdb951c902b', query = "UPDATE clean_minicensus_main SET wid='80' WHERE instance_id='6de89fa4-8933-4486-931d-7fdb951c902b'")
 implement(id = 'missing_wid_a71799cc-e54c-473b-a279-1570c5a42b92', query = "UPDATE clean_minicensus_main SET wid='74' WHERE instance_id='a71799cc-e54c-473b-a279-1570c5a42b92'")
 
-iid = "'046297df-1517-43af-b670-30255b77807d,4595f8dc-235c-4f69-beac-f3c06b9ad9b2'"
+
+
+iid = "'046297df-1517-43af-b670-30255b77807d'"
 implement(id = 'repeat_hh_id_046297df-1517-43af-b670-30255b77807d,4595f8dc-235c-4f69-beac-f3c06b9ad9b2', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
-iid = "'04bc6d7c-578a-47e5-8f72-28a483c2fb3f,e607306d-f050-4fdf-94f2-eb5ff6d4db0d'"
+iid = "'e607306d-f050-4fdf-94f2-eb5ff6d4db0d'"
 implement(id = 'repeat_hh_id_04bc6d7c-578a-47e5-8f72-28a483c2fb3f,e607306d-f050-4fdf-94f2-eb5ff6d4db0d', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
-iid = "'18439bc9-963b-427f-b906-a21814454e27,84914d5a-f64c-4a47-9110-aca348d85fe5'"
+iid = "'84914d5a-f64c-4a47-9110-aca348d85fe5'"
 implement(id = 'repeat_hh_id_18439bc9-963b-427f-b906-a21814454e27,84914d5a-f64c-4a47-9110-aca348d85fe5', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
-iid = "'a68ac273-abe7-41a9-bc20-249d28d33be5,c2b36a0c-52c6-4119-8a49-d3957d67e941'"
+iid = "'c2b36a0c-52c6-4119-8a49-d3957d67e941'"
 implement(id = 'repeat_hh_id_a68ac273-abe7-41a9-bc20-249d28d33be5,c2b36a0c-52c6-4119-8a49-d3957d67e941', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
-iid = "'28e64506-5bbe-4717-8d2d-407498284d3b,322322bc-a12b-4794-9981-0d473aed210d'"
+iid = "'322322bc-a12b-4794-9981-0d473aed210d'"
 implement(id = 'repeat_hh_id_28e64506-5bbe-4717-8d2d-407498284d3b,322322bc-a12b-4794-9981-0d473aed210d', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
-iid = "'8513c270-934d-46a9-8b9d-c80fe7c2e974,3fca1b08-a60a-432a-ad7d-ebaafff4fe33'"
+iid = "'3fca1b08-a60a-432a-ad7d-ebaafff4fe33'"
 implement(id = 'repeat_hh_id_8513c270-934d-46a9-8b9d-c80fe7c2e974,3fca1b08-a60a-432a-ad7d-ebaafff4fe33', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
-iid = "'a47d41c9-6f77-4d41-a1fe-40d5cb327491,356ff91b-668e-4a82-849a-fb188f3fdeee'"
+iid = "'356ff91b-668e-4a82-849a-fb188f3fdeee'"
 implement(id = 'repeat_hh_id_a47d41c9-6f77-4d41-a1fe-40d5cb327491,356ff91b-668e-4a82-849a-fb188f3fdeee', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
-iid = "'94284e9b-ad61-496f-885e-b1741189d4a3,7844442f-2813-421f-a5d2-deff680a161c'"
+iid = "'7844442f-2813-421f-a5d2-deff680a161c'"
 implement(id = 'repeat_hh_id_94284e9b-ad61-496f-885e-b1741189d4a3,7844442f-2813-421f-a5d2-deff680a161c', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
-iid = "'04892ea2-e389-4f1c-bf91-54f56a15ae46,cd0e2222-3496-45f7-a603-85f9447ac233'"
+iid = "'cd0e2222-3496-45f7-a603-85f9447ac233'"
 implement(id = 'repeat_hh_id_04892ea2-e389-4f1c-bf91-54f56a15ae46,cd0e2222-3496-45f7-a603-85f9447ac233', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
 
