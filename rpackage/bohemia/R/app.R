@@ -11,14 +11,12 @@
 #' @import DT
 #' @import mapview
 #' @import stplanr
-#' @import osmextract
 #' @import lubridate
 #' @import mapview
 #' @import RPostgres
 #' @import yaml
 #' @import leafgl
 #' @import stplanr
-#' @import osmextract
 #' @import sf
 #' @import shinybusy
 #' @import ggrepel
