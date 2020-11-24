@@ -48,7 +48,7 @@ fixes = pd.DataFrame(data = iter(result), columns = result.keys())
 
 # Keep only those which aren't already done
 do_these = corrections[~corrections['id'].isin(fixes['id'])]
-show_these = do_these[['id', 'response_details', 'instance_id']]
+show_these = do_these[['resolved_by', 'submitted_at', 'id', 'response_details', 'instance_id']]
 show_these.to_csv('/tmp/show_these.csv') # to help human
 
 # Define function for implementing corrections
@@ -181,14 +181,8 @@ implement(id = 'no_va_id_76a3fecd-c548-40cb-837b-42f8d131d9f9', query = "UPDATE 
 implement(id = 'no_va_id_b3252dd2-0ad0-44aa-9e9c-eb0dfcae194a', query = "UPDATE clean_va SET death_id='DEX-261-701' WHERE instance_id='b3252dd2-0ad0-44aa-9e9c-eb0dfcae194a'")
 implement(id = 'no_va_id_27c848ea-5529-48a2-b0eb-fbf57b8ca289', query = "UPDATE clean_va SET death_id='DEX-292-701' WHERE instance_id='27c848ea-5529-48a2-b0eb-fbf57b8ca289'")
 implement(id = 'no_va_id_44f99f03-b0f8-4e06-b89b-383d820f53e5', query = "UPDATE clean_va SET death_id='EDU-014-701' WHERE instance_id='44f99f03-b0f8-4e06-b89b-383d820f53e5'")
-# implement(id = 'no_va_id_f754caea-0a7d-42c9-a6af-a52d18a1e8ae', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='f754caea-0a7d-42c9-a6af-a52d18a1e8ae'")
-# implement(id = 'no_va_id_bbdbf1a0-f892-49d7-b8d0-dc176042d734', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='bbdbf1a0-f892-49d7-b8d0-dc176042d734'")
-# implement(id = 'no_va_id_3bf921f9-dc51-4f88-baea-8f588074b7bf', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='3bf921f9-dc51-4f88-baea-8f588074b7bf'")
-# implement(id = 'no_va_id_d969f990-5e43-4e0a-8df9-e8c13ea78fa9', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='d969f990-5e43-4e0a-8df9-e8c13ea78fa9'")
 implement(id = 'no_va_id_cd6f20f7-b292-481d-af33-6a5b0cd41d5d', query = "UPDATE clean_va SET death_id='FFF-046-701' WHERE instance_id='cd6f20f7-b292-481d-af33-6a5b0cd41d5d'")
 implement(id = 'no_va_id_1bddf446-393d-42d7-b73a-3ded7b42f4b9', query = "UPDATE clean_va SET death_id='JSA-077-701' WHERE instance_id='1bddf446-393d-42d7-b73a-3ded7b42f4b9'")
-# implement(id = 'no_va_id_2c064504-fa15-4672-9815-ca9f9ca852c8', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='2c064504-fa15-4672-9815-ca9f9ca852c8'")
-# implement(id = 'no_va_id_f5912455-1921-4632-9007-45d8300e7f3e', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='f5912455-1921-4632-9007-45d8300e7f3e'")
 implement(id = 'no_va_id_83ce759a-3e04-49c1-9ddd-a2f1d73ffe47', query = "UPDATE clean_va SET death_id='LIE-018-701' WHERE instance_id='83ce759a-3e04-49c1-9ddd-a2f1d73ffe47'")
 implement(id = 'no_va_id_c25b68ed-503c-4113-911c-d4dc41026728', query = "UPDATE clean_va SET death_id='LIE-055-701' WHERE instance_id='c25b68ed-503c-4113-911c-d4dc41026728'")
 implement(id = 'no_va_id_1162212c-05d3-4303-afaf-1325d9a02b71', query = "UPDATE clean_va SET death_id='MAL-023-701' WHERE instance_id='1162212c-05d3-4303-afaf-1325d9a02b71'")
@@ -201,9 +195,6 @@ implement(id = 'no_va_id_62b578fe-2651-4fe1-a1d2-4ce7d8bac96e', query = "UPDATE 
 implement(id = 'no_va_id_a809e802-fa58-4d22-ba57-8d2b0000bb2a', query = "UPDATE clean_va SET death_id='MUR-092-701' WHERE instance_id='a809e802-fa58-4d22-ba57-8d2b0000bb2a'")
 implement(id = 'no_va_id_5e6a611c-8320-4915-8039-84e1d018eff0', query = "UPDATE clean_va SET death_id='MUR-059-701' WHERE instance_id='5e6a611c-8320-4915-8039-84e1d018eff0'")
 implement(id = 'no_va_id_c5caa4f7-ae42-45d9-a363-7f24a541807f', query = "UPDATE clean_va SET death_id='MUT-075-701' WHERE instance_id='c5caa4f7-ae42-45d9-a363-7f24a541807f'")
-# implement(id = 'no_va_id_e45d94f8-c4ce-4d8d-bfe2-20a9704a3863', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='e45d94f8-c4ce-4d8d-bfe2-20a9704a3863'")
-# implement(id = 'no_va_id_d5b4442c-af42-411c-ab25-5b2641681c52', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='d5b4442c-af42-411c-ab25-5b2641681c52'")
-# implement(id = 'no_va_id_ab45b465-93b8-4884-b03f-4615c5ea1af6', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='ab45b465-93b8-4884-b03f-4615c5ea1af6'")
 implement(id = 'no_va_id_f6c4ed2f-012a-4025-b8b5-e7d23ec8d06b', query = "UPDATE clean_va SET death_id='XAM-051-701' WHERE instance_id='f6c4ed2f-012a-4025-b8b5-e7d23ec8d06b'")
 implement(id = 'no_va_id_9a3207b7-6925-4441-b834-723ae93af283', query = "UPDATE clean_va SET death_id='ZVB-263-701' WHERE instance_id='9a3207b7-6925-4441-b834-723ae93af283'")
 implement(id = 'no_va_id_c6a098bb-55f8-4160-a6e5-5f2afbe9082e', query = "UPDATE clean_va SET death_id='ZVB-286-701' WHERE instance_id='c6a098bb-55f8-4160-a6e5-5f2afbe9082e'")
@@ -233,41 +224,79 @@ implement(id = 'strange_hh_code_bda16440-1171-4691-95a1-0e55527e0c33', query = "
 implement(id = 'strange_hh_code_c867866e-b703-4fe2-a9a7-50d31cfdea09', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='DEO', hh_village='Marruma', hh_hamlet='4 de Outubro' WHERE instance_id='c867866e-b703-4fe2-a9a7-50d31cfdea09'", who = 'Xing Brew')
 implement(id = 'strange_hh_code_cc891eb8-e320-4272-a490-ad8045dc1689', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma', hh_hamlet='Mifarinha' WHERE instance_id='cc891eb8-e320-4272-a490-ad8045dc1689'", who = 'Xing Brew')
 implement(id = 'strange_wid_enumerations_2939b05a-3bbe-4c1b-81fe-6eac54d47dc9', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='2939b05a-3bbe-4c1b-81fe-6eac54d47dc9'", who = 'Xing Brew')
-# jaume
-implement(id = 'no_va_id_bbdbf1a0-f892-49d7-b8d0-dc176042d734', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='bbdbf1a0-f892-49d7-b8d0-dc176042d734'", who = 'Jaume')
-implement(id = 'no_va_id_3bf921f9-dc51-4f88-baea-8f588074b7bf', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='3bf921f9-dc51-4f88-baea-8f588074b7bf'", who = 'Jaume')
-implement(id = 'no_va_id_d969f990-5e43-4e0a-8df9-e8c13ea78fa9', query = "UPDATE clean_va SET death_id='EDU-196-701' WHERE instance_id='d969f990-5e43-4e0a-8df9-e8c13ea78fa9'", who = 'Jaume')
-implement(id = 'no_va_id_2c064504-fa15-4672-9815-ca9f9ca852c8', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='2c064504-fa15-4672-9815-ca9f9ca852c8'", who = 'Jaume')
-implement(id = 'no_va_id_f5912455-1921-4632-9007-45d8300e7f3e', query = "UPDATE clean_va SET death_id='JSA-085-701' WHERE instance_id='f5912455-1921-4632-9007-45d8300e7f3e'", who = 'Jaume')
-implement(id = 'no_va_id_e45d94f8-c4ce-4d8d-bfe2-20a9704a3863', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='e45d94f8-c4ce-4d8d-bfe2-20a9704a3863'", who = 'Jaume')
-implement(id = 'no_va_id_d5b4442c-af42-411c-ab25-5b2641681c52', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='d5b4442c-af42-411c-ab25-5b2641681c52'", who = 'Jaume')
-implement(id = 'no_va_id_ab45b465-93b8-4884-b03f-4615c5ea1af6', query = "UPDATE clean_va SET death_id='NXG-013-701' WHERE instance_id='ab45b465-93b8-4884-b03f-4615c5ea1af6'", who = 'Jaume')
 implement(id = 'strange_hh_code_1e0e5093-ac9e-4f24-aedb-5c1fc18b9439', query = "UPDATE clean_minicensus_main SET hh_hamlet_code='MIF', hh_village='Marruma', hh_hamlet='Mifarinha' WHERE instance_id='1e0e5093-ac9e-4f24-aedb-5c1fc18b9439'", who = 'Jaume')
 implement(id = 'strange_wid_4eed4b20-6197-4694-9359-b19708e692bc', query = "UPDATE clean_minicensus_main SET wid='392' WHERE instance_id='4eed4b20-6197-4694-9359-b19708e692bc'", who = 'Jaume')
 implement(id = 'strange_wid_73cea41e-c35f-4d8a-823c-d3780e41c510', query = "UPDATE clean_minicensus_main SET wid='28' WHERE instance_id='73cea41e-c35f-4d8a-823c-d3780e41c510'", who = 'Jaume')
 
-## the instructions in the response_details do not make sense given the anomaly id in the following:
-#implement(id = 'cook_time_to_water_mismatch_87ce2b74-e8bc-4d77-9c73-05a70f3c9c5b', query = "UPDATE clean_minicensus_main SET ???='DEX-089-701' WHERE instance_id='87ce2b74-e8bc-4d77-9c73-05a70f3c9c5b'")
-#implement(id = 'missing_wid_va_83ce759a-3e04-49c1-9ddd-a2f1d73ffe47', query = "UPDATE clean_va_main SET wid='DEX-140-701' WHERE instance_id='83ce759a-3e04-49c1-9ddd-a2f1d73ffe47'")
-#implement(id = 'missing_wid_va_ea7fb4ca-ee7f-4fb3-abd9-f46fa0c63fff', query = "UPDATE clean_va_main SET wid='NXG-013-702' WHERE instance_id='ea7fb4ca-ee7f-4fb3-abd9-f46fa0c63fff'")
 
-## Joe, please confirm format for the following type of correction: 
-implement(id = 'repeat_hh_id_b1b160bd-8616-4a13-a001-903fd94daffa,e7263ebd-ae5e-4493-b053-b2148796507f', query = "DELETE FROM clean_minicensus_main WHERE instance_id='b1b160bd-8616-4a13-a001-903fd94daffa'", who = 'Xing Brew')
-implement(id = 'repeat_hh_id_f105ac83-1ef5-445a-ae5f-62f9e49a97c0,f3c073b4-e0b5-4027-9527-996861dd1b80', query = "DELETE FROM clean_minicensus_main WHERE instance_id='f3c073b4-e0b5-4027-9527-996861dd1b80'", who = 'Xing Brew')
-implement(id = 'repeat_hh_id_6d0a71d0-8dff-4ae7-a82c-7b861ab05a7b,f64247c8-cd98-4221-b7de-60d9d310b3a1', query = "DELETE FROM clean_minicensus_main WHERE instance_id='6d0a71d0-8dff-4ae7-a82c-7b861ab05a7b'", who = 'Xing Brew')
-implement(id = 'repeat_hh_id_32338a6c-29b4-4e19-8476-916fdb54848d,78c379a5-b886-490e-8f19-b1c766077f31', query = "DELETE FROM clean_minicensus_main WHERE instance_id='32338a6c-29b4-4e19-8476-916fdb54848d'", who = 'Xing Brew')
-implement(id = 'repeat_hh_id_eafbc597-74ca-4dbc-84e5-4529ff3d5a15,fcdda43d-821f-4fda-bfbc-ed94cb7fa0ba', query = "DELETE FROM clean_minicensus_main WHERE instance_id='eafbc597-74ca-4dbc-84e5-4529ff3d5a15'", who = 'Xing Brew')
-implement(id = 'repeat_hh_id_0462b38a-738b-4bef-baad-7157b4368790,7207712b-c086-4b04-ad4b-2bc85f9065ea', query = "DELETE FROM clean_minicensus_main WHERE instance_id='0462b38a-738b-4bef-baad-7157b4368790'", who = 'Xing Brew')
-implement(id = 'repeat_hh_id_2f9f04fd-b9a2-45e7-ab66-62c647ed350a,a0bdbe89-b911-4e15-b1de-adc3fd90fa00', query = "DELETE FROM clean_minicensus_main WHERE instance_id='2f9f04fd-b9a2-45e7-ab66-62c647ed350a'", who = 'Xing Brew')
-implement(id = 'repeat_hh_id_2b0e0656-6be8-4fd5-a97a-74b9cb544a2b,ca0a830a-cb97-4e89-a8f5-a9ed940de44b', query = "DELETE FROM clean_minicensus_main WHERE instance_id='2b0e0656-6be8-4fd5-a97a-74b9cb544a2b'", who = 'Xing Brew')
+## Joe, please confirm format for the following type of correction:
+iid = "'b1b160bd-8616-4a13-a001-903fd94daffa'"
+implement(id = 'repeat_hh_id_b1b160bd-8616-4a13-a001-903fd94daffa,e7263ebd-ae5e-4493-b053-b2148796507f', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";", who = 'Xing Brew')
+
+iid = "'f3c073b4-e0b5-4027-9527-996861dd1b80'"
+implement(id = 'repeat_hh_id_f105ac83-1ef5-445a-ae5f-62f9e49a97c0,f3c073b4-e0b5-4027-9527-996861dd1b80', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";", who = 'Xing Brew')
+
+iid = "'6d0a71d0-8dff-4ae7-a82c-7b861ab05a7b'"
+implement(id = 'repeat_hh_id_6d0a71d0-8dff-4ae7-a82c-7b861ab05a7b,f64247c8-cd98-4221-b7de-60d9d310b3a1', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";", who = 'Xing Brew')
+
+iid = "'32338a6c-29b4-4e19-8476-916fdb54848d'"
+implement(id = 'repeat_hh_id_32338a6c-29b4-4e19-8476-916fdb54848d,78c379a5-b886-490e-8f19-b1c766077f31', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";", who = 'Xing Brew')
+
+iid = "'eafbc597-74ca-4dbc-84e5-4529ff3d5a15'"
+implement(id = 'repeat_hh_id_eafbc597-74ca-4dbc-84e5-4529ff3d5a15,fcdda43d-821f-4fda-bfbc-ed94cb7fa0ba', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";", who = 'Xing Brew')
+
+iid = "'0462b38a-738b-4bef-baad-7157b4368790'"
+implement(id = 'repeat_hh_id_0462b38a-738b-4bef-baad-7157b4368790,7207712b-c086-4b04-ad4b-2bc85f9065ea', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";", who = 'Xing Brew')
+
+iid = "'2f9f04fd-b9a2-45e7-ab66-62c647ed350a'"
+implement(id = 'repeat_hh_id_2f9f04fd-b9a2-45e7-ab66-62c647ed350a,a0bdbe89-b911-4e15-b1de-adc3fd90fa00', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";", who = 'Xing Brew')
+
+iid = "'2b0e0656-6be8-4fd5-a97a-74b9cb544a2b'"
+implement(id = 'repeat_hh_id_2b0e0656-6be8-4fd5-a97a-74b9cb544a2b,ca0a830a-cb97-4e89-a8f5-a9ed940de44b', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";", who = 'Xing Brew')
+
 
 
 # TZA
 implement(id = 'strange_wid_5f466226-1d75-40a9-97fc-5e8cd84448c9', query = "UPDATE clean_minicensus_main SET wid='37' WHERE instance_id='5f466226-1d75-40a9-97fc-5e8cd84448c9'")
 implement(id = 'missing_wid_23632449-cb8d-4ea2-a705-4d9f145b352c', query = "UPDATE clean_minicensus_main SET wid='80' WHERE instance_id='23632449-cb8d-4ea2-a705-4d9f145b352c'")
 implement(id = 'missing_wid_ee4aca39-2370-49c2-a01e-a295638038e9', query = "UPDATE clean_minicensus_main SET wid='14' WHERE instance_id='ee4aca39-2370-49c2-a01e-a295638038e9'")
-implement(id = 'repeat_hh_id_564fe4e1-1978-4bc5-84b4-d80adb7a9bde,7ac74d0a-7eb9-4651-a2a6-ee7d8edd7059', query = "DELETE FROM clean_minicensus_main WHERE instance_id='7ac74d0a-7eb9-4651-a2a6-ee7d8edd7059'")
-implement(id = 'repeat_hh_id_36527774-d88c-4b97-8722-b881171ff77c,3be77a06-5646-49fe-9037-f0ff3bc40543', query = "DELETE FROM clean_minicensus_main WHERE instance_id='36527774-d88c-4b97-8722-b881171ff77c'")
+
+iid = "'7ac74d0a-7eb9-4651-a2a6-ee7d8edd7059'"
+implement(id = 'repeat_hh_id_564fe4e1-1978-4bc5-84b4-d80adb7a9bde,7ac74d0a-7eb9-4651-a2a6-ee7d8edd7059', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'36527774-d88c-4b97-8722-b881171ff77c'"
+implement(id = 'repeat_hh_id_36527774-d88c-4b97-8722-b881171ff77c,3be77a06-5646-49fe-9037-f0ff3bc40543', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+implement(id = 'missing_wid_6de89fa4-8933-4486-931d-7fdb951c902b', query = "UPDATE clean_minicensus_main SET wid='80' WHERE instance_id='6de89fa4-8933-4486-931d-7fdb951c902b'")
+implement(id = 'missing_wid_a71799cc-e54c-473b-a279-1570c5a42b92', query = "UPDATE clean_minicensus_main SET wid='74' WHERE instance_id='a71799cc-e54c-473b-a279-1570c5a42b92'")
+
+iid = "'046297df-1517-43af-b670-30255b77807d,4595f8dc-235c-4f69-beac-f3c06b9ad9b2'"
+implement(id = 'repeat_hh_id_046297df-1517-43af-b670-30255b77807d,4595f8dc-235c-4f69-beac-f3c06b9ad9b2', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'04bc6d7c-578a-47e5-8f72-28a483c2fb3f,e607306d-f050-4fdf-94f2-eb5ff6d4db0d'"
+implement(id = 'repeat_hh_id_04bc6d7c-578a-47e5-8f72-28a483c2fb3f,e607306d-f050-4fdf-94f2-eb5ff6d4db0d', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'18439bc9-963b-427f-b906-a21814454e27,84914d5a-f64c-4a47-9110-aca348d85fe5'"
+implement(id = 'repeat_hh_id_18439bc9-963b-427f-b906-a21814454e27,84914d5a-f64c-4a47-9110-aca348d85fe5', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'a68ac273-abe7-41a9-bc20-249d28d33be5,c2b36a0c-52c6-4119-8a49-d3957d67e941'"
+implement(id = 'repeat_hh_id_a68ac273-abe7-41a9-bc20-249d28d33be5,c2b36a0c-52c6-4119-8a49-d3957d67e941', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'28e64506-5bbe-4717-8d2d-407498284d3b,322322bc-a12b-4794-9981-0d473aed210d'"
+implement(id = 'repeat_hh_id_28e64506-5bbe-4717-8d2d-407498284d3b,322322bc-a12b-4794-9981-0d473aed210d', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'8513c270-934d-46a9-8b9d-c80fe7c2e974,3fca1b08-a60a-432a-ad7d-ebaafff4fe33'"
+implement(id = 'repeat_hh_id_8513c270-934d-46a9-8b9d-c80fe7c2e974,3fca1b08-a60a-432a-ad7d-ebaafff4fe33', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'a47d41c9-6f77-4d41-a1fe-40d5cb327491,356ff91b-668e-4a82-849a-fb188f3fdeee'"
+implement(id = 'repeat_hh_id_a47d41c9-6f77-4d41-a1fe-40d5cb327491,356ff91b-668e-4a82-849a-fb188f3fdeee', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'94284e9b-ad61-496f-885e-b1741189d4a3,7844442f-2813-421f-a5d2-deff680a161c'"
+implement(id = 'repeat_hh_id_94284e9b-ad61-496f-885e-b1741189d4a3,7844442f-2813-421f-a5d2-deff680a161c', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'04892ea2-e389-4f1c-bf91-54f56a15ae46,cd0e2222-3496-45f7-a603-85f9447ac233'"
+implement(id = 'repeat_hh_id_04892ea2-e389-4f1c-bf91-54f56a15ae46,cd0e2222-3496-45f7-a603-85f9447ac233', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
 
 dbconn.commit()
 cur.close()

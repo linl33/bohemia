@@ -1,0 +1,13 @@
+delete from corrections where id = 'no_va_id_bbdbf1a0-f892-49d7-b8d0-dc176042d734';
+delete from corrections where id = 'no_va_id_3bf921f9-dc51-4f88-baea-8f588074b7bf';
+delete from corrections where id = 'no_va_id_d969f990-5e43-4e0a-8df9-e8c13ea78fa9';
+delete from corrections where id = 'no_va_id_2c064504-fa15-4672-9815-ca9f9ca852c8';
+delete from corrections where id = 'no_va_id_f5912455-1921-4632-9007-45d8300e7f3e';
+delete from corrections where id = 'no_va_id_e45d94f8-c4ce-4d8d-bfe2-20a9704a3863';
+delete from corrections where id = 'no_va_id_d5b4442c-af42-411c-ab25-5b2641681c52';
+delete from corrections where id = 'no_va_id_ab45b465-93b8-4884-b03f-4615c5ea1af6';
+delete from corrections where id = 'strange_wid_4eed4b20-6197-4694-9359-b19708e692bc';
+delete from corrections where id = 'strange_wid_73cea41e-c35f-4d8a-823c-d3780e41c510';
+delete from corrections where id = 'cook_time_to_water_mismatch_87ce2b74-e8bc-4d77-9c73-05a70f3c9c5b';
+delete from corrections where id = 'missing_wid_va_83ce759a-3e04-49c1-9ddd-a2f1d73ffe47';
+delete from corrections where id = 'missing_wid_va_ea7fb4ca-ee7f-4fb3-abd9-f46fa0c63fff';
