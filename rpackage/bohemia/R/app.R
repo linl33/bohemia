@@ -3097,9 +3097,7 @@ app_server <- function(input, output, session) {
     # Get the traccar data for that country
     traccar <- session_data$traccar
     date_slider <- input$gps_slider
-    save(traccar, file='temp_traccar.rda')
-    save(date_slider, file='temp_date.rda')
-    
+
     if(!nrow(traccar)==0 | !is.null(date_slider)){
       # get date 
       traccar$date <- as.Date(traccar$devicetime, 'EST')
