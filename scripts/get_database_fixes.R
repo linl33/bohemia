@@ -10,7 +10,7 @@ is_local <- FALSE
 # load data from odk for both countries
 odk_data <- load_odk_data(credentials_path = '../credentials/credentials.yaml',
                           users_path = '../credentials/users.yaml',
-                          local = is_local)
+                          local = is_local, efficient = FALSE)
 
 # get corrections and fixes.
 corrections <- odk_data$corrections
@@ -34,3 +34,4 @@ subs <- odk_data$minicensus_repeat_hh_sub
 minicensus_main <- odk_data$minicensus_main
 people <- odk_data$minicensus_people
 subs <- odk_data$minicensus_repeat_hh_sub
+

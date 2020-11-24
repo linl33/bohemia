@@ -161,15 +161,10 @@ app_ui <- function(request) {
                                                                     uiOutput('ui_individual_out')
                                                                   )),
                                                          tabPanel('Aggregate data',
-                                                                  navbarPage('Fieldworkers tables',
-                                                                             tabPanel('Daily',
-                                                                                      fluidPage(
-                                                                                        uiOutput('ui_fw_time_period'),
-                                                                                        uiOutput('ui_fw_daily')
-                                                                                      )
-                                                                             ),
-                                                                             tabPanel('Overall',
-                                                                                      uiOutput('ui_fw_overall')))),
+                                                                  fluidPage(
+                                                                    uiOutput('ui_fw_time_period'),
+                                                                    uiOutput('ui_fw_daily')
+                                                                  )),
                                                          tabPanel('Dropouts',
                                                                   fluidRow(
                                                                     br() # drop out ui here
@@ -455,11 +450,11 @@ app_server <- function(input, output, session) {
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0'
-    fids1 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor) %>% dplyr::mutate(country = 'Tanzania')
+    fids1 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor, Role = details) %>% dplyr::mutate(country = 'Tanzania')
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130'
-    fids2 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor) %>% dplyr::mutate(country = 'Mozambique')
+    fids2 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor, Role = details) %>% dplyr::mutate(country = 'Mozambique')
     fids_url <- 'https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=179257508'
-    fids3 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor) %>% dplyr::mutate(country = 'Catalonia')
+    fids3 <- gsheet::gsheet2tbl(fids_url) %>% dplyr::select(bohemia_id, first_name, last_name, supervisor, Role = details) %>% dplyr::mutate(country = 'Catalonia')
     fids <- bind_rows(fids1, fids2, fids3)
     readr::write_csv(fids, '/tmp/fids.csv')
   } else {
@@ -686,7 +681,7 @@ app_server <- function(input, output, session) {
     # Load data     
     li <- session_info$logged_in
     if(li){
-      out <- load_odk_data(local = is_local, the_country = the_country)
+      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE)
       odk_data$data <- out
       
       # Get anomalies
@@ -1812,20 +1807,20 @@ app_server <- function(input, output, session) {
     }
   })
   
-  output$table_individual_details <- renderTable({
+  output$table_individual_details <- DT::renderDataTable({
     
     # Get the odk data
     pd <- odk_data$data
-    # save(pd, file='temp_odk_dat.rda')
+    # save(pd, file='/tmp/temp_ odk_dat.rda')
     enum <- pd$enumerations
     va <- pd$va
     ref <- pd$refusals
     pd <- pd$minicensus_main
     co <- country()
-    pd <- pd %>% filter(hh_country == co)
-    enum <- enum %>% filter(country==co)
-    va <- va %>% filter(the_country==co)
-    ref <- ref %>% filter(country==co)
+    # pd <- pd %>% filter(hh_country == co)
+    # enum <- enum %>% filter(country==co)
+    # va <- va %>% filter(the_country==co)
+    # ref <- ref %>% filter(country==co)
     min_date <- min(pd$todays_date, na.rm = TRUE)
     max_date <- max(pd$todays_date, na.rm = TRUE)
     seq_days <- seq(min_date, max_date, by = 1)
@@ -1856,12 +1851,13 @@ app_server <- function(input, output, session) {
         total_forms_fw <- 500
       }
       who <- input$fid
+      who <- as.character(who)
       
       pd <- pd %>%
         mutate(end_time = lubridate::as_datetime(end_time))
       if(nrow(an) > 0){
         an$date <- as.Date(an$date, format='%Y-%m-%d')
-        an <- an %>% filter(wid==who)
+        an <- an %>% filter(as.character(wid)==who)
         num_anomaly <- length(which(an$type=='anomaly'))
         num_error <- length(which(an$type=='error'))
       } else {
@@ -1870,14 +1866,14 @@ app_server <- function(input, output, session) {
       }
       
       if(is.null(who)){
-        who <- 0 
+        who <- '0'
       }
       
       id <- who
-      pd <- pd %>% filter(wid == id)
-      enum <- enum %>% filter(wid==id)
-      va <- va %>% filter(wid==id)
-      ref <- ref %>% filter(wid==id)
+      pd <- pd %>% filter(as.character(wid) == id)
+      enum <- enum %>% filter(as.character(wid)==id)
+      va <- va %>% filter(as.character(wid)==id)
+      ref <- ref %>% filter(as.character(wid)==id)
       
       last_upload <- as.character(max(pd$end_time, na.rm = TRUE))
       sup_name <- as.character(fids$supervisor[fids$bohemia_id == id])
@@ -1895,7 +1891,10 @@ app_server <- function(input, output, session) {
       num_ref = nrow(ref)
       
       # last_days <-paste0('Last ', time_period, ' days')
-      tibble(` ` = c('Supervisor','% of rolling minicensus target','% of total minicensus target','# of minicensus forms','# of enumeration forms','# of va forms','# of refusals','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), `   ` = c(sup_name, rolling_per, total_per, total_forms, num_enum, num_va, num_ref,num_anomaly, num_error,average_time, daily_work_hours))
+      bohemia::prettify(
+        tibble(` ` = c('Supervisor','% of rolling minicensus target','% of total minicensus target','# of minicensus forms','# of enumeration forms','# of va forms','# of refusals','# of anomalies', '# of errors','Average time/form', 'Daily work hours'), `   ` = c(sup_name, rolling_per, total_per, total_forms, num_enum, num_va, num_ref,num_anomaly, num_error,average_time, daily_work_hours)),
+        nrows = 11
+      )
     } else {
       NULL
     }
@@ -2150,6 +2149,113 @@ app_server <- function(input, output, session) {
               )
             })
   })
+  
+  output$plot_individual_time_matrix <- renderPlot({
+
+    # Get the odk data
+    pd <- odk_data$data
+    enum <- pd$enumerations
+    # refs <- pd$refusals
+    va <- pd$va
+    pd <- pd$minicensus_main
+    co <- country()
+    pd <- pd %>% filter(hh_country == co)
+    
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      who <- input$fid
+      if(is.null(who)){
+        who <- 0 
+      }
+      # save(pd, co, pd_ok, enum, refs, va, who, file = '/tmp/time_matrix.RData')
+      plot_data <- 
+        bind_rows(
+          pd %>% filter(wid == who) %>% dplyr::select(start_time, end_time) %>% mutate(Form = 'Minicensus'),
+          enum %>% filter(wid == who) %>% dplyr::select(start_time, end_time) %>% mutate(Form = 'Enumerations'),
+          # refs %>% filter(wid == who) %>% mutate(Form = 'Refusals'),
+          va %>% filter(wid == who) %>% dplyr::select(start_time, end_time) %>% mutate(Form = 'VA'),
+        )
+      if(nrow(plot_data) > 0){
+        plot_data$time_taken <- plot_data$end_time - plot_data$start_time
+        units_taken <- attr(plot_data$time_taken, 'units')
+        plot_data$date <- as.Date(plot_data$start_time)
+        plot_data$end_date <- as.Date(plot_data$end_time)
+        plot_data$start_val <- lubridate::hour(plot_data$start_time) +
+          (lubridate::minute(plot_data$start_time)/60)
+        plot_data$end_val <- lubridate::hour(plot_data$end_time) +
+          (lubridate::minute(plot_data$end_time)/60)
+        # plot_data$start_val <- round(plot_data$start_val, 1)
+        # plot_data$end_val <- round(plot_data$end_val, 1)
+        # plot_data$end_val <- ifelse(plot_data$end_val == plot_data$start_val,
+        #                             plot_data$end_val + 0.1, plot_data$end_val)
+        # plot_data$end_val <- ifelse(plot_data$end_date != plot_data$date,
+        #                             24, plot_data$end_val)
+        # expanded_list <- list()
+        # for(i in 1:nrow(plot_data)){
+        #   print(i)
+        #   this_row <- plot_data[i,]
+        #   these_times <- seq(this_row$start_val, this_row$end_val, by = 0.1)
+        #   this_out <- tibble(times = these_times,
+        #                      Form = this_row$Form,
+        #                      date = this_row$date)
+        #   expanded_list[[i]] <- this_out
+        # }
+        # expanded <- bind_rows(expanded_list)
+        # right <- expanded %>%
+        #   group_by(hour = times, Form, date) %>%
+        #   tally
+        # 
+        # date_seq <- seq(min(plot_data$date),
+        #                 max(plot_data$date),
+        #                 by = 1)
+        # left <- expand.grid(hour = seq(0, 24, by = 0.1),
+        #                     date = date_seq,
+        #                     Form = sort(unique(right$Form)))
+        # joined <- left_join(left, right)# %>%
+        #   # mutate(n = ifelse(is.na(n), 0, n))
+        # 
+        # g <- ggplot(data = joined,
+        #             aes(x = hour,
+        #                 y = date,
+        #                 color = Form,
+        #                 size = n)) +
+        #   geom_point() +
+        #   theme_bohemia() +
+        #   scale_y_date(breaks = date_seq, labels = date_seq) +
+        #   labs(x = 'Hour of day',
+        #        y = 'Date') +
+        #   scale_size_area(name = 'Number of open forms')
+      
+        g <- ggplot(data = plot_data,
+                    aes(x = start_val,
+                        xend = end_val,
+                        y = date,
+                        yend = date,
+                        color = Form)) +
+          geom_segment(size = 3,
+                       alpha = 0.6) +
+          theme_bohemia() +
+          labs(x = 'Time of day (24 hour clock)',
+               y = 'Date')
+        
+      } else {
+        g <- NULL
+      }
+      
+    } else {
+      g <- NULL
+    }
+    return(g)
+    
+    
+    
+  })
+  
   output$ui_individual_out <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -2162,9 +2268,14 @@ app_server <- function(input, output, session) {
               fluidPage(
                 fluidRow(
                   column(6,
-                         tableOutput('table_individual_details')),
+                         DT::dataTableOutput('table_individual_details')),
                   column(6,
                          tableOutput('table_individual_errors'))),
+                fluidRow(
+                  column(12,
+                         plotOutput('plot_individual_time_matrix',
+                                    height = '600px'))
+                ),
                 fluidRow(
                   column(6,
                          plotOutput('plot_individual_target')),
@@ -2482,12 +2593,12 @@ app_server <- function(input, output, session) {
               va <- odk_data$data$va
               # save(va, pd, co, deaths, file = '/tmp/tmp.RData')
               
-              grouper <- 'district'
+              # grouper <- 'district'
               
               va_progress <- deaths %>%
                 left_join(pd) %>%
                 filter(!is.na(hamlet)) %>%
-                group_by_(grouper) %>%
+                # group_by_(grouper) %>%
                 summarise(`VA forms collected` = nrow(va),
                           `Deaths reported` = n()) %>%
                 mutate(`% VA forms completed` = round(`VA forms collected` / 
@@ -2516,11 +2627,13 @@ app_server <- function(input, output, session) {
               
               # Get the overall va progress table
               pd <- odk_data$data
+              va <- pd$va
+              deaths <- pd$minicensus_repeat_death_info
               pd <- pd$minicensus_main
               co <- country()
+              save(pd, va, deaths, file = '/tmp/va.RData')
               pd <- pd %>%
                 filter(hh_country == co)
-              deaths <- odk_data$data$minicensus_repeat_death_info
               
               deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
                                           !is.na(death_number))
@@ -2531,9 +2644,10 @@ app_server <- function(input, output, session) {
                               hamlet = hh_hamlet, instance_id)
               
               grouper <- input$va_monitor_by
+              save(grouper, file = '/tmp/grouper.RData')
               
               
-              va <- odk_data$data$va
+              
               # Get location in va
               va <- va %>%
                 mutate(code = substr(hh_id, 1, 3)) %>%
@@ -2786,20 +2900,22 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
-              pd <- odk_data$data
-              pd <- pd$minicensus_main
-              co <- country()
-              # save(pd, file = '/tmp/pd.RData')
-              pd <- pd %>% filter(hh_country == co)
-              
+              # pd <- odk_data$data
+              # pd <- pd$minicensus_main
+              # co <- country()
+              # # save(pd, file = '/tmp/pd.RData')
+              # pd <- pd %>% filter(hh_country == co)
+              # 
+              start_at <- as.Date('2020-09-20')
+              end_at <- Sys.Date()
               fluidPage(
                 fluidRow(
                   column(6,
                          sliderInput(inputId = 'fw_time_period', 
                                      label = 'Previous days to include:', 
-                                     min = min(pd$todays_date), 
-                                     max=max(pd$todays_date), 
-                                     value = c(min(pd$todays_date), max(pd$todays_date))))
+                                     min = start_at, 
+                                     max=end_at, 
+                                     value = c(start_at, end_at)))
                 )
               ) 
             })
@@ -2818,15 +2934,15 @@ app_server <- function(input, output, session) {
               an <- session_data$anomalies
               
               co <- country()
-              # save(pd, co, an, file = '/tmp/pd.RData')
               enumerations <- pd$enumerations
               va <- pd$va
               pd <- pd$minicensus_main
+              # save(pd, co, an,enumerations, va, file = '/tmp/pd.RData')
               
-              pd <- pd %>% filter(hh_country == co)
+              # pd <- pd %>% filter(hh_country == co)
               
-              min_date <- min(pd$todays_date, na.rm = TRUE)
-              max_date <- max(pd$todays_date, na.rm = TRUE)
+              min_date <- as.Date('2020-09-20')   #min(pd$todays_date, na.rm = TRUE)
+              max_date <- Sys.Date() #  max(pd$todays_date, na.rm = TRUE)
               seq_days <- seq(min_date, max_date, by = 1)
               seq_days <- seq_days[!weekdays(seq_days) %in% c('Saturday', 'Sunday')]
               n_days <- length(seq_days)
@@ -2834,7 +2950,7 @@ app_server <- function(input, output, session) {
               if(nrow(an) > 0){
                 an$date <- as.Date(an$date, format = '%Y-%m-%d')
               }
-              # save(an, pd, co, file='/tmp/temp_an.rda')
+              # save(an, enumerations, pd, va, min_date, max_date, n_days, co, file='/tmp/temp_an.rda')
               
               pd_ok <- FALSE
               if(!is.null(pd)){
@@ -2869,9 +2985,16 @@ app_server <- function(input, output, session) {
                 
                 time_period <- input$fw_time_period
                 if(is.null(time_period)){
-                  time_period <- c(min(pd$todays_date), max(pd$todays_date))
+                  time_period <- c(min_date,
+                                   max_date)
                 } 
                 time_range <- time_period
+                
+                seq_days <- seq(min(time_period), max(time_period), by = 1)
+                seq_days <- seq_days[!weekdays(seq_days) %in% c('Saturday', 'Sunday')]
+                n_days <- length(seq_days)
+                n_days <- ifelse(n_days < 1, 1, n_days)
+                
                 an <- an %>% group_by(wid = as.character(wid)) %>% 
                   filter(date >= time_range[1],
                          date <=time_range[2]) %>%
@@ -2892,42 +3015,63 @@ app_server <- function(input, output, session) {
                     summarise(num_va = n())
                 }
                 
+                # Get all fieldworkers
+                left <- 
+                  sub_fids %>%
+                  dplyr::rename(wid = bohemia_id) %>%
+                  dplyr::select(-country) %>%
+                  mutate(wid = as.character(wid))
+                
                 if(nrow(va) > 0){
-                  pd <- left_join(pd %>% mutate(wid = as.character(wid)), va, by ='wid')
+                  left <- left %>% left_join(va, by = 'wid')
                 } else {
-                  pd <- pd %>% mutate(num_va = 0)
+                  left <- left %>% mutate(num_va = 0)
                 }
                 if(nrow(enumerations) > 0){
-                  pd <- pd %>% left_join(enumerations, by ='wid')
+                  left <- left %>% left_join(enumerations, by = 'wid')
                 } else {
-                  pd <- pd %>% mutate(num_enumerations = 0)
+                  left <- left %>% mutate(num_enumerations = 0)
                 }
                 if(nrow(an) > 0){
-                  pd <- pd %>% left_join(an, by ='wid')
+                  left <- left %>% left_join(an, by ='wid')
                 } else {
-                  pd <- pd %>% mutate(
+                  left <- left %>% mutate(
                     num_anomalies = 0,
                     num_errors = 0
                   )
                 }
-                 
                 
-                fwt_daily <- pd %>%
+                right <- 
+                  pd %>%
                   mutate(fw_name = paste0(first_name, ' ', last_name)) %>%
                   mutate(todays_date = as.Date(todays_date)) %>%
                   mutate(end_time = lubridate::as_datetime(end_time)) %>%
                   filter(todays_date >= time_range[1],
                          todays_date <=time_range[2])%>%
-                  group_by(`FW ID` = wid,
-                           FW = fw_name,
-                           `Supervisor` = supervisor) %>%
+                  group_by(wid = as.character(wid)) %>%
                   summarise(`Minicensus forms` = n(),
                             `Average time per minicensus form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `% rolling target (minicensus)` = (`Minicensus forms` / n_days) / daily_forms_fw * 100,
-                            `Enumeration forms` = sum(num_enumerations),
-                            `VA forms` = sum(num_va),
-                            `# of anomalies` = max(num_anomalies),
-                            `# of errors` = max(num_errors)) 
+                            `% rolling target (minicensus)` = (`Minicensus forms` / n_days) / daily_forms_fw * 100) 
+                
+                 
+                make_na <- function(x){ifelse(is.na(x), 0, x)}
+                fwt_daily <-left_join(left, right) %>%
+                  mutate(num_enumerations = make_na(num_enumerations),
+                         num_va = make_na(num_va),
+                         num_anomalies = make_na(num_anomalies),
+                         num_errors = make_na(num_errors)) %>%
+                  mutate(fw = paste0(first_name, ' ', last_name)) %>%
+                  dplyr::select(`FW ID` = wid,
+                                `FW` = fw,
+                                Supervisor = supervisor,
+                                Role,
+                                `Minicensus forms`,
+                                `Average time per minicensus form (minutes)`,
+                                `% rolling target (minicensus)`,
+                                `Enumeration forms` = num_enumerations,
+                                `VA forms` = num_va,
+                                `Anomalies` = num_anomalies,
+                                `Errors` = num_errors) 
                 
               }
               fluidPage(
@@ -2936,116 +3080,6 @@ app_server <- function(input, output, session) {
               ) 
             })
   })
-  output$ui_fw_overall <- renderUI({
-    # See if the user is logged in and has access
-    si <- session_info
-    li <- si$logged_in
-    ac <- TRUE
-    # Generate the ui
-    make_ui(li = li,
-            ac = ac,
-            ok = {
-              # Get the odk data
-              pd <- odk_data$data
-              co <- country()
-              # save(pd, co, an, file = '/tmp/pd.RData')
-              enumerations <- pd$enumerations
-              va <- pd$va
-              pd <- pd$minicensus_main
-              
-              pd <- pd %>% filter(hh_country == co)
-              
-              # save(pd, file = '/tmp/pd.RData')
-              pd <- pd %>% filter(hh_country == co)
-              
-              # get anomaly dataset
-              an <- session_data$anomalies %>%
-                mutate(date = as.Date(date, format = '%Y-%m-%d'))
-              pd_ok <- FALSE
-              if(!is.null(pd)){
-                if(nrow(pd) > 0){
-                  pd_ok <- TRUE
-                }
-              }
-              if(pd_ok){
-                # join fids with pd to ge supervisor info
-                # Get the fieldworkers for the country in question
-                co <- country()
-                sub_fids <- fids %>% filter(country == co)
-                pd <- left_join(pd %>% mutate(wid = as.character(wid)), 
-                                sub_fids %>% mutate(bohemia_id = as.character(bohemia_id)), by=c('wid'= 'bohemia_id')) %>%
-                  filter(!is.na(country)) %>%
-                  filter(country == co)
-                # Create fieldworkers table
-                pd$end_time <- lubridate::as_datetime(pd$end_time)
-                pd$start_time <- lubridate::as_datetime(pd$start_time)
-                pd$time <- pd$end_time - pd$start_time
-                
-                if(co=='Mozambique'){
-                  daily_forms_fw <- 10
-                  weekly_forms_fw <- daily_forms_fw*5
-                  total_forms_fw <- 500
-                } else {
-                  daily_forms_fw <- 13
-                  weekly_forms_fw <- daily_forms_fw*5
-                  total_forms_fw <- 599
-                }
-
-                an <- an %>% group_by(wid = as.character(wid)) %>% summarise(num_errors = sum(type=='error'),
-                                                         num_anomalies = sum(type == 'anomaly'))
-                if(nrow(an) > 0){
-                  pd <- pd %>% left_join(an, by ='wid')
-                } else {
-                  pd <- pd %>% mutate(
-                    num_anomalies = 0,
-                    num_errors = 0
-                  )
-                }
-                if(nrow(enumerations) > 0){
-                  enumerations <- enumerations %>% 
-                    group_by(wid = as.character(wid)) %>%
-                    summarise(num_enumerations = n())
-                }
-                if(nrow(va) > 0){
-                  va <- va %>% 
-                    group_by(wid = as.character(wid)) %>%
-                    summarise(num_va = n())
-                }
-                if(nrow(va) > 0){
-                  pd <- left_join(pd %>% mutate(wid = as.character(wid)), va, by ='wid')
-                } else {
-                  pd <- pd %>% mutate(num_va = 0)
-                }
-                if(nrow(enumerations) > 0){
-                  pd <- pd %>% left_join(enumerations, by ='wid')
-                } else {
-                  pd <- pd %>% mutate(num_enumerations = 0)
-                }
-                fwt_overall <-  pd %>%
-                  mutate(todays_date = as.Date(todays_date)) %>%
-                  mutate(fw_name = paste0(first_name, ' ', last_name)) %>%
-                  mutate(end_time = lubridate::as_datetime(end_time)) %>%
-                  group_by(`FW ID` = wid,
-                           `FW` = fw_name,
-                           `Supervisor` = supervisor) %>%
-                  summarise(`Minicensus forms` = n(),
-                            `Average time per form (minutes)` = round(mean(time, na.rm = TRUE), 1),
-                            `% complete total (minicensus)` = round(`Minicensus forms`/total_forms_fw * 100, digits = 2),
-                            `Enumeration forms` = sum(num_enumerations),
-                            `VA forms` = sum(num_va),
-                            `# of anomalies` = max(num_anomalies),
-                            `# of errors` = max(num_errors))
-                fwt_overall$`# of errors`[is.na(fwt_overall$`# of errors`)] <- 0
-                fwt_overall$`# of anomalies`[is.na(fwt_overall$`# of anomalies`)] <- 0
-                
-              }
-              fluidPage(
-                div(bohemia::prettify(fwt_overall, nrows = nrow(fwt_overall),
-                                  download_options = TRUE), style = "font-size:80%")
-              ) 
-            })
-  })
-  
   
   # Leaflet of fieldworkers
   output$fid_leaf <- renderLeaflet({
@@ -4043,7 +4077,7 @@ app_server <- function(input, output, session) {
               fluidPage(
                 dateRangeInput('verification_date_filter',
                                'Filter by date',
-                               start = as.Date('2020-09-01'),
+                               start = as.Date('2020-09-20'),
                                end = Sys.Date()))
               
             })
@@ -4092,7 +4126,7 @@ app_server <- function(input, output, session) {
               co <- input$geo
               co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
               pd <- pd %>% dplyr::filter(hh_country == co)
-              # save(pd, co, people, file = '/tmp/joe.RData')
+              # save(pd, people, subs, co, people, file = '/tmp/joe.RData')
               # Get hh head
               out <- pd %>%
                 dplyr::mutate(num = as.character(hh_head_id)) %>%
@@ -4132,10 +4166,7 @@ app_server <- function(input, output, session) {
                        icf_correct = 'Sim__ Não__',
                        reason_no_correct = '',
                        error_resolved = 'Sim__ Não__',
-                       verified_by = '') %>%
-                # Hide names
-                mutate(sub_name = ' ') %>%
-                mutate(person_name = ' ')
+                       verified_by = '') 
               
               verification_all <- input$verification_all
               if(!verification_all){
