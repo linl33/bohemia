@@ -141,21 +141,21 @@ app_ui <- function(request) {
             fluidPage(
               fluidRow(column(12, align = 'center',
                               h3('The Bohemia Data Portal'))),
-              fluidRow(box(width = 6, 
-                           column(12,
+              fluidRow(column(9,
                               plotOutput('landing_plot_1'),
-                              plotOutput('landing_plot_2'))),
-                       box(width = 6,
-                           column(12,
-                             div(tableOutput('landing_box_mini'),style='font-size:30px'),
-                             br(),
-                             div(tableOutput('landing_box_va'),style='font-size:30px'),
-                             br(),
-                             div(tableOutput('landing_box_error'),style='font-size:30px'),
-                             br(),
-                             div(tableOutput('landing_box_anom'),style='font-size:30px')
+                              plotOutput('landing_plot_2')),
+                       column(3,
+                             uiOutput('landing_box_mini'),
                              
-                              ))
+                             
+                             # br(),
+                             # div(tableOutput('landing_box_va'),style='font-size:30px'),
+                             # br(),
+                             # div(tableOutput('landing_box_error'),style='font-size:30px'),
+                             # br(),
+                             # div(tableOutput('landing_box_anom'),style='font-size:30px')
+                             
+                              )
                        )
               )
             ),
@@ -1119,94 +1119,86 @@ app_server <- function(input, output, session) {
     
   })
   
-  output$landing_box_mini <- renderTable({
+   
+  
+  output$landing_box_mini <- renderUI({
     pd <- odk_data$data
-    if(is.null(pd)){
+    an <- session_data$anomalies
+    if(is.null(pd) | is.null(an) | nrow(an)==0){
       NULL
     } else {
-      save(pd, file='odk_data_table.rda')
+      # look at corrections and fixes
+      co <- pd$corrections
+      fixes <- pd$fixes
+      # join co 
+      temp <- left_join(an, co, by='id')
+      
+      
+      # save(pd, file='odk_data_table.rda')
+      # get mini census info
+      va <- pd$va
       pd <- pd$minicensus_main
       forms_complete <- nrow(pd)
       date_today <- Sys.Date()
       seconds_in_day <- 86400
       forms_complete_24_hours <- pd %>% filter(end_time >= Sys.time() - (seconds_in_day))
       forms_complete_24_hours <- nrow(forms_complete_24_hours)
-      title_text <- paste0('Minicensus forms finished: ', forms_complete)
-      sub_title_text <- paste0('Last 24 hours: ', forms_complete_24_hours)
-     return(tibble(` ` = title_text,
-                          `  `= sub_title_text))
-    }
-  })
-  
-  output$landing_box_va <- renderTable({
-    pd <- odk_data$data
-    if(is.null(pd)){
-      NULL
-    } else {
-      pd <- pd$va
-      forms_complete <- nrow(pd)
-      date_today <- Sys.Date()
-      seconds_in_day <- 86400
-      forms_complete_24_hours <- pd %>% filter(todays_date >= Sys.time() - (seconds_in_day))
+      title_mini <- paste0('Minicensus forms finished: ', forms_complete)
+      sub_title_mini <- paste0('Last 24 hours: ', forms_complete_24_hours)
+      
+      # get va info
+      forms_complete <- nrow(va)
+      forms_complete_24_hours <- va %>% filter(todays_date >= Sys.time() - (seconds_in_day))
       forms_complete_24_hours <- nrow(forms_complete_24_hours)
-      title_text <- paste0('VA forms finished: ', forms_complete)
-      sub_title_text <- paste0('Last 24 hours: ', forms_complete_24_hours)
-      return(tibble(` ` = title_text,
-                    `  `= sub_title_text))
-    }
-  })
-  # 
-  # 
-  output$landing_box_error <- renderTable({
-    an <- session_data$anomalies
-    if(is.null(an) | nrow(an)==0){
-      NULL
-    } else {
-      seconds_in_day <- 86400
+      title_va <- paste0('VA forms finished: ', forms_complete)
+      sub_title_va <- paste0('Last 24 hours: ', forms_complete_24_hours)
+      
+      # get error info
       total_errors <- length(which(an$type=='error'))
       total_errors_24 <- length(which(an$type=='error' & an$date>= Sys.time() - (seconds_in_day)))
-      title_text <- paste0('Total errors reported: ', total_errors)
-      sub_title_text <- paste0('Last 24 hours: ', total_errors_24)
-      return(tibble(` ` = title_text,
-                    `  `= sub_title_text))
-    }
-  })
-  
-  output$landing_box_anom <- renderTable({
-    an <- session_data$anomalies
-    if(is.null(an) | nrow(an)==0){
-      NULL
-    } else {
-      seconds_in_day <- 86400
+      title_errors <- paste0('Total errors reported: ', total_errors)
+      sub_title_errors <- paste0('Last 24 hours: ', total_errors_24)
+      
+      # get anomaly info
       total_anom <- length(which(an$type=='anomaly'))
       total_anom_24 <- length(which(an$type=='anomaly' & an$date>= Sys.time() - (seconds_in_day)))
-      title_text <- paste0('Total anomalies reported: ', total_anom)
-      sub_title_text <- paste0('Last 24 hours: ', total_anom_24)
-      return(tibble(` ` = title_text,
-                    `  `= sub_title_text))
+      title_anom <- paste0('Total anomalies reported: ', total_anom)
+      sub_title_anom <- paste0('Last 24 hours: ', total_anom_24)
+      
+      fluidPage(
+        fluidRow(
+          infoBox(title = title_mini, subtitle = sub_title_mini, icon = icon("thumbs-up", lib = "glyphicon"),
+                  color = "yellow", fill = TRUE, width = '100px'),
+          infoBox(title = title_va, subtitle = sub_title_va, icon = icon("thumbs-up", lib = "glyphicon"),
+                  color = "yellow", fill = TRUE, width = '100px'),
+          infoBox(title = title_errors, subtitle = sub_title_errors, icon = icon("thumbs-up", lib = "glyphicon"),
+                  color = "yellow", fill = TRUE, width = '100px'),
+          infoBox(title = title_anom, subtitle = sub_title_anom, icon = icon("thumbs-up", lib = "glyphicon"),
+                  color = "yellow", fill = TRUE, width = '100px')
+        )
+      )
+      
     }
   })
- 
   
-  
-  output$main_plot <- renderPlot({
-    shp <- bohemia::mop2
-    geo <- input$geo
-    if(geo == 'Rufiji'){
-      shp <- bohemia::ruf2
-    }
-    # if(geo == 'Both'){
-    #   shp = rbind(ruf2, mop2)
-    #   coords <- coordinates(shp)
-    #   afr <- rbind(moz0, tza0)
-    #   plot(afr, col = adjustcolor('black', alpha.f = 1), border = NA)
-    #   plot(shp, col = 'red', add = T)
-    #   # points(coords, col = 'red', pch = 16)
-    #   lines(coords, col = 'red', lty =2)
-    # } else {
-    plot(shp, col = 'black')
-    # }
-  })
+  # output$main_plot <- renderPlot({
+  #   shp <- bohemia::mop2
+  #   geo <- input$geo
+  #   if(geo == 'Rufiji'){
+  #     shp <- bohemia::ruf2
+  #   }
+  #   # if(geo == 'Both'){
+  #   #   shp = rbind(ruf2, mop2)
+  #   #   coords <- coordinates(shp)
+  #   #   afr <- rbind(moz0, tza0)
+  #   #   plot(afr, col = adjustcolor('black', alpha.f = 1), border = NA)
+  #   #   plot(shp, col = 'red', add = T)
+  #   #   # points(coords, col = 'red', pch = 16)
+  #   #   lines(coords, col = 'red', lty =2)
+  #   # } else {
+  #   plot(shp, col = 'black')
+  #   # }
+  # })
   
   # sneak peek #############################################
   output$average_time <- renderPlot({
