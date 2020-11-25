@@ -89,3 +89,43 @@ decrypted <- decrypt_private_data(encrypted,
                                            keyfile = '../credentials/bohemia_priv.pem')
 print(decrypted)
 ```
+
+# How to Decrypt CSV File
+
+As a data manager, you can decrypt the data from a csv file by doing the following steps in your RStudio
+
+1. Open the file `decrypt_csv_data.R` it contains the following code snippet:
+
+```
+suppressMessages({
+    library(bohemia)
+})
+
+csv_file <- 'tmp/itemsets.csv'
+enc_columns <- list('fname','lname')
+keyfile <- 'rpackage/bohemia/bohemia_priv.pem'
+
+
+csv_contents <- read.csv(csv_file, TRUE, sep=',')
+enc_columns <- unlist(enc_columns)
+
+for(col_name in enc_columns){
+    col_content <- csv_contents[[col_name]]
+    dec_content <- decrypt_private_data(col_content, keyfile)
+    csv_contents[[col_name]] <- dec_content
+}
+
+readr::write_csv(csv_contents, file = "decrypted_csv_data.csv")
+message("Decrypted csv file title 'decrypted_csv_data.csv' created at: ", getwd())
+```
+
+2. Set the applicable values for the params i.e. `csv_file, enc_columns, keyfile`:
+  - `csv_file` is the path to your data file that has encrypted data
+  - `enc_columns` is the list of column headings that have the encrypted data. 
+  - `keyfile` is the path to your pem file containing the secret key
+
+3. Run the R code
+
+4. In the directory indicated by the message, open the file `decrypted_csv_data.csv` and move it 
+   to your desired location and rename it as you prefer.
+   _Please note that every time you run this R script, the decrypted file's contents are overwritten_
