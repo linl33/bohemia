@@ -355,7 +355,7 @@ message('Retrieving information on positions from traccar (takes a while)')
 library(dplyr)
 position_list <- list()
 for(i in 1:nrow(dat)){
-  message(i, ' of ', nrow(dat))
+  # message(i, ' of ', nrow(dat))
   this_id <- dat$id[i]
   unique_id <- dat$uniqueId[i]
   # message(i, '. ', this_id)

@@ -116,7 +116,7 @@ CREATE TABLE minicensus_repeat_death_info (
     death_gender  VARCHAR(8),
     death_id  TEXT,
     death_location    VARCHAR(128),
-    death_location_location   VARCHAR(128),
+    death_location_location   TEXT,
     death_name    TEXT,
     death_initials  VARCHAR(10),
     death_number  INT,
@@ -884,4 +884,3 @@ CREATE TABLE done_hamlets (
 -- Enable UUID extension
 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
