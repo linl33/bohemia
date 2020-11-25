@@ -216,6 +216,7 @@ app_ui <- function(request) {
             )),
           tabItem(
             tabName="server_status",
+            uiOutput('ui_server_status_date'),
             uiOutput('ui_server_status')),
           tabItem(
             tabName="geo_tables",
@@ -3053,7 +3054,6 @@ app_server <- function(input, output, session) {
                             `Average time per minicensus form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `% rolling target (minicensus)` = (`Minicensus forms` / n_days) / daily_forms_fw * 100) 
                 
-                 
                 make_na <- function(x){ifelse(is.na(x), 0, x)}
                 fwt_daily <-left_join(left, right) %>%
                   mutate(num_enumerations = make_na(num_enumerations),
@@ -3072,6 +3072,9 @@ app_server <- function(input, output, session) {
                                 `VA forms` = num_va,
                                 `Anomalies` = num_anomalies,
                                 `Errors` = num_errors) 
+                # remove rows that have 'NA NA' in FW column
+                fwt_daily <- fwt_daily %>% filter(!grepl('NA NA', fwt_daily$FW))
+                
                 
               }
               fluidPage(
@@ -3914,6 +3917,28 @@ app_server <- function(input, output, session) {
   })
   
   # Server status UI  ################################################
+  output$ui_server_status_date <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- 'server_status' %in% si$access
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              pd <- odk_data$data
+              pd <- pd$minicensus_main
+              fluidPage(
+                column(6,
+                       sliderInput(inputId = 'server_status_date', 
+                                   label = 'Select dates', 
+                                   min= min(pd$todays_date), 
+                                   max=max(pd$todays_date), 
+                                   value = c(min(pd$todays_date), max(pd$todays_date))))
+              )
+              
+            })
+  })
   output$ui_server_status <- renderUI({
     # See if the user is logged in and has access
     si <- session_info
@@ -3926,6 +3951,11 @@ app_server <- function(input, output, session) {
               pd <- odk_data$data
               an <- session_data$anomalies
               the_country <- country()
+              date_range <- input$server_status_date
+              if(is.null(date_range)){
+                date_range <- c(min(pd$todays_date), max(pd$todays_date))
+              }
+              save(pd, an, date_range, file='ui_temp.rda')
               # save(pd, file = '/tmp/tmp.RData')
               
               # for every date that has mulitple dates seperated by comma, split and create new row.
@@ -3936,18 +3966,34 @@ app_server <- function(input, output, session) {
                 summarise(`# of anomalies` = sum(type == 'error', na.rm=TRUE),
                           `# of errors` = sum(type == 'anomaly', na.rm=TRUE)) %>%
                 gather(key=key, value=value, -date) %>%
-                mutate(date = as.Date(date))
+                mutate(date = as.Date(date)) %>%
+                filter(date >=date_range[1], 
+                       date <= date_range[2]) %>%
+                group_by(key) %>%
+                mutate(`cumulative_value` = cumsum(value))
               a_and_e_plot <- ggplot(an, aes(date, value, fill=key)) +
-                geom_bar(stat = 'identity', position = 'dodge') +
+                geom_bar(stat = 'identity') +
                 scale_fill_manual(name = '', 
                                   values = c('black', 'grey')) +
                 labs(x='Date', y='') +
                 theme_bohemia()
               output$e_and_a_per_day <- renderPlot({a_and_e_plot})
               
+              # plot for cumulative errors and anomalies
+              a_and_e_plot_cumulative <- ggplot(an, aes(date, cumulative_value, color=key)) +
+                geom_line(size = 1.5,alpha=0.7) +
+                geom_point(size = 2) +
+                scale_color_manual(name = '', 
+                                  values = c('black', 'grey')) +
+                labs(x='Date', y='') +
+                theme_bohemia()
+              output$e_and_a_cumulative <- renderPlot({a_and_e_plot_cumulative})
+              
               # create data to visualize number of active FW per day. active being submitted a form.
               pd_fw <- pd$minicensus_main %>% group_by(todays_date,wid) %>% summarise(counts=n()) %>%
-                group_by(todays_date) %>% summarise(counts = n())
+                group_by(todays_date) %>% summarise(counts = n()) %>%
+                filter(todays_date >=date_range[1], 
+                       todays_date <= date_range[2])
               fw_active_daily_plot<-  ggplot(pd_fw, aes(todays_date, counts)) + 
                 geom_bar(stat = 'identity') +
                 geom_label(aes(label=counts)) +
@@ -3968,6 +4014,7 @@ app_server <- function(input, output, session) {
               ),
               country = c('Mozambique', 'Tanzania'))
               end_times <- left_join(left, end_times) %>% mutate(n = ifelse(is.na(n), 0, n))
+              end_times <- end_times %>% filter(as.Date(date_time) >= date_range[1], date_time <=date_range[2])
               end_times_plot <- ggplot(data = end_times %>% filter(country == the_country),
                                        aes(x = date_time,
                                            y = n)) +
@@ -4028,7 +4075,8 @@ app_server <- function(input, output, session) {
                        `Va forms` = ifelse(is.na(`Va forms`), 0, `Va forms`),
                        Absences = ifelse(is.na(Absences), 0, Absences),
                        Refusals = ifelse(is.na(Refusals), 0, Refusals))
-              joined <- joined %>% filter(country == the_country)
+              joined <- joined %>% filter(country == the_country) %>%  filter(date >=date_range[1], 
+                                                                          date <= date_range[2])
               
               
               fluidPage(
@@ -4043,6 +4091,10 @@ app_server <- function(input, output, session) {
                 fluidRow(
                   h3('Errors and anomalies per day'),
                   plotOutput('e_and_a_per_day')
+                ),
+                fluidRow(
+                  h3('Errors and anomalies (cumulative)'),
+                  plotOutput('e_and_a_cumulative')
                 ),
                 fluidRow(
                   h3('Errors and Anomalies resolutions'),
@@ -4582,13 +4634,14 @@ app_server <- function(input, output, session) {
                         corrections %>% dplyr::select(-instance_id))
     joined <- left_join(joined, fixes)
     
+    # save(joined, file='temp_joined.rda')
     pd <- joined %>%
       mutate(status = ifelse(!is.na(done_by), 'Done',
                              ifelse(!is.na(response_details), 'Response submitted',
                                     'Needs response'))) %>%
       mutate(week = lubridate::week(date)) %>%
       group_by(week) %>%
-      mutate(week_label = paste0(min(date), '-\n', max(date))) %>%
+      mutate(week_label = paste0('Week of ', min(date))) %>%
       group_by(category = status, date = week_label) %>%
       tally %>%
       ungroup 
@@ -4609,7 +4662,8 @@ app_server <- function(input, output, session) {
       labs(x = 'Week of anomaly occurrence',
            y = 'Number of anomalies',
            title = 'Anomalies/errors and status over time') +
-      theme_bohemia()
+      theme_bohemia() +
+      theme(axis.text.x = element_text(angle=45, hjust=1))
   })
   
   # Alert ui
