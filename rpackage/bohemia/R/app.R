@@ -2173,23 +2173,25 @@ app_server <- function(input, output, session) {
       if(is.null(who)){
         who <- 0 
       }
-      # save(pd, co, pd_ok, enum, refs, va, who, file = '/tmp/time_matrix.RData')
+      # save(pd, co, pd_ok, enum, va, who, file = '/tmp/time_matrix.RData')
       plot_data <- 
         bind_rows(
-          pd %>% filter(wid == who) %>% dplyr::select(start_time, end_time) %>% mutate(Form = 'Minicensus'),
-          enum %>% filter(wid == who) %>% dplyr::select(start_time, end_time) %>% mutate(Form = 'Enumerations'),
+          pd %>% filter(wid == who) %>% dplyr::select(start_time, end_time, instance_id) %>% mutate(Form = 'Minicensus'),
+          enum %>% filter(wid == who) %>% dplyr::select(start_time, end_time, instance_id) %>% mutate(Form = 'Enumerations'),
           # refs %>% filter(wid == who) %>% mutate(Form = 'Refusals'),
-          va %>% filter(wid == who) %>% dplyr::select(start_time, end_time) %>% mutate(Form = 'VA'),
+          va %>% filter(wid == who) %>% dplyr::select(start_time, end_time, instance_id) %>% mutate(Form = 'VA'),
         )
       if(nrow(plot_data) > 0){
         plot_data$time_taken <- plot_data$end_time - plot_data$start_time
         units_taken <- attr(plot_data$time_taken, 'units')
-        plot_data$date <- as.Date(plot_data$start_time)
+        plot_data$date <- plot_data$start_date <- as.Date(plot_data$start_time)
         plot_data$end_date <- as.Date(plot_data$end_time)
         plot_data$start_val <- lubridate::hour(plot_data$start_time) +
           (lubridate::minute(plot_data$start_time)/60)
         plot_data$end_val <- lubridate::hour(plot_data$end_time) +
           (lubridate::minute(plot_data$end_time)/60)
+        plot_data <- plot_data %>%
+          mutate(end_val = ifelse(end_date != start_date, 24, end_val))
         # plot_data$start_val <- round(plot_data$start_val, 1)
         # plot_data$end_val <- round(plot_data$end_val, 1)
         # plot_data$end_val <- ifelse(plot_data$end_val == plot_data$start_val,
@@ -2232,17 +2234,30 @@ app_server <- function(input, output, session) {
         #        y = 'Date') +
         #   scale_size_area(name = 'Number of open forms')
       
+        cols <- rainbow(length(unique(plot_data$instance_id)))
+        cols <- sample(cols, length(cols))
         g <- ggplot(data = plot_data,
                     aes(x = start_val,
                         xend = end_val,
-                        y = date,
-                        yend = date,
-                        color = Form)) +
-          geom_segment(size = 3,
+                        y = start_time,
+                        yend = start_time,
+                        color = instance_id)) +
+          geom_segment(size = 1,
                        alpha = 0.6) +
+          geom_point(aes(x = start_val,
+                         y = start_time,
+                         color = instance_id),
+                     pch = 5) +
+          geom_point(aes(x = end_val,
+                         y = start_time,
+                         color = instance_id),
+                     pch = 3) +
           theme_bohemia() +
           labs(x = 'Time of day (24 hour clock)',
-               y = 'Date')
+               y = 'Date') +
+          scale_color_manual(name = '', values = cols) +
+          theme(legend.position = 'none') +
+          labs(subtitle = 'Diamond: start time; Cross: end time')
         
       } else {
         g <- NULL
@@ -2909,20 +2924,20 @@ app_server <- function(input, output, session) {
               # 
               start_at <- as.Date('2020-09-20')
               end_at <- Sys.Date()
-              fluidPage(
+              # fluidPage(
                 fluidRow(
-                  column(6,
+                #   column(12,
                          sliderInput(inputId = 'fw_time_period', 
                                      label = 'Previous days to include:', 
                                      min = start_at, 
                                      max=end_at, 
                                      value = c(start_at, end_at)))
-                )
-              ) 
+              #   )
+              # ) 
             })
   })
-  output$ui_fw_daily <- renderUI({
-    # See if the user is logged in and has access
+  
+  output$ui_fw_table <- DT::renderDataTable({
     si <- session_info
     li <- si$logged_in
     ac <- TRUE
@@ -3077,11 +3092,16 @@ app_server <- function(input, output, session) {
                 
                 
               }
-              fluidPage(
-                div(bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
-                                  download_options = TRUE), style = "font-size:80%")
-              ) 
+                       # div(
+                       bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
+                                         download_options = TRUE)
+                       # , style = "font-size:80%")
             })
+  })
+  
+  output$ui_fw_daily <- renderUI({
+    # See if the user is logged in and has access
+   DT::dataTableOutput('ui_fw_table')
   })
   
   # Leaflet of fieldworkers
