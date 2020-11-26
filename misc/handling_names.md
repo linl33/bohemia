@@ -98,24 +98,24 @@ As a data manager, you can decrypt the data from a csv file by doing the followi
 
 ```
 suppressMessages({
-    library(bohemia)
+  library(bohemia)
+  library(readr)
 })
 
-csv_file <- 'tmp/itemsets.csv'
-enc_columns <- list('fname','lname')
-keyfile <- 'rpackage/bohemia/bohemia_priv.pem'
+csv_file <- '~/Desktop/Minicensus people roster.csv'
+enc_columns <- list('first_name','last_name')
+keyfile <- '/home/joebrew/Documents/bohemia/credentials/bohemia_priv.pem'
 
-
-csv_contents <- read.csv(csv_file, TRUE, sep=',')
+csv_contents <- readr::read_csv(csv_file)
 enc_columns <- unlist(enc_columns)
 
 for(col_name in enc_columns){
-    col_content <- csv_contents[[col_name]]
-    dec_content <- decrypt_private_data(col_content, keyfile)
-    csv_contents[[col_name]] <- dec_content
+  col_content <- as.character(csv_contents[,col_name])
+  dec_content <- decrypt_private_data(col_content, keyfile)
+  csv_contents[,col_name] <- dec_content
 }
 
-readr::write_csv(csv_contents, file = "decrypted_csv_data.csv")
+readr::write_csv(csv_contents, file = "/tmp/decrypted_csv_data.csv")
 message("Decrypted csv file title 'decrypted_csv_data.csv' created at: ", getwd())
 ```
 
