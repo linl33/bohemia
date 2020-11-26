@@ -20,6 +20,7 @@
 #' @import sf
 #' @import shinybusy
 #' @import ggrepel
+#' @import osmextract
 app_ui <- function(request) {
   options(scipen = '999')
   tagList(
