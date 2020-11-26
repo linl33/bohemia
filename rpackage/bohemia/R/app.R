@@ -2730,10 +2730,11 @@ app_server <- function(input, output, session) {
     }
     if(pd_ok){
       # va table
+      
       deaths <- odk_data$data$minicensus_repeat_death_info
       deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
       va <- odk_data$data$va
-      
+      # save(pd, cn, deaths, va, file = '/tmp/vajoe.RData')
       # Conditional mourning period
       mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
       out <- left_join(deaths %>% 
@@ -2764,7 +2765,7 @@ app_server <- function(input, output, session) {
                                        `HH ID` = hh_id,
                                        `FW ID` = wid,
                                        `HH visit date` = todays_date), by = 'instance_id') %>%
-        mutate(`FW ID` = ' ') %>%
+        # mutate(`FW ID` = ' ') %>%
         dplyr::select(-instance_id)
       
       # Remove those which have already been done
@@ -2783,7 +2784,20 @@ app_server <- function(input, output, session) {
           out <- out %>%  rename(Distrito = District,
                                  `Posto administrativo/localidade`=Ward,
                                  Povoado=Village,
-                                 Bairro=Hamlet)
+                                 Bairro=Hamlet,
+                                 `FW ID (minicensus)` = `FW ID`) 
+        } else {
+          out <- out %>%
+            left_join(
+              bohemia::tza_ward_supervisors %>%
+                dplyr::mutate(wid = paste0(Supervisor_Name, ' (',
+                                           wid, ')')) %>%
+                dplyr::select(Ward, wid),
+              by = 'Ward'
+            ) %>%
+            mutate(`FW ID` = wid) %>%
+            dplyr::select(-wid) %>%
+            dplyr::rename(`Assigned to`  = `FW ID`) 
         }
         out$`Time elapsed` <- NULL
         print(head(out))        
