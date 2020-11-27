@@ -1141,6 +1141,74 @@ clean tables), run: `clean_db()`
 3.  Wait for the time set to verify the job is run by checking the
     syslog for the entry: `tail -f /var/log/syslog | grep CRON`
 
+#### CronTab Email Notification Set Up
+
+1.  SSH into the `shiny` server (deployed at bohemia.team). The reason
+    for using the shiny server is that it has the necessary R packages.
+
+2.  Run (on the shell): `sudo apt install postfix mailutils libsasl2-modules postfix`
+
+3.  Choose 'Internet site' and press `Enter`
+
+4.  Accept the default domain in the 'Postfix Configuration' and press `Enter`
+
+5.  Edit the config by typing `sudo nano /etc/postfix/main.cf`
+
+6.  Add/Update the entries to be:
+    ```
+      myhostname = bohemia.team
+      relayhost = [smtp.gmail.com]:587
+      smtp_sasl_auth_enable = yes
+      smtp_sasl_password_maps = hash:/etc/postfix/sasl/sasl_passwd
+      smtp_sasl_security_options = noanonymous
+      smtp_tls_security_level = encrypt
+      header_size_limit = 4096000
+    ```
+7. Create the password map by typing `sudo nano /etc/postfix/sasl/sasl_passwd`
+
+8. Type in the username and password of the email account 
+   to be used for sending emails: 
+   `[smtp.gmail.com]:587 yourgmailaddress:yourpassword` and save.
+
+9. Run:
+    ```
+    sudo postmap /etc/postfix/sasl/sasl_passwd
+    sudo chown -R root:postfix /etc/postfix/sasl
+    sudo chmod 750 /etc/postfix/sasl
+    sudo chmod 640 /etc/postfix/sasl/sasl_passwd
+    ```
+
+10. Restart the postfix service by running `sudo service postfix restart`
+
+11. Test that the email setup works by running 
+    `echo "Confirm email works test" | mail -s "Cron email test" joe@databrew.cc`
+
+12. If you don't get an email, check the mail log at
+    `tail -10 /var/log/mail.log` to review the issue.
+
+13. For Gmail, you should have an email or a security alert. 
+    Follow the instructions in the security alert email to 
+    guide you to the option to 
+    `Allow less secure apps` set this to `ON`
+
+<!-- end list -->
+
+1.  Open the crontab editor, type just above the cron above the line 
+    where the entries you wish to email notifications are:
+
+<!-- end list -->
+
+    MAILTO="joe@databrew.cc,wanjiru@databrew.cc"
+    42 * * * * sh /home/ubuntu/Documents/bohemia/scripts/run_odk_get_data_cron.sh
+
+2.  Save and exit the editor.
+
+<!-- end list -->
+
+3.  Wait for the time set to verify the job is run by checking the
+    syslog for the entry: `tail -f /var/log/syslog | grep CRON` and 
+    your inbox.
+
 ## Backups
 
   - All data needs to be regularly backed up in case of server failure.
