@@ -2952,6 +2952,260 @@ app_server <- function(input, output, session) {
             })
   })
   
+  
+  
+  output$ui_fw_plot <- renderPlot({
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              # Get the odk data
+              pd <- odk_data$data
+              an <- session_data$anomalies
+              
+              co <- country()
+              enumerations <- pd$enumerations
+              va <- pd$va
+              pd <- pd$minicensus_main
+              # save(pd, co, an,enumerations, va, file = '/tmp/pd.RData')
+
+              if(nrow(an) > 0){
+                an$date <- as.Date(an$date, format = '%Y-%m-%d')
+              }
+              
+              pd_ok <- FALSE
+              if(!is.null(pd)){
+                if(nrow(pd) > 0){
+                  pd_ok <- TRUE
+                }
+              }
+              if(pd_ok){
+                
+                # Date filters
+                min_date <- as.Date('2020-09-20')   
+                max_date <- Sys.Date() 
+                time_period <- input$fw_time_period
+                if(is.null(time_period)){
+                  time_period <- c(min_date,
+                                   max_date)
+                } 
+                pd <- pd %>%
+                  filter(todays_date >= time_period[1],
+                         todays_date <= time_period[2])
+                va <- va %>%
+                  filter(todays_date >= time_period[1],
+                         todays_date <= time_period[2])
+                enumerations <- enumerations %>%
+                  filter(todays_date >= time_period[1],
+                         todays_date <= time_period[2])
+                
+                # Get the fieldworkers for the country in question
+                sub_fids <- fids %>% filter(country == co)
+                left <- tibble(wid = as.character(sub_fids$bohemia_id))
+                
+                # Join to minicensus
+                pd <- left %>%
+                  left_join(
+                    pd %>%
+                      group_by(wid = as.character(wid)) %>%
+                      summarise(minicensus = n(),
+                                minicensus_days = length(unique(todays_date)))
+                  )
+                
+                # Join to enumerations forms and days
+                pd <- pd %>% 
+                  left_join(
+                    enumerations %>% mutate(wid = as.character(wid)) %>%
+                    group_by(wid) %>%
+                    summarise(enumerations = n(),
+                              enumerations_days = length(unique(todays_date)))
+                )
+                # Join to VA
+                pd <- pd %>% 
+                  left_join(
+                    va %>% mutate(wid = as.character(wid)) %>%
+                      group_by(wid) %>%
+                      summarise(va = n(),
+                                va_days = length(unique(todays_date)))
+                  )
+                
+
+                # Restructure
+                ui_fw_plot_form <- input$ui_fw_plot_form
+                if(is.null(ui_fw_plot_form)){
+                  ui_fw_plot_form <- 'Minicensus'
+                }
+                pdx <- pd %>%
+                  mutate(wid = as.numeric(wid)) 
+              
+                if(ui_fw_plot_form == 'Minicensus'){
+                pdx <- pdx %>%
+                  mutate(forms = minicensus,
+                         days = minicensus_days)
+              } else if(ui_fw_plot_form == 'Enumerations'){
+                pdx <- pdx %>%
+                  mutate(forms = enumerations,
+                         days = enumerations_days)
+              } else if(ui_fw_plot_form == 'VA'){
+                pdx <- pdx %>%
+                  mutate(forms = va,
+                         days = va_days)
+              }  
+                pdx <- pdx %>%
+                  mutate(per_day = forms / days) %>%
+                  mutate(label = paste0(forms, '\n',
+                                        days, ''))
+                pdx <- pdx %>% filter(!is.na(forms))
+                pdx <- pdx %>% arrange(desc(per_day))
+                pdx$wid <- factor(pdx$wid, levels = pdx$wid)
+                ggplot(data = pdx,
+                         aes(x = wid,
+                             y = per_day)) +
+                      geom_bar(stat = 'identity') +
+                    labs(x = 'FW',
+                         y = 'Forms per (working) day',
+                         caption = 'Numbers show forms on top, working days on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
+                    theme_bohemia() +
+                    geom_text(aes(label = label),
+                              nudge_y = 0, size = 2, alpha = 0.8) +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
+                
+              } else {
+                NULL
+              }
+
+            })
+  })
+  
+  output$ui_fw_plot2 <- renderPlot({
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              # Get the odk data
+              pd <- odk_data$data
+              an <- session_data$anomalies
+              
+              co <- country()
+              enumerations <- pd$enumerations
+              va <- pd$va
+              pd <- pd$minicensus_main
+              # save(pd, co, an,enumerations, va, file = '/tmp/pd.RData')
+              
+              if(nrow(an) > 0){
+                an$date <- as.Date(an$date, format = '%Y-%m-%d')
+              }
+              
+              pd_ok <- FALSE
+              if(!is.null(pd)){
+                if(nrow(pd) > 0){
+                  pd_ok <- TRUE
+                }
+              }
+              if(pd_ok){
+                
+                # Date filters
+                min_date <- as.Date('2020-09-20')   
+                max_date <- Sys.Date() 
+                time_period <- input$fw_time_period
+                if(is.null(time_period)){
+                  time_period <- c(min_date,
+                                   max_date)
+                } 
+                pd <- pd %>%
+                  filter(todays_date >= time_period[1],
+                         todays_date <= time_period[2])
+                va <- va %>%
+                  filter(todays_date >= time_period[1],
+                         todays_date <= time_period[2])
+                enumerations <- enumerations %>%
+                  filter(todays_date >= time_period[1],
+                         todays_date <= time_period[2])
+                
+                left <- tibble(todays_date =seq(time_period[1],
+                                                time_period[2],
+                                                by = 1))
+                
+                # Join to minicensus
+                pd <- left %>%
+                  left_join(
+                    pd %>%
+                      group_by(todays_date) %>%
+                      summarise(minicensus = n(),
+                                minicensus_workers = length(unique(wid)))
+                  )
+                
+                # Join to enumerations forms and days
+                pd <- pd %>% 
+                  left_join(
+                    enumerations %>% 
+                      group_by(todays_date) %>%
+                      summarise(enumerations = n(),
+                                enumerations_workers = length(unique(wid)))
+                  )
+                # Join to VA
+                pd <- pd %>% 
+                  left_join(
+                    va %>% 
+                      group_by(todays_date) %>%
+                      summarise(va = n(),
+                                va_workers = length(unique(wid)))
+                  )
+                
+                
+                # Restructure
+                ui_fw_plot_form <- input$ui_fw_plot_form
+                if(is.null(ui_fw_plot_form)){
+                  ui_fw_plot_form <- 'Minicensus'
+                }
+                pdx <- pd
+
+                if(ui_fw_plot_form == 'Minicensus'){
+                  pdx <- pdx %>%
+                    mutate(forms = minicensus,
+                           workers = minicensus_workers)
+                } else if(ui_fw_plot_form == 'Enumerations'){
+                  pdx <- pdx %>%
+                    mutate(forms = enumerations,
+                           workers = enumerations_workers)
+                } else if(ui_fw_plot_form == 'VA'){
+                  pdx <- pdx %>%
+                    mutate(forms = va,
+                           workers = va_workers)
+                }  
+                pdx <- pdx %>%
+                  mutate(per_worker = forms / workers) %>%
+                  mutate(label = paste0(forms, '\n',
+                                        workers, ''))
+                pdx <- pdx %>% filter(!is.na(forms))
+                pdx <- pdx %>% arrange(desc(per_worker))
+                ggplot(data = pdx,
+                       aes(x = todays_date,
+                           y = per_worker)) +
+                  geom_bar(stat = 'identity') +
+                  labs(x = 'FW',
+                       y = 'Forms per worker',
+                       caption = 'Numbers show forms on top, workers that day on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
+                  theme_bohemia() +
+                  geom_text(aes(label = label),
+                            nudge_y = 0, size = 3, alpha = 0.8) +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
+                
+              } else {
+                NULL
+              }
+              
+            })
+    
+  })
+  
+  
   output$ui_fw_table <- DT::renderDataTable({
     si <- session_info
     li <- si$logged_in
@@ -3116,7 +3370,18 @@ app_server <- function(input, output, session) {
   
   output$ui_fw_daily <- renderUI({
     # See if the user is logged in and has access
-   DT::dataTableOutput('ui_fw_table')
+   fluidPage(
+     selectInput('ui_fw_plot_form',
+                 'Form to show in chart',
+                 choices = c('Minicensus',
+                             'Enumerations', 
+                             'VA'),
+                 selected = 'Minicensus'),
+     fluidRow(column(6,
+                     plotOutput('ui_fw_plot')),
+              column(6,
+                     plotOutput('ui_fw_plot2'))),
+     DT::dataTableOutput('ui_fw_table'))
   })
   
   # Leaflet of fieldworkers
