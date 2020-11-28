@@ -276,10 +276,7 @@ app_ui <- function(request) {
                                   tabPanel('Consent verification list',
                                            fluidPage(
                                              fluidRow(
-                                               column(6, checkboxInput('verification_all',
-                                                                       'All fieldworkers?',
-                                                                       value = TRUE)),
-                                               column(6, 
+                                               column(12, 
                                                       uiOutput('ui_verification_text_filter'))
                                              ),
                                              uiOutput('ui_consent_verification_list_a'),
@@ -4427,10 +4424,22 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               fluidPage(
-                dateRangeInput('verification_date_filter',
-                               'Filter by date',
-                               start = as.Date('2020-09-20'),
-                               end = Sys.Date()))
+                fluidRow(
+                  column(4,
+                         dateRangeInput('verification_date_filter',
+                                        'Filter by date',
+                                        start = as.Date('2020-09-20'),
+                                        end = Sys.Date())),
+                  column(4,
+                         checkboxInput('verification_all',
+                                       'All fieldworkers?',
+                                       value = TRUE)),
+                  column(4,
+                         checkboxInput('workers_on_separate_pages',
+                                       'Print workers on separate pages?',
+                                       value = TRUE))
+                )
+                )
               
             })
   })
@@ -4440,19 +4449,26 @@ app_server <- function(input, output, session) {
     pd <- odk_data$data
     pd <- pd$minicensus_main
     verification_all <- input$verification_all
-    if(!verification_all){
-      # Get the country
-      co <- input$geo
-      co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
-      pd <- pd %>% dplyr::filter(hh_country == co)
-      wid <- sort(unique(pd$wid))
-      wid <- wid[!is.na(wid)]
-      selectInput('verification_text_filter',
-                  'Filter by FW code (all, by default)',
-                  choices = wid,
-                  selected = wid,
-                  multiple = TRUE)
+    if(is.null(verification_all)){
+      out <- NULL
+    } else {
+      if(!verification_all){
+        # Get the country
+        co <- input$geo
+        co <- ifelse(co == 'Rufiji', 'Tanzania', 'Mozambique')
+        pd <- pd %>% dplyr::filter(hh_country == co)
+        wid <- sort(unique(pd$wid))
+        wid <- wid[!is.na(wid)]
+        out <- selectInput('verification_text_filter',
+                    'Filter by FW code (all, by default)',
+                    choices = wid,
+                    selected = wid,
+                    multiple = TRUE)
+      } else {
+        out <- NULL
+      }
     }
+    return(out)
     
   })
   
@@ -4521,13 +4537,16 @@ app_server <- function(input, output, session) {
                        verified_by = '') 
               
               verification_all <- input$verification_all
-              if(!verification_all){
-                text_filter <- input$verification_text_filter
-                if(!is.null(text_filter)){
-                  out <- out %>%
-                    dplyr::filter(wid %in% text_filter)
+              if(!is.null(verification_all)){
+                if(!verification_all){
+                  text_filter <- input$verification_text_filter
+                  if(!is.null(text_filter)){
+                    out <- out %>%
+                      dplyr::filter(wid %in% text_filter)
+                  }
                 }
               }
+              
               
               date_filter <- input$verification_date_filter
               if(!is.null(date_filter)){
@@ -4536,6 +4555,24 @@ app_server <- function(input, output, session) {
                     todays_date <= date_filter[2],
                     todays_date >= date_filter[1]
                   )
+              }
+              
+              # Location code filtering
+              lc <- location_code()
+              if(length(lc) > 0){
+                out <- out %>%
+                  filter(hh_hamlet_code %in% lc)
+              }
+              
+              # Split by workers or by date
+              workers_on_separate_pages <- input$workers_on_separate_pages
+              if(is.null(workers_on_separate_pages)){
+                workers_on_separate_pages <- TRUE
+              }
+              if(workers_on_separate_pages){
+                out <- out %>% arrange(wid)
+              } else {
+                out <- out %>% arrange(todays_date)
               }
               
               # Render QC stuf
@@ -4550,7 +4587,8 @@ app_server <- function(input, output, session) {
               # get inputs for slider to control sample size
               min_value <- 1
               max_value <- nrow(qc)
-              selected_value <- sample(min_value:max_value, 1)
+              
+              selected_value <- max_value#sample(min_value:max_value, 1)
               if(co == 'Mozambique'){
                 # here
                 names(out) <- c(
@@ -4603,9 +4641,6 @@ app_server <- function(input, output, session) {
               consent_verification_list_reactive$data <- out
               fluidPage(
                 fluidRow(
-                  checkboxInput('workers_on_separate_pages',
-                                'Print workers on separate pages?',
-                                value = TRUE),
                   downloadButton('render_consent_verification_list',
                                  'Print consent verification list')
                 ),
