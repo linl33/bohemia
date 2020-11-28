@@ -3,7 +3,7 @@ import os
 import shutil
 os.chdir('../credentials')
 
-s = ezsheets.Spreadsheet('https://docs.google.com/spreadsheets/d/16_drw-35haLaBlB6tn92mr6zbIuYorAUDyieGONyGTM/edit#gid=141178862')
+s = ezsheets.Spreadsheet('https://docs.google.com/spreadsheets/d/1i3mzVjV-Ynu_3MbG_ovzWOHdYK-EuP0_q1SR-W1lJ8U/edit#gid=0')
 s.downloadAsExcel()
 
 ## Convert to xml

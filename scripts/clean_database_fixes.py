@@ -52,17 +52,18 @@ show_these = do_these[['resolved_by', 'submitted_at', 'id', 'response_details', 
 show_these.to_csv('/tmp/show_these.csv') # to help human
 
 # Define function for implementing corrections
-def implement(id, query = '', who = 'Joe Brew', cur = cur, dbconn = dbconn):
+def implement(id, query = '', who = 'Joe Brew', is_ok = False, cur = cur, dbconn = dbconn):
     # Implement the actual fix to the database
-    try:
-        print('Executing this query:\n')
-        print(query)
-        cur.execute(query)
-    except:
-        cur.execute("ROLLBACK")
-        print('Problem executing:\n')
-        print(query)
-        return
+    if not is_ok:
+        try:
+            # print('Executing this query:\n')
+            # print(query)
+            cur.execute(query)
+        except:
+            cur.execute("ROLLBACK")
+            print('Problem executing:\n')
+            print(query)
+            return
     done_at = datetime.now()
     # State the fact that it has been fixed
     cur.execute(
@@ -701,7 +702,6 @@ implement(id = 'missing_wid_6de89fa4-8933-4486-931d-7fdb951c902b', query = "UPDA
 implement(id = 'missing_wid_a71799cc-e54c-473b-a279-1570c5a42b92', query = "UPDATE clean_minicensus_main SET wid='74' WHERE instance_id='a71799cc-e54c-473b-a279-1570c5a42b92'")
 
 
-
 iid = "'046297df-1517-43af-b670-30255b77807d'"
 implement(id = 'repeat_hh_id_046297df-1517-43af-b670-30255b77807d,4595f8dc-235c-4f69-beac-f3c06b9ad9b2', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
@@ -729,6 +729,64 @@ implement(id = 'repeat_hh_id_94284e9b-ad61-496f-885e-b1741189d4a3,7844442f-2813-
 iid = "'cd0e2222-3496-45f7-a603-85f9447ac233'"
 implement(id = 'repeat_hh_id_04892ea2-e389-4f1c-bf91-54f56a15ae46,cd0e2222-3496-45f7-a603-85f9447ac233', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
 
+implement(id = 'missing_wid_2d72c6ba-dc82-45e1-a8d8-144781c7b72e', query = "UPDATE clean_minicensus_main SET wid='74' WHERE instance_id='2d72c6ba-dc82-45e1-a8d8-144781c7b72e'")
+
+iid = "'d00884cc-65ed-4784-85a4-dea6ca3f46eb'"
+implement(id = 'repeat_hh_id_4c66d0d7-9571-4449-bc08-bd79f45fa1da,d00884cc-65ed-4784-85a4-dea6ca3f46eb', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'f2939b12-099e-4378-ab6b-a095e217bcf9'"
+implement(id = 'repeat_hh_id_b804d947-5524-4a18-af16-83975587509d,f2939b12-099e-4378-ab6b-a095e217bcf9', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'f15d4b99-5056-434d-9ed3-e1b4df61a19c'"
+implement(id = 'repeat_hh_id_3bff571f-3ffb-415d-be55-e1986a816847,f15d4b99-5056-434d-9ed3-e1b4df61a19c', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'7d2ff42f-aa74-4c5f-896c-6f86b60dc938'"
+implement(id = 'repeat_hh_id_125e6809-84f3-433d-888e-e99477395ed3,7d2ff42f-aa74-4c5f-896c-6f86b60dc938', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'cce8909b-6ef2-4394-9372-1bd4899e08bf'"
+implement(id = 'repeat_hh_id_cce8909b-6ef2-4394-9372-1bd4899e08bf,79f53b02-9a1c-464f-900b-1cfbdbb911dc', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'9bb234f3-5c83-4173-a147-7b1f50392ee0'"
+implement(id = 'repeat_hh_id_69ae2b9f-0bdd-4604-b62d-3856d8fded5d,9bb234f3-5c83-4173-a147-7b1f50392ee0', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'643a1ae6-7219-4db5-9231-e65ed63b6ae5'"
+implement(id = 'repeat_hh_id_14de102e-2672-4823-ab41-5f707afa4cc3,643a1ae6-7219-4db5-9231-e65ed63b6ae5', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'2187ebbc-a289-4afd-8399-2694e34cf73d'"
+implement(id = 'repeat_hh_id_10b7d4d9-5c99-49fb-aa80-7a578bac2619,2187ebbc-a289-4afd-8399-2694e34cf73d', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'43814b5c-3666-4153-acfc-91b2a5d915fe'"
+implement(id = 'repeat_hh_id_43814b5c-3666-4153-acfc-91b2a5d915fe,8d0077a0-3678-4d4e-95dc-01829ddb0f3d', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'a6195ece-1f15-4a56-9335-90c1af814329'"
+implement(id = 'repeat_hh_id_bc7614f4-9d1e-46dd-bcac-ae8603d2c1d0,a6195ece-1f15-4a56-9335-90c1af814329', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'34af8873-c4f7-47aa-aa8d-84635746d010'"
+implement(id = 'repeat_hh_id_34af8873-c4f7-47aa-aa8d-84635746d010,f1201d75-a6e3-4766-80aa-43f89475ee08', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'9a691d71-1620-41da-a8d2-c66fd386c696'"
+implement(id = 'repeat_hh_id_9a691d71-1620-41da-a8d2-c66fd386c696,a4ecd543-0c52-4ea3-bb08-6ea43d12270d', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'d1f79a1e-2844-4c98-ac20-9f3ca0bd8df0'"
+implement(id = 'repeat_hh_id_82905168-0510-46e2-9b55-5306fc6ad709,d1f79a1e-2844-4c98-ac20-9f3ca0bd8df0', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+implement(id = 'missing_wid_82d018ff-0059-4bef-8226-dc048a41ee59', query = "UPDATE clean_minicensus_main SET wid='2' WHERE instance_id='82d018ff-0059-4bef-8226-dc048a41ee59'")
+
+iid = "'b631e081-bb2c-4bdc-97d1-d6e73fd24e2d'"
+implement(id = 'repeat_hh_id_b631e081-bb2c-4bdc-97d1-d6e73fd24e2d,9d1f5ef2-647a-4869-a108-a455e17669bc', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+# In the below, it appears they picked household head to be person 4 when it should have been person 1
+implement(id = 'hh_head_too_young_old_47b88599-1e36-429a-b348-f24715c369c2', query = "UPDATE clean_minicensus_main SET hh_head_id='4' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'; UPDATE clean_minicensus_main SET hh_head_dob='1997-07-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'; UPDATE clean_minicensus_main SET hh_head_gender='male' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2';")
+
+implement(id = 'hh_sub_age_mismatch_young_47b88599-1e36-429a-b348-f24715c369c2', is_ok = True)
+
+implement(id = 'hh_head_too_young_old_540f3603-4c2e-40a5-a60a-635be795a32b', query = "UPDATE clean_minicensus_main SET hh_head_dob='1994-12-12' WHERE instance_id='540f3603-4c2e-40a5-a60a-635be795a32b'; UPDATE clean_minicensus_people SET dob='1994-12-12' WHERE instance_id='540f3603-4c2e-40a5-a60a-635be795a32b' and num='1';")
+
+implement(id = 'hh_head_too_young_old_a8f3a1db-efef-4de7-8b54-71958de9b156', query = "UPDATE clean_minicensus_main SET hh_head_dob='1996-06-15' WHERE instance_id='a8f3a1db-efef-4de7-8b54-71958de9b156'; UPDATE clean_minicensus_people SET dob='1996-06-15' WHERE instance_id='a8f3a1db-efef-4de7-8b54-71958de9b156' and num='1';")
+
+implement(id = 'hh_head_too_young_old_9b53674d-70b4-4905-9e70-bda099ecec81', is_ok = True)
+
+implement(id = 'too_many_houses_2743fb87-a494-4a0d-8835-0fae53b543cc', query = "UPDATE clean_minicensus_main SET hh_n_constructions='1' WHERE instance_id='2743fb87-a494-4a0d-8835-0fae53b543cc';")
 
 dbconn.commit()
 cur.close()
