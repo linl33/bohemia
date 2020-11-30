@@ -1209,6 +1209,26 @@ clean tables), run: `clean_db()`
     syslog for the entry: `tail -f /var/log/syslog | grep CRON` and 
     your inbox.
 
+
+#### CronTab for checking data volume in DB
+
+This job is handled via a python script `check_database_data_size.py` which 
+runs queries against the given tables to check what the total number of records 
+are for the previous day.
+
+Currently checking for the data in:
+
+- `clean_minicensus_main`
+- `clean_refusals`
+- `clean_enumerations`
+- `clean_va`
+
+To set this up, 
+1. Follow the same instructions as outlined in the CronTab Set Up section
+
+2. Add an entry for the database size check job to be run every day at 4 am
+    0 4 * * * sh /home/ubuntu/Documents/bohemia/scripts/run_db_size_check.sh
+    
 ## Backups
 
   - All data needs to be regularly backed up in case of server failure.
