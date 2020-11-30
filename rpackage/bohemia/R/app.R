@@ -4252,7 +4252,7 @@ app_server <- function(input, output, session) {
               if(is.null(date_range)){
                 date_range <- c(min(pd$todays_date), max(pd$todays_date))
               }
-              save(pd, an, date_range, file='ui_temp.rda')
+              # save(pd, an, date_range, file='ui_temp.rda')
               # save(pd, file = '/tmp/tmp.RData')
               
               # for every date that has mulitple dates seperated by comma, split and create new row.
