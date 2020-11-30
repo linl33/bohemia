@@ -1226,7 +1226,19 @@ Currently checking for the data in:
 To set this up, 
 1. Follow the same instructions as outlined in the CronTab Set Up section
 
-2. Add an entry for the database size check job to be run every day at 4 am
+2. If the server has not been set up to run python scripts, also do the following:
+
+    - Install `sudo apt install -y python3-venv` 
+    - Change to the `bohemia` root folder `cd ~/Documents/bohemia`
+    - Create a virtual environment `python3 -m venv .venv`
+    - Activate the virtual environment `. .venv/bin/activate`
+    - Install the python requirements `pip3 install -r requirements.txt`
+    - Deactivate the virtual environment `deactivate`
+
+3. Add an entry for the database size check job to be run every day at 4 am
+
+<!-- end list -->
+
     0 4 * * * sh /home/ubuntu/Documents/bohemia/scripts/run_db_size_check.sh
     
 ## Backups
