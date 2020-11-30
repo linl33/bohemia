@@ -4223,15 +4223,15 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
-              pd <- odk_data$data
-              pd <- pd$minicensus_main
+              # pd <- odk_data$data
+              # pd <- pd$minicensus_main
               fluidPage(
                 column(6,
                        sliderInput(inputId = 'server_status_date', 
                                    label = 'Select dates', 
-                                   min= min(pd$todays_date), 
-                                   max=max(pd$todays_date), 
-                                   value = c(min(pd$todays_date), max(pd$todays_date))))
+                                   min= as.Date('2020-09-01'), #  min(pd$todays_date), 
+                                   max= Sys.Date(), #max(pd$todays_date), 
+                                   value = c(as.Date('2020-09-01'), Sys.Date())))
               )
               
             })
@@ -4250,7 +4250,9 @@ app_server <- function(input, output, session) {
               the_country <- country()
               date_range <- input$server_status_date
               if(is.null(date_range)){
-                date_range <- c(min(pd$todays_date), max(pd$todays_date))
+                # date_range <- c(min(pd$todays_date), max(pd$todays_date))
+                date_range <- c(as.Date('2020-09-01'),
+                                Sys.Date())
               }
               # save(pd, an, date_range, file='ui_temp.rda')
               # save(pd, file = '/tmp/tmp.RData')
