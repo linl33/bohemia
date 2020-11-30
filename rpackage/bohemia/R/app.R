@@ -4254,6 +4254,17 @@ app_server <- function(input, output, session) {
               }
               # save(pd, an, date_range, file='ui_temp.rda')
               # save(pd, file = '/tmp/tmp.RData')
+              # save(an, file = '/tmp/an.RData')
+              
+              by_type <- an %>%
+                mutate(date = as.Date(date)) %>%
+                filter(date >=date_range[1], 
+                       date <= date_range[2]) %>%
+                group_by(description) %>%
+                summarise(Occurrences = n()) %>%
+                arrange(desc(Occurrences)) %>%
+                mutate(`%` = round(Occurrences / sum(Occurrences) *100, digits = 2))
+                
               
               # for every date that has mulitple dates seperated by comma, split and create new row.
               an <- an %>% 
@@ -4402,10 +4413,19 @@ app_server <- function(input, output, session) {
                   
                 ),
                 fluidRow(
+                  column(12,
                   h3('Summary table'),
                   bohemia::prettify(joined,
                                     nrows = nrow(joined),
-                                    download_options = TRUE)
+                                    download_options = TRUE))
+                  
+                ),
+                fluidRow(
+                  column(12,
+                         h3('Anomalies by type'),
+                         bohemia::prettify(by_type,
+                                           nrows = nrow(by_type),
+                                           download_options = TRUE))
                 )
               ) 
             }
