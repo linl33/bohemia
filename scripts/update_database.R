@@ -470,6 +470,38 @@ dbWriteTable(conn = con,
              name = 'anomalies',
              value = anomalies,
              append = TRUE)
+
+# See how many corrections are pending fixes
+
+# get corrections and fixes.
+anomalies <- dbGetQuery(con, 'select * from anomalies')
+corrections <- dbGetQuery(con, 'select * from corrections')
+fixes <- dbGetQuery(con, 'select * from fixes')
+
+#get ids from fixes 
+fixes_ids <- fixes$id
+
+# keep only response_details, id, and instance_id
+pending_for_databrew <- corrections %>% filter(!id %in% fixes_ids) %>% select(id, instance_id, response_details)
+
+corrected <- left_join(anomalies, corrections %>% dplyr::filter(!duplicated(id))) %>% filter(!is.na(resolved_by))
+pending_correction <- left_join(anomalies, corrections %>% dplyr::filter(!duplicated(id))) %>% filter(is.na(resolved_by))
+
+message(paste0(nrow(anomalies), ' total anomalies'),
+        paste0('\n---MOZ: ', nrow(anomalies[anomalies$country == 'Mozambique',])),
+        paste0('\n---TZA: ', nrow(anomalies[anomalies$country == 'Tanzania',])),
+        
+        paste0('\n',nrow(corrected), ' total corrections submitted by sites'),
+        paste0('\n---MOZ: ', nrow(corrected[corrected$country == 'Mozambique',])),
+        paste0('\n---TZA: ', nrow(corrected[corrected$country == 'Tanzania',])),
+        paste0('\n---', nrow(pending_for_databrew), ' total corrections waiting for Databrew to implement'),
+        
+        paste0('\n', nrow(pending_correction), ' total corrections requiring site input'),
+        paste0('\n---MOZ: ', nrow(pending_correction[pending_correction$country == 'Mozambique',])),
+        paste0('\n---TZA: ', nrow(pending_correction[pending_correction$country == 'Tanzania',]))
+        
+)
+
 x = dbDisconnect(con)
 
 

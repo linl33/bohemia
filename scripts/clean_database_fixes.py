@@ -686,8 +686,626 @@ implement(id = 'strange_wid_enumerations_5005ac3d-1282-499c-9cf1-375bb23e4449', 
 implement(id = 'strange_wid_enumerations_50c85b43-b4f6-4533-baae-f1347170b308', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='50c85b43-b4f6-4533-baae-f1347170b308'")
 implement(id = 'strange_wid_enumerations_50deb336-99fc-46f0-94b4-2182057f6b76', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='50deb336-99fc-46f0-94b4-2182057f6b76'")
 
+implement(id = 'strange_wid_enumerations_01826bbc-f519-4ea4-a58e-23053d27c6f0', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='01826bbc-f519-4ea4-a58e-23053d27c6f0'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_1312ee21-7c1f-4b68-84c8-ab58d88b8449', query = "UPDATE clean_enumerations SET wid='373' WHERE instance_id='1312ee21-7c1f-4b68-84c8-ab58d88b8449'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_50e0070c-1dc1-4564-81ff-3e50b031f994', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='50e0070c-1dc1-4564-81ff-3e50b031f994'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_5168cf5e-f012-446a-a32b-ac1d997065bc', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='5168cf5e-f012-446a-a32b-ac1d997065bc'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_52658e27-5955-49e3-ab57-1b6590adc138', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='52658e27-5955-49e3-ab57-1b6590adc138'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_53a8af08-10cf-488f-aeea-e3c61cf17a98', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='53a8af08-10cf-488f-aeea-e3c61cf17a98'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_53dea47f-bf86-4e41-97b2-f7193d75076b', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='53dea47f-bf86-4e41-97b2-f7193d75076b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_543e6e28-0719-4ff0-a7f5-d1622ddd5b34', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='543e6e28-0719-4ff0-a7f5-d1622ddd5b34'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_547139cd-4f3e-4b48-98f2-c537b796cc47', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='547139cd-4f3e-4b48-98f2-c537b796cc47'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_54c77064-b0a3-462c-a8e2-403abd2893b5', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='54c77064-b0a3-462c-a8e2-403abd2893b5'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_551e6ef9-3e74-4404-b8ad-9ab621900b7d', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='551e6ef9-3e74-4404-b8ad-9ab621900b7d'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_55635769-a689-4e83-87a2-1591a111e81b', query = "UPDATE clean_enumerations SET wid='424' WHERE instance_id='55635769-a689-4e83-87a2-1591a111e81b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_55fcdd8f-5273-4f18-b199-77663b046500', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='55fcdd8f-5273-4f18-b199-77663b046500'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_56547492-3682-4215-b2ae-c7bac12d89c9', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='56547492-3682-4215-b2ae-c7bac12d89c9'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_56b8c93d-ac8c-4cb7-9c6f-288a50ccebac', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='56b8c93d-ac8c-4cb7-9c6f-288a50ccebac'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_56da06b0-4aea-427f-ab00-9e135295eb35', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='56da06b0-4aea-427f-ab00-9e135295eb35'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_57722f3e-3d1b-4cfa-a065-a6044901c641', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='57722f3e-3d1b-4cfa-a065-a6044901c641'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_587c8307-ac2f-4c45-8aef-3fb3fd8445f8', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='587c8307-ac2f-4c45-8aef-3fb3fd8445f8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_59284a9c-b989-4516-9a01-e8cb4da28090', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='59284a9c-b989-4516-9a01-e8cb4da28090'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_593525d7-6d08-43b8-afa8-1951041c87a5', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='593525d7-6d08-43b8-afa8-1951041c87a5'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_598c768c-732e-4daf-b99f-9939a3ca5449', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='598c768c-732e-4daf-b99f-9939a3ca5449'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_59a5254c-8645-43ca-83ba-584849a04d41', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='59a5254c-8645-43ca-83ba-584849a04d41'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_5a127420-bf98-49d4-ad1e-faa4fc3385b5', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='5a127420-bf98-49d4-ad1e-faa4fc3385b5'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_5bbd1592-9050-4d72-ada1-0fdea77fd36c', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='5bbd1592-9050-4d72-ada1-0fdea77fd36c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_5bf76c0f-f02b-495f-a719-e596a269e3bb', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='5bf76c0f-f02b-495f-a719-e596a269e3bb'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_5c99e39a-166c-482c-b725-13ae71910aa2', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='5c99e39a-166c-482c-b725-13ae71910aa2'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_5d8baec0-2f90-4c59-8bae-633b77e86edd', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='5d8baec0-2f90-4c59-8bae-633b77e86edd'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_5daa37a4-f3f3-4cfa-8204-fc1a27aedf2c', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='5daa37a4-f3f3-4cfa-8204-fc1a27aedf2c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_5feeed48-c86f-4774-b5d2-75cd2a9d0fa1', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='5feeed48-c86f-4774-b5d2-75cd2a9d0fa1'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6011bf7f-10a4-498e-b48f-0fc5b37365f3', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='6011bf7f-10a4-498e-b48f-0fc5b37365f3'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6177901a-05bd-40ac-8cfc-d8440abb8ca9', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='6177901a-05bd-40ac-8cfc-d8440abb8ca9'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_621e9123-f60a-4ce1-ab3d-9cc27b244ff4', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='621e9123-f60a-4ce1-ab3d-9cc27b244ff4'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6399c14b-246b-401d-a631-4f9fc1ee340a', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='6399c14b-246b-401d-a631-4f9fc1ee340a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_63db3f83-e890-41cb-b68c-6861df88613b', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='63db3f83-e890-41cb-b68c-6861df88613b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_63ee9e0c-911d-4433-8f3d-277a4f8ae6c9', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='63ee9e0c-911d-4433-8f3d-277a4f8ae6c9'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_64366cd7-e14e-40bd-ad6c-d86bf716e8b5', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='64366cd7-e14e-40bd-ad6c-d86bf716e8b5'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_64775351-78e0-4ce9-a10a-b3b5b4d40908', query = "UPDATE clean_enumerations SET wid='430' WHERE instance_id='64775351-78e0-4ce9-a10a-b3b5b4d40908'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_65340da2-ea89-43cc-863b-107e455fdb7f', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='65340da2-ea89-43cc-863b-107e455fdb7f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_65746382-cd51-424d-83c6-6455ddd2add3', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='65746382-cd51-424d-83c6-6455ddd2add3'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_664aa739-cdc0-4f29-b418-bb07ac2368ab', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='664aa739-cdc0-4f29-b418-bb07ac2368ab'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_678eedec-bce4-4440-96c7-79017ccd60d3', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='678eedec-bce4-4440-96c7-79017ccd60d3'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6a63e926-f320-4789-bfb4-2ee5f4d0cc30', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='6a63e926-f320-4789-bfb4-2ee5f4d0cc30'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6a732413-2097-4a93-84b4-565361a6cfb1', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='6a732413-2097-4a93-84b4-565361a6cfb1'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6a9d7203-575b-4d68-959c-da433dac201f', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='6a9d7203-575b-4d68-959c-da433dac201f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6b805d98-cbcf-49a0-86d8-17afe68b19ed', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='6b805d98-cbcf-49a0-86d8-17afe68b19ed'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6d1b06ad-9930-426f-a8e7-86826eb67bd7', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='6d1b06ad-9930-426f-a8e7-86826eb67bd7'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6e156247-f61c-4a3b-a813-f519614880dc', query = "UPDATE clean_enumerations SET wid='424' WHERE instance_id='6e156247-f61c-4a3b-a813-f519614880dc'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_6efaf33a-93fb-4aeb-9134-943520d73652', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='6efaf33a-93fb-4aeb-9134-943520d73652'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_715c5ac5-c889-482f-9415-3e4bc86d87a1', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='715c5ac5-c889-482f-9415-3e4bc86d87a1'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_71d4c36b-66c5-4d2c-8429-a91d05520887', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='71d4c36b-66c5-4d2c-8429-a91d05520887'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_73d7066c-2ab6-416f-946f-416bd9789f38', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='73d7066c-2ab6-416f-946f-416bd9789f38'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_741d8428-801a-49fc-ae23-b0f3af6c6589', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='741d8428-801a-49fc-ae23-b0f3af6c6589'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_74b1a36f-a292-48c3-adda-afaa9fa7f600', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='74b1a36f-a292-48c3-adda-afaa9fa7f600'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_74ced52b-a9ae-418f-b046-0706c5987017', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='74ced52b-a9ae-418f-b046-0706c5987017'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_761c3a78-4202-44a1-834d-50135042abc2', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='761c3a78-4202-44a1-834d-50135042abc2'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_76ed1008-9507-45d6-8a96-3d3a1a8026a7', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='76ed1008-9507-45d6-8a96-3d3a1a8026a7'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_77195815-03ce-4292-90ba-b7543e0f11f6', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='77195815-03ce-4292-90ba-b7543e0f11f6'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_77f9af56-1ea2-47d7-9c36-30a46601b5f3', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='77f9af56-1ea2-47d7-9c36-30a46601b5f3'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7860f0f1-caa0-4dc8-b16b-be267a1232c8', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='7860f0f1-caa0-4dc8-b16b-be267a1232c8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_79743b35-43a1-4b3f-b26c-256fab141ce0', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='79743b35-43a1-4b3f-b26c-256fab141ce0'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7a0f1532-8818-4e29-bbe2-8ff893bd7a71', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='7a0f1532-8818-4e29-bbe2-8ff893bd7a71'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7a95465e-0cab-499d-9854-fd3584263a08', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='7a95465e-0cab-499d-9854-fd3584263a08'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7b1ea63d-f7fb-4f53-99e3-c2b428636a98', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='7b1ea63d-f7fb-4f53-99e3-c2b428636a98'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7b39b72e-9937-4a1e-a0db-3be541f56e03', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='7b39b72e-9937-4a1e-a0db-3be541f56e03'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7b601dcc-7eae-4ba0-bf6b-5a15807f52cf', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='7b601dcc-7eae-4ba0-bf6b-5a15807f52cf'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7bd97025-5644-4b3f-8f9f-bc556f31b477', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='7bd97025-5644-4b3f-8f9f-bc556f31b477'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7c513134-8683-40a4-ac74-a69d83401d61', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='7c513134-8683-40a4-ac74-a69d83401d61'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7d19bfe6-926d-444c-92a2-fba67f2d0f90', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='7d19bfe6-926d-444c-92a2-fba67f2d0f90'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7d52ec6a-03ce-47c0-bbfb-6c5411f5f2cd', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='7d52ec6a-03ce-47c0-bbfb-6c5411f5f2cd'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7e27f10e-7ab2-4ac3-b8fe-138efb2c0fe8', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='7e27f10e-7ab2-4ac3-b8fe-138efb2c0fe8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7e2cd911-2eee-49cc-b704-df052a73e2b6', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='7e2cd911-2eee-49cc-b704-df052a73e2b6'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_7fd6ca91-9ee4-484f-950d-407019dd47cf', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='7fd6ca91-9ee4-484f-950d-407019dd47cf'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_804c5d0f-54e2-47ea-8e6f-ffb5497a5eda', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='804c5d0f-54e2-47ea-8e6f-ffb5497a5eda'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_80f63cc9-2f6b-40bb-a753-a84416416a33', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='80f63cc9-2f6b-40bb-a753-a84416416a33'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_814dfbf7-00ac-489a-9e30-c2725f382ec1', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='814dfbf7-00ac-489a-9e30-c2725f382ec1'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_829323cb-a1f6-4280-bb94-4c385ad08f5d', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='829323cb-a1f6-4280-bb94-4c385ad08f5d'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_82a1acde-0efc-45ed-92fa-f109173f7248', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='82a1acde-0efc-45ed-92fa-f109173f7248'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_82c2594b-917f-4e52-aa43-daabeb4e4b78', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='82c2594b-917f-4e52-aa43-daabeb4e4b78'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_832ccbd9-8946-40e7-b9f9-f68d2af62cfc', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='832ccbd9-8946-40e7-b9f9-f68d2af62cfc'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8348f308-17a8-40cd-92c1-69d5c9e1f3a7', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='8348f308-17a8-40cd-92c1-69d5c9e1f3a7'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_84e83c91-3b35-48e3-b418-622cf6ddfae8', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='84e83c91-3b35-48e3-b418-622cf6ddfae8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_85a11d83-f6b7-480d-ac5d-a0401ff38739', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='85a11d83-f6b7-480d-ac5d-a0401ff38739'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_85d16ce9-783d-483e-9e4a-c6784b67d17e', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='85d16ce9-783d-483e-9e4a-c6784b67d17e'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_86487053-b2cf-4b2b-8a44-0f03543ea688', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='86487053-b2cf-4b2b-8a44-0f03543ea688'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_864d9630-8457-45db-b7ea-702c65046632', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='864d9630-8457-45db-b7ea-702c65046632'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_866d73d5-aa71-4bdb-a4a7-72c8e53e8127', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='866d73d5-aa71-4bdb-a4a7-72c8e53e8127'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_86775443-8c54-4de6-a1bf-2c0b829d7e54', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='86775443-8c54-4de6-a1bf-2c0b829d7e54'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8681c5b6-2f0a-48fb-b2c0-01358b220569', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='8681c5b6-2f0a-48fb-b2c0-01358b220569'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_871ac4b3-c888-4c28-96e8-b2ad54f7b25c', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='871ac4b3-c888-4c28-96e8-b2ad54f7b25c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8768322a-3e8c-46ce-9a54-eba1a404cb23', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='8768322a-3e8c-46ce-9a54-eba1a404cb23'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_87d24b7d-f828-44a2-8eaa-83539cfce216', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='87d24b7d-f828-44a2-8eaa-83539cfce216'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8a5fd300-991b-4e4a-8e92-56d060eaefb9', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='8a5fd300-991b-4e4a-8e92-56d060eaefb9'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8ae5c6f5-e1ff-4e8d-8a41-7c65ba88afd0', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='8ae5c6f5-e1ff-4e8d-8a41-7c65ba88afd0'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8ba431d9-7524-46bd-9cc7-8b8af53070c0', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='8ba431d9-7524-46bd-9cc7-8b8af53070c0'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8bb2cfaa-07e1-4f6a-974f-3f70214d4b1c', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='8bb2cfaa-07e1-4f6a-974f-3f70214d4b1c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8bcd8fae-dda7-494b-82c8-eb1c4f6a44da', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='8bcd8fae-dda7-494b-82c8-eb1c4f6a44da'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8bf28e41-f9d1-4238-8490-91ba3259633e', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='8bf28e41-f9d1-4238-8490-91ba3259633e'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8d5c5642-6d3a-48d4-898d-eab7c3d673da', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='8d5c5642-6d3a-48d4-898d-eab7c3d673da'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8d808ba9-13b4-4f0c-bff6-2a701c779326', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='8d808ba9-13b4-4f0c-bff6-2a701c779326'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8e5577c9-0aac-406e-a6af-391724bc17b8', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='8e5577c9-0aac-406e-a6af-391724bc17b8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8e63bca0-2b60-48a6-ba82-32883d918dec', query = "UPDATE clean_enumerations SET wid='424' WHERE instance_id='8e63bca0-2b60-48a6-ba82-32883d918dec'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8f03ba4f-fca1-4a8a-bd0e-935768b7b577', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='8f03ba4f-fca1-4a8a-bd0e-935768b7b577'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8f28e42d-ddbd-401f-bce0-45780184eafb', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='8f28e42d-ddbd-401f-bce0-45780184eafb'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8fcc5aff-65f8-4826-9be6-01552905760c', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='8fcc5aff-65f8-4826-9be6-01552905760c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_8fd26300-8506-4274-b664-a9dba4304ebd', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='8fd26300-8506-4274-b664-a9dba4304ebd'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9021e1a3-7582-438c-9f5c-a1586faeac85', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='9021e1a3-7582-438c-9f5c-a1586faeac85'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_90703679-7dc7-4a1a-931b-2f06d7e42508', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='90703679-7dc7-4a1a-931b-2f06d7e42508'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_91592f38-99a8-43da-9768-e46b6f806b58', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='91592f38-99a8-43da-9768-e46b6f806b58'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9184a432-1567-4f9c-89ae-9ddb3f2aa043', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='9184a432-1567-4f9c-89ae-9ddb3f2aa043'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_91b45a48-a4a2-4476-a0a0-104fe37bc002', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='91b45a48-a4a2-4476-a0a0-104fe37bc002'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_92006471-2193-413e-8afe-be8766619525', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='92006471-2193-413e-8afe-be8766619525'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_92504a06-2330-4ad7-8cc7-41a51d72584d', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='92504a06-2330-4ad7-8cc7-41a51d72584d'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_92d5e667-0a36-4023-a658-c1bcf296d208', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='92d5e667-0a36-4023-a658-c1bcf296d208'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_931b2975-90c4-460a-b1aa-5ca5ae0bd356', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='931b2975-90c4-460a-b1aa-5ca5ae0bd356'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_93a3ffa1-3b3d-47df-86c4-d1ba9ae30e6b', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='93a3ffa1-3b3d-47df-86c4-d1ba9ae30e6b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_93e871fa-2d69-4919-bc19-e5a085bb2fcc', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='93e871fa-2d69-4919-bc19-e5a085bb2fcc'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9650a1b2-fb4e-4960-94f3-f7a97db6b756', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='9650a1b2-fb4e-4960-94f3-f7a97db6b756'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_969990aa-89b5-4c59-b972-42b1c3da49b5', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='969990aa-89b5-4c59-b972-42b1c3da49b5'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9711422f-1027-473a-8659-095233a6543a', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='9711422f-1027-473a-8659-095233a6543a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9836c55f-e2c8-4fb6-aa35-b5801215d00f', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='9836c55f-e2c8-4fb6-aa35-b5801215d00f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_983d213b-f927-4436-af9d-84b21a948432', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='983d213b-f927-4436-af9d-84b21a948432'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_986501c2-88de-400a-b07d-ab1c808b383c', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='986501c2-88de-400a-b07d-ab1c808b383c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_98f2231f-4046-46a2-b2df-a5637d9ae81f', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='98f2231f-4046-46a2-b2df-a5637d9ae81f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_99b11b10-dc59-4517-9304-6bab982a7252', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='99b11b10-dc59-4517-9304-6bab982a7252'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9a5be8cf-0950-4d90-8100-a0240a0f443a', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='9a5be8cf-0950-4d90-8100-a0240a0f443a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9abea0ec-0644-4277-92a1-aa1fdc6e236d', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='9abea0ec-0644-4277-92a1-aa1fdc6e236d'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9bdcd885-2ff0-4f2c-a650-4650c436c58a', query = "UPDATE clean_enumerations SET wid='425' WHERE instance_id='9bdcd885-2ff0-4f2c-a650-4650c436c58a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9d2f5377-7ada-4d4c-b7a5-9bdfd5c981c2', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='9d2f5377-7ada-4d4c-b7a5-9bdfd5c981c2'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9d694ca5-e04c-4f20-ac85-b554529a798c', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='9d694ca5-e04c-4f20-ac85-b554529a798c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9df985a4-8d98-4647-ae16-4255faa48a7e', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='9df985a4-8d98-4647-ae16-4255faa48a7e'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9e35718d-36e3-42b4-aef0-efb94d472302', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='9e35718d-36e3-42b4-aef0-efb94d472302'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9e6d5d6c-bd25-4c90-ba58-23af7f9cca3a', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='9e6d5d6c-bd25-4c90-ba58-23af7f9cca3a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9eb7f32d-e927-465f-be5f-7b4d9c10c552', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='9eb7f32d-e927-465f-be5f-7b4d9c10c552'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9ebe26b1-1089-472b-b19a-3ae5916bc332', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='9ebe26b1-1089-472b-b19a-3ae5916bc332'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9ed7cfdc-e470-42ce-a36e-ae2b96d8bbc8', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='9ed7cfdc-e470-42ce-a36e-ae2b96d8bbc8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9ed889f3-1ab6-4e85-b43c-39417a97917c', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='9ed889f3-1ab6-4e85-b43c-39417a97917c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_9f1857ec-371a-4e00-8b9c-dbfb6f19b64e', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='9f1857ec-371a-4e00-8b9c-dbfb6f19b64e'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a072934d-9dd8-4442-9754-62286915c412', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='a072934d-9dd8-4442-9754-62286915c412'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a1cb5b4d-e8ca-4d29-a86a-8423a2483b0b', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='a1cb5b4d-e8ca-4d29-a86a-8423a2483b0b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a33ae23f-9552-417e-afcb-843842038b0a', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='a33ae23f-9552-417e-afcb-843842038b0a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a4aa298c-d46a-46d9-973c-bce701ea0a23', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='a4aa298c-d46a-46d9-973c-bce701ea0a23'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a53185b3-8f6a-4be3-8613-27be05118b01', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='a53185b3-8f6a-4be3-8613-27be05118b01'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a5a9d487-f076-4490-a44d-330952ea7067', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='a5a9d487-f076-4490-a44d-330952ea7067'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a5b04bbb-e427-42fa-8209-72b8d36985cb', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='a5b04bbb-e427-42fa-8209-72b8d36985cb'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a6006f8b-f5da-4ada-bd0a-689cbd37dfa5', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='a6006f8b-f5da-4ada-bd0a-689cbd37dfa5'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a66bbd1e-0867-42df-8d17-62fd9e2de097', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='a66bbd1e-0867-42df-8d17-62fd9e2de097'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a70c2814-5056-4b69-b165-5a6a89103b6c', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='a70c2814-5056-4b69-b165-5a6a89103b6c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a70cb6a1-7d4f-44ae-8397-16ffe4d9ebcb', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='a70cb6a1-7d4f-44ae-8397-16ffe4d9ebcb'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a78494be-f79e-4332-998d-96c917994e0f', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='a78494be-f79e-4332-998d-96c917994e0f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a87e9b26-dcb4-46c9-bbea-113d11ed0f6c', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='a87e9b26-dcb4-46c9-bbea-113d11ed0f6c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_a8ac45b8-1e32-49ec-86df-b52e6b328aba', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='a8ac45b8-1e32-49ec-86df-b52e6b328aba'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_aa831a8f-e822-4b29-b813-260b08ae222b', query = "UPDATE clean_enumerations SET wid='424' WHERE instance_id='aa831a8f-e822-4b29-b813-260b08ae222b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ab375c0f-f2b8-4016-9f32-0acaa7b1a801', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='ab375c0f-f2b8-4016-9f32-0acaa7b1a801'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ab3cfe57-29f3-44bb-8bf2-dfc02088a29c', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='ab3cfe57-29f3-44bb-8bf2-dfc02088a29c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_aba90c68-5a26-4a55-b56d-f4ff660547e0', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='aba90c68-5a26-4a55-b56d-f4ff660547e0'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_abc4badf-87a3-4945-a171-7699fb32579d', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='abc4badf-87a3-4945-a171-7699fb32579d'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ac36a71e-d027-4754-9e26-9d01537ce024', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='ac36a71e-d027-4754-9e26-9d01537ce024'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ac86e05f-3fa0-43d4-b35e-fb92f3e9f262', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='ac86e05f-3fa0-43d4-b35e-fb92f3e9f262'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ad1ceb67-1021-4b56-98f1-d6244f198ca2', query = "UPDATE clean_enumerations SET wid='425' WHERE instance_id='ad1ceb67-1021-4b56-98f1-d6244f198ca2'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ad85a089-d4ff-48c1-9a1d-e0a8ed0f1f52', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='ad85a089-d4ff-48c1-9a1d-e0a8ed0f1f52'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ae1e6165-7a7f-4ef7-816b-85e64dc6ea12', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='ae1e6165-7a7f-4ef7-816b-85e64dc6ea12'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ae4ecefb-3051-4ab1-8a34-57631d4ce5ff', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='ae4ecefb-3051-4ab1-8a34-57631d4ce5ff'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_af259274-1569-4e36-bb83-87038a2875c3', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='af259274-1569-4e36-bb83-87038a2875c3'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_af2959b7-0564-4eac-9937-52a8a57d17e5', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='af2959b7-0564-4eac-9937-52a8a57d17e5'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b0a7f00d-8bd7-4171-a70a-86966df1ea8f', query = "UPDATE clean_enumerations SET wid='430' WHERE instance_id='b0a7f00d-8bd7-4171-a70a-86966df1ea8f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b0bab71b-179f-4135-9691-8de2c91b956a', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='b0bab71b-179f-4135-9691-8de2c91b956a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b0c72f42-8894-4269-86ef-d3e474ef404b', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='b0c72f42-8894-4269-86ef-d3e474ef404b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b19189d7-edf6-4a9a-95d4-3ff2129ff603', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='b19189d7-edf6-4a9a-95d4-3ff2129ff603'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b216bb17-f3e3-417d-a077-19d5d749184d', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='b216bb17-f3e3-417d-a077-19d5d749184d'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b24a0dfb-6b48-4186-943d-482f2cb0c22b', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='b24a0dfb-6b48-4186-943d-482f2cb0c22b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b445d9ad-930d-4cab-a066-cfb41aea4996', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='b445d9ad-930d-4cab-a066-cfb41aea4996'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b527756b-89f8-4985-b97a-e0c170d6aef3', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='b527756b-89f8-4985-b97a-e0c170d6aef3'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b538161a-3bcc-44c6-bd90-e2832bad72ae', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='b538161a-3bcc-44c6-bd90-e2832bad72ae'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b5bc913e-6caa-4793-a3d2-fd7b011eb05a', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='b5bc913e-6caa-4793-a3d2-fd7b011eb05a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b5ea5b0d-66e5-4774-bf2f-80a0984c9a18', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='b5ea5b0d-66e5-4774-bf2f-80a0984c9a18'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b5fa7cc3-3d60-4ee9-a0e3-c04537b0466a', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='b5fa7cc3-3d60-4ee9-a0e3-c04537b0466a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b60756d2-6982-422f-a948-79080606aafd', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='b60756d2-6982-422f-a948-79080606aafd'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b65de328-75ca-4600-8777-088fbf5cc3a4', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='b65de328-75ca-4600-8777-088fbf5cc3a4'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b6b987ab-e737-4993-9c7d-35d655a56217', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='b6b987ab-e737-4993-9c7d-35d655a56217'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b71d4991-d7a3-43fa-8d88-69a338b61912', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='b71d4991-d7a3-43fa-8d88-69a338b61912'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b7f61a6c-743c-40a6-b2ae-5d10ddb923f2', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='b7f61a6c-743c-40a6-b2ae-5d10ddb923f2'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b88236e3-c8da-48c8-a5a9-bd58d84f0227', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='b88236e3-c8da-48c8-a5a9-bd58d84f0227'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b89269f5-aa83-403d-9bd2-0769a307fb14', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='b89269f5-aa83-403d-9bd2-0769a307fb14'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b8b8f735-3ecb-42b9-a6c7-a9471975de99', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='b8b8f735-3ecb-42b9-a6c7-a9471975de99'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b8c7d786-2d86-4124-9ad3-8cb72322fca4', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='b8c7d786-2d86-4124-9ad3-8cb72322fca4'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_b9eb2bf4-3f8b-47aa-b0d9-f2e09614bc5e', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='b9eb2bf4-3f8b-47aa-b0d9-f2e09614bc5e'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ba22b679-0dde-450a-ade4-a8056dd8a2e5', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='ba22b679-0dde-450a-ade4-a8056dd8a2e5'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ba765a0c-ce9d-4040-ad81-21dfa79f507e', query = "UPDATE clean_enumerations SET wid='425' WHERE instance_id='ba765a0c-ce9d-4040-ad81-21dfa79f507e'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_bb8205d5-fd58-47ff-9d0a-e7178834c34b', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='bb8205d5-fd58-47ff-9d0a-e7178834c34b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_bbd8495e-b318-41ba-b16d-a7126c81ff6f', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='bbd8495e-b318-41ba-b16d-a7126c81ff6f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_bc6ec263-93d9-478b-847e-fd59de05644e', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='bc6ec263-93d9-478b-847e-fd59de05644e'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_bca54588-3968-44b7-9a82-2600be9d1451', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='bca54588-3968-44b7-9a82-2600be9d1451'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_be2f9471-c21c-41b7-8ba0-6266c5b5ec33', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='be2f9471-c21c-41b7-8ba0-6266c5b5ec33'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_be3a6e8a-4c62-4468-9a7e-d3ae6d1e76c5', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='be3a6e8a-4c62-4468-9a7e-d3ae6d1e76c5'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_be5e4d84-0dcb-496a-ba16-5082f7fc5325', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='be5e4d84-0dcb-496a-ba16-5082f7fc5325'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_be936d7c-fe86-4da8-953f-c4b3c36d3116', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='be936d7c-fe86-4da8-953f-c4b3c36d3116'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_bfce4a4c-767b-44f5-9285-633b9c53ebc0', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='bfce4a4c-767b-44f5-9285-633b9c53ebc0'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_bfd9927b-82e4-4c8e-923f-d29a5d8a3bab', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='bfd9927b-82e4-4c8e-923f-d29a5d8a3bab'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_bfdb0704-b6c0-4d2f-809c-66c73827c4e1', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='bfdb0704-b6c0-4d2f-809c-66c73827c4e1'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_bff50ed3-4fe2-4c93-ae75-3457f2ac9d54', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='bff50ed3-4fe2-4c93-ae75-3457f2ac9d54'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c02e5291-8b7d-422f-b2a9-eed0ce26cd46', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='c02e5291-8b7d-422f-b2a9-eed0ce26cd46'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c073ee99-8de4-4ea1-bb54-dde1b50a1511', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='c073ee99-8de4-4ea1-bb54-dde1b50a1511'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c1c604b5-a308-41f2-b5c0-c729e391a19c', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='c1c604b5-a308-41f2-b5c0-c729e391a19c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c26f5c9e-1854-4168-a5a5-936468a48c86', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='c26f5c9e-1854-4168-a5a5-936468a48c86'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c345875a-83eb-4dc3-a38a-061c3c8def2c', query = "UPDATE clean_enumerations SET wid='424' WHERE instance_id='c345875a-83eb-4dc3-a38a-061c3c8def2c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c35fe6e4-104d-4799-8a8e-882b6970f648', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='c35fe6e4-104d-4799-8a8e-882b6970f648'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c40436df-185f-4300-9d20-fb1f2e61655e', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='c40436df-185f-4300-9d20-fb1f2e61655e'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c6b4291d-35ac-4c33-b487-c2289890dd6b', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='c6b4291d-35ac-4c33-b487-c2289890dd6b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c7fdd610-30ee-4ce5-adc6-f2ee74d31bd2', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='c7fdd610-30ee-4ce5-adc6-f2ee74d31bd2'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_c92eda6e-e176-47b7-89a1-ffd289c6269a', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='c92eda6e-e176-47b7-89a1-ffd289c6269a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ca1819d4-c49f-4054-a985-a0e19ef59dd8', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='ca1819d4-c49f-4054-a985-a0e19ef59dd8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ca5374cf-918a-48b0-bf69-ebc12e53e4ca', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='ca5374cf-918a-48b0-bf69-ebc12e53e4ca'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_cc498256-cc75-4226-93cd-17b480b948a6', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='cc498256-cc75-4226-93cd-17b480b948a6'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_cd33aa09-a7be-4d95-b400-6db46690fa86', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='cd33aa09-a7be-4d95-b400-6db46690fa86'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_cd3d4509-1f55-491f-817a-acb97c613ab9', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='cd3d4509-1f55-491f-817a-acb97c613ab9'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_cda1c471-a12b-44d9-9c12-ff428186e21f', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='cda1c471-a12b-44d9-9c12-ff428186e21f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_cdafe66b-da9e-4523-94c5-9b0c16a24f54', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='cdafe66b-da9e-4523-94c5-9b0c16a24f54'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_cf767dbd-f19e-4cb7-9723-a2e26cc3aa42', query = "UPDATE clean_enumerations SET wid='425' WHERE instance_id='cf767dbd-f19e-4cb7-9723-a2e26cc3aa42'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_cffc7d08-f590-4390-a6c2-b4114cbdada6', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='cffc7d08-f590-4390-a6c2-b4114cbdada6'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d0a66b0f-a591-4fb4-b334-46550a329d85', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='d0a66b0f-a591-4fb4-b334-46550a329d85'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d1c3565a-3e91-4604-bb0b-b2f0a0cc6888', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='d1c3565a-3e91-4604-bb0b-b2f0a0cc6888'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d2635da6-4d10-4154-b71f-0cba2e2d6d80', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='d2635da6-4d10-4154-b71f-0cba2e2d6d80'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d2730700-516b-4694-a9fc-60692cd7c56a', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='d2730700-516b-4694-a9fc-60692cd7c56a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d2d25f50-745c-447a-8586-e12fbfa4b225', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='d2d25f50-745c-447a-8586-e12fbfa4b225'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d46d9a69-15f9-425e-ad1c-8f3e0af21a66', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='d46d9a69-15f9-425e-ad1c-8f3e0af21a66'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d58caee8-99ad-4c4b-92d3-970433e84466', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='d58caee8-99ad-4c4b-92d3-970433e84466'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d6c94b41-cd8b-489b-abc5-7feb499c85cc', query = "UPDATE clean_enumerations SET wid='425' WHERE instance_id='d6c94b41-cd8b-489b-abc5-7feb499c85cc'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d7bb4a9e-85d9-4f4b-aee7-cae991c89187', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='d7bb4a9e-85d9-4f4b-aee7-cae991c89187'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d80b478a-ebd0-4dad-8258-3ff742ee2125', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='d80b478a-ebd0-4dad-8258-3ff742ee2125'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d835c7d8-5e2d-47fd-b542-37bb661a9e34', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='d835c7d8-5e2d-47fd-b542-37bb661a9e34'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d8758ba4-363e-4f07-bce2-3a7a67538d3e', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='d8758ba4-363e-4f07-bce2-3a7a67538d3e'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d89bb7f5-9d1c-43da-89a9-b84bf07e8913', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='d89bb7f5-9d1c-43da-89a9-b84bf07e8913'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_d9d4ce4e-1ad5-43da-be38-b388e58be676', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='d9d4ce4e-1ad5-43da-be38-b388e58be676'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_da0ed261-6ad2-4951-9a8a-e4e925f811ad', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='da0ed261-6ad2-4951-9a8a-e4e925f811ad'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_da319701-6a94-49ac-8236-cbca06751728', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='da319701-6a94-49ac-8236-cbca06751728'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_da4b1f30-ee85-49ad-b859-69449ff3ad45', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='da4b1f30-ee85-49ad-b859-69449ff3ad45'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_de66a759-03c2-4db0-b2b1-2fecd81f91e1', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='de66a759-03c2-4db0-b2b1-2fecd81f91e1'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_de94d4de-4d50-4a74-9ab0-4fc9bb0abd5f', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='de94d4de-4d50-4a74-9ab0-4fc9bb0abd5f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_dfbc50f4-cf44-4ca6-9950-10f21759b688', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='dfbc50f4-cf44-4ca6-9950-10f21759b688'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_dfc7583f-3a3a-4048-ae5a-e47a5f7b2902', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='dfc7583f-3a3a-4048-ae5a-e47a5f7b2902'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e0701684-e584-4612-bd37-42cdef0a5275', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='e0701684-e584-4612-bd37-42cdef0a5275'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e16e8836-0899-4723-b6b0-051f71efd9a0', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='e16e8836-0899-4723-b6b0-051f71efd9a0'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e179218b-24b9-47a5-a1ce-9fd8901780c8', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='e179218b-24b9-47a5-a1ce-9fd8901780c8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e1a8c45a-ebfd-4919-bf04-3a7524837678', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='e1a8c45a-ebfd-4919-bf04-3a7524837678'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e1e6b871-1eb7-4d10-998b-059f34ac8488', query = "UPDATE clean_enumerations SET wid='424' WHERE instance_id='e1e6b871-1eb7-4d10-998b-059f34ac8488'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e3314347-c34e-40c1-aa24-38e03f569bb4', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='e3314347-c34e-40c1-aa24-38e03f569bb4'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e3867206-c2f2-4148-b722-6300c4177db8', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='e3867206-c2f2-4148-b722-6300c4177db8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e39317ea-ad09-4cac-ac97-9cbfe46b5f69', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='e39317ea-ad09-4cac-ac97-9cbfe46b5f69'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e3db59b6-3b7b-4c95-b179-b4e447363313', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='e3db59b6-3b7b-4c95-b179-b4e447363313'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e3f8c028-c3bc-49b5-8983-3cf2f5340815', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='e3f8c028-c3bc-49b5-8983-3cf2f5340815'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e424c715-c0fe-4aad-aa5e-f04c6c454ef4', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='e424c715-c0fe-4aad-aa5e-f04c6c454ef4'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e4a9dbf9-622c-4bde-abbe-9d838ecb794c', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='e4a9dbf9-622c-4bde-abbe-9d838ecb794c'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e50f61d4-b6bd-45a5-b863-05a76fee8320', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='e50f61d4-b6bd-45a5-b863-05a76fee8320'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e51fbb44-bfd0-41dd-ac51-c9c0b92a0b66', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='e51fbb44-bfd0-41dd-ac51-c9c0b92a0b66'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e656083b-bdb0-4547-9478-d17790cac51b', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='e656083b-bdb0-4547-9478-d17790cac51b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e71ef654-396b-4ee5-8730-dd01b87335f3', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='e71ef654-396b-4ee5-8730-dd01b87335f3'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e8875b8e-4638-4c6e-8afc-c0766999cc9f', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='e8875b8e-4638-4c6e-8afc-c0766999cc9f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e95c48de-706a-4026-a280-b5c79fb1c649', query = "UPDATE clean_enumerations SET wid='424' WHERE instance_id='e95c48de-706a-4026-a280-b5c79fb1c649'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_e9a39131-2949-40a6-b915-b34602cadf2f', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='e9a39131-2949-40a6-b915-b34602cadf2f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_eac1578c-880c-4945-b293-b64d50db3e86', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='eac1578c-880c-4945-b293-b64d50db3e86'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ead40546-c044-4818-aa30-85d1f91ad7ac', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='ead40546-c044-4818-aa30-85d1f91ad7ac'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_eaef0ad8-2a38-4417-b39b-252d5c17babb', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='eaef0ad8-2a38-4417-b39b-252d5c17babb'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ebd8cbdd-55ee-4a80-85fd-ef42168fdd89', query = "UPDATE clean_enumerations SET wid='428' WHERE instance_id='ebd8cbdd-55ee-4a80-85fd-ef42168fdd89'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ec195139-0413-4f3b-95ae-77c7db4f3330', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='ec195139-0413-4f3b-95ae-77c7db4f3330'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_eca3687d-ecab-4cfc-bcf0-8f5af30f91c7', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='eca3687d-ecab-4cfc-bcf0-8f5af30f91c7'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ecc594e2-dbc9-46d2-a95e-dcbb8904a86a', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='ecc594e2-dbc9-46d2-a95e-dcbb8904a86a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ed00e124-9f32-4386-b925-c41c85f588e6', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='ed00e124-9f32-4386-b925-c41c85f588e6'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ed098407-742b-4d41-8d0b-b6a96132c2cc', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='ed098407-742b-4d41-8d0b-b6a96132c2cc'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ee3a2c98-1703-4f3f-90a4-ffba3a189477', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='ee3a2c98-1703-4f3f-90a4-ffba3a189477'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ee802b4a-e9f9-4457-8f51-15a835847fae', query = "UPDATE clean_enumerations SET wid='424' WHERE instance_id='ee802b4a-e9f9-4457-8f51-15a835847fae'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ef9a4880-a225-4ae6-8c72-36b6e7024998', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='ef9a4880-a225-4ae6-8c72-36b6e7024998'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_efa597b7-b593-4a12-bad2-882f9eb58310', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='efa597b7-b593-4a12-bad2-882f9eb58310'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_efbf39f5-46b0-42ce-80ae-9c49477cc147', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='efbf39f5-46b0-42ce-80ae-9c49477cc147'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f0cb9510-4160-4b4b-8fde-92b0a0539eeb', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='f0cb9510-4160-4b4b-8fde-92b0a0539eeb'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f0da5c81-b39a-49f2-9a77-6a1879af8447', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='f0da5c81-b39a-49f2-9a77-6a1879af8447'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f0e122e9-7269-403c-8c34-e8923502f24f', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='f0e122e9-7269-403c-8c34-e8923502f24f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f16b951c-b61e-4090-acdf-b66cee4a1451', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='f16b951c-b61e-4090-acdf-b66cee4a1451'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f1b2843d-a2d2-45ab-a998-1c8dd9332394', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='f1b2843d-a2d2-45ab-a998-1c8dd9332394'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f28dd34c-3997-4274-9058-f89910d4254b', query = "UPDATE clean_enumerations SET wid='430' WHERE instance_id='f28dd34c-3997-4274-9058-f89910d4254b'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f3036b1a-689e-4c85-9900-5dd5e0bda165', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='f3036b1a-689e-4c85-9900-5dd5e0bda165'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f3b3e969-dac7-4468-82cc-575baaab2888', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='f3b3e969-dac7-4468-82cc-575baaab2888'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f3d535fc-fe4c-4faa-a9ea-607b268f7ea8', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='f3d535fc-fe4c-4faa-a9ea-607b268f7ea8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f545f773-f426-4f26-bc91-26dfdf211a97', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='f545f773-f426-4f26-bc91-26dfdf211a97'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f6b221a3-ba06-4d42-ad9c-250fa6c7cbe8', query = "UPDATE clean_enumerations SET wid='424' WHERE instance_id='f6b221a3-ba06-4d42-ad9c-250fa6c7cbe8'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f72f8553-77f2-4f62-9c56-a9b48c854a3a', query = "UPDATE clean_enumerations SET wid='422' WHERE instance_id='f72f8553-77f2-4f62-9c56-a9b48c854a3a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f77f13c2-8bde-4789-b10f-9b792eba76b7', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='f77f13c2-8bde-4789-b10f-9b792eba76b7'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f78f8dbe-d850-4b6e-ae45-c2298b056134', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='f78f8dbe-d850-4b6e-ae45-c2298b056134'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_f9039d4c-4ec7-4b7c-b103-b9331ff35151', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='f9039d4c-4ec7-4b7c-b103-b9331ff35151'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_fa94e9e9-caf9-4bbf-b147-6c0c3c797c93', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='fa94e9e9-caf9-4bbf-b147-6c0c3c797c93'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_fac91b1f-9007-4301-99c9-bdf2c7930533', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='fac91b1f-9007-4301-99c9-bdf2c7930533'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_faf1ffd0-cb94-4f4a-a066-4b745e95f90a', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='faf1ffd0-cb94-4f4a-a066-4b745e95f90a'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_fb3c301e-a9ec-4ab5-8e04-a55be60e4a37', query = "UPDATE clean_enumerations SET wid='429' WHERE instance_id='fb3c301e-a9ec-4ab5-8e04-a55be60e4a37'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_fba706b6-9d56-4c2b-89f8-efa4070ab5c3', query = "UPDATE clean_enumerations SET wid='425' WHERE instance_id='fba706b6-9d56-4c2b-89f8-efa4070ab5c3'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_fc67fde4-e844-4832-816e-1b5cd0bdd400', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='fc67fde4-e844-4832-816e-1b5cd0bdd400'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_fd694b29-3a65-4fc6-9110-bff00098940f', query = "UPDATE clean_enumerations SET wid='423' WHERE instance_id='fd694b29-3a65-4fc6-9110-bff00098940f'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_fd797b50-0ee0-4d30-b4e9-4ebe45e554be', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='fd797b50-0ee0-4d30-b4e9-4ebe45e554be'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_fdce285f-325f-40eb-94dd-8fd9f3d795aa', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='fdce285f-325f-40eb-94dd-8fd9f3d795aa'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ff7b4ff3-e34e-47d6-bff4-11417d5b3642', query = "UPDATE clean_enumerations SET wid='427' WHERE instance_id='ff7b4ff3-e34e-47d6-bff4-11417d5b3642'", who = 'Joe Brew')
+
+implement(id = 'strange_wid_enumerations_ffa1bd93-5c82-417d-9afe-8e4608da8052', query = "UPDATE clean_enumerations SET wid='338' WHERE instance_id='ffa1bd93-5c82-417d-9afe-8e4608da8052'", who = 'Joe Brew')
+
+implement(id = 'missing_wid_enumerations_4022bf4c-c760-479b-9553-ae98d3025824', query = "UPDATE clean_enumerations SET wid='395' WHERE instance_id='4022bf4c-c760-479b-9553-ae98d3025824'", who = 'Joe Brew')
+
+implement(id = 'missing_wid_enumerations_49c1ce36-8372-4878-9fbb-63136cdb4dae', query = "UPDATE clean_enumerations SET wid='370' WHERE instance_id='49c1ce36-8372-4878-9fbb-63136cdb4dae'", who = 'Joe Brew')
+
+iid = "'addcd14f-a887-42b9-9c4d-5f475bfecd22'"
+implement(id = 'repeat_hh_id_addcd14f-a887-42b9-9c4d-5f475bfecd22,e5651bb0-ed12-451a-ad51-dee635862a7f', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'5a80ba29-077c-4c13-bfda-9cd3e1415a4a'"
+implement(id = 'repeat_hh_id_5a80ba29-077c-4c13-bfda-9cd3e1415a4a,9dabcbd6-11c8-4345-9b23-3d4ee976465f', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+iid = "'4994bf5c-88fd-47ec-b3cb-4ee0e51ac7a4'"
+implement(id = 'repeat_hh_id_4994bf5c-88fd-47ec-b3cb-4ee0e51ac7a4,ee265069-4077-4d54-9d6d-6650faddadfb', query = "DELETE FROM clean_minicensus_main WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_people WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_hh_sub WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_mosquito_net WHERE instance_id= " + iid + "; DELETE FROM clean_minicensus_repeat_water WHERE instance_id= " + iid + ";")
+
+# Picked wrong person for household head
+implement(id = 'hh_head_too_young_old_7a5d2620-32cd-4dca-b193-df563a770f69', query = "UPDATE clean_minicensus_main SET hh_head_id='2' WHERE instance_id='7a5d2620-32cd-4dca-b193-df563a770f69'; UPDATE clean_minicensus_main SET hh_head_dob='1999-12-24' WHERE instance_id='7a5d2620-32cd-4dca-b193-df563a770f69'; UPDATE clean_minicensus_main SET hh_head_gender='female' WHERE instance_id='7a5d2620-32cd-4dca-b193-df563a770f69';")
+
+
+
+
 
 # TZA
+implement(id = 'missing_wid_3cb21b8a-65b1-487f-93ad-5e7c3bf317a1', query = "UPDATE clean_minicensus_main SET wid='3' WHERE instance_id='3cb21b8a-65b1-487f-93ad-5e7c3bf317a1'")
 implement(id = 'strange_wid_5f466226-1d75-40a9-97fc-5e8cd84448c9', query = "UPDATE clean_minicensus_main SET wid='37' WHERE instance_id='5f466226-1d75-40a9-97fc-5e8cd84448c9'")
 implement(id = 'missing_wid_23632449-cb8d-4ea2-a705-4d9f145b352c', query = "UPDATE clean_minicensus_main SET wid='80' WHERE instance_id='23632449-cb8d-4ea2-a705-4d9f145b352c'")
 implement(id = 'missing_wid_ee4aca39-2370-49c2-a01e-a295638038e9', query = "UPDATE clean_minicensus_main SET wid='14' WHERE instance_id='ee4aca39-2370-49c2-a01e-a295638038e9'")
