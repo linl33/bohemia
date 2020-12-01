@@ -1,7 +1,7 @@
 library(shiny)
 library(ggplot2)
 
-points_to_line <- function(data, group = "time_of_day"){
+points_to_line <- function(data, group = "day"){
   data <- data %>% 
     group_by_at(group) %>%
     summarise(do_union = FALSE) %>%

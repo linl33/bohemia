@@ -3455,7 +3455,11 @@ app_server <- function(input, output, session) {
         filter(date >= date_slider[1],
                                       date <= date_slider[2])
       sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
+      sub_data$day <- lubridate::round_date(sub_data$devicetime, 'day')
+      
       sub_data$time_of_day <- as.character(sub_data$time_of_day)
+      sub_data$day <- as.character(sub_data$day)
+      
     }
     if(nrow(sub_data) < 1){
       ok <- FALSE
@@ -3471,7 +3475,7 @@ app_server <- function(input, output, session) {
       # pts$groups <- stplanr::rnet_group(pts)
       # Make the plot
       # l <- mapview::mapview()
-      l <- mapview::mapview(pts["time_of_day"],
+      l <- mapview::mapview(pts["day"],
                             legend = TRUE,
                             layer.name = 'Date-time')
       l@map
@@ -3505,17 +3509,121 @@ app_server <- function(input, output, session) {
     l
   })
   
-  
-  
-  output$traccar_table <- DT::renderDataTable({
-    # data.frame(a = 'Undergoing changes')
-    out <- session_data$traccar %>%
-      arrange(desc(devicetime)) %>%
-      group_by(unique_id) %>%
-      dplyr::distinct(unique_id, id, valid, devicetime, longitude, latitude)
-    bohemia::prettify(out,
-                      download_options = FALSE)
+  output$traccar_table_1 <- DT::renderDataTable({
+   
+    # Get the traccar data for that country
+    traccar <- session_data$traccar
+    date_slider <- input$gps_slider
+    fid <- input$fid_gps
+    # save(traccar, date_slider, fid, file = '/tmp/dec1x.RData')
+    ok <- TRUE
+    if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
+      ok <- FALSE
+    }
+    if(ok){
+      if(nrow(traccar) == 0){
+        ok <- FALSE
+      }
+    }
+    if(ok){
+      # Get sub-data
+      sub_data <- traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
+      sub_data$date <- as.Date(sub_data$devicetime, 'EST')
+      sub_data <- sub_data %>% 
+        # filter(date == date_slider)
+        filter(date >= date_slider[1],
+               date <= date_slider[2])
+      sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
+      sub_data$day <- lubridate::round_date(sub_data$devicetime, 'day')
+      
+      sub_data$time_of_day <- as.character(sub_data$time_of_day)
+      sub_data$day <- as.character(sub_data$day)
+      
+    }
+    if(nrow(sub_data) < 1){
+      ok <- FALSE
+    }
+    if(ok){
+      out <- sub_data %>%
+        group_by(Hour = time_of_day) %>%
+        summarise(`GPS pings` = n())
+    } else {
+      NULL
+    }
   })
+  
+  observeEvent(input$traccar_table_1_rows_selected,{
+    
+    sr <- input$traccar_table_1_rows_selected
+    
+    if(length(sr) == 0){
+      leafletProxy('traccar_plot_1') %>%
+        clearMarkers() 
+    } else {
+      message('selected rows for traccar table 1:\n ', paste0(sr, collapse = ', '))
+      
+      # Get the traccar data for that country
+      traccar <- session_data$traccar
+      date_slider <- input$gps_slider
+      fid <- input$fid_gps
+      # save(traccar, date_slider, fid, file = '/tmp/dec1z.RData')
+      ok <- TRUE
+      if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
+        ok <- FALSE
+      }
+      if(ok){
+        if(nrow(traccar) == 0){
+          ok <- FALSE
+        }
+      }
+      if(ok){
+        # Get sub-data
+        sub_data <- traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
+        sub_data$date <- as.Date(sub_data$devicetime, 'EST')
+        sub_data <- sub_data %>% 
+          # filter(date == date_slider)
+          filter(date >= date_slider[1],
+                 date <= date_slider[2])
+        sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
+        sub_data$time_of_day <- as.character(sub_data$time_of_day)
+      }
+      if(nrow(sub_data) < 1){
+        ok <- FALSE
+      }
+      if(ok){
+        out <- sub_data %>%
+          group_by(Hour = time_of_day) %>%
+          summarise(`GPS pings` = n())
+        selected_hours <- out[sr,]
+        done <- sub_data[sub_data$time_of_day %in% selected_hours$Hour,]
+        leafletProxy('traccar_plot_1') %>%
+          clearMarkers() %>%
+          addMarkers(data = done, lng = done$longitude, lat = done$latitude,
+                     popup = done$devicetime)
+        
+      } 
+    }
+  })
+  
+  # observeEvent(input$traccar_table_1_rows_selected,{
+  #   
+  #   sr <- input$traccar_table_1_rows_selected
+  #   if(length(sr)){
+  #     leafletProxy('traccar_plot_1') %>%
+  #       clearMarkers() 
+  #   }
+  # })
+  
+
+  # output$traccar_table <- DT::renderDataTable({
+  #   # data.frame(a = 'Undergoing changes')
+  #   out <- session_data$traccar %>%
+  #     arrange(desc(devicetime)) %>%
+  #     group_by(unique_id) %>%
+  #     dplyr::distinct(unique_id, id, valid, devicetime, longitude, latitude)
+  #   bohemia::prettify(out,
+  #                     download_options = FALSE)
+  # })
   
   ### 401 errors, just commenting out for now
   # output$traccar_live_view <- renderUI({
@@ -3586,10 +3694,14 @@ app_server <- function(input, output, session) {
                 # fluidRow(column(12, align = 'center',
                 #                 h3('Live view'),
                 #                 uiOutput('traccar_live_view'))),
-                fluidRow(column(12, align = 'center',
-                                leafletOutput('traccar_plot_1'))),
-                fluidRow((column(12, align = 'center',
-                                 DT::dataTableOutput('traccar_table'))))
+                fluidRow(
+                  column(3,
+                         align = 'center',
+                         DT::dataTableOutput('traccar_table_1')),
+                  column(9, align = 'center',
+                                leafletOutput('traccar_plot_1')))
+                # fluidRow((column(12, align = 'center',
+                #                  DT::dataTableOutput('traccar_table'))))
               )
               
             })
