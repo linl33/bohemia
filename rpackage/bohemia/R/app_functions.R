@@ -192,15 +192,15 @@ fake_map <- function(tile = 'Stamen.Watercolor',
   return(l)
 }
 
-ui_main <- fluidPage(
-  fluidRow(column(12, align = 'center',
-                  h1('BohemiApp'))),
-  fluidRow(column(12, align = 'center',
-                  h3('The Bohemia Data Portal'))),
-  fluidRow(column(12, align = 'center')),
-  fluidRow(column(12, align = 'center',
-                  plotOutput('main_plot'))),
-)
+# ui_main <- fluidPage(
+#   fluidRow(column(12, align = 'center',
+#                   h1('BohemiApp'))),
+#   fluidRow(column(12, align = 'center',
+#                   h3('The Bohemia Data Portal'))),
+#   fluidRow(column(12, align = 'center')),
+#   fluidRow(column(12, align = 'center',
+#                   plotOutput('main_plot'))),
+# )
 
 # Filter locations
 # Define function for filtering locations based on inputs

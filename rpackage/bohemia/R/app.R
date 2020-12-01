@@ -140,7 +140,27 @@ app_ui <- function(request) {
         tabItems(
           tabItem(
             tabName="main",
-            ui_main),
+            fluidPage(
+              fluidRow(column(12, align = 'center',
+                              h3('The Bohemia Data Portal'))),
+              fluidRow(column(9,
+                              plotOutput('landing_plot_1'),
+                              plotOutput('landing_plot_2')),
+                       column(3,
+                             uiOutput('landing_box_mini'),
+                             
+                             
+                             # br(),
+                             # div(tableOutput('landing_box_va'),style='font-size:30px'),
+                             # br(),
+                             # div(tableOutput('landing_box_error'),style='font-size:30px'),
+                             # br(),
+                             # div(tableOutput('landing_box_anom'),style='font-size:30px')
+                             
+                              )
+                       )
+              )
+            ),
           tabItem(
             tabName = 'field_monitoring',
             tabsetPanel(tabPanel('Overview',
@@ -1050,25 +1070,136 @@ app_server <- function(input, output, session) {
   ###########################################################################
   
   # # Main UI ##########################################################
-  
-  output$main_plot <- renderPlot({
-    shp <- bohemia::mop2
-    geo <- input$geo
-    if(geo == 'Rufiji'){
-      shp <- bohemia::ruf2
+
+  output$landing_plot_1 <- renderPlot({
+    pd <- odk_data$data
+    if(is.null(pd)){
+      NULL
+    } else {
+      pd <- pd$minicensus_main
+      plot_data <- pd %>% group_by(todays_date) %>% summarise(num_forms = n()) %>%
+        mutate(cum_forms = cumsum(num_forms))
+      ggplot(plot_data, aes(todays_date, cum_forms)) +
+        geom_point() +
+        geom_line() + 
+        labs(x='Date',
+             y= 'Number of forms',
+             title = 'Cumulative minicensus forms') +
+        theme_bohemia()
     }
-    # if(geo == 'Both'){
-    #   shp = rbind(ruf2, mop2)
-    #   coords <- coordinates(shp)
-    #   afr <- rbind(moz0, tza0)
-    #   plot(afr, col = adjustcolor('black', alpha.f = 1), border = NA)
-    #   plot(shp, col = 'red', add = T)
-    #   # points(coords, col = 'red', pch = 16)
-    #   lines(coords, col = 'red', lty =2)
-    # } else {
-    plot(shp, col = 'black')
-    # }
+    
   })
+  
+  output$landing_plot_2 <- renderPlot({
+    
+    an <- session_data$anomalies
+
+    if(is.null(an) | nrow(an)==0){
+      NULL
+    } else {
+      plot_data <- an %>% group_by(date) %>% summarise(sum_error = sum(type == 'error', na.rm = TRUE),
+                                                       sum_anomaly = sum(type == 'anomaly', na.rm = TRUE)) %>%
+        gather(key = key, value=value, -date)
+      ggplot(plot_data, aes(date, value, fill = key)) +
+        geom_bar(position='dodge', stat='identity', alpha = 0.75) +
+        scale_fill_manual(name = '',
+                          label = c('# of Anomalies', '# of Errors'),
+                          values = c('black', 'grey')) +
+        labs(x='Date',
+             y= '#',
+             title = 'Errors and Anomalies') +
+        theme_bohemia() +
+        theme(legend.position="bottom")
+    }
+    
+  })
+  
+   
+  
+  output$landing_box_mini <- renderUI({
+    pd <- odk_data$data
+    an <- session_data$anomalies
+    if(is.null(pd) | is.null(an) | nrow(an)==0){
+      NULL
+    } else {
+      # save(an, file='temp_an.rda')
+      # look at corrections and fixes
+      corrections <- pd$corrections
+      va <- pd$va
+      death <- pd$minicensus_repeat_death_info
+      pd <- pd$minicensus_main
+      forms_complete <- nrow(pd)
+      date_today <- Sys.Date()
+      seconds_in_day <- 86400
+      forms_complete_24_hours <- pd %>% filter(end_time >= Sys.time() - (seconds_in_day))
+      forms_complete_24_hours <- nrow(forms_complete_24_hours)
+      title_mini <- paste0('Minicensus forms finished: ', forms_complete)
+      sub_title_mini <- paste0('Last 24 hours: ', forms_complete_24_hours)
+      
+      # get va info
+      va_num_deaths <- length(which(va$death_id %in% death$death_id))
+      total_deaths <- length(unique(death$death_id))
+      forms_complete <- length(unique(va$death_id))
+      forms_complete_24_hours <- va %>% filter(todays_date >= Sys.time() - (seconds_in_day))
+      forms_complete_24_hours <- nrow(forms_complete_24_hours)
+      title_va <- paste0('VA forms finished: ', forms_complete, ' out of ', total_deaths)
+      sub_title_va <- paste0('Last 24 hours: ', forms_complete_24_hours)
+      
+      # get error info
+      total_errors <- length(which(an$type=='error'))
+      error_ids <- an$id[an$type=='error']
+      error_corrected <- length(which(corrections$id  %in% error_ids))
+      total_errors_24 <- length(which(an$type=='error' & an$date>= Sys.time() - (seconds_in_day)))
+      title_errors <- paste0('Errors resolved: ', error_corrected, ' out of ',total_errors)
+      sub_title_errors <- paste0('Last 24 hours: ', total_errors_24)
+      
+      # get anomaly info
+      total_anom <- length(which(an$type=='anomaly'))
+      anom_ids <- an$id[an$type=='anomaly']
+      anom_corrected <- length(which(corrections$id  %in% anom_ids))
+      
+      total_anom_24 <- length(which(an$type=='anomaly' & an$date>= Sys.time() - (seconds_in_day)))
+      title_anom <- paste0('Anomalies resolved: ', anom_corrected,' out of ',total_anom)
+      sub_title_anom <- paste0('Last 24 hours: ', total_anom_24)
+      
+      fluidPage(
+        fluidRow(
+          br(),
+          infoBox(title = title_mini, subtitle = sub_title_mini, icon = icon("bar-chart"),
+                  color = "blue", fill = TRUE, width = '100px'),
+          br(), br(),br(), br(),
+          infoBox(title = title_va, subtitle = sub_title_va, icon = icon("table"),
+                  color = "green", fill = TRUE, width = '100px'),
+          br(),br(), br(),br(), br(),
+          infoBox(title = title_errors, subtitle = sub_title_errors, icon = icon("exclamation-circle"),
+                  color = "red", fill = TRUE, width = '100px'),
+          br(), br(),br(), br(),
+          infoBox(title = title_anom, subtitle = sub_title_anom, icon = icon("exclamation-triangle"),
+                  color = "yellow", fill = TRUE, width = '100px')
+        )
+      )
+      
+    }
+  })
+  
+  # output$main_plot <- renderPlot({
+  #   shp <- bohemia::mop2
+  #   geo <- input$geo
+  #   if(geo == 'Rufiji'){
+  #     shp <- bohemia::ruf2
+  #   }
+  #   # if(geo == 'Both'){
+  #   #   shp = rbind(ruf2, mop2)
+  #   #   coords <- coordinates(shp)
+  #   #   afr <- rbind(moz0, tza0)
+  #   #   plot(afr, col = adjustcolor('black', alpha.f = 1), border = NA)
+  #   #   plot(shp, col = 'red', add = T)
+  #   #   # points(coords, col = 'red', pch = 16)
+  #   #   lines(coords, col = 'red', lty =2)
+  #   # } else {
+  #   plot(shp, col = 'black')
+  #   # }
+  # })
   
   # sneak peek #############################################
   output$average_time <- renderPlot({
@@ -1099,7 +1230,6 @@ app_server <- function(input, output, session) {
     # get data
     indic <- input$indicator_time
     pd <- odk_data$data
-    # save(pd, file='odk_data.rda')
     pd_people <- pd$minicensus_people
     pd <- pd$minicensus_main
     
@@ -1159,6 +1289,9 @@ app_server <- function(input, output, session) {
     }
   })
   
+  
+  
+
   # Field monitoring UI  #############################################
   field_monitoring_geo <- reactiveVal('Ward')
   output$ui_field_monitoring_by <- renderUI({
@@ -1397,6 +1530,7 @@ app_server <- function(input, output, session) {
     }
     return(out)
   })
+  
   
   # Map of progress by geography
   output$leaf_lx <- renderLeaflet({
