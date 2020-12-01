@@ -1127,16 +1127,11 @@ app_server <- function(input, output, session) {
     if(is.null(pd) | is.null(an) | nrow(an)==0){
       NULL
     } else {
+      # save(an, file='temp_an.rda')
       # look at corrections and fixes
-      co <- pd$corrections
-      fixes <- pd$fixes
-      # join co 
-      temp <- left_join(an, co, by='id')
-      
-      
-      # save(pd, file='odk_data_table.rda')
-      # get mini census info
+      corrections <- pd$corrections
       va <- pd$va
+      death <- pd$minicensus_repeat_death_info
       pd <- pd$minicensus_main
       forms_complete <- nrow(pd)
       date_today <- Sys.Date()
@@ -1147,33 +1142,44 @@ app_server <- function(input, output, session) {
       sub_title_mini <- paste0('Last 24 hours: ', forms_complete_24_hours)
       
       # get va info
-      forms_complete <- nrow(va)
+      va_num_deaths <- length(which(va$death_id %in% death$death_id))
+      total_deaths <- length(unique(death$death_id))
+      forms_complete <- length(unique(va$death_id))
       forms_complete_24_hours <- va %>% filter(todays_date >= Sys.time() - (seconds_in_day))
       forms_complete_24_hours <- nrow(forms_complete_24_hours)
-      title_va <- paste0('VA forms finished: ', forms_complete)
+      title_va <- paste0('VA forms finished: ', forms_complete, ' out of ', total_deaths)
       sub_title_va <- paste0('Last 24 hours: ', forms_complete_24_hours)
       
       # get error info
       total_errors <- length(which(an$type=='error'))
+      error_ids <- an$id[an$type=='error']
+      error_corrected <- length(which(corrections$id  %in% error_ids))
       total_errors_24 <- length(which(an$type=='error' & an$date>= Sys.time() - (seconds_in_day)))
-      title_errors <- paste0('Total errors reported: ', total_errors)
+      title_errors <- paste0('Errors resolved: ', error_corrected, ' out of ',total_errors)
       sub_title_errors <- paste0('Last 24 hours: ', total_errors_24)
       
       # get anomaly info
       total_anom <- length(which(an$type=='anomaly'))
+      anom_ids <- an$id[an$type=='anomaly']
+      anom_corrected <- length(which(corrections$id  %in% anom_ids))
+      
       total_anom_24 <- length(which(an$type=='anomaly' & an$date>= Sys.time() - (seconds_in_day)))
-      title_anom <- paste0('Total anomalies reported: ', total_anom)
+      title_anom <- paste0('Anomalies resolved: ', anom_corrected,' out of ',total_anom)
       sub_title_anom <- paste0('Last 24 hours: ', total_anom_24)
       
       fluidPage(
         fluidRow(
-          infoBox(title = title_mini, subtitle = sub_title_mini, icon = icon("thumbs-up", lib = "glyphicon"),
-                  color = "yellow", fill = TRUE, width = '100px'),
-          infoBox(title = title_va, subtitle = sub_title_va, icon = icon("thumbs-up", lib = "glyphicon"),
-                  color = "yellow", fill = TRUE, width = '100px'),
-          infoBox(title = title_errors, subtitle = sub_title_errors, icon = icon("thumbs-up", lib = "glyphicon"),
-                  color = "yellow", fill = TRUE, width = '100px'),
-          infoBox(title = title_anom, subtitle = sub_title_anom, icon = icon("thumbs-up", lib = "glyphicon"),
+          br(),
+          infoBox(title = title_mini, subtitle = sub_title_mini, icon = icon("bar-chart"),
+                  color = "blue", fill = TRUE, width = '100px'),
+          br(), br(),br(), br(),
+          infoBox(title = title_va, subtitle = sub_title_va, icon = icon("table"),
+                  color = "green", fill = TRUE, width = '100px'),
+          br(),br(), br(),br(), br(),
+          infoBox(title = title_errors, subtitle = sub_title_errors, icon = icon("exclamation-circle"),
+                  color = "red", fill = TRUE, width = '100px'),
+          br(), br(),br(), br(),
+          infoBox(title = title_anom, subtitle = sub_title_anom, icon = icon("exclamation-triangle"),
                   color = "yellow", fill = TRUE, width = '100px')
         )
       )
