@@ -1,0 +1,163 @@
+---
+title: "Anomalies and completion snapshot"
+output: html_document
+---
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = TRUE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 8.64,
+               fig.height = 4.86,
+               fig.path = 'figures/')
+```
+
+```{r}
+library(dplyr)
+library(bohemia)
+library(leaflet)
+library(ggplot2)
+```
+
+```{r}
+if('data.RData' %in% dir()){
+  load('data.RData')
+} else {
+  pd_moz <- load_odk_data(the_country = 'Mozambique',
+                    credentials_path = '../../credentials/credentials.yaml',
+                    users_path = '../../credentials/users.yaml')
+  pd_tza <- load_odk_data(the_country = 'Tanzania',
+                      credentials_path = '../../credentials/credentials.yaml',
+                      users_path = '../../credentials/users.yaml')
+  is_local <- FALSE
+  library(DBI)
+  library(RPostgres)
+  source('../../rpackage/bohemia/R/app_functions.R')
+  owd <- getwd()
+  setwd('../../')
+  con <- get_db_connection(local = is_local)
+  the_country <- 'Tanzania'
+  anomalies_tza <- dbGetQuery(conn = con,
+                              statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
+  the_country <- 'Mozambique'
+  anomalies_moz <- dbGetQuery(conn = con,
+                              statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
+  corrections <- dbGetQuery(conn = con,
+                            statement = "SELECT * FROM corrections;")
+  fixes <- dbGetQuery(conn = con,
+                            statement = "SELECT * FROM fixes;")
+  dbDisconnect(conn = con)
+  setwd(owd)
+  save(pd_moz,
+       pd_tza,
+       anomalies_tza, anomalies_moz,
+       corrections, fixes,
+       file = 'data.RData')
+}
+minicensus_main <- bind_rows(
+  pd_moz$minicensus_main,
+  pd_tza$minicensus_main
+)
+minicensus_people <- bind_rows(
+  pd_moz$minicensus_people,
+  pd_tza$minicensus_people
+)
+anomalies <- bind_rows(anomalies_moz, anomalies_tza)
+na_to_zero <- function(x){ifelse(is.na(x), 0, x)}
+gps <- bohemia::gps
+```
+
+# Number of anomalies
+
+Total: 
+
+```{r}
+nrow(anomalies)
+```
+
+By country:
+
+```{r}
+anomalies %>%
+  group_by(country) %>%
+  tally
+```
+
+By date / country:
+
+```{r}
+anomalies %>%
+  group_by(country, date) %>%
+  tally %>%
+  ggplot(aes(x = date, y = n, color = country)) + geom_point() + geom_line() +
+  labs(x = 'Date', y = 'Anomalies') +
+  theme(legend.position = 'bottom')
+```
+
+By correction status: 
+
+```{r}
+pd <- anomalies %>%
+  left_join(corrections %>% dplyr::select(-instance_id)) %>%
+  group_by(corrected = ifelse(!is.na(resolution_method), 'Corrected',
+                              'Not yet corrected')) %>%
+  tally
+pd
+```
+
+By correction status and country: 
+
+```{r}
+pd <- anomalies %>%
+  left_join(corrections %>% dplyr::select(-instance_id)) %>%
+  group_by(country, corrected = ifelse(!is.na(resolution_method), 'Corrected',
+                              'Not yet corrected')) %>%
+  tally %>%
+  tidyr::spread(key = corrected, value = n)
+pd
+```
+
+
+# Number of minicensus forms 
+
+Total:
+
+```{r}
+minicensus_main %>%
+  nrow
+```
+
+By country:
+
+```{r}
+minicensus_main %>%
+  group_by(hh_country) %>%
+  tally
+```
+
+By date / country:
+
+```{r}
+minicensus_main %>%
+  group_by(country = hh_country, date = todays_date) %>% tally %>%
+    ggplot(aes(x = date, y = n, color = country)) + geom_point() + geom_line() +
+  labs(x = 'Date', y = 'Minicensus forms') +
+  theme(legend.position = 'bottom')
+```
+
+
+By date / country (cumulative):
+
+```{r}
+minicensus_main %>%
+  group_by(country = hh_country, date = todays_date) %>% tally %>%
+  ungroup %>% group_by(country) %>% mutate(n = cumsum(n)) %>%
+    ggplot(aes(x = date, y = n, color = country)) + geom_point() + geom_line() +
+  labs(x = 'Date', y = 'Minicensus forms') +
+  theme(legend.position = 'bottom')
+```
