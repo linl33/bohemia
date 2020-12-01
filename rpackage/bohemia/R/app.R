@@ -9,6 +9,7 @@
 #' @import gt
 #' @import sp
 #' @import DT
+#' @import plotly
 #' @import mapview
 #' @import stplanr
 #' @import lubridate
@@ -1361,7 +1362,7 @@ app_server <- function(input, output, session) {
     
     # Get the odk data
     pd <- odk_data$data
-    
+
     enum <- pd$enumerations
     va <- pd$va
     # ref <- pd$refusals
@@ -1407,7 +1408,7 @@ app_server <- function(input, output, session) {
                                `Estimated total forms` = target,
                                `Estimated forms remaining` = target - nrow(pd),
                                `Estimated % finished` = round(nrow(pd) / target * 100, digits = 2))
-      
+      temp <- estimated_households$data
       # Create a detailed progress table (by hamlet)
       left <- estimated_households$data %>%
         filter(clinical_trial != 1) %>%
@@ -1527,6 +1528,116 @@ app_server <- function(input, output, session) {
 
       message('---created progess table for Overview by geography')
       out <- bohemia::prettify(monitor_by_table, download_options = TRUE, nrows = nrow(monitor_by_table))
+    }
+    return(out)
+  })
+  
+  # Progress by geographical unit
+  output$dt_monitor_by_plot <- renderPlotly({
+    
+    # Get the odk data
+    pd <- odk_data$data
+    
+    # ref <- pd$refusals
+    pd <- pd$minicensus_main
+    co <- country()
+    the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
+    # save(pd, enum, va, co, the_iso, file = '/tmp/pd.RData')
+    
+    # get country
+    pd <- pd %>% filter(hh_country==co)
+  
+    time_period <- input$progress_by_date
+    if(is.null(time_period)){
+      time_period <- c(as.Date('2020-01-01'), Sys.Date())
+    } 
+    
+    pd <- pd %>% filter(todays_date >= time_period[1],
+                        todays_date <=time_period[2]) 
+   
+    # save(pd, enum, va, file = 'temp_gps.rda')
+    pd_ok <- FALSE
+    
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(!pd_ok){
+      out <- NULL
+    } else {
+      # Create a detailed progress table (by hamlet)
+      left <- estimated_households$data %>%
+        filter(clinical_trial != 1) %>%
+        filter(iso == the_iso) %>%
+        dplyr::select(code, n_households)
+      right <- pd %>%
+        group_by(code = hh_hamlet_code) %>%
+        summarise(numerator = n())
+      joined <- left_join(left, right, by = 'code') %>%
+        mutate(numerator = ifelse(is.na(numerator), 0, numerator)) %>%
+        mutate(p = numerator / n_households * 100) %>%
+        mutate(p = round(p, digits = 2))
+      # get overall progress by hamlet code
+      progress_by <- joined %>% left_join(locations %>% dplyr::select(code, Hamlet, District, Ward, Village), by = 'code')
+      # by district
+      progress_by_district <- progress_by %>% group_by(District) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+      # by ward
+      progress_by_ward <- progress_by %>% group_by(Ward) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+      # by village
+      progress_by_village <- progress_by %>% group_by(Village) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+      # by hamlet
+      progress_by_hamlet <- progress_by %>% group_by(Hamlet) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+      
+      by_geo <- field_monitoring_geo() 
+      
+      if(is.null(by_geo)){
+        monitor_plot <- progress_by_district
+      } else {
+        cn <- input$geo
+        cn <- ifelse(cn == 'Rufiji', 'Tanzania', 'Mozambique')
+        if(by_geo == 'District'){
+          if(cn == 'Mozambique'){
+            names(progress_by_district)[1] <- 'Distrito'
+            monitor_plot <- progress_by_district
+          } else {
+            monitor_plot <- progress_by_district
+          }
+        } else if(by_geo == 'Ward'){
+          if(cn == 'Mozambique'){
+            names(progress_by_ward)[1] <- c('Posto administrativo/localidade')
+            monitor_plot <- progress_by_ward
+          } else {
+            monitor_plot <- progress_by_ward
+          }
+        } else if(by_geo == 'Village'){
+          if(cn == 'Mozambique'){
+            names(progress_by_village)[1] <- c('Povoado')
+            monitor_plot <- progress_by_village
+          } else {
+            monitor_plot <- progress_by_village
+          }
+        } else if(by_geo == 'Hamlet'){
+          if(cn == 'Mozambique'){
+            names(progress_by_hamlet)[1] <- c('Bairro')
+            monitor_plot <- progress_by_hamlet
+          } else {
+            monitor_plot <- progress_by_hamlet
+          }
+        }
+      }
+      
+      
+      
+      message('---created progess plot for Overview by geography')
+      names(monitor_plot)[1] <- 'location'
+     out <- ggplot(monitor_plot, aes(location, `Percent finished`)) + geom_bar(stat='identity') +
+       labs(x = '',
+            y ='') + 
+       theme_bohemia() +
+       theme(axis.text.x  = element_blank(),
+             axis.ticks.x = element_blank())
+     
     }
     return(out)
   })
@@ -1658,6 +1769,8 @@ app_server <- function(input, output, session) {
                        tabsetPanel(
                          tabPanel('Table',
                                   div(DT::dataTableOutput('dt_monitor_by_table'), style = "font-size:80%")),
+                         tabPanel('Plot',
+                                  plotlyOutput('dt_monitor_by_plot')),
                          tabPanel('Map',
                                   leafletOutput('leaf_lx', height = 800)))))
             })
