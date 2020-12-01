@@ -1235,7 +1235,6 @@ app_server <- function(input, output, session) {
     # get data
     indic <- input$indicator_time
     pd <- odk_data$data
-    save(pd, file='odk_data.rda')
     pd_people <- pd$minicensus_people
     pd <- pd$minicensus_main
     
