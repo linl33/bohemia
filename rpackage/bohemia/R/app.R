@@ -3001,7 +3001,7 @@ app_server <- function(input, output, session) {
                 
                 # Get the fieldworkers for the country in question
                 sub_fids <- fids %>% filter(country == co)
-                left <- tibble(wid = as.character(sub_fids$bohemia_id))
+                left <- tibble(wid = sort(unique(as.character(sub_fids$bohemia_id))))
                 
                 # Join to minicensus
                 pd <- left %>%
@@ -3057,7 +3057,7 @@ app_server <- function(input, output, session) {
                                         days, ''))
                 pdx <- pdx %>% filter(!is.na(forms))
                 pdx <- pdx %>% arrange(desc(per_day))
-                pdx$wid <- factor(pdx$wid, levels = pdx$wid)
+                pdx$wid <- factor(pdx$wid, levels = unique(pdx$wid))
                 ggplot(data = pdx,
                          aes(x = wid,
                              y = per_day)) +
@@ -3426,36 +3426,61 @@ app_server <- function(input, output, session) {
   # TRACCAR GPS UI
   output$traccar_plot_1 <- renderLeaflet({
     
+    mapviewOptions(#basemaps = c("Esri.WorldShadedRelief", "OpenStreetMap.DE"),
+                   # raster.palette = grey.colors,
+                   # vector.palette = colorRampPalette(c("snow", "cornflowerblue", "grey10")),
+                   # na.color = "magenta",
+                   layers.control.pos = "topright")
+    
     # Get the traccar data for that country
     traccar <- session_data$traccar
     date_slider <- input$gps_slider
-
-    if(!nrow(traccar)==0 | !is.null(date_slider)){
-      # get date 
-      traccar$date <- as.Date(traccar$devicetime, 'EST')
-      traccar <- traccar %>% filter(date >= date_slider[1], 
-                                    date <= date_slider[2])
-      points_to_line <- function(data, group = "unique_id"){
-        data <- data %>% 
-          group_by_at(group) %>%
-          summarise(do_union = FALSE) %>%
-          st_cast("LINESTRING") %>%
-          ungroup 
+    fid <- input$fid_gps
+    # save(traccar, date_slider, fid, file = '/tmp/dec1b.RData')
+    ok <- TRUE
+    if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
+      ok <- FALSE
+    }
+    if(ok){
+      if(nrow(traccar) == 0){
+        ok <- FALSE
       }
-      
-      pts = st_as_sf(data.frame(traccar), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line()
-      pts$unique_id <- as.character(pts$unique_id)
+    }
+    if(ok){
+      # Get sub-data
+      sub_data <- traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
+      sub_data$date <- as.Date(sub_data$devicetime, 'EST')
+      sub_data <- sub_data %>% 
+        # filter(date == date_slider)
+        filter(date >= date_slider[1],
+                                      date <= date_slider[2])
+      sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
+      sub_data$time_of_day <- as.character(sub_data$time_of_day)
+    }
+    if(nrow(sub_data) < 1){
+      ok <- FALSE
+    }
+    
+    if(ok){
+      pts = st_as_sf(data.frame(sub_data), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line()
+      # Remove those which are two few
+      sizes <- unlist(lapply(pts$geometry, length))
+      # pts <- pts[sizes >10,]
+      # pts$date <- as.character(pts$date)
       # pts <- pts[-15,]
       # pts$groups <- stplanr::rnet_group(pts)
-      
+      # Make the plot
+      # l <- mapview::mapview()
+      l <- mapview::mapview(pts["time_of_day"],
+                            legend = TRUE,
+                            layer.name = 'Date-time')
+      l@map
+    } else {
+      leaflet()
     }
-    # Make the plot
-    l <- mapview::mapview()
-    if(nrow(traccar) > 0){
-      l <- mapview::mapview(pts["unique_id"])
-      
-    }
-    l@map
+
+
+
   })
   output$traccar_leaf <- renderLeaflet({
     # leaflet() %>% addTiles()
@@ -3529,10 +3554,15 @@ app_server <- function(input, output, session) {
     si <- session_info
     li <- si$logged_in
     ac <- TRUE
-    pd <- odk_data$data
-    pd <- pd$minicensus_main
     co <- country()
-    pd <- pd %>% filter(hh_country==co)
+    sub_fids <- fids %>% 
+      filter(country == co)
+    the_choices <- sub_fids$bohemia_id
+    names(the_choices) <- paste0(sub_fids$bohemia_id, '. ',
+                                 sub_fids$first_name, ' ',
+                                 sub_fids$last_name)
+    # save(ac, li, si, co, sub_fids, the_choices, file = '/tmp/dec1.RData')
+    
     # Generate the ui
     make_ui(li = li,
             ac = ac,
@@ -3540,21 +3570,23 @@ app_server <- function(input, output, session) {
               
               
               fluidPage(
-                fluidRow(h1('GPS tracking')),
                 fluidRow(
-                  column(12,
+                  column(6,
                          sliderInput(inputId = 'gps_slider', 
                                      label = 'Select dates', 
-                                     min = min(pd$todays_date), 
-                                     max=max(pd$todays_date), 
-                                     value = c(max(pd$todays_date) -1, max(pd$todays_date))))
+                                     min = as.Date('2020-09-01'), 
+                                     max= Sys.Date(), 
+                                     value = c(Sys.Date()-4, Sys.Date()-1)# c(as.Date('2020-09-01'), Sys.Date())
+                                     )),
+                  column(6,
+                         selectInput('fid_gps',
+                                     'Fieldworker ID',
+                                     choices = the_choices))
                 ),
                 # fluidRow(column(12, align = 'center',
                 #                 h3('Live view'),
                 #                 uiOutput('traccar_live_view'))),
                 fluidRow(column(12, align = 'center',
-                                h3('Map of locations visited, last 7 days'),
-                                
                                 leafletOutput('traccar_plot_1'))),
                 fluidRow((column(12, align = 'center',
                                  DT::dataTableOutput('traccar_table'))))

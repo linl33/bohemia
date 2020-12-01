@@ -1,6 +1,14 @@
 library(shiny)
 library(ggplot2)
 
+points_to_line <- function(data, group = "time_of_day"){
+  data <- data %>% 
+    group_by_at(group) %>%
+    summarise(do_union = FALSE) %>%
+    st_cast("LINESTRING") %>%
+    ungroup 
+}
+
 # Basic placeholder function
 placeholder <- function(li = FALSE,
                         ac = FALSE){
