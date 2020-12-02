@@ -634,7 +634,7 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       # Update the in-session estimated_households$data table to make sure values are right
-      message('Overwriting GPS!')
+      # message('Overwriting GPS!')
       co <- country()
       if(co == 'Mozambique'){
         pd <- odk_data$data$enumerations
@@ -653,7 +653,7 @@ app_server <- function(input, output, session) {
       # filter to only keep those which are already marked as done
       out <- already_done_hamlets()
       
-      # save(pd, estimated_hh_per_collection, co, li, out,
+      # save(pd, estimated_hh_per_collection, co, li, out, left,
       #      file = '/tmp/joe2020.RData')
       
       # Fill in any empties
@@ -661,9 +661,9 @@ app_server <- function(input, output, session) {
         for(i in 1:length(out)){
           if(!out[i] %in% estimated_hh_per_collection$code){
             message('Marking ', out[i], ' as done despite having no forms collected...')
-            new_row <- tibble(code = out,
+            new_row <- tibble(code = out[i],
                               done_hh = 0)
-            estimated_hh_per_collection <- 
+            estimated_hh_per_collection <-
               bind_rows(estimated_hh_per_collection,
                         new_row)
           }
@@ -1538,12 +1538,14 @@ app_server <- function(input, output, session) {
     pd <- pd$minicensus_main
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
-    # save(pd, enum, va, co, the_iso, file = '/tmp/pd.RData')
+    ehd <- estimated_households$data
+    time_period <- input$progress_by_date
+    
+    # save(pd, co, the_iso, ehd, time_period, file = '/tmp/pd.RData')
     
     # get country
     pd <- pd %>% filter(hh_country==co)
   
-    time_period <- input$progress_by_date
     if(is.null(time_period)){
       time_period <- c(as.Date('2020-01-01'), Sys.Date())
     } 
@@ -1563,7 +1565,7 @@ app_server <- function(input, output, session) {
       out <- NULL
     } else {
       # Create a detailed progress table (by hamlet)
-      left <- estimated_households$data %>%
+      left <- ehd %>%
         filter(clinical_trial != 1) %>%
         filter(iso == the_iso) %>%
         dplyr::select(code, n_households)
@@ -1583,7 +1585,7 @@ app_server <- function(input, output, session) {
       # by village
       progress_by_village <- progress_by %>% group_by(Village) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
       # by hamlet
-      progress_by_hamlet <- progress_by %>% group_by(Hamlet) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+      progress_by_hamlet <- progress_by %>%ungroup %>% group_by(Hamlet) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE), .groups = 'drop') %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
       
       by_geo <- field_monitoring_geo() 
       
