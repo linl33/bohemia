@@ -44,22 +44,22 @@ subs <- odk_data$minicensus_repeat_hh_sub
 
 others <- c()
 
-for(i in 1:nrow(corrections)){
-  if(grepl('strange_wid_enumeration|missing_wid_enumeration', corrections$id[i])){
-    this_id <- corrections$id[i]
-    this_instance_id <- corrections$instance_id[i]
-    rd <- tolower(corrections$response_details[i])
-    rd <- gsub(' ', '', rd)
-    this_fid <- as.numeric(gsub('thecorrectidis', '', rd))
-    if(!is.na(this_fid)){
-      cat(
-        paste0("implement(id = '", this_id, "', query = \"UPDATE clean_minicensus_main SET wid='", this_fid, "' WHERE instance_id='", this_instance_id, "'\", who = 'Joe Brew')\n\n")
-      )
-    } else {
-      others <- c(others, i)
-    } 
-  } else {
-    others <- c(others, i)
-  }
-}
+# for(i in 1:nrow(corrections)){
+#   if(grepl('strange_wid_enumeration|missing_wid_enumeration', corrections$id[i])){
+#     this_id <- corrections$id[i]
+#     this_instance_id <- corrections$instance_id[i]
+#     rd <- tolower(corrections$response_details[i])
+#     rd <- gsub(' ', '', rd)
+#     this_fid <- as.numeric(gsub('thecorrectidis', '', rd))
+#     if(!is.na(this_fid)){
+#       cat(
+#         paste0("implement(id = '", this_id, "', query = \"UPDATE clean_enumerations SET wid='", this_fid, "' WHERE instance_id='", this_instance_id, "'\", who = 'Joe Brew')\n\n")
+#       )
+#     } else {
+#       others <- c(others, i)
+#     }
+#   } else {
+#     others <- c(others, i)
+#   }
+# }
 

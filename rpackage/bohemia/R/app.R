@@ -466,6 +466,7 @@ app_server <- function(input, output, session) {
     message('Using remote database')
   }
   # is_local <- FALSE
+  use_cached <- TRUE
   
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
@@ -701,7 +702,7 @@ app_server <- function(input, output, session) {
     # Load data     
     li <- session_info$logged_in
     if(li){
-      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE)
+      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached)
       odk_data$data <- out
       
       # Get anomalies
@@ -746,7 +747,7 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       message('Logged in. Loading data for ', the_country)
-      out <- load_odk_data(local = is_local, the_country = the_country)
+      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached)
       
       # Get anomalies
       con <- get_db_connection(local = is_local)
@@ -757,6 +758,7 @@ app_server <- function(input, output, session) {
       # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
       # Read in the traccar data (could speed this up by not reading all in)
       message('Reading in traccar table')
+      start_time <- Sys.time()
       # Get the country
       the_country <- country()
       co <- the_country
@@ -772,19 +774,13 @@ app_server <- function(input, output, session) {
       traccar <- dbGetQuery(conn = con,
                             statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
       session_data$traccar <- traccar
-      # Get traccar summary data
-      message('Retrieving information on workers from traccar')
-      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      # dat <- get_traccar_data(url = creds$traccar_server,
-      #                         user = creds$traccar_user,
-      #                         pass = creds$traccar_pass)
-      
       dbDisconnect(con)
-      
+      end_time <- Sys.time()
+      message('..That took ', round(lubridate::time_length(end_time - start_time, unit = 'second'), 2), ' seconds.')      
       odk_data$data <- out
-      if(grepl('joebrew', getwd())){
-        save(out, file = '~/Desktop/odk_data_data.RData')
-      }
+      # if(grepl('joebrew', getwd())){
+      #   save(out, file = '~/Desktop/odk_data_data.RData')
+      # }
     }
   })
   
@@ -2892,7 +2888,7 @@ app_server <- function(input, output, session) {
               deaths <- pd$minicensus_repeat_death_info
               pd <- pd$minicensus_main
               co <- country()
-              save(pd, va, deaths, file = '/tmp/va.RData')
+             # save(pd, va, deaths, file = '/tmp/va.RData')
               pd <- pd %>%
                 filter(hh_country == co)
               
@@ -2905,7 +2901,7 @@ app_server <- function(input, output, session) {
                               hamlet = hh_hamlet, instance_id)
               
               grouper <- input$va_monitor_by
-              save(grouper, file = '/tmp/grouper.RData')
+              # save(grouper, file = '/tmp/grouper.RData')
               
               
               
@@ -2949,7 +2945,7 @@ app_server <- function(input, output, session) {
                   names(va_progress_geo)[1] <- 'Povaodo'
                 }
               }
-              save(va_progress_geo, file='temp_va.rda')
+              # save(va_progress_geo, file='temp_va.rda')
               fluidPage(
                 fluidRow(
                   h2(paste0('Progress by ',  names(va_progress_geo)[1])),
@@ -3440,6 +3436,15 @@ app_server <- function(input, output, session) {
                 pdx <- pdx %>% filter(!is.na(forms))
                 pdx <- pdx %>% arrange(desc(per_day))
                 pdx$wid <- factor(pdx$wid, levels = unique(pdx$wid))
+                # save(pdx, fids, file = '/tmp/dec2.RData')
+                right <- fids %>%
+                  mutate(wid = bohemia_id) %>%
+                  dplyr::select(wid, Role) %>%
+                  mutate(wid = as.numeric(as.character(wid)))
+                pdx <- left_join(
+                  pdx %>% mutate(wid = as.numeric(as.character(wid))),
+                                 right)%>%
+                  mutate(wid = paste0(wid, ' (', Role, ')'))
                 ggplot(data = pdx,
                          aes(x = wid,
                              y = per_day)) +
@@ -3773,17 +3778,19 @@ app_server <- function(input, output, session) {
   output$ui_fw_daily <- renderUI({
     # See if the user is logged in and has access
    fluidPage(
-     selectInput('ui_fw_plot_form',
-                 'Form to show in chart',
-                 choices = c('Minicensus',
-                             'Enumerations', 
-                             'VA'),
-                 selected = 'Minicensus'),
-     fluidRow(column(6,
-                     plotOutput('ui_fw_plot')),
-              column(6,
+     fluidRow(column(12,
+                     selectInput('ui_fw_plot_form',
+                                 'Form to show in chart',
+                                 choices = c('Minicensus',
+                                             'Enumerations', 
+                                             'VA'),
+                                 selected = 'Minicensus'))),
+     fluidRow(column(12,
+                     plotOutput('ui_fw_plot'))),
+     fluidRow(column(12,
                      plotOutput('ui_fw_plot2'))),
-     DT::dataTableOutput('ui_fw_table'))
+     fluidRow(column(12,
+                     DT::dataTableOutput('ui_fw_table'))))
   })
   
   # Leaflet of fieldworkers
@@ -4564,19 +4571,19 @@ app_server <- function(input, output, session) {
     liu <- input$log_in_user
     done_button <- input$mark_done
     not_done_button <- input$mark_undone
-    the_authorized_users <- c("iirema@ihi.or.tz",
-                              "eldo.elobolobo@manhica.net",
-                              "joe@databrew.cc")
-    if(liu %in% the_authorized_users){
+    # the_authorized_users <- c("iirema@ihi.or.tz",
+    #                           "eldo.elobolobo@manhica.net",
+    #                           "joe@databrew.cc")
+    # if(liu %in% the_authorized_users){
       con <- get_db_connection(local = is_local)
       done_hamlets <- dbGetQuery(conn = con,
                               statement = paste0("SELECT * FROM done_hamlets"))
       dbDisconnect(con)
       bohemia::prettify(done_hamlets,
                         nrows = nrow(done_hamlets))
-    } else {
-      bohemia::prettify(data.frame(o = 'You are not authorized to mark hamlets as done.'))
-    }
+    # } else {
+    #   bohemia::prettify(data.frame(o = 'You are not authorized to mark hamlets as done.'))
+    # }
   })
   
   already_done_hamlets <- reactiveVal(value = c())
@@ -5583,7 +5590,7 @@ app_server <- function(input, output, session) {
       inFile <- input$upload_data
       dat <- read.csv(inFile$datapath, check.names = FALSE)
       previous_corrections <- odk_data$data$corrections
-      save(dat, previous_corrections, file='/tmp/temp_upload.rda')
+      # save(dat, previous_corrections, file='/tmp/temp_upload.rda')
       
       # create valid names 
       log_in_user <- input$log_in_user
