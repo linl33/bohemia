@@ -9,7 +9,8 @@ load_odk_data(
   credentials_path = "credentials/credentials.yaml",
   users_path = "credentials/users.yaml",
   local = FALSE,
-  efficient = TRUE
+  efficient = TRUE,
+  use_cached = FALSE
 )
 }
 \arguments{
@@ -21,7 +22,9 @@ load_odk_data(
 
 \item{local}{Whether to use the local database}
 
-\item{the_tables}{The names of tables to be loaded}
+\item{efficient}{Whether to only load select columns}
+
+\item{use_cached}{Whether to use a cached file}
 }
 \description{
 Load odk data

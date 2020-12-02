@@ -466,6 +466,7 @@ app_server <- function(input, output, session) {
     message('Using remote database')
   }
   # is_local <- FALSE
+  use_cached <- TRUE
   
   # Define a default fieldworkers data
   if(!'fids.csv' %in% dir('/tmp')){
@@ -701,7 +702,7 @@ app_server <- function(input, output, session) {
     # Load data     
     li <- session_info$logged_in
     if(li){
-      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE)
+      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached)
       odk_data$data <- out
       
       # Get anomalies
@@ -746,7 +747,7 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       message('Logged in. Loading data for ', the_country)
-      out <- load_odk_data(local = is_local, the_country = the_country)
+      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached)
       
       # Get anomalies
       con <- get_db_connection(local = is_local)
@@ -757,6 +758,7 @@ app_server <- function(input, output, session) {
       # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
       # Read in the traccar data (could speed this up by not reading all in)
       message('Reading in traccar table')
+      start_time <- Sys.time()
       # Get the country
       the_country <- country()
       co <- the_country
@@ -772,19 +774,13 @@ app_server <- function(input, output, session) {
       traccar <- dbGetQuery(conn = con,
                             statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
       session_data$traccar <- traccar
-      # Get traccar summary data
-      message('Retrieving information on workers from traccar')
-      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      # dat <- get_traccar_data(url = creds$traccar_server,
-      #                         user = creds$traccar_user,
-      #                         pass = creds$traccar_pass)
-      
       dbDisconnect(con)
-      
+      end_time <- Sys.time()
+      message('..That took ', round(lubridate::time_length(end_time - start_time, unit = 'second'), 2), ' seconds.')      
       odk_data$data <- out
-      if(grepl('joebrew', getwd())){
-        save(out, file = '~/Desktop/odk_data_data.RData')
-      }
+      # if(grepl('joebrew', getwd())){
+      #   save(out, file = '~/Desktop/odk_data_data.RData')
+      # }
     }
   })
   
