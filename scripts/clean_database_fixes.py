@@ -1769,7 +1769,7 @@ implement(id = 'hh_head_too_young_old_a8f3a1db-efef-4de7-8b54-71958de9b156', que
 implement(id = 'hh_head_too_young_old_9b53674d-70b4-4905-9e70-bda099ecec81', is_ok = True)
 implement(id = 'energy_ownership_mismatch_81bbf5c2-0f3c-4b10-9970-930bae33f86f', is_ok = True)
 implement(id = 'too_many_houses_2743fb87-a494-4a0d-8835-0fae53b543cc', query = "UPDATE clean_minicensus_main SET hh_n_constructions='1' WHERE instance_id='2743fb87-a494-4a0d-8835-0fae53b543cc';")
-implement(id = 'strange_wid_enumerations_723f4a7f-f161-4739-80d5-8a3ee412023f', query = "'UPDATE clean_enumerations SET wid='430' WHERE instance_id = '723f4a7f-f161-4739-80d5-8a3ee412023f';")
+implement(id = 'strange_wid_enumerations_723f4a7f-f161-4739-80d5-8a3ee412023f', query = "UPDATE clean_enumerations SET wid='430' WHERE instance_id = '723f4a7f-f161-4739-80d5-8a3ee412023f';")
 
 ##### Xing Dec 2 Fixes #####
 # Message from Joe: these needs to be examined in more detail. Specifically (a) check if perhaps the wrong person was assigned to be hh head (you can see this if the corrected DOB is actually the DOB of someone else in the house - in which case you may need to change things like hh head gender, etc.) and (b) make sure not to set EVERYONE in the household to having the same DOB (ie, you need to add an "and num=" query when modifying clean_minicensus_people)
