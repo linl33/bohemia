@@ -214,7 +214,6 @@ app_ui <- function(request) {
                                                                     uiOutput('ui_va_monitoring_by'),
                                                                     br(),
                                                                     uiOutput('va_progress_geo_ui'),
-                                                                    uiOutput('va_progress_geo_supervisor_ui'),
                                                                     uiOutput('va_progress_geo_past_due_ui'))),
                                                          tabPanel('Past due VAs',
                                                                   uiOutput('ui_va_progress_past_due')
@@ -2956,70 +2955,7 @@ app_server <- function(input, output, session) {
             })
   })
   
-  # ui for VA progress by geography.
-  output$va_progress_geo_supervisor_ui <- renderUI({
-    # See if the user is logged in and has access
-    si <- session_info
-    li <- si$logged_in
-    ac <- TRUE
-    # Generate the ui
-    make_ui(li = li,
-            ac = ac,
-            ok = {
-              grouper <- input$va_monitor_by
-              temp_grouper <- grouper
-              if(is.null(temp_grouper)){
-                grouper <- 'Ward'
-              }
-              co <- country()
-              # save(grouper, file = '/tmp/grouper.RData')
-              if(grouper!='Ward' | co!='Tanzania'){
-                NULL
-              } else {
-                # Get the overall va progress table
-                pd <- odk_data$data
-                va <- pd$va
-                deaths <- pd$minicensus_repeat_death_info
-                pd <- pd$minicensus_main
-                # save(pd, va, deaths, file = '/tmp/va.RData')
-                pd <- pd %>%
-                  filter(hh_country == co)
-                
-                deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
-                                            !is.na(death_number))
-                pd <- pd %>%
-                  dplyr::select(district = hh_district,
-                                ward = hh_ward,
-                                village = hh_village,
-                                hamlet = hh_hamlet, instance_id)
-                
-                sups <- as.data.frame(bohemia::tza_ward_supervisors)
-                # Get location in va
-                va <- va %>%
-                  mutate(code = substr(hh_id, 1, 3)) %>%
-                  left_join(locations %>% dplyr::select(code, region = Region, district = District,
-                                                        ward = Ward, village = Village, hamlet = Hamlet)) 
-                va <- dplyr::left_join(va, sups, by=c('ward'='Ward'))
-                
-                total_vas <- nrow(va)
-                va_agg <- va %>%
-                  group_by(Supervisor_Name) %>%
-                  summarise(`VA forms collected` = n()) %>%
-                  mutate(`Percent from supervisor`= round((`VA forms collected`/total_vas)*100,2))
-                
-               
-                # save(va_progress_geo, file='temp_va.rda')
-                fluidPage(
-                  fluidRow(
-                    prettify(va_agg, nrows = 20)
-                  )
-                )
-              }
-              
-              
-            })
-  })
-  
+ 
   output$plot_va_progress_by_geo_past_due <- renderPlot({
     # Get the odk data
     pd <- odk_data$data
@@ -3669,8 +3605,8 @@ app_server <- function(input, output, session) {
               
               co <- country()
               enumerations <- pd$enumerations
-              va <- pd$va
-              pd <- pd$minicensus_main
+              full_va <- va <- pd$va
+              full_pd <- pd <- pd$minicensus_main
               # save(pd, co, an,enumerations, va, file = '/tmp/pd.RData')
               
               # pd <- pd %>% filter(hh_country == co)
@@ -3828,15 +3764,30 @@ app_server <- function(input, output, session) {
                                   `Errors` = num_errors) 
                   # remove rows that have 'NA NA' in FW column
                   fwt_daily <- fwt_daily %>% filter(!grepl('NA NA', fwt_daily$FW))
-                  
+                  # save(fwt_daily, full_va, full_pd, file = '/tmp/joedec.RData')
+                  # GET done by ward
+                    # Get the overall va progress table
+                    deaths <- full_pd$minicensus_repeat_death_info
+
+                    sups <- as.data.frame(bohemia::tza_ward_supervisors)
+                    # Get location in va
+                    va <- full_va %>%
+                      mutate(code = substr(hh_id, 1, 3)) %>%
+                      left_join(bohemia::locations %>% dplyr::select(code, region = Region, district = District,
+                                                            ward = Ward, village = Village, hamlet = Hamlet))
+                    va <- dplyr::left_join(va, sups)
+                    right <- va %>%
+                      group_by(`FW ID` = as.character(wid)) %>%
+                      summarise(`VAs assigned` = n())
+                    fwt_daily <- left_join(fwt_daily,
+                                           right) %>%
+                      mutate(`VA forms done as % assigned` = round(`VA forms` / `VAs assigned` * 100, 2))
                 }
-            
+                bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
+                                  download_options = TRUE)
                 
               }
-                       # div(
-                       bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
-                                         download_options = TRUE)
-                       # , style = "font-size:80%")
+                       
             })
   })
   
