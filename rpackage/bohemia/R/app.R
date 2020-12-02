@@ -4552,19 +4552,19 @@ app_server <- function(input, output, session) {
     liu <- input$log_in_user
     done_button <- input$mark_done
     not_done_button <- input$mark_undone
-    the_authorized_users <- c("iirema@ihi.or.tz",
-                              "eldo.elobolobo@manhica.net",
-                              "joe@databrew.cc")
-    if(liu %in% the_authorized_users){
+    # the_authorized_users <- c("iirema@ihi.or.tz",
+    #                           "eldo.elobolobo@manhica.net",
+    #                           "joe@databrew.cc")
+    # if(liu %in% the_authorized_users){
       con <- get_db_connection(local = is_local)
       done_hamlets <- dbGetQuery(conn = con,
                               statement = paste0("SELECT * FROM done_hamlets"))
       dbDisconnect(con)
       bohemia::prettify(done_hamlets,
                         nrows = nrow(done_hamlets))
-    } else {
-      bohemia::prettify(data.frame(o = 'You are not authorized to mark hamlets as done.'))
-    }
+    # } else {
+    #   bohemia::prettify(data.frame(o = 'You are not authorized to mark hamlets as done.'))
+    # }
   })
   
   already_done_hamlets <- reactiveVal(value = c())
