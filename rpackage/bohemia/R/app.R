@@ -3721,28 +3721,51 @@ app_server <- function(input, output, session) {
                   summarise(`Minicensus forms` = n(),
                             `Average time per minicensus form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `% rolling target (minicensus)` = (`Minicensus forms` / n_days) / daily_forms_fw * 100) 
-                
                 make_na <- function(x){ifelse(is.na(x), 0, x)}
-                fwt_daily <-left_join(left, right) %>%
-                  mutate(num_enumerations = make_na(num_enumerations),
-                         num_va = make_na(num_va),
-                         num_anomalies = make_na(num_anomalies),
-                         num_errors = make_na(num_errors)) %>%
-                  mutate(fw = paste0(first_name, ' ', last_name)) %>%
-                  dplyr::select(`FW ID` = wid,
-                                `FW` = fw,
-                                Supervisor = supervisor,
-                                Role,
-                                `Minicensus forms`,
-                                `Average time per minicensus form (minutes)`,
-                                `% rolling target (minicensus)`,
-                                `Enumeration forms` = num_enumerations,
-                                `VA forms` = num_va,
-                                `Anomalies` = num_anomalies,
-                                `Errors` = num_errors) 
-                # remove rows that have 'NA NA' in FW column
-                fwt_daily <- fwt_daily %>% filter(!grepl('NA NA', fwt_daily$FW))
-                
+                if(co=='Mozambique'){
+                  fwt_daily <-left_join(left, right) %>%
+                    mutate(num_enumerations = make_na(num_enumerations),
+                           num_va = make_na(num_va),
+                           num_anomalies = make_na(num_anomalies),
+                           num_errors = make_na(num_errors)) %>%
+                    mutate(fw = paste0(first_name, ' ', last_name)) %>%
+                    dplyr::select(`FW ID` = wid,
+                                  `FW` = fw,
+                                  Supervisor = supervisor,
+                                  Role,
+                                  `Minicensus forms`,
+                                  `Average time per minicensus form (minutes)`,
+                                  `% rolling target (minicensus)`,
+                                  `Enumeration forms` = num_enumerations,
+                                  `VA forms` = num_va,
+                                  `Anomalies` = num_anomalies,
+                                  `Errors` = num_errors) 
+                  # remove rows that have 'NA NA' in FW column
+                  fwt_daily <- fwt_daily %>% filter(!grepl('NA NA', fwt_daily$FW))
+                  
+                } else {
+                  fwt_daily <-left_join(left, right) %>%
+                    mutate(num_enumerations = make_na(num_enumerations),
+                           num_va = make_na(num_va),
+                           num_anomalies = make_na(num_anomalies),
+                           num_errors = make_na(num_errors)) %>%
+                    mutate(fw = paste0(first_name, ' ', last_name)) %>%
+                    dplyr::select(`FW ID` = wid,
+                                  `FW` = fw,
+                                  Supervisor = supervisor,
+                                  Role,
+                                  `Minicensus forms`,
+                                  `Average time per minicensus form (minutes)`,
+                                  `% rolling target (minicensus)`,
+                                  `Enumeration forms` = num_enumerations,
+                                  `VA forms` = num_va,
+                                  `Anomalies` = num_anomalies,
+                                  `Errors` = num_errors) 
+                  # remove rows that have 'NA NA' in FW column
+                  fwt_daily <- fwt_daily %>% filter(!grepl('NA NA', fwt_daily$FW))
+                  
+                }
+            
                 
               }
                        # div(
