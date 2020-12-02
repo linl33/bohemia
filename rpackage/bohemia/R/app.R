@@ -2892,7 +2892,7 @@ app_server <- function(input, output, session) {
               deaths <- pd$minicensus_repeat_death_info
               pd <- pd$minicensus_main
               co <- country()
-              save(pd, va, deaths, file = '/tmp/va.RData')
+             # save(pd, va, deaths, file = '/tmp/va.RData')
               pd <- pd %>%
                 filter(hh_country == co)
               
@@ -2905,7 +2905,7 @@ app_server <- function(input, output, session) {
                               hamlet = hh_hamlet, instance_id)
               
               grouper <- input$va_monitor_by
-              save(grouper, file = '/tmp/grouper.RData')
+              # save(grouper, file = '/tmp/grouper.RData')
               
               
               
@@ -2949,7 +2949,7 @@ app_server <- function(input, output, session) {
                   names(va_progress_geo)[1] <- 'Povaodo'
                 }
               }
-              save(va_progress_geo, file='temp_va.rda')
+              # save(va_progress_geo, file='temp_va.rda')
               fluidPage(
                 fluidRow(
                   h2(paste0('Progress by ',  names(va_progress_geo)[1])),
@@ -5560,7 +5560,7 @@ app_server <- function(input, output, session) {
       inFile <- input$upload_data
       dat <- read.csv(inFile$datapath, check.names = FALSE)
       previous_corrections <- odk_data$data$corrections
-      save(dat, previous_corrections, file='/tmp/temp_upload.rda')
+      # save(dat, previous_corrections, file='/tmp/temp_upload.rda')
       
       # create valid names 
       log_in_user <- input$log_in_user
