@@ -1767,21 +1767,18 @@ implement(id = 'hh_head_too_young_old_540f3603-4c2e-40a5-a60a-635be795a32b', que
 implement(id = 'hh_head_too_young_old_a8f3a1db-efef-4de7-8b54-71958de9b156', query = "UPDATE clean_minicensus_main SET hh_head_dob='1996-06-15' WHERE instance_id='a8f3a1db-efef-4de7-8b54-71958de9b156'; UPDATE clean_minicensus_people SET dob='1996-06-15' WHERE instance_id='a8f3a1db-efef-4de7-8b54-71958de9b156' and num='1';")
 
 implement(id = 'hh_head_too_young_old_9b53674d-70b4-4905-9e70-bda099ecec81', is_ok = True)
-
+implement(id = 'energy_ownership_mismatch_81bbf5c2-0f3c-4b10-9970-930bae33f86f', is_ok = True)
 implement(id = 'too_many_houses_2743fb87-a494-4a0d-8835-0fae53b543cc', query = "UPDATE clean_minicensus_main SET hh_n_constructions='1' WHERE instance_id='2743fb87-a494-4a0d-8835-0fae53b543cc';")
-
-dbconn.commit()
-cur.close()
-dbconn.close()
-
+implement(id = 'strange_wid_enumerations_723f4a7f-f161-4739-80d5-8a3ee412023f', query = "'UPDATE clean_enumerations SET wid='430' WHERE instance_id = '723f4a7f-f161-4739-80d5-8a3ee412023f';")
 
 ##### Xing Dec 2 Fixes #####
-implement(id = 'hh_head_too_young_old_2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc', query = "UPDATE clean_minicensus_main SET hh_head_dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'; UPDATE clean_minicensus_people SET dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'", who = 'Xing Brew')
-implement(id = 'hh_head_too_young_old_b3fb8bbd-b526-4077-9d35-80e1b6065ebc', query = "UPDATE clean_minicensus_main SET hh_head_dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc'; UPDATE clean_minicensus_people SET dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc'", who = 'Xing Brew')
-implement(id = 'hh_head_too_young_old_1cb51568-08f3-469a-944b-8eaff8324676', query = "UPDATE clean_minicensus_main SET hh_head_dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676'; UPDATE clean_minicensus_people SET dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676'", who = 'Xing Brew')
-implement(id = 'hh_head_too_young_old_aa24512d-d817-4131-9b66-c7e953558826', query = "UPDATE clean_minicensus_main SET hh_head_dob='1997-06-09' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'; UPDATE clean_minicensus_people SET dob='1997-06-09' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'", who = 'Xing Brew')
-implement(id = 'hh_head_too_young_old_6de39fda-146e-4e52-a04b-2270235bb4ca', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca'; UPDATE clean_minicensus_people SET dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca'", who = 'Xing Brew')
-implement(id = 'hh_head_too_young_old_59227b76-b811-4060-8a72-e4ca544b8825', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-09-03' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'; UPDATE clean_minicensus_people SET dob='2000-09-03' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'", who = 'Xing Brew')
+# Message from Joe: these needs to be examined in more detail. Specifically (a) check if perhaps the wrong person was assigned to be hh head (you can see this if the corrected DOB is actually the DOB of someone else in the house - in which case you may need to change things like hh head gender, etc.) and (b) make sure not to set EVERYONE in the household to having the same DOB (ie, you need to add an "and num=" query when modifying clean_minicensus_people)
+# implement(id = 'hh_head_too_young_old_2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc', query = "UPDATE clean_minicensus_main SET hh_head_dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'; UPDATE clean_minicensus_people SET dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'", who = 'Xing Brew')
+# implement(id = 'hh_head_too_young_old_b3fb8bbd-b526-4077-9d35-80e1b6065ebc', query = "UPDATE clean_minicensus_main SET hh_head_dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc'; UPDATE clean_minicensus_people SET dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc'", who = 'Xing Brew')
+# implement(id = 'hh_head_too_young_old_1cb51568-08f3-469a-944b-8eaff8324676', query = "UPDATE clean_minicensus_main SET hh_head_dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676'; UPDATE clean_minicensus_people SET dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676'", who = 'Xing Brew')
+# implement(id = 'hh_head_too_young_old_aa24512d-d817-4131-9b66-c7e953558826', query = "UPDATE clean_minicensus_main SET hh_head_dob='1997-06-09' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'; UPDATE clean_minicensus_people SET dob='1997-06-09' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'", who = 'Xing Brew')
+# implement(id = 'hh_head_too_young_old_6de39fda-146e-4e52-a04b-2270235bb4ca', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca'; UPDATE clean_minicensus_people SET dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca'", who = 'Xing Brew')
+# implement(id = 'hh_head_too_young_old_59227b76-b811-4060-8a72-e4ca544b8825', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-09-03' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'; UPDATE clean_minicensus_people SET dob='2000-09-03' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'", who = 'Xing Brew')
 
 # No hh_sub DOB variable in clean_minicensus_main and don't know who is the sub in clean_mini_census_people
 # implement(id = 'hh_sub_age_mismatch_old_7a9d44be-04c3-412e-9285-3e2e3ed15094', query = "UPDATE clean_minicensus_main SET XXX='1981-11-26' WHERE instance_id='7a9d44be-04c3-412e-9285-3e2e3ed15094'; UPDATE clean_minicensus_people SET XXX='1981-11-26' WHERE instance_id='7a9d44be-04c3-412e-9285-3e2e3ed15094'", who = 'Xing Brew')
@@ -1875,12 +1872,13 @@ implement(id = 'energy_ownership_mismatch_17547c71-56b3-403f-aa80-14c20d974419',
 implement(id = 'energy_ownership_mismatch_9daa040a-949e-4b1f-b7d0-0d63600355e1', query = "UPDATE clean_minicensus_main SET hh_main_energy_source_for_lighting='electricity' WHERE instance_id='9daa040a-949e-4b1f-b7d0-0d63600355e1'", who = 'Xing Brew')
 
 # please verify that 'tv' is correctly removed from list of hh_possessions in 3 lines below:
+# Message from Joe: checked. all good
 implement(id = 'energy_ownership_mismatch_12819949-e1a4-40ee-b4fc-e3f10d33ea8d', query = "UPDATE clean_minicensus_main SET hh_possessions='radio cell_phone' WHERE instance_id='12819949-e1a4-40ee-b4fc-e3f10d33ea8d'", who = 'Xing Brew')
 implement(id = 'energy_ownership_mismatch_4170fa7a-e168-4287-9101-96f7d3a4b9dc', query = "UPDATE clean_minicensus_main SET hh_possessions='radio' WHERE instance_id='4170fa7a-e168-4287-9101-96f7d3a4b9dc'", who = 'Xing Brew')
 implement(id = 'energy_ownership_mismatch_cdc973fe-ec43-47a4-bfdd-116384e8106c', query = "UPDATE clean_minicensus_main SET hh_possessions='radio' WHERE instance_id='cdc973fe-ec43-47a4-bfdd-116384e8106c'", who = 'Xing Brew')
 
 # correction instructions indicate there is no tv, but unclear if that means no other possessions too:
-implement(id = 'energy_ownership_mismatch_bf995b59-6c68-4b9d-9fef-f6ce60b3bd8b', query = "UPDATE clean_minicensus_main SET hh_possessions='NA' WHERE instance_id='bf995b59-6c68-4b9d-9fef-f6ce60b3bd8b'", who = 'Xing Brew')
+implement(id = 'energy_ownership_mismatch_bf995b59-6c68-4b9d-9fef-f6ce60b3bd8b', query = "UPDATE clean_minicensus_main SET hh_possessions='none' WHERE instance_id='bf995b59-6c68-4b9d-9fef-f6ce60b3bd8b'", who = 'Xing Brew')
 
 implement(id = 'all_males_17547c71-56b3-403f-aa80-14c20d974419', query = "UPDATE clean_minicensus_people SET gender='female' WHERE num='2' and instance_id='17547c71-56b3-403f-aa80-14c20d974419'", who = 'Xing Brew')
 implement(id = 'all_males_e57b0474-c749-4d3f-ab2d-b3148320408c', query = "UPDATE clean_minicensus_people SET gender='female' WHERE num='2' and  instance_id='e57b0474-c749-4d3f-ab2d-b3148320408c'; UPDATE clean_minicensus_people SET gender='female' WHERE num='5' and  instance_id='e57b0474-c749-4d3f-ab2d-b3148320408c'; UPDATE clean_minicensus_people SET gender='female' WHERE num='8' and  instance_id='e57b0474-c749-4d3f-ab2d-b3148320408c'; UPDATE clean_minicensus_people SET gender='female' WHERE num='10' and instance_id='e57b0474-c749-4d3f-ab2d-b3148320408c'", who = 'Xing Brew')
@@ -1894,3 +1892,6 @@ implement(id = 'strange_wid_refusals_183d99cd-09e0-4638-b0bf-553abb21fa8f', quer
 implement(id = 'strange_wid_refusals_d1ac8f57-8c55-43ad-a9e8-a294053c58fd', query = "DELETE FROM clean_refusals WHERE instance_id='d1ac8f57-8c55-43ad-a9e8-a294053c58fd'", who = 'Xing Brew')
 implement(id = 'missing_wid_refusals_ab2ea7af-cec2-4b5e-9e5d-b636d395fbb1', query = "DELETE FROM clean_refusals WHERE instance_id='ab2ea7af-cec2-4b5e-9e5d-b636d395fbb1'", who = 'Xing Brew')
 
+dbconn.commit()
+cur.close()
+dbconn.close()
