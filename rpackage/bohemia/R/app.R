@@ -9,7 +9,6 @@
 #' @import gt
 #' @import sp
 #' @import DT
-#' @import plotly
 #' @import mapview
 #' @import stplanr
 #' @import lubridate
@@ -214,7 +213,8 @@ app_ui <- function(request) {
                                                                   fluidPage(
                                                                     uiOutput('ui_va_monitoring_by'),
                                                                     br(),
-                                                                    uiOutput('va_progress_geo_ui'))),
+                                                                    uiOutput('va_progress_geo_ui'),
+                                                                    uiOutput('va_progress_geo_past_due_ui'))),
                                                          tabPanel('Past due VAs',
                                                                   uiOutput('ui_va_progress_past_due')
                                                          )
@@ -1533,7 +1533,7 @@ app_server <- function(input, output, session) {
   })
   
   # Progress by geographical unit
-  output$dt_monitor_by_plot <- renderPlotly({
+  output$dt_monitor_by_plot <- renderPlot({
     
     # Get the odk data
     pd <- odk_data$data
@@ -1627,16 +1627,16 @@ app_server <- function(input, output, session) {
         }
       }
       
-      
-      
       message('---created progess plot for Overview by geography')
       names(monitor_plot)[1] <- 'location'
      out <- ggplot(monitor_plot, aes(location, `Percent finished`)) + geom_bar(stat='identity') +
+       geom_text(aes(label=`Percent finished`), vjust=-1)+
        labs(x = '',
             y ='') + 
        theme_bohemia() +
-       theme(axis.text.x  = element_blank(),
+       theme(axis.text.x  = element_text(angle=90, vjust=0.5),
              axis.ticks.x = element_blank())
+     
      
     }
     return(out)
@@ -1770,7 +1770,7 @@ app_server <- function(input, output, session) {
                          tabPanel('Table',
                                   div(DT::dataTableOutput('dt_monitor_by_table'), style = "font-size:80%")),
                          tabPanel('Plot',
-                                  plotlyOutput('dt_monitor_by_plot')),
+                                  plotOutput('dt_monitor_by_plot')),
                          tabPanel('Map',
                                   leafletOutput('leaf_lx', height = 800)))))
             })
@@ -2949,6 +2949,7 @@ app_server <- function(input, output, session) {
                   names(va_progress_geo)[1] <- 'Povaodo'
                 }
               }
+              save(va_progress_geo, file='temp_va.rda')
               fluidPage(
                 fluidRow(
                   h2(paste0('Progress by ',  names(va_progress_geo)[1])),
@@ -2958,6 +2959,140 @@ app_server <- function(input, output, session) {
             })
   })
   
+  output$plot_va_progress_by_geo_past_due <- renderPlot({
+    # Get the odk data
+    pd <- odk_data$data
+    pd <- pd$minicensus_main
+    cn <- country()
+    pd <- pd %>% filter(hh_country == cn)
+    
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      # va table
+      
+      deaths <- odk_data$data$minicensus_repeat_death_info
+      deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
+      va <- odk_data$data$va
+      # save(pd, cn, deaths, va, file = '/tmp/vajoe.RData')
+      # Conditional mourning period
+      mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
+      out <- left_join(deaths %>% 
+                         left_join(pd %>% dplyr::select(instance_id, todays_date), by = 'instance_id') %>%
+                         mutate(todays_date = as.Date(todays_date),
+                                death_dod = as.Date(death_dod)) %>%
+                         mutate(old = (todays_date - death_dod) > mourning_period) %>%
+                         mutate(time_to_add = ifelse(old, 7, mourning_period)) %>%
+                         mutate(xx = todays_date + time_to_add#, # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
+                                # yy = Sys.Date() - todays_date
+                         ) %>%
+                         # Note: in case the "date of death" is unknown (the form has that option): let's just calculate the "latest date to do VA" by adding 40 days (Tanzania) and 30 days (Moz) to the "date of the hh visit", to be safe.
+                         mutate(safe_bet = todays_date + mourning_period) %>%
+                         mutate(xx = ifelse(is.na(xx), safe_bet, xx)) %>%
+                         mutate(xx = as.Date(xx, origin = '1970-01-01')) %>%
+                         mutate(yy = Sys.Date() - xx) %>% # "time elapsed" means time between lastest date to collect and today
+                         dplyr::select(instance_id,
+                                       `Date of death` = death_dod,
+                                       `Latest date to collect VA form` = xx,
+                                       `PERM ID` = death_id,
+                                       `Time elapsed` = yy),
+                       pd %>%
+                         dplyr::select(instance_id,
+                                       District = hh_district,
+                                       Ward = hh_ward,
+                                       Village = hh_village,
+                                       Hamlet = hh_hamlet,
+                                       `HH ID` = hh_id,
+                                       `FW ID` = wid,
+                                       `HH visit date` = todays_date), by = 'instance_id') %>%
+        # mutate(`FW ID` = ' ') %>%
+        dplyr::select(-instance_id)
+      
+      # Remove those which have already been done
+      out <- out %>%
+        filter(!`PERM ID` %in% va$death_id)
+      
+      if(nrow(out) > 0){
+        out <- out %>% dplyr::select(District, Ward, Village, Hamlet,
+                                     `HH ID`, `FW ID`, `PERM ID`,
+                                     `HH visit date`, `Date of death`,
+                                     `Latest date to collect VA form`,
+                                     `Time elapsed`
+        ) %>%
+          arrange(desc(`HH visit date`))
+        if(cn=='Mozambique'){
+          out <- out %>%  rename(Distrito = District,
+                                 `Posto administrativo/localidade`=Ward,
+                                 Povoado=Village,
+                                 Bairro=Hamlet,
+                                 `FW ID (minicensus)` = `FW ID`) 
+        } else {
+          out <- out %>%
+            left_join(
+              bohemia::tza_ward_supervisors %>%
+                dplyr::mutate(wid = paste0(Supervisor_Name, ' (',
+                                           wid, ')')) %>%
+                dplyr::select(Ward, wid),
+              by = 'Ward'
+            ) %>%
+            mutate(`FW ID` = wid) %>%
+            dplyr::select(-wid) %>%
+            dplyr::rename(`Assigned to`  = `FW ID`) 
+        }
+        grouper <- input$va_monitor_by
+        
+        if(is.null(grouper)){
+          grouper <- 'District'
+        } 
+        out$`Time elapsed` <- NULL
+        if(cn=='Mozambique'){
+          plot_data <- out %>% group_by_(grouper) %>% summarise(counts=n())
+          names(plot_data)[1] <- 'V1'
+          plot <- ggplot(plot_data, aes(V1, counts)) + geom_bar(stat='identity') +
+            labs(x = '',
+                 y='VAs past due') +
+            theme_bohemia() +
+            theme(axis.text.x = element_text(angle=90, vjust=0.5))
+          
+          return(plot)
+        } else {
+          out$District <- paste0(out$District, ' - ', out$`Assigned to`)
+          out$Ward <- paste0(out$Ward, ' - ', out$`Assigned to`)
+          out$Village <- paste0(out$Village, ' - ', out$`Assigned to`)
+          out$Hamlet<- paste0(out$Hamlet, ' - ', out$`Assigned to`)
+          
+          plot_data <- out %>% group_by_(grouper) %>% summarise(counts=n())
+          names(plot_data)[1] <- 'V1'
+          plot <- ggplot(plot_data, aes(V1, counts)) + geom_bar(stat='identity') +
+            labs(x = '',
+                 y='VAs past due') +
+            theme_bohemia() +
+            theme(axis.text.x = element_text(angle=90, vjust=0.5))
+          
+          return(plot)
+        }
+        
+      } 
+    } else {
+      return(NULL)
+    }
+  })
+  output$va_progress_geo_past_due_ui <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              plotOutput('plot_va_progress_by_geo_past_due')
+            })
+  })
   
   output$table_va_progress_past_due <- DT::renderDataTable({
     # Get the odk data
