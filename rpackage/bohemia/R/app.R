@@ -3440,6 +3440,15 @@ app_server <- function(input, output, session) {
                 pdx <- pdx %>% filter(!is.na(forms))
                 pdx <- pdx %>% arrange(desc(per_day))
                 pdx$wid <- factor(pdx$wid, levels = unique(pdx$wid))
+                # save(pdx, fids, file = '/tmp/dec2.RData')
+                right <- fids %>%
+                  mutate(wid = bohemia_id) %>%
+                  dplyr::select(wid, Role) %>%
+                  mutate(wid = as.numeric(as.character(wid)))
+                pdx <- left_join(
+                  pdx %>% mutate(wid = as.numeric(as.character(wid))),
+                                 right)%>%
+                  mutate(wid = paste0(wid, ' (', Role, ')'))
                 ggplot(data = pdx,
                          aes(x = wid,
                              y = per_day)) +
@@ -3750,17 +3759,19 @@ app_server <- function(input, output, session) {
   output$ui_fw_daily <- renderUI({
     # See if the user is logged in and has access
    fluidPage(
-     selectInput('ui_fw_plot_form',
-                 'Form to show in chart',
-                 choices = c('Minicensus',
-                             'Enumerations', 
-                             'VA'),
-                 selected = 'Minicensus'),
-     fluidRow(column(6,
-                     plotOutput('ui_fw_plot')),
-              column(6,
+     fluidRow(column(12,
+                     selectInput('ui_fw_plot_form',
+                                 'Form to show in chart',
+                                 choices = c('Minicensus',
+                                             'Enumerations', 
+                                             'VA'),
+                                 selected = 'Minicensus'))),
+     fluidRow(column(12,
+                     plotOutput('ui_fw_plot'))),
+     fluidRow(column(12,
                      plotOutput('ui_fw_plot2'))),
-     DT::dataTableOutput('ui_fw_table'))
+     fluidRow(column(12,
+                     DT::dataTableOutput('ui_fw_table'))))
   })
   
   # Leaflet of fieldworkers
