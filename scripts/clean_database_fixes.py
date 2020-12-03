@@ -1772,16 +1772,25 @@ implement(id = 'too_many_houses_2743fb87-a494-4a0d-8835-0fae53b543cc', query = "
 implement(id = 'strange_wid_enumerations_723f4a7f-f161-4739-80d5-8a3ee412023f', query = "UPDATE clean_enumerations SET wid='430' WHERE instance_id = '723f4a7f-f161-4739-80d5-8a3ee412023f';")
 
 ##### Xing Dec 2 Fixes #####
-# Message from Joe: these needs to be examined in more detail. Specifically (a) check if perhaps the wrong person was assigned to be hh head (you can see this if the corrected DOB is actually the DOB of someone else in the house - in which case you may need to change things like hh head gender, etc.) and (b) make sure not to set EVERYONE in the household to having the same DOB (ie, you need to add an "and num=" query when modifying clean_minicensus_people)
-# implement(id = 'hh_head_too_young_old_2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc', query = "UPDATE clean_minicensus_main SET hh_head_dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'; UPDATE clean_minicensus_people SET dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'", who = 'Xing Brew')
-# implement(id = 'hh_head_too_young_old_b3fb8bbd-b526-4077-9d35-80e1b6065ebc', query = "UPDATE clean_minicensus_main SET hh_head_dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc'; UPDATE clean_minicensus_people SET dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc'", who = 'Xing Brew')
-# implement(id = 'hh_head_too_young_old_1cb51568-08f3-469a-944b-8eaff8324676', query = "UPDATE clean_minicensus_main SET hh_head_dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676'; UPDATE clean_minicensus_people SET dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676'", who = 'Xing Brew')
-# implement(id = 'hh_head_too_young_old_aa24512d-d817-4131-9b66-c7e953558826', query = "UPDATE clean_minicensus_main SET hh_head_dob='1997-06-09' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'; UPDATE clean_minicensus_people SET dob='1997-06-09' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'", who = 'Xing Brew')
-# implement(id = 'hh_head_too_young_old_6de39fda-146e-4e52-a04b-2270235bb4ca', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca'; UPDATE clean_minicensus_people SET dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca'", who = 'Xing Brew')
-# implement(id = 'hh_head_too_young_old_59227b76-b811-4060-8a72-e4ca544b8825', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-09-03' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'; UPDATE clean_minicensus_people SET dob='2000-09-03' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'", who = 'Xing Brew')
 
-# No hh_sub DOB variable in clean_minicensus_main and don't know who is the sub in clean_mini_census_people
-# implement(id = 'hh_sub_age_mismatch_old_7a9d44be-04c3-412e-9285-3e2e3ed15094', query = "UPDATE clean_minicensus_main SET XXX='1981-11-26' WHERE instance_id='7a9d44be-04c3-412e-9285-3e2e3ed15094'; UPDATE clean_minicensus_people SET XXX='1981-11-26' WHERE instance_id='7a9d44be-04c3-412e-9285-3e2e3ed15094'", who = 'Xing Brew')
+### Joe, please see below for updated corrections to DOB 
+# verified that only DOB incorrectly entered
+implement(id = 'hh_head_too_young_old_b3fb8bbd-b526-4077-9d35-80e1b6065ebc', query = "UPDATE clean_minicensus_main SET hh_head_dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc'; UPDATE clean_minicensus_people SET dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc' and num='1'", who = 'Xing Brew')
+implement(id = 'hh_head_too_young_old_6de39fda-146e-4e52-a04b-2270235bb4ca', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca'; UPDATE clean_minicensus_people SET dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca' and num='1'", who = 'Xing Brew')
+implement(id = 'hh_head_too_young_old_59227b76-b811-4060-8a72-e4ca544b8825', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-09-03' WHERE instance_id='59227b76-b811-4060-8a72-e4ca544b8825'; UPDATE clean_minicensus_people SET dob='2000-09-03' WHERE instance_id='59227b76-b811-4060-8a72-e4ca544b8825' and num='1'", who = 'Xing Brew')
+
+# Fixed DOB. HH head is correctly identified in minicensus_main, but she was entered second in minicensus_people, so her permid ends in -002. 
+implement(id = 'hh_head_too_young_old_1cb51568-08f3-469a-944b-8eaff8324676', query = "UPDATE clean_minicensus_main SET hh_head_dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676'; UPDATE clean_minicensus_people SET dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676' and num='2'", who = 'Xing Brew')
+
+# incorrect person selected as hh_head in minicensus_main, DOB correct in minicensus_people
+implement(id = 'hh_head_too_young_old_aa24512d-d817-4131-9b66-c7e953558826', query = "UPDATE clean_minicensus_main SET hh_head_dob='1997-06-09', hh_head_id='1' WHERE instance_id='aa24512d-d817-4131-9b66-c7e953558826'", who = 'Xing Brew')
+
+# Need to verify who is hh head. In minicensus_main, hh_head_id=4 but hh_head_dob matches person num=1 in minicensus_people. Corrected DOB is not similar to that of either person.
+# implement(id = 'hh_head_too_young_old_2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc', query = "UPDATE clean_minicensus_main SET hh_head_dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'; UPDATE clean_minicensus_people SET dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'", who = 'Xing Brew')
+
+# added brick_block as additional wall material. 
+implement(id = 'note_material_warning_02f7a143-66a1-4118-a09d-2a2ea42f605d', query = "UPDATE clean_minicensus_main SET hh_main_building_type='brick_block zinc' WHERE instance_id='02f7a143-66a1-4118-a09d-2a2ea42f605d'", who = 'Xing Brew')
+
 
 implement(id = 'strange_hh_code_enumerations_0ae1e05c-94e5-4055-b3eb-7171c56a65ff', query = "UPDATE clean_enumerations SET agregado='ZVB-088', hamlet_code='ZVB', hamlet='Zona Verde B' WHERE instance_id='0ae1e05c-94e5-4055-b3eb-7171c56a65ff'", who = 'Xing Brew')
 implement(id = 'strange_hh_code_enumerations_0ae45db7-8a6c-4e57-8304-8220516d837f', query = "UPDATE clean_enumerations SET agregado='ZVB-127', hamlet_code='ZVB', hamlet='Zona Verde B' WHERE instance_id='0ae45db7-8a6c-4e57-8304-8220516d837f'", who = 'Xing Brew')
