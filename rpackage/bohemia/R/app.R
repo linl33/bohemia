@@ -1528,6 +1528,7 @@ app_server <- function(input, output, session) {
     return(out)
   })
   
+  # here
   # Progress by geographical unit
   output$dt_monitor_by_plot <- renderPlot({
     
@@ -1535,6 +1536,7 @@ app_server <- function(input, output, session) {
     pd <- odk_data$data
     
     # ref <- pd$refusals
+    enum <- pd$enumerations
     pd <- pd$minicensus_main
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
@@ -1552,8 +1554,10 @@ app_server <- function(input, output, session) {
     
     pd <- pd %>% filter(todays_date >= time_period[1],
                         todays_date <=time_period[2]) 
+    enum <- enum %>% filter(todays_date >= time_period[1],
+                            todays_date <=time_period[2]) 
    
-    # save(pd, enum, va, file = 'temp_gps.rda')
+    # save(pd, enum, file = 'temp_gps.rda')
     pd_ok <- FALSE
     
     if(!is.null(pd)){
@@ -1564,6 +1568,7 @@ app_server <- function(input, output, session) {
     if(!pd_ok){
       out <- NULL
     } else {
+      dt_choose_form <- input$dt_choose_form
       # Create a detailed progress table (by hamlet)
       left <- ehd %>%
         filter(clinical_trial != 1) %>%
@@ -1768,6 +1773,7 @@ app_server <- function(input, output, session) {
                          tabPanel('Table',
                                   div(DT::dataTableOutput('dt_monitor_by_table'), style = "font-size:80%")),
                          tabPanel('Plot',
+                                  selectInput('dt_choose_form', 'Choose form', choices = c('Minicensus', 'Enumerations')),
                                   plotOutput('dt_monitor_by_plot')),
                          tabPanel('Map',
                                   leafletOutput('leaf_lx', height = 800)))))
@@ -3361,7 +3367,6 @@ app_server <- function(input, output, session) {
                 }
               }
               if(pd_ok){
-                
                 # Date filters
                 min_date <- as.Date('2020-09-20')   
                 max_date <- Sys.Date() 
@@ -3380,6 +3385,12 @@ app_server <- function(input, output, session) {
                   filter(todays_date >= time_period[1],
                          todays_date <= time_period[2])
                 
+                # get daily target
+                if(co=='Mozambique'){
+                  fw_daily_target <- 10
+                } else {
+                  fw_daily_target <- 13
+                }
                 # Get the fieldworkers for the country in question
                 sub_fids <- fids %>% filter(country == co)
                 left <- tibble(wid = sort(unique(as.character(sub_fids$bohemia_id))))
@@ -3420,9 +3431,51 @@ app_server <- function(input, output, session) {
                   mutate(wid = as.numeric(wid)) 
               
                 if(ui_fw_plot_form == 'Minicensus'){
-                pdx <- pdx %>%
-                  mutate(forms = minicensus,
-                         days = minicensus_days)
+                  ui_show_percent <- input$ui_show_percent
+                  if(is.null(ui_show_percent)){
+                    ui_show_percent <- FALSE
+                  } 
+                  if(ui_show_percent){
+                    pdx <- pdx %>%
+                      mutate(forms = minicensus,
+                             days = minicensus_days)
+                    pdx <- pdx %>%
+                      mutate(per_day = forms / days) %>%
+                      mutate(label = paste0(forms, '\n',
+                                            days, ''))
+                    pdx <- pdx %>% filter(!is.na(forms))
+                    pdx <- pdx %>% arrange(desc(per_day))
+                    pdx$wid <- factor(pdx$wid, levels = unique(pdx$wid))
+                    # save(pdx, fids, file = '/tmp/dec2.RData')
+                    right <- fids %>%
+                      mutate(wid = bohemia_id) %>%
+                      dplyr::select(wid, Role) %>%
+                      mutate(wid = as.numeric(as.character(wid)))
+                    pdx <- left_join(
+                      pdx %>% mutate(wid = as.numeric(as.character(wid))),
+                      right)%>%
+                      mutate(wid = paste0(wid, ' (', Role, ')'))
+                    # add denominator for daily target
+                    pdx$daily_target <- fw_daily_target
+                    pdx$percent_of_daily_target <- round((pdx$per_day/pdx$daily_target)*100, 2)
+                    p <- ggplot(data = pdx,
+                           aes(x = wid,
+                               y = percent_of_daily_target)) +
+                      geom_bar(stat = 'identity') +
+                      labs(x = 'FW',
+                           y = '% of daily target',
+                           caption = 'Numbers show forms on top, working days on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
+                      theme_bohemia() +
+                      geom_text(aes(label = label),
+                                nudge_y = 0, size = 2, alpha = 0.8) +
+                      theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
+                    return(p)
+                  } else {
+                    pdx <- pdx %>%
+                      mutate(forms = minicensus,
+                             days = minicensus_days)
+                  }
+               
               } else if(ui_fw_plot_form == 'Enumerations'){
                 pdx <- pdx %>%
                   mutate(forms = enumerations,
@@ -3796,13 +3849,16 @@ app_server <- function(input, output, session) {
   output$ui_fw_daily <- renderUI({
     # See if the user is logged in and has access
    fluidPage(
-     fluidRow(column(12,
+     fluidRow(column(6,
                      selectInput('ui_fw_plot_form',
                                  'Form to show in chart',
                                  choices = c('Minicensus',
                                              'Enumerations', 
                                              'VA'),
-                                 selected = 'Minicensus'))),
+                                 selected = 'Minicensus')),
+              column(6,
+                     checkboxInput(inputId = 'ui_show_percent', label = 'Show percentage', value = FALSE))
+              ),
      fluidRow(column(12,
                      plotOutput('ui_fw_plot'))),
      fluidRow(column(12,
