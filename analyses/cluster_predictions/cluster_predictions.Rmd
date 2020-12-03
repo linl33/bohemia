@@ -72,11 +72,18 @@ minicensus_people <- bind_rows(
 na_to_zero <- function(x){ifelse(is.na(x), 0, x)}
 gps <- bohemia::gps
 
+df_adjust <- function(df){
+  df %>%
+    mutate(n_households = ifelse(df$iso == 'TZA', n_households * 1,
+                                 ifelse(df$iso == 'MOZ', n_households * 0.55, 
+                                        NA)))
+}
+
 # source('global.R')
 source('try_clusters.R')
 
 # Define the number of clusters required of each type
-n_required <- 48
+n_required <- 49
 
 # Get age and household details
 ages <- 
@@ -86,7 +93,9 @@ ages <-
   ) %>%
   mutate(days_old = Sys.Date() - dob) %>%
   mutate(years_old = days_old / 365.25) %>%
-  mutate(is_child  = years_old >= 5 & years_old <= 15) %>%
+  mutate(is_child  = ifelse(country == 'Mozambique',
+                            years_old >= 0 & years_old <= 5,
+                            years_old >= 0 & years_old <= 15)) %>%
   group_by(country) %>%
   summarise(children = length(which(is_child)),
             people = n()) %>%
@@ -122,11 +131,11 @@ We consider a cluster to be "complete" if it has the following characteristics:
 - NO ANIMAL FLOOR  
 - At least 2 kilometers between clusters of different treatment assignments (ie, a 1km "buffer" for each cluster, except in the case that the nearby cluster is of identical treatment assignment)  
 
-We consider that the number of clusters is "enough" if 144 are reached (ie, sufficient for the random assignment of all clusters to 3 assignment groups of n=48).
+We consider that the number of clusters is "enough" if 147 are reached (ie, sufficient for the random assignment of all clusters to 3 assignment groups of n=49).
 
 We allow for clusters to be formed by more than one hamlet, but we do not allow for the splitting of hamlets. 
 
-We consider that a "child" is some between ages 5 and 15. We consider that the % of people which are children will be `r paste0(ages$percent_children, ' in ', ages$country, collapse = ', ')` (as per the data observed so far in the minicensus).
+We consider that a "child" is some between 5 or younger in Mozambique and 15 or younger in Tanzania. We consider that the % of people which are children will be `r paste0(ages$percent_children, ' in ', ages$country, collapse = ', ')` (as per the data observed so far in the minicensus).
 
 We consider that an average household size will consist of the following number of people: `r paste0(round(hh$avg_size, digits = 2), ' in ', hh$country, collapse = ', ')` (as per the data in the minicensus).
 
@@ -160,7 +169,7 @@ out <- try_clusters(the_country = 'Tanzania',
   km = 2,
   max_km_from_hq = 1000,
   start_at_hq = TRUE,
-  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique')))
+  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique')) %>% df_adjust)
 ```
 
 #### Summary
@@ -178,10 +187,9 @@ keep_only_n <- function(cluster_xdf, n = n_required){
     filter(cs <= n_required)
 }
 out_minimal <- keep_only_n(out$cluster_xdf)
-out_maximal <- out$cluster_xdf
 ```
 
-If we keep only the minimal number required (`r n_required` clusters) and do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r sum(out_maximal$n_households)` to `r sum(out_minimal$n_households)`.
+If we keep only the minimal number required (`r n_required` clusters per arm) and do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x` to `r sum(out_minimal$n_households)`.
 
 
 ```{r}
@@ -208,7 +216,7 @@ out <- try_clusters(the_country = 'Mozambique',
   km = 2,
   max_km_from_hq = 1000,
   start_at_hq = TRUE,
-  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique')))
+  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique'))  %>% df_adjust)
 ```
 
 
@@ -231,7 +239,9 @@ out_minimal <- keep_only_n(out$cluster_xdf)
 out_maximal <- out$cluster_xdf
 ```
 
-If we keep only the minimal number required (`r n_required` clusters) and do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r sum(out_maximal$n_households)` to `r sum(out_minimal$n_households)`.
+IMPORTANT: UNABLE TO FORM MINIMUM NUMBER OF CLUSTERS. Only `r out$cluster_xdf %>% filter(complete_cluster) %>% nrow()` clusters total formed.
+
+If we do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r sum(out_maximal$n_households)` to `r sum(out_minimal$n_households)`.
 
 ```{r}
 out$map
