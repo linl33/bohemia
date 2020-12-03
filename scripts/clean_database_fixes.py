@@ -1773,13 +1773,13 @@ implement(id = 'strange_wid_enumerations_723f4a7f-f161-4739-80d5-8a3ee412023f', 
 
 ##### Xing Dec 2 Fixes #####
 
-### Joe, please see below for updated corrections to DOB 
+### Joe, please see below for updated corrections to DOB
 # verified that only DOB incorrectly entered
 implement(id = 'hh_head_too_young_old_b3fb8bbd-b526-4077-9d35-80e1b6065ebc', query = "UPDATE clean_minicensus_main SET hh_head_dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc'; UPDATE clean_minicensus_people SET dob='2001-11-10' WHERE instance_id='b3fb8bbd-b526-4077-9d35-80e1b6065ebc' and num='1'", who = 'Xing Brew')
 implement(id = 'hh_head_too_young_old_6de39fda-146e-4e52-a04b-2270235bb4ca', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca'; UPDATE clean_minicensus_people SET dob='2000-05-07' WHERE instance_id='6de39fda-146e-4e52-a04b-2270235bb4ca' and num='1'", who = 'Xing Brew')
 implement(id = 'hh_head_too_young_old_59227b76-b811-4060-8a72-e4ca544b8825', query = "UPDATE clean_minicensus_main SET hh_head_dob='2000-09-03' WHERE instance_id='59227b76-b811-4060-8a72-e4ca544b8825'; UPDATE clean_minicensus_people SET dob='2000-09-03' WHERE instance_id='59227b76-b811-4060-8a72-e4ca544b8825' and num='1'", who = 'Xing Brew')
 
-# Fixed DOB. HH head is correctly identified in minicensus_main, but she was entered second in minicensus_people, so her permid ends in -002. 
+# Fixed DOB. HH head is correctly identified in minicensus_main, but she was entered second in minicensus_people, so her permid ends in -002.
 implement(id = 'hh_head_too_young_old_1cb51568-08f3-469a-944b-8eaff8324676', query = "UPDATE clean_minicensus_main SET hh_head_dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676'; UPDATE clean_minicensus_people SET dob='1987-11-05' WHERE instance_id='1cb51568-08f3-469a-944b-8eaff8324676' and num='2'", who = 'Xing Brew')
 
 # incorrect person selected as hh_head in minicensus_main, DOB correct in minicensus_people
@@ -1788,7 +1788,7 @@ implement(id = 'hh_head_too_young_old_aa24512d-d817-4131-9b66-c7e953558826', que
 # Need to verify who is hh head. In minicensus_main, hh_head_id=4 but hh_head_dob matches person num=1 in minicensus_people. Corrected DOB is not similar to that of either person.
 # implement(id = 'hh_head_too_young_old_2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc', query = "UPDATE clean_minicensus_main SET hh_head_dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'; UPDATE clean_minicensus_people SET dob='1980-02-02' WHERE instance_id='47b88599-1e36-429a-b348-f24715c369c2'", who = 'Xing Brew')
 
-# added brick_block as additional wall material. 
+# added brick_block as additional wall material.
 implement(id = 'note_material_warning_02f7a143-66a1-4118-a09d-2a2ea42f605d', query = "UPDATE clean_minicensus_main SET hh_main_building_type='brick_block zinc' WHERE instance_id='02f7a143-66a1-4118-a09d-2a2ea42f605d'", who = 'Xing Brew')
 
 
@@ -1880,13 +1880,10 @@ implement(id = 'energy_ownership_mismatch_7b369660-6605-4444-8eb9-0bc2204ad8f4',
 implement(id = 'energy_ownership_mismatch_17547c71-56b3-403f-aa80-14c20d974419', query = "UPDATE clean_minicensus_main SET hh_main_energy_source_for_lighting='electricity' WHERE instance_id='17547c71-56b3-403f-aa80-14c20d974419'", who = 'Xing Brew')
 implement(id = 'energy_ownership_mismatch_9daa040a-949e-4b1f-b7d0-0d63600355e1', query = "UPDATE clean_minicensus_main SET hh_main_energy_source_for_lighting='electricity' WHERE instance_id='9daa040a-949e-4b1f-b7d0-0d63600355e1'", who = 'Xing Brew')
 
-# please verify that 'tv' is correctly removed from list of hh_possessions in 3 lines below:
-# Message from Joe: checked. all good
 implement(id = 'energy_ownership_mismatch_12819949-e1a4-40ee-b4fc-e3f10d33ea8d', query = "UPDATE clean_minicensus_main SET hh_possessions='radio cell_phone' WHERE instance_id='12819949-e1a4-40ee-b4fc-e3f10d33ea8d'", who = 'Xing Brew')
 implement(id = 'energy_ownership_mismatch_4170fa7a-e168-4287-9101-96f7d3a4b9dc', query = "UPDATE clean_minicensus_main SET hh_possessions='radio' WHERE instance_id='4170fa7a-e168-4287-9101-96f7d3a4b9dc'", who = 'Xing Brew')
 implement(id = 'energy_ownership_mismatch_cdc973fe-ec43-47a4-bfdd-116384e8106c', query = "UPDATE clean_minicensus_main SET hh_possessions='radio' WHERE instance_id='cdc973fe-ec43-47a4-bfdd-116384e8106c'", who = 'Xing Brew')
 
-# correction instructions indicate there is no tv, but unclear if that means no other possessions too:
 implement(id = 'energy_ownership_mismatch_bf995b59-6c68-4b9d-9fef-f6ce60b3bd8b', query = "UPDATE clean_minicensus_main SET hh_possessions='none' WHERE instance_id='bf995b59-6c68-4b9d-9fef-f6ce60b3bd8b'", who = 'Xing Brew')
 
 implement(id = 'all_males_17547c71-56b3-403f-aa80-14c20d974419', query = "UPDATE clean_minicensus_people SET gender='female' WHERE num='2' and instance_id='17547c71-56b3-403f-aa80-14c20d974419'", who = 'Xing Brew')
