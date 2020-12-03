@@ -1,0 +1,256 @@
+---
+title: "Cluster predictions"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: "hide"
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               # echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 9.64,
+               fig.height = 5.9,
+               fig.path = 'figures/')
+options(scipen=999)
+```
+
+```{r}
+## Load libraries
+library(bohemia)
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(sp)
+library(raster)
+library(ggthemes)
+library(sf)
+library(RColorBrewer)
+library(readr)
+library(tidyr)
+library(leaflet)
+library(rgeos)
+# options(scipen = '999')
+theme_set(databrew::theme_simple())
+```
+
+
+```{r}
+if('data.RData' %in% dir()){
+  load('data.RData')
+} else {
+  pd_moz <- load_odk_data(the_country = 'Mozambique',
+                    credentials_path = '../../credentials/credentials.yaml',
+                    users_path = '../../credentials/users.yaml')
+  pd_tza <- load_odk_data(the_country = 'Tanzania',
+                      credentials_path = '../../credentials/credentials.yaml',
+                      users_path = '../../credentials/users.yaml')
+  is_local <- FALSE
+  library(DBI)
+  library(RPostgres)
+  source('../../rpackage/bohemia/R/app_functions.R')
+  save(pd_moz,
+       pd_tza,
+       file = 'data.RData')
+}
+minicensus_main <- bind_rows(
+  pd_moz$minicensus_main,
+  pd_tza$minicensus_main
+)
+minicensus_people <- bind_rows(
+  pd_moz$minicensus_people,
+  pd_tza$minicensus_people
+)
+na_to_zero <- function(x){ifelse(is.na(x), 0, x)}
+gps <- bohemia::gps
+
+df_adjust <- function(df){
+  df %>%
+    mutate(n_households = ifelse(df$iso == 'TZA', n_households * 1,
+                                 ifelse(df$iso == 'MOZ', n_households * 0.55, 
+                                        NA)))
+}
+
+# source('global.R')
+source('try_clusters.R')
+
+# Define the number of clusters required of each type
+n_required <- 49
+
+# Get age and household details
+ages <- 
+  bind_rows(
+    pd_moz$minicensus_people %>% mutate(country = 'Mozambique'),
+    pd_tza$minicensus_people %>% mutate(country = 'Tanzania')
+  ) %>%
+  mutate(days_old = Sys.Date() - dob) %>%
+  mutate(years_old = days_old / 365.25) %>%
+  mutate(is_child  = ifelse(country == 'Mozambique',
+                            years_old >= 0 & years_old <= 5,
+                            years_old >= 0 & years_old <= 15)) %>%
+  group_by(country) %>%
+  summarise(children = length(which(is_child)),
+            people = n()) %>%
+  ungroup %>%
+  mutate(percent_children = round(children / people * 100, digits = 2))
+
+hh <- bind_rows(
+  pd_moz$minicensus_main %>% mutate(country = 'Mozambique'),
+  pd_tza$minicensus_main %>% mutate(country = 'Tanzania')
+) %>%
+  group_by(country) %>%
+  summarise(avg_size = mean(hh_size))
+
+```
+
+# Sample size prediction based on clustering requirements {.tabset}
+
+## Question
+
+The question: Can we make a rough estimation regarding how many fewer houses we could survey in the full census if we only included those houses which are part of clusters?
+
+## Methods
+
+Clusters will be formed using full data from the minicensus on the spatial distribution of hamlets and certain "parameters" (buffer distance, minimum number of children per cluster, minimum number and type of animals, etc.). Since the minicensus is not finished, we cannot yet form clusters.
+
+However, we can approximate this number by taking advantage of the data collected during Bohemia "Reconnaissance" activities (ie, hamlet-level questionnaires during the period of May-Aug 2020). Though less accurate than person-level data (for example, with hamlet level data we don't know exactly where the "borders" of a hamlet are, nor can we be sure whether a hamlet leader's estimations of the number of people/livestock in their hamlet are systematically biased), hamlet-level data is sufficiently accurate to at least _approximate_ how many clusters we'll be able to generate once we have person-level data, and how many people live in the area covered by the (minimum) number of clusters. 
+
+
+## Parameters and assumptions
+
+We consider a cluster to be "complete" if it has the following characteristics:
+- At least 30 children (25 +5 to account for potential lost to follow-up)  
+- NO ANIMAL FLOOR  
+- At least 2 kilometers between clusters of different treatment assignments (ie, a 1km "buffer" for each cluster, except in the case that the nearby cluster is of identical treatment assignment)  
+
+We consider that the number of clusters is "enough" if 147 are reached (ie, sufficient for the random assignment of all clusters to 3 assignment groups of n=49).
+
+We allow for clusters to be formed by more than one hamlet, but we do not allow for the splitting of hamlets. 
+
+We consider that a "child" is some between 5 or younger in Mozambique and 15 or younger in Tanzania. We consider that the % of people which are children will be `r paste0(ages$percent_children, ' in ', ages$country, collapse = ', ')` (as per the data observed so far in the minicensus).
+
+We consider that an average household size will consist of the following number of people: `r paste0(round(hh$avg_size, digits = 2), ' in ', hh$country, collapse = ', ')` (as per the data in the minicensus).
+
+The clustering algorithm:  
+- Starts at the hamlet of the district headquarters  
+- Assess whether the hamlet is a complete cluster, then  
+  - If it is a complete cluster, it moves on to the next hamlet and starts a new cluster  
+  - If it is not a complete cluster, it adds the nearest hamlet to the same cluster (and so on)   
+- Uses _pre-assigned_ (but random) treatment groups, so as to allow for the assignation of buffers only when necessary  
+- Assumes a perfectly circular hamlet shape and a radius based on population (since true distribution of households is not available). The assumed radius is 1 meter per person (except for hamlets with > 1,000 people, which are assumed to have a radius of 1,000 meters)  
+
+## Tanzania
+
+Note: this is excluding hamlets in other clinical trial
+
+
+```{r, echo = TRUE}
+out <- try_clusters(the_country = 'Tanzania',
+  include_clinical = FALSE,
+  interpolate_animals = TRUE,
+  interpolate_humans = TRUE,
+  humans_per_household = hh$avg_size[hh$country == 'Tanzania'],
+  p_children = ages$percent_children[ages$country == 'Tanzania'],
+  minimum_households = 0,
+  minimum_children = 30,
+  minimum_humans = 0,
+  minimum_animals = 0,
+  minimum_cattle = 0,
+  minimum_pigs = 0,
+  minimum_goats = 0,
+  km = 2,
+  max_km_from_hq = 1000,
+  start_at_hq = TRUE,
+  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique')) %>% df_adjust)
+```
+
+#### Summary
+
+```{r, results='asis'}
+cat(paste0(out$summary_text))
+```
+
+```{r}
+keep_only_n <- function(cluster_xdf, n = n_required){
+  done <- cluster_xdf %>% filter(complete_cluster)
+  done <- done %>% mutate(dummy = 1) %>% group_by(assignment_group) %>%
+    mutate(cs = cumsum(dummy)) %>%
+    ungroup %>%
+    filter(cs <= n_required)
+}
+out_minimal <- keep_only_n(out$cluster_xdf)
+```
+
+If we keep only the minimal number required (`r n_required` clusters per arm) and do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x` to `r sum(out_minimal$n_households)`.
+
+
+```{r}
+out$map
+```
+
+## Mozambique
+
+
+```{r, echo = TRUE}
+out <- try_clusters(the_country = 'Mozambique',
+  include_clinical = TRUE,
+  interpolate_animals = TRUE,
+  interpolate_humans = TRUE,
+  humans_per_household = hh$avg_size[hh$country == 'Mozambique'],
+  p_children = ages$percent_children[ages$country == 'Mozambique'],
+  minimum_households = 0,
+  minimum_children = 30,
+  minimum_humans = 0,
+  minimum_animals = 0,
+  minimum_cattle = 0,
+  minimum_pigs = 0,
+  minimum_goats = 0,
+  km = 2,
+  max_km_from_hq = 1000,
+  start_at_hq = TRUE,
+  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique'))  %>% df_adjust)
+```
+
+
+#### Summary
+
+```{r, results='asis'}
+cat(paste0(out$summary_text))
+```
+
+
+```{r}
+keep_only_n <- function(cluster_xdf, n = n_required){
+  done <- cluster_xdf %>% filter(complete_cluster)
+  done <- done %>% mutate(dummy = 1) %>% group_by(assignment_group) %>%
+    mutate(cs = cumsum(dummy)) %>%
+    ungroup %>%
+    filter(cs <= n_required)
+}
+out_minimal <- keep_only_n(out$cluster_xdf)
+out_maximal <- out$cluster_xdf
+```
+
+IMPORTANT: UNABLE TO FORM MINIMUM NUMBER OF CLUSTERS. Only `r out$cluster_xdf %>% filter(complete_cluster) %>% nrow()` clusters total formed.
+
+If we do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r sum(out_maximal$n_households)` to `r sum(out_minimal$n_households)`.
+
+```{r}
+out$map
+```
+
+
+## More resources
+
+- Source code for the hamlet-level clustering algorithm: [here](https://github.com/databrew/bohemia/blob/master/rpackage/bohemia/inst/shiny/operations/try_clusters.R) 
+- Interactive web app for modifying parameters and re-running cluster algorithm: [here](https://bohemia.team/operations) ("Clustering" tab)
+
+

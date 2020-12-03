@@ -634,7 +634,7 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       # Update the in-session estimated_households$data table to make sure values are right
-      message('Overwriting GPS!')
+      # message('Overwriting GPS!')
       co <- country()
       if(co == 'Mozambique'){
         pd <- odk_data$data$enumerations
@@ -653,7 +653,7 @@ app_server <- function(input, output, session) {
       # filter to only keep those which are already marked as done
       out <- already_done_hamlets()
       
-      # save(pd, estimated_hh_per_collection, co, li, out,
+      # save(pd, estimated_hh_per_collection, co, li, out, left,
       #      file = '/tmp/joe2020.RData')
       
       # Fill in any empties
@@ -661,9 +661,9 @@ app_server <- function(input, output, session) {
         for(i in 1:length(out)){
           if(!out[i] %in% estimated_hh_per_collection$code){
             message('Marking ', out[i], ' as done despite having no forms collected...')
-            new_row <- tibble(code = out,
+            new_row <- tibble(code = out[i],
                               done_hh = 0)
-            estimated_hh_per_collection <- 
+            estimated_hh_per_collection <-
               bind_rows(estimated_hh_per_collection,
                         new_row)
           }
@@ -1528,6 +1528,7 @@ app_server <- function(input, output, session) {
     return(out)
   })
   
+  # here
   # Progress by geographical unit
   output$dt_monitor_by_plot <- renderPlot({
     
@@ -1535,23 +1536,28 @@ app_server <- function(input, output, session) {
     pd <- odk_data$data
     
     # ref <- pd$refusals
+    enum <- pd$enumerations
     pd <- pd$minicensus_main
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
-    # save(pd, enum, va, co, the_iso, file = '/tmp/pd.RData')
+    ehd <- estimated_households$data
+    time_period <- input$progress_by_date
+    
+    # save(pd, co, the_iso, ehd, time_period, file = '/tmp/pd.RData')
     
     # get country
     pd <- pd %>% filter(hh_country==co)
   
-    time_period <- input$progress_by_date
     if(is.null(time_period)){
       time_period <- c(as.Date('2020-01-01'), Sys.Date())
     } 
     
     pd <- pd %>% filter(todays_date >= time_period[1],
                         todays_date <=time_period[2]) 
+    enum <- enum %>% filter(todays_date >= time_period[1],
+                            todays_date <=time_period[2]) 
    
-    # save(pd, enum, va, file = 'temp_gps.rda')
+    # save(pd, enum, file = 'temp_gps.rda')
     pd_ok <- FALSE
     
     if(!is.null(pd)){
@@ -1562,8 +1568,9 @@ app_server <- function(input, output, session) {
     if(!pd_ok){
       out <- NULL
     } else {
+      dt_choose_form <- input$dt_choose_form
       # Create a detailed progress table (by hamlet)
-      left <- estimated_households$data %>%
+      left <- ehd %>%
         filter(clinical_trial != 1) %>%
         filter(iso == the_iso) %>%
         dplyr::select(code, n_households)
@@ -1572,7 +1579,7 @@ app_server <- function(input, output, session) {
         summarise(numerator = n())
       joined <- left_join(left, right, by = 'code') %>%
         mutate(numerator = ifelse(is.na(numerator), 0, numerator)) %>%
-        mutate(p = numerator / n_households * 100) %>%
+        mutate(p = (numerator / n_households) * 100) %>%
         mutate(p = round(p, digits = 2))
       # get overall progress by hamlet code
       progress_by <- joined %>% left_join(locations %>% dplyr::select(code, Hamlet, District, Ward, Village), by = 'code')
@@ -1583,7 +1590,7 @@ app_server <- function(input, output, session) {
       # by village
       progress_by_village <- progress_by %>% group_by(Village) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
       # by hamlet
-      progress_by_hamlet <- progress_by %>% group_by(Hamlet) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+      progress_by_hamlet <- progress_by %>%ungroup %>% group_by(Hamlet) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE), .groups = 'drop') %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
       
       by_geo <- field_monitoring_geo() 
       
@@ -1766,6 +1773,7 @@ app_server <- function(input, output, session) {
                          tabPanel('Table',
                                   div(DT::dataTableOutput('dt_monitor_by_table'), style = "font-size:80%")),
                          tabPanel('Plot',
+                                  selectInput('dt_choose_form', 'Choose form', choices = c('Minicensus', 'Enumerations')),
                                   plotOutput('dt_monitor_by_plot')),
                          tabPanel('Map',
                                   leafletOutput('leaf_lx', height = 800)))))
@@ -2955,6 +2963,7 @@ app_server <- function(input, output, session) {
             })
   })
   
+ 
   output$plot_va_progress_by_geo_past_due <- renderPlot({
     # Get the odk data
     pd <- odk_data$data
@@ -3358,7 +3367,6 @@ app_server <- function(input, output, session) {
                 }
               }
               if(pd_ok){
-                
                 # Date filters
                 min_date <- as.Date('2020-09-20')   
                 max_date <- Sys.Date() 
@@ -3377,6 +3385,12 @@ app_server <- function(input, output, session) {
                   filter(todays_date >= time_period[1],
                          todays_date <= time_period[2])
                 
+                # get daily target
+                if(co=='Mozambique'){
+                  fw_daily_target <- 10
+                } else {
+                  fw_daily_target <- 13
+                }
                 # Get the fieldworkers for the country in question
                 sub_fids <- fids %>% filter(country == co)
                 left <- tibble(wid = sort(unique(as.character(sub_fids$bohemia_id))))
@@ -3417,9 +3431,51 @@ app_server <- function(input, output, session) {
                   mutate(wid = as.numeric(wid)) 
               
                 if(ui_fw_plot_form == 'Minicensus'){
-                pdx <- pdx %>%
-                  mutate(forms = minicensus,
-                         days = minicensus_days)
+                  ui_show_percent <- input$ui_show_percent
+                  if(is.null(ui_show_percent)){
+                    ui_show_percent <- FALSE
+                  } 
+                  if(ui_show_percent){
+                    pdx <- pdx %>%
+                      mutate(forms = minicensus,
+                             days = minicensus_days)
+                    pdx <- pdx %>%
+                      mutate(per_day = forms / days) %>%
+                      mutate(label = paste0(forms, '\n',
+                                            days, ''))
+                    pdx <- pdx %>% filter(!is.na(forms))
+                    pdx <- pdx %>% arrange(desc(per_day))
+                    pdx$wid <- factor(pdx$wid, levels = unique(pdx$wid))
+                    # save(pdx, fids, file = '/tmp/dec2.RData')
+                    right <- fids %>%
+                      mutate(wid = bohemia_id) %>%
+                      dplyr::select(wid, Role) %>%
+                      mutate(wid = as.numeric(as.character(wid)))
+                    pdx <- left_join(
+                      pdx %>% mutate(wid = as.numeric(as.character(wid))),
+                      right)%>%
+                      mutate(wid = paste0(wid, ' (', Role, ')'))
+                    # add denominator for daily target
+                    pdx$daily_target <- fw_daily_target
+                    pdx$percent_of_daily_target <- round((pdx$per_day/pdx$daily_target)*100, 2)
+                    p <- ggplot(data = pdx,
+                           aes(x = wid,
+                               y = percent_of_daily_target)) +
+                      geom_bar(stat = 'identity') +
+                      labs(x = 'FW',
+                           y = '% of daily target',
+                           caption = 'Numbers show forms on top, working days on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
+                      theme_bohemia() +
+                      geom_text(aes(label = label),
+                                nudge_y = 0, size = 2, alpha = 0.8) +
+                      theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
+                    return(p)
+                  } else {
+                    pdx <- pdx %>%
+                      mutate(forms = minicensus,
+                             days = minicensus_days)
+                  }
+               
               } else if(ui_fw_plot_form == 'Enumerations'){
                 pdx <- pdx %>%
                   mutate(forms = enumerations,
@@ -3604,8 +3660,8 @@ app_server <- function(input, output, session) {
               
               co <- country()
               enumerations <- pd$enumerations
-              va <- pd$va
-              pd <- pd$minicensus_main
+              full_va <- va <- pd$va
+              full_pd <- pd <- pd$minicensus_main
               # save(pd, co, an,enumerations, va, file = '/tmp/pd.RData')
               
               # pd <- pd %>% filter(hh_country == co)
@@ -3721,47 +3777,88 @@ app_server <- function(input, output, session) {
                   summarise(`Minicensus forms` = n(),
                             `Average time per minicensus form (minutes)` = round(mean(time, na.rm = TRUE), 1),
                             `% rolling target (minicensus)` = (`Minicensus forms` / n_days) / daily_forms_fw * 100) 
-                
                 make_na <- function(x){ifelse(is.na(x), 0, x)}
-                fwt_daily <-left_join(left, right) %>%
-                  mutate(num_enumerations = make_na(num_enumerations),
-                         num_va = make_na(num_va),
-                         num_anomalies = make_na(num_anomalies),
-                         num_errors = make_na(num_errors)) %>%
-                  mutate(fw = paste0(first_name, ' ', last_name)) %>%
-                  dplyr::select(`FW ID` = wid,
-                                `FW` = fw,
-                                Supervisor = supervisor,
-                                Role,
-                                `Minicensus forms`,
-                                `Average time per minicensus form (minutes)`,
-                                `% rolling target (minicensus)`,
-                                `Enumeration forms` = num_enumerations,
-                                `VA forms` = num_va,
-                                `Anomalies` = num_anomalies,
-                                `Errors` = num_errors) 
-                # remove rows that have 'NA NA' in FW column
-                fwt_daily <- fwt_daily %>% filter(!grepl('NA NA', fwt_daily$FW))
-                
+                if(co=='Mozambique'){
+                  fwt_daily <-left_join(left, right) %>%
+                    mutate(num_enumerations = make_na(num_enumerations),
+                           num_va = make_na(num_va),
+                           num_anomalies = make_na(num_anomalies),
+                           num_errors = make_na(num_errors)) %>%
+                    mutate(fw = paste0(first_name, ' ', last_name)) %>%
+                    dplyr::select(`FW ID` = wid,
+                                  `FW` = fw,
+                                  Supervisor = supervisor,
+                                  Role,
+                                  `Minicensus forms`,
+                                  `Average time per minicensus form (minutes)`,
+                                  `% rolling target (minicensus)`,
+                                  `Enumeration forms` = num_enumerations,
+                                  `VA forms` = num_va,
+                                  `Anomalies` = num_anomalies,
+                                  `Errors` = num_errors) 
+                  # remove rows that have 'NA NA' in FW column
+                  fwt_daily <- fwt_daily %>% filter(!grepl('NA NA', fwt_daily$FW))
+                  
+                } else {
+                  fwt_daily <-left_join(left, right) %>%
+                    mutate(num_enumerations = make_na(num_enumerations),
+                           num_va = make_na(num_va),
+                           num_anomalies = make_na(num_anomalies),
+                           num_errors = make_na(num_errors)) %>%
+                    mutate(fw = paste0(first_name, ' ', last_name)) %>%
+                    dplyr::select(`FW ID` = wid,
+                                  `FW` = fw,
+                                  Supervisor = supervisor,
+                                  Role,
+                                  `Minicensus forms`,
+                                  `Average time per minicensus form (minutes)`,
+                                  `% rolling target (minicensus)`,
+                                  `Enumeration forms` = num_enumerations,
+                                  `VA forms` = num_va,
+                                  `Anomalies` = num_anomalies,
+                                  `Errors` = num_errors) 
+                  # remove rows that have 'NA NA' in FW column
+                  fwt_daily <- fwt_daily %>% filter(!grepl('NA NA', fwt_daily$FW))
+                  # save(fwt_daily, full_va, full_pd, file = '/tmp/joedec.RData')
+                  # GET done by ward
+                    # Get the overall va progress table
+                    deaths <- full_pd$minicensus_repeat_death_info
+
+                    sups <- as.data.frame(bohemia::tza_ward_supervisors)
+                    # Get location in va
+                    va <- full_va %>%
+                      mutate(code = substr(hh_id, 1, 3)) %>%
+                      left_join(bohemia::locations %>% dplyr::select(code, region = Region, district = District,
+                                                            ward = Ward, village = Village, hamlet = Hamlet))
+                    va <- dplyr::left_join(va, sups)
+                    right <- va %>%
+                      group_by(`FW ID` = as.character(wid)) %>%
+                      summarise(`VAs assigned` = n())
+                    fwt_daily <- left_join(fwt_daily,
+                                           right) %>%
+                      mutate(`VA forms done as % assigned` = round(`VA forms` / `VAs assigned` * 100, 2))
+                }
+                bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
+                                  download_options = TRUE)
                 
               }
-                       # div(
-                       bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
-                                         download_options = TRUE)
-                       # , style = "font-size:80%")
+                       
             })
   })
   
   output$ui_fw_daily <- renderUI({
     # See if the user is logged in and has access
    fluidPage(
-     fluidRow(column(12,
+     fluidRow(column(6,
                      selectInput('ui_fw_plot_form',
                                  'Form to show in chart',
                                  choices = c('Minicensus',
                                              'Enumerations', 
                                              'VA'),
-                                 selected = 'Minicensus'))),
+                                 selected = 'Minicensus')),
+              column(6,
+                     checkboxInput(inputId = 'ui_show_percent', label = 'Show percentage', value = FALSE))
+              ),
      fluidRow(column(12,
                      plotOutput('ui_fw_plot'))),
      fluidRow(column(12,
