@@ -72,6 +72,15 @@ na_to_zero <- function(x){ifelse(is.na(x), 0, x)}
 gps <- bohemia::gps
 ```
 
+# Type of anomalies
+
+```{r}
+pd <- anomalies %>%
+  group_by(country, description) %>%
+  tally %>% arrange(country, desc(n))
+View(pd)
+```
+
 # Number of anomalies
 
 Total: 
