@@ -44,6 +44,8 @@ theme_set(databrew::theme_simple())
 
 
 ```{r}
+source('../../rpackage/bohemia/R/app_functions.R')
+
 if('data.RData' %in% dir()){
   load('data.RData')
 } else {
@@ -56,7 +58,6 @@ if('data.RData' %in% dir()){
   is_local <- FALSE
   library(DBI)
   library(RPostgres)
-  source('../../rpackage/bohemia/R/app_functions.R')
   save(pd_moz,
        pd_tza,
        file = 'data.RData')
@@ -119,19 +120,81 @@ left <- minicensus_people %>%
    mutate(is_child  = ifelse(country == 'Mozambique',
                             years_old >= 0 & years_old <= 5,
                             years_old >= 0 & years_old <= 15)) %>%
-  group_by(instance_id) %>%
+  group_by(country, instance_id) %>%
   summarise(n_members = n(),
             n_children = length(which(is_child)))
 df <-
   left_join(left,
             minicensus_main %>% dplyr::select(instance_id,
-                                              country = hh_country,
+                                              # country = hh_country,
                                               code = hh_hamlet_code,
                                               n_people = hh_size,
                                               location = hh_geo_location)) 
-locs <- extract_ll(minicensus_main$hh_geo_location)
+locs <- extract_ll(df$location)
 df$lng <- locs$lng; df$lat <- locs$lat
 df <- left_join(df, bohemia::locations %>% dplyr::select(code, clinical_trial))
+
+df <- df %>% filter(lat < -3)
+df <- df %>%
+  filter((lat < -16 & country == 'Mozambique') |
+           (lat > -12 & country == 'Tanzania')
+  )
+# Get the data grouped by codes
+codes <- sort(unique(df$code))
+locations_list <- list()
+locations_list_ll <- list()
+for(i in 1:length(codes)){
+  # message('INDEX ', i)
+  this_code <- codes[i]
+  this_data <- df %>% filter(code == this_code) %>% mutate(x = lng, y = lat)
+  coordinates(this_data) <- ~x+y
+  proj4string(this_data) <- proj4string(bohemia::mop2)
+  # CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+  ss <- spTransform(this_data, CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+  # Get distances
+  # dd <- rgeos::gDistance(ss, byid = TRUE)
+  # Throw out anything more than 3k from centroid?
+  centroid <- apply(coordinates(ss), 2, median)
+  centroid <- data.frame(t(as.data.frame(centroid)))
+  coordinates(centroid) <- ~x+y
+  proj4string(centroid) <- proj4string(ss)
+  distance_from_centroid <- rgeos::gDistance(ss, centroid, byid = TRUE)
+  remove_these <- which(distance_from_centroid > 3000)
+  if(length(remove_these) > 0){
+    message('Removing ', length(remove_these), ' of ', nrow(ss), ' due to weird distances.')
+    this_data <- this_data[!(1:nrow(this_data)) %in% remove_these,]
+    ss <- ss[!(1:nrow(ss)) %in% remove_these,]
+  }
+  locations_list_ll[[i]] <- this_data
+  locations_list[[i]] <- ss
+}
+names(locations_list) <- names(locations_list_ll) <- codes
+df_sp <- df
+coordinates(df_sp) <- ~lng+lat
+proj4string(df_sp) <- proj4string(bohemia::mop2)
+df_proj <- spTransform(df_sp,   CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+)
+
+plot(df_proj, col = 'white')
+cols <- rainbow(length(locations_list))
+for(i in 1:length(locations_list)){
+  this_location <- locations_list[[i]]
+  points(this_location, col = cols[i], add = TRUE, pch = '.')
+}
+
+# Aggregate df
+df <- df %>%
+  group_by(code) %>%
+  summarise(n_humans = sum(n_members),
+            n_households = n(),
+            n_children = sum(n_children),
+            clinical_trial = dplyr::first(clinical_trial),
+            country = dplyr::first(country),
+            lng = mean(lng),
+            lat = mean(lat))
+df <- df %>% arrange(code)
+
+
 ```
 
 
@@ -177,20 +240,25 @@ out <- try_clusters_hh_level(the_country = 'Tanzania',
                          minimum_households = 0,
                          minimum_children = 30,
                          minimum_humans = 0,
-                         minimum_animals = 35,
+                         minimum_animals = 0,
                          minimum_cattle = 0,
                          minimum_pigs = 0,
                          minimum_goats = 0,
                          km = 2,
                          max_km_from_hq = 1000,
                          start_at_hq = FALSE,
-                         df = df)
+                         df = df,
+                         locations_list = locations_list)
 ```
 
 #### Summary
 
 ```{r, results='asis'}
 cat(paste0(out$summary_text))
+```
+
+```{r}
+out$map
 ```
 
 ```{r}
@@ -202,9 +270,11 @@ keep_only_n <- function(cluster_xdf, n = n_required){
     filter(cs <= n_required)
 }
 out_minimal <- keep_only_n(out$cluster_xdf)
+
+# If we keep only the minimal number required (`r n_required` clusters per arm) and do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x` to `r sum(out_minimal$n_households)`.
 ```
 
-If we keep only the minimal number required (`r n_required` clusters per arm) and do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r gps %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x` to `r sum(out_minimal$n_households)`.
+
 
 
 ```{r}
@@ -215,23 +285,24 @@ out$map
 
 
 ```{r, echo = TRUE}
-out <- try_clusters(the_country = 'Mozambique',
-  include_clinical = TRUE,
-  interpolate_animals = TRUE,
-  interpolate_humans = TRUE,
-  humans_per_household = hh$avg_size[hh$country == 'Mozambique'],
-  p_children = ages$percent_children[ages$country == 'Mozambique'],
-  minimum_households = 0,
-  minimum_children = 30,
-  minimum_humans = 0,
-  minimum_animals = 0,
-  minimum_cattle = 0,
-  minimum_pigs = 0,
-  minimum_goats = 0,
-  km = 2,
-  max_km_from_hq = 1000,
-  start_at_hq = TRUE,
-  df = gps %>% mutate(Country = ifelse(iso == 'TZA', 'Tanzania', 'Mozambique'))  %>% df_adjust)
+out <- try_clusters_hh_level(the_country = 'Mozambique',
+                         include_clinical = TRUE,
+                         minimum_households = 0,
+                         minimum_children = 30,
+                         minimum_humans = 0,
+                         minimum_animals = 0,
+                         minimum_cattle = 0,
+                         minimum_pigs = 0,
+                         minimum_goats = 0,
+                         km = 2,
+                         max_km_from_hq = 1000,
+                         start_at_hq = FALSE,
+                         df = df,
+                         locations_list = locations_list)
+```
+
+```{r}
+out$map
 ```
 
 
@@ -252,11 +323,13 @@ keep_only_n <- function(cluster_xdf, n = n_required){
 }
 out_minimal <- keep_only_n(out$cluster_xdf)
 out_maximal <- out$cluster_xdf
+
+
+# If we do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r sum(out_maximal$n_households)` to `r sum(out_minimal$n_households)`.
+
 ```
 
-IMPORTANT: UNABLE TO FORM MINIMUM NUMBER OF CLUSTERS. Only `r out$cluster_xdf %>% filter(complete_cluster) %>% nrow()` clusters total formed.
 
-If we do not cense those in buffer areas, this is estimated to reduce the number of participating households from `r sum(out_maximal$n_households)` to `r sum(out_minimal$n_households)`.
 
 ```{r}
 out$map

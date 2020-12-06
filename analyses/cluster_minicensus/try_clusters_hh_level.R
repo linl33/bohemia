@@ -12,7 +12,8 @@
 #' @param km The distance in kilometers between two clusters of different assignment groups
 #' @param max_km_from_hq Maximum distance from HQ
 #' @param start_at_hq Make the start point be whatever is nearest to HQ so as to get clusters as close to HQ as possible
-#' @param df A dataframe with one row for each household and other variables like n_children, n_goats, etc.
+#' @param df A dataframe with one row for each hamlet and other variables like n_children, n_goats, etc.
+#' @param locations_list list a list of locations for each hamlet in the same order as df
 #' @return A list
 #' @import rgeos
 #' @import deldir
@@ -33,18 +34,15 @@ try_clusters_hh_level <- function(the_country = 'Tanzania',
                          km = 2,
                          max_km_from_hq = 1000,
                          start_at_hq = FALSE,
-                         df = NULL){
-  set.seed(1)
+                         df = NULL,
+                         locations_list = NULL){
+  # set.seed(1)
   # the_country = 'Tanzania'
   # include_clinical = TRUE
-  # interpolate_animals = TRUE
-  # interpolate_humans = TRUE
-  # humans_per_household = 5
-  # p_children = 30
   # minimum_households = 0
-  # minimum_children = 35
+  # minimum_children = 30
   # minimum_humans = 0
-  # minimum_animals = 35
+  # minimum_animals = 0
   # minimum_cattle = 0
   # minimum_pigs = 0
   # minimum_goats = 0
@@ -109,11 +107,13 @@ try_clusters_hh_level <- function(the_country = 'Tanzania',
   )
 
   # Get the locations filtered
-  xdf <- df %>% filter(country == the_country) %>% filter(!is.na(lng))
-  
+  keep <- which(df$country == the_country)
   if(!include_clinical){
-    xdf <- xdf %>% filter(!as.logical(clinical_trial))
+    keep <- which(df$country == the_country & !as.logical(df$clinical_trial))
   }
+  xdf <- df[keep,]  #df %>% filter(country == the_country)# %>% filter(!is.na(lng))
+  sub_locations_list <- locations_list[keep]
+
   # xdf <- xdf %>% filter(Country == the_country) 
   
 
@@ -133,25 +133,25 @@ try_clusters_hh_level <- function(the_country = 'Tanzania',
   ss <- spTransform(ss, CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   hq <- spTransform(hq, CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
   hq_distance <- as.numeric(unlist(gDistance(hq, ss, byid = TRUE)))
-  xdf <- xdf[(hq_distance/(max_km_from_hq * 1000)) <= max_km_from_hq,]
+  # xdf <- xdf[(hq_distance/(max_km_from_hq * 1000)) <= max_km_from_hq,]
   
 
   # Define number of people variable
-  xdf$n_humans <- xdf$n_people
-  xdf$n_households <- 1
+  # xdf$n_humans <- xdf$n_people
+  # xdf$n_households <- xdf$n_households
   # Define an animal variable
   # xdf$n_animals <- xdf$n_cattle + xdf$n_goats + xdf$n_pigs
 
-  # Remove any data with missing animals or humans
-  xdf <- xdf %>%
-    filter(#!is.na(n_households),
-           # !is.na(n_cattle),
-           # !is.na(n_pigs),
-           # !is.na(n_goats),
-           !is.na(n_children),
-           !is.na(n_humans)
-           # !is.na(n_animals)
-           )
+  # # Remove any data with missing animals or humans
+  # xdf <- xdf %>%
+  #   filter(#!is.na(n_households),
+  #          # !is.na(n_cattle),
+  #          # !is.na(n_pigs),
+  #          # !is.na(n_goats),
+  #          !is.na(n_children),
+  #          !is.na(n_humans)
+  #          # !is.na(n_animals)
+  #          )
 
 
   # Create a space for indicating whether the hamlet
@@ -208,8 +208,16 @@ try_clusters_hh_level <- function(the_country = 'Tanzania',
     is_sufficient <- this_cluster$is_sufficient
     # Turn the cluster into a convex
     radius <- 0.0000001
-    cluster_convex <- SpatialPolygonsDataFrame(Sr = gConvexHull(spgeom = gBuffer(this_cluster_sp, width = radius)), 
-                                               data = data.frame(cluster = cluster_counter))
+    # cluster_convex <- SpatialPolygonsDataFrame(Sr = gConvexHull(spgeom = gBuffer(this_cluster_sp, width = radius)), 
+    #                                            data = data.frame(cluster = cluster_counter))
+    this_locx <- sub_locations_list[[this_hamlet_id]]
+    if(nrow(this_locx) == 1){
+      this_locx <- gBuffer(this_locx, width = radius)
+    }
+    cluster_convex <- SpatialPolygonsDataFrame(Sr = gConvexHull(spgeom = this_locx), 
+                               data = data.frame(cluster = cluster_counter))
+      
+    
     if(is_sufficient){
       message('---sufficient with just one hamlet')
     }
@@ -403,7 +411,7 @@ try_clusters_hh_level <- function(the_country = 'Tanzania',
                                       this_row$n_pigs, ' pigs. ',
                                       this_row$n_animals, ' animals.<br>',
                                       this_row$n_households, ' households. ',
-                                      this_row$n_humans, ' humans. ', 
+                                      this_row$n_humans, ' humans. ',
                                       this_row$n_children, ' children.'))
   }
   map <- map %>%
