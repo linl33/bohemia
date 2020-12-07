@@ -10,7 +10,8 @@ load_odk_data(
   users_path = "credentials/users.yaml",
   local = FALSE,
   efficient = TRUE,
-  use_cached = FALSE
+  use_cached = FALSE,
+  con = NULL
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ load_odk_data(
 \item{efficient}{Whether to only load select columns}
 
 \item{use_cached}{Whether to use a cached file}
+
+\item{con}{A connection object}
 }
 \description{
 Load odk data

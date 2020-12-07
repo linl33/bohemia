@@ -81,7 +81,7 @@ df_adjust <- function(df){
 }
 
 # source('global.R')
-source('try_clusters.R')
+source('try_clusters_hh_level.R')
 
 # Define the number of clusters required of each type
 n_required <- 49
@@ -175,12 +175,12 @@ proj4string(df_sp) <- proj4string(bohemia::mop2)
 df_proj <- spTransform(df_sp,   CRS("+proj=utm +zone=36 +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
 )
 
-plot(df_proj, col = 'white')
-cols <- rainbow(length(locations_list))
-for(i in 1:length(locations_list)){
-  this_location <- locations_list[[i]]
-  points(this_location, col = cols[i], add = TRUE, pch = '.')
-}
+# plot(df_proj, col = 'white')
+# cols <- rainbow(length(locations_list))
+# for(i in 1:length(locations_list)){
+#   this_location <- locations_list[[i]]
+#   points(this_location, col = cols[i], add = TRUE, pch = '.')
+# }
 
 # Aggregate df
 df <- df %>%
@@ -204,11 +204,12 @@ df <- df %>% arrange(code)
 
 The question: How many clusters can we form with the data _already_ collected via the minicensus?
 
-## Methods
+## Methods, parameters and assumptions
+
 
 Clusters will be formed using full data from the minicensus on the spatial distribution of hamlets and certain "parameters" (buffer distance, minimum number of children per cluster, minimum number and type of animals, etc.). Since the minicensus is not finished, we cannot do this for all areas. However, we can do it for the areas done so far, so as to get a sense of how the observed spatial distribution of households (and demographic details) translate into clusters.
 
-## Parameters and assumptions
+Since one incorrectly geocoded household can radically throw off the convex hull of a hamlet, we remove any households which are > 3km from the estimated centroid (median longitude / latitude) of the others from that hamlet.
 
 We consider a cluster to be "complete" if it has the following characteristics:
 - At least 30 children (25 +5 to account for potential lost to follow-up)  
@@ -275,12 +276,6 @@ out_minimal <- keep_only_n(out$cluster_xdf)
 ```
 
 
-
-
-```{r}
-out$map
-```
-
 ## Mozambique
 
 
@@ -329,11 +324,6 @@ out_maximal <- out$cluster_xdf
 
 ```
 
-
-
-```{r}
-out$map
-```
 
 
 ## More resources

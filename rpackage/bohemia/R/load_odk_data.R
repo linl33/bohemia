@@ -7,6 +7,7 @@
 #' @param local Whether to use the local database
 #' @param efficient Whether to only load select columns
 #' @param use_cached Whether to use a cached file
+#' @param con A connection object
 #' @import yaml
 #' @import dplyr
 #' @import DBI
@@ -19,7 +20,9 @@ load_odk_data <- function(the_country = 'Mozambique',
                           users_path = 'credentials/users.yaml',
                           local = FALSE, 
                           efficient=TRUE,
-                          use_cached = FALSE){
+                          use_cached = FALSE,
+                          con = NULL){
+  no_con <- is.null(con)
   message('Starting the load_odk_data function...')
   start_time <- Sys.time()
   
@@ -48,19 +51,22 @@ load_odk_data <- function(the_country = 'Mozambique',
   # No file, need to ping database
   if(get_new_data){
     message('...Retrieving data from the database')
-    creds <- yaml::yaml.load_file(credentials_path)
-    users <- yaml::yaml.load_file(users_path)
-    psql_end_point = creds$endpoint
-    psql_user = creds$psql_master_username
-    psql_pass = creds$psql_master_password
-    drv <- RPostgres::Postgres()
-    if(local){
-      con <- dbConnect(drv, dbname='bohemia')
-    } else {
-      con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
-                       port=5432,
-                       user=psql_user, password=psql_pass)
-    } 
+    if(no_con){
+      creds <- yaml::yaml.load_file(credentials_path)
+      users <- yaml::yaml.load_file(users_path)
+      psql_end_point = creds$endpoint
+      psql_user = creds$psql_master_username
+      psql_pass = creds$psql_master_password
+      drv <- RPostgres::Postgres()
+      if(local){
+        con <- dbConnect(drv, dbname='bohemia')
+      } else {
+        con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                         port=5432,
+                         user=psql_user, password=psql_pass)
+      } 
+    }
+
     
     # Define server
     if(the_country == 'Mozambique'){
@@ -166,7 +172,11 @@ load_odk_data <- function(the_country = 'Mozambique',
     data$fixes <- fixes
     data$corrections <- corrections
     
-    dbDisconnect(con)
+    # Only disconnect if the connection was established in function
+    if(no_con){
+      dbDisconnect(con)
+    }
+    
     
     if(use_cached){
       # At this point there is something named data

@@ -455,8 +455,6 @@ mobile_golem_add_external_resources <- function(){
 #' @import DT
 app_server <- function(input, output, session) {
   
-  message('Working directory is :', getwd())
-  
   # Define whether local or not
   if(grepl('brew', getwd())){
     is_local <- TRUE
@@ -465,6 +463,13 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
+  
+  # Connect to database
+  message('Connecting to database : ', ifelse(is_local, ' local', 'remote'))
+  con <- get_db_connection(local = is_local)
+  
+  message('Working directory is :', getwd())
+  
   # is_local <- FALSE
   use_cached <- TRUE
   
@@ -554,40 +559,31 @@ app_server <- function(input, output, session) {
                      start_time = Sys.time(),
                      end_time = NA,
                      web = grepl('/srv/shiny-server', getwd(), fixed = TRUE))
-      con <- get_db_connection(local = is_local)
+      # con <- get_db_connection(local = is_local)
       message('Writing session info to sessions table.')
       dbAppendTable(conn = con,
                     name = 'sessions',
                     value = sesh)
       
-      # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
-      # Read in the traccar data (could speed this up by not reading all in)
-      message('Reading in traccar table')
-      # Get the country
-      co <- the_country
-      lat_string <- ifelse(co == 'Mozambique',
-                           'latitude < -15',
-                           'latitude > -9')
-      # Get fieldworkers for this country
-      these_fids <- fids %>% filter(country == co)
-      keep_ids <- these_fids$bohemia_id
-      these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
-      # Get traccar data for those fieldworkers
-      device_time <- paste0(Sys.Date() - 7, ' 01:01:01')
-      traccar <- dbGetQuery(conn = con,
-                             statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
-      session_data$traccar <- traccar
-      dbDisconnect(con)
-      # Get traccar summary data
-      message('Retrieving information on workers from traccar')
-      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      # dat <- get_traccar_data(url = creds$traccar_server,
-      #                         user = creds$traccar_user,
-      #                         pass = creds$traccar_pass)
-      # # Keep only the summary data for the country
-      # dat$uniqueId <- as.numeric(dat$uniqueId)
-      # dat <- dat %>% filter(uniqueId %in% keep_ids)
-      # session_data$traccar_summary <- dat
+      # # Read in the traccar data (could speed this up by not reading all in)
+      # message('Reading in traccar table')
+      # # Get the country
+      # co <- the_country
+      # lat_string <- ifelse(co == 'Mozambique',
+      #                      'latitude < -15',
+      #                      'latitude > -9')
+      # # Get fieldworkers for this country
+      # these_fids <- fids %>% filter(country == co)
+      # keep_ids <- these_fids$bohemia_id
+      # these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
+      # # Get traccar data for those fieldworkers
+      # device_time <- paste0(Sys.Date() - 7, ' 01:01:01')
+      # traccar <- dbGetQuery(conn = con,
+      #                       statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
+      # session_data$traccar <- traccar
+      # # dbDisconnect(con)
+      
+      
       session_info$logged_in <- TRUE
       reactive_log_in_text('')
       removeModal()
@@ -599,11 +595,11 @@ app_server <- function(input, output, session) {
                      start_time = Sys.time(),
                      end_time = NA,
                      web = grepl('ubuntu', getwd()))
-      con <- get_db_connection(local = is_local)
+      # con <- get_db_connection(local = is_local)
       dbAppendTable(conn = con,
                     name = 'sessions',
                     value = sesh)
-      dbDisconnect(con)
+      # dbDisconnect(con)
       session_info$logged_in <- TRUE
       reactive_log_in_text('')
       removeModal()
@@ -702,41 +698,41 @@ app_server <- function(input, output, session) {
     # Load data     
     li <- session_info$logged_in
     if(li){
-      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached)
+      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached, con = con)
       odk_data$data <- out
       
       # Get anomalies
-      con <- get_db_connection(local = is_local)
+      # con <- get_db_connection(local = is_local)
       anomalies <- dbGetQuery(conn = con,
                               statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
       session_data$anomalies <- anomalies
       
       # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
       # Read in the traccar data (could speed this up by not reading all in)
-      message('Reading in traccar table')
-      # Get the country
-      the_country <- country()
-      co <- the_country
-      lat_string <- ifelse(co == 'Mozambique',
-                           'latitude < -15',
-                           'latitude > -9')
-      # Get fieldworkers for this country
-      these_fids <- fids %>% filter(country == co)
-      keep_ids <- these_fids$bohemia_id
-      these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
-      # Get traccar data for those fieldworkers
-      device_time <- paste0(Sys.Date() - 7, ' 01:01:01')
-      traccar <- dbGetQuery(conn = con,
-                            statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
-      session_data$traccar <- traccar
-      # Get traccar summary data
-      message('Retrieving information on workers from traccar')
-      creds <- yaml::yaml.load_file('credentials/credentials.yaml')
-      # dat <- get_traccar_data(url = creds$traccar_server,
-      #                         user = creds$traccar_user,
-      #                         pass = creds$traccar_pass)
-      # 
-      dbDisconnect(con)
+      # message('Reading in traccar table')
+      # # Get the country
+      # the_country <- country()
+      # co <- the_country
+      # lat_string <- ifelse(co == 'Mozambique',
+      #                      'latitude < -15',
+      #                      'latitude > -9')
+      # # Get fieldworkers for this country
+      # these_fids <- fids %>% filter(country == co)
+      # keep_ids <- these_fids$bohemia_id
+      # these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
+      # # Get traccar data for those fieldworkers
+      # device_time <- paste0(Sys.Date() - 7, ' 01:01:01')
+      # traccar <- dbGetQuery(conn = con,
+      #                       statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
+      # session_data$traccar <- traccar
+      # # Get traccar summary data
+      # message('Retrieving information on workers from traccar')
+      # creds <- yaml::yaml.load_file('credentials/credentials.yaml')
+      # # dat <- get_traccar_data(url = creds$traccar_server,
+      # #                         user = creds$traccar_user,
+      # #                         pass = creds$traccar_pass)
+      # # 
+      # dbDisconnect(con)
       
     }
   })
@@ -747,34 +743,34 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       message('Logged in. Loading data for ', the_country)
-      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached)
+      out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached, con = con)
       
       # Get anomalies
-      con <- get_db_connection(local = is_local)
+      # con <- get_db_connection(local = is_local)
       anomalies <- dbGetQuery(conn = con,
                               statement = paste0("SELECT * FROM anomalies WHERE country = '", the_country, "'"))
       session_data$anomalies <- anomalies
       
-      # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
-      # Read in the traccar data (could speed this up by not reading all in)
-      message('Reading in traccar table')
+      # # PAUSING TRACCAR STUFF, TOO SLOW, OPTIMIZE LATER
+      # # Read in the traccar data (could speed this up by not reading all in)
+      # message('Reading in traccar table')
       start_time <- Sys.time()
-      # Get the country
-      the_country <- country()
-      co <- the_country
-      lat_string <- ifelse(co == 'Mozambique',
-                           'latitude < -15',
-                           'latitude > -9')
-      # Get fieldworkers for this country
-      these_fids <- fids %>% filter(country == co)
-      keep_ids <- these_fids$bohemia_id
-      these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
-      # Get traccar data for those fieldworkers
-      device_time <- paste0(Sys.Date() - 7, ' 01:01:01')
-      traccar <- dbGetQuery(conn = con,
-                            statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
-      session_data$traccar <- traccar
-      dbDisconnect(con)
+      # # Get the country
+      # the_country <- country()
+      # co <- the_country
+      # lat_string <- ifelse(co == 'Mozambique',
+      #                      'latitude < -15',
+      #                      'latitude > -9')
+      # # Get fieldworkers for this country
+      # these_fids <- fids %>% filter(country == co)
+      # keep_ids <- these_fids$bohemia_id
+      # these_fids <- paste0("(",paste0("'",these_fids$bohemia_id,"'", collapse=","),")")
+      # # Get traccar data for those fieldworkers
+      # device_time <- paste0(Sys.Date() - 7, ' 01:01:01')
+      # traccar <- dbGetQuery(conn = con,
+      #                       statement = paste0('SELECT * FROM traccar WHERE (unique_id IN ', these_fids, " AND devicetime > '", device_time, "' AND ", lat_string, ")"))
+      # session_data$traccar <- traccar
+      # dbDisconnect(con)
       end_time <- Sys.time()
       message('..That took ', round(lubridate::time_length(end_time - start_time, unit = 'second'), 2), ' seconds.')      
       odk_data$data <- out
@@ -3917,11 +3913,15 @@ app_server <- function(input, output, session) {
                    # vector.palette = colorRampPalette(c("snow", "cornflowerblue", "grey10")),
                    # na.color = "magenta",
                    layers.control.pos = "topright")
-    
-    # Get the traccar data for that country
-    traccar <- session_data$traccar
-    date_slider <- input$gps_slider
     fid <- input$fid_gps
+    
+    # con <- get_db_connection(local = is_local)
+    # Get the traccar data for that country
+    traccar <- dbGetQuery(conn = con,
+                          statement = paste0('SELECT * FROM traccar WHERE unique_id = ', fid))
+    # dbDisconnect(con)
+    # traccar <- session_data$traccar
+    date_slider <- input$gps_slider
     # save(traccar, date_slider, fid, file = '/tmp/dec1b.RData')
     ok <- TRUE
     if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
@@ -3947,22 +3947,20 @@ app_server <- function(input, output, session) {
       sub_data$day <- as.character(sub_data$day)
       
     }
-    if(nrow(sub_data) < 1){
-      ok <- FALSE
-    }
+
     
     if(ok){
-      pts = st_as_sf(data.frame(sub_data), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line()
+      pts = st_as_sf(data.frame(sub_data), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line2()
       # Remove those which are two few
-      sizes <- unlist(lapply(pts$geometry, length))
+      # sizes <- unlist(lapply(pts$geometry, length))
       # pts <- pts[sizes >10,]
       # pts$date <- as.character(pts$date)
       # pts <- pts[-15,]
       # pts$groups <- stplanr::rnet_group(pts)
       # Make the plot
       # l <- mapview::mapview()
-      l <- mapview::mapview(pts["day"],
-                            legend = TRUE,
+      l <- mapview::mapview(pts["grp"],
+                            legend = FALSE,
                             layer.name = 'Date-time')
       l@map
     } else {
@@ -3975,45 +3973,54 @@ app_server <- function(input, output, session) {
   output$traccar_leaf <- renderLeaflet({
     # leaflet() %>% addTiles()
     # Get the traccar data for that country
-    traccar <- session_data$traccar
+    # traccar <- session_data$traccar
     the_worker <- input$fid
+
     if(!is.null(the_worker)){
-      sub_traccar <- traccar %>% filter(unique_id == the_worker)
+      sub_traccar <- dbGetQuery(conn = con,
+                            statement = paste0('SELECT * FROM traccar WHERE unique_id = ', the_worker))
       pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
     }
     # Make the plot
     l <- leaflet() %>%
       addTiles()
-    if(nrow(sub_traccar) > 0){
-      l <- l %>%
-        addGlPoints(data = pts,
-                    fillColor = 'red',
-                    # fillColor = pts$status,
-                    popup = pts %>% dplyr::select(devicetime, valid),
-                    group = "pts")
+    if(!is.null(sub_traccar)){
+      if(nrow(sub_traccar) > 0){
+        l <- l %>%
+          addGlPoints(data = pts,
+                      fillColor = 'red',
+                      # fillColor = pts$status,
+                      popup = pts %>% dplyr::select(devicetime, valid),
+                      group = "pts")
+      }
     }
+
     l
   })
   
   output$traccar_table_1 <- DT::renderDataTable({
    
     # Get the traccar data for that country
-    traccar <- session_data$traccar
+    
     date_slider <- input$gps_slider
     fid <- input$fid_gps
+    
+    sub_traccar <- dbGetQuery(conn = con,
+                              statement = paste0('SELECT * FROM traccar WHERE unique_id = ', fid))
+    
     # save(traccar, date_slider, fid, file = '/tmp/dec1x.RData')
     ok <- TRUE
-    if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
+    if(is.null(sub_traccar) | is.null(date_slider) | is.null(fid)){
       ok <- FALSE
     }
     if(ok){
-      if(nrow(traccar) == 0){
+      if(nrow(sub_traccar) == 0){
         ok <- FALSE
       }
     }
     if(ok){
       # Get sub-data
-      sub_data <- traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
+      sub_data <- sub_traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
       sub_data$date <- as.Date(sub_data$devicetime, 'EST')
       sub_data <- sub_data %>% 
         # filter(date == date_slider)
@@ -4049,22 +4056,23 @@ app_server <- function(input, output, session) {
       message('selected rows for traccar table 1:\n ', paste0(sr, collapse = ', '))
       
       # Get the traccar data for that country
-      traccar <- session_data$traccar
       date_slider <- input$gps_slider
       fid <- input$fid_gps
-      # save(traccar, date_slider, fid, file = '/tmp/dec1z.RData')
+      sub_traccar <- dbGetQuery(conn = con,
+                                statement = paste0('SELECT * FROM traccar WHERE unique_id = ', fid))
+            # save(traccar, date_slider, fid, file = '/tmp/dec1z.RData')
       ok <- TRUE
-      if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
+      if(is.null(sub_traccar) | is.null(date_slider) | is.null(fid)){
         ok <- FALSE
       }
       if(ok){
-        if(nrow(traccar) == 0){
+        if(nrow(sub_traccar) == 0){
           ok <- FALSE
         }
       }
       if(ok){
         # Get sub-data
-        sub_data <- traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
+        sub_data <- sub_traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
         sub_data$date <- as.Date(sub_data$devicetime, 'EST')
         sub_data <- sub_data %>% 
           # filter(date == date_slider)
@@ -4395,12 +4403,12 @@ app_server <- function(input, output, session) {
     # CONNECT TO THE DATABASE AND ADD FIX
     message('Connecting to the database in order to add a fix to the corrections table')
     # save(fix, fix_source, fix_method, resolution_date, log_in_user, response_details, this_row, action, sr, file = '/tmp/sunday.RData')
-    con <- get_db_connection(local = is_local)
+    # con <- get_db_connection(local = is_local)
     dbAppendTable(conn = con,
                   name = 'corrections',
                   value = fix)
     message('Done. now disconnecting from database')
-    dbDisconnect(con)
+    # dbDisconnect(con)
     # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
     # save(this_row, sr, action, fix, odk_data, resolution_details, file = '/tmp/this_row.RData')
     message('Now uploading the in-session data')
@@ -4649,10 +4657,10 @@ app_server <- function(input, output, session) {
     #                           "eldo.elobolobo@manhica.net",
     #                           "joe@databrew.cc")
     # if(liu %in% the_authorized_users){
-      con <- get_db_connection(local = is_local)
+      # con <- get_db_connection(local = is_local)
       done_hamlets <- dbGetQuery(conn = con,
                               statement = paste0("SELECT * FROM done_hamlets"))
-      dbDisconnect(con)
+      # dbDisconnect(con)
       bohemia::prettify(done_hamlets,
                         nrows = nrow(done_hamlets))
     # } else {
@@ -4671,13 +4679,13 @@ app_server <- function(input, output, session) {
     # if(sidebar == 'done_hamlets'){
       message('Updating the already_done_hamlets object')
       
-      con <- get_db_connection(local = is_local)
+      # con <- get_db_connection(local = is_local)
       already <- dbReadTable(conn = con, 'done_hamlets')
       print(already)
       out <- as.character(already$code)
       print(out)
       already_done_hamlets(out)
-      dbDisconnect(con)
+      # dbDisconnect(con)
     # }
   })
   
@@ -4786,26 +4794,26 @@ app_server <- function(input, output, session) {
     the_data <- tibble(code = the_hamlet,
                        done_by = liu,
                        done_at = Sys.time())
-    con <- get_db_connection(local = is_local)
+    # con <- get_db_connection(local = is_local)
     dbAppendTable(conn = con,
                   name = 'done_hamlets',
                   value = the_data)
     already <- dbReadTable(conn = con, 'done_hamlets')
     out <- as.character(already$code)
     already_done_hamlets(out)
-    dbDisconnect(con)
+    # dbDisconnect(con)
   })
   
   observeEvent(input$mark_undone, {
     the_hamlet <- input$the_done_hamlet
     liu <- input$log_in_user
-    con <- get_db_connection(local = is_local)
+    # con <- get_db_connection(local = is_local)
     dbSendQuery(conn = con,
                 statement = paste0("DELETE FROM done_hamlets WHERE code ='", the_hamlet, "'"))
     already <- dbReadTable(conn = con, 'done_hamlets')
     out <- as.character(already$code)
     already_done_hamlets(out)
-    dbDisconnect(con)
+    # dbDisconnect(con)
   })
   
   # GEO TABLES UI ######################################################
@@ -5726,12 +5734,12 @@ app_server <- function(input, output, session) {
                  submitted_at = Sys.time()) %>%
           dplyr::select(id, instance_id, response_details, resolved_by,
                         resolution_method, resolution_date, submitted_by, submitted_at)
-        con <- get_db_connection(local = is_local)
+        # con <- get_db_connection(local = is_local)
         dbAppendTable(conn = con,
                       name = 'corrections',
                       value = fix)
         message('Done. now disconnecting from database')
-        dbDisconnect(con)
+        # dbDisconnect(con)
         # AND THEN MAKE SURE TO UPDATE THE IN-SESSION STUFF
         message('Now uploading the in-session data')
         old_corrections <- odk_data$data$corrections 
@@ -6244,6 +6252,11 @@ app_server <- function(input, output, session) {
   
   # Malaria UI elements #################################################
   
+  session$onSessionEnded(function(){
+    cat(paste0('Session ended.'))
+    dbDisconnect(con)
+    cat(paste0('Disconnected from database.'))
+  })
   
 }
 
