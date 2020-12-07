@@ -86,6 +86,9 @@ odk_list_submissions <- function(url = 'https://bohemia.systems',
   
   # Now go through and re-retrieve in chunks of 1000
   keep_going <- TRUE
+  if(length(uuids_list) < 1000){
+    keep_going <- FALSE
+  }
   counter <- 1000
   while(keep_going){
     message('Working on numbers ', counter, ' to ', counter + 999)
