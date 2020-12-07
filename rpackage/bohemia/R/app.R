@@ -468,6 +468,8 @@ app_server <- function(input, output, session) {
   message('Connecting to database : ', ifelse(is_local, ' local', 'remote'))
   con <- get_db_connection(local = is_local)
   
+  
+
   message('Working directory is :', getwd())
   
   # is_local <- FALSE
@@ -559,6 +561,8 @@ app_server <- function(input, output, session) {
                      start_time = Sys.time(),
                      end_time = NA,
                      web = grepl('/srv/shiny-server', getwd(), fixed = TRUE))
+      
+
       # con <- get_db_connection(local = is_local)
       message('Writing session info to sessions table.')
       dbAppendTable(conn = con,
@@ -613,6 +617,7 @@ app_server <- function(input, output, session) {
   observeEvent(input$log_out_button, {
     session_info$logged_in <- FALSE
     removeModal()
+    dbDisconnect(con)
   })
   
   ##################
@@ -742,6 +747,9 @@ app_server <- function(input, output, session) {
     the_country <- country()
     li <- session_info$logged_in
     if(li){
+      
+
+      
       message('Logged in. Loading data for ', the_country)
       out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached, con = con)
       
@@ -3922,7 +3930,7 @@ app_server <- function(input, output, session) {
     # dbDisconnect(con)
     # traccar <- session_data$traccar
     date_slider <- input$gps_slider
-    # save(traccar, date_slider, fid, file = '/tmp/dec1b.RData')
+    save(traccar, date_slider, fid, file = '/tmp/dec1b.RData')
     ok <- TRUE
     if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
       ok <- FALSE
@@ -3940,16 +3948,20 @@ app_server <- function(input, output, session) {
         # filter(date == date_slider)
         filter(date >= date_slider[1],
                                       date <= date_slider[2])
+      if(nrow(sub_data) == 0){
+        ok <- FALSE
+      }
+    }
+
+    
+    if(ok){
+      
       sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
       sub_data$day <- lubridate::round_date(sub_data$devicetime, 'day')
       
       sub_data$time_of_day <- as.character(sub_data$time_of_day)
       sub_data$day <- as.character(sub_data$day)
       
-    }
-
-    
-    if(ok){
       pts = st_as_sf(data.frame(sub_data), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line2()
       # Remove those which are two few
       # sizes <- unlist(lapply(pts$geometry, length))
@@ -4178,7 +4190,7 @@ app_server <- function(input, output, session) {
                                      label = 'Select dates', 
                                      min = as.Date('2020-09-01'), 
                                      max= Sys.Date(), 
-                                     value = c(Sys.Date()-4, Sys.Date()-1)# c(as.Date('2020-09-01'), Sys.Date())
+                                     value = c(Sys.Date()-30, Sys.Date()-1)# c(as.Date('2020-09-01'), Sys.Date())
                                      )),
                   column(6,
                          selectInput('fid_gps',
@@ -4677,14 +4689,17 @@ app_server <- function(input, output, session) {
   observeEvent(listen_already_done(),{
     sidebar <- input$sidebar
     # if(sidebar == 'done_hamlets'){
-      message('Updating the already_done_hamlets object')
       
       # con <- get_db_connection(local = is_local)
-      already <- dbReadTable(conn = con, 'done_hamlets')
-      print(already)
-      out <- as.character(already$code)
-      print(out)
-      already_done_hamlets(out)
+      if(exists('con')){
+        message('Updating the already_done_hamlets object')
+        already <- dbReadTable(conn = con, 'done_hamlets')
+        print(already)
+        out <- as.character(already$code)
+        print(out)
+        already_done_hamlets(out)
+      }
+
       # dbDisconnect(con)
     # }
   })
@@ -6254,8 +6269,10 @@ app_server <- function(input, output, session) {
   
   session$onSessionEnded(function(){
     cat(paste0('Session ended.'))
-    dbDisconnect(con)
-    cat(paste0('Disconnected from database.'))
+    if(exists('con')){
+      dbDisconnect(con)
+      cat(paste0('Disconnected from database.'))
+    }
   })
   
 }
