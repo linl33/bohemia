@@ -44,6 +44,45 @@ subs <- odk_data$minicensus_repeat_hh_sub
 
 others <- c()
 
+
+# eldo <- readr::read_csv('~/Desktop/eldo.csv')
+# ids <- eldo$`meta:instanceID`
+# ids <- gsub('uuid:', '', ids)
+# for(i in 1:length(ids)){
+#   this_id <- ids[i]
+#   out <- paste0(
+#     'implement(id=None, query="',
+#     "DELETE FROM clean_enumerations WHERE instance_id='",
+#     this_id,
+#     "'", '"',
+#     ", who='Joe Brew') #manual removal at site request; going to re-enumerate\n")
+#   cat(out)
+# }
+# 
+# source('../rpackage/bohemia/R/app_functions.R')
+# owd <- getwd()
+# setwd('..')
+# con <- get_db_connection(local = is_local)
+# setwd(owd)
+# anomalies <- dbGetQuery(conn = con, 'SELECT * FROM anomalies;')
+# dbDisconnect(con)
+# 
+# remove_anomalies <- anomalies %>%
+#   filter(instance_id %in% ids)
+# for(i in 1:nrow(remove_anomalies)){
+#   this_anomaly <- remove_anomalies[i,]
+#   this_id <- this_anomaly$instance_id
+#   this_aid <- this_anomaly$id
+#   this_correction <- corrections %>% filter(id == this_aid)
+#   out <- paste0(
+#     "DELETE FROM anomalies WHERE instance_id='", this_id, "';\n"
+#   )
+#   cat(out)
+# }
+
+
+# Also need to remove all anomalies pertaining to these
+
 # for(i in 1:nrow(corrections)){
 #   if(grepl('strange_wid_enumeration|missing_wid_enumeration', corrections$id[i])){
 #     this_id <- corrections$id[i]

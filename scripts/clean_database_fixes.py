@@ -52,7 +52,7 @@ show_these = do_these[['resolved_by', 'submitted_at', 'id', 'response_details', 
 show_these.to_csv('/tmp/show_these.csv') # to help human
 
 # Define function for implementing corrections
-def implement(id, query = '', who = 'Joe Brew', is_ok = False, cur = cur, dbconn = dbconn):
+def implement(id = None, query = '', who = 'Joe Brew', is_ok = False, cur = cur, dbconn = dbconn):
     # Implement the actual fix to the database
     if not is_ok:
         try:
@@ -66,12 +66,13 @@ def implement(id, query = '', who = 'Joe Brew', is_ok = False, cur = cur, dbconn
             return
     done_at = datetime.now()
     # State the fact that it has been fixed
-    cur.execute(
-        """
-        INSERT INTO fixes (id, done_by, done_at, resolution_code) VALUES(%s, %s, %s, %s)
-        """,
-        (id, who, done_at, query)
-    )
+    if id is not None:
+        cur.execute(
+            """
+            INSERT INTO fixes (id, done_by, done_at, resolution_code) VALUES(%s, %s, %s, %s)
+            """,
+            (id, who, done_at, query)
+        )
     dbconn.commit()
 
 # Go one-by-one through "show_these" and implement changes
@@ -1897,6 +1898,10 @@ implement(id = 'strange_wid_enumerations_53fad9f3-a31b-48d1-a582-8e66523580b0', 
 implement(id = 'strange_wid_refusals_183d99cd-09e0-4638-b0bf-553abb21fa8f', query = "DELETE FROM clean_refusals WHERE instance_id='183d99cd-09e0-4638-b0bf-553abb21fa8f'", who = 'Xing Brew')
 implement(id = 'strange_wid_refusals_d1ac8f57-8c55-43ad-a9e8-a294053c58fd', query = "DELETE FROM clean_refusals WHERE instance_id='d1ac8f57-8c55-43ad-a9e8-a294053c58fd'", who = 'Xing Brew')
 implement(id = 'missing_wid_refusals_ab2ea7af-cec2-4b5e-9e5d-b636d395fbb1', query = "DELETE FROM clean_refusals WHERE instance_id='ab2ea7af-cec2-4b5e-9e5d-b636d395fbb1'", who = 'Xing Brew')
+
+# Removing enumerations at site request
+
+
 
 dbconn.commit()
 cur.close()
