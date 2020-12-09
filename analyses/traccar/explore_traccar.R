@@ -44,14 +44,14 @@ moz_forms <- load_odk_data(the_country = 'Mozambique',
                            credentials_path = '../../credentials/credentials.yaml',
                            users_path = '../../credentials/users.yaml',
                            local = TRUE, 
-                           efficient=TRUE,
+                           efficient=FALSE,
                            use_cached = FALSE)
 
 tz_forms <- load_odk_data(the_country = 'Tanzania',
                           credentials_path = '../../credentials/credentials.yaml',
                           users_path = '../../credentials/users.yaml',
                           local = TRUE, 
-                          efficient=TRUE,
+                          efficient=FALSE,
                           use_cached = FALSE)
 
 # get minicensus
@@ -71,42 +71,52 @@ traccar$total_distance <- as.numeric(unlist(lapply(strsplit(traccar$total_distan
 traccar$motion <- as.character(unlist(lapply(strsplit(traccar$motion, ':'), function(x) x[2])))
 
 traccar_moz <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country == 'Mozambique'])
-traccar_tz <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country == 'Tanzania'])
+traccar_tza <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country == 'Tanzania'])
 
 load('temp_data.R')
 
 # get correct time zones for census data
-moz_census$end_time <- lubridate::as_datetime(moz_census$end_time, tz = 'Africa/Maputo')
-tz_census$end_time <- lubridate::as_datetime(tz_census$end_time, tz = 'Africa/Dar_es_Salaam')
 moz_census$start_time <- lubridate::as_datetime(moz_census$start_time, tz = 'Africa/Maputo')
 tz_census$start_time <- lubridate::as_datetime(tz_census$start_time, tz = 'Africa/Dar_es_Salaam')
 
+# get date for census
+moz_census$date <- as.Date(moz_census$start_time, 'CAT')
+tz_census$date <- as.Date(tz_census$start_time, 'EAT')
+
 # get correct time zones for enumerations data (Moz only)
-moz_enum$end_time <- lubridate::as_datetime(moz_enum$end_time, tz = 'Africa/Maputo')
+moz_enum$start_time <- lubridate::as_datetime(moz_enum$start_time, tz = 'Africa/Maputo')
+moz_enum$date <- as.Date(moz_enum$start_time, 'CAT')
 
 # get correct time zones for va data
-moz_va$end_time <- lubridate::as_datetime(moz_va$end_time, tz = 'Africa/Maputo')
-tz_va$end_time <- lubridate::as_datetime(tz_va$end_time, tz = 'Africa/Dar_es_Salaam')
+moz_va$start_time <- lubridate::as_datetime(moz_va$start_time, tz = 'Africa/Maputo')
+moz_va$date <- as.Date(moz_va$start_time, 'CAT')
+
+tz_va$start_time <- lubridate::as_datetime(tz_va$start_time, tz = 'Africa/Dar_es_Salaam')
+tz_va$date <- as.Date(tz_va$start_time, 'EAT')
 
 # get time zones for traccar data
 traccar_moz$devicetime <- lubridate::as_datetime(traccar_moz$devicetime, tz = 'Africa/Maputo')
-traccar_tza$devicetime <- lubridate::as_datetime(traccar_tza$devicetime, tz = 'Africa/Maputo')
+traccar_moz$date <- as.Date(traccar_moz$devicetime, 'CAT')
 
-#### lots of junk below. put it all into one function, that takes all data (NA for enum if TZ), and layers a plot. If enumeration and/or census not available (because tz or date range selected), then dont add layer. final plot has map with data that's available.
+traccar_tz$devicetime <- lubridate::as_datetime(traccar_tz$devicetime, tz = 'Africa/Dar_es_Salaam')
+traccar_tz$date <- as.Date(traccar_tz$devicetime, 'EAT')
 
-# moving forward - see if people changed devices (device id compared to unique_id)
-# function takes into account va, enumerations, and census
 
-# compare_tz function
-
+# take all dates out of functions
 # two function - subset_forms and subset_traccar (one country at a time)
-subset_forms <- function(temp_dat, wid_code, date_slider){
+subset_forms <- function(temp_dat, wid_code, date_slider, form){
   # subset census by 331
+  
   temp_wid <- temp_dat %>% filter(wid==wid_code) %>%
-    filter(end_time>=date_slider[1], end_time <=date_slider[2]) 
-  temp_wid$date <- as.Date(temp_wid$end_time)
+    filter(date>=date_slider[1], date<=date_slider[2]) 
   # get lat and lon
-  ll <- extract_ll(temp_wid$hh_geo_location)
+  if(form=='enum'){
+    ll <- extract_ll(temp_wid$location_gps)
+  } else if (form=='va'){
+    ll <- extract_ll(temp_wid$gps_location)
+  } else{
+    ll <- extract_ll(temp_wid$hh_geo_location)
+  }
   temp_wid$lat <- ll$lat
   temp_wid$lng <- ll$lng
   rm(ll)
@@ -116,76 +126,244 @@ subset_forms <- function(temp_dat, wid_code, date_slider){
 subset_traccar <- function(temp_dat, wid_code, date_slider){
   # other traccar map
   sub_data <- temp_dat %>% filter(unique_id==wid_code) 
-  sub_data$devicetime <- lubridate::as_datetime(sub_data$devicetime, tz = 'Africa/Maputo')
-  sub_data$date <- as.Date(sub_data$devicetime)
   sub_data <- sub_data %>% 
-    filter(date >= date_slider[1],date <= date_slider[2])
-  sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
-  sub_data$day <- lubridate::round_date(sub_data$devicetime, 'day')
-  
-  sub_data$time_of_day <- as.character(sub_data$time_of_day)
-  sub_data$day <- as.character(sub_data$day)
+    filter(as.Date(devicetime) >=date_slider[1], as.Date(devicetime)<= date_slider[2])
   return(sub_data)
   
 }
-
-wid_code <- '311'
-date_range <-  c("2020-10-09", "2020-10-20")
-# subset traccar
-sub_traccar <- subset_traccar(temp_dat = traccar_moz, wid_code = wid_code,date_slider =  date_range )
-
-# subset the 3 forms
-sub_mini <- subset_forms(temp_dat = moz_census,  wid_code = wid_code,date_slider = date_range)
-sub_enum <- subset_forms(temp_dat = moz_enum,  wid_code = wid_code,date_slider = date_range)
-sub_va <- subset_forms(temp_dat = moz_va,  wid_code = wid_code,date_slider = date_range)
-
-# get palettes
-pal_traccar <- colorFactor(brewer.pal(sort(unique(sub_traccar$date)), name = 'Blues'), domain = unique(sub_traccar$date))
-
-t <- leaflet(sub_traccar) %>% addTiles() %>%
-  clearMarkers() %>%
-  addCircleMarkers(lng = sub_traccar$longitude, lat = sub_traccar$latitude,
-                   color = ~pal_traccar(as.factor(sub_traccar$date)),
-                   popup = sub_traccar$devicetime,
-                   stroke = FALSE, fillOpacity = 0.5
-  ) %>%
-  addLegend(pal = pal_traccar, values = ~sub_traccar$date, group = "circles", position = "bottomleft") 
-
-pal_census <- 
+#### lots of junk below. put it all into one function, that takes all data (NA for enum if TZ), and layers a plot. If enumeration and/or census not available (because tz or date range selected), then dont add layer. final plot has map with data that's available.
+trac = traccar_tz
+mini = tz_census
+enum = tz_enum
+va = tz_va
+wid_code = '90'
+date_range = c("2020-11-27", "2020-11-27")
+plot_traccar <- function(trac, mini, enum, va, wid_code,date_range, show_line_only ){
+  mini <- try(subset_forms(temp_dat = mini, wid_code = wid_code, date_slider = date_range, form = 'mini'), silent = TRUE)
+  enum <- try(subset_forms(temp_dat = enum, wid_code = wid_code, date_slider = date_range, form='enum'),silent = TRUE )
+  va <- try(subset_forms(temp_dat = va, wid_code = wid_code, date_slider = date_range, form='va'), silent = TRUE)
+  trac <- try(subset_traccar(temp_dat = trac, wid_code = wid_code, date_slider = date_range), silent = TRUE)
   
-m <-  leaflet(sub_mini) %>% 
-  addTiles() %>%
-  clearMarkers() %>%
-  addCircleMarkers(lng = sub_mini$lng, lat = sub_mini$lat,
-                   color = ~pal_census(as.factor(sub_mini$date)),
-                   popup = sub_mini$end_time,
-                   stroke = FALSE, fillOpacity = 0.5
-  ) %>%
-  addLegend(pal = pal, values = ~sub_mini$date, group = "circles", position = "bottomleft") 
-
-
-
-pal_census <- colorFactor(brewer.pal(sort(unique(sub_cen$date)), name = 'Blues'), domain = unique(sub_traccar$date))
-
-
+  if(class(trac)!='try-error'){
+    # pts = st_as_sf(data.frame(trac), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line(group = 'date')
+    # # Remove those which are two few
+    # # sizes <- unlist(lapply(pts$geometry, length))
+    # # pts <- pts[sizes >10,]
+    # # pts$date <- as.character(pts$date)
+    # # pts <- pts[-15,]
+    # # pts$groups <- stplanr::rnet_group(pts)
+    # # Make the plot
+    # # l <- mapview::mapview()
+    # l <- mapview::mapview(pts["date"],
+    #                       legend = FALSE,
+    #                       layer.name = 'date')
+    # t <-l@object
+    # get palettes
+    pal_traccar <- colorFactor(brewer.pal(sort(unique(trac$devicetime)), name = 'YlOrRd'), domain = unique(trac$devicetime))
+    if(show_line_only){
+      t <- leaflet(trac) %>% addTiles() %>%
+        clearMarkers() %>%
+        addPolylines(lng = trac$longitude, lat = trac$latitude, color = 'black',
+                     group = ~devicetime, weight = 0.5) #%>%
+      # addLegend(pal = pal_traccar, values = ~trac$devicetime, group = "lines", position = "bottomleft") 
+      
+    } else {
+      t <- leaflet(trac) %>% addTiles() %>%
+        clearMarkers() %>%
+        addCircleMarkers(lng = trac$longitude, lat = trac$latitude,
+                         color = ~pal_traccar(as.factor(trac$devicetime)),
+                         popup = trac$devicetime,
+                         radius=8,
+                         stroke = FALSE, fillOpacity = 0.9) #%>%
+        #addLegend(pal = pal_traccar, values = ~trac$devicetime, group = "lines", position = "bottomleft") 
+    }
+    
+  } 
+  
+  if(class(mini)!= 'try-error'){
+    pal_traccar <- colorFactor(brewer.pal(sort(unique(mini$start_time)), name = 'Blues'), domain = unique(mini$start_time))
+    t <- t %>% addCircleMarkers(lng = mini$lng, lat =mini$lat,
+                                color = 'blue',
+                                popup = mini$start_time,
+                                stroke = FALSE, fillOpacity = 0.5
+    ) #%>%
+      #addLegend(pal = pal_traccar, values = ~mini$start_time, group = "circles", position = "bottomleft") 
+  }
+  if(class(enum)!='try-error'){
+    # pal_traccar <- colorFactor(brewer.pal(sort(unique(enum$start_time)), name = 'Greens'), domain = unique(enum$start_time))
+    t <- t %>% addCircleMarkers(lng = enum$lng, lat =enum$lat,
+                                color ='green',
+                                popup = enum$start_time,
+                                stroke = FALSE, fillOpacity = 0.5
+    ) #%>%
+      #addLegend(pal = pal_traccar, values = ~enum$start_time, group = "circles", position = "bottomleft") 
+  }
+  
+  if(class(va)!='try-error'){
+    pal_traccar <- colorFactor(brewer.pal(sort(unique(va$start_time)), name = 'Purples'), domain = unique(va$start_time))
+    t <- t %>% addCircleMarkers(lng = va$lng, lat =va$lat,
+                                color = 'purple',
+                                popup = va$start_time,
+                                stroke = FALSE, fillOpacity = 0.5
+    ) #%>%
+      #addLegend(pal = pal_traccar, values = ~va$start_time, group = "circles", position = "bottomleft") 
+  }
+  
+  return(t)
+}
 
 # function to get longest travelling distance
 get_long_travel <- function(temp_dat){
-  temp_dat$devicetime <- lubridate::as_datetime(temp_dat$devicetime, tz = 'Africa/Maputo')
-  temp_dat$date <- as.Date(temp_dat$devicetime)
   temp <- temp_dat %>% group_by(unique_id, date) %>% summarise(sum_travel = sum(distance, na.rm = TRUE))
   return(temp)
 }
 
-top_travels <- get_long_travel(traccar_tz)
-# find most prevelant workers
-top_workers <- moz_census %>% group_by(wid) %>% summarise(counts = n())  %>% arrange(-counts)
+top_travels <- get_long_travel(traccar_moz)
+top_travels <- top_travels %>% filter(date >='2020-10-02', date<='2020-12-05')
+temp <- top_travels %>% filter(unique_id=='358')
 
-# use worker id
-print(top_workers$wid[3])
+# 338 is good
+sort(unique(moz_census$date))
+
+# MOZ
+plot_traccar(trac = traccar_moz, mini = moz_census, enum = moz_enum, va = moz_va, wid_code = '358', date_range = c("2020-10-20", "2020-10-20"), show_line_only = TRUE)
+
+# TZ
+plot_traccar(trac = traccar_tz, mini = tz_census, enum = tz_enum, va = tz_va, wid_code = '77', date_range = c("2020-12-02", "2020-12-03"), show_line_only = TRUE)
 
 
-get_census(temp_dat = moz_census, wid_code = '311', date_slider =c("2020-10-12", "2020-10-14"), color_by = 'date' )
+#MZ: 308, 336,338,357,358, 370, 379, 393, 394, 396, 401, 403
+#TZ:44, 72, 7, 3, 85, 20, 38, 51, 77,25,27,90, 71
 
-get_traccar(temp_dat = traccar_moz, wid_code = '349', date_slider = c("2020-10-9", "2020-10-9"), color_by = 'time_of_day'  )
+
+###############################################################################################
+# section for getting overall evidence of distance traveled and forms done 
+
+#############
+# mozambique
+#############
+
+# get date object 
+moz_census$date <- as.Date(moz_census$end_time)
+moz_enum$date <- as.Date(moz_enum$end_time)
+moz_va$date <- as.Date(moz_va$end_time)
+traccar_moz$date <- as.Date(traccar_moz$devicetime)
+
+# group by wid and date 
+moz_census_group <- moz_census %>% group_by(wid, date) %>% summarise(counts=n())
+moz_enum_group <- moz_enum %>% group_by(wid, date) %>% summarise(counts=n())
+moz_va_group <- moz_va %>% group_by(wid, date) %>% summarise(counts=n())
+moz_forms <- rbind(moz_census_group, moz_enum_group, moz_va_group)
+# moz_forms <-moz_forms %>% group_by(wid) %>% summarise(mean_daily_forms = mean(counts, na.rm = TRUE))
+
+# group by unique_id and date and get sum of meters travled 
+moz_distance <- traccar_moz %>% group_by(unique_id, date) %>% summarise(sum_travel = sum(distance, na.rm = TRUE)) %>% filter(sum_travel >0) 
+# join with moz forms 
+moz_form_dis <- inner_join(moz_forms, moz_distance, by=c('wid'='unique_id', 'date'))
+moz_form_corr <- moz_form_dis %>% group_by(wid) %>% summarise(correlation = cor(counts, sum_travel))
+
+# moz_form_dis <- moz_form_dis %>% filter(sum_travel <500000)
+# moz_form_dis <- moz_form_dis %>% group_by(wid) %>% summarise(mean_forms = mean(counts), 
+                                                              # mean_travel = mean(sum_travel))
+options(scipen = '999')
+# plot corelation
+ggplot(moz_form_dis %>% filter(wid=='316'), aes(counts, sum_travel)) + geom_point() +
+  geom_smooth(method = 'lm', se = FALSE, lty=2) +
+  labs(x='Forms submitted', 
+       y='Distance Traveled (meters)')
+
+# choose individual case and plot
+ggplot(moz_form_corr %>% filter(correlation >-.9, correlation<1), aes(wid,correlation)) + geom_bar(stat='identity') +
+  labs(x = 'Worker ID',
+       y='Correlation') +
+  theme_bohemia()
+
+#############
+# tanzania
+#############
+# get date object 
+tz_census$date <- as.Date(tz_census$end_time)
+tz_va$date <- as.Date(tz_va$end_time)
+traccar_tz$date <- as.Date(traccar_tz$devicetime)
+
+# group by wid and date 
+tz_census_group <- tz_census %>% group_by(wid, date) %>% summarise(counts=n())
+tz_va_group <- tz_va %>% group_by(wid, date) %>% summarise(counts=n())
+tz_forms <- rbind(tz_census_group,  tz_va_group)
+# tz_forms <-tz_forms %>% group_by(wid) %>% summarise(mean_daily_forms = mean(counts, na.rm = TRUE))
+
+# group by unique_id and date and get sum of meters travled 
+tz_distance <- traccar_tz %>% group_by(unique_id, date) %>% summarise(sum_travel = sum(distance, na.rm = TRUE)) %>% filter(sum_travel >0) 
+# join with tz forms 
+tz_form_dis <- inner_join(tz_forms, tz_distance, by=c('wid'='unique_id', 'date'))
+tz_form_corr <- tz_form_dis %>% group_by(wid) %>% summarise(correlation = cor(counts, sum_travel))
+
+# tz_form_dis <- tz_form_dis %>% filter(sum_travel <500000)
+# tz_form_dis <- tz_form_dis %>% group_by(wid) %>% summarise(mean_forms = mean(counts), 
+# mean_travel = mean(sum_travel))
+options(scipen = '999')
+
+# TZ:44, 72, 7, 3, 85, 20, 38, 51, 77,25,27,90
+# plot corelation
+ggplot(tz_form_dis %>% filter(wid=='90'), aes(counts, sum_travel)) + geom_point() +
+  geom_smooth(method = 'lm', se = FALSE, lty=2) +
+  labs(x='Forms submitted', 
+       y='Distance Traveled (meters)')
+
+# choose individual case and plot
+ggplot(tz_form_corr %>% filter(correlation >-.9, correlation<1), aes(wid,correlation)) + geom_bar(stat='identity') +
+  labs(x = 'Worker ID',
+       y='Correlation') +
+  theme_bohemia()
+
+################
+# code for intro to slides 
+################
+library(lubridate)
+library(tidyverse)
+# average weekly forms by both countries 
+moz_census$week <- lubridate::week(ymd(moz_census$date))
+tz_census$week <- lubridate::week(ymd(tz_census$date))
+
+# group by week and get counts 
+moz_day <- moz_census %>% group_by(wid,date) %>% summarise(counts =n()) %>%
+  group_by(wid) %>% summarise(mean_day = mean(counts))
+tz_day <- tz_census %>% group_by(wid,date) %>% summarise(counts =n()) %>%
+  group_by(wid) %>% summarise(mean_day = mean(counts))
+
+# find days with very few forms submitted
+moz_day <- moz_census%>% group_by(wid,date) %>% summarise(counts =n()) %>%
+  filter(counts <= 5)
+nrow(moz_day)/nrow(moz_census)
+tz_day <- tz_census%>% group_by(wid,date) %>% summarise(counts =n()) %>%
+  filter(counts <= 5)
+nrow(tz_day)/nrow(tz_census)
+
+# avg distance travelled
+moz_dis <- traccar_moz %>% group_by(unique_id, date) %>% summarise(sum_dis = sum(distance, na.rm = TRUE))
+moz_cen <- moz_census %>% group_by(wid, date) %>% summarise(forms_submitted = n())
+moz_dates <- unique(moz_cen$date)
+joined_moz <- inner_join(moz_cen, moz_dis, by=c('wid'='unique_id', 'date'))
+joined_moz <- joined_moz %>% group_by(wid) %>% summarise(mean_dis = mean(sum_dis,na.rm = TRUE))
+mean(joined_moz$mean_dis)
+
+# tz
+tz_dis <- traccar_tz %>% group_by(unique_id, date) %>% summarise(sum_dis = sum(distance, na.rm = TRUE))
+tz_cen <- tz_census %>% group_by(wid, date) %>% summarise(forms_submitted = n())
+tz_dates <- unique(tz_cen$date)
+joined_tz <- inner_join(tz_cen, tz_dis, by=c('wid'='unique_id', 'date'))
+joined_tz <- joined_tz %>% group_by(wid) %>% summarise(mean_dis = mean(sum_dis,na.rm = TRUE))
+mean(joined_tz$mean_dis)
+
+# how many fws have collected at least one form, but have no recent traccar data (december)
+moz_fw <- moz_census %>% filter(date>'2020-11-30') %>% group_by(wid) %>% summarise(counts = n())
+tz_fw <- tz_census %>% filter(date>'2020-11-30') %>%group_by(wid) %>% summarise(counts = n())
+
+# get recent traccar data
+trac_moz_dec <- traccar_moz %>% filter(date>'2020-11-30') %>% group_by(unique_id) %>% summarise(counts =n()) 
+trac_tz_dec <- traccar_tz %>% filter(date>'2020-11-30') %>% group_by(unique_id) %>% summarise(counts =n()) 
+
+# how many have submitted a form
+length(which(!moz_fw$wid %in% trac_moz_dec$unique_id))
+length(which(!tz_fw$wid %in% trac_tz_dec$unique_id))
 
