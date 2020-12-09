@@ -1562,7 +1562,6 @@ app_server <- function(input, output, session) {
     enum <- enum %>% filter(todays_date >= time_period[1],
                             todays_date <=time_period[2]) 
    
-    save(pd, enum, ehd, file = 'temp_gps.rda')
     pd_ok <- FALSE
     
     if(!is.null(pd)){
@@ -3083,10 +3082,16 @@ app_server <- function(input, output, session) {
         grouper <- input$va_monitor_by
         
         if(is.null(grouper)){
-          grouper <- 'District'
-        } 
+          if(co=='Mozambique'){}
+          grouper <- 'ward'
+        } else {
+          grouper <-tolower(grouper)
+        }
         out$`Time elapsed` <- NULL
         if(cn=='Mozambique'){
+          grouper <- ifelse(grouper == 'ward', '`Posto administrativo/localidade`', 
+                            ifelse(grouper =='district', 'Distrito',
+                                   ifelse(grouper=='village', 'Povoado', 'Bairro')))
           plot_data <- out %>% group_by_(grouper) %>% summarise(counts=n())
           names(plot_data)[1] <- 'V1'
           plot <- ggplot(plot_data, aes(V1, counts)) + geom_bar(stat='identity') +
@@ -3958,7 +3963,7 @@ app_server <- function(input, output, session) {
     # dbDisconnect(con)
     # traccar <- session_data$traccar
     date_slider <- input$gps_slider
-    save(traccar, date_slider, fid, file = '/tmp/dec1b.RData')
+    # save(traccar, date_slider, fid, file = '/tmp/dec1b.RData')
     ok <- TRUE
     if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
       ok <- FALSE
@@ -4246,12 +4251,14 @@ app_server <- function(input, output, session) {
       cn_choices = c('District',
                      'Ward',
                      'Village',
-                     'Hamlet')
+                     'Hamlet',
+                     'Household level')
     } else {
       cn_choices = c('Distrito' = 'District',
                      'Posto administrativo/localidade' ='Ward',
                      'Povoado' ='Village',
-                     'Bairro' ='Hamlet')
+                     'Bairro' ='Hamlet',
+                     'Household level')
     }
     # See if the user is logged in and has access
     si <- session_info
@@ -4287,88 +4294,96 @@ app_server <- function(input, output, session) {
               co <- country()
               geo_r_and_a <- input$geo_r_and_a
               if(is.null(geo_r_and_a)){
-                grouper <- 'district'
-              } else{
-                grouper <- tolower(geo_r_and_a)
-              }
-              # # get refusals data
-              rf = odk_data$data$refusals
-              # save(rf, file = '/tmp/rf.RData')
-              # Keep only the country in question
-              rf <- rf %>% dplyr::filter(country == co)
-              
-              # save(rf, file = 'temp_rf.rda')
-              # Get agg
-              rf_agg <- rf %>%
-                mutate(free_text = reason_no_participate) %>%
-                mutate(reason_no_participate = ifelse(reason_no_participate %in% 
-                                                        c('SEM COMENTARIO',
-                                                          'He didnt want to do it',
-                                                          'Dont know',
-                                                          'refused'),
-                                                      'refused',
-                                                      'not_present')) %>%
-                group_by(district, ward, village, hamlet, hh_id, reason_no_participate, free_text) %>%
-                summarise(n = n(),
-                          date = max(as.Date(todays_date), na.rm = TRUE)) %>%
-                ungroup
-              
-              out_rf <- rf_agg %>%
-                filter(reason_no_participate == 'refused') %>%
-                dplyr::select(district, ward, village, hamlet, hh_id,
-                              `Refusal date` = date,
-                              `Description` = free_text)
-              
-              out_ab <- rf_agg %>%
-                filter(reason_no_participate == 'not_present',
-                       reason_no_participate != 'refused')  %>%
-                dplyr::select(district, ward, village, hamlet, hh_id,
-                              `Visits` = n,
-                              `Last visit` = date)
-              
-              if(grouper!='hamlet'){
-                out_rf <- out_rf %>% group_by_(grouper) %>% summarise(`Number of refusals` = n())
-                out_ab <- out_ab %>% group_by_(grouper) %>% summarise(`Number of absences` = n())
-              }
-              
-             
-              if(co=='Mozambique'){
-                if(grouper =='hamlet'){
-                  names(out_rf)[1:4] <- c('Distrito', 'Posto administrativo/localidade', 'Povoado', 'Bairro')
-                  names(out_ab)[1:4] <- c('Distrito', 'Posto administrativo/localidade', 'Povoado', 'Bairro')
-                } else if(grouper=='district'){
-                  names(out_rf)[1] <- 'Distrito'
-                  names(out_ab)[1] <- 'Distrito'
-                } else if(grouper=='village'){
-                  names(out_rf)[1] <- 'Povoado'
-                  names(out_ab)[1] <- 'Povoado'
-                } else if(grouper=='ward'){
-                  names(out_rf)[1] <- 'Posto administrativo/localidade'
-                  names(out_ab)[1] <- 'Posto administrativo/localidade'
+                NULL
+              } else {
+                
+                if(geo_r_and_a=='Household level'){
+                  grouper <- 'household'
+                } else{
+                  grouper <- tolower(geo_r_and_a)
+                }
+                # # get refusals data
+                rf = odk_data$data$refusals
+                # save(rf, file = '/tmp/rf.RData')
+                # Keep only the country in question
+                rf <- rf %>% dplyr::filter(country == co)
+                
+                # save(rf, file = 'temp_rf.rda')
+                # Get agg
+                rf_agg <- rf %>%
+                  mutate(free_text = reason_no_participate) %>%
+                  mutate(reason_no_participate = ifelse(reason_no_participate %in% 
+                                                          c('SEM COMENTARIO',
+                                                            'He didnt want to do it',
+                                                            'Dont know',
+                                                            'refused'),
+                                                        'refused',
+                                                        'not_present')) %>%
+                  group_by(district, ward, village, hamlet, hh_id, reason_no_participate, free_text) %>%
+                  summarise(n = n(),
+                            date = max(as.Date(todays_date), na.rm = TRUE)) %>%
+                  ungroup
+                
+                out_rf <- rf_agg %>%
+                  filter(reason_no_participate == 'refused') %>%
+                  dplyr::select(district, ward, village, hamlet, hh_id,
+                                `Refusal date` = date,
+                                `Description` = free_text)
+                
+                out_ab <- rf_agg %>%
+                  filter(reason_no_participate == 'not_present',
+                         reason_no_participate != 'refused')  %>%
+                  dplyr::select(district, ward, village, hamlet, hh_id,
+                                `Visits` = n,
+                                `Last visit` = date)
+                
+                if(grouper!='household'){
+                  out_rf <- out_rf %>% group_by_(grouper) %>% summarise(`Number of refusals` = n())
+                  out_ab <- out_ab %>% group_by_(grouper) %>% summarise(`Number of absences` = n())
                 } 
                 
+                if(co=='Mozambique'){
+                  if(grouper == 'household'){
+                    names(out_rf)[1:4] <-c('Distrito','Posto administrativo/localidade','Povoado','Bairro')
+                    names(out_ab)[1:4] <-c('Distrito','Posto administrativo/localidade','Povoado','Bairro')
+                  } else if(grouper =='hamlet'){
+                    names(out_rf)[1] <-'Bairro'
+                    names(out_ab)[1] <- 'Bairro'
+                  } else if(grouper=='district'){
+                    names(out_rf)[1] <- 'Distrito'
+                    names(out_ab)[1] <- 'Distrito'
+                  } else if(grouper=='village'){
+                    names(out_rf)[1] <- 'Povoado'
+                    names(out_ab)[1] <- 'Povoado'
+                  } else if(grouper=='ward'){
+                    names(out_rf)[1] <- 'Posto administrativo/localidade'
+                    names(out_ab)[1] <- 'Posto administrativo/localidade'
+                  } 
+                  
+                }
+                
+                
+                tabsetPanel(
+                  tabPanel(title = 'Refusals',
+                           fluidPage(
+                             fluidRow(
+                               bohemia::prettify(out_rf,
+                                                 nrows = nrow(out_rf),
+                                                 download_options = TRUE)
+                             )
+                           )),
+                  tabPanel(title = 'Absences',
+                           fluidPage(
+                             fluidRow(
+                               bohemia::prettify(out_ab,
+                                                 nrows = nrow(out_ab),
+                                                 download_options = TRUE)
+                             )
+                           ))
+                )
+                
               }
-             
-
-              tabsetPanel(
-                tabPanel(title = 'Refusals',
-                         fluidPage(
-                           fluidRow(
-                             bohemia::prettify(out_rf,
-                                               nrows = nrow(out_rf),
-                                               download_options = TRUE)
-                           )
-                         )),
-                tabPanel(title = 'Absences',
-                         fluidPage(
-                           fluidRow(
-                             bohemia::prettify(out_ab,
-                                               nrows = nrow(out_ab),
-                                               download_options = TRUE)
-                           )
-                         ))
-              )
-              
+       
             })
   })
   
