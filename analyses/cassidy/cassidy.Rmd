@@ -29,10 +29,10 @@ if('data.RData' %in% dir()){
 } else {
   pd_moz <- load_odk_data(the_country = 'Mozambique',
                     credentials_path = '../../credentials/credentials.yaml',
-                    users_path = '../../credentials/users.yaml')
+                    users_path = '../../credentials/users.yaml', efficient = FALSE)
   pd_tza <- load_odk_data(the_country = 'Tanzania',
                       credentials_path = '../../credentials/credentials.yaml',
-                      users_path = '../../credentials/users.yaml')
+                      users_path = '../../credentials/users.yaml', efficient = FALSE)
   save(pd_moz,
        pd_tza,
        file = 'data.RData')
