@@ -227,6 +227,7 @@ app_ui <- function(request) {
                         tabPanel('GPS tracking',
                                  uiOutput('ui_gps')),
                         tabPanel('Refusals and Absences',
+                                 uiOutput('ui_geo_r_and_a'),
                                  uiOutput('ui_refusals_and_absences')))
           ),
           tabItem(
@@ -1561,7 +1562,7 @@ app_server <- function(input, output, session) {
     enum <- enum %>% filter(todays_date >= time_period[1],
                             todays_date <=time_period[2]) 
    
-    # save(pd, enum, file = 'temp_gps.rda')
+    save(pd, enum, ehd, file = 'temp_gps.rda')
     pd_ok <- FALSE
     
     if(!is.null(pd)){
@@ -1573,6 +1574,10 @@ app_server <- function(input, output, session) {
       out <- NULL
     } else {
       dt_choose_form <- input$dt_choose_form
+      make_percent <- input$make_percent
+      if(is.null(make_percent)){
+        make_percent <- FALSE
+      }
       # Create a detailed progress table (by hamlet)
       left <- ehd %>%
         filter(clinical_trial != 1) %>%
@@ -1581,12 +1586,25 @@ app_server <- function(input, output, session) {
       right <- pd %>%
         group_by(code = hh_hamlet_code) %>%
         summarise(numerator = n())
+      right_enum <- enum %>%
+        group_by(code = hamlet_code) %>%
+        summarise(numerator = n())
       joined <- left_join(left, right, by = 'code') %>%
         mutate(numerator = ifelse(is.na(numerator), 0, numerator)) %>%
         mutate(p = (numerator / n_households) * 100) %>%
         mutate(p = round(p, digits = 2))
-      # get overall progress by hamlet code
-      progress_by <- joined %>% left_join(locations %>% dplyr::select(code, Hamlet, District, Ward, Village), by = 'code')
+      joined_enum <- left_join(left, right_enum, by = 'code') %>%
+        mutate(numerator = ifelse(is.na(numerator), 0, numerator)) %>%
+        mutate(p = (numerator / n_households) * 100) %>%
+        mutate(p = round(p, digits = 2))
+      if(dt_choose_form=='Minicensus'){
+        # get overall progress by hamlet code
+        progress_by <- joined %>% left_join(locations %>% dplyr::select(code, Hamlet, District, Ward, Village), by = 'code')
+      } else {
+        # get overall progress by hamlet code
+        progress_by <- joined_enum %>% left_join(locations %>% dplyr::select(code, Hamlet, District, Ward, Village), by = 'code')
+      }
+     
       # by district
       progress_by_district <- progress_by %>% group_by(District) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
       # by ward
@@ -1636,13 +1654,24 @@ app_server <- function(input, output, session) {
       
       message('---created progess plot for Overview by geography')
       names(monitor_plot)[1] <- 'location'
-     out <- ggplot(monitor_plot, aes(location, `Percent finished`)) + geom_bar(stat='identity') +
-       geom_text(aes(label=`Percent finished`), vjust=-1)+
-       labs(x = '',
-            y ='') + 
-       theme_bohemia() +
-       theme(axis.text.x  = element_text(angle=90, vjust=0.5),
-             axis.ticks.x = element_blank())
+      if(make_percent){
+        out <- ggplot(monitor_plot, aes(location, `Percent finished`)) + geom_bar(stat='identity') +
+          geom_text(aes(label=`Percent finished`), vjust=-1)+
+          labs(x = '',
+               y ='') + 
+          theme_bohemia() +
+          theme(axis.text.x  = element_text(angle=90, vjust=0.5),
+                axis.ticks.x = element_blank())
+      } else {
+        out <- ggplot(monitor_plot, aes(location, numerator)) + geom_bar(stat='identity') +
+          geom_text(aes(label=numerator), vjust=-1)+
+          labs(x = '',
+               y ='') + 
+          theme_bohemia() +
+          theme(axis.text.x  = element_text(angle=90, vjust=0.5),
+                axis.ticks.x = element_blank())
+      }
+     
      
      
     }
@@ -1772,12 +1801,13 @@ app_server <- function(input, output, session) {
                 h3('Progress by geographical unit'),
                 uiOutput('ui_field_monitoring_by'),
                 uiOutput('ui_progress_by_date'),
-                column(12, align = 'center',
+                column(12, #align = 'center',
                        tabsetPanel(
                          tabPanel('Table',
                                   div(DT::dataTableOutput('dt_monitor_by_table'), style = "font-size:80%")),
                          tabPanel('Plot',
                                   selectInput('dt_choose_form', 'Choose form', choices = c('Minicensus', 'Enumerations')),
+                                  checkboxInput(inputId = 'make_percent', label = 'Show percentage', value = FALSE),
                                   plotOutput('dt_monitor_by_plot')),
                          tabPanel('Map',
                                   leafletOutput('leaf_lx', height = 800)))))
@@ -2914,8 +2944,6 @@ app_server <- function(input, output, session) {
               
               grouper <- input$va_monitor_by
               # save(grouper, file = '/tmp/grouper.RData')
-              
-              
               
               # Get location in va
               va <- va %>%
@@ -4212,7 +4240,38 @@ app_server <- function(input, output, session) {
               
             })
   })
-  
+  output$ui_geo_r_and_a <- renderUI({
+    cn <- input$geo
+    if(cn=='Rufiji'){
+      cn_choices = c('District',
+                     'Ward',
+                     'Village',
+                     'Hamlet')
+    } else {
+      cn_choices = c('Distrito' = 'District',
+                     'Posto administrativo/localidade' ='Ward',
+                     'Povoado' ='Village',
+                     'Bairro' ='Hamlet')
+    }
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              fmg <- field_monitoring_geo()
+              fluidPage(
+                column(12, align = 'center',
+                       radioButtons('geo_r_and_a',
+                                    'Geographic level:',
+                                    choices = cn_choices,
+                                    selected = fmg,
+                                    inline = TRUE))
+              )
+            })
+  })
   
   # Refusals and absences UI
   output$ui_refusals_and_absences <- renderUI({
@@ -4226,13 +4285,19 @@ app_server <- function(input, output, session) {
             ok = {
               # Get the country
               co <- country()
-              
+              geo_r_and_a <- input$geo_r_and_a
+              if(is.null(geo_r_and_a)){
+                grouper <- 'district'
+              } else{
+                grouper <- tolower(geo_r_and_a)
+              }
               # # get refusals data
               rf = odk_data$data$refusals
               # save(rf, file = '/tmp/rf.RData')
               # Keep only the country in question
               rf <- rf %>% dplyr::filter(country == co)
               
+              # save(rf, file = 'temp_rf.rda')
               # Get agg
               rf_agg <- rf %>%
                 mutate(free_text = reason_no_participate) %>%
@@ -4261,6 +4326,30 @@ app_server <- function(input, output, session) {
                               `Visits` = n,
                               `Last visit` = date)
               
+              if(grouper!='hamlet'){
+                out_rf <- out_rf %>% group_by_(grouper) %>% summarise(`Number of refusals` = n())
+                out_ab <- out_ab %>% group_by_(grouper) %>% summarise(`Number of absences` = n())
+              }
+              
+             
+              if(co=='Mozambique'){
+                if(grouper =='hamlet'){
+                  names(out_rf)[1:4] <- c('Distrito', 'Posto administrativo/localidade', 'Povoado', 'Bairro')
+                  names(out_ab)[1:4] <- c('Distrito', 'Posto administrativo/localidade', 'Povoado', 'Bairro')
+                } else if(grouper=='district'){
+                  names(out_rf)[1] <- 'Distrito'
+                  names(out_ab)[1] <- 'Distrito'
+                } else if(grouper=='village'){
+                  names(out_rf)[1] <- 'Povoado'
+                  names(out_ab)[1] <- 'Povoado'
+                } else if(grouper=='ward'){
+                  names(out_rf)[1] <- 'Posto administrativo/localidade'
+                  names(out_ab)[1] <- 'Posto administrativo/localidade'
+                } 
+                
+              }
+             
+
               tabsetPanel(
                 tabPanel(title = 'Refusals',
                          fluidPage(
