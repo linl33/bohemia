@@ -64,6 +64,10 @@ app_ui <- function(request) {
               tabName="server_status",
               icon=icon("server")),
             menuSubItem(
+              text="Cross-site comparison",
+              tabName="cross_site",
+              icon=icon("globe-africa")),
+            menuSubItem(
               text="Geographical tables",
               tabName="geo_tables",
               icon=icon("globe"))),
@@ -237,6 +241,10 @@ app_ui <- function(request) {
               tabPanel('Aggregated',
                        uiOutput('ui_enrollment'))
             )),
+          tabItem(
+            tabName = 'cross_site',
+            uiOutput('ui_cross_site')
+          ),
           tabItem(
             tabName="server_status",
             uiOutput('ui_server_status_date'),
@@ -519,7 +527,9 @@ app_server <- function(input, output, session) {
   odk_data <- reactiveValues(data = NULL)
   
   # estimated households data
-  estimated_households <- reactiveValues(data = bohemia::gps)
+  estimated_households <- reactiveValues(data = bohemia::gps %>% mutate(n_households = ifelse(iso == 'MOZ',
+                                                                                              round(n_households * 0.55),
+                                                                                              n_households)))
   
   
   
@@ -2206,7 +2216,10 @@ app_server <- function(input, output, session) {
         scale_fill_manual(name = '',
                           values = c('black', 'grey')) +
         labs(x='Date', y='', title='Number of errors and anomalies') +
-        theme_bohemia()
+        theme_bohemia() +
+        theme(axis.text = element_text(size = 10),
+              axis.title = element_text(size = 14),
+              plot.title = element_text(size = 20))
     } else {
       NULL
     }
@@ -2275,7 +2288,10 @@ app_server <- function(input, output, session) {
           theme_bohemia() +
           scale_color_manual(name = '',
                              values = c('red', 'blue')) +
-          theme(legend.position = 'bottom')
+          theme(legend.position = 'bottom') +
+          theme(axis.text = element_text(size = 10),
+                axis.title = element_text(size = 14),
+                plot.title = element_text(size = 20))
         
         
       } else {
@@ -2322,7 +2338,10 @@ app_server <- function(input, output, session) {
           labs(x = 'Date',
                y = 'Forms collected',
                title = 'Forms collected by date') +
-          theme_bohemia()
+          theme_bohemia() +
+          theme(axis.text = element_text(size = 10),
+                axis.title = element_text(size = 14),
+                plot.title = element_text(size = 20))
         
         
       } else {
@@ -2369,7 +2388,10 @@ app_server <- function(input, output, session) {
                y = 'Density',
                title = paste0('Distribution of time taken per form for FW ',
                               who, '; ', n, ' forms, ', avg, ' ', units_taken)) +
-          theme_bohemia()
+          theme_bohemia() +
+          theme(axis.text = element_text(size = 10),
+                axis.title = element_text(size = 14),
+                plot.title = element_text(size = 20))
         
         
       } else {
@@ -2539,7 +2561,10 @@ app_server <- function(input, output, session) {
                y = 'Date') +
           scale_color_manual(name = '', values = cols) +
           theme(legend.position = 'none') +
-          labs(subtitle = 'Diamond: start time; Cross: end time')
+          labs(subtitle = 'Diamond: start time; Cross: end time') +
+          theme(axis.text = element_text(size = 10),
+                axis.title = element_text(size = 14),
+                plot.title = element_text(size = 20))
         
       } else {
         g <- NULL
@@ -3098,14 +3123,16 @@ app_server <- function(input, output, session) {
             labs(x = '',
                  y='VAs past due') +
             theme_bohemia() +
-            theme(axis.text.x = element_text(angle=90, vjust=0.5))
+            theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+                  axis.title = element_text(size = 14),
+                  plot.title = element_text(size = 20))
           
           return(plot)
         } else {
-          out$District <- paste0(out$District, ' - ', out$`Assigned to`)
-          out$Ward <- paste0(out$Ward, ' - ', out$`Assigned to`)
-          out$Village <- paste0(out$Village, ' - ', out$`Assigned to`)
-          out$Hamlet<- paste0(out$Hamlet, ' - ', out$`Assigned to`)
+          out$district <- paste0(out$District, ' - ', out$`Assigned to`)
+          out$ward <- paste0(out$Ward, ' - ', out$`Assigned to`)
+          out$village <- paste0(out$Village, ' - ', out$`Assigned to`)
+          out$hamlet<- paste0(out$Hamlet, ' - ', out$`Assigned to`)
           
           plot_data <- out %>% group_by_(grouper) %>% summarise(counts=n())
           names(plot_data)[1] <- 'V1'
@@ -3113,7 +3140,10 @@ app_server <- function(input, output, session) {
             labs(x = '',
                  y='VAs past due') +
             theme_bohemia() +
-            theme(axis.text.x = element_text(angle=90, vjust=0.5))
+            theme(axis.text.x = element_text(angle=90, vjust=0.5)) +
+            theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+                  axis.title = element_text(size = 14),
+                  plot.title = element_text(size = 20))
           
           return(plot)
         }
@@ -3132,7 +3162,7 @@ app_server <- function(input, output, session) {
     make_ui(li = li,
             ac = ac,
             ok = {
-              plotOutput('plot_va_progress_by_geo_past_due')
+              plotOutput('plot_va_progress_by_geo_past_due', height = '700px')
             })
   })
   
@@ -3550,8 +3580,11 @@ app_server <- function(input, output, session) {
                          caption = 'Numbers show forms on top, working days on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
                     theme_bohemia() +
                     geom_text(aes(label = label),
-                              nudge_y = 0, size = 2, alpha = 0.8) +
-                  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
+                              nudge_y = 0, size = 4, alpha = 0.8) +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
+                  theme(axis.text = element_text(size = 10),
+                        axis.title = element_text(size = 14),
+                        plot.title = element_text(size = 20))
                 
               } else {
                 NULL
@@ -3674,8 +3707,11 @@ app_server <- function(input, output, session) {
                        caption = 'Numbers show forms on top, workers that day on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
                   theme_bohemia() +
                   geom_text(aes(label = label),
-                            nudge_y = 0, size = 3, alpha = 0.8) +
-                  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
+                            nudge_y = 0, size = 5, alpha = 0.8) +
+                  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
+                  theme(axis.text = element_text(size = 10),
+                        axis.title = element_text(size = 14),
+                        plot.title = element_text(size = 20))
                 
               } else {
                 NULL
@@ -4349,14 +4385,20 @@ app_server <- function(input, output, session) {
                     names(out_rf)[1] <- 'V1'
                     ggplot(out_rf, aes(V1, `Number of refusals`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
-                      theme(axis.text.x = element_text(angle=90, vjust = 0.5))
+                      theme(axis.text.x = element_text(angle=90, vjust = 0.5)) +
+                      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+                            axis.title = element_text(size = 14),
+                            plot.title = element_text(size = 20))
                   })
                   
                   output$ab_plot <- renderPlot({
                     names(out_ab)[1] <- 'V1'
                     ggplot(out_ab, aes(V1, `Number of absences`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
-                      theme(axis.text.x = element_text(angle=90, vjust = 0.5))
+                      theme(axis.text.x = element_text(angle=90, vjust = 0.5)) +
+                      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+                            axis.title = element_text(size = 14),
+                            plot.title = element_text(size = 20))
                   })
                 } 
                 
@@ -4392,7 +4434,7 @@ app_server <- function(input, output, session) {
                                                  download_options = TRUE)
                              ),
                              fluidRow(
-                               plotOutput('ref_plot')
+                               plotOutput('ref_plot', height = '700px')
                              )
                            )),
                   tabPanel(title = 'Absences',
@@ -4403,7 +4445,7 @@ app_server <- function(input, output, session) {
                                                  download_options = TRUE)
                              ),
                              fluidRow(
-                               plotOutput('ab_plot')
+                               plotOutput('ab_plot', height = '700px')
                              )
                            ))
                 )
@@ -4971,7 +5013,11 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               the_country <- country()
-              pd <- bohemia::gps %>% left_join(bohemia::locations %>% dplyr::select(-clinical_trial))
+              pd <- bohemia::gps %>% left_join(bohemia::locations %>% 
+                                                 dplyr::select(-clinical_trial) %>% 
+                                                 mutate(n_households = ifelse(iso == 'MOZ',
+                                                                                                                                      round(n_households * 0.55),
+                                                                                                                                      n_households)))
               the_iso <- ifelse(the_country == 'Tanzania', 'TZA', 'MOZ')
               pdx <- pd <- pd %>%
                 filter(iso == the_iso,
@@ -4991,6 +5037,218 @@ app_server <- function(input, output, session) {
                 fluidRow(bohemia::prettify(pd)),
                 fluidRow(h3('Locations hierarchy')),
                 fluidRow(bohemia::prettify(pdx, nrows = nrow(pdx), download_options = TRUE))
+              )
+              
+            })
+  })
+  
+  # Cross site UI ####################################################
+  output$ui_cross_site <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    
+    # Load the data
+    the_country <- country()
+    the_other_country <- ifelse(the_country == 'Mozambique', 'Tanzania', 'Mozambique')
+    out1 <- odk_data$data
+    out2 <- load_odk_data(local = is_local, the_country = the_other_country, efficient = TRUE, use_cached = use_cached, con = con)
+    # save(out1, out2, file = '/tmp/out.RData')
+    minicensus_main <- bind_rows(
+      out1$minicensus_main,
+      out2$minicensus_main
+    )
+    minicensus_people <- bind_rows(
+      out1$minicensus_people,
+      out2$minicensus_people
+    )
+    anomalies <- dbGetQuery(conn = con,
+                            statement = paste0("SELECT * FROM anomalies"))
+    corrections <- dbGetQuery(conn = con,
+                              statement = "SELECT * FROM corrections;")
+    fixes <- dbGetQuery(conn = con,
+                        statement = "SELECT * FROM fixes;")
+    
+    # Meta stuff
+    country_cols <- c('darkorange', 'lightblue')
+    
+    # Anomalies by country table
+    anomalies_by_country <- anomalies %>%
+      group_by(country) %>%
+      tally
+    output$table_anomalies_by_country <- 
+      DT::renderDataTable({
+        anomalies_by_country  %>% bohemia::prettify(download_options = TRUE)
+      })
+    output$plot_anomalies_by_country <- 
+      renderPlot({
+        ggplot(data = anomalies_by_country,
+               aes(x = country,
+                   y = n)) +
+          geom_bar(stat = 'identity',
+                   aes(fill = country)) +
+          scale_fill_manual(name = '', values = country_cols) +
+          theme_bohemia() +
+          theme(legend.position = 'none') 
+      })
+    
+    # Anomalies by country/date chart
+    anomalies_by_country_date <- 
+      anomalies %>%
+      group_by(country, date) %>%
+      tally %>% 
+      arrange(date) %>%
+      group_by(country) %>%
+      mutate(cumulative = cumsum(n)) 
+    output$table_anomalies_by_country_date <- 
+      DT::renderDataTable({
+        anomalies_by_country_date %>%
+          bohemia::prettify(download_options = TRUE)
+      })
+    output$plot_anomalies_by_country_date <- renderPlot({
+      ggplot(data = anomalies_by_country_date,
+             aes(x = date,
+                 y = cumulative,
+                 color = country)) +
+        geom_line() +
+        scale_color_manual(name = 'Country', values = country_cols) +
+        theme_bohemia() +
+        theme(legend.position = 'bottom')
+    })
+    
+    # Anomalies by correction status
+    anomalies_by_correction_status <- 
+      anomalies %>%
+      left_join(corrections %>% dplyr::select(-instance_id)) %>%
+      group_by(corrected = ifelse(!is.na(resolution_method), 'Corrected',
+                                  'Not yet corrected')) %>%
+      tally
+    output$table_anomalies_by_correction_status <- DT::renderDataTable({
+      anomalies_by_correction_status %>% bohemia::prettify(download_options = TRUE)
+    })
+    output$plot_anomalies_by_correction_status <- renderPlot({
+      ggplot(data = anomalies_by_correction_status,
+             aes(x = corrected,
+                 y = n)) +
+        geom_bar(stat = 'identity',
+                 aes(fill = corrected)) +
+        scale_fill_manual(name = '',
+                          values = c('darkgreen', 'red')) +
+        theme_bohemia()  +
+        theme(legend.position = 'none') +
+        labs(x = '',
+             y = 'Anomalies')
+    })
+    
+    # Anomalies by correction status and country
+    anomalies_by_correction_status_and_country <- 
+      anomalies %>%
+      left_join(corrections %>% dplyr::select(-instance_id)) %>%
+      group_by(country,
+               corrected = ifelse(!is.na(resolution_method), 'Corrected',
+                                  'Not yet corrected')) %>%
+      tally
+    output$table_anomalies_by_correction_status_and_country <- DT::renderDataTable({
+      anomalies_by_correction_status_and_country %>% bohemia::prettify(download_options = TRUE)
+    })
+    output$plot_anomalies_by_correction_status_and_country <- renderPlot({
+      ggplot(data = anomalies_by_correction_status_and_country,
+             aes(x = country,
+                 y = n,
+                 group = corrected)) +
+        geom_bar(stat = 'identity',
+                 position = position_stack(),
+                 aes(fill = corrected)) +
+        scale_fill_manual(name = '',
+                          values = c('darkgreen', 'red')) +
+        theme_bohemia()  +
+        theme(legend.position = 'bottom') +
+        labs(x = '',
+             y = 'Anomalies')
+    })
+    
+    # Number of minicensus forms by country
+    minicensus_forms <-minicensus_main %>%
+      group_by(hh_country) %>%
+      tally
+    output$table_minicensus_forms <- DT::renderDataTable({
+      minicensus_forms %>% bohemia::prettify(download_options = TRUE)
+    })
+    output$plot_minicensus_forms <- renderPlot({
+      ggplot(data = minicensus_forms,
+             aes(x = hh_country,
+                 y = n)) +
+        geom_bar(stat = 'identity',
+                 aes(fill = hh_country)) +
+        scale_fill_manual(name = '', values = country_cols) +
+        theme_bohemia() +
+        theme(legend.position = 'none') +
+        labs(x = '',
+             y= 'Forms')
+    })
+    
+    # Number of minicensus forms by country / date
+    minicensus_forms_by_date <-minicensus_main %>%
+      group_by(country = hh_country, date = todays_date) %>%
+      tally %>%
+      ungroup %>%
+      arrange(date) %>%
+      group_by(country) %>%
+      mutate(cumulative = cumsum(n))
+    output$table_minicensus_forms_by_date <- DT::renderDataTable({
+      minicensus_forms_by_date %>% bohemia::prettify(download_options = TRUE)
+    })
+    output$plot_minicensus_forms_by_date <- renderPlot({
+      ggplot(data = minicensus_forms_by_date,
+             aes(x = date,
+                 y = cumulative)) +
+        geom_line(aes(color = country)) +
+        scale_color_manual(name = '',
+                           values = country_cols) +
+        theme_bohemia() +
+        theme(legend.position = 'bottom') +
+        labs(x = 'Date',
+             y= 'Forms')
+    })
+    
+    
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              
+              fluidPage(
+                fluidRow(
+                  column(6,
+                         h3('Anomalies by country'),
+                         plotOutput('plot_anomalies_by_country'),
+                         DT::dataTableOutput('table_anomalies_by_country')),
+                  column(6,
+                         h3('Anomalies by country/date'),
+                         plotOutput('plot_anomalies_by_country_date'),
+                         DT::dataTableOutput('table_anomalies_by_country_date'))
+                ),
+                fluidRow(
+                  column(6,
+                         h3('Anomalies by correction status'),
+                         plotOutput('plot_anomalies_by_correction_status'),
+                         DT::dataTableOutput('table_anomalies_by_correction_status')),
+                  column(6,
+                         h3('Anomalies by correction status and country'),
+                         plotOutput('plot_anomalies_by_correction_status_and_country'),
+                         DT::dataTableOutput('table_anomalies_by_correction_status_and_country'))
+                ),
+                fluidRow(
+                  column(6,
+                         h3('Minicensus forms by country'),
+                         plotOutput('plot_minicensus_forms'),
+                         DT::dataTableOutput('table_minicensus_forms')),
+                  column(6,
+                         h3('Minicensus forms by country and date'),
+                         plotOutput('plot_minicensus_forms_by_date'),
+                         DT::dataTableOutput('table_minicensus_forms_by_date'))
+                )
               )
               
             })

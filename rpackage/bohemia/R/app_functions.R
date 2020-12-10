@@ -117,6 +117,7 @@ credentials_check <- function(user = NULL,
   return(checks_out)
 }
 
+na_to_zero <- function(x){ifelse(is.na(x), 0, x)}
 
 
 # Function for generating the about page
