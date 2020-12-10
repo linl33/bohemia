@@ -4308,7 +4308,6 @@ app_server <- function(input, output, session) {
                 # Keep only the country in question
                 rf <- rf %>% dplyr::filter(country == co)
                 
-                # save(rf, file = 'temp_rf.rda')
                 # Get agg
                 rf_agg <- rf %>%
                   mutate(free_text = reason_no_participate) %>%
@@ -4340,7 +4339,25 @@ app_server <- function(input, output, session) {
                 if(grouper!='household'){
                   out_rf <- out_rf %>% group_by_(grouper) %>% summarise(`Number of refusals` = n())
                   out_ab <- out_ab %>% group_by_(grouper) %>% summarise(`Number of absences` = n())
+                  
+                  # only create plots if household level not selected
+                  # create plot for refusals
+                  output$ref_plot <- renderPlot({
+                    names(out_rf)[1] <- 'V1'
+                    ggplot(out_rf, aes(V1, `Number of refusals`)) + geom_bar(stat = 'identity') +
+                      labs(x='') + theme_bohemia() +
+                      theme(axis.text.x = element_text(angle=90, vjust = 0.5))
+                  })
+                  
+                  output$ab_plot <- renderPlot({
+                    names(out_ab)[1] <- 'V1'
+                    ggplot(out_ab, aes(V1, `Number of absences`)) + geom_bar(stat = 'identity') +
+                      labs(x='') + theme_bohemia() +
+                      theme(axis.text.x = element_text(angle=90, vjust = 0.5))
+                  })
                 } 
+                
+               
                 
                 if(co=='Mozambique'){
                   if(grouper == 'household'){
@@ -4370,6 +4387,9 @@ app_server <- function(input, output, session) {
                                bohemia::prettify(out_rf,
                                                  nrows = nrow(out_rf),
                                                  download_options = TRUE)
+                             ),
+                             fluidRow(
+                               plotOutput('ref_plot')
                              )
                            )),
                   tabPanel(title = 'Absences',
@@ -4378,6 +4398,9 @@ app_server <- function(input, output, session) {
                                bohemia::prettify(out_ab,
                                                  nrows = nrow(out_ab),
                                                  download_options = TRUE)
+                             ),
+                             fluidRow(
+                               plotOutput('ab_plot')
                              )
                            ))
                 )
