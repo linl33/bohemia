@@ -1655,7 +1655,7 @@ app_server <- function(input, output, session) {
       names(monitor_plot)[1] <- 'location'
       if(make_percent){
         out <- ggplot(monitor_plot, aes(location, `Percent finished`)) + geom_bar(stat='identity') +
-          geom_text(aes(label=`Percent finished`), vjust=-1)+
+          geom_text(aes(label=`Percent finished`), vjust=-0.1)+
           labs(x = '',
                y ='') + 
           theme_bohemia() +
@@ -1663,7 +1663,7 @@ app_server <- function(input, output, session) {
                 axis.ticks.x = element_blank())
       } else {
         out <- ggplot(monitor_plot, aes(location, numerator)) + geom_bar(stat='identity') +
-          geom_text(aes(label=numerator), vjust=-1)+
+          geom_text(aes(label=numerator), vjust=-0.1)+
           labs(x = '',
                y ='') + 
           theme_bohemia() +
@@ -3538,6 +3538,9 @@ app_server <- function(input, output, session) {
                   pdx %>% mutate(wid = as.numeric(as.character(wid))),
                                  right)%>%
                   mutate(wid = paste0(wid, ' (', Role, ')'))
+                
+                # remove NA in parantheses
+                pdx <- pdx %>% filter(!grepl('NA', wid))
                 ggplot(data = pdx,
                          aes(x = wid,
                              y = per_day)) +
@@ -3897,9 +3900,9 @@ app_server <- function(input, output, session) {
                      checkboxInput(inputId = 'ui_show_percent', label = 'Show percentage', value = FALSE))
               ),
      fluidRow(column(12,
-                     plotOutput('ui_fw_plot'))),
+                     plotOutput('ui_fw_plot', height = '700px'))),
      fluidRow(column(12,
-                     plotOutput('ui_fw_plot2'))),
+                     plotOutput('ui_fw_plot2', height = '700px'))),
      fluidRow(column(12,
                      DT::dataTableOutput('ui_fw_table'))))
   })
