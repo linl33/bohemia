@@ -199,7 +199,8 @@ if(moz){
       user = user,
       password = password,
       pre_auth = TRUE,
-      use_data_id = use_data_id
+      use_data_id = use_data_id,
+      chunk_size = 50000
     )
     new_data <- FALSE
     if(!is.null(data)){
@@ -240,7 +241,8 @@ if(moz){
       user = user,
       password = password,
       pre_auth = TRUE,
-      use_data_id = FALSE
+      use_data_id = FALSE,
+      chunk_size = 50000
     )
     new_data <- FALSE
     if(!is.null(data)){
@@ -279,7 +281,8 @@ if(moz){
       uuids = NULL,
       exclude_uuids = existing_uuids,
       user = user,
-      password = password
+      password = password,
+      chunk_size = 50000
     )
     new_data <- FALSE
     if(!is.null(data)){
@@ -320,7 +323,8 @@ if(moz){
       exclude_uuids = existing_uuids,
       user = user,
       password = password, 
-      pre_auth = TRUE
+      pre_auth = TRUE,
+      chunk_size = 50000
     )
     new_data <- FALSE
     if(!is.null(data)){
@@ -515,6 +519,15 @@ message(paste0(nrow(anomalies), ' total anomalies'),
 )
 
 x = dbDisconnect(con)
+
+remove_file <- '/tmp/Mozambique_efficient_local.RData'
+if(file.exists(remove_file)){
+  file.remove(remove_file)
+}
+remove_file <- '/tmp/Tanzania_efficient_local.RData'
+if(file.exists(remove_file)){
+  file.remove(remove_file)
+}
 
 
 end_time <- Sys.time()

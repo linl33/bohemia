@@ -14,6 +14,7 @@
 #' @param use_data_id Whether to substitute the id2 field with "data" in the submission retrieval URL
 #' @param sleeper How long to sleep between requests (seconds)
 #' @param use_progress_bar Whether to show a progress bar instead of messages for each form
+#' @param chunk_size The chunk size for pagination
 #' @import httr
 #' @import xml2
 #' @import dplyr
@@ -34,7 +35,8 @@ odk_get_data <- function(url = 'https://bohemia.systems',
                          pre_auth = FALSE,
                          use_data_id = FALSE, 
                          sleeper = 0.25,
-                         use_progress_bar = TRUE){
+                         use_progress_bar = TRUE,
+                         chunk_size = 1000){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){
@@ -64,7 +66,8 @@ odk_get_data <- function(url = 'https://bohemia.systems',
                                       id = id,
                                       user = user,
                                       password = password,
-                                      pre_auth = pre_auth)
+                                      pre_auth = pre_auth,
+                                      chunk_size = chunk_size)
   # If no submissions, stop
   if(length(submissions) == 0){
     message('No submissions are available for the form with id: ', id, ' at ', url, '.\nReturning an empty vector')

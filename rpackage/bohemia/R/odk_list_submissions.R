@@ -6,6 +6,7 @@
 #' @param user The ODK Aggregate username
 #' @param password The ODK Aggregate password
 #' @param pre-auth Pre-authenticate (needed for Manhica server)
+#' @param chunk_size The chunk size for pagination
 #' @import httr
 #' @import xml2
 #' @import dplyr
@@ -16,7 +17,8 @@ odk_list_submissions <- function(url = 'https://bohemia.systems',
                                  id = 'recon',
                                  user = NULL,
                                  password = NULL,
-                                 pre_auth = FALSE){
+                                 pre_auth = FALSE,
+                                 chunk_size = 1000){
   
   # Ensure that username and password are provided
   if(is.null(user) | is.null(password)){
@@ -33,7 +35,7 @@ odk_list_submissions <- function(url = 'https://bohemia.systems',
   }
   
   # Create the url for the request
-  rurl <- paste0(url, '/view/submissionList?formId=', id, '&numEntries=1000')
+  rurl <- paste0(url, '/view/submissionList?formId=', id, '&numEntries=', chunk_size)
   r = GET(rurl,
           authenticate(user = user,
                        password = password, 
@@ -84,14 +86,14 @@ odk_list_submissions <- function(url = 'https://bohemia.systems',
   uuids_list <- c(uuids_list, vrx$uuids)
   current_cursor_date <- vrx$cursor_date
   
-  # Now go through and re-retrieve in chunks of 1000
+  # Now go through and re-retrieve in chunks of chunk_size
   keep_going <- TRUE
-  if(length(uuids_list) < 1000){
+  if(length(uuids_list) < chunk_size){
     keep_going <- FALSE
   }
-  counter <- 1000
+  counter <- chunk_size
   while(keep_going){
-    message('Working on numbers ', counter, ' to ', counter + 999)
+    message('Working on numbers ', counter, ' to ', counter + (chunk_size-1))
     new_rurl <- paste0(rurl, '&cursor=', 
                        "<cursor xmlns=\"http://www.opendatakit.org/cursor\"><attributeName>_LAST_UPDATE_DATE</attributeName><attributeValue>", current_cursor_date, 
                        '</attributeValue><isForwardCursor>true</isForwardCursor></cursor>', collapse = '')
@@ -107,7 +109,7 @@ odk_list_submissions <- function(url = 'https://bohemia.systems',
     } else {
       uuids_list <- c(uuids_list, vrx$uuids)
       current_cursor_date <- vrx$cursor_date
-      counter <- counter + 1000
+      counter <- counter + chunk_size
     }
   }
   
