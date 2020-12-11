@@ -1664,7 +1664,7 @@ app_server <- function(input, output, session) {
       message('---created progess plot for Overview by geography')
       names(monitor_plot)[1] <- 'location'
       if(make_percent){
-        out <- ggplot(monitor_plot, aes(location, `Percent finished`)) + geom_bar(stat='identity') +
+        out <- ggplot(monitor_plot, aes(reorder(location,-`Percent finished`), `Percent finished`)) + geom_bar(stat='identity') +
           geom_text(aes(label=`Percent finished`), vjust=-0.1)+
           labs(x = '',
                y ='') + 
@@ -1672,7 +1672,7 @@ app_server <- function(input, output, session) {
           theme(axis.text.x  = element_text(angle=90, vjust=0.5),
                 axis.ticks.x = element_blank())
       } else {
-        out <- ggplot(monitor_plot, aes(location, numerator)) + geom_bar(stat='identity') +
+        out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator)) + geom_bar(stat='identity') +
           geom_text(aes(label=numerator), vjust=-0.1)+
           labs(x = '',
                y ='') + 
@@ -3119,7 +3119,7 @@ app_server <- function(input, output, session) {
                                    ifelse(grouper=='village', 'Povoado', 'Bairro')))
           plot_data <- out %>% group_by_(grouper) %>% summarise(counts=n())
           names(plot_data)[1] <- 'V1'
-          plot <- ggplot(plot_data, aes(V1, counts)) + geom_bar(stat='identity') +
+          plot <- ggplot(plot_data, aes(reorder(V1, -counts), counts)) + geom_bar(stat='identity') +
             labs(x = '',
                  y='VAs past due') +
             theme_bohemia() +
@@ -3136,7 +3136,7 @@ app_server <- function(input, output, session) {
           
           plot_data <- out %>% group_by_(grouper) %>% summarise(counts=n())
           names(plot_data)[1] <- 'V1'
-          plot <- ggplot(plot_data, aes(V1, counts)) + geom_bar(stat='identity') +
+          plot <- ggplot(plot_data, aes(reorder(V1, -counts), counts)) + geom_bar(stat='identity') +
             labs(x = '',
                  y='VAs past due') +
             theme_bohemia() +
@@ -3572,7 +3572,7 @@ app_server <- function(input, output, session) {
                 # remove NA in parantheses
                 pdx <- pdx %>% filter(!grepl('NA', wid))
                 ggplot(data = pdx,
-                         aes(x = wid,
+                         aes(x = reorder(wid, -per_day),
                              y = per_day)) +
                       geom_bar(stat = 'identity') +
                     labs(x = 'FW',
@@ -3699,7 +3699,7 @@ app_server <- function(input, output, session) {
                 pdx <- pdx %>% filter(!is.na(forms))
                 pdx <- pdx %>% arrange(desc(per_worker))
                 ggplot(data = pdx,
-                       aes(x = todays_date,
+                       aes(x = reorder(todays_date, -per_worker),
                            y = per_worker)) +
                   geom_bar(stat = 'identity') +
                   labs(x = 'FW',
@@ -4383,7 +4383,7 @@ app_server <- function(input, output, session) {
                   # create plot for refusals
                   output$ref_plot <- renderPlot({
                     names(out_rf)[1] <- 'V1'
-                    ggplot(out_rf, aes(V1, `Number of refusals`)) + geom_bar(stat = 'identity') +
+                    ggplot(out_rf, aes(reorder(V1, -`Number of refusals`), `Number of refusals`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
                       theme(axis.text.x = element_text(angle=90, vjust = 0.5)) +
                       theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
@@ -4393,7 +4393,7 @@ app_server <- function(input, output, session) {
                   
                   output$ab_plot <- renderPlot({
                     names(out_ab)[1] <- 'V1'
-                    ggplot(out_ab, aes(V1, `Number of absences`)) + geom_bar(stat = 'identity') +
+                    ggplot(out_ab, aes(reorder(V1, -`Number of absences`), `Number of absences`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
                       theme(axis.text.x = element_text(angle=90, vjust = 0.5)) +
                       theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
