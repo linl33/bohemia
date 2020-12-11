@@ -466,7 +466,7 @@ anomalies <- bind_rows(
   anomalies_tza %>% mutate(country = 'Tanzania')
 )
 anomalies$date <- as.Date(anomalies$date)
-  # Drop old anomalies and add these ones to the database
+# Drop old anomalies and add these ones to the database
 # however, we don't want to drop any old anomalies that have a correction already
 # associated (since we want to give the site "credit" for that)
 corrections <- dbGetQuery(conn = con, "SELECT * FROM corrections;")
