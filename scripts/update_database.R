@@ -518,16 +518,27 @@ message(paste0(nrow(anomalies), ' total anomalies'),
         
 )
 
+
+replace_local_files <- TRUE
+if(replace_local_files){
+  remove_file <- '/tmp/Mozambique_efficient_local.RData'
+  if(file.exists(remove_file)){
+    file.remove(remove_file)
+  }
+  remove_file <- '/tmp/Tanzania_efficient_local.RData'
+  if(file.exists(remove_file)){
+    file.remove(remove_file)
+  }
+  
+  use_cached <- TRUE
+  for(the_country in c('Mozambique', 'Tanzania')){
+    out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached, con = con)
+  }
+}
+
+
 x = dbDisconnect(con)
 
-remove_file <- '/tmp/Mozambique_efficient_local.RData'
-if(file.exists(remove_file)){
-  file.remove(remove_file)
-}
-remove_file <- '/tmp/Tanzania_efficient_local.RData'
-if(file.exists(remove_file)){
-  file.remove(remove_file)
-}
 
 
 end_time <- Sys.time()
