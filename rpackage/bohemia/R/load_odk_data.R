@@ -80,7 +80,7 @@ load_odk_data <- function(the_country = 'Mozambique',
     if(!is.null(the_country)){
       # load smaller dataset
       if(efficient){
-        main <- dbGetQuery(con, paste0("SELECT instance_id,wid, device_id, start_time,end_time,hh_head_id,hh_hamlet_code, hh_hamlet,hh_id, hh_size, hh_n_cows_less_than_1_year, hh_n_pigs_less_than_6_weeks, n_nets_in_hh, todays_date, hh_country, hh_geo_location, hh_ward, hh_village, hh_district FROM clean_minicensus_main where server='", server_url, "'"))
+        main <- dbGetQuery(con, paste0("SELECT instance_id,wid, device_id, start_time,end_time,hh_head_id,hh_hamlet_code, hh_hamlet,hh_id, hh_size, hh_n_cows_less_than_1_year, hh_n_cows_greater_than_1_year, hh_n_pigs_less_than_6_weeks, hh_n_pigs_greater_than_6_weeks, n_nets_in_hh, hh_animals_distance_cattle_rainy_season_geo, hh_animals_distance_cattle_dry_season_geo, hh_animals_rainy_season_geo_pigs, hh_animals_dry_season_geo_pigs, todays_date, hh_country, hh_geo_location, hh_ward, hh_village, hh_district FROM clean_minicensus_main where server='", server_url, "'"))
       } else {
         main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main where server='", server_url, "'"))
       }
@@ -88,7 +88,7 @@ load_odk_data <- function(the_country = 'Mozambique',
     } else {
       if(efficient){
         # load smaller dataset
-        main <- dbGetQuery(con, paste0("SELECT instance_id, wid,device_id, start_time,end_time,hh_head_id,hh_hamlet_code, hh_hamlet,hh_id, hh_size, hh_n_cows_less_than_1_year, hh_n_pigs_less_than_6_weeks, n_nets_in_hh, todays_date, hh_country, hh_geo_location, hh_ward, hh_village, hh_district FROM clean_minicensus_main"))
+        main <- dbGetQuery(con, paste0("SELECT instance_id,wid, device_id, start_time,end_time,hh_head_id,hh_hamlet_code, hh_hamlet,hh_id, hh_size, hh_n_cows_less_than_1_year, hh_n_cows_greater_than_1_year, hh_n_pigs_less_than_6_weeks, hh_n_pigs_greater_than_6_weeks, n_nets_in_hh, hh_animals_distance_cattle_rainy_season_geo, hh_animals_distance_cattle_dry_season_geo, hh_animals_rainy_season_geo_pigs, hh_animals_dry_season_geo_pigs, todays_date, hh_country, hh_geo_location, hh_ward, hh_village, hh_district FROM clean_minicensus_main"))
       } else {
         main <- dbGetQuery(con, paste0("SELECT * FROM clean_minicensus_main"))
         
