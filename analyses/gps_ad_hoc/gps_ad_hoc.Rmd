@@ -1,0 +1,172 @@
+---
+title: "Ad-hoc GPS"
+author: "www.databrew.cc"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: "hide"
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = TRUE,
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 9.64,
+               fig.height = 5.9,
+               fig.path = 'figures/')
+```
+
+```{r}
+## Load libraries
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(sp)
+library(raster)
+library(viridis)
+library(ggthemes)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(RColorBrewer)
+library(readr)
+library(zoo)
+library(tidyr)
+options(scipen = '999')
+library(bohemia)
+library(geosphere)
+```
+
+```{r}
+# Define function for calculating distance
+calculate_distance <- function(shp, lat, lng){
+  p <- c(lng, lat)
+  # ll <- length(shp@polygons[[1]]@Polygons)
+  ll <- nrow(coordinates(shp))
+  out_list <- list()
+  for(i in 1:ll){
+    temp_points <- coordinates(shp)[i,]#shp@polygons[[1]]@Polygons[[ll]]@coords
+    out_list[[i]] <- temp_points
+  }
+  the_points <- do.call('rbind', out_list)
+  the_line <- SpatialPointsDataFrame(coords = the_points,
+                                     data = data.frame(id = 1:nrow(the_points)))
+  proj4string(the_line) <- proj4string(shp)
+  i = 1
+  out <- rep(NA, nrow(the_points))
+  for(i in 1:nrow(the_points)){
+    out[i] <- distm(c(the_points[i,]), c(lng, lat), fun = distHaversine)
+  }
+  df <- data.frame(the_points)
+  df$distance <- out
+  df$lng <- lng
+  df$lat <- lat
+  return(df)
+}
+```
+
+```{r}
+# Read in hamlets locations
+gps_sp <- gps <- bohemia::gps %>% filter(!is.na(lng)) %>%
+  mutate(x = lng, y = lat)
+coordinates(gps_sp) <- ~x+y
+# Segregate by country
+gps_tza <- gps_sp[gps_sp@data$iso == 'TZA',]
+gps_moz <- gps_sp[gps_sp@data$iso == 'MOZ',]
+# Calculate distances
+
+df_moz <- calculate_distance(shp = gps_moz,
+                         lng = 35.711553,
+                         lat = -17.979446)
+df_moz$code <- gps_moz@data$code
+df_moz$n_households <- round(gps_moz@data$n_households * 0.55, digits = 0)
+df_moz$lat <- gps_moz@data$lat
+df_moz$lng <- gps_moz@data$lng
+df_moz$hamlet <- gps_moz@data$hamlet
+
+df_tza <- calculate_distance(shp = gps_tza,
+                         lng = 38.984170,
+                         lat = -7.947843)
+df_tza$code <- gps_tza@data$code
+df_tza$n_households <- gps_tza@data$n_households
+df_tza$lat <- gps_tza@data$lat
+df_tza$lng <- gps_tza@data$lng
+df_tza$hamlet <- gps_tza@data$hamlet
+```
+
+```{r}
+if('data.RData' %in% dir()){
+  load('data.RData')
+} else {
+  pd_moz <- load_odk_data(the_country = 'Mozambique',
+                    credentials_path = '../../credentials/credentials.yaml',
+                    users_path = '../../credentials/users.yaml')
+  pd_tza <- load_odk_data(the_country = 'Tanzania',
+                      credentials_path = '../../credentials/credentials.yaml',
+                      users_path = '../../credentials/users.yaml')
+  
+  creds <- yaml::yaml.load_file('../../credentials/credentials.yaml')
+  psql_end_point = creds$endpoint
+  psql_user = creds$psql_master_username
+  psql_pass = creds$psql_master_password
+  drv <- RPostgres::Postgres()
+  library(DBI)
+  library(RPostgres)
+  con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                 port=5432,
+                 user=psql_user, password=psql_pass)
+  traccar <- dbGetQuery(conn = con,
+                        'SELECT * FROM traccar;')
+  
+  save(pd_moz,
+       pd_tza,
+       traccar,
+       file = 'data.RData')
+}
+minicensus_main <- bind_rows(
+  pd_moz$minicensus_main,
+  pd_tza$minicensus_main
+)
+minicensus_people <- bind_rows(
+  pd_moz$minicensus_people,
+  pd_tza$minicensus_people
+)
+na_to_zero <- function(x){ifelse(is.na(x), 0, x)}
+library(readxl)
+mopeia_remote_workers <- read_excel('data/Trabalhadores de campo acampados por localidade_ 02122020 v2 (1).xlsx')
+mopeia_remote_fids <- mopeia_remote_workers$Cod.
+```
+
+```{r}
+mopeia_remote_traccar <- traccar %>%
+  filter(unique_id %in% mopeia_remote_fids) 
+
+moz_mini <- pd_moz$minicensus_main %>%
+  mutate(remote = wid %in% mopeia_remote_fids) %>%
+  mutate(month = format(todays_date, '%m',)) %>%
+  mutate(worker_day = paste0(wid, todays_date)) %>%
+  group_by(month, remote = ifelse(remote, 'Remotely deployed', 'HQ based')) %>%
+  summarise(worker_days = length(unique(worker_day)),
+            forms = n()) %>%
+  mutate(forms_per_worker_day = forms / worker_days)
+
+ggplot(data = moz_mini,
+       aes(x = month,
+           y = forms_per_worker_day,
+           color = remote,
+           group = remote)) +
+  geom_line() +
+  geom_point() +
+  databrew::theme_simple() +
+  theme(legend.position = 'bottom') +
+  scale_color_manual(name = '',
+                     values = c('red', 'black'))
+
+```
