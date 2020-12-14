@@ -3554,7 +3554,7 @@ app_server <- function(input, output, session) {
               }  
                 pdx <- pdx %>%
                   mutate(per_day = forms / days) %>%
-                  mutate(label = paste0(forms, '\n',
+                  mutate(label = paste0(forms, '     ',
                                         days, ''))
                 pdx <- pdx %>% filter(!is.na(forms))
                 pdx <- pdx %>% arrange(desc(per_day))
@@ -3574,13 +3574,15 @@ app_server <- function(input, output, session) {
                 ggplot(data = pdx,
                          aes(x = reorder(wid, -per_day),
                              y = per_day)) +
-                      geom_bar(stat = 'identity') +
+                      geom_bar(stat = 'identity',
+                               alpha = 0.6) +
                     labs(x = 'FW',
                          y = 'Forms per (working) day',
                          caption = 'Numbers show forms on top, working days on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
                     theme_bohemia() +
                     geom_text(aes(label = label),
-                              nudge_y = 0, size = 4, alpha = 0.8) +
+                              nudge_y = 0, size = 3, alpha = 0.8,
+                              angle = 90) +
                   theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
                   theme(axis.text = element_text(size = 10),
                         axis.title = element_text(size = 14),
@@ -3694,7 +3696,7 @@ app_server <- function(input, output, session) {
                 }  
                 pdx <- pdx %>%
                   mutate(per_worker = forms / workers) %>%
-                  mutate(label = paste0(forms, '\n',
+                  mutate(label = paste0(forms, '    ',
                                         workers, ''))
                 pdx <- pdx %>% filter(!is.na(forms))
                 pdx <- pdx %>% arrange(desc(per_worker))
@@ -3707,7 +3709,8 @@ app_server <- function(input, output, session) {
                        caption = 'Numbers show forms on top, workers that day on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
                   theme_bohemia() +
                   geom_text(aes(label = label),
-                            nudge_y = 0, size = 5, alpha = 0.8) +
+                            nudge_y = 0, size = 3, alpha = 0.8,
+                            angle = 90) +
                   theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
                   theme(axis.text = element_text(size = 10),
                         axis.title = element_text(size = 14),
