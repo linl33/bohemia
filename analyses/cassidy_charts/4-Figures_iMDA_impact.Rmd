@@ -376,9 +376,12 @@ ggplot(data = pd,
 ## Figures 4 right half: Cumulative averted deaths due to BOHEMIA iMDA for all 10 countries.
 Given a Griffin scenario, the number of deaths averted due to the BOHEMIA iMDA.\
 ```{r, results = "asis", echo=F, fig.width=10, fig.height=6, fig.fullwidth=TRUE}
-png(paste0("./output/Figures_online/1.3_averted_deaths_all.png"), 600, 1000)
-par(mfrow=c(3,1))
+done_list <- list()
+strategies <- c('Conservative uptake','Rapid uptake','National 7 uptake')
+grifs <- rev(c('Innovate', 'Accelerate 2', 'Accelerate 1', 'No change', 'Sustain'))
+counter <- 0
 for (uptake.id in 1:3){
+  counter <- counter + 1
   avertdata<-NULL
   for (grif.rt.id in 1:5){
     avertdata.temp<-NULL
@@ -389,23 +392,35 @@ for (uptake.id in 1:3){
     avertdata[[grif.rt.id]]<-avertdata.temp
   }
   avert_matdeath<-matrix(unlist(avertdata),nrow=2,byrow=F)[,c(4,5,1,2,3)]
-  par(mar=c(4.1,0,1.1,2))
-  bp<-barplot(avert_matdeath/1000,horiz = TRUE,beside = T, xlim=c(0,590),ylim=c(0,18), cex.axis = 1.5, cex.lab = 1.5, cex.main=1.5, axisnames=FALSE,
-              legend.text = c('20% Efficacy','40% Efficacy'),
-              yaxt = 'n', xlab= 'Number of averted deaths in thousand',
-              args.legend = list(x = "topright",bty = 'n',cex = 1.7))
-      axis(2, at=apply(bp,2,mean), labels=grif.name[c(4,5,1,2,3)], tick=FALSE, las=2, line=-0.8, cex.axis = 1.4, cex.lab = 2)
-      text(y = bp, x = avert_matdeath/1000, label = signif(avert_matdeath/1000,3), pos = 4, cex = 1.5, col = "red")
+  out <- data.frame(t(avert_matdeath))
+  names(out) <- rev(c('40% Efficacy', '20% Efficacy'))
+  out$strategy <- strategies[counter]
+  out$grif <- grifs
+  done_list[[counter]] <- out
 }
+  
+done <- bind_rows(done_list)
+pd_right <- tidyr::gather(done, key, value, `40% Efficacy`:`20% Efficacy`)
 
-dev.off()
+pd_right$strategy <- factor(pd_right$strategy, levels = c('Conservative uptake',
+                                                    'Rapid uptake',
+                                                    'National 7 uptake'))
+pd_right$grif <- factor(pd_right$grif, levels = c('Sustain',
+                                      'No change',
+                                      'Accelerate 1',
+                                      'Accelerate 2',
+                                      'Innovate'))
+pd_right$value <- pd_right$value / 1000
 ```
 ## Figures 4 left half: Cumulative averted cases due to BOHEMIA iMDA for all 10 countries.
 Given a Griffin scenario, the number of deaths averted due to the BOHEMIA iMDA.\
-```{r, results = "asis", echo=F, fig.width=10, fig.height=6, fig.fullwidth=TRUE}
-png(paste0("./output/Figures_online/1.5_averted_deaths_all.png"), 600, 1000)
-par(mfrow=c(3,1))
-for (uptake.id in 1:2){
+```{r, results = "asis", echo=F, fig.width=10, fig.height=9, fig.fullwidth=TRUE}
+done_list <- list()
+strategies <- c('Conservative uptake','Rapid uptake','National 7 uptake')
+grifs <- rev(c('Innovate', 'Accelerate 2', 'Accelerate 1', 'No change', 'Sustain'))
+counter <- 0
+for (uptake.id in 1:3){
+  counter <- counter + 1
   avertdata<-NULL
   avertdata.case <- NULL
   for (grif.rt.id in 1:5){
@@ -421,182 +436,55 @@ for (uptake.id in 1:2){
   }
   avert_matdeath<-matrix(unlist(avertdata),nrow=2,byrow=F)[,c(4,5,1,2,3)]
   avert_mat<-matrix(unlist(avertdata.case),nrow=2,byrow=F)[,c(4,5,1,2,3)]
-  par(mar=c(4.1,6.8,1.1,0.5))
-  bp1 = barplot(-avert_mat/1000000,horiz = TRUE,beside = T, xlim=c(-350,0), ylim=c(0,18), cex.axis = 1.5, cex.lab = 1.5, cex.main=1.5, xlab= 'Number of averted cases in million')
-             
-      title(paste0(uptake.name[uptake.id],' Uptake'), cex.main=1.5,adj=0, line=-2)
-      axis(2, at=apply(bp1,2,mean), labels=grif.name[c(4,5,1,2,3)], tick=FALSE, las=2, line=-0.8, cex.axis = 1.4, cex.lab = 2)
-      text(y = bp1, x = -avert_mat/1000000-25, label = signif(avert_mat/1000000,3), pos = 4, cex = 1.5, col = "red")
-      
-
-}
-
-dev.off()
-```
-
-
-#####################################Online Supplements################################################
-# Figures for Each Country
-## Figures1.1: Change in malaria incidence for each country
-```{r, results = "asis", echo=F, fig.width=10, fig.height=6, fig.fullwidth=TRUE}
-figure_folder = './output/Figures_online/'
-for (country.data.id in 1:9){
- 
-  png(paste0(figure_folder, "1.1_malaria_cases_",country.name[country.data.id],".png"), 600, 1000)
-  par(mfrow=c(3,1))
-  for (uptake.id in 1:3){
-    casedata<-NULL
-    for (grif.rt.id in 1:5){
-      casedata.temp<-NULL
-      for (eff.id in 1:2){
-       case.temp<-data.frame(temp[[uptake.id]][[eff.id]][[grif.rt.id]][[1]][[country.data.id]][[1]])
-        if (eff.id == 1){
-         casedata.temp<-rbind(case.temp[,2]/case.temp[,1],case.temp[,4]/case.temp[,1])
-        }else{
-         casedata.temp<-rbind(casedata.temp,case.temp[,4]/case.temp[,1])
-        }
-      }
-      casedata[[grif.rt.id]]<-casedata.temp[,1:10]*1000
-    }
-    par(mar=c(5.1,5.1,4.1,2.1))
-  max_y<-max(casedata[[4]])
-  plot(1:dim(casedata[[1]])[2]+year.init-1, casedata[[1]][1,], type='l', col = 1, lty = 1, lwd = 2,
-       ylim=c(0,max_y),ylab='Incidence per 1000 people at risk',xlab='Year', cex.main=1.5,
-       cex.lab=1.5,cex.axis=1.5,main=paste0(uptake.name[uptake.id],' uptake'))
-  lines(1:dim(casedata[[1]])[2]+year.init-1, casedata[[1]][2,], type='l', col = 1, lty = 2, lwd = 2)
-  lines(1:dim(casedata[[1]])[2]+year.init-1, casedata[[1]][3,], type='l', col = 1, lty = 3, lwd = 2)
-  for (i in 2:5){
-    for (j in 1:3){
-      lines(1:dim(casedata[[1]])[2]+year.init-1, casedata[[i]][j,], type='l', col = i*2, lty = j, lwd = 2)
-    }
-  }
-  legend('bottomleft',c(grif.name[c(4,5,1,2,3)]),
-         lty=1,lwd=2,bty='n',col=c(8,10,1,4,6),text.col=c(8,10,1,4,6),cex=1.5)
-  legend('bottom',c('Baseline scenario','20% efficacy','40% efficacy'),
-         lty=c(1:3),lwd=2,bty='n',cex=1.5)
-
-}
-
-dev.off()
-}
-```
-
-## Figures1.2: Cumulative averted incidence cases due to BOHEMIA ivermectin MDA for each country
-Given a Griffin scenario, the number of cases averted due to the BOHEMIA iMDA.\
-```{r, results = "asis", echo=F, fig.width=10, fig.height=6, fig.fullwidth=TRUE}
-for (country.data.id in 1:9){
   
-  png(paste0(figure_folder, "1.2_averted_cases_",country.name[country.data.id],".png"), 600, 1000)
-  par(mfrow=c(3,1))
-  for (uptake.id in 1:3){
-    avertdata<-NULL
-    for (grif.rt.id in 1:5){
-      avertdata.temp<-NULL
-      for (eff.id in 1:2){
-        avert.temp<-temp[[uptake.id]][[eff.id]][[grif.rt.id]][[1]][[country.data.id]][[5]]
-        avertdata.temp<-c(avertdata.temp,avert.temp[length(avert.temp)])
-      }
-     avertdata[[grif.rt.id]]<-avertdata.temp
-    }
-    avert_mat<-matrix(unlist(avertdata),nrow=2,byrow=F)[,c(4,5,1,2,3)]
-  par(mar=c(5.1,6.8,4.1,2.1))
-  if(country.data.id ==1){
-    xlim=c(0,130)
-  }else if(country.data.id==2){
-    xlim=c(0,70)
-  }else{
-    xlim = c(0,30)
-  }
-    bp<-barplot(avert_mat/1000000,horiz = TRUE,beside = T, xlim=xlim, ylim=c(0,18), cex.axis = 1.5, cex.lab = 1.5,  cex.main=1.5,legend.text = c('20% Efficacy','40% Efficacy'),
-              names.arg = grif.name[c(4,5,1,2,3)], yaxt = 'n', xlab= 'Number of averted cases in million',
-              args.legend = list(x = "topright",bty = 'n',cex=1.7), 
-              main = paste0(uptake.name[uptake.id],' Uptake'))
-      axis(2, at=apply(bp,2,mean), labels=grif.name[c(4,5,1,2,3)], tick=FALSE, las=2, line=-0.8, cex.axis = 1.4, cex.lab = 2)
-      text(y = bp, x = avert_mat/1000000, label = signif(avert_mat/1000000,2), pos = 4, cex = 1.5, col = "red")  
-}
-dev.off()
-}
-```
-
-## Figures1.3: Cumulative averted incidence deaths due to BOHEMIA ivermectin MDA for each country
-Given a Griffin scenario, the number of deaths averted due to the BOHEMIA iMDA.\
-```{r, results = "asis", echo=F, fig.width=10, fig.height=6, fig.fullwidth=TRUE}
-for (country.data.id in 1:9){
+  out <- data.frame(t(avert_mat))
+  names(out) <- rev(c('40% Efficacy', '20% Efficacy'))
+  out$strategy <- strategies[counter]
+  out$grif <- grifs
+  done_list[[counter]] <- out
   
-  png(paste0(figure_folder, "1.3_averted_deaths_",country.name[country.data.id],".png"), 600, 1000)
-  par(mfrow=c(3,1))
-  for (uptake.id in 1:3){
-    avertdata<-NULL
-    for (grif.rt.id in 1:5){
-      avertdata.temp<-NULL
-        for (sev.case.id in 1:2){
-        avert.temp<-temp[[uptake.id]][[eff.id]][[grif.rt.id]][[1]][[country.data.id]][[6]]
-        avertdata.temp<-c(avertdata.temp,avert.temp[length(avert.temp)])
-      }
-     avertdata[[grif.rt.id]]<-avertdata.temp
-    }
- avert_matdeath<-matrix(unlist(avertdata),nrow=2,byrow=F)[,c(4,5,1,2,3)]
-  par(mar=c(5.1,6.8,4.1,2))
-  if(country.data.id ==1){
-    xlim=c(0,200)
-  }else if(country.data.id==2){
-    xlim=c(0,105)
-  }else{
-    xlim = c(0,65)
-  }
-  bp<-barplot(avert_matdeath/1000,horiz = TRUE,beside = T, xlim=xlim,ylim=c(0,18), cex.axis = 1.5, cex.lab = 1.5, cex.main=1.5,
-              legend.text = c('20% Efficacy','40% Efficacy'),
-              names.arg = grif.name[c(4,5,1,2,3)], yaxt = 'n', xlab= 'Number of averted deaths in thousand',
-              args.legend = list(x = "topright",bty = 'n',cex = 1.7), 
-              main = paste0(uptake.name[uptake.id],' Uptake'))
-      axis(2, at=apply(bp,2,mean), labels=grif.name[c(4,5,1,2,3)], tick=FALSE, las=2, line=-0.8, cex.axis = 1.4, cex.lab = 2)
-      text(y = bp, x = avert_matdeath/1000, label = signif(avert_matdeath/1000,3), pos = 4, cex = 1.5, col = "red")
 }
-dev.off()
-}
+  
+done <- bind_rows(done_list)
+pd_left <- tidyr::gather(done, key, value, `40% Efficacy`:`20% Efficacy`)
+
+pd_left$strategy <- factor(pd_left$strategy, levels = c('Conservative uptake',
+                                                    'Rapid uptake',
+                                                    'National 7 uptake'))
+pd_left$grif <- factor(pd_left$grif, levels = c('Sustain',
+                                      'No change',
+                                      'Accelerate 1',
+                                      'Accelerate 2',
+                                      'Innovate'))
+pd_left$value <- pd_left$value / 1000000 * -1
+
+options(scipen = 999)
+pd <- bind_rows(
+  pd_right,
+  pd_left
+)
+ggplot(data = pd,
+       aes(x = grif,
+           y = value,
+           fill = key)) +
+  geom_bar(position = position_dodge(width = 0.9),
+           stat = 'identity') +
+  facet_wrap(~strategy, ncol = 1) +
+  coord_flip() +
+  geom_text(aes(label = round(value),
+                y = ifelse(value < 0, value - 17, value + 17)),
+                color = 'black',
+            position = position_dodge(width = 0.9),
+            size = 3) +
+  geom_hline(yintercept = 0) +
+  labs(y = 'Number of averted cases (millions)                             Number of averted deaths (thousands)',
+       x = '') +
+  databrew::theme_simple() +
+  theme(legend.position = 'bottom',
+        axis.title = element_text(size = 12)) +
+  scale_fill_manual(name = '',
+                    values = c('black', 'darkgrey'))
+
+  
+  
 ```
-
-## Figures1.4: Cumulative averted financial costs due to BOHEMIA ivermectin MDA for each country
-Given a Griffin scenario, the treatment costs averted due to BOHEMIA iMDA. These figures show the marginal effect of BOHEMIA iMDA.\
-```{r, results = "asis", echo=F, fig.width=10, fig.height=6, fig.fullwidth=TRUE}
-for (country.data.id in 1:9){
-  png(paste0(figure_folder, "1.4_averted_cost_",country.name[country.data.id],".png"), 600, 1000)
-  par(mfrow=c(3,1))
-
-  for (uptake.id in 1:3){
-  bardata<-NULL
-  for (grif.rt.id in 1:5){
-    bardata.temp<-NULL
-    for (eff.id in 1:2){
-      for (sev.case.id in 1:2){
-        avert.temp<-temp[[uptake.id]][[eff.id]][[grif.rt.id]][[sev.case.id]][[country.data.id]][[2]]
-        bardata.temp<-c(bardata.temp,avert.temp[length(avert.temp)])
-      }
-    }
-    bardata[[grif.rt.id]]<-bardata.temp
-  }
-  bar_mat<-matrix(unlist(bardata),nrow=4,byrow=F)[,c(4,5,1,2,3)]   # reorder the Griffin scenario
-  par(mar=c(5.1,6.8,4.1,2.1))
-    if(country.data.id ==1){
-    xlim=c(0,810)
-  }else if(country.data.id==2){
-    xlim=c(0,410)
-  }else{
-    xlim = c(0,200)
-  }
-  bp<-barplot(bar_mat/1000000,horiz = TRUE,beside = T,xlim=xlim, cex.axis = 1.5, cex.lab = 1.5, cex.main=1.5,
-              legend.text = c('20% Efficacy, 1% severe cases','20% Efficacy, 3% severe cases',
-                              '40% Efficacy, 1% severe cases','40% Efficacy, 3% severe cases'),
-              names.arg = grif.name[c(4,5,1,2,3)], yaxt = 'n', xlab= 'Dollars (million)',
-              args.legend = list(x = "topright",bty = 'n', cex=1.7), 
-              col = c("#E69F00", "black", "lightgrey","#4100E6"),
-              main = paste0(uptake.name[uptake.id],' Uptake'))
-      axis(2, at=apply(bp,2,mean), labels=grif.name[c(4,5,1,2,3)], tick=FALSE, las=2, line=-0.8, cex.axis = 1.4, cex.lab = 2)
-      text(y = bp, x = bar_mat/1000000, label = signif(bar_mat/1000000,3), pos = 4, cex = 1.5, col = "red")
-}
-
-dev.off()
-}
-```
-
-
