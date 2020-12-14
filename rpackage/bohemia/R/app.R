@@ -1414,7 +1414,7 @@ app_server <- function(input, output, session) {
       # Create a progress table
       target <- ifelse(co == 'Tanzania', 
                        estimated_households$data %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
-                       30467)
+                       30803)
       progress_table <- tibble(`Forms finished` = nrow(pd),
                                `Estimated total forms` = target,
                                `Estimated forms remaining` = target - nrow(pd),
@@ -1855,7 +1855,7 @@ app_server <- function(input, output, session) {
       # target <- sum(gps$n_households[gps$iso == iso], na.rm = TRUE)
       target <- ifelse(iso == 'TZA', 
                        estimated_households$data %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
-                       30467)
+                       30803)
       
       # save(pd, file = 'temp_pd.rda')
       # create a placeholder for number of fieldworkers. 
@@ -1901,7 +1901,7 @@ app_server <- function(input, output, session) {
         total_forms_fw <- 500
         total_daily_country <- 1000
         total_weekly_country <- total_daily_country*5
-        total_forms <- 30467
+        total_forms <- 30803
         total_weeks <- round(total_forms/total_weekly_country,2)
         total_days <- total_weeks*7
       }
@@ -1967,7 +1967,7 @@ app_server <- function(input, output, session) {
     if(pd_ok){
       target <- ifelse(co == 'Tanzania', 
                        estimated_households$data %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
-                       30467)
+                       30803)
       x <- pd %>%
         group_by(date = as.Date(todays_date)) %>%
         tally %>%
@@ -2008,7 +2008,7 @@ app_server <- function(input, output, session) {
     if(pd_ok){
       target <- ifelse(co == 'Tanzania', 
                        estimated_households$data %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
-                       30467)
+                       30803)
       progress_table <- tibble(`Forms finished` = nrow(pd),
                                `Estimated total forms` = target,
                                `Estimated forms remaining` = target - nrow(pd),

@@ -43,7 +43,8 @@ already_on_server <- odk_list_submissions(
   id = id,
   user = user,
   password = password,
-  pre_auth = TRUE
+  pre_auth = TRUE,
+  chunk_size = 50000
 )
 # Get thosw which still need to be uploaded
 still <- files[!gsub('uuid', 'uuid:', files, fixed = TRUE) %in% already_on_server]
