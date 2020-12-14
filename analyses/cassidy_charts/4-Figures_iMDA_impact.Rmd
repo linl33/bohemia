@@ -60,7 +60,7 @@ m2 = tm_shape(World, bbox = bhu_bb) +
     tm_polygons(col = "deaths_point_estimated", palette="YlOrRd", style="cont",  title="Malaria deaths") +
     tm_text("iso_a3", size = 0.6) +
     tm_layout(frame = T, legend.position = c("left", "bottom"), bg.color="lightcyan1",
-              legend.title.size=1.5, legend.text.size = 0.5) 
+              legend.title.size=1.2, legend.text.size = 0.7) 
 
 
 tmap_arrange(m1, m2, nrow = 1)
@@ -208,7 +208,7 @@ for (uptake.id in 1:3){
 
 # Figures for all Country Together
 ## Figures 2: Change in malaria cases for all 10 countries
-```{r, results = "asis", echo=F, fig.width=10, fig.height=6, fig.fullwidth=TRUE}
+```{r, results = "asis", echo=F, fig.width=10, fig.height=9, fig.fullwidth=TRUE}
 # graphics.off()
 #pdf("./output/1.1_malaria_cases.pdf", width = 6, height = 10)
 out_list <- final_list <- list()
@@ -300,13 +300,18 @@ ggplot(data = pd,
  
 ```
 
-## Figures 3: Cumulative averted financial costs due to BOHEMIA ivermectin MDA for all 10 countries.
-Given a Griffin scenario, the treatment costs averted due to BOHEMIA iMDA. These figures show the marginal effect of BOHEMIA iMDA. Note that, the calculation does not account for money saved from deaths averted.\
-```{r, results = "asis", echo=F, fig.width=10, fig.height=6, fig.fullwidth=TRUE}
+## Figures 4
 
-png("./output/Figures_online/1.4_averted_cost_all.png", 700, 1000)
-par(mfrow=c(3,1))
+```{r, results = "asis", echo=F, fig.width=10, fig.height=9, fig.fullwidth=TRUE}
+done_list <- list()
+strategies <- c('Innovate', 'Accelerate 2', 'Accelerate 1', 'No change', 'Sustain')
+strategies <- rev(strategies)
+# strategies <- strategies[c(4,5,1,2,3)]
+key_values <- c('20% Efficacy, 1% severe cases','20% Efficacy, 3% severe cases',
+                              '40% Efficacy, 1% severe cases','40% Efficacy, 3% severe cases')
+counter <- 0
 for (uptake.id in 1:3){
+  counter <- counter +1
   bardata<-NULL
   for (grif.rt.id in 1:5){
     bardata.temp<-NULL
@@ -319,19 +324,52 @@ for (uptake.id in 1:3){
     bardata[[grif.rt.id]]<-bardata.temp
   }
   bar_mat<-matrix(unlist(bardata),nrow=4,byrow=F)[,c(4,5,1,2,3)]   # reorder the Griffin scenario
-  par(mar=c(5.1,6.8,4.1,2.1))
-  bp<-barplot(bar_mat/1000000,horiz = TRUE,beside = T,xlim=c(0, 2250), cex.axis = 1.5, cex.lab = 1.5, cex.main=1.5,
-              legend.text = c('20% Efficacy, 1% severe cases','20% Efficacy, 3% severe cases',
-                              '40% Efficacy, 1% severe cases','40% Efficacy, 3% severe cases'),
-              names.arg = grif.name[c(4,5,1,2,3)], yaxt = 'n', xlab= 'Dollars (million)',
-              args.legend = list(x = "topright",bty = 'n', cex=1.7), 
-              col = c("#E69F00", "black", "lightgrey","#4100E6"),
-              main = paste0(uptake.name[uptake.id],' Uptake'))
-      axis(2, at=apply(bp,2,mean), labels=grif.name[c(4,5,1,2,3)], tick=FALSE, las=2, line=-0.8, cex.axis = 1.4, cex.lab = 2)
-      text(y = bp, x = bar_mat/1000000, label = signif(bar_mat/1000000,3), pos = 4, cex = 1.5, col = "red")
+  bar_mat <- bar_mat / 1000000
+  out <- data.frame(bar_mat)
+  out$key <- key_values
+  out$uptake_id <- uptake.id
+  names(out)[1:5] <- strategies
+  done_list[[counter]] <- out
 }
+done <- bind_rows(done_list)
+done$uptake_id <- 
+  ifelse(done$uptake_id == 1, 'Conservative uptake',
+         ifelse(done$uptake_id == 2, 'Rapid uptake',
+                ifelse(done$uptake_id == 3, 'National 7 uptake', NA)))
+pd <- done %>%
+  tidyr::gather(uptake, value, Innovate:Sustain)
 
-dev.off()
+pd$uptake_id <- factor(pd$uptake_id, levels = c('Conservative uptake',
+                                                    'Rapid uptake',
+                                                    'National 7 uptake'))
+pd$uptake <- factor(pd$uptake, levels = c('Sustain',
+                                      'No change',
+                                      'Accelerate 1',
+                                      'Accelerate 2',
+                                      'Innovate'))
+pd$key <- factor(pd$key, levels = key_values)
+ggplot(data = pd,
+       aes(x = uptake,
+           y = value,
+           group = key,
+           fill = key)) +
+  facet_wrap(~uptake_id, ncol = 1) +
+  geom_bar(stat = 'identity', position = position_dodge(width = 0.9),
+           alpha = 0.8) +
+  databrew::theme_simple() +
+  scale_fill_manual(name = '',
+                    values = cols[c(1,2,4,5)]) +
+  theme(legend.position = 'bottom',
+        legend.text = element_text(size = 8)) +
+  labs(x = '',
+       y = 'Dollars (millions)') +
+  geom_text(aes(label = round(value),
+                y = value - 30),
+            position = position_dodge(width = 0.9),
+            alpha = 0.9, col = 'white', size = 2) +
+  coord_flip()
+
+  
 ```
 
 
