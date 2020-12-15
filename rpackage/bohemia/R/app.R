@@ -1558,8 +1558,8 @@ app_server <- function(input, output, session) {
     ehd <- estimated_households$data
     time_period <- input$progress_by_date
     
-    # save(pd, co, the_iso, ehd, time_period, file = '/tmp/pd.RData')
-    
+    # save(pd, co, the_iso, ehd, enum,time_period, file = '/tmp/pd.RData')
+
     # get country
     pd <- pd %>% filter(hh_country==co)
   
@@ -1609,20 +1609,38 @@ app_server <- function(input, output, session) {
       if(dt_choose_form=='Minicensus'){
         # get overall progress by hamlet code
         progress_by <- joined %>% left_join(locations %>% dplyr::select(code, Hamlet, District, Ward, Village), by = 'code')
-      } else {
+      } else if(dt_choose_form=='Enumerations') {
         # get overall progress by hamlet code
         progress_by <- joined_enum %>% left_join(locations %>% dplyr::select(code, Hamlet, District, Ward, Village), by = 'code')
+      } else {
+        joined_enum$data <- 'Enumerations'
+        joined$data <- 'Minicensus'
+        joined <- rbind(joined, joined_enum)
+        progress_by <- joined %>% left_join(locations %>% dplyr::select(code, Hamlet, District, Ward, Village), by = 'code')
       }
      
-      # by district
-      progress_by_district <- progress_by %>% group_by(District) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
-      # by ward
-      progress_by_ward <- progress_by %>% group_by(Ward) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
-      # by village
-      progress_by_village <- progress_by %>% group_by(Village) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
-      # by hamlet
-      progress_by_hamlet <- progress_by %>%ungroup %>% group_by(Hamlet) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE), .groups = 'drop') %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
-      
+      if(dt_choose_form =='Both'){
+        # by district
+        progress_by_district <- progress_by %>% group_by(District,data) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+        # by ward
+        progress_by_ward <- progress_by %>% group_by(Ward,data) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+        # by village
+        progress_by_village <- progress_by %>% group_by(Village,data) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+        # by hamlet
+        progress_by_hamlet <- progress_by %>%ungroup %>% group_by(Hamlet,data) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE), .groups = 'drop') %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+        
+      } else {
+        # by district
+        progress_by_district <- progress_by %>% group_by(District) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+        # by ward
+        progress_by_ward <- progress_by %>% group_by(Ward) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+        # by village
+        progress_by_village <- progress_by %>% group_by(Village) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+        # by hamlet
+        progress_by_hamlet <- progress_by %>%ungroup %>% group_by(Hamlet) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE), .groups = 'drop') %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
+        
+      }
+ 
       by_geo <- field_monitoring_geo() 
       
       if(is.null(by_geo)){
@@ -1663,24 +1681,37 @@ app_server <- function(input, output, session) {
       
       message('---created progess plot for Overview by geography')
       names(monitor_plot)[1] <- 'location'
-      if(make_percent){
-        out <- ggplot(monitor_plot, aes(reorder(location,-`Percent finished`), `Percent finished`)) + geom_bar(stat='identity') +
-          geom_text(aes(label=`Percent finished`), vjust=-0.1)+
+      if(dt_choose_form=='Both'){
+        out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator, fill=data)) + geom_bar(stat='identity',alpha=0.7) +
+          scale_fill_manual(name='', values=c('darkblue', 'darkgreen')) +
+          # geom_text(aes(label=numerator), position = 'stack', vjust=1.5)+
           labs(x = '',
                y ='') + 
           theme_bohemia() +
           theme(axis.text.x  = element_text(angle=90, vjust=0.5),
                 axis.ticks.x = element_blank())
+        
       } else {
-        out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator)) + geom_bar(stat='identity') +
-          geom_text(aes(label=numerator), vjust=-0.1)+
-          labs(x = '',
-               y ='') + 
-          theme_bohemia() +
-          theme(axis.text.x  = element_text(angle=90, vjust=0.5),
-                axis.ticks.x = element_blank())
+        if(make_percent){
+          out <- ggplot(monitor_plot, aes(reorder(location,-`Percent finished`), `Percent finished`)) + geom_bar(stat='identity') +
+            geom_text(aes(label=`Percent finished`), vjust=-0.1)+
+            labs(x = '',
+                 y ='') + 
+            theme_bohemia() +
+            theme(axis.text.x  = element_text(angle=90, vjust=0.5),
+                  axis.ticks.x = element_blank())
+        } else {
+          out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator)) + geom_bar(stat='identity') +
+            geom_text(aes(label=numerator), vjust=-0.1)+
+            labs(x = '',
+                 y ='') + 
+            theme_bohemia() +
+            theme(axis.text.x  = element_text(angle=90, vjust=0.5),
+                  axis.ticks.x = element_blank())
+        }
+        
       }
-     
+      
      
      
     }
@@ -1815,7 +1846,7 @@ app_server <- function(input, output, session) {
                          tabPanel('Table',
                                   div(DT::dataTableOutput('dt_monitor_by_table'), style = "font-size:80%")),
                          tabPanel('Plot',
-                                  selectInput('dt_choose_form', 'Choose form', choices = c('Minicensus', 'Enumerations')),
+                                  selectInput('dt_choose_form', 'Choose form', choices = c('Minicensus', 'Enumerations', 'Both')),
                                   checkboxInput(inputId = 'make_percent', label = 'Show percentage', value = FALSE),
                                   plotOutput('dt_monitor_by_plot')),
                          tabPanel('Map',
@@ -3488,7 +3519,6 @@ app_server <- function(input, output, session) {
                                 va_days = length(unique(todays_date)))
                   )
                 
-
                 # Restructure
                 ui_fw_plot_form <- input$ui_fw_plot_form
                 if(is.null(ui_fw_plot_form)){
@@ -3516,12 +3546,12 @@ app_server <- function(input, output, session) {
                     # save(pdx, fids, file = '/tmp/dec2.RData')
                     right <- fids %>%
                       mutate(wid = bohemia_id) %>%
-                      dplyr::select(wid, Role) %>%
+                      dplyr::select(wid, Role, first_name, last_name) %>%
                       mutate(wid = as.numeric(as.character(wid)))
                     pdx <- left_join(
                       pdx %>% mutate(wid = as.numeric(as.character(wid))),
                       right)%>%
-                      mutate(wid = paste0(wid, ' (', Role, ')'))
+                      mutate(wid = paste0(wid,' ', first_name, ' ', last_name, ' (', Role, ')'))
                     # add denominator for daily target
                     pdx$daily_target <- fw_daily_target
                     pdx$percent_of_daily_target <- round((pdx$per_day/pdx$daily_target)*100, 2)
@@ -3562,12 +3592,12 @@ app_server <- function(input, output, session) {
                 # save(pdx, fids, file = '/tmp/dec2.RData')
                 right <- fids %>%
                   mutate(wid = bohemia_id) %>%
-                  dplyr::select(wid, Role) %>%
+                  dplyr::select(wid, Role, first_name, last_name) %>%
                   mutate(wid = as.numeric(as.character(wid)))
                 pdx <- left_join(
                   pdx %>% mutate(wid = as.numeric(as.character(wid))),
                                  right)%>%
-                  mutate(wid = paste0(wid, ' (', Role, ')'))
+                  mutate(wid = paste0(wid,' ', first_name, ' ', last_name, ' (', Role, ')'))
                 
                 # remove NA in parantheses
                 pdx <- pdx %>% filter(!grepl('NA', wid))
