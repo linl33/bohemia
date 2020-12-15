@@ -4148,18 +4148,14 @@ app_server <- function(input, output, session) {
       
       sub_data$time_of_day <- as.character(sub_data$time_of_day)
       sub_data$day <- as.character(sub_data$day)
-      
-    }
-    if(nrow(sub_data) < 1){
-      ok <- FALSE
-    }
-    if(ok){
       out <- sub_data %>%
         group_by(Hour = time_of_day) %>%
         summarise(`GPS pings` = n())
+     
     } else {
       NULL
     }
+    
   })
   
   observeEvent(input$traccar_table_1_rows_selected,{
