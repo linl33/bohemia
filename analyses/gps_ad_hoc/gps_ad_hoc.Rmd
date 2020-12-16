@@ -145,6 +145,28 @@ mopeia_remote_fids <- mopeia_remote_workers$Cod.
 ```
 
 ```{r}
+any_form <- minicensus_main %>%
+  group_by(hh_country, wid) %>%
+  summarise(last5 = max(todays_date) >= (Sys.Date()-5)) %>%
+  filter(last5)
+any_gps <- traccar %>%
+  mutate(date = as.Date(devicetime)) %>%
+  filter(date >= (Sys.Date()-5)) %>%
+  group_by(wid = unique_id) %>%
+  tally
+joined <- 
+  left_join(
+    any_form,
+    any_gps
+  ) %>%
+  mutate(n = ifelse(is.na(n), 0, n))
+joined %>%
+  group_by(hh_country) %>%
+  summarise(wids = length(unique(wid)),
+            gps = length(which(n > 0)))
+```
+
+```{r}
 mopeia_remote_traccar <- traccar %>%
   filter(unique_id %in% mopeia_remote_fids) 
 
