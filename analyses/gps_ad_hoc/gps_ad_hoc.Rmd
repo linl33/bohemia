@@ -144,6 +144,10 @@ mopeia_remote_workers <- read_excel('data/Trabalhadores de campo acampados por l
 mopeia_remote_fids <- mopeia_remote_workers$Cod.
 ```
 
+## GPS data availability on recently active fieldworkers
+
+The below table shows the number of recently active fieldworkers (minicensus form submitted in last five days) and the number among them with any GPS data from the last five days.
+
 ```{r}
 any_form <- minicensus_main %>%
   group_by(hh_country, wid) %>%
@@ -162,33 +166,104 @@ joined <-
   mutate(n = ifelse(is.na(n), 0, n))
 joined %>%
   group_by(hh_country) %>%
-  summarise(wids = length(unique(wid)),
-            gps = length(which(n > 0)))
+  summarise(`Recently active` = length(unique(wid)),
+            `Has GPS` = length(which(n > 0)))
 ```
 
+# Remotely field-deployed workers in Mopeia
+
+The below chart shows the number of average minicensus forms collected per day by remotely deployed workers in Mopeia (red) versus those who are not remotely deployed (black). This is per the spreadsheet sent by Elena ("Trabalhadores de campo acampados por localidade_ 02122020 v2.xlsx"), and does not take into account device-generated GPS data.
+
 ```{r}
+cols <- rev(c('red', 'black'))
 mopeia_remote_traccar <- traccar %>%
   filter(unique_id %in% mopeia_remote_fids) 
+
 
 moz_mini <- pd_moz$minicensus_main %>%
   mutate(remote = wid %in% mopeia_remote_fids) %>%
   mutate(month = format(todays_date, '%m',)) %>%
   mutate(worker_day = paste0(wid, todays_date)) %>%
-  group_by(month, remote = ifelse(remote, 'Remotely deployed', 'HQ based')) %>%
+  group_by(date = todays_date, remote = ifelse(remote, 'Remotely deployed', 'HQ based')) %>%
   summarise(worker_days = length(unique(worker_day)),
             forms = n()) %>%
-  mutate(forms_per_worker_day = forms / worker_days)
+  mutate(forms_per_worker_day = forms / worker_days) %>%
+  filter(worker_days >= 10)
 
 ggplot(data = moz_mini,
-       aes(x = month,
+       aes(x = date,
            y = forms_per_worker_day,
            color = remote,
            group = remote)) +
   geom_line() +
-  geom_point() +
+  geom_point(aes(size = worker_days), alpha = 0.7, show.legend = FALSE) +
+  geom_smooth(method = lm, formula = y ~ splines::bs(x, 8), se = FALSE) +
   databrew::theme_simple() +
   theme(legend.position = 'bottom') +
   scale_color_manual(name = '',
-                     values = c('red', 'black'))
+                     values = cols) +
+  labs(x = 'Date', y = 'Forms per worker')
 
+
+# moz_mini <- pd_moz$minicensus_main %>%
+#   mutate(remote = wid %in% mopeia_remote_fids) %>%
+#   mutate(month = format(todays_date, '%m',)) %>%
+#   mutate(worker_day = paste0(wid, todays_date)) %>%
+#   group_by(month, remote = ifelse(remote, 'Remotely deployed', 'HQ based')) %>%
+#   summarise(worker_days = length(unique(worker_day)),
+#             forms = n()) %>%
+#   mutate(forms_per_worker_day = forms / worker_days)
+# 
+# ggplot(data = moz_mini,
+#        aes(x = month,
+#            y = forms_per_worker_day,
+#            color = remote,
+#            group = remote)) +
+#   geom_line() +
+#   geom_point() +
+#   databrew::theme_simple() +
+#   theme(legend.position = 'bottom') +
+#   scale_color_manual(name = '',
+#                      values = cols)
 ```
+
+
+The below chart shows the same data but in a slightly different way. The x-axis is the number of forms per worker-day (among workers who collected any forms that day), and the y-axis is the density (ie, the relative amount of days in that month at the collection rate in the x-axis). It appears that the two worker groups had very similar performance during months 10 and 11 (Oct and Nov, respectively), but sharp divergence in month 12 (Dec). Of particular note is the very concentrated distribution around 4-6 forms per day among the HQ based workers vs many worker-days at >7 forms per day among field-deployed workers. This suggests that the field deployment (assuming it took place beginning in December) has had a significant positive effect.
+
+```{r}
+cols <- rev(c('red', 'black'))
+mopeia_remote_traccar <- traccar %>%
+  filter(unique_id %in% mopeia_remote_fids) 
+
+
+moz_mini <- pd_moz$minicensus_main %>%
+  mutate(remote = wid %in% mopeia_remote_fids) %>%
+  mutate(month = paste0('Month: ', format(todays_date, '%m'))) %>%
+  mutate(worker_day = paste0(wid, todays_date)) %>%
+  group_by(month, remote = ifelse(remote, 'Remotely deployed', 'HQ based')) %>%
+  group_by(month, remote, todays_date) %>%
+  summarise(forms = n(),
+            workers = length(unique(wid))) %>%
+  mutate(y = forms / workers)
+  # summarise(worker_days = length(unique(worker_day)),
+  #           forms = n()) %>%
+  # mutate(forms_per_worker_day = forms / worker_days) %>%
+  # filter(worker_days >= 10)
+
+ggplot(data = moz_mini,
+       aes(x = y,
+           fill = remote,
+           group = remote)) +
+  geom_density(alpha = 0.6) +
+  facet_wrap(~month) +
+  databrew::theme_simple() +
+  theme(legend.position = 'bottom') +
+  scale_fill_manual(name = '',
+                     values = cols) +
+  labs(x = 'Forms per worker', y = 'Density')
+```
+
+
+# Remotely field-deployed workers in Rufiji
+
+Need further details.
