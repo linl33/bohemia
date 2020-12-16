@@ -229,7 +229,16 @@ app_ui <- function(request) {
                                  
                         ),
                         tabPanel('GPS tracking',
-                                 uiOutput('ui_gps')),
+                                 uiOutput('ui_gps'),
+                                 fluidRow(column(6, align = 'center',
+                                                 h3('Locations visited by FW (all time)'),
+                                                 leafletOutput('traccar_leaf',
+                                                               height = 500)),
+                                          column(6,
+                                                 h3('Locations of minicensus forms submitted by FW'),
+                                                 leafletOutput('leaf_fid',
+                                                               height = 500)
+                                          ))),
                         tabPanel('Refusals and Absences',
                                  uiOutput('ui_geo_r_and_a'),
                                  uiOutput('ui_refusals_and_absences')))
@@ -2076,7 +2085,7 @@ app_server <- function(input, output, session) {
   # Individual data
   output$leaf_fid <- renderLeaflet({
     # Get the odk data
-    who <- input$fid
+    who <- input$fid_gps
     pd <- odk_data$data
     pd <- pd$minicensus_main
     co <- country()
@@ -2636,15 +2645,6 @@ app_server <- function(input, output, session) {
                   column(6,
                          plotOutput('plot_individual_errors'))
                 ),
-                fluidRow(column(6, align = 'center',
-                                h3('Locations visited by FW over last 7 days'),
-                                leafletOutput('traccar_leaf',
-                                              height = 500)),
-                         column(6,
-                                h3('Locations of forms submitted by FW'),
-                                leafletOutput('leaf_fid',
-                                              height = 500)
-                         )),
                 fluidRow(
                   column(6,
                          plotOutput('plot_individual_details')),
@@ -4091,7 +4091,7 @@ app_server <- function(input, output, session) {
     # leaflet() %>% addTiles()
     # Get the traccar data for that country
     # traccar <- session_data$traccar
-    the_worker <- input$fid
+    the_worker <- input$fid_gps
 
     if(!is.null(the_worker)){
       sub_traccar <- dbGetQuery(conn = con,
