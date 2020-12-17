@@ -113,7 +113,7 @@ format_minicensus <- function(data, keyfile){
   # REPEATS
   # death
   repeat_death_info <- data$repeats$repeat_death_info 
-  repeat_death_info <- repeat_death_info %>% filter(!is.na(repeat_death_info_count))
+  repeat_death_info <- repeat_death_info %>% filter(!is.na(repeated_id))
   if(!is.null(repeat_death_info)){
     if(nrow(repeat_death_info) > 0){
       repeat_death_info <- repeat_death_info %>%

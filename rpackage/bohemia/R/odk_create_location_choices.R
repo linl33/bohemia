@@ -30,7 +30,7 @@ odk_create_location_choices <- function(country = NULL,
   # Define the url of the location hierachy spreadsheet (contains all locations for both sites)
   url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
   # Fetch the data
-  locations <- locations_original <-  gsheet::gsheet2tbl(url = url)
+  locations <- locations_original <-  gsheet::gsheet2tbl(url = url) %>% dplyr::select(-new_hamlet)
   locations$clinical_trial <- NULL
   locations$code <- NULL
   
@@ -230,7 +230,6 @@ odk_create_location_choices <- function(country = NULL,
 # x <- odk_create_location_choices()
 # write_csv(x$survey, '~/Desktop/1.csv', na = '')
 # write_csv(x$choices, '~/Desktop/2.csv')
-
 # # VA (extra other choices)
 # library(readr); library(dplyr); library(bohemia)
 # x <- odk_create_location_choices(
