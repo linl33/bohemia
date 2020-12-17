@@ -151,20 +151,20 @@ app_ui <- function(request) {
                               plotOutput('landing_plot_1'),
                               plotOutput('landing_plot_2')),
                        column(3,
-                             uiOutput('landing_box_mini'),
-                             
-                             
-                             # br(),
-                             # div(tableOutput('landing_box_va'),style='font-size:30px'),
-                             # br(),
-                             # div(tableOutput('landing_box_error'),style='font-size:30px'),
-                             # br(),
-                             # div(tableOutput('landing_box_anom'),style='font-size:30px')
-                             
-                              )
+                              uiOutput('landing_box_mini'),
+                              
+                              
+                              # br(),
+                              # div(tableOutput('landing_box_va'),style='font-size:30px'),
+                              # br(),
+                              # div(tableOutput('landing_box_error'),style='font-size:30px'),
+                              # br(),
+                              # div(tableOutput('landing_box_anom'),style='font-size:30px')
+                              
                        )
               )
-            ),
+            )
+          ),
           tabItem(
             tabName = 'field_monitoring',
             tabsetPanel(tabPanel('Overview',
@@ -229,20 +229,21 @@ app_ui <- function(request) {
                                  
                         ),
                         tabPanel('GPS tracking',
-                                 uiOutput('ui_gps'),
-                                 fluidRow(column(6, align = 'center',
-                                                 h3('Locations visited by FW (all time)'),
-                                                 leafletOutput('traccar_leaf',
-                                                               height = 500)),
-                                          column(6,
-                                                 h3('Locations of minicensus forms submitted by FW'),
-                                                 leafletOutput('leaf_fid',
-                                                               height = 500)
-                                          ))),
+                                 
+                                 tabsetPanel(
+                                   tabPanel('Individual',
+                                            uiOutput('ui_gps')),
+                                   tabPanel('Aggregate',
+                                            fluidRow(column(12, align = 'center',
+                                                            h3('Most recent locations'),
+                                                            leafletOutput('most_recent_locations'),
+                                                            h3('Tabular data on period'),
+                                                            DT::dataTableOutput('traccar_table')))
+                                   ))
+                        ),
                         tabPanel('Refusals and Absences',
                                  uiOutput('ui_geo_r_and_a'),
-                                 uiOutput('ui_refusals_and_absences')))
-          ),
+                                 uiOutput('ui_refusals_and_absences')))),
           tabItem(
             tabName="enrollment",
             navbarPage(
@@ -369,11 +370,11 @@ app_ui <- function(request) {
               tabPanel('Alerts table',
                        fluidPage(
                          column(12, align = 'center',
-                         tags$img(src = "www/alerts_legend.png", style="width: 600px"),
-                         # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
-                         uiOutput('anomalies_ui_a'),
-                         uiOutput('anomalies_ui')
-                       ))),
+                                tags$img(src = "www/alerts_legend.png", style="width: 600px"),
+                                # add_busy_gif(src = "https://jeroen.github.io/images/banana.gif", height = 70, width = 70),
+                                uiOutput('anomalies_ui_a'),
+                                uiOutput('anomalies_ui')
+                         ))),
               tabPanel('Bulk uploader',
                        fluidPage(
                          fluidRow(
@@ -395,7 +396,7 @@ app_ui <- function(request) {
                          )
                        ))
             )
-           
+            
           ),
           tabItem(
             tabName = 'about',
@@ -487,7 +488,7 @@ app_server <- function(input, output, session) {
   con <- get_db_connection(local = is_local)
   
   
-
+  
   message('Working directory is :', getwd())
   
   # is_local <- FALSE
@@ -582,7 +583,7 @@ app_server <- function(input, output, session) {
                      end_time = NA,
                      web = grepl('/srv/shiny-server', getwd(), fixed = TRUE))
       
-
+      
       # con <- get_db_connection(local = is_local)
       message('Writing session info to sessions table.')
       dbAppendTable(conn = con,
@@ -782,7 +783,7 @@ app_server <- function(input, output, session) {
     li <- session_info$logged_in
     if(li){
       
-
+      
       
       message('Logged in. Loading data for ', the_country)
       out <- load_odk_data(local = is_local, the_country = the_country, efficient = TRUE, use_cached = use_cached, con = con)
@@ -1105,7 +1106,7 @@ app_server <- function(input, output, session) {
   ###########################################################################
   
   # # Main UI ##########################################################
-
+  
   output$landing_plot_1 <- renderPlot({
     pd <- odk_data$data
     if(is.null(pd)){
@@ -1128,7 +1129,7 @@ app_server <- function(input, output, session) {
   output$landing_plot_2 <- renderPlot({
     
     an <- session_data$anomalies
-
+    
     if(is.null(an) | nrow(an)==0){
       NULL
     } else {
@@ -1149,7 +1150,7 @@ app_server <- function(input, output, session) {
     
   })
   
-   
+  
   
   output$landing_box_mini <- renderUI({
     pd <- odk_data$data
@@ -1326,7 +1327,7 @@ app_server <- function(input, output, session) {
   
   
   
-
+  
   # Field monitoring UI  #############################################
   field_monitoring_geo <- reactiveVal('Ward')
   output$ui_field_monitoring_by <- renderUI({
@@ -1396,7 +1397,7 @@ app_server <- function(input, output, session) {
     
     # Get the odk data
     pd <- odk_data$data
-
+    
     enum <- pd$enumerations
     va <- pd$va
     # ref <- pd$refusals
@@ -1479,9 +1480,9 @@ app_server <- function(input, output, session) {
         # Get % minicensed of enumerated
         mutate(`% minicensed of enumerated` = `Minicensus Forms done` / `Enumerations Forms done` * 100)  %>%
         # add va
-      left_join(right_va) %>%
+        left_join(right_va) %>%
         mutate(`VA Forms done` = ifelse(is.na(`VA Forms done`), 0, `VA Forms done`))
-
+      
       # Transform the estimated number of forms (will be lower for MOZ than TZA since MOZ did buildings, not households)
       transformer <- ifelse(co == 'Mozambique', 0.55, 1)
       
@@ -1501,7 +1502,7 @@ app_server <- function(input, output, session) {
       
       
       progress_by <- progress_by_hamlet %>% left_join(locations %>% 
-                                            dplyr::select(code, District, Ward, Village), by = 'code')
+                                                        dplyr::select(code, District, Ward, Village), by = 'code')
       
       
       progress_by_district <- progress_by %>% group_by(District) %>%
@@ -1559,7 +1560,7 @@ app_server <- function(input, output, session) {
       if(cn == 'Tanzania'){
         monitor_by_table <- monitor_by_table[,!grepl('enumer', tolower(names(monitor_by_table)))]
       }
-
+      
       message('---created progess table for Overview by geography')
       out <- bohemia::prettify(monitor_by_table, download_options = TRUE, nrows = nrow(monitor_by_table))
     }
@@ -1582,10 +1583,10 @@ app_server <- function(input, output, session) {
     time_period <- input$progress_by_date
     
     # save(pd, co, the_iso, ehd, enum,time_period, file = '/tmp/pd.RData')
-
+    
     # get country
     pd <- pd %>% filter(hh_country==co)
-  
+    
     if(is.null(time_period)){
       time_period <- c(as.Date('2020-01-01'), Sys.Date())
     } 
@@ -1594,7 +1595,7 @@ app_server <- function(input, output, session) {
                         todays_date <=time_period[2]) 
     enum <- enum %>% filter(todays_date >= time_period[1],
                             todays_date <=time_period[2]) 
-   
+    
     pd_ok <- FALSE
     
     if(!is.null(pd)){
@@ -1641,7 +1642,7 @@ app_server <- function(input, output, session) {
         joined <- rbind(joined, joined_enum)
         progress_by <- joined %>% left_join(locations %>% dplyr::select(code, Hamlet, District, Ward, Village), by = 'code')
       }
-     
+      
       if(dt_choose_form =='Both'){
         # by district
         progress_by_district <- progress_by %>% group_by(District,data) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE)) %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
@@ -1663,7 +1664,7 @@ app_server <- function(input, output, session) {
         progress_by_hamlet <- progress_by %>%ungroup %>% group_by(Hamlet) %>% summarise(n_households = sum(n_households, na.rm=TRUE), numerator=sum(numerator, na.rm = TRUE), .groups = 'drop') %>% mutate(`Percent finished` = round((numerator/n_households)*100,2))
         
       }
- 
+      
       by_geo <- field_monitoring_geo() 
       
       if(is.null(by_geo)){
@@ -1735,8 +1736,8 @@ app_server <- function(input, output, session) {
         
       }
       
-     
-     
+      
+      
     }
     return(out)
   })
@@ -1793,7 +1794,7 @@ app_server <- function(input, output, session) {
           right$id <- right$ward
         }
       }
-  
+      
       
       # Group by id and get number done
       df_pdx <-
@@ -1814,7 +1815,7 @@ app_server <- function(input, output, session) {
       l <- leaflet() %>% addTiles() %>%
         addMarkers(data = hqx,  
                    popup = hqx$label)
-
+      
       # pal_all <- pal_hamlet <- colorNumeric(
       #   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
       #   domain = 0:ceiling(max(out@data$p))
@@ -2126,7 +2127,7 @@ app_server <- function(input, output, session) {
       ll <- extract_ll(pd$hh_geo_location)
       pd$lng <- ll$lng; pd$lat <- ll$lat
       
-
+      
       # round table not here, and here make sure map works (not saving data below)
       l <- leaflet() %>%
         # addProviderTiles(providers$Stamen.Toner) %>%
@@ -2140,7 +2141,7 @@ app_server <- function(input, output, session) {
     } else {
       l <- leaflet() %>% 
         addProviderTiles(providers$Esri.WorldImagery) %>% # addProviderTiles(providers$Stamen.Toner)
-      
+        
         addMarkers(data = hqx,  
                    popup = hqx$label) 
       
@@ -2524,7 +2525,7 @@ app_server <- function(input, output, session) {
   })
   
   output$plot_individual_time_matrix <- renderPlot({
-
+    
     # Get the odk data
     pd <- odk_data$data
     enum <- pd$enumerations
@@ -2605,7 +2606,7 @@ app_server <- function(input, output, session) {
         #   labs(x = 'Hour of day',
         #        y = 'Date') +
         #   scale_size_area(name = 'Number of open forms')
-      
+        
         cols <- rainbow(length(unique(plot_data$instance_id)))
         cols <- sample(cols, length(cols))
         g <- ggplot(data = plot_data,
@@ -2692,7 +2693,7 @@ app_server <- function(input, output, session) {
     return(out)
   })
   
-# VA DATA
+  # VA DATA
   
   
   observeEvent({
@@ -2716,132 +2717,132 @@ app_server <- function(input, output, session) {
           pd_ok <- TRUE
         }
       }
-          if(pd_ok){
-            # va table
-            people <- odk_data$data$minicensus_people
-            deaths <- odk_data$data$minicensus_repeat_death_info
-            deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
-            # save(people, deaths, pd, cn, file = '/tmp/va.RData')
-            # Conditional mourning period
-            mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
-            va <- left_join(deaths %>%
-                              left_join(pd %>%
-                                          dplyr::select(instance_id, todays_date), by = 'instance_id') %>%
-                              mutate(todays_date = as.Date(todays_date),
-                                     death_dod = as.Date(death_dod)) %>%
-                              mutate(old = (todays_date - death_dod) > mourning_period) %>%
-                              mutate(time_to_add = ifelse(old, 7, mourning_period)) %>%
-                              mutate(xx = todays_date + time_to_add#, # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
-                                     # yy = Sys.Date() - todays_date
-                              ) %>%
-                              # Note: in case the "date of death" is unknown (the form has that option): let's just calculate the "latest date to do VA" by adding 40 days (Tanzania) and 30 days (Moz) to the "date of the hh visit", to be safe.
-                              mutate(safe_bet = todays_date + mourning_period) %>%
-                              mutate(xx = ifelse(is.na(xx), safe_bet, xx)) %>%
-                              mutate(xx = as.Date(xx, origin = '1970-01-01')) %>%
-                              mutate(yy = Sys.Date() - xx) %>% # "time elapsed" means time between lastest date to collect and today
-                              dplyr::select(instance_id,
-                                            death_initials,
-                                            `Date of death` = death_dod,
-                                            `Latest date to collect VA form` = xx,
-                                            `ID of deceased person` = death_id,
-                                            `Time elapsed` = yy),
-                            pd %>%
-                              mutate(num = as.numeric(hh_head_id)) %>%
-                              dplyr::select(instance_id,
-                                            District = hh_district,
-                                            Ward = hh_ward,
-                                            Village = hh_village,
-                                            Hamlet = hh_hamlet,
-                                            `HH ID` = hh_id,
-                                            `FW ID` = wid,
-                                            num, # for getting the initials of household head
-                                            `HH visit date` = todays_date), by = 'instance_id') %>%
-              left_join(people %>% dplyr::select(instance_id,
-                                                 initials,
-                                                 pid,
-                                                 num), by = c('instance_id', 'num')) %>%
-              mutate(`FW ID` = ' ') %>%
-              dplyr::select(-instance_id) %>%
-              mutate(`HH head initials and ID` = paste0(pid, ' (',initials, ')'))
-
-            # Remove those which have already been collected
-            already_done <- unique(odk_data$data$va$death_id)
-            va <- va %>% filter(!`ID of deceased person` %in% already_done)
-
-            # Remove those not in the selected location hierarchy
-            lc <- location_code()
-            va <- va %>% filter(substr(`HH ID`, 1, 3) %in% lc)
-
-            if(nrow(va) > 0){
-              va <- va %>% dplyr::select(District,
-                                         Ward,
-                                         Village,
-                                         Hamlet,
-                                         `HH ID`,
-                                         `HH head initials and ID`,
-                                         # `FW ID`,
-                                         `Initials of deceased person` = death_initials,
-                                         `ID of deceased person`,
-                                         `Date of death`,
-                                         `Latest date to collect VA form`
+      if(pd_ok){
+        # va table
+        people <- odk_data$data$minicensus_people
+        deaths <- odk_data$data$minicensus_repeat_death_info
+        deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
+        # save(people, deaths, pd, cn, file = '/tmp/va.RData')
+        # Conditional mourning period
+        mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
+        va <- left_join(deaths %>%
+                          left_join(pd %>%
+                                      dplyr::select(instance_id, todays_date), by = 'instance_id') %>%
+                          mutate(todays_date = as.Date(todays_date),
+                                 death_dod = as.Date(death_dod)) %>%
+                          mutate(old = (todays_date - death_dod) > mourning_period) %>%
+                          mutate(time_to_add = ifelse(old, 7, mourning_period)) %>%
+                          mutate(xx = todays_date + time_to_add#, # this needs to be 7 days after hh visit date if death was <40 days prior to hh visit date | 40 days after hh visit date if the death was >40 days after hh visit date
+                                 # yy = Sys.Date() - todays_date
+                          ) %>%
+                          # Note: in case the "date of death" is unknown (the form has that option): let's just calculate the "latest date to do VA" by adding 40 days (Tanzania) and 30 days (Moz) to the "date of the hh visit", to be safe.
+                          mutate(safe_bet = todays_date + mourning_period) %>%
+                          mutate(xx = ifelse(is.na(xx), safe_bet, xx)) %>%
+                          mutate(xx = as.Date(xx, origin = '1970-01-01')) %>%
+                          mutate(yy = Sys.Date() - xx) %>% # "time elapsed" means time between lastest date to collect and today
+                          dplyr::select(instance_id,
+                                        death_initials,
+                                        `Date of death` = death_dod,
+                                        `Latest date to collect VA form` = xx,
+                                        `ID of deceased person` = death_id,
+                                        `Time elapsed` = yy),
+                        pd %>%
+                          mutate(num = as.numeric(hh_head_id)) %>%
+                          dplyr::select(instance_id,
+                                        District = hh_district,
+                                        Ward = hh_ward,
+                                        Village = hh_village,
+                                        Hamlet = hh_hamlet,
+                                        `HH ID` = hh_id,
+                                        `FW ID` = wid,
+                                        num, # for getting the initials of household head
+                                        `HH visit date` = todays_date), by = 'instance_id') %>%
+          left_join(people %>% dplyr::select(instance_id,
+                                             initials,
+                                             pid,
+                                             num), by = c('instance_id', 'num')) %>%
+          mutate(`FW ID` = ' ') %>%
+          dplyr::select(-instance_id) %>%
+          mutate(`HH head initials and ID` = paste0(pid, ' (',initials, ')'))
+        
+        # Remove those which have already been collected
+        already_done <- unique(odk_data$data$va$death_id)
+        va <- va %>% filter(!`ID of deceased person` %in% already_done)
+        
+        # Remove those not in the selected location hierarchy
+        lc <- location_code()
+        va <- va %>% filter(substr(`HH ID`, 1, 3) %in% lc)
+        
+        if(nrow(va) > 0){
+          va <- va %>% dplyr::select(District,
+                                     Ward,
+                                     Village,
+                                     Hamlet,
+                                     `HH ID`,
+                                     `HH head initials and ID`,
+                                     # `FW ID`,
+                                     `Initials of deceased person` = death_initials,
+                                     `ID of deceased person`,
+                                     `Date of death`,
+                                     `Latest date to collect VA form`
+          ) %>%
+            mutate(`FW / Supervisor ID` = ' ',
+                   `Date of VA visit` = ' ',
+                   `ICF signed?` = 'Yes__ No__',
+                   `VA form completed?` = 'Yes__ No__',
+                   `If HH not visited or VA form not completed, why` = '                 ')
+          if(cn=='Mozambique'){
+            va <- va %>%  
+              dplyr::mutate(
+                `ICF signed?` = 'Sim__ Não__',
+                `VA form completed?` = 'Sim__ Não__',
               ) %>%
-                mutate(`FW / Supervisor ID` = ' ',
-                       `Date of VA visit` = ' ',
-                       `ICF signed?` = 'Yes__ No__',
-                       `VA form completed?` = 'Yes__ No__',
-                       `If HH not visited or VA form not completed, why` = '                 ')
-              if(cn=='Mozambique'){
-                va <- va %>%  
-                  dplyr::mutate(
-                    `ICF signed?` = 'Sim__ Não__',
-                    `VA form completed?` = 'Sim__ Não__',
-                  ) %>%
-                  rename(Distrito = District,
-                                     `PA / Localidade`=Ward,
-                                     Povoado=Village,
-                                     Bairro=Hamlet,
-                                     `Iniciais do chefe do agregado e Ext_ID` = `HH head initials and ID`,
-                                     `Iniciais do(a) falecido(a)` = `Initials of deceased person`,
-                                     `Ext_ID Falecido(a)` = `ID of deceased person`,
-                                     `Data da morte` = `Date of death`,
-                                     `Última data para VA` = `Latest date to collect VA form`,
-                                     `ID Inquiridor` = `FW / Supervisor ID`,
-                                     `Data da visita` = `Date of VA visit`,
-                                     `Consentimiento informado assinado?`= `ICF signed?`,
-                                     `Formulária realizado` = `VA form completed?`,
-                                     `Se não foi visitado ou entrevistado, porque?` = `If HH not visited or VA form not completed, why`)
-              } else {
-                # TZA, populate ward supervisors automatically
-                va <- va %>%
-                  left_join(tza_ward_supervisors) %>%
-                  mutate(`FW / Supervisor ID` =  paste0(Supervisor_Name, ' (id:', wid, ')')) %>%
-                  dplyr::rename(`Supervisor name (ID)` = `FW / Supervisor ID`) %>%
-                  dplyr::select(-wid, -Supervisor_Name)
-              }
-
-              # # Capture n teams
-              # n_teams <- input$va_n_teams
-              # if(is.null(n_teams)){
-              #   n_teams <- 1
-              # }
-              # n_teams <- as.numeric(n_teams)
-              # if(n_teams < 1 | n_teams > 100){
-              #   n_teams <- 1
-              # }
-              # if(is.na(n_teams)){
-              #   n_teams <- 1
-              # }
-              # team_vector <- sort(rep(1:n_teams, length = nrow(va)))
-              # va$`Team` <- team_vector
-              message('---Created list generation table for VA')
-              # Save for use in other places
-              session_data$va_table <- va
-            } else {
-              session_data$va_table <- data.frame()
-            }
+              rename(Distrito = District,
+                     `PA / Localidade`=Ward,
+                     Povoado=Village,
+                     Bairro=Hamlet,
+                     `Iniciais do chefe do agregado e Ext_ID` = `HH head initials and ID`,
+                     `Iniciais do(a) falecido(a)` = `Initials of deceased person`,
+                     `Ext_ID Falecido(a)` = `ID of deceased person`,
+                     `Data da morte` = `Date of death`,
+                     `Última data para VA` = `Latest date to collect VA form`,
+                     `ID Inquiridor` = `FW / Supervisor ID`,
+                     `Data da visita` = `Date of VA visit`,
+                     `Consentimiento informado assinado?`= `ICF signed?`,
+                     `Formulária realizado` = `VA form completed?`,
+                     `Se não foi visitado ou entrevistado, porque?` = `If HH not visited or VA form not completed, why`)
           } else {
-            session_data$va_table <- data.frame()
+            # TZA, populate ward supervisors automatically
+            va <- va %>%
+              left_join(tza_ward_supervisors) %>%
+              mutate(`FW / Supervisor ID` =  paste0(Supervisor_Name, ' (id:', wid, ')')) %>%
+              dplyr::rename(`Supervisor name (ID)` = `FW / Supervisor ID`) %>%
+              dplyr::select(-wid, -Supervisor_Name)
           }
+          
+          # # Capture n teams
+          # n_teams <- input$va_n_teams
+          # if(is.null(n_teams)){
+          #   n_teams <- 1
+          # }
+          # n_teams <- as.numeric(n_teams)
+          # if(n_teams < 1 | n_teams > 100){
+          #   n_teams <- 1
+          # }
+          # if(is.na(n_teams)){
+          #   n_teams <- 1
+          # }
+          # team_vector <- sort(rep(1:n_teams, length = nrow(va)))
+          # va$`Team` <- team_vector
+          message('---Created list generation table for VA')
+          # Save for use in other places
+          session_data$va_table <- va
+        } else {
+          session_data$va_table <- data.frame()
+        }
+      } else {
+        session_data$va_table <- data.frame()
+      }
     } else {
       session_data$va_table <- data.frame()
     }
@@ -2894,7 +2895,7 @@ app_server <- function(input, output, session) {
                                         'Print VA control sheet'),
                          br(), br(),
                          div(DT::dataTableOutput('table_va_list_generation'), style = "font-size:60%")
-                         )
+                  )
                 )
               } else {
                 fluidPage(
@@ -3013,7 +3014,7 @@ app_server <- function(input, output, session) {
               deaths <- pd$minicensus_repeat_death_info
               pd <- pd$minicensus_main
               co <- country()
-             # save(pd, va, deaths, file = '/tmp/va.RData')
+              # save(pd, va, deaths, file = '/tmp/va.RData')
               pd <- pd %>%
                 filter(hh_country == co)
               
@@ -3078,7 +3079,7 @@ app_server <- function(input, output, session) {
             })
   })
   
- 
+  
   output$plot_va_progress_by_geo_past_due <- renderPlot({
     # Get the odk data
     pd <- odk_data$data
@@ -3450,13 +3451,13 @@ app_server <- function(input, output, session) {
               start_at <- as.Date('2020-09-20')
               end_at <- Sys.Date()
               # fluidPage(
-                fluidRow(
+              fluidRow(
                 #   column(12,
-                         sliderInput(inputId = 'fw_time_period', 
-                                     label = 'Previous days to include:', 
-                                     min = start_at, 
-                                     max=end_at, 
-                                     value = c(start_at, end_at)))
+                sliderInput(inputId = 'fw_time_period', 
+                            label = 'Previous days to include:', 
+                            min = start_at, 
+                            max=end_at, 
+                            value = c(start_at, end_at)))
               #   )
               # ) 
             })
@@ -3481,7 +3482,7 @@ app_server <- function(input, output, session) {
               va <- pd$va
               pd <- pd$minicensus_main
               # save(pd, co, an,enumerations, va, file = '/tmp/pd.RData')
-
+              
               if(nrow(an) > 0){
                 an$date <- as.Date(an$date, format = '%Y-%m-%d')
               }
@@ -3534,10 +3535,10 @@ app_server <- function(input, output, session) {
                 pd <- pd %>% 
                   left_join(
                     enumerations %>% mutate(wid = as.character(wid)) %>%
-                    group_by(wid) %>%
-                    summarise(enumerations = n(),
-                              enumerations_days = length(unique(todays_date)))
-                )
+                      group_by(wid) %>%
+                      summarise(enumerations = n(),
+                                enumerations_days = length(unique(todays_date)))
+                  )
                 # Join to VA
                 pd <- pd %>% 
                   left_join(
@@ -3554,7 +3555,7 @@ app_server <- function(input, output, session) {
                 }
                 pdx <- pd %>%
                   mutate(wid = as.numeric(wid)) 
-              
+                
                 if(ui_fw_plot_form == 'Minicensus'){
                   ui_show_percent <- input$ui_show_percent
                   if(is.null(ui_show_percent)){
@@ -3584,8 +3585,8 @@ app_server <- function(input, output, session) {
                     pdx$daily_target <- fw_daily_target
                     pdx$percent_of_daily_target <- round((pdx$per_day/pdx$daily_target)*100, 2)
                     p <- ggplot(data = pdx,
-                           aes(x = wid,
-                               y = percent_of_daily_target)) +
+                                aes(x = wid,
+                                    y = percent_of_daily_target)) +
                       geom_bar(stat = 'identity') +
                       labs(x = 'FW',
                            y = '% of daily target',
@@ -3600,16 +3601,16 @@ app_server <- function(input, output, session) {
                       mutate(forms = minicensus,
                              days = minicensus_days)
                   }
-               
-              } else if(ui_fw_plot_form == 'Enumerations'){
-                pdx <- pdx %>%
-                  mutate(forms = enumerations,
-                         days = enumerations_days)
-              } else if(ui_fw_plot_form == 'VA'){
-                pdx <- pdx %>%
-                  mutate(forms = va,
-                         days = va_days)
-              }  
+                  
+                } else if(ui_fw_plot_form == 'Enumerations'){
+                  pdx <- pdx %>%
+                    mutate(forms = enumerations,
+                           days = enumerations_days)
+                } else if(ui_fw_plot_form == 'VA'){
+                  pdx <- pdx %>%
+                    mutate(forms = va,
+                           days = va_days)
+                }  
                 pdx <- pdx %>%
                   mutate(per_day = forms / days) %>%
                   mutate(label = paste0(forms, '     ',
@@ -3624,23 +3625,23 @@ app_server <- function(input, output, session) {
                   mutate(wid = as.numeric(as.character(wid)))
                 pdx <- left_join(
                   pdx %>% mutate(wid = as.numeric(as.character(wid))),
-                                 right)%>%
+                  right)%>%
                   mutate(wid = paste0(wid,' ', first_name, ' ', last_name, ' (', Role, ')'))
                 
                 # remove NA in parantheses
                 pdx <- pdx %>% filter(!grepl('NA', wid))
                 ggplot(data = pdx,
-                         aes(x = reorder(wid, -per_day),
-                             y = per_day)) +
-                      geom_bar(stat = 'identity',
-                               alpha = 0.6) +
-                    labs(x = 'FW',
-                         y = 'Forms per (working) day',
-                         caption = 'Numbers show forms on top, working days on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
-                    theme_bohemia() +
-                    geom_text(aes(label = label),
-                              nudge_y = 0, size = 3, alpha = 0.8,
-                              angle = 90) +
+                       aes(x = reorder(wid, -per_day),
+                           y = per_day)) +
+                  geom_bar(stat = 'identity',
+                           alpha = 0.6) +
+                  labs(x = 'FW',
+                       y = 'Forms per (working) day',
+                       caption = 'Numbers show forms on top, working days on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
+                  theme_bohemia() +
+                  geom_text(aes(label = label),
+                            nudge_y = 0, size = 3, alpha = 0.8,
+                            angle = 90) +
                   theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
                   theme(axis.text = element_text(size = 10),
                         axis.title = element_text(size = 14),
@@ -3649,7 +3650,7 @@ app_server <- function(input, output, session) {
               } else {
                 NULL
               }
-
+              
             })
   })
   
@@ -3738,7 +3739,7 @@ app_server <- function(input, output, session) {
                   ui_fw_plot_form <- 'Minicensus'
                 }
                 pdx <- pd
-
+                
                 if(ui_fw_plot_form == 'Minicensus'){
                   pdx <- pdx %>%
                     mutate(forms = minicensus,
@@ -3958,50 +3959,50 @@ app_server <- function(input, output, session) {
                   fwt_daily <- fwt_daily %>% filter(!grepl('NA NA', fwt_daily$FW))
                   # save(fwt_daily, full_va, full_pd, file = '/tmp/joedec.RData')
                   # GET done by ward
-                    # Get the overall va progress table
-                    deaths <- full_pd$minicensus_repeat_death_info
-
-                    sups <- as.data.frame(bohemia::tza_ward_supervisors)
-                    # Get location in va
-                    va <- full_va %>%
-                      mutate(code = substr(hh_id, 1, 3)) %>%
-                      left_join(bohemia::locations %>% dplyr::select(code, region = Region, district = District,
-                                                            ward = Ward, village = Village, hamlet = Hamlet))
-                    va <- dplyr::left_join(va, sups)
-                    right <- va %>%
-                      group_by(`FW ID` = as.character(wid)) %>%
-                      summarise(`VAs assigned` = n())
-                    fwt_daily <- left_join(fwt_daily,
-                                           right) %>%
-                      mutate(`VA forms done as % assigned` = round(`VA forms` / `VAs assigned` * 100, 2))
+                  # Get the overall va progress table
+                  deaths <- full_pd$minicensus_repeat_death_info
+                  
+                  sups <- as.data.frame(bohemia::tza_ward_supervisors)
+                  # Get location in va
+                  va <- full_va %>%
+                    mutate(code = substr(hh_id, 1, 3)) %>%
+                    left_join(bohemia::locations %>% dplyr::select(code, region = Region, district = District,
+                                                                   ward = Ward, village = Village, hamlet = Hamlet))
+                  va <- dplyr::left_join(va, sups)
+                  right <- va %>%
+                    group_by(`FW ID` = as.character(wid)) %>%
+                    summarise(`VAs assigned` = n())
+                  fwt_daily <- left_join(fwt_daily,
+                                         right) %>%
+                    mutate(`VA forms done as % assigned` = round(`VA forms` / `VAs assigned` * 100, 2))
                 }
                 bohemia::prettify(fwt_daily, nrows = nrow(fwt_daily),
                                   download_options = TRUE)
                 
               }
-                       
+              
             })
   })
   
   output$ui_fw_daily <- renderUI({
     # See if the user is logged in and has access
-   fluidPage(
-     fluidRow(column(6,
-                     selectInput('ui_fw_plot_form',
-                                 'Form to show in chart',
-                                 choices = c('Minicensus',
-                                             'Enumerations', 
-                                             'VA'),
-                                 selected = 'Minicensus')),
-              column(6,
-                     checkboxInput(inputId = 'ui_show_percent', label = 'Show percentage', value = FALSE))
-              ),
-     fluidRow(column(12,
-                     plotOutput('ui_fw_plot', height = '700px'))),
-     fluidRow(column(12,
-                     plotOutput('ui_fw_plot2', height = '700px'))),
-     fluidRow(column(12,
-                     DT::dataTableOutput('ui_fw_table'))))
+    fluidPage(
+      fluidRow(column(6,
+                      selectInput('ui_fw_plot_form',
+                                  'Form to show in chart',
+                                  choices = c('Minicensus',
+                                              'Enumerations', 
+                                              'VA'),
+                                  selected = 'Minicensus')),
+               column(6,
+                      checkboxInput(inputId = 'ui_show_percent', label = 'Show percentage', value = FALSE))
+      ),
+      fluidRow(column(12,
+                      plotOutput('ui_fw_plot', height = '700px'))),
+      fluidRow(column(12,
+                      plotOutput('ui_fw_plot2', height = '700px'))),
+      fluidRow(column(12,
+                      DT::dataTableOutput('ui_fw_table'))))
   })
   
   # Leaflet of fieldworkers
@@ -4050,10 +4051,10 @@ app_server <- function(input, output, session) {
   output$traccar_plot_1 <- renderLeaflet({
     
     mapviewOptions(#basemaps = c("Esri.WorldShadedRelief", "OpenStreetMap.DE"),
-                   # raster.palette = grey.colors,
-                   # vector.palette = colorRampPalette(c("snow", "cornflowerblue", "grey10")),
-                   # na.color = "magenta",
-                   layers.control.pos = "topright")
+      # raster.palette = grey.colors,
+      # vector.palette = colorRampPalette(c("snow", "cornflowerblue", "grey10")),
+      # na.color = "magenta",
+      layers.control.pos = "topright")
     fid <- input$fid_gps
     
     # con <- get_db_connection(local = is_local)
@@ -4080,12 +4081,12 @@ app_server <- function(input, output, session) {
       sub_data <- sub_data %>% 
         # filter(date == date_slider)
         filter(date >= date_slider[1],
-                                      date <= date_slider[2])
+               date <= date_slider[2])
       if(nrow(sub_data) == 0){
         ok <- FALSE
       }
     }
-
+    
     hqx <- hq$data
     if(ok){
       
@@ -4107,27 +4108,27 @@ app_server <- function(input, output, session) {
       l <- mapview::mapview(pts["grp"],
                             legend = FALSE,
                             layer.name = 'Date-time') #%>%
-        # addMarkers(data = hqx,  
-        #            popup = hqx$label) 
+      # addMarkers(data = hqx,  
+      #            popup = hqx$label) 
       l@map
     } else {
       leaflet() %>%
         addMarkers(data = hqx,  
                    popup = hqx$label) 
     }
-
-
-
+    
+    
+    
   })
   output$traccar_leaf <- renderLeaflet({
     # leaflet() %>% addTiles()
     # Get the traccar data for that country
     # traccar <- session_data$traccar
     the_worker <- input$fid_gps
-
+    
     if(!is.null(the_worker)){
       sub_traccar <- dbGetQuery(conn = con,
-                            statement = paste0('SELECT * FROM traccar WHERE unique_id = ', the_worker))
+                                statement = paste0('SELECT * FROM traccar WHERE unique_id = ', the_worker))
       pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
     }
     hqx <- hq$data
@@ -4146,12 +4147,12 @@ app_server <- function(input, output, session) {
                       group = "pts")
       }
     }
-
+    
     l
   })
   
   output$traccar_table_1 <- DT::renderDataTable({
-   
+    
     # Get the traccar data for that country
     
     date_slider <- input$gps_slider
@@ -4186,14 +4187,16 @@ app_server <- function(input, output, session) {
       out <- sub_data %>%
         group_by(Day = day) %>%
         summarise(`GPS pings` = n())
-     
+      
     } else {
       NULL
     }
     
   })
   
-  observeEvent(input$traccar_table_1_rows_selected,{
+  
+  
+  observeEvent(input$traccar_table_1_rows_selected, ignoreNULL = FALSE, {
     
     sr <- input$traccar_table_1_rows_selected
     
@@ -4208,7 +4211,7 @@ app_server <- function(input, output, session) {
       fid <- input$fid_gps
       sub_traccar <- dbGetQuery(conn = con,
                                 statement = paste0('SELECT * FROM traccar WHERE unique_id = ', fid))
-            # save(traccar, date_slider, fid, file = '/tmp/dec1z.RData')
+      # save(traccar, date_slider, fid, file = '/tmp/dec1z.RData')
       ok <- TRUE
       if(is.null(sub_traccar) | is.null(date_slider) | is.null(fid)){
         ok <- FALSE
@@ -4248,25 +4251,123 @@ app_server <- function(input, output, session) {
     }
   })
   
-  # observeEvent(input$traccar_table_1_rows_selected,{
-  #   
-  #   sr <- input$traccar_table_1_rows_selected
-  #   if(length(sr)){
-  #     leafletProxy('traccar_plot_1') %>%
-  #       clearMarkers() 
-  #   }
-  # })
   
+  
+  output$traccar_table <- DT::renderDataTable({
+    
+    date_slider <- input$gps_slider
+    # fid <- input$fid_gps
+    
+    # sub_traccar <- dbGetQuery(conn = con,
+    #                           statement = paste0('SELECT * FROM traccar WHERE unique_id = ', fid)) 
+    the_country <- country()
+    if(the_country == 'Mozambique'){
+      country_string <- ' WHERE unique_id >=301'
+    } else {
+      country_string <- ' WHERE unique_id <300'
+    }
+    
+    sub_traccar <- dbGetQuery(conn = con,
+                              statement = paste0("SELECT * FROM traccar ", country_string))
+    
+    # save(sub_traccar, fid, date_slider, fid, file = '/tmp/dec17x.RData')
+    ok <- TRUE
+    if(is.null(sub_traccar) | is.null(date_slider)){
+      ok <- FALSE
+    }
+    if(ok){
+      if(nrow(sub_traccar) == 0){
+        ok <- FALSE
+      }
+    }
+    if(ok){
+      # Get sub-data
+      # sub_data <- sub_traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
+      sub_data <- sub_traccar
+      sub_data$date <- as.Date(sub_data$devicetime, 'EST')
+      sub_data <- sub_data %>% 
+        # filter(date == date_slider)
+        filter(date >= date_slider[1],
+               date <= date_slider[2])
+      sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
+      sub_data$day <- lubridate::round_date(sub_data$devicetime, 'day')
+      
+      sub_data$time_of_day <- as.character(sub_data$time_of_day)
+      sub_data$day <- as.character(sub_data$day)
+      
+      
+      out <- sub_data %>%
+        group_by(Day = day) %>%
+        traccar_transform() %>%
+        traccar_summarise(fids = fids)
+      out
+    } else {
+      NULL
+    }
+    
+  })
+  
+  output$most_recent_locations <- renderLeaflet({
+    date_slider <- input$gps_slider
+    # fid <- input$fid_gps
+    
+    # sub_traccar <- dbGetQuery(conn = con,
+    #                           statement = paste0('SELECT * FROM traccar WHERE unique_id = ', fid)) 
+    the_country <- country()
+    if(the_country == 'Mozambique'){
+      country_string <- ' WHERE unique_id >=301'
+    } else {
+      country_string <- ' WHERE unique_id <300'
+    }
+    hqx <- hq$data
+    sub_traccar <- dbGetQuery(conn = con,
+                              statement = paste0("SELECT * FROM traccar ", country_string))
+    
+    # save(sub_traccar, fid, date_slider, fid, file = '/tmp/dec17x.RData')
+    ok <- TRUE
+    if(is.null(sub_traccar) | is.null(date_slider)){
+      ok <- FALSE
+    }
+    if(ok){
+      if(nrow(sub_traccar) == 0){
+        ok <- FALSE
+      }
+    }
+    if(ok){
+      # Get sub-data
+      # sub_data <- sub_traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
+      sub_data <- sub_traccar
+      sub_data$date <- as.Date(sub_data$devicetime, 'EST')
+      sub_data <- sub_data %>% 
+        # filter(date == date_slider)
+        filter(date >= date_slider[1],
+               date <= date_slider[2])
 
-  # output$traccar_table <- DT::renderDataTable({
-  #   # data.frame(a = 'Undergoing changes')
-  #   out <- session_data$traccar %>%
-  #     arrange(desc(devicetime)) %>%
-  #     group_by(unique_id) %>%
-  #     dplyr::distinct(unique_id, id, valid, devicetime, longitude, latitude)
-  #   bohemia::prettify(out,
-  #                     download_options = FALSE)
-  # })
+      
+      out <- sub_data %>%
+        mutate(bohemia_id = as.numeric(as.character(unique_id))) %>%
+        left_join(fids %>% dplyr::select(bohemia_id, 
+                                         first_name, 
+                                         last_name,
+                                         Role)) %>%
+        mutate(Fieldworker = paste0(bohemia_id, ' ',
+                                    first_name, ' ',
+                                    last_name, ' (',
+                                    Role, ')')) %>%
+      group_by(Fieldworker) %>%
+      filter(devicetime == max(devicetime))
+      
+      leaflet() %>%
+        addTiles() %>%
+        addMarkers(data = out,
+                   popup = paste0(out$Fieldworker, ' ',
+                                  out$devicetime)) %>%
+        addCircleMarkers(data = hqx, popup = 'HQ')
+      
+    } else {
+      NULL
+    }
+  })
   
   ### 401 errors, just commenting out for now
   # output$traccar_live_view <- renderUI({
@@ -4328,7 +4429,7 @@ app_server <- function(input, output, session) {
                                      min = as.Date('2020-09-01'), 
                                      max= Sys.Date(), 
                                      value = c(Sys.Date()-30, Sys.Date()-1)# c(as.Date('2020-09-01'), Sys.Date())
-                                     )),
+                         )),
                   column(6,
                          selectInput('fid_gps',
                                      'Fieldworker ID',
@@ -4342,9 +4443,19 @@ app_server <- function(input, output, session) {
                          align = 'center',
                          DT::dataTableOutput('traccar_table_1')),
                   column(9, align = 'center',
-                                leafletOutput('traccar_plot_1')))
-                # fluidRow((column(12, align = 'center',
-                #                  DT::dataTableOutput('traccar_table'))))
+                         leafletOutput('traccar_plot_1',
+                                       height = 600))),
+                
+                fluidRow(column(6, align = 'center',
+                                h3('Locations visited by FW (all time)'),
+                                leafletOutput('traccar_leaf',
+                                              height = 500)),
+                         column(6,
+                                h3('Locations of minicensus forms submitted by FW'),
+                                leafletOutput('leaf_fid',
+                                              height = 500)
+                         ))
+                
               )
               
             })
@@ -4467,7 +4578,7 @@ app_server <- function(input, output, session) {
                   })
                 } 
                 
-               
+                
                 
                 if(co=='Mozambique'){
                   if(grouper == 'household'){
@@ -4516,7 +4627,7 @@ app_server <- function(input, output, session) {
                 )
                 
               }
-       
+              
             })
   })
   
@@ -4897,7 +5008,7 @@ app_server <- function(input, output, session) {
     )
   })
   
- 
+  
   # Done hamlets UI  ################################################
   output$done_hamlet_table <- DT::renderDataTable({
     sb <- input$sidebar
@@ -4908,12 +5019,12 @@ app_server <- function(input, output, session) {
     #                           "eldo.elobolobo@manhica.net",
     #                           "joe@databrew.cc")
     # if(liu %in% the_authorized_users){
-      # con <- get_db_connection(local = is_local)
-      done_hamlets <- dbGetQuery(conn = con,
-                              statement = paste0("SELECT * FROM done_hamlets"))
-      # dbDisconnect(con)
-      bohemia::prettify(done_hamlets,
-                        nrows = nrow(done_hamlets))
+    # con <- get_db_connection(local = is_local)
+    done_hamlets <- dbGetQuery(conn = con,
+                               statement = paste0("SELECT * FROM done_hamlets"))
+    # dbDisconnect(con)
+    bohemia::prettify(done_hamlets,
+                      nrows = nrow(done_hamlets))
     # } else {
     #   bohemia::prettify(data.frame(o = 'You are not authorized to mark hamlets as done.'))
     # }
@@ -4922,24 +5033,24 @@ app_server <- function(input, output, session) {
   already_done_hamlets <- reactiveVal(value = c())
   listen_already_done <- reactive({
     list(as.character(input$mark_done),
-      as.character(input$mark_undone),
-      as.character(input$the_done_hamlet))
+         as.character(input$mark_undone),
+         as.character(input$the_done_hamlet))
   })
   observeEvent(listen_already_done(),{
     sidebar <- input$sidebar
     # if(sidebar == 'done_hamlets'){
-      
-      # con <- get_db_connection(local = is_local)
-      if(exists('con')){
-        message('Updating the already_done_hamlets object')
-        already <- dbReadTable(conn = con, 'done_hamlets')
-        print(already)
-        out <- as.character(already$code)
-        print(out)
-        already_done_hamlets(out)
-      }
-
-      # dbDisconnect(con)
+    
+    # con <- get_db_connection(local = is_local)
+    if(exists('con')){
+      message('Updating the already_done_hamlets object')
+      already <- dbReadTable(conn = con, 'done_hamlets')
+      print(already)
+      out <- as.character(already$code)
+      print(out)
+      already_done_hamlets(out)
+    }
+    
+    # dbDisconnect(con)
     # }
   })
   
@@ -5019,7 +5130,7 @@ app_server <- function(input, output, session) {
                 mark_button <- actionButton('mark_done_fake',
                                             'Clicking here will do nothing')
               }
-
+              
               fluidPage(
                 fluidRow(
                   mark_button
@@ -5040,7 +5151,7 @@ app_server <- function(input, output, session) {
               DT::dataTableOutput('done_hamlet_table')
             })})
   
-
+  
   
   observeEvent(input$mark_done, {
     the_hamlet <- input$the_done_hamlet
@@ -5085,8 +5196,8 @@ app_server <- function(input, output, session) {
               pd <- bohemia::gps %>% left_join(bohemia::locations %>% 
                                                  dplyr::select(-clinical_trial) %>% 
                                                  mutate(n_households = ifelse(country == 'Mozambique',
-                                                                                                                                      round(n_households * 0.55),
-                                                                                                                                      n_households)))
+                                                                              round(n_households * 0.55),
+                                                                              n_households)))
               pdx <- pd <- pd %>%
                 filter(iso == the_iso,
                        clinical_trial == 0)
@@ -5375,7 +5486,7 @@ app_server <- function(input, output, session) {
                 summarise(Occurrences = n()) %>%
                 arrange(desc(Occurrences)) %>%
                 mutate(`%` = round(Occurrences / sum(Occurrences) *100, digits = 2))
-                
+              
               
               # for every date that has mulitple dates seperated by comma, split and create new row.
               an <- an %>% 
@@ -5403,7 +5514,7 @@ app_server <- function(input, output, session) {
                 geom_line(size = 1.5,alpha=0.7) +
                 geom_point(size = 2) +
                 scale_color_manual(name = '', 
-                                  values = c('black', 'grey')) +
+                                   values = c('black', 'grey')) +
                 labs(x='Date', y='') +
                 theme_bohemia()
               output$e_and_a_cumulative <- renderPlot({a_and_e_plot_cumulative})
@@ -5495,7 +5606,7 @@ app_server <- function(input, output, session) {
                        Absences = ifelse(is.na(Absences), 0, Absences),
                        Refusals = ifelse(is.na(Refusals), 0, Refusals))
               joined <- joined %>% filter(country == the_country) %>%  filter(date >=date_range[1], 
-                                                                          date <= date_range[2])
+                                                                              date <= date_range[2])
               
               
               fluidPage(
@@ -5525,10 +5636,10 @@ app_server <- function(input, output, session) {
                 ),
                 fluidRow(
                   column(12,
-                  h3('Summary table'),
-                  bohemia::prettify(joined,
-                                    nrows = nrow(joined),
-                                    download_options = TRUE))
+                         h3('Summary table'),
+                         bohemia::prettify(joined,
+                                           nrows = nrow(joined),
+                                           download_options = TRUE))
                   
                 ),
                 fluidRow(
@@ -5570,7 +5681,7 @@ app_server <- function(input, output, session) {
                                        'Print workers on separate pages?',
                                        value = TRUE))
                 )
-                )
+              )
               
             })
   })
@@ -5591,10 +5702,10 @@ app_server <- function(input, output, session) {
         wid <- sort(unique(pd$wid))
         wid <- wid[!is.na(wid)]
         out <- selectInput('verification_text_filter',
-                    'Filter by FW code (all, by default)',
-                    choices = wid,
-                    selected = wid,
-                    multiple = TRUE)
+                           'Filter by FW code (all, by default)',
+                           choices = wid,
+                           selected = wid,
+                           multiple = TRUE)
       } else {
         out <- NULL
       }
@@ -5948,7 +6059,7 @@ app_server <- function(input, output, session) {
     anomalies_show <- input$anomalies_show
     message('anomalies show is:')
     # if(!is.null(anomalies_show)){
-      joined <- joined %>% filter(type %in% anomalies_show)
+    joined <- joined %>% filter(type %in% anomalies_show)
     # }
     # save(joined, file = '/tmp/anomalies_dt.RData')
     return(joined)
@@ -6158,7 +6269,7 @@ app_server <- function(input, output, session) {
         ok <- FALSE
         out_text <- paste0('ERROR! The following required columns are missing: ', paste0(valid_names[which(!valid_names %in% names(dat))], collapse = '; '), collapse = ' ')
       }
-
+      
       # Check duplicates
       if(ok){
         any_duplicates <- any(duplicated(dat$Id))
@@ -6193,7 +6304,7 @@ app_server <- function(input, output, session) {
       }
       if(ok){
         out_text <- 'Successfully uploaded corrections requests.'
-
+        
         fix <- dat %>%
           mutate(id = tolower(Id),
                  instance_id = tolower(`Instance id`),
@@ -6276,7 +6387,7 @@ app_server <- function(input, output, session) {
                                             #   icon('question-circle')
                                             # ),
                                             # choiceValues = c('anomaly', 'error')
-                                            )),
+                         )),
                   column(3)
                   
                   
@@ -6599,7 +6710,7 @@ app_server <- function(input, output, session) {
                       minicensus_main_data <- odk_data$data$minicensus_main
                       refusals_data = odk_data$data$refusals
                       
-
+                      
                       # save(refusals_data, minicensus_main_data, enumerations_data,
                       #      xdata, use_previous, enum, enumeration_or_minicensus, lc, li, si, 
                       #      file = '/tmp/tmp.RData')

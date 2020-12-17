@@ -1,6 +1,55 @@
 library(shiny)
 library(ggplot2)
 
+traccar_transform <- function(x){
+  out <- x %>%
+    mutate(y = valid) %>%
+    mutate(date = as.Date(substr(devicetime, 1, 10)),
+           battery = unlist(lapply(strsplit(y, split = ":"), function(z){as.numeric(gsub(' distance', '', z[2]))})),
+           distance = unlist(lapply(strsplit(y, split = ":"), function(z){as.numeric(gsub(' totalDistance', '', z[3]))})),
+           total_distance = unlist(lapply(strsplit(y, split = ":"), function(z){as.numeric(gsub(' motion', '', z[4]))}))) %>%
+    dplyr::select(id, deviceid, devicetime, latitude, longitude,
+                  unique_id, date, battery, distance, total_distance)
+  return(out)
+}
+
+traccar_simplify <- function(y){
+  out <- y %>%
+    arrange(devicetime) %>%
+    group_by(unique_id) %>%
+    filter(devicetime == max(devicetime)) %>%
+    mutate(total_distance = total_distance / 1000)
+    dplyr::select(unique_id,
+                  `Last ping` = devicetime,
+                  `Last battery` = battery,
+                  `Total KM` = total_distance)
+  return(out)
+}
+
+traccar_summarise <- function(y, fids){
+  out <- y %>%
+    arrange(devicetime) %>%
+    mutate(bohemia_id = as.numeric(as.character(unique_id))) %>%
+    left_join(fids %>% dplyr::select(bohemia_id, 
+                                     first_name, 
+                                     last_name,
+                                     Role)) %>%
+    mutate(Fieldworker = paste0(bohemia_id, ' ',
+                                first_name, ' ',
+                                last_name, ' (',
+                                Role, ')')) %>%
+    group_by(Fieldworker) %>%
+    summarise(`First ping` = min(devicetime),
+              `Last ping` = max(devicetime),
+              `Pings` = n(),
+              # `Total KM` = max(total_distance/1000),
+              `KM in period` = max(total_distance/1000) -
+                min(total_distance/1000),
+              `Days with any ping` = length(unique(date)))
+  return(out)
+}
+
+
 points_to_line <- function(data, group = "day"){
   data <- data %>% 
     group_by_at(group) %>%
@@ -16,7 +65,7 @@ points_to_line2 <- function(data){
     mutate(time_since = as.numeric(lubridate::as.difftime(devicetime - dplyr::lag(devicetime, 1), units = 'seconds'))) %>%
     mutate(same_day = day == dplyr::lag(day, 1)) %>%
     mutate(same_id = unique_id == dplyr::lag(unique_id, 1)) %>%
-    mutate(grp_helper = ifelse(time_since >100 | !same_day | !same_id, 1, 0)) %>%
+    mutate(grp_helper = ifelse(time_since >500 | !same_day | !same_id, 1, 0)) %>%
     mutate(grp_helper = ifelse(is.na(grp_helper), 1, grp_helper)) %>%
     mutate(grp = cumsum(grp_helper))
     
