@@ -4184,7 +4184,7 @@ app_server <- function(input, output, session) {
       sub_data$time_of_day <- as.character(sub_data$time_of_day)
       sub_data$day <- as.character(sub_data$day)
       out <- sub_data %>%
-        group_by(Hour = time_of_day) %>%
+        group_by(Day = day) %>%
         summarise(`GPS pings` = n())
      
     } else {
@@ -4222,6 +4222,7 @@ app_server <- function(input, output, session) {
         # Get sub-data
         sub_data <- sub_traccar %>% filter(as.numeric(as.character(unique_id)) == as.numeric(as.character(fid)))
         sub_data$date <- as.Date(sub_data$devicetime, 'EST')
+        sub_data$day <- lubridate::round_date(sub_data$devicetime, 'day')
         sub_data <- sub_data %>% 
           # filter(date == date_slider)
           filter(date >= date_slider[1],
@@ -4234,10 +4235,10 @@ app_server <- function(input, output, session) {
       }
       if(ok){
         out <- sub_data %>%
-          group_by(Hour = time_of_day) %>%
+          group_by(Day = day) %>%
           summarise(`GPS pings` = n())
         selected_hours <- out[sr,]
-        done <- sub_data[sub_data$time_of_day %in% selected_hours$Hour,]
+        done <- sub_data[sub_data$day %in% selected_hours$Day,]
         leafletProxy('traccar_plot_1') %>%
           clearMarkers() %>%
           addMarkers(data = done, lng = done$longitude, lat = done$latitude,
