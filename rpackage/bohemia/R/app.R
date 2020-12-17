@@ -711,6 +711,9 @@ app_server <- function(input, output, session) {
   ##################
   # Get the location code based on the input hierarchy
   location_code <- reactiveVal(value = NULL)
+  hq <- reactiveValues(data = tibble(lng = 35.711553,
+                                     lat = -17.979446,
+                                     label = 'Mopeia Sede'))
   observeEvent(input$geo, {
     gg <- input$geo
     if(gg == 'Rufiji'){
@@ -719,6 +722,17 @@ app_server <- function(input, output, session) {
       the_country <- 'Mozambique'
     }
     country(the_country)
+    
+    # Update HQ location
+    if(the_country == 'Mozambique'){
+      hq$data <- tibble(lng = 35.711553,
+                        lat = -17.979446,
+                        label = 'Mopeia Sede')
+    } else {
+      hq$data <- tibble(lng = 38.984170,
+                        lat = -7.947843,
+                        label = 'Rufiji Ikwiri')
+    }
     
     # Load data     
     li <- session_info$logged_in
@@ -1795,7 +1809,11 @@ app_server <- function(input, output, session) {
       out <- voronoi(pdx)
       out@data <- left_join(out@data, df_pdx)
       
-      l <- leaflet() %>% addTiles()
+      hqx <- hq$data
+      
+      l <- leaflet() %>% addTiles() %>%
+        addMarkers(data = hqx,  
+                   popup = hqx$label)
 
       # pal_all <- pal_hamlet <- colorNumeric(
       #   palette = c("black","darkred", 'red', 'darkorange', 'blue'),
@@ -2102,19 +2120,29 @@ app_server <- function(input, output, session) {
         pd_ok <- TRUE
       }
     }
+    hqx <- hq$data
+    
     if(pd_ok){
       ll <- extract_ll(pd$hh_geo_location)
       pd$lng <- ll$lng; pd$lat <- ll$lat
+      
+
       # round table not here, and here make sure map works (not saving data below)
       l <- leaflet() %>%
         # addProviderTiles(providers$Stamen.Toner) %>%
         # addProviderTiles(providers$Esri.WorldImagery) %>%
         addTiles() %>%
         clearMarkers() %>%
-        addMarkers(data = pd, lng = pd$lng, lat = pd$lat)
+        addMarkers(data = hqx,  
+                   popup = hqx$label) %>%
+        addCircleMarkers(data = pd, lng = pd$lng, lat = pd$lat)
       
     } else {
-      l <- leaflet() %>% addProviderTiles(providers$Esri.WorldImagery)# addProviderTiles(providers$Stamen.Toner)
+      l <- leaflet() %>% 
+        addProviderTiles(providers$Esri.WorldImagery) %>% # addProviderTiles(providers$Stamen.Toner)
+      
+        addMarkers(data = hqx,  
+                   popup = hqx$label) 
       
     }
     l
@@ -4058,7 +4086,7 @@ app_server <- function(input, output, session) {
       }
     }
 
-    
+    hqx <- hq$data
     if(ok){
       
       sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
@@ -4078,10 +4106,14 @@ app_server <- function(input, output, session) {
       # l <- mapview::mapview()
       l <- mapview::mapview(pts["grp"],
                             legend = FALSE,
-                            layer.name = 'Date-time')
+                            layer.name = 'Date-time') #%>%
+        # addMarkers(data = hqx,  
+        #            popup = hqx$label) 
       l@map
     } else {
-      leaflet()
+      leaflet() %>%
+        addMarkers(data = hqx,  
+                   popup = hqx$label) 
     }
 
 
@@ -4098,9 +4130,12 @@ app_server <- function(input, output, session) {
                             statement = paste0('SELECT * FROM traccar WHERE unique_id = ', the_worker))
       pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
     }
+    hqx <- hq$data
     # Make the plot
     l <- leaflet() %>%
-      addTiles()
+      addTiles() %>%
+      addMarkers(data = hqx,  
+                 popup = hqx$label)
     if(!is.null(sub_traccar)){
       if(nrow(sub_traccar) > 0){
         l <- l %>%
@@ -4772,10 +4807,12 @@ app_server <- function(input, output, session) {
                 filter(!is.na(lng)) %>%
                 filter(lng > 1,
                        lat < -1)
-              
+              hqx <- hq$data
               pts = st_as_sf(data.frame(geo_dat), coords = c("lng", "lat"), crs = 4326)
               dat_leaf <- leaflet() %>%
                 addProviderTiles(provider = providers$Esri.WorldImagery) %>%
+                addMarkers(data = hqx,  
+                           popup = hqx$label) %>%
                 addGlPoints(data = pts,
                             # fillColor = 'red',
                             fillColor = pts$status,
@@ -5042,12 +5079,13 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = {
               the_country <- country()
+              the_iso <- ifelse(the_country == 'Tanzania', 'TZA', 'MOZ')
+              
               pd <- bohemia::gps %>% left_join(bohemia::locations %>% 
                                                  dplyr::select(-clinical_trial) %>% 
-                                                 mutate(n_households = ifelse(iso == 'MOZ',
+                                                 mutate(n_households = ifelse(country == 'Mozambique',
                                                                                                                                       round(n_households * 0.55),
                                                                                                                                       n_households)))
-              the_iso <- ifelse(the_country == 'Tanzania', 'TZA', 'MOZ')
               pdx <- pd <- pd %>%
                 filter(iso == the_iso,
                        clinical_trial == 0)
