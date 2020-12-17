@@ -2361,7 +2361,13 @@ iid = "'2774e59a-76cd-46cf-a202-a1ff27aff836'"
 implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year = 'No' where instance_id = " + iid + "; DELETE FROM minicensus_repeat_death_info WHERE instance_id = " + iid + ";")
 
 
-
+# Removing refusals unless VA Fieldworker, as requested by Eldo - Dec 17
+implement(id=None, query="DELETE FROM clean_refusals WHERE instance_id='2d16e296-5aef-4f52-80f2-afe15134cd31'", who='Xing Brew') 
+implement(id=None, query="DELETE FROM clean_refusals WHERE instance_id='ece28d13-4be1-475d-b5a2-dee069d34453'", who='Xing Brew') 
+implement(id=None, query="DELETE FROM clean_refusals WHERE instance_id='40413108-afc3-42dd-b4aa-58c6561c7872'", who='Xing Brew') 
+implement(id=None, query="DELETE FROM clean_refusals WHERE instance_id='b5a32ef2-ffda-4c00-893f-4350ce00376a'", who='Xing Brew') 
+implement(id=None, query="DELETE FROM clean_refusals WHERE instance_id='6dfefd8b-1c38-4230-94fb-e89ce0262f08'", who='Xing Brew') 
+implement(id=None, query="DELETE FROM clean_refusals WHERE instance_id='6dfefd8b-1c38-4230-94fb-e89ce0262f08'", who='Xing Brew') 
 
 
 dbconn.commit()
