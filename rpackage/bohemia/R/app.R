@@ -3566,9 +3566,7 @@ app_server <- function(input, output, session) {
                       mutate(forms = minicensus,
                              days = minicensus_days)
                     pdx <- pdx %>%
-                      mutate(per_day = forms / days) %>%
-                      mutate(label = paste0(forms, '\n',
-                                            days, ''))
+                      mutate(per_day = forms / days)
                     pdx <- pdx %>% filter(!is.na(forms))
                     pdx <- pdx %>% arrange(desc(per_day))
                     pdx$wid <- factor(pdx$wid, levels = unique(pdx$wid))
@@ -3584,17 +3582,23 @@ app_server <- function(input, output, session) {
                     # add denominator for daily target
                     pdx$daily_target <- fw_daily_target
                     pdx$percent_of_daily_target <- round((pdx$per_day/pdx$daily_target)*100, 2)
+                    # create color vector for manual legend
+                    colors <- c('Number of forms' ='blue','Working days'='red')
                     p <- ggplot(data = pdx,
                                 aes(x = wid,
                                     y = percent_of_daily_target)) +
-                      geom_bar(stat = 'identity') +
+                      geom_bar(stat = 'identity', alpha=0.6) +
                       labs(x = 'FW',
-                           y = '% of daily target',
-                           caption = 'Numbers show forms on top, working days on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
+                           y = '% of daily target') +
                       theme_bohemia() +
-                      geom_text(aes(label = label),
-                                nudge_y = 0, size = 2, alpha = 0.8) +
+                      geom_text(aes(label = forms, color='Number of forms'),
+                                nudge_y = 0.5, size = 4, alpha = 0.8) +
+                      geom_text(aes(label = days, color='Working days'),
+                                nudge_y = -2, size = 4, alpha = 0.8) +
+                      scale_color_manual(name ='', 
+                                         values =colors) +
                       theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
+                    p
                     return(p)
                   } else {
                     pdx <- pdx %>%
@@ -3612,9 +3616,7 @@ app_server <- function(input, output, session) {
                            days = va_days)
                 }  
                 pdx <- pdx %>%
-                  mutate(per_day = forms / days) %>%
-                  mutate(label = paste0(forms, '     ',
-                                        days, ''))
+                  mutate(per_day = forms / days) 
                 pdx <- pdx %>% filter(!is.na(forms))
                 pdx <- pdx %>% arrange(desc(per_day))
                 pdx$wid <- factor(pdx$wid, levels = unique(pdx$wid))
@@ -3630,22 +3632,31 @@ app_server <- function(input, output, session) {
                 
                 # remove NA in parantheses
                 pdx <- pdx %>% filter(!grepl('NA', wid))
-                ggplot(data = pdx,
-                       aes(x = reorder(wid, -per_day),
-                           y = per_day)) +
-                  geom_bar(stat = 'identity',
-                           alpha = 0.6) +
-                  labs(x = 'FW',
-                       y = 'Forms per (working) day',
-                       caption = 'Numbers show forms on top, working days on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
-                  theme_bohemia() +
-                  geom_text(aes(label = label),
-                            nudge_y = 0, size = 3, alpha = 0.8,
-                            angle = 90) +
-                  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
-                  theme(axis.text = element_text(size = 10),
-                        axis.title = element_text(size = 14),
-                        plot.title = element_text(size = 20))
+                colors <- c('Number of forms' ='blue','Working days'='red')
+                
+                if(nrow(pdx)==0){
+                  NULL
+                } else {
+                  ggplot(data = pdx,
+                         aes(x = reorder(wid, -per_day),
+                             y = per_day)) +
+                    geom_bar(stat = 'identity',
+                             alpha = 0.6) +
+                    labs(x = 'FW',
+                         y = 'Forms per (working) day') +
+                    theme_bohemia() +
+                    geom_text(aes(label = forms, color='Number of forms'),
+                              nudge_y = 0.2, size = 4, alpha = 0.8) +
+                    geom_text(aes(label = days, color='Working days'),
+                              nudge_y = -0.5, size = 4, alpha = 0.8) +
+                    scale_color_manual(name ='', 
+                                       values =colors) +
+                    theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
+                    theme(axis.text = element_text(size = 10),
+                          axis.title = element_text(size = 14),
+                          plot.title = element_text(size = 20))
+                }
+                
                 
               } else {
                 NULL
