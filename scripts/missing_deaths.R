@@ -32,6 +32,91 @@ skip_deprecated <- FALSE
 
 moz <- tza <- TRUE
 sys_hour <- lubridate::hour(Sys.time())
+
+# Get those households with > 1 death
+many <- dbGetQuery(conn = con,
+                   "SELECT instance_id, todays_date, server FROM minicensus_main WHERE how_many_deaths > 1")
+# already_in_deaths <- 
+#   dbGetQuery(conn = con,
+#              "SELECT instance_id, death_dod, death_id FROM minicensus_repeat_death_info") %>%
+#   mutate(death_dod = as.character(death_dod),
+#          already_there = TRUE)
+
+for(i in 1:nrow(many)){
+  the_row <- many[i,]
+  dbSendQuery(conn = con,
+              statement = paste0("DELETE FROM minicensus_main WHERE instance_id = '", 
+                                 the_row$instance_id, "'"))
+  # the_server <- the_row$server
+  # failed <- TRUE
+  # 
+  # while(failed){
+  #   if(the_server == 'https://sap.manhica.net:4442/ODKAggregate'){
+  # 
+  #     for(id in c('minicensus', 'minicensusb', 'smallcensus', 'smallcensusa', 'smallcensusb')){
+  #       message('Working on ', id)
+  #       url <- creds$moz_odk_server
+  #       user = creds$moz_odk_user
+  #       password = creds$moz_odk_pass
+  #       if(id == 'minicensusb'){
+  #         id2 = 'minicensus'
+  #         use_data_id = FALSE
+  #       } else {
+  #         id2 = NULL
+  #         use_data_id = TRUE
+  #       }
+  #       if(id %in% c('smallcensus', 'smallcensusa', 'smallcensusb')){
+  #         id2 = NULL
+  #         use_data_id = FALSE
+  #       }
+  #       # Get data
+  #       data <- odk_get_data(
+  #         url = url,
+  #         id = id,
+  #         id2 = id2,
+  #         unknown_id2 = FALSE,
+  #         uuids = paste0('uuid:', the_row$instance_id),
+  #         user = user,
+  #         password = password,
+  #         pre_auth = TRUE,
+  #         use_data_id = use_data_id,
+  #         chunk_size = 50000
+  #       )
+  #       new_data <- FALSE
+  #       if(!is.null(data)){
+  #         new_data <- TRUE
+  #       }
+  #       if(new_data){
+  #         # Format data
+  #         formatted_data <- format_minicensus(data = data, keyfile = keyfile_path)
+  #         # Get the death repeat part
+  #         death_repeat <- formatted_data$minicensus_repeat_death_info
+  #         # Get the part that might not be there already
+  #         keep <- death_repeat %>% left_join(already_in_deaths) %>%
+  #           filter(is.na(already_there)) %>%
+  #           dplyr::select(-already_there)
+  #         
+  #         # Throw into database
+  #         if(nrow(keep) > 0){
+  #           dbAppendTable(conn = con,
+  #                         name = 'minicensus_repeat_death_info',
+  #                         value = keep)
+  #         }
+  #         
+  #         # Update data
+  #         update_minicensus(formatted_data = formatted_data,
+  #                           con = con)
+  #       }
+  #     }
+  #     
+  #   }
+    
+    
+  # }
+}
+
+
+
 if(sys_hour %in% 7:10){
   moz <- FALSE
   message('Skipping Mozambique due to time of day (server down for maintenance)')
@@ -356,7 +441,7 @@ dat <- get_traccar_data(url = creds$traccar_server,
 # Get existing max date
 max_date <- dbGetQuery(con, 'SELECT max(devicetime) FROM traccar')
 # fetch data only from one week prior to max date
-fetch_date <- max_date$max - lubridate::days(3)
+fetch_date <- max_date$max - lubridate::days(7)
 fetch_date <- as.character(as.Date(fetch_date))
 if(is.na(fetch_date)){
   fetch_date <- '2020-01-01'

@@ -114,22 +114,28 @@ format_minicensus <- function(data, keyfile){
   # death
   repeat_death_info <- data$repeats$repeat_death_info 
   repeat_death_info <- repeat_death_info %>% filter(!is.na(repeated_id))
+  repeat_death_ok <- FALSE
   if(!is.null(repeat_death_info)){
     if(nrow(repeat_death_info) > 0){
-      repeat_death_info <- repeat_death_info %>%
-        dplyr::rename(instance_id = instanceID)
-      repeat_death_info$repeat_name <- NULL
-      repeat_death_info$repeated_id <- NULL
-      repeat_death_info$death_adjustment <- NULL
-      death_first_initials <- substr(repeat_death_info$death_name, 1, 1)
-      death_second_initials <- substr(repeat_death_info$death_surname, 1, 1)
-      repeat_death_info$death_initials <- paste0(death_first_initials, ' ', death_second_initials)
-      repeat_death_info$death_name <- encrypt_private_data(data = repeat_death_info$death_name, keyfile = keyfile)
-      repeat_death_info$death_surname <- encrypt_private_data(data = repeat_death_info$death_surname, keyfile = keyfile)
-      repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
-    } else {
-      repeat_death_info <- NULL
-    }
+      if('death_name' %in% repeat_death_info){
+        repeat_death_ok <- TRUE
+      }
+    } 
+  }
+  if(repeat_death_ok){
+    repeat_death_info <- repeat_death_info %>%
+      dplyr::rename(instance_id = instanceID)
+    repeat_death_info$repeat_name <- NULL
+    repeat_death_info$repeated_id <- NULL
+    repeat_death_info$death_adjustment <- NULL
+    death_first_initials <- substr(repeat_death_info$death_name, 1, 1)
+    death_second_initials <- substr(repeat_death_info$death_surname, 1, 1)
+    repeat_death_info$death_initials <- paste0(death_first_initials, ' ', death_second_initials)
+    repeat_death_info$death_name <- encrypt_private_data(data = repeat_death_info$death_name, keyfile = keyfile)
+    repeat_death_info$death_surname <- encrypt_private_data(data = repeat_death_info$death_surname, keyfile = keyfile)
+    repeat_death_info <- repeat_death_info[,!grepl('note_|_warning', names(repeat_death_info))]
+  } else {
+    repeat_death_info <- NULL
   }
     
   
