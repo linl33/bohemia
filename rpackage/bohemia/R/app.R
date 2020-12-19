@@ -218,6 +218,7 @@ app_ui <- function(request) {
                                                                     uiOutput('ui_va_monitoring_by'),
                                                                     br(),
                                                                     uiOutput('va_progress_geo_ui'),
+                                                                    uiOutput('va_progress_geo_render_plot_ui'),
                                                                     uiOutput('va_progress_geo_past_due_ui'))),
                                                          tabPanel('Past due VAs',
                                                                   uiOutput('ui_va_progress_past_due')
@@ -1705,6 +1706,8 @@ app_server <- function(input, output, session) {
       
       message('---created progess plot for Overview by geography')
       names(monitor_plot)[1] <- 'location'
+      # paste together numerator and percent finished for every plot text
+      monitor_plot$plot_text <- paste0(monitor_plot$numerator, '\n', monitor_plot$`Percent finished`)
       if(dt_choose_form=='Both'){
         out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator, fill=data)) + geom_bar(stat='identity',alpha=0.7) +
           scale_fill_manual(name='', values=c('darkblue', 'darkgreen')) +
@@ -1717,16 +1720,17 @@ app_server <- function(input, output, session) {
         
       } else {
         if(make_percent){
-          out <- ggplot(monitor_plot, aes(reorder(location,-`Percent finished`), `Percent finished`)) + geom_bar(stat='identity') +
-            geom_text(aes(label=`Percent finished`), vjust=-0.1)+
+          out <- ggplot(monitor_plot, aes(reorder(location,-`Percent finished`), `Percent finished`)) + geom_bar(stat='identity', fill = 'grey', alpha=0.5) +
+            geom_text(aes(label=plot_text), vjust=0.5, size = 3)+
             labs(x = '',
                  y ='') + 
             theme_bohemia() +
             theme(axis.text.x  = element_text(angle=90, vjust=0.5),
                   axis.ticks.x = element_blank())
+          
         } else {
-          out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator)) + geom_bar(stat='identity') +
-            geom_text(aes(label=numerator), vjust=-0.1)+
+          out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator)) + geom_bar(stat='identity', fill='grey', alpha=0.7) +
+            geom_text(aes(label=plot_text), vjust=0.5, size = 3)+
             labs(x = '',
                  y ='') + 
             theme_bohemia() +
@@ -3079,6 +3083,96 @@ app_server <- function(input, output, session) {
             })
   })
   
+  # ui for VA progress by geography.
+  output$va_progress_geo_plot_ui <- renderPlot({
+    
+    # Get the overall va progress table
+    pd <- odk_data$data
+    va <- pd$va
+    deaths <- pd$minicensus_repeat_death_info
+    pd <- pd$minicensus_main
+    co <- country()
+    # save(pd, va, deaths, cofile = '/tmp/vajoe.RData')
+    pd <- pd %>%
+      filter(hh_country == co)
+    
+    deaths <- deaths %>% filter(instance_id %in% pd$instance_id,
+                                !is.na(death_number))
+    pd <- pd %>%
+      dplyr::select(district = hh_district,
+                    ward = hh_ward,
+                    village = hh_village,
+                    hamlet = hh_hamlet, instance_id)
+    
+    grouper <- input$va_monitor_by
+    # save(grouper, file = '/tmp/grouper.RData')
+    
+    # Get location in va
+    va <- va %>%
+      mutate(code = substr(hh_id, 1, 3)) %>%
+      left_join(locations %>% dplyr::select(code, region = Region, district = District,
+                                            ward = Ward, village = Village, hamlet = Hamlet))
+    
+    
+    if(is.null(grouper)){
+      grouper <- 'district'
+    } else {
+      grouper <- tolower(grouper)
+    }
+    va_agg <- va %>%
+      group_by_(grouper) %>%
+      summarise(`VA forms collected` = n())
+    
+    va_progress_geo <- deaths %>%
+      left_join(pd) %>%
+      filter(!is.na(hamlet)) %>%
+      group_by_(grouper) %>%
+      summarise(`Deaths reported` = n()) %>%
+      full_join(va_agg) %>%
+      mutate(`VA forms collected` = ifelse(is.na(`VA forms collected`), 0, `VA forms collected`)) %>%
+      mutate(`Deaths reported` = ifelse(is.na(`Deaths reported`), 0, `Deaths reported`)) %>%
+      mutate(`% VA forms completed` = round(`VA forms collected` /
+                                              `Deaths reported` * 100))
+    message('---Created progess table for VA by geography')
+    
+    if(co == 'Mozambique'){
+      if(grouper=='district'){
+        names(va_progress_geo)[1] <- 'Distrito'
+      } else if(grouper=='ward'){
+        names(va_progress_geo)[1] <- 'Posto administrativo/localidade'
+      } else if (grouper=='hamlet'){
+        names(va_progress_geo)[1] <- 'Bairro'
+      } else if(grouper =='village'){
+        names(va_progress_geo)[1] <- 'Povaodo'
+      }
+    }
+    names(va_progress_geo)[1] <- 'location'
+    va_progress_geo <- va_progress_geo %>%gather(key=key, value=value, -c(location, `% VA forms completed`))
+    
+    plot <- ggplot(va_progress_geo, aes(reorder(location, -value), value, fill=key)) + geom_bar(stat = 'identity', alpha=0.6) +
+      labs(x='', y ='Number of forms', title = 'Deaths reported vs forms collected') +
+      scale_fill_manual(name='', values = c('darkred', 'darkblue')) +
+      theme_bohemia() +
+      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+            axis.title = element_text(size = 14),
+            plot.title = element_text(size = 20))
+    return(plot)
+    
+  })
+  
+  output$va_progress_geo_render_plot_ui <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              plotOutput('va_progress_geo_plot_ui', height = '700px')
+            })
+  })
+  
   
   output$plot_va_progress_by_geo_past_due <- renderPlot({
     # Get the odk data
@@ -3181,7 +3275,7 @@ app_server <- function(input, output, session) {
           names(plot_data)[1] <- 'V1'
           plot <- ggplot(plot_data, aes(reorder(V1, -counts), counts)) + geom_bar(stat='identity') +
             labs(x = '',
-                 y='VAs past due') +
+                 y='# of forms', title = 'VAs past due') +
             theme_bohemia() +
             theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
                   axis.title = element_text(size = 14),
@@ -3198,7 +3292,7 @@ app_server <- function(input, output, session) {
           names(plot_data)[1] <- 'V1'
           plot <- ggplot(plot_data, aes(reorder(V1, -counts), counts)) + geom_bar(stat='identity') +
             labs(x = '',
-                 y='VAs past due') +
+                 y='# of forms', title = 'VAs past due') +
             theme_bohemia() +
             theme(axis.text.x = element_text(angle=90, vjust=0.5)) +
             theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
