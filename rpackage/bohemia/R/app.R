@@ -2152,6 +2152,7 @@ app_server <- function(input, output, session) {
     }
     l
   })
+
   
   # table for anomaly description
   output$table_individual_errors <- renderTable({
@@ -4160,6 +4161,20 @@ app_server <- function(input, output, session) {
       # vector.palette = colorRampPalette(c("snow", "cornflowerblue", "grey10")),
       # na.color = "magenta",
       layers.control.pos = "topright")
+    
+    pd <- odk_data$data
+    the_form <- input$forms_gps
+    if(is.null(the_form)){
+      the_form <- 'Minicensus'
+    }
+    if(the_form=='Minicensus'){
+      pd <- pd$minicensus_main
+    } else if(the_form == 'Enumerations'){
+      pd <- pd$enumerations
+    } else {
+      pd <- pd$va
+      
+    }
     fid <- input$fid_gps
     
     # con <- get_db_connection(local = is_local)
@@ -4194,7 +4209,6 @@ app_server <- function(input, output, session) {
     
     hqx <- hq$data
     if(ok){
-      
       sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
       sub_data$day <- lubridate::round_date(sub_data$devicetime, 'day')
       
@@ -4202,28 +4216,58 @@ app_server <- function(input, output, session) {
       sub_data$day <- as.character(sub_data$day)
       
       pts = st_as_sf(data.frame(sub_data), coords = c("longitude", "latitude"), crs = 4326) %>% points_to_line2()
-      # Remove those which are two few
-      # sizes <- unlist(lapply(pts$geometry, length))
-      # pts <- pts[sizes >10,]
-      # pts$date <- as.character(pts$date)
-      # pts <- pts[-15,]
-      # pts$groups <- stplanr::rnet_group(pts)
-      # Make the plot
-      # l <- mapview::mapview()
       l <- mapview::mapview(pts["grp"],
                             legend = FALSE,
-                            layer.name = 'Date-time') #%>%
-      # addMarkers(data = hqx,  
-      #            popup = hqx$label) 
-      l@map
+                            layer.name = 'Date-time') 
+      
+      # subset by wid and dates 
+      sub_dat <- pd %>%  filter(wid == fid) %>% filter(todays_date >= date_slider[1],
+                                                       todays_date <= date_slider[2])
+      if(nrow(sub_dat)==0){
+        l@map
+      } else {
+        pd_locs <- extract_ll(sub_dat$hh_geo_location)
+        sub_dat$lng <- pd_locs$lng
+        sub_dat$lat <- pd_locs$lat
+        l@map %>%
+          addMarkers(data = sub_dat,
+                     lng = sub_dat$lng, 
+                     lat = sub_dat$lat, 
+                     popup = sub_dat$todays_date) 
+      }
     } else {
       leaflet() %>%
         addMarkers(data = hqx,  
                    popup = hqx$label) 
     }
+  })
+  
+  # Map of most recent gps 
+  output$traccar_recent <- renderLeaflet({
+    co = country()
+    traccar <- dbGetQuery(conn = con,
+                              statement = 'SELECT unique_id, devicetime, latitude, longitude, valid FROM traccar INNER JOIN(SELECT unique_id, MAX(devicetime) as devicetime FROM traccar GROUP BY unique_id) AS t1 USING(unique_id, devicetime)')
+    sub_traccar <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country == co])
+    pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
+    names(pts)[1] <- 'FW ID'
+    hqx <- hq$data
+    # Make the plot
+    l <- leaflet() %>%
+      addTiles() %>%
+      addMarkers(data = hqx,  
+                 popup = hqx$label)
+    if(!is.null(sub_traccar)){
+      if(nrow(sub_traccar) > 0){
+        l <- l %>%
+          addGlPoints(data = pts,
+                      fillColor = 'red',
+                      # fillColor = pts$status,
+                      popup = pts %>% dplyr::select(`FW ID`,devicetime, valid),
+                      group = "pts")
+      }
+    }
     
-    
-    
+    l
   })
   output$traccar_leaf <- renderLeaflet({
     # leaflet() %>% addTiles()
@@ -4528,17 +4572,21 @@ app_server <- function(input, output, session) {
               
               fluidPage(
                 fluidRow(
-                  column(6,
+                  column(4,
                          sliderInput(inputId = 'gps_slider', 
                                      label = 'Select dates', 
                                      min = as.Date('2020-09-01'), 
                                      max= Sys.Date(), 
                                      value = c(Sys.Date()-30, Sys.Date()-1)# c(as.Date('2020-09-01'), Sys.Date())
                          )),
-                  column(6,
+                  column(4,
                          selectInput('fid_gps',
                                      'Fieldworker ID',
-                                     choices = the_choices))
+                                     choices = the_choices)),
+                  column(4,
+                         selectInput('forms_gps',
+                                     'Choose form',
+                                     choices = c('Minicensus', 'Enumerations', 'VA'))), 
                 ),
                 # fluidRow(column(12, align = 'center',
                 #                 h3('Live view'),
@@ -4559,7 +4607,11 @@ app_server <- function(input, output, session) {
                                 h3('Locations of minicensus forms submitted by FW'),
                                 leafletOutput('leaf_fid',
                                               height = 500)
-                         ))
+                         )),
+                fluidRow(column(6, align='center',
+                                h3('Last recorded GPS location'),
+                                leafletOutput('traccar_recent',
+                                              height = 500)))
                 
               )
               
@@ -6859,8 +6911,6 @@ app_server <- function(input, output, session) {
                         country <- 'Tanzania'
                       }
                       # save(pd, file = '/tmp/pd.RData')
-                      
-                      
                       out <- pd %>%
                         dplyr::select(
                           Ward = hh_ward,
