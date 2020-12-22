@@ -4155,8 +4155,6 @@ app_server <- function(input, output, session) {
   
   # TRACCAR GPS UI
   output$traccar_plot_1 <- renderLeaflet({
-    # HERE GOTTEN LOAD_ODK_DATA TO GET LOCATION. NOW TESTING ACTUAL CODE TO SEE IF ALL FORMS WORK. 
-    # FIND A TEST CASE FID THAT HAS DATA IN ALL THREE FORMS (ADJUST DATES ON APP TOO. RIGHT NOT MUCH DATA IS BEING PRESENTED BECAUSE OF DATE SLIDER)
     mapviewOptions(#basemaps = c("Esri.WorldShadedRelief", "OpenStreetMap.DE"),
       # raster.palette = grey.colors,
       # vector.palette = colorRampPalette(c("snow", "cornflowerblue", "grey10")),
@@ -4165,15 +4163,12 @@ app_server <- function(input, output, session) {
     
     pd <- odk_data$data
     the_form <- input$forms_gps
-    if(is.null(the_form)){
-      the_form <- 'Minicensus'
-    }
     enum <- pd$enumerations
     va <- pd$va
     pd <- pd$minicensus_main
-    
     fid <- input$fid_gps
-    
+    # [1] 344 316 420 331 373 400 406 359 402 392 438 383 378 368 303 390 421 343 414 412 376 366 340 326 310 348 405
+    # [28] 360 345 322 419 380 427 599 434 395
     # con <- get_db_connection(local = TRUE)
     # Get the traccar data for that country
     traccar <- dbGetQuery(conn = con,
@@ -4181,8 +4176,7 @@ app_server <- function(input, output, session) {
     # dbDisconnect(con)
     # traccar <- session_data$traccar
     date_slider <- input$gps_slider
-    # save(pd,enum,va, fid,traccar, date_slider, file = 'temp_gps.rda')
-    
+
     # save(traccar, date_slider, fid, file = '/tmp/dec1b.RData')
     ok <- TRUE
     if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
@@ -4229,37 +4223,42 @@ app_server <- function(input, output, session) {
                                                         todays_date <= date_slider[2])
       if(nrow(sub_mini)==0 & nrow(enum)==0 & nrow(va)==0){
         m <- l@map
-      } else if(nrow(sub_mini) > 0) {
-        pd_locs <- extract_ll(sub_mini$hh_geo_location)
-        sub_mini$lng <- pd_locs$lng
-        sub_mini$lat <- pd_locs$lat
-        m <- m %>%
-          addCircleMarkers(data = sub_mini,
-                           lng = sub_mini$lng, 
-                           lat = sub_mini$lat, 
-                           color = 'blue',
-                           popup = sub_mini$todays_date) 
-      } else if(nrow(enum) > 0) {
-        pd_locs <- extract_ll(enum$location_gps)
-        enum$lng <- pd_locs$lng
-        enum$lat <- pd_locs$lat
-        m <- m %>%
-          addCircleMarkers(data = enum,
-                           lng = enum$lng, 
-                           lat = enum$lat, 
-                           color = 'green',
-                           popup = enum$todays_date) 
-      } else if(nrow(va) > 0) {
-        pd_locs <- extract_ll(va$location_gps)
-        va$lng <- pd_locs$lng
-        va$lat <- pd_locs$lat
-        m <- m %>%
-          addCircleMarkers(data = va,
-                           lng = va$lng, 
-                           lat = va$lat, 
-                           color = 'green',
-                           popup = va$todays_date) 
-      } 
+      } else  {
+        if(nrow(sub_mini) > 0 & 'Minicensus' %in% the_form){
+          pd_locs <- extract_ll(sub_mini$hh_geo_location)
+          sub_mini$lng <- pd_locs$lng
+          sub_mini$lat <- pd_locs$lat
+          m <- m %>%
+            addCircleMarkers(data = sub_mini,
+                             lng = sub_mini$lng, 
+                             lat = sub_mini$lat, 
+                             color = 'blue',
+                             popup = c(sub_mini$start_time))
+          
+        }
+        if(nrow(enum) > 0 & 'Enumerations' %in% the_form){
+          pd_locs <- extract_ll(enum$location_gps)
+          enum$lng <- pd_locs$lng
+          enum$lat <- pd_locs$lat
+          m <- m %>%
+            addCircleMarkers(data = enum,
+                             lng = enum$lng, 
+                             lat = enum$lat, 
+                             color = 'green',
+                             popup = enum$start_time) 
+        }
+        if(nrow(va) > 0 & 'VA' %in% the_form) {
+          pd_locs <- extract_ll(va$location_gps)
+          va$lng <- pd_locs$lng
+          va$lat <- pd_locs$lat
+          m <- m %>%
+            addCircleMarkers(data = va,
+                             lng = va$lng, 
+                             lat = va$lat, 
+                             color = 'green',
+                             popup = va$start_time) 
+        } 
+      }
     } else {
       m <- leaflet() %>%
         addMarkers(data = hqx,  
