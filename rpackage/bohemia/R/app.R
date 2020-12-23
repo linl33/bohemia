@@ -4272,10 +4272,15 @@ app_server <- function(input, output, session) {
     co = country()
     traccar <- dbGetQuery(conn = con,
                               statement = 'SELECT unique_id, devicetime, latitude, longitude, valid FROM traccar INNER JOIN(SELECT unique_id, MAX(devicetime) as devicetime FROM traccar GROUP BY unique_id) AS t1 USING(unique_id, devicetime)')
+    # create a days ago variable 
+    traccar$date <- lubridate::as_date(traccar$devicetime)
+    todays_date <- Sys.Date()
+    traccar$days_ago <-as.numeric(todays_date)- as.numeric(traccar$date)
     sub_traccar <- traccar %>% filter(unique_id %in% fids$bohemia_id[fids$country == co])
     pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
     names(pts)[1] <- 'FW ID'
     hqx <- hq$data
+    
     # Make the plot
     l <- leaflet() %>%
       addTiles() %>%
@@ -4283,17 +4288,28 @@ app_server <- function(input, output, session) {
                  popup = hqx$label)
     if(!is.null(sub_traccar)){
       if(nrow(sub_traccar) > 0){
-        l <- l %>%
-          addGlPoints(data = pts,
-                      fillColor = 'red',
+        color_pal <- colorNumeric(palette =  colorRampPalette(c('red', 'green'))(length(pts$days_ago)),domain = sort(unique(pts$days_ago)), reverse = T)
+        
+          
+        l <- l %>%leaflet() %>%
+          addTiles() %>%
+          addCircleMarkers(data = pts,
+                      color  = ~color_pal(days_ago),
                       # fillColor = pts$status,
                       popup = pts %>% dplyr::select(`FW ID`,devicetime, valid),
-                      group = "pts")
+                      group = "pts") %>%
+        addLegend("bottomright", 
+                  colors =color_pal(sort(unique(pts$days_ago))),
+                  labels=sort(unique(pts$days_ago)),
+                  opacity = 1)
+        
       }
     }
     
     l
   })
+  
+ 
   output$traccar_leaf <- renderLeaflet({
     # leaflet() %>% addTiles()
     # Get the traccar data for that country
