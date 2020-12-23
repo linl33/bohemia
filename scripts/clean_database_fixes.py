@@ -2451,6 +2451,157 @@ implement(id = 'repeat_hh_id_331a332a-2750-4ae1-b909-2ef311965521,8b3eac42-8599-
 implement(id = 'repeat_hh_id_3890ab39-af74-4ffc-ae57-a4dfca68e879,84975cb5-3fde-42cb-8e16-f03aba8aba0b', query = "UPDATE clean_minicensus_main SET hh_id='NAV-025' WHERE instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-001', permid='NAV-025-001' WHERE num='1' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-002', permid='NAV-025-002' WHERE num='2' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-003', permid='NAV-025-003' WHERE num='3' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-004', permid='NAV-025-004' WHERE num='4' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-005', permid='NAV-025-005' WHERE num='5' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-006', permid='NAV-025-006' WHERE num='6' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-007', permid='NAV-025-007' WHERE num='7' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-008', permid='NAV-025-008' WHERE num='8' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-009', permid='NAV-025-009' WHERE num='9' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-010', permid='NAV-025-010' WHERE num='10' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-011', permid='NAV-025-011' WHERE num='11' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-012', permid='NAV-025-012' WHERE num='12' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b';UPDATE clean_minicensus_people SET pid = 'NAV-025-013', permid='NAV-025-013' WHERE num='13' and instance_id='84975cb5-3fde-42cb-8e16-f03aba8aba0b'", who = 'Xing Brew')
 implement(id = 'repeat_hh_id_3a2396c2-eacd-4534-b969-69da74d2a8e9,8d3ed037-7e7d-4efe-a813-17fe0896309d', query = "UPDATE clean_minicensus_main SET hh_id='JON-015' WHERE instance_id='8d3ed037-7e7d-4efe-a813-17fe0896309d';UPDATE clean_minicensus_people SET pid = 'JON-015-001', permid='JON-015-001' WHERE num='1' and instance_id='8d3ed037-7e7d-4efe-a813-17fe0896309d';UPDATE clean_minicensus_people SET pid = 'JON-015-002', permid='JON-015-002' WHERE num='2' and instance_id='8d3ed037-7e7d-4efe-a813-17fe0896309d';UPDATE clean_minicensus_people SET pid = 'JON-015-003', permid='JON-015-003' WHERE num='3' and instance_id='8d3ed037-7e7d-4efe-a813-17fe0896309d';UPDATE clean_minicensus_people SET pid = 'JON-015-004', permid='JON-015-004' WHERE num='4' and instance_id='8d3ed037-7e7d-4efe-a813-17fe0896309d';UPDATE clean_minicensus_people SET pid = 'JON-015-005', permid='JON-015-005' WHERE num='5' and instance_id='8d3ed037-7e7d-4efe-a813-17fe0896309d';UPDATE clean_minicensus_people SET pid = 'JON-015-006', permid='JON-015-006' WHERE num='6' and instance_id='8d3ed037-7e7d-4efe-a813-17fe0896309d';UPDATE clean_minicensus_people SET pid = 'JON-015-007', permid='JON-015-007' WHERE num='7' and instance_id='8d3ed037-7e7d-4efe-a813-17fe0896309d'", who = 'Xing Brew')
 
+### VA FIXES ###
+
+iid = "'ff7a7064-2489-47cc-8d2a-1965e0587c76'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'43afb427-c306-46f2-997b-83e4435c0811'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'7cb1a7d8-ee77-496a-9aac-65984adf19d8'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'a8e033b3-a462-42f4-9688-8fbec0d3fac0'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'9e362517-93e9-41b7-a59a-66e2e242b0f2'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'b7fbb56d-3f6d-4013-adfd-63001119ffb2'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'9e362517-93e9-41b7-a59a-66e2e242b0f2'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'5b613404-9ac0-4ea9-bda1-209f073ac5f6'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'c52d0cc4-8e89-4a8c-a76b-00caac388bb3'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'6dde710b-a086-4a52-87bf-aad47e848da4'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'304dafd6-f75f-4015-aac5-8c1450cc1711'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'9795d612-b1b8-4631-8ae9-58b48844c0ae'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'304dafd6-f75f-4015-aac5-8c1450cc1711'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'24f504e6-db95-4677-b7c0-e337b83da1b2'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'f40af921-825e-481d-8eb4-31170b16d9db'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'bfb49e83-3af5-45c1-8c5e-c94bdf86ee3e'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'861ca56e-6b78-4a96-b049-11f8ae781aeb'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'6293b81b-24b1-459a-bc40-dc71569e4b1f'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'7b1c34f1-ca4d-4716-ad38-e2264b1763f9'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'67106dc9-8e4f-4fdb-a93a-919828c01fbb'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'4f710a4f-c1c8-4eb3-ab81-2d5a83ad6a80'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'f837bd59-1fed-4349-a443-0b422bc665d1'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'d06cc030-6448-4932-9347-d99eec204850'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'cf93fa79-0fc3-4d77-8cd6-62b305d7cffe'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'9cdd32c0-8e57-4bae-a311-6512f65f6599'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'9b375459-7183-45b6-81a0-8444501512e8'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'9b375459-7183-45b6-81a0-8444501512e8'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'e6bac960-b238-4137-90fa-7b7f06eb8778'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'8bd23948-ba2a-4f90-8a9b-0167e01a5408'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'74dfe6c6-7d62-4398-86da-e034da2f80c9'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'717b9ff5-fc46-4e97-a280-745f7b459111'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'0c1956e4-281f-48b2-aca4-4f02b5a58c84'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'a17b7a47-6741-4936-a020-42d3b37f63f2'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'e7b9901e-84f6-4c3a-8c8c-acb0c08a6913'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'3eb0c383-c7a0-42b0-b0ee-e69a13a28d1a'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'5e4eea37-1b88-42bc-bb4e-b7d1fecd0aba'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'8cc570d8-b18c-451f-8278-47ad50c92717'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'27ec3d85-4ff8-4276-8308-2d3a72061275'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'a85741ad-37df-454a-9f7a-f809e1d34f26'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'2bd207df-0e3d-46bf-aeb1-7e1e88fa7d5d'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'70afb03d-0ec9-4504-a02d-c37d589a9548'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+iid = "'87cfb23e-5e2d-4dec-91ac-cffeca0dd99f'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET any_deaths_past_year='No', how_many_deaths=NULL WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + ";", who = 'Xing Brew')																									
+																									
+# households with multiple deaths, where at least one should be deleted																									
+iid = "'a562f9ad-5e3e-46b0-a5c0-62d347b30535'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET how_many_deaths='1' WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + " and death_number='1'; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + " and death_number='2';", who = 'Xing Brew')																									
+																									
+iid = "'b4f682b9-9e28-4def-a04c-75dee495eeed'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET how_many_deaths='1' WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + " and death_number='1';", who = 'Xing Brew')																									
+																									
+iid = "'c4dd69e3-9f00-4935-93b6-ad2eef6fb0af'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET how_many_deaths='1' WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + " and death_number='1';", who = 'Xing Brew')																									
+																									
+iid = "'5ca40c5e-1972-4098-8210-d5e5947cc2d1'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET how_many_deaths='1' WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + " and death_number='2';", who = 'Xing Brew')																									
+																									
+iid = "'b7717b99-b646-4238-ae0e-d3950c1b453a'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET how_many_deaths='1' WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + " and death_number='2';", who = 'Xing Brew')																									
+																									
+iid = "'bc8f9381-35b6-44ad-bbfb-d4dee20b5f75'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET how_many_deaths='1' WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + " and death_number='1';", who = 'Xing Brew')																									
+																									
+iid = "'be6ab64d-364a-47df-8f59-a1db152001bf'"																									
+implement(id = None, query = "UPDATE clean_minicensus_main SET how_many_deaths='2' WHERE instance_id=" + iid + "; DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id= " + iid + " and death_number='1';", who = 'Xing Brew')																									
+																									
+																								
 
 dbconn.commit()
 cur.close()
