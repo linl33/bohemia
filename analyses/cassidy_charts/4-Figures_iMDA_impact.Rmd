@@ -47,11 +47,11 @@ m1 = tm_shape(World, bbox = bhu_bb) +
     tm_borders() +
     tm_polygons(col = 'grey') +
   tm_shape(study_area, bbox = bhu_bb) +
-    tm_polygons(col = "incidence_case", palette="YlOrRd", style="cont", title="Malaria incidence*") +
+    tm_polygons(col = "incidence_case", palette="YlOrRd", style="cont", title="Malaria incidence") +
     tm_text("iso_a3", size = 0.6) +
-    tm_layout(frame = T, legend.position = c("left", "bottom"), bg.color="lightcyan1",
+    tm_layout(frame = T, legend.position = c(0, 0.1), bg.color="lightcyan1",
               legend.title.size=1.7, legend.text.size = 0.7) +
-  tm_credits('*per 1000\npopulation at risk', size = 0.8)
+  tm_credits('Per 1000\npopulation at risk', size = 0.5, position = c(0,0))
 
 m2 = tm_shape(World, bbox = bhu_bb) +  
     tm_borders() +
