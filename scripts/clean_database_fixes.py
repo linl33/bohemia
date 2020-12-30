@@ -12,22 +12,22 @@ logging.basicConfig(filename="logs/apply_corrections.log", level=logging.DEBUG)
 
 # Read in credentials
 with open(r'../credentials/credentials.yaml') as file:
-    creds = yaml.load(file, Loader=yaml.FullLoader)
+  creds = yaml.load(file, Loader=yaml.FullLoader)
 
 # Define whether working locally or not
 is_local = False
 if is_local:
-    dbconn = psycopg2.connect(dbname="bohemia") #psycopg2.connect(dbname="bohemia", user="bohemia_app", password="")
-    engine_string = "postgresql:///bohemia"
+  dbconn = psycopg2.connect(dbname="bohemia") #psycopg2.connect(dbname="bohemia", user="bohemia_app", password="")
+engine_string = "postgresql:///bohemia"
 else:
-    dbconn = psycopg2.connect(dbname='bohemia', user = creds['psql_master_username'], password = creds['psql_master_password'], host = creds['endpoint'], port = 5432)
-    engine_string = "postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}".format(
-        user=creds['psql_master_username'],
-        password=creds['psql_master_password'],
-        host=creds['endpoint'],
-        port='5432',
-        database='bohemia',
-    )
+  dbconn = psycopg2.connect(dbname='bohemia', user = creds['psql_master_username'], password = creds['psql_master_password'], host = creds['endpoint'], port = 5432)
+engine_string = "postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}".format(
+  user=creds['psql_master_username'],
+  password=creds['psql_master_password'],
+  host=creds['endpoint'],
+  port='5432',
+  database='bohemia',
+)
 
 # Initialize connection to the database
 cur = dbconn.cursor()
@@ -53,27 +53,27 @@ show_these.to_csv('/tmp/show_these.csv') # to help human
 
 # Define function for implementing corrections
 def implement(id = None, query = '', who = 'Joe Brew', is_ok = False, cur = cur, dbconn = dbconn):
-    # Implement the actual fix to the database
-    if not is_ok:
-        try:
-            # print('Executing this query:\n')
-            # print(query)
-            cur.execute(query)
-        except:
-            cur.execute("ROLLBACK")
-            print('Problem executing:\n')
-            print(query)
-            return
-    done_at = datetime.now()
-    # State the fact that it has been fixed
-    if id is not None:
-        cur.execute(
-            """
+  # Implement the actual fix to the database
+  if not is_ok:
+  try:
+  # print('Executing this query:\n')
+  # print(query)
+  cur.execute(query)
+except:
+  cur.execute("ROLLBACK")
+print('Problem executing:\n')
+print(query)
+return
+done_at = datetime.now()
+# State the fact that it has been fixed
+if id is not None:
+  cur.execute(
+    """
             INSERT INTO fixes (id, done_by, done_at, resolution_code) VALUES(%s, %s, %s, %s)
             """,
-            (id, who, done_at, query)
-        )
-    dbconn.commit()
+    (id, who, done_at, query)
+  )
+dbconn.commit()
 
 # Go one-by-one through "show_these" and implement changes
 # show_these.iloc[5]
@@ -2681,7 +2681,7 @@ implement(id='repeat_hh_id_enumerations_c3433b5d-ff12-4baa-bd37-b82075789116,f98
 implement(id='repeat_hh_id_enumerations_b4e7b9d4-92fb-48a9-92c5-94b644a44c3f,e8480758-73f5-4309-9010-3f2e6fcd72de', query = "UPDATE clean_enumerations SET agregado='CIM-082' WHERE instance_id='e8480758-73f5-4309-9010-3f2e6fcd72de'", who='Xing Brew')
 implement(id='repeat_hh_id_enumerations_2046c45c-ed0a-4b1e-a9dd-f2b56adaa3f9,b3b0da09-d4ea-41f3-9846-e30b5cc4d7ac', query = "UPDATE clean_enumerations SET agregado='CIM-098' WHERE instance_id='2046c45c-ed0a-4b1e-a9dd-f2b56adaa3f9'", who='Xing Brew')
 
-implement(id = 'repeat_hh_id_0847fe9b-9c16-4a58-8446-087e9c50750e,de4ad34c-4f57-4832-bb85-4f82843a8391', query = "UPDATE clean_minicensus_main SET hh_id='JON-012' WHERE instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-001', permid='JON-012-001' WHERE num='1' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-002', permid='JON-012-002' WHERE num='2' and instanceid='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-003', permid='JON-012-003' WHERE num='3' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-004', permid='JON-012-004' WHERE num='4' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-005', permid='JON-012-005' WHERE num='5' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-006', permid='JON-012-006' WHERE num='6' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-007', permid='JON-012-007' WHERE num='7' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-008', permid='JON-012-008' WHERE num='8' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391'", who = 'Xing Brew')
+implement(id = 'repeat_hh_id_0847fe9b-9c16-4a58-8446-087e9c50750e,de4ad34c-4f57-4832-bb85-4f82843a8391', query = "UPDATE clean_minicensus_main SET hh_id='JON-012' WHERE instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-001', permid='JON-012-001' WHERE num='1' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-002', permid='JON-012-002' WHERE num='2' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-003', permid='JON-012-003' WHERE num='3' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-004', permid='JON-012-004' WHERE num='4' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-005', permid='JON-012-005' WHERE num='5' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-006', permid='JON-012-006' WHERE num='6' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-007', permid='JON-012-007' WHERE num='7' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391';UPDATE clean_minicensus_people SET pid = 'JON-012-008', permid='JON-012-008' WHERE num='8' and instance_id='de4ad34c-4f57-4832-bb85-4f82843a8391'", who = 'Xing Brew')
 
 dbconn.commit()
 cur.close()
