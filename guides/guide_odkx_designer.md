@@ -48,15 +48,21 @@ Prepopulated data should be in the `hh_members.csv` file in the `/app/config/ass
 Add the table and file name for prepopulating the database you need in the `tables.init` file in the `app/config/assets` folder
 
 ### Test app on android device
-To test the init setup and generally the app on an android device:
+To test the init setup and generally the app on an android device: 
+
+0. If you haven't already; use this resource to install the ODK tools on your android device: https://docs.odk-x.org/basics-install/#installing-odk-x-basic-tools
+     - OI File Manager
+     - ODK-X Services
+     - ODK-X Survey
+     - ODK-X Tables
 
 1. Connect the device to your computer via a USB cable
 
 2. Open a cmd or terminal window within the Application Designer directory (the one containing Gruntfile.js), as described in the Application Designer Directory Structure documentation.
 
 3. Type:
-
- `grunt adbpush`
+    
+    `grunt adbpush`
 
 _For detailed instructions please refer to: https://docs.odk-x.org/build-app/#moving-files-to-the-device_
 
