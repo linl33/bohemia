@@ -35,7 +35,7 @@ sync_workers_traccar <- function(credentials = NULL,
   
   # Get users data already registered on the traccar server
   registered_workers_tza <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=0') %>% dplyr::select(-tablet_id)  %>% mutate(phone = as.character(phone))
-  registered_workers_moz <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=490144130') %>% dplyr::select(-tablet_id)  %>% mutate(phone = as.character(phone))
+  registered_workers_moz <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=409816186') %>% dplyr::select(-tablet_id)  %>% mutate(phone = as.character(phone))
   registered_workers_other <- gsheet::gsheet2tbl('https://docs.google.com/spreadsheets/d/1o1DGtCUrlBZcu-iLW-reWuB3PC8poEFGYxHfIZXNk1Q/edit#gid=179257508') %>% dplyr::select(-tablet_id)  %>% mutate(phone = as.character(phone))
   
   registered_workers <- bind_rows(registered_workers_tza,

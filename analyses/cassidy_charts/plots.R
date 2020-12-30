@@ -1,16 +1,4 @@
----
-title: "Figures: impact assessment plan"
-output: 
-  html_document:
-    number_sections: true
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-```{r loadLibraries, include=FALSE}
 library(knitr)
 library(xtable)
 library(sf)
@@ -25,9 +13,7 @@ library(cartogram)
 library(gridExtra)
 library(XLConnect)
 
-```
 ## Figure 1: maps of study countries
-```{r, results = "asis", echo=F}
 data(World)
 country_data<-read.csv(file='./country_data_whole_9.csv')
 country.name<-country_data$country
@@ -40,34 +26,47 @@ study_area <- World %>%
 bhu_bb <- st_bbox(study_area)
 bhu_bb <- bhu_bb * 1.1
 
-par(mfrow=c(1,2))
-
-# Figure 1a
-m1 = tm_shape(World, bbox = bhu_bb) +  
+make_plot <- function(){
+  
+  # Figure 1a
+  m1 = tm_shape(World, bbox = bhu_bb) +  
     tm_borders() +
     tm_polygons(col = 'grey') +
-  tm_shape(study_area, bbox = bhu_bb) +
+    tm_shape(study_area, bbox = bhu_bb) +
     tm_polygons(col = "incidence_case", palette="YlOrRd", style="cont", title="Malaria incidence") +
     tm_text("iso_a3", size = 0.6) +
-    tm_layout(frame = T, legend.position = c(0, 0.1), bg.color="lightcyan1",
+    tm_layout(frame = T, legend.position = c(0.03, 0.03), bg.color="lightcyan1",
               legend.title.size=1.7, legend.text.size = 0.7) +
-  tm_credits('Per 1000\npopulation at risk', size = 0.5, position = c(0,0))
-
-m2 = tm_shape(World, bbox = bhu_bb) +  
+    tm_credits('Per 1000 population at risk', size = 0.5, position = c(0,0))
+  
+  m2 = tm_shape(World, bbox = bhu_bb) +  
     tm_borders() +
-  tm_polygons(col = 'grey') +
-  tm_shape(study_area, bbox = bhu_bb) +
+    tm_polygons(col = 'grey') +
+    tm_shape(study_area, bbox = bhu_bb) +
     tm_polygons(col = "deaths_point_estimated", palette="YlOrRd", style="cont",  title="Malaria deaths") +
     tm_text("iso_a3", size = 0.6) +
-    tm_layout(frame = T, legend.position = c("left", "bottom"), bg.color="lightcyan1",
+    tm_layout(frame = T, legend.position = c(0.03, 0.03), bg.color="lightcyan1",
               legend.title.size=1.2, legend.text.size = 0.7) 
+  
+  
+  tmap_arrange(m1, m2, nrow = 1)
+}
+
+setEPS()
+svg("1.svg")
+par(mfrow=c(1,2))
+make_plot()
+dev.off()
+
+png("1.png")
+par(mfrow=c(1,2))
+make_plot()
+dev.off()
+#########################################
 
 
-tmap_arrange(m1, m2, nrow = 1)
-```
 
-Results
-```{r include=FALSE}
+
 #function of calculation----------------------------
 year.init<-2018
 
@@ -203,14 +202,7 @@ for (uptake.id in 1:3){
     }
   }
 }
-```
-
-
-# Figures for all Country Together
 ## Figures 2: Change in malaria cases for all 10 countries
-```{r, results = "asis", echo=F, fig.width=10, fig.height=9, fig.fullwidth=TRUE}
-# graphics.off()
-#pdf("./output/1.1_malaria_cases.pdf", width = 6, height = 10)
 out_list <- final_list <- list()
 # par(mfrow=c(3,1))
 counter <- 0
@@ -256,13 +248,13 @@ done <- bind_rows(final_list)
 done$uptake_id <- 
   ifelse(done$uptake_id == 1, 'Conservative uptake',
          ifelse(done$uptake_id == 2, 'Rapid uptake',
-                ifelse(done$uptake_id == 3, 'National 7 uptake', NA)))
+                ifelse(done$uptake_id == 3, 'National', NA)))
 
 pd <- done %>%
     tidyr::gather(key, value, `Baseline scenario`:`40% efficacy`)
 pd$uptake_id <- factor(pd$uptake_id, levels = c('Conservative uptake',
                                                     'Rapid uptake',
-                                                    'National 7 uptake'))
+                                                    'National'))
 pd$grif <- factor(pd$grif, levels = c('Sustain',
                                       'No change',
                                       'Accelerate 1',
@@ -296,13 +288,14 @@ ggplot(data = pd,
   scale_linetype(name = '') +
   theme(legend.position = 'right',
         legend.direction = 'vertical',
-        legend.text = element_text(size = 8))
- 
-```
+        legend.text = element_text(size = 14))
+ggsave('2.svg', height = 7, width = 9) 
+ggsave('2.png', height = 7, width = 9) 
+
+##########################################
 
 ## Figures 4
 
-```{r, results = "asis", echo=F, fig.width=10, fig.height=9, fig.fullwidth=TRUE}
 done_list <- list()
 strategies <- c('Innovate', 'Accelerate 2', 'Accelerate 1', 'No change', 'Sustain')
 strategies <- rev(strategies)
@@ -335,13 +328,13 @@ done <- bind_rows(done_list)
 done$uptake_id <- 
   ifelse(done$uptake_id == 1, 'Conservative uptake',
          ifelse(done$uptake_id == 2, 'Rapid uptake',
-                ifelse(done$uptake_id == 3, 'National 7 uptake', NA)))
+                ifelse(done$uptake_id == 3, 'National', NA)))
 pd <- done %>%
   tidyr::gather(uptake, value, Innovate:Sustain)
 
 pd$uptake_id <- factor(pd$uptake_id, levels = c('Conservative uptake',
                                                     'Rapid uptake',
-                                                    'National 7 uptake'))
+                                                    'National'))
 pd$uptake <- factor(pd$uptake, levels = c('Sustain',
                                       'No change',
                                       'Accelerate 1',
@@ -360,24 +353,22 @@ ggplot(data = pd,
   scale_fill_manual(name = '',
                     values = cols[c(1,2,4,5)]) +
   theme(legend.position = 'bottom',
-        legend.text = element_text(size = 8)) +
+        legend.text = element_text(size = 14)) +
+  guides(fill=guide_legend(nrow=2,byrow=TRUE)) +
   labs(x = '',
        y = 'Dollars (millions)') +
   geom_text(aes(label = round(value),
                 y = value - 30),
             position = position_dodge(width = 0.9),
-            alpha = 0.9, col = 'white', size = 2) +
+            alpha = 0.9, col = 'black', size = 1.7) +
   coord_flip()
+ggsave('4.svg', width = 9, height= 7)
+ggsave('4.png', width = 9, height= 7)
 
-  
-```
 
-
-## Figures 4 right half: Cumulative averted deaths due to BOHEMIA iMDA for all 10 countries.
-Given a Griffin scenario, the number of deaths averted due to the BOHEMIA iMDA.\
-```{r, results = "asis", echo=F, fig.width=10, fig.height=6, fig.fullwidth=TRUE}
+## Figures 3 right half: Cumulative averted deaths due to BOHEMIA iMDA for all 10 countries.
 done_list <- list()
-strategies <- c('Conservative uptake','Rapid uptake','National 7 uptake')
+strategies <- c('Conservative uptake','Rapid uptake','National')
 grifs <- rev(c('Innovate', 'Accelerate 2', 'Accelerate 1', 'No change', 'Sustain'))
 counter <- 0
 for (uptake.id in 1:3){
@@ -404,19 +395,16 @@ pd_right <- tidyr::gather(done, key, value, `40% Efficacy`:`20% Efficacy`)
 
 pd_right$strategy <- factor(pd_right$strategy, levels = c('Conservative uptake',
                                                     'Rapid uptake',
-                                                    'National 7 uptake'))
+                                                    'National'))
 pd_right$grif <- factor(pd_right$grif, levels = c('Sustain',
                                       'No change',
                                       'Accelerate 1',
                                       'Accelerate 2',
                                       'Innovate'))
 pd_right$value <- pd_right$value / 1000
-```
-## Figures 4 left half: Cumulative averted cases due to BOHEMIA iMDA for all 10 countries.
-Given a Griffin scenario, the number of deaths averted due to the BOHEMIA iMDA.\
-```{r, results = "asis", echo=F, fig.width=10, fig.height=9, fig.fullwidth=TRUE}
+## Figures 3 left half: Cumulative averted cases due to BOHEMIA iMDA for all 10 countries.
 done_list <- list()
-strategies <- c('Conservative uptake','Rapid uptake','National 7 uptake')
+strategies <- c('Conservative uptake','Rapid uptake','National')
 grifs <- rev(c('Innovate', 'Accelerate 2', 'Accelerate 1', 'No change', 'Sustain'))
 counter <- 0
 for (uptake.id in 1:3){
@@ -450,7 +438,7 @@ pd_left <- tidyr::gather(done, key, value, `40% Efficacy`:`20% Efficacy`)
 
 pd_left$strategy <- factor(pd_left$strategy, levels = c('Conservative uptake',
                                                     'Rapid uptake',
-                                                    'National 7 uptake'))
+                                                    'National'))
 pd_left$grif <- factor(pd_left$grif, levels = c('Sustain',
                                       'No change',
                                       'Accelerate 1',
@@ -471,20 +459,23 @@ ggplot(data = pd,
            stat = 'identity') +
   facet_wrap(~strategy, ncol = 1) +
   coord_flip() +
-  geom_text(aes(label = round(value),
+  geom_text(aes(label = round(abs(value)),
                 y = ifelse(value < 0, value - 17, value + 17)),
                 color = 'black',
             position = position_dodge(width = 0.9),
             size = 3) +
   geom_hline(yintercept = 0) +
-  labs(y = 'Number of averted cases (millions)                             Number of averted deaths (thousands)',
+  labs(y = 'Number of averted cases (millions)              Number of averted deaths (thousands)',
        x = '') +
   databrew::theme_simple() +
   theme(legend.position = 'bottom',
-        axis.title = element_text(size = 12)) +
+        axis.title = element_text(size = 12, vjust = 0)) +
   scale_fill_manual(name = '',
-                    values = c('black', 'darkgrey'))
-
+                    values = c('black', 'darkgrey')) +
+  scale_y_continuous(breaks = seq(-500, 500, by = 250),
+                     labels = abs(seq(-500, 500, by = 250)),
+                     limits = c(-500, 500))
+ggsave('3.png', height = 7, width = 8)
+ggsave('3.eps', height = 8.5, width = 10)
   
   
-```
