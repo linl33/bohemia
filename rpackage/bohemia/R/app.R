@@ -1704,36 +1704,43 @@ app_server <- function(input, output, session) {
         }
       }
       
+      # condition text size on which geography was chosen
+      if(by_geo=='Hamlet'){
+        text_size = 3
+      } else {
+        text_size = 6
+      }
+      
       message('---created progess plot for Overview by geography')
       names(monitor_plot)[1] <- 'location'
       # paste together numerator and percent finished for every plot text
-      monitor_plot$plot_text <- paste0(monitor_plot$numerator, '\n', monitor_plot$`Percent finished`)
+      monitor_plot$plot_text <- paste0(monitor_plot$numerator, '\n', round(monitor_plot$`Percent finished`))
       if(dt_choose_form=='Both'){
         out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator, fill=data)) + geom_bar(stat='identity',alpha=0.7) +
           scale_fill_manual(name='', values=c('darkblue', 'darkgreen')) +
           # geom_text(aes(label=numerator), position = 'stack', vjust=1.5)+
           labs(x = '',
                y ='') + 
-          theme_bohemia() +
+          theme_bohemia(base_size = 18) +
           theme(axis.text.x  = element_text(angle=90, vjust=0.5),
                 axis.ticks.x = element_blank())
         
       } else {
         if(make_percent){
           out <- ggplot(monitor_plot, aes(reorder(location,-`Percent finished`), `Percent finished`)) + geom_bar(stat='identity', fill = 'grey', alpha=0.5) +
-            geom_text(aes(label=plot_text), vjust=0.5, size = 3)+
+            geom_text(aes(label=plot_text), vjust=0.5, size = text_size)+
             labs(x = '',
                  y ='') + 
-            theme_bohemia() +
+            theme_bohemia(base_size = 18) +
             theme(axis.text.x  = element_text(angle=90, vjust=0.5),
                   axis.ticks.x = element_blank())
           
         } else {
           out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator)) + geom_bar(stat='identity', fill='grey', alpha=0.7) +
-            geom_text(aes(label=plot_text), vjust=0.5, size = 3)+
+            geom_text(aes(label=plot_text), vjust=0.5, size = text_size)+
             labs(x = '',
                  y ='') + 
-            theme_bohemia() +
+            theme_bohemia(base_size = 18) +
             theme(axis.text.x  = element_text(angle=90, vjust=0.5),
                   axis.ticks.x = element_blank())
         }
@@ -1880,7 +1887,8 @@ app_server <- function(input, output, session) {
                          tabPanel('Plot',
                                   selectInput('dt_choose_form', 'Choose form', choices = c('Minicensus', 'Enumerations', 'Both')),
                                   checkboxInput(inputId = 'make_percent', label = 'Show percentage', value = FALSE),
-                                  plotOutput('dt_monitor_by_plot')),
+                                  tags$div(style='overflow-x: scroll; position: relative', plotOutput('dt_monitor_by_plot', height = '800px', width = '4000px'))
+                                  ),
                          tabPanel('Map',
                                   leafletOutput('leaf_lx', height = 800)))))
             })
@@ -3687,9 +3695,9 @@ app_server <- function(input, output, session) {
                            y = '% of daily target') +
                       theme_bohemia() +
                       geom_text(aes(label = forms, color='Number of forms'),
-                                nudge_y = 0.5, size = 4, alpha = 0.8) +
+                                nudge_y = 0.5, size = 5, alpha = 0.8) +
                       geom_text(aes(label = days, color='Working days'),
-                                nudge_y = -2, size = 4, alpha = 0.8) +
+                                nudge_y = -2, size = 5, alpha = 0.8) +
                       scale_color_manual(name ='', 
                                          values =colors) +
                       theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
@@ -3741,9 +3749,9 @@ app_server <- function(input, output, session) {
                          y = 'Forms per (working) day') +
                     theme_bohemia() +
                     geom_text(aes(label = forms, color='Number of forms'),
-                              nudge_y = 0.2, size = 4, alpha = 0.8) +
+                              nudge_y = 0.2, size = 5, alpha = 0.8) +
                     geom_text(aes(label = days, color='Working days'),
-                              nudge_y = -0.5, size = 4, alpha = 0.8) +
+                              nudge_y = -0.5, size = 5, alpha = 0.8) +
                     scale_color_manual(name ='', 
                                        values =colors) +
                     theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
@@ -3874,7 +3882,7 @@ app_server <- function(input, output, session) {
                        caption = 'Numbers show forms on top, workers that day on bottom. A "working day" is a day on which that worker submitted any form of that type.') +
                   theme_bohemia() +
                   geom_text(aes(label = label),
-                            nudge_y = 0, size = 3, alpha = 0.8,
+                            nudge_y = 0, size = 5, alpha = 0.8,
                             angle = 90) +
                   theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
                   theme(axis.text = element_text(size = 10),
@@ -4103,10 +4111,11 @@ app_server <- function(input, output, session) {
                column(6,
                       checkboxInput(inputId = 'ui_show_percent', label = 'Show percentage', value = FALSE))
       ),
+     
       fluidRow(column(12,
-                      plotOutput('ui_fw_plot', height = '700px'))),
+                      tags$div(style='overflow-x: scroll; position: relative',plotOutput('ui_fw_plot', height = '700px', width = '2000px')))),
       fluidRow(column(12,
-                      plotOutput('ui_fw_plot2', height = '700px'))),
+                      tags$div(style='overflow-x: scroll; position: relative',plotOutput('ui_fw_plot2', height = '700px', width = '2000px')))),
       fluidRow(column(12,
                       DT::dataTableOutput('ui_fw_table'))))
   })
