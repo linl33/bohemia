@@ -12,22 +12,22 @@ logging.basicConfig(filename="logs/apply_corrections.log", level=logging.DEBUG)
 
 # Read in credentials
 with open(r'../credentials/credentials.yaml') as file:
-  creds = yaml.load(file, Loader=yaml.FullLoader)
+    creds = yaml.load(file, Loader=yaml.FullLoader)
 
 # Define whether working locally or not
 is_local = False
 if is_local:
-  dbconn = psycopg2.connect(dbname="bohemia") #psycopg2.connect(dbname="bohemia", user="bohemia_app", password="")
-engine_string = "postgresql:///bohemia"
+    dbconn = psycopg2.connect(dbname="bohemia") #psycopg2.connect(dbname="bohemia", user="bohemia_app", password="")
+    engine_string = "postgresql:///bohemia"
 else:
-  dbconn = psycopg2.connect(dbname='bohemia', user = creds['psql_master_username'], password = creds['psql_master_password'], host = creds['endpoint'], port = 5432)
-engine_string = "postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}".format(
-  user=creds['psql_master_username'],
-  password=creds['psql_master_password'],
-  host=creds['endpoint'],
-  port='5432',
-  database='bohemia',
-)
+    dbconn = psycopg2.connect(dbname='bohemia', user = creds['psql_master_username'], password = creds['psql_master_password'], host = creds['endpoint'], port = 5432)
+    engine_string = "postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}".format(
+      user=creds['psql_master_username'],
+      password=creds['psql_master_password'],
+      host=creds['endpoint'],
+      port='5432',
+      database='bohemia',
+    )
 
 # Initialize connection to the database
 cur = dbconn.cursor()
@@ -53,26 +53,24 @@ show_these.to_csv('/tmp/show_these.csv') # to help human
 
 # Define function for implementing corrections
 def implement(id = None, query = '', who = 'Joe Brew', is_ok = False, cur = cur, dbconn = dbconn):
-  # Implement the actual fix to the database
-  if not is_ok:
-  try:
-  # print('Executing this query:\n')
-  # print(query)
-  cur.execute(query)
-except:
-  cur.execute("ROLLBACK")
-print('Problem executing:\n')
-print(query)
-return
-done_at = datetime.now()
+    # Implement the actual fix to the database
+    if not is_ok:
+        try:
+            cur.execute(query)
+        except:
+            cur.execute("ROLLBACK")
+            print('Problem executing:\n')
+            print(query)
+            return
+    done_at = datetime.now()
 # State the fact that it has been fixed
-if id is not None:
-  cur.execute(
-    """
-            INSERT INTO fixes (id, done_by, done_at, resolution_code) VALUES(%s, %s, %s, %s)
-            """,
-    (id, who, done_at, query)
-  )
+    if id is not None:
+        cur.execute(
+        """
+                INSERT INTO fixes (id, done_by, done_at, resolution_code) VALUES(%s, %s, %s, %s)
+                """,
+        (id, who, done_at, query)
+        )
 dbconn.commit()
 
 # Go one-by-one through "show_these" and implement changes
