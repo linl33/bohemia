@@ -44,16 +44,14 @@ subs <- odk_data$minicensus_repeat_hh_sub
 
 others <- c()
 
-# error_id <- 'repeat_hh_id_0d09707a-51be-4e91-a5e8-5534fb7bd007,7f97b88a-4090-4c81-aab7-b26fa51d5e99,fe970bb0-521c-4a82-b7d7-b8ef282b1bbb'
-
+# 
 # get_num <- function(error_id){
 #   inst_id <- unlist(lapply(strsplit(error_id, split = ','), function(x) x[length(x)]))
 #   num_people <- minicensus_main$hh_member_num[minicensus_main$instance_id == inst_id]
 #   return(num_people)
 # }
 # 
-
-# # create function to get number of people in household 
+# # create function to get number of people in household
 # get_query <- function(error_id, inst_id){
 #   temp <- corrections %>% filter(id == error_id)
 #   # get new hh id
@@ -61,7 +59,7 @@ others <- c()
 #   # UPDATE clean_minicensus_main SET hh_id='DEU-216' WHERE instance_id='8b133ccc-2f0d-439e-ab6d-06bb7b3d16eb'
 #   # get household id query (first part)
 #   hh_query <- paste0("UPDATE clean_minicensus_main SET hh_id='", new_hh_id, "' WHERE instance_id='", inst_id, "'")
-#   
+# 
 #   # get people query (second part)
 #   old_hh_id <- minicensus_main$hh_id[minicensus_main$instance_id == inst_id]
 #   people$hh_id <- substr(people$pid, 1, 7)
@@ -74,17 +72,34 @@ others <- c()
 #     result_list[[i]] <- paste0("UPDATE clean_minicensus_people SET pid = '", temp$new_pid[i],"'",", permid='",temp$new_pid[i],"'", " WHERE num='", temp$num[i],"'", " and instance_id='", inst_id,"'" )
 #   }
 #   people_query=  paste0(unlist(result_list), collapse = ';')
-#   
+# 
 #   # combine queries separated by ;
 #   full_query = paste0(hh_query, ';', people_query )
 #   return(full_query)
 # }
 # 
-# get_query(error_id = 'repeat_hh_id_3dd8c322-947c-4552-8adf-1352e675c897,cd082e8c-b3a1-4253-a752-43bb516d0d91', 
-#           inst_id = '8d3ed037-7e7d-4efe-a813-17fe0896309d')
 # 
-# x <- odk_data$minicensus_main[odk_data$minicensus_main$instance_id=='8d3ed037-7e7d-4efe-a813-17fe0896309d',]
-# xp <- odk_data$minicensus_people[odk_data$minicensus_people$instance_id=='84975cb5-3fde-42cb-8e16-f03aba8aba0b',]
+# ### Query for enumerations
+# # get_query_enum <- function(error_id, inst_id){
+# #   temp <- corrections %>% filter(id == error_id)
+# #   # get new hh id
+# #   new_hh_id <- unique(trimws(unlist(lapply(strsplit(temp$response_details, split = 'to'), function(x) x[length(x)])), which = 'both'))
+# #   # UPDATE clean_minicensus_main SET hh_id='DEU-216' WHERE instance_id='8b133ccc-2f0d-439e-ab6d-06bb7b3d16eb'
+# #   # get household id query (first part)
+# #   hh_query <- paste0("UPDATE clean_enumerations SET hh_id='", new_hh_id, "' WHERE instance_id='", inst_id, "'")
+# #   
+# #   return(hh_query)
+# # }
+# 
+# # get_query_enum(error_id='repeat_hh_id_4a811abc-ab94-4618-979b-ad14d0fc5ed1,e90e82f9-5bb2-470b-b20a-028bb42b32ce',
+#                # inst_id='2046c45c-ed0a-4b1e-a9dd-f2b56adaa3f9')
+# 
+# get_query(error_id = 'repeat_hh_id_c4b07dc3-fec0-4450-a84d-7947984ce945,e5a29f5c-52da-43f3-ba4e-98c965309b5e',
+#           inst_id = 'c4b07dc3-fec0-4450-a84d-7947984ce945')
+# 
+# x <- odk_data$minicensus_main[odk_data$minicensus_main$instance_id=='252767d7-8601-469b-be57-e334eb9c9f21',]
+# xp <- odk_data$minicensus_people[odk_data$minicensus_people$instance_id=='e90e82f9-5bb2-470b-b20a-028bb42b32ce',]
+
 
 # eldo <- readr::read_csv('~/Desktop/eldo.csv')
 # ids <- eldo$`meta:instanceID`
