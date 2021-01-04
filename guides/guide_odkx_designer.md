@@ -12,7 +12,10 @@ The app has been organized in the format:
 ## Local Designer Deploy
 ### Prerequisites
 1. Set up the application designer as per the instructions at: https://docs.odk-x.org/app-designer-setup/
-2. Proceed to clean up the test apps from the installation as per instructions at: https://docs.odk-x.org/build-app/#cleaning-app-designer
+
+_Pro tip: In the instructions below, before cleaning the folder, maintain the assets folder from one of the sample folders e.g. household to use in your app until you can create the custom styles._
+
+2. Proceed to clean up the test apps from the installation as per instructions at: https://docs.odk-x.org/build-app/#cleaning-app-designer  
 
 ### Launch designer app 
 To test this app locally, start the designer by:
@@ -27,6 +30,7 @@ _For detailed instructions please refer to: https://docs.odk-x.org/app-designer-
 Import the xlsx files as per the instructions at: https://docs.odk-x.org/build-app/#generating-formdef-json
 
 Load the xls files in the following order for ease of flow 
+- `framework.xlsx`
 - `census.xlsx`
     - After saving to file system, copy the `external_choices.csv` to the same folder with the `formdef.json` otherwise app won't load
 - `hh_members.xlsx`
@@ -65,6 +69,16 @@ To test the init setup and generally the app on an android device:
     `grunt adbpush`
 
 _For detailed instructions please refer to: https://docs.odk-x.org/build-app/#moving-files-to-the-device_
+
+_Pro tip: If the grunt command fails due to `adb command not found error` use the steps detailed at https://docs.odk-x.org/app-designer-prereqs/#add-adb-to-your-path_
+
+_Pro tip 2: If you are not able to find the path to the platform tools easily, if you have Android Studio;_
+  - Launch the Android Studio,
+  - Start a new project
+  - On the menu bar, click on `Tools`
+  - On the displayed sub menu, select `SDK Manager`
+  - On the displayed dialog, copy the `Android SDK Location` path displayed
+  - You should now be able to proceed with the instructions using the `<path_copied>/platform-tools`
 
 ### Notes
 
