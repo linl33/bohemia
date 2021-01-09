@@ -101,7 +101,7 @@ for(i in 1:length(wid_code)){
       sub_din <- sub_din %>% filter(!is.na(`Real answer`))
       sub_din$correct <- ifelse(sub_din$`FW answer`==sub_din$`Real answer`, 'yes', 'no')
       num_correct_din <- length(which(sub_din$correct == 'yes'))
-      num_wrong_din <- length(which(sub_din$correct == 'no'))
+      num_wrong_din <- length(which(sub_din$correct == 'no' | is.na(sub_din$correct)))
       
       per_correct_din <- round(num_correct_din/nrow(sub_din)*100, 2)
       sub_din$wid <- this_wid
@@ -123,7 +123,7 @@ for(i in 1:length(wid_code)){
       sub_mpr <- sub_mpr %>% filter(!is.na(`Real answer`))
       sub_mpr$correct <- ifelse(sub_mpr$`FW answer`==sub_mpr$`Real answer`, 'yes', 'no')
       num_correct_mpr <- length(which(sub_mpr$correct == 'yes'))
-      num_wrong_mpr <- length(which(sub_mpr$correct == 'no'))
+      num_wrong_mpr <- length(which(sub_mpr$correct == 'no' | is.na(sub_mpr$correct)))
 
       per_correct_mpr <- round(num_correct_mpr/nrow(sub_mpr)*100, 2)
       sub_mpr$wid <- this_wid
@@ -167,8 +167,8 @@ for(i in 1:length(wid_code)){
     num_correct_mpr <- length(which(sub_mpr$correct == 'yes'))
     num_correct_din <- length(which(sub_din$correct == 'yes'))
     
-    num_wrong_mpr <- length(which(sub_mpr$correct == 'no'))
-    num_wrong_din <- length(which(sub_din$correct == 'no'))
+    num_wrong_mpr <- length(which(sub_mpr$correct == 'no' | is.na(sub_mpr$correct) ))
+    num_wrong_din <- length(which(sub_din$correct == 'no' | is.na(sub_din$correct)))
     
     per_correct_mpr <- round(num_correct_mpr/nrow(sub_mpr)*100, 2)
     per_correct_din <- round(num_correct_din/nrow(sub_din)*100, 2)
@@ -184,7 +184,6 @@ for(i in 1:length(wid_code)){
     # create data frame with wid, test version, and number and percent correct
     temp <- tibble(wid = this_wid, test_version = c('DIN','MPR'), num_correct = c(num_correct_din, num_correct_mpr), num_wrong = c(num_wrong_din, num_wrong_mpr),per_correct= c(per_correct_din, per_correct_mpr))
     table_list[[i]] <- temp
-    print(i)
   }
   
   
