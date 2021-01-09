@@ -47,7 +47,7 @@ Official documentation reference: https://docs.odk-x.org/sync-endpoint-cloud-set
 
 3. Skip the `Choose an Instance Type` step. Instead, click on the `3: Configure Instance` tab at the top and then click on the `As File` option and then attach the `cloud_init_AWS.yml` file provided in the `misc/odkx/init_files` folder.
 
-4. Click on the `6. Configure Security Group` tab in order to modify the firewall rules and control the traffic for the instance. 
+4. Click on the `6. Configure Security Group` tab in order to modify the firewall rules and control the traffic for the instance.
 Create a new security group, name it `custom_security_group` and modify the rules to match the rules specified below, then click Review and Launch.
 
 
@@ -59,21 +59,74 @@ Create a new security group, name it `custom_security_group` and modify the rule
 | Custom TCP Rule   |   TCP |   40000   |   Custom  0.0.0.0/0, ::/0 |
 |   |   |   |
 
-5. Review the Instance Launch and then click Launch. 
+5. Review the Instance Launch and then click Launch.
 
 6. Create a new key pair to access the instance via SSH and make sure to download it to a secure location. Finally, click Launch Instances!
 
 
-#### Setting up a DNS Record
+#### Configuring a key pair  
 
-1. From the EC2 dashboard and click on Running instances.
+- A modal will show up saying “Select an existing key pair or create a new key pair”
+- Select “Create a new key pair”
+- Name it pariskey.pem
+- Run the following to change permissions on your key: `chmod 400 ~/.ssh/pariskey.pem`
+- Click “Launch instances”
+- Wait a few minutes for the system to launch (check the "launch log" if you’re impatient)
+- This will bring you to the instances menu, where you can see things (in the “Description” tab below) like public IP address, etc.
 
-2. Select the instance you just created, and obtain its public IP address.
+### Allocate a persistent IP
 
-3. Log into your account for your domain name registrar and DNS provider. 
+- So that your AWS instance's public IP address does not change at reboot, etc., you need to create an "Elastic IP address". To do this:
+  - Go to the EC2 dashboard in aws
+  - Click "Elastic IPs" under "Network & Security" in the left-most menu
+  - Click "Allocate new address"
+  - Select "Amazon pool"
+  - Click "Allocate"
+  - In the allocation menu, click "Associate address"
+  - Select the instance you just created. Also select the corresponding "Private IP"
+  - Click "Associate"
+- Note, this guide is written with the below elastic id. You'll need to replace this with your own when necessary.
 
-4. Add a dns 'A' record for the domain or subdomain you would like to use for the Sync Endpoint with the instance's public IP address. Refer [here](https://support.google.com/domains/answer/9211383?hl=en) for Google Domains instructions
+```
+13.36.9.244
+```
 
+### Setting up SSH keys
+
+- If you don’t have an SSH key on your system yet, run the following:
+`ssh-keygen -t rsa -b 4096 -C “youremail@host.com”`
+- Select defaults (ie, press enter when it asks you the location, password, etc.)
+- You will now have a file at `/home/<username>/.ssh/id_rsa`
+- To verify, type: `ls ~/.ssh/id_*` (this will show your key)
+- To change permissions to be slightly safer, run the following: `chmod 400 ~/.ssh/id_rsa`
+
+### Connect to the servers
+
+- In the “Instances” menu, click on “Connect” in the upper right
+- This will give instructions for connecting via an SSH client
+- It will be something very similar to the following:
+
+```
+ssh -i "/home/joebrew/.ssh/pariskey.pem" ubuntu@ec2-13-36-9-244.eu-west-3.compute.amazonaws.com
+```
+
+- Congratulations! You are now able to run linux commands on your new ubuntu server
+- If you want, create an alias such as:
+```
+alias odkx='ssh -i "/home/joebrew/.ssh/pariskey.pem" ubuntu@ec2-13-36-9-244.eu-west-3.compute.amazonaws.com'
+```
+- Add the above line to ~/.bashrc to persist
+- Run `source ~/.bashrc`
+- You can now ssh into the instance by simply running `odkx`
+
+### Setting up the domain
+
+- In domains.google.com, click on the purchased domain.
+- Click on "DNS" on the left
+- Go to "Custom resource records"
+- You're going to create two records:
+  1. Name: @; Type: A; TTL 1h; Data: 13.36.9.244
+  2. Name: www; Type: CNAME; TTL: 1h; Data: ec2-18-218-151-100.us-east-2.compute.amazonaws.com.
 
 #### Connecting to your virtual machine
 
@@ -81,24 +134,18 @@ Create a new security group, name it `custom_security_group` and modify the rule
 
 2. Select the instance that you want to connect to and then click Connect.
 
-3. Open up a terminal window and enter the following command to change key permissions.
+3. SSH in (see above instructions)
 
-    `chmod 400 KEY_NAME.pem`
-
-4. Use the following command in order to SSH into your virtual machine.
-
-    `ssh -i “KEY_NAME.pem” PUBLIC_DNS`
-
-5. Before running the launch scripts, check the logs to ensure that all the packages have been successfully installed, which should take about 2-3 minutes. The virtual machine may also reboot in this time.
+4. Before running the launch scripts, check the logs to ensure that all the packages have been successfully installed, which should take about 2-3 minutes. The virtual machine may also reboot in this time.
 Use the following command to get into the log directory.
-    
+
     `cd /var/log`
 
     Now, open the log file with command:
 
     `tail cloud-init-output.log`
 
-6. If you see the message `The system is finally up, after X seconds` you can proceed to the next step! Otherwise, continue to wait and check the log again.
+5. If you see the message `The system is finally up, after X seconds` you can proceed to the next step! Otherwise, continue to wait and check the log again.
 
 #### Running launch scripts
 
@@ -116,8 +163,8 @@ After gathering this data the script will begin the install and you should see a
 
 3. Once all the services have been created, check if all the services are running properly with the command:
 
-    `docker stack ls`
-    
+    `sudo docker stack ls`
+
     You should see 9 services running under the name `syncldap`.
 
 #### Launching LDAP Admin
@@ -143,9 +190,9 @@ Official documentation reference: https://docs.odk-x.org/sync-endpoint-cloud-set
 
 4. Select the `Generic: User Account` template.
 
-5. Fill out information for the new user and `create object` 
+5. Fill out information for the new user and `create object`
 
-6. Assign the user object to `default_prefix_synchronize_tables` group. 
+6. Assign the user object to `default_prefix_synchronize_tables` group.
 
 7. Commit (confirm) that you want to create this entry on the next screen.
 
@@ -154,10 +201,10 @@ Official documentation reference: https://docs.odk-x.org/sync-endpoint-cloud-set
 
 When you have created a user, you need to add the user to the respective group from the group settings.
 
-1. Click the `+` sign next `ou=groups` to expand it. 
+1. Click the `+` sign next `ou=groups` to expand it.
 2. Within the unfolded menu, in the `ou=default_prefix` section, click on `gidNumber=503`, which is the group ID that corresponds to `default_prefix_synchronize_tables`. Groups correspond to the access permissions available to a certain user.
 
-3. Click on `Add new attribute` which should show a pull-down menu and then select `memberUid`. 
+3. Click on `Add new attribute` which should show a pull-down menu and then select `memberUid`.
 4. Enter the `memberUid` of the user, _this is the 'username' you created_, and then update the object.
 
 
@@ -188,7 +235,7 @@ _After creating the users required, there is no longer need access to the LDAP a
 `docker service ls` - shows you the names of the services
 `docker service logs -f <SERVICE NAME>` - shows the real time logs. For authentication, tail the web-ui service
 
-3. To set up the EC2 instance to have a static IP, refer to the guide for the bohemia aggregrate setup 
+3. To set up the EC2 instance to have a static IP, refer to the guide for the bohemia aggregrate setup
 
 ### Source Code References
 
