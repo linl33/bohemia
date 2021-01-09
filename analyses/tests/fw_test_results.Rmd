@@ -1,0 +1,518 @@
+---
+title: "Fieldwork test results"
+author: "Databrew"
+date: "08/01/2021"
+output: pdf_document
+---
+
+```{r,echo=FALSE, message=FALSE}
+source('grade_test.R')
+```
+
+## Summary of test results 
+```{r, echo=FALSE, message=FALSE}
+DT::datatable(r_tab,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+```
+
+## WID 95 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 95)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 95 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 95)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 96 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 96)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 96 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 96)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 98 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 98)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 98 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 98)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 99 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 99)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 99 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 99)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+
+## WID 100 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 100)
+DT::datatable(temp,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 101 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 101)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 101 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 101)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 102 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 102)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 102 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 102)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 103 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 103)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 103 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 103)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 104 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 104)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 104 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 104)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 105 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 105)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 105 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 105)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 107 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 107)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 107 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 107)
+dat <- temp[[2]]
+DT::datatable(dat, rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 109 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 109)
+DT::datatable(temp,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 110 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 110)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 110 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 110)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 112 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 112)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 112 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 112)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 113 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 113)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 113 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 113)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 114 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 114)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 114 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 114)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 115 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 115)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 115 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 115)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 116 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 116)
+DT::datatable(temp,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 117 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 117)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 117 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 117)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 118 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 118)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 118 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 118)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 119 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 119)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 119 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 119)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 120 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 120)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 120 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 120)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 121 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 121)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 121 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 121)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+
+## WID 122 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 122)
+DT::datatable(temp,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 124 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 124)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 124 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 124)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+
+## WID 125 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 125)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 125 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 125)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 126 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 126)
+DT::datatable(temp,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 127 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 127)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 127 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 127)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 130 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 130)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 130 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 130)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+
+## WID 131 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 131)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 131 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 131)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 132 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 132)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 132 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 132)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+
+## WID 133 DIN version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 133)
+dat <- temp[[1]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+
+```
+
+## WID 133 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 133)
+dat <- temp[[2]]
+DT::datatable(dat,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+```
+
+## WID Unkown 1 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 'Unknown 1')
+DT::datatable(temp,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+```
+
+## WID Unkown 2 MPR version
+```{r,echo=FALSE, message=FALSE}
+temp <- get_wid_results(wid_code = 'Unknown 2')
+DT::datatable(temp,rownames = FALSE,caption = '', options = list(pageLength = nrow(dat), lengthChange = FALSE))
+```
