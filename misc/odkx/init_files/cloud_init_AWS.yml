@@ -1,0 +1,39 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+
+packages:
+  - openjdk-8-jdk
+  - maven
+  - git
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
+  - certbot
+
+write_files:
+  - path: /home/ubuntu/script_to_run.sh
+    permissions: '0755'
+    content: |
+      #!/bin/sh
+      docker swarm init
+      git clone https://github.com/odk-x/sync-endpoint-default-setup.git
+      cd sync-endpoint-default-setup
+      python3 init-odkx-sync-endpoint.py
+
+runcmd:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+  - add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - apt-get update -y
+  - apt-get install -y -m docker-ce docker-ce-cli containerd.io
+  - systemctl start docker
+  - systemctl enable docker
+
+final_message: "The system is finally up, after $UPTIME seconds"
+
+# Do not run the script in runcmd.  sync-endpoint tests do not timeout!
+# commands in runcmd are run from the top level /directory
