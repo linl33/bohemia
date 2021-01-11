@@ -13,15 +13,15 @@ The app has been organized in the format:
 ### Prerequisites
 1. Set up the application designer as per the instructions at: https://docs.odk-x.org/app-designer-setup/
 
-_Pro tip: In the instructions below, before cleaning the folder, maintain the assets folder from one of the sample folders e.g. household to use in your app until you can create the custom styles._
-
 2. Proceed to clean up the test apps from the installation as per instructions at: https://docs.odk-x.org/build-app/#cleaning-app-designer  
 
+_Pro tip: Rather than deleting all the files in the `app/config/` directory as instructed in the Cleaning App Designer instructions, maintain the assets folder from one of the sample folders (e.g. household) to use in your app until you can create the custom styles._
+
+
 ### Launch designer app 
-To test this app locally, start the designer by:
+To test this app locally, open the shell of your choice and start the designer by:
  - `cd` into the designer folder
  - type `grunt` 
-in the shell of your choice.
 
 _For detailed instructions please refer to: https://docs.odk-x.org/app-designer-launching/#launching-the-application-designer_
 
@@ -41,6 +41,7 @@ Load the xls files in the following order for ease of flow
 - `hh_latrines.xlsx`
 - `hh_snake_bites.xlsx`
 - `hh_member_questions.xlsx`
+- `hh_geo_locations.xlsx`
 
 ### Run app on browser
 Navigate to `http://localhost:8000/index.html` and you can try out the app 
@@ -54,17 +55,19 @@ Add the table and file name for prepopulating the database you need in the `tabl
 ### Test app on android device
 To test the init setup and generally the app on an android device: 
 
-0. If you haven't already; use this resource to install the ODK tools on your android device: https://docs.odk-x.org/basics-install/#installing-odk-x-basic-tools
+1. If you haven't already; use this resource to install the ODK tools on your android device: https://docs.odk-x.org/basics-install/#installing-odk-x-basic-tools
      - OI File Manager
      - ODK-X Services
      - ODK-X Survey
      - ODK-X Tables
 
-1. Connect the device to your computer via a USB cable
+2. Connect the device to your computer via a USB cable.
 
-2. Open a cmd or terminal window within the Application Designer directory (the one containing Gruntfile.js), as described in the Application Designer Directory Structure documentation.
+_Note: You must have USB debugging enabled on your device in order to perform the next step. See [these instructions](https://www.phonearena.com/news/How-to-enable-USB-debugging-on-Android_id53909) for help.
 
-3. Type:
+3. Open a cmd or terminal window within the Application Designer directory (the one containing Gruntfile.js), as described in the Application Designer Directory Structure documentation.
+
+4. Type:
     
     `grunt adbpush`
 
