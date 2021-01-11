@@ -63,7 +63,7 @@ To test the init setup and generally the app on an android device:
 
 2. Connect the device to your computer via a USB cable.
 
-_Note: You must have USB debugging enabled on your device in order to perform the next step. See [these instructions](https://www.phonearena.com/news/How-to-enable-USB-debugging-on-Android_id53909) for help.
+_Note: You must have USB debugging enabled on your device in order to perform the next step. See [these instructions](https://www.phonearena.com/news/How-to-enable-USB-debugging-on-Android_id53909) for help._
 
 3. Open a cmd or terminal window within the Application Designer directory (the one containing Gruntfile.js), as described in the Application Designer Directory Structure documentation.
 
