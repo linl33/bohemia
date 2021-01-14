@@ -259,7 +259,9 @@ app_ui <- function(request) {
           tabItem(
             tabName="server_status",
             uiOutput('ui_server_status_date'),
-            uiOutput('ui_server_status')),
+            uiOutput('ui_server_status'),
+            checkboxInput('only_pending', 'Show only pending',
+                          value = FALSE)),
           tabItem(
             tabName="geo_tables",
             uiOutput('ui_geo_tables')),
@@ -2993,7 +2995,7 @@ app_server <- function(input, output, session) {
               
               va_progress <- deaths %>%
                 left_join(pd) %>%
-                filter(!is.na(hamlet)) %>%
+                # filter(!is.na(hamlet)) %>%
                 # group_by_(grouper) %>%
                 summarise(`VA forms collected` = nrow(va),
                           `Deaths reported` = n()) %>%
@@ -3060,7 +3062,7 @@ app_server <- function(input, output, session) {
               
               va_progress_geo <- deaths %>%
                 left_join(pd) %>%
-                filter(!is.na(hamlet)) %>%
+                # filter(!is.na(hamlet)) %>%
                 group_by_(grouper) %>%
                 summarise(`Deaths reported` = n()) %>%
                 full_join(va_agg) %>%
@@ -3101,7 +3103,7 @@ app_server <- function(input, output, session) {
     deaths <- pd$minicensus_repeat_death_info
     pd <- pd$minicensus_main
     co <- country()
-    # save(pd, va, deaths, cofile = '/tmp/vajoe.RData')
+    # save(pd, va, deaths, co, file = '/tmp/vajoe.RData')
     pd <- pd %>%
       filter(hh_country == co)
     
@@ -3134,7 +3136,7 @@ app_server <- function(input, output, session) {
     
     va_progress_geo <- deaths %>%
       left_join(pd) %>%
-      filter(!is.na(hamlet)) %>%
+      # filter(!is.na(hamlet)) %>%
       group_by_(grouper) %>%
       summarise(`Deaths reported` = n()) %>%
       full_join(va_agg) %>%
@@ -3156,15 +3158,35 @@ app_server <- function(input, output, session) {
       }
     }
     names(va_progress_geo)[1] <- 'location'
-    va_progress_geo <- va_progress_geo %>%gather(key=key, value=value, -c(location, `% VA forms completed`))
+    # save(va_progress_geo, file = '/tmp/va_progress_geo.RData')
     
-    plot <- ggplot(va_progress_geo, aes(reorder(location, -value), value, fill=key)) + geom_bar(stat = 'identity', alpha=0.6) +
-      labs(x='', y ='Number of forms', title = 'Deaths reported vs forms collected') +
-      scale_fill_manual(name='', values = c('darkred', 'darkblue')) +
-      theme_bohemia() +
-      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
-            axis.title = element_text(size = 14),
-            plot.title = element_text(size = 20))
+    va_progress_geo <- va_progress_geo %>%
+      mutate(`% VA forms pending` = 100 - `% VA forms completed`) %>%
+      tidyr::gather(key=key, value=value, -c(location))
+    
+      plot <- ggplot(data = va_progress_geo %>%
+                       filter(grepl('%', key)),
+                     aes(x = "",
+                         y = value,
+                         fill = key)) +
+        geom_bar(stat = 'identity', width = 1) +
+        theme_void() +
+        coord_polar("y", start=0) +
+        # geom_text(data = va_progress_geo %>%
+        #             filter(!grepl('%', key)),
+        #           aes(y = value, label = value, fill = NA, color = NA), color = "white", size=6) +
+        facet_wrap(~location) +
+        theme(legend.position = 'bottom') +
+        scale_fill_manual(name='', values = c('lightblue', 'darkorange')) 
+      # plot <- ggplot(va_progress_geo, aes(reorder(location, -value), value, fill=key)) + geom_bar(stat = 'identity', alpha=0.6, width = 1) +
+      #   coord_polar() +
+      #   labs(x='', y ='Number of forms', title = 'Deaths reported vs forms collected') +
+      #   scale_fill_manual(name='', values = c('darkred', 'darkblue')) +
+      #   theme_bohemia() +
+      #   theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+      #         axis.title = element_text(size = 14),
+      #         plot.title = element_text(size = 20))
+
     return(plot)
     
   })
@@ -3348,7 +3370,7 @@ app_server <- function(input, output, session) {
       deaths <- odk_data$data$minicensus_repeat_death_info
       deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
       va <- odk_data$data$va
-      # save(pd, cn, deaths, va, file = '/tmp/vajoe.RData')
+      save(pd, cn, deaths, va, file = '/tmp/vajoe.RData')
       # Conditional mourning period
       mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
       out <- left_join(deaths %>% 
@@ -5674,6 +5696,7 @@ app_server <- function(input, output, session) {
             ok = {
               pd <- odk_data$data
               an <- session_data$anomalies
+              corrections <- pd$corrections
               the_country <- country()
               date_range <- input$server_status_date
               if(is.null(date_range)){
@@ -5683,9 +5706,21 @@ app_server <- function(input, output, session) {
               }
               # save(pd, an, date_range, file='ui_temp.rda')
               # save(pd, file = '/tmp/tmp.RData')
-              # save(an, file = '/tmp/an.RData')
+              op <- input$only_pending
+              if(is.null(op)){
+                op <- FALSE
+              }
+              # save(an, op, corrections, file = '/tmp/an.RData')
               
-              by_type <- an %>%
+              if(op){
+                anx <- an %>%
+                  left_join(corrections %>% dplyr::select(id, submitted_at)) %>%
+                  filter(is.na(submitted_at))
+              } else {
+                anx <- an
+              }
+              
+              by_type <- anx %>%
                 mutate(date = as.Date(date)) %>%
                 filter(date >=date_range[1], 
                        date <= date_range[2]) %>%

@@ -124,10 +124,16 @@ if('data.RData' %in% dir()){
                  user=psql_user, password=psql_pass)
   traccar <- dbGetQuery(conn = con,
                         'SELECT * FROM traccar;')
+  traccar_summary <- bohemia::get_traccar_data(url = creds$traccar_server,
+                                               user = creds$traccar_user,
+                                               pass = creds$traccar_pass)
+  traccar_summary$last_update_date <- 
+    as.Date(substr(as.character(traccar_summary$lastUpdate), 1, 10))
   
   save(pd_moz,
        pd_tza,
        traccar,
+       traccar_summary,
        file = 'data.RData')
 }
 minicensus_main <- bind_rows(
@@ -151,23 +157,34 @@ The below table shows the number of recently active fieldworkers (minicensus for
 ```{r}
 any_form <- minicensus_main %>%
   group_by(hh_country, wid) %>%
-  summarise(last5 = max(todays_date) >= (Sys.Date()-5)) %>%
-  filter(last5)
+  summarise(last5 = max(todays_date) >= (Sys.Date()-5)) #%>%
+  # filter(last5)
 any_gps <- traccar %>%
   mutate(date = as.Date(devicetime)) %>%
   filter(date >= (Sys.Date()-5)) %>%
   group_by(wid = unique_id) %>%
   tally
+gps_sync <- traccar_summary %>%
+  mutate(gps_on = ifelse(last_update_date >= (Sys.Date()-5), 'Yes', 'No')) %>%
+  dplyr::select(wid = uniqueId, 
+                gps_on,
+                last_update_date) %>%
+  mutate(gps_on = ifelse(is.na(gps_on), 'No',gps_on)) %>%
+  mutate(wid = as.numeric(wid))
 joined <- 
   left_join(
     any_form,
     any_gps
   ) %>%
+  left_join(gps_sync) %>%
   mutate(n = ifelse(is.na(n), 0, n))
+x <- joined
+write_csv(x, '~/Desktop/x.csv')
 joined %>%
   group_by(hh_country) %>%
-  summarise(`Recently active` = length(unique(wid)),
-            `Has GPS` = length(which(n > 0)))
+  summarise(`Recently active collecting minicensus` = length(unique(wid)),
+            `Has GPS points` = length(which(n > 0)),
+            `Has GPS activated` = length(which(gps_on == 'Yes')))
 ```
 
 # Remotely field-deployed workers in Mopeia
