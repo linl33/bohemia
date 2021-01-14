@@ -6262,6 +6262,7 @@ app_server <- function(input, output, session) {
   
   anomalies_dt <- reactive({
     action <- session_data$anomalies
+    # save(action, '/tmp/action_table.RData')
     # Get supervisor
     action <- action %>%
       left_join(fids %>% dplyr::mutate(fw_name = paste0(first_name, ' ', last_name))  %>%
@@ -6272,7 +6273,7 @@ app_server <- function(input, output, session) {
     corrections <- odk_data$data$corrections
     fixes <- odk_data$data$fixes
     # odk_data <- odk_data$data
-    save(action, corrections, fixes, odk_data, file = '/tmp/this.RData')
+    # save(action, corrections, fixes, odk_data, file = '/tmp/this.RData')
     
     # Join tables together
     joined <- left_join(action,
@@ -6287,6 +6288,7 @@ app_server <- function(input, output, session) {
     # Reorder a bit
     joined <- joined %>% 
       dplyr::select(type, days_ago, country, FW, date, id, description, incident, instance_id, supervisor,
+                    hamlet_code,
                     response_details,
                     resolved_by,
                     resolution_method,
