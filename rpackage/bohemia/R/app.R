@@ -5423,10 +5423,13 @@ app_server <- function(input, output, session) {
               the_iso <- ifelse(the_country == 'Tanzania', 'TZA', 'MOZ')
               
               pd <- bohemia::gps %>% left_join(bohemia::locations %>% 
-                                                 dplyr::select(-clinical_trial) %>% 
-                                                 mutate(n_households = ifelse(country == 'Mozambique',
-                                                                              round(n_households * 0.55),
-                                                                              n_households)))
+                                                 dplyr::select(-clinical_trial))
+                
+              if(the_iso == 'MOZ'){
+                pd <- pd %>%
+                  mutate(n_households = round(n_households * 0.55))
+              }
+
               pdx <- pd <- pd %>%
                 filter(iso == the_iso,
                        clinical_trial == 0)
