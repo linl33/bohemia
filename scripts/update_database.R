@@ -455,11 +455,13 @@ data_tza <- load_odk_data(the_country = 'Tanzania',
                           local = is_local,
                           efficient = FALSE)
 # Run anomaly detection
+url <- 'https://docs.google.com/spreadsheets/d/1MH4rLmmmQSkNBDpSB9bOXmde_-n-U9MbRuVCfg_VHNI/edit#gid=0'
+anomaly_and_error_registry <- gsheet::gsheet2tbl(url)
 anomalies_moz <- identify_anomalies_and_errors(data = data_moz,
-                                               anomalies_registry = bohemia::anomaly_and_error_registry,
+                                               anomalies_registry = anomaly_and_error_registry,
                                                locs = bohemia::locations)
 anomalies_tza <- identify_anomalies_and_errors(data = data_tza,
-                                               anomalies_registry = bohemia::anomaly_and_error_registry,
+                                               anomalies_registry =anomaly_and_error_registry,
                                                locs = bohemia::locations)
 anomalies <- bind_rows(
   anomalies_moz %>% mutate(country = 'Mozambique'),
@@ -469,6 +471,11 @@ anomalies$date <- as.Date(anomalies$date)
 # Drop old anomalies and add these ones to the database
 # however, we don't want to drop any old anomalies that have a correction already
 # associated (since we want to give the site "credit" for that)
+
+# already_anomalies <- dbGetQuery(conn = con, "SELECT * FROM anomalies;")
+# already_anomalies <- left_join(already_anomalies, anomalies %>% dplyr::select(id, hamlet_code))
+
+
 corrections <- dbGetQuery(conn = con, "SELECT * FROM corrections;")
 keep_these <- paste0('(', paste0("'", corrections$id, "'", collapse = ', '), ')', collapse = '')
 dbExecute(conn = con,

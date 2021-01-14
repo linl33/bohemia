@@ -48,6 +48,7 @@ identify_anomalies_and_errors <- function(data,
     this_fid_code <- this_row$fid_code
     this_date_code <- this_row$date_code
     this_instance_id_code <- this_row$instance_id_code
+    this_hamlet_code <- this_row$hamlet_code
     this_category <- this_row$name
     suppressMessages({
       eval(parse(text = this_snippet))
@@ -74,6 +75,10 @@ identify_anomalies_and_errors <- function(data,
         suppressMessages({
           eval(parse(text = this_instance_id_code))
         })
+        # Hamlet code
+        suppressMessages({
+          eval(parse(text = this_hamlet_code))
+        })
         out <- this_row %>%
           mutate(category = this_category) %>%
           dplyr::mutate(id = paste0(name, '_',instance_id)) %>%
@@ -81,7 +86,8 @@ identify_anomalies_and_errors <- function(data,
           mutate(incident = as.character(incident)) %>%
           mutate(wid = as.character(fid)) %>%
           mutate(date = as.character(date)) %>%
-          mutate(instance_id = as.character(instance_id))
+          mutate(instance_id = as.character(instance_id)) %>%
+          mutate(hamlet_code = as.character(hamlet_code))
         # Check for completeness
         if(is.na(out$type)){
           message('------PROBLEM: type missing in snippet ', i, ' of ', nrow(ae), ': ', this_row$name, '. Element number j: ', j)

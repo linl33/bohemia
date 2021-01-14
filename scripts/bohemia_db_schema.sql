@@ -852,6 +852,7 @@ CREATE TABLE anomalies (
   correction_id TEXT,
   supervisor_id VARCHAR(8),
   country_id VARCHAR(32),
+  hamlet_code VARCHAR(32),
   date_triggered TIMESTAMP
 );
 

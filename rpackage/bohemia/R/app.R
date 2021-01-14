@@ -485,6 +485,7 @@ app_server <- function(input, output, session) {
     is_local <- FALSE
     message('Using remote database')
   }
+  # is_local <- FALSE
   
   # Connect to database
   message('Connecting to database : ', ifelse(is_local, ' local', 'remote'))
@@ -3370,7 +3371,7 @@ app_server <- function(input, output, session) {
       deaths <- odk_data$data$minicensus_repeat_death_info
       deaths <- deaths %>% filter(instance_id %in% pd$instance_id)
       va <- odk_data$data$va
-      save(pd, cn, deaths, va, file = '/tmp/vajoe.RData')
+      # save(pd, cn, deaths, va, file = '/tmp/vajoe.RData')
       # Conditional mourning period
       mourning_period <- ifelse(cn == 'Mozambique', 30, 40)
       out <- left_join(deaths %>% 
@@ -6271,7 +6272,7 @@ app_server <- function(input, output, session) {
     corrections <- odk_data$data$corrections
     fixes <- odk_data$data$fixes
     # odk_data <- odk_data$data
-    # save(action, corrections, fixes, odk_data, file = '/tmp/this.RData')
+    save(action, corrections, fixes, odk_data, file = '/tmp/this.RData')
     
     # Join tables together
     joined <- left_join(action,
