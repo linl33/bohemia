@@ -452,6 +452,8 @@ make_knn(df = df)
 ```
 
 ```{r}
-write_csv(df_moz, '~/Desktop/distances_moz.csv')
-write_csv(df_tza, '~/Desktop/distances_tza.csv')
+write_csv(df_moz %>% mutate(km = distance / 1000) %>% dplyr::rename(meters = distance) %>%
+            left_join(locations %>% dplyr::select(code, Country, Region, District, Ward)), '~/Desktop/distances_moz.csv')
+write_csv(df_tza %>% mutate(km = distance / 1000) %>% dplyr::rename(meters = distance) %>%
+            left_join(locations %>% dplyr::select(code, Country, Region, District, Ward)), '~/Desktop/distances_tza.csv')
 ```
