@@ -63,7 +63,7 @@ You'll start by downloading and installing 4 applications on the android device.
 
 ## Opening census form
 
-- On the main page, you'll see the census form  
-- Click on the census form to open it  
-- For an existing household, tap on the ID number from the list.  
+- On the main page, you'll see a list of forms. Most of these are really sub-forms of the main form (ie, "repeats"). The form of interest / relevance is the "Bohemia Census" form.
+- Click on the "Bohemia Census" form to open it  
 - For a new household, click "Create new instance"
+- For an existing household, find the ID number from the list and click the pencil icon next to that ID number  
