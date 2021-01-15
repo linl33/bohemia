@@ -1890,7 +1890,7 @@ app_server <- function(input, output, session) {
                          tabPanel('Plot',
                                   selectInput('dt_choose_form', 'Choose form', choices = c('Minicensus', 'Enumerations', 'Both')),
                                   checkboxInput(inputId = 'make_percent', label = 'Show percentage', value = FALSE),
-                                  tags$div(style='overflow-x: scroll; position: relative', plotOutput('dt_monitor_by_plot', height = '800px', width = '4000px'))
+                                  tags$div(style='overflow-x: scroll; position: relative', plotOutput('dt_monitor_by_plot', height = '800px', width = '4500px'))
                                   ),
                          tabPanel('Map',
                                   leafletOutput('leaf_lx', height = 800)))))
@@ -2124,6 +2124,11 @@ app_server <- function(input, output, session) {
     pd <- pd$minicensus_main
     co <- country()
     pd <- pd %>% filter(hh_country == co)
+    if(co == 'Mozambique'){
+      shp_file = mop3
+    } else {
+      shp_file = ruf3
+    }
     # save(pd, file = 'fid_pd.rda')
     if(is.null(who)){
       who <- 0
@@ -2136,18 +2141,20 @@ app_server <- function(input, output, session) {
         pd_ok <- TRUE
       }
     }
+  
     hqx <- hq$data
     
     if(pd_ok){
       ll <- extract_ll(pd$hh_geo_location)
       pd$lng <- ll$lng; pd$lat <- ll$lat
       
-      
+      # get shape files 
       # round table not here, and here make sure map works (not saving data below)
-      l <- leaflet() %>%
+      l <- leaflet(shp_file) %>%
         # addProviderTiles(providers$Stamen.Toner) %>%
         # addProviderTiles(providers$Esri.WorldImagery) %>%
         addTiles() %>%
+        addPolygons(weight = 1) %>%
         clearMarkers() %>%
         addMarkers(data = hqx,  
                    popup = hqx$label) %>%
@@ -3718,9 +3725,9 @@ app_server <- function(input, output, session) {
                            y = '% of daily target') +
                       theme_bohemia() +
                       geom_text(aes(label = forms, color='Number of forms'),
-                                nudge_y = 0.5, size = 5, alpha = 0.8) +
+                                nudge_y = 0.5, size = 5, alpha = 0.8, angle=90) +
                       geom_text(aes(label = days, color='Working days'),
-                                nudge_y = -2, size = 5, alpha = 0.8) +
+                                nudge_y = -0.5, size = 5, alpha = 0.8,angle = 90) +
                       scale_color_manual(name ='', 
                                          values =colors) +
                       theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
@@ -3772,9 +3779,9 @@ app_server <- function(input, output, session) {
                          y = 'Forms per (working) day') +
                     theme_bohemia() +
                     geom_text(aes(label = forms, color='Number of forms'),
-                              nudge_y = 0.2, size = 5, alpha = 0.8) +
+                              nudge_y = 0.5, size = 5, alpha = 0.8, angle = 90) +
                     geom_text(aes(label = days, color='Working days'),
-                              nudge_y = -0.5, size = 5, alpha = 0.8) +
+                              nudge_y = -0.5, size = 5, alpha = 0.8, angle = 90) +
                     scale_color_manual(name ='', 
                                        values =colors) +
                     theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
@@ -4136,9 +4143,9 @@ app_server <- function(input, output, session) {
       ),
      
       fluidRow(column(12,
-                      tags$div(style='overflow-x: scroll; position: relative',plotOutput('ui_fw_plot', height = '700px', width = '2000px')))),
+                      tags$div(style='overflow-x: scroll; position: relative',plotOutput('ui_fw_plot', height = '700px', width = '2500px')))),
       fluidRow(column(12,
-                      tags$div(style='overflow-x: scroll; position: relative',plotOutput('ui_fw_plot2', height = '700px', width = '2000px')))),
+                      tags$div(style='overflow-x: scroll; position: relative',plotOutput('ui_fw_plot2', height = '700px', width = '2500px')))),
       fluidRow(column(12,
                       DT::dataTableOutput('ui_fw_table'))))
   })
@@ -4347,15 +4354,21 @@ app_server <- function(input, output, session) {
     # Get the traccar data for that country
     # traccar <- session_data$traccar
     the_worker <- input$fid_gps
-    
+    co = country()
     if(!is.null(the_worker)){
       sub_traccar <- dbGetQuery(conn = con,
                                 statement = paste0('SELECT * FROM traccar WHERE unique_id = ', the_worker))
       pts = st_as_sf(data.frame(sub_traccar), coords = c("longitude", "latitude"), crs = 4326)
     }
+    if(co == 'Mozambique'){
+      shp_file = mop3
+    } else {
+      shp_file = ruf3
+    }
     hqx <- hq$data
     # Make the plot
-    l <- leaflet() %>%
+    l <- leaflet(shp_file) %>%
+      addPolygons(weight = 1) %>%
       addTiles() %>%
       addMarkers(data = hqx,  
                  popup = hqx$label)
@@ -5221,7 +5234,6 @@ app_server <- function(input, output, session) {
                          prettify(sub_stats, download_options = TRUE),
                          br(),
                          h2('Enrollment map'),
-                         p('Under construction'),
                          leafglOutput('dat_leaf_output')#,
                          # h2('De-aggregated enrollment data'),
                          # p('The below table shows the status of each household'),
@@ -6163,7 +6175,7 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = 
               fluidPage(
-                h3('LOGGED IN. This page is under construction..')
+                # h3('LOGGED IN. This page is under construction..')
               )
     )
   })
@@ -6179,7 +6191,7 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = 
               fluidPage(
-                h3('LOGGED IN. This page is under construction..')
+                # h3('LOGGED IN. This page is under construction..')
               )
     )
   })
@@ -6195,7 +6207,7 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = 
               fluidPage(
-                h3('LOGGED IN. This page is under construction..')
+                # h3('LOGGED IN. This page is under construction..')
               )
     )
   })
@@ -6211,7 +6223,7 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = 
               fluidPage(
-                h3('LOGGED IN. This page is under construction..')
+                # h3('LOGGED IN. This page is under construction..')
               )
     )
   })
@@ -6227,7 +6239,7 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = 
               fluidPage(
-                h3('LOGGED IN. This page is under construction..')
+                # h3('LOGGED IN. This page is under construction..')
               )
     )
   })
@@ -6243,7 +6255,7 @@ app_server <- function(input, output, session) {
             ac = ac,
             ok = 
               fluidPage(
-                h3('LOGGED IN. This page is under construction..')
+                # h3('LOGGED IN. This page is under construction..')
               )
     )
   })
