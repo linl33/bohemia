@@ -4305,9 +4305,9 @@ app_server <- function(input, output, session) {
       m <- leaflet() %>%
         addMarkers(data = hqx,  
                    popup = hqx$label) 
-      m
+      
     }
-    
+    m
   })
   
   # Map of most recent gps 
