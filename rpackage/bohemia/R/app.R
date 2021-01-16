@@ -4241,7 +4241,8 @@ app_server <- function(input, output, session) {
       }
     }
     
-    hqx <- hq$data
+    # hqx <- hq$data
+    
     if(ok){
       sub_data$time_of_day <- lubridate::round_date(sub_data$devicetime, 'hour')
       sub_data$day <- lubridate::round_date(sub_data$devicetime, 'day')
@@ -4276,6 +4277,7 @@ app_server <- function(input, output, session) {
                              lat = sub_mini$lat, 
                              color = 'blue',
                              popup = c(sub_mini$start_time))
+          return(m)
           
         }
         if(nrow(enum) > 0 & 'Enumerations' %in% the_form){
@@ -4288,6 +4290,7 @@ app_server <- function(input, output, session) {
                              lat = enum$lat, 
                              color = 'green',
                              popup = enum$start_time) 
+          return(m)
         }
         if(nrow(va) > 0 & 'VA' %in% the_form) {
           pd_locs <- extract_ll(va$location_gps)
@@ -4299,15 +4302,13 @@ app_server <- function(input, output, session) {
                              lat = va$lat, 
                              color = 'green',
                              popup = va$start_time) 
+          return(m)
         } 
       }
     } else {
-      m <- leaflet() %>%
-        addMarkers(data = hqx,  
-                   popup = hqx$label) 
-      
+      NULL
     }
-    m
+    
   })
   
   # Map of most recent gps 
