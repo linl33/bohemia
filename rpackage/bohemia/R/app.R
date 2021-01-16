@@ -4200,6 +4200,26 @@ app_server <- function(input, output, session) {
       # na.color = "magenta",
       layers.control.pos = "topright")
     
+    points_to_line2 <- function(data){
+      
+      out <- data %>%
+        mutate(time_since = as.numeric(lubridate::as.difftime(devicetime - dplyr::lag(devicetime, 1), units = 'seconds'))) %>%
+        mutate(same_day = day == dplyr::lag(day, 1)) %>%
+        mutate(same_id = unique_id == dplyr::lag(unique_id, 1)) %>%
+        mutate(grp_helper = ifelse(time_since >500 | !same_day | !same_id, 1, 0)) %>%
+        mutate(grp_helper = ifelse(is.na(grp_helper), 1, grp_helper)) %>%
+        mutate(grp = cumsum(grp_helper))
+      
+      
+      group = 'grp'
+      out <- out %>% 
+        group_by_at(group) %>%
+        summarise(do_union = FALSE) %>%
+        st_cast("LINESTRING") %>%
+        ungroup 
+      return(out)
+    }
+    
     pd <- odk_data$data
     the_form <- input$forms_gps
     enum <- pd$enumerations
@@ -4215,7 +4235,8 @@ app_server <- function(input, output, session) {
     # dbDisconnect(con)
     # traccar <- session_data$traccar
     date_slider <- input$gps_slider
-
+    # save(pd, enum,va, file = 'temp_gps.rda')
+    
     # save(traccar, date_slider, fid, file = '/tmp/dec1b.RData')
     ok <- TRUE
     if(is.null(traccar) | is.null(date_slider) | is.null(fid)){
@@ -4260,6 +4281,7 @@ app_server <- function(input, output, session) {
                                                         todays_date <= date_slider[2])
       va <- va %>%  filter(wid == fid) %>% filter(todays_date >= date_slider[1],
                                                         todays_date <= date_slider[2])
+      
       if(nrow(sub_mini)==0 & nrow(enum)==0 & nrow(va)==0){
         m <- l@map
       } else  {
@@ -4302,8 +4324,9 @@ app_server <- function(input, output, session) {
       m <- leaflet() %>%
         addMarkers(data = hqx,  
                    popup = hqx$label) 
+      m
     }
-    m
+    
   })
   
   # Map of most recent gps 
