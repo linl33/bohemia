@@ -55,6 +55,7 @@ Imports:
     deldir,
     geosphere,
     htmlTable,
-    PKI
+    PKI,
+    mapview
 Depends: 
     R (>= 2.10)

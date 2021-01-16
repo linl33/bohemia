@@ -20,6 +20,7 @@ make_it <- function(){
   usethis::use_package('gpclib')
   usethis::use_package('gsheet')
   usethis::use_package('maptools')
+  usethis::use_package('mapview')
   usethis::use_package('qrcode')
   usethis::use_package('readr')
   usethis::use_package('rgeos')
