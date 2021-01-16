@@ -4194,12 +4194,12 @@ app_server <- function(input, output, session) {
   
   # TRACCAR GPS UI
   output$traccar_plot_1 <- renderLeaflet({
-    mapviewOptions(#basemaps = c("Esri.WorldShadedRelief", "OpenStreetMap.DE"),
-      # raster.palette = grey.colors,
-      # vector.palette = colorRampPalette(c("snow", "cornflowerblue", "grey10")),
-      # na.color = "magenta",
-      layers.control.pos = "topright")
-    
+    # mapviewOptions(#basemaps = c("Esri.WorldShadedRelief", "OpenStreetMap.DE"),
+    #   # raster.palette = grey.colors,
+    #   # vector.palette = colorRampPalette(c("snow", "cornflowerblue", "grey10")),
+    #   # na.color = "magenta",
+    #   layers.control.pos = "topright")
+    # 
     
     pd <- odk_data$data
     the_form <- input$forms_gps
