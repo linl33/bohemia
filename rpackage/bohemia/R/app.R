@@ -2153,7 +2153,7 @@ app_server <- function(input, output, session) {
         # addProviderTiles(providers$Stamen.Toner) %>%
         # addProviderTiles(providers$Esri.WorldImagery) %>%
         addTiles() %>%
-        addPolygons(weight = 1) %>%
+        addPolygons(weight = 1,label = shp_file@data$NAME_3) %>%
         clearMarkers() %>%
         addMarkers(data = hqx,  
                    popup = hqx$label) %>%
@@ -4372,7 +4372,7 @@ app_server <- function(input, output, session) {
     hqx <- hq$data
     # Make the plot
     l <- leaflet(shp_file) %>%
-      addPolygons(weight = 1) %>%
+      addPolygons(weight = 1, label = shp_file@data$NAME_3) %>%
       addTiles() %>%
       addMarkers(data = hqx,  
                  popup = hqx$label)
