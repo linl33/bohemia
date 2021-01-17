@@ -12,7 +12,6 @@
 #' @import mapview
 #' @import stplanr
 #' @import lubridate
-#' @import mapview
 #' @import RPostgres
 #' @import yaml
 #' @import leafgl

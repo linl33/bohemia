@@ -1,5 +1,6 @@
 library(shiny)
 library(ggplot2)
+library(mapview)
 
 traccar_transform <- function(x){
   out <- x %>%
