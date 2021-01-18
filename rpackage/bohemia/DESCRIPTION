@@ -55,6 +55,9 @@ Imports:
     deldir,
     geosphere,
     htmlTable,
-    PKI
+    PKI,
+    mapview (>= 2.9.8)
 Depends: 
     R (>= 2.10)
+Remotes:  
+    https://github.com/r-spatial/mapview
