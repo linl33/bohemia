@@ -1765,7 +1765,7 @@ app_server <- function(input, output, session) {
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
     pd <- pd %>% filter(hh_country == co)
-    # save(pd, the_iso, co, file = '/tmp/leaf.RData')
+    save(pd, the_iso, co, file = '/tmp/leaf.RData')
     pd_ok <- FALSE
     if(!is.null(pd)){
       if(nrow(pd) > 0){
