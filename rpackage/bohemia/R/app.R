@@ -6714,6 +6714,7 @@ app_server <- function(input, output, session) {
                                                  'Minicensus mosquito nets',
                                                  'Minicensus water',
                                                  'VA',
+                                                 'VA (full)',
                                                  'Modifications'
                                      ))
                   ),
@@ -6753,6 +6754,15 @@ app_server <- function(input, output, session) {
         df <- odk_data$data$minicensus_repeat_water
       } else if(which_download == 'VA'){
         df <- odk_data$data$va
+      } else if(which_download == 'VA (full)'){
+        the_country <- country()
+        if(the_country == 'Mozambique'){
+          the_server <- 'https://sap.manhica.net:4442/ODKAggregate'
+        } else {
+          the_server <- 'https://bohemia.ihi.or.tz'
+        }
+        df <- dbGetQuery(conn = con,
+                                statement = paste0("SELECT * FROM va WHERE server = '", the_server, "'"))
       } else if(which_download == 'Modifications'){
         df <- odk_data$data$fixes
       } 
