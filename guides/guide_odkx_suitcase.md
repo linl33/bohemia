@@ -29,20 +29,19 @@ alias suitcase='java -jar ~/Documents/suitcase/ODK-X_Suitcase_v2.1.7.jar &'
 - Alternatively, double-click the .jar file.
   - A window will popup and enter the following fields:
   - Cloud Endpoint Address: https://your_url
- - App ID: default
- - Username: your_username
- - Password: your_password
+  - App ID: default
+  - Username: your_username
+  - Password: your_password
 - Then select the `Login` button
 
 - There are two uptions: Download and Upload
- - `Download`: download existing data from the server
- - `Upload`: delete, upload new, or update data.
-
- - Download 
+  - `Download`: download existing data from the server
+  - `Upload`: delete, upload new, or update data.
+- Download 
   - When downloading, you will need to specify the table_id. By default ODK-X Suitcase creates a `Download` directory where the ODK-X Suitcase jar file is located and saves data in that directory in a table_id sub-folder with a corresponding link_unformatted.csv that has all of the data for that table downloaded from the server. To specify a different directory for ODK-X Suitcase to store downloaded data in, modify the `Save to` field or click on the `…` button.
   - ODK-X Suitcase provides three options to customize the CSV file download.
-   - (1) Download attachments:
-    - If this option is selected, ODK-X Suitcase will download all attachments from the given table and the CSV generated will contain hyperlinks to the local files.
+    - (1) Download attachments:
+     - If this option is selected, ODK-X Suitcase will download all attachments from the given table and the CSV generated will contain hyperlinks to the local files.
     - If this option is not selected, the CSV generated will contain hyperlink to the given ODK-X Cloud Endpoint.
    - (2) Apply scan formatting:
     - When this option is selected, ODK-X Suitcase will optimize the CSV by replacing certain columns added by ODK-X Scan.
