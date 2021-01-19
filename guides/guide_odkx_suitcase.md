@@ -27,8 +27,8 @@ alias suitcase='java -jar ~/Documents/suitcase/ODK-X_Suitcase_v2.1.7.jar &'
 - Run `source ~/.bashrc`
 - Then, to run the program, simply type `suitcase` into the terminal
 - Alternatively, double-click the .jar file.
- - A window will popup and enter the following fields:
- - Cloud Endpoint Address: https://your_url
+  - A window will popup and enter the following fields:
+  - Cloud Endpoint Address: https://your_url
  - App ID: default
  - Username: your_username
  - Password: your_password
