@@ -1,0 +1,117 @@
+---
+title: "Recon report"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: "hide"
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               # echo = FALSE, 
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 9.64,
+               fig.height = 5.9,
+               fig.path = 'figures/')
+```
+
+```{r}
+## Load libraries
+library(bohemia)
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(sp)
+library(raster)
+library(ggthemes)
+library(sf)
+library(RColorBrewer)
+library(readr)
+library(tidyr)
+# options(scipen = '999')
+theme_set(databrew::theme_simple())
+```
+
+```{r}
+source('global.R')
+source('try_clusters.R')
+
+library(readxl)
+if(!file.exists('recon.xlsx')){
+  download.file('https://github.com/databrew/bohemia/blob/master/forms/recon/recon.xlsx?raw=true', destfile = 'recon.xlsx')
+}
+form <- read_excel('recon.xlsx')
+
+# Join names
+name_joiner <- 
+  tibble(column_name = names(recon_data),
+         new_name = NA)
+for(i in 1:nrow(name_joiner)){
+  this_column_name <- name_joiner$column_name[i]
+  if(this_column_name %in% form$name){
+    this_form_row <- form %>% filter(name == this_column_name)
+    this_form_row <- this_form_row[1,]
+    the_label <- this_form_row$`label::English`
+    if(!is.na(the_label)){
+      name_joiner$new_name[i] <- the_label
+    }
+  }
+}
+
+for(j in 1:ncol(recon_data)){
+  if(!is.na(name_joiner$new_name[j])){
+   names(recon_data)[j] <- name_joiner$new_name[j] 
+  }
+}
+recon_data <- recon_data[,!duplicated(names(recon_data))]
+this_order <- form$`label::English`
+this_order <- this_order[!is.na(this_order)]
+this_order <- this_order[!duplicated(this_order)]
+this_order <- this_order[this_order %in% names(recon_data)]
+recon_data <- recon_data[,this_order]
+names(recon_data) <- gsub('#', '', names(recon_data), fixed = TRUE)
+
+```
+
+# Reconnaissance report {.tabset}
+
+
+## Summary
+
+This report contains interactive data tables with data from the Bohemia reconnaissance activities, carried out in 2020.
+
+## MOZ
+
+```{r}
+pd <- recon_data %>%
+  filter(`1. Country` == 'Mozambique') %>%
+  dplyr::select(-`1. Country`,
+                -`Manually write your 3 digit worker ID here`,
+                -`Scan your worker ID QR code`)
+bohemia::prettify(pd,
+                  nrows = nrow(pd),
+                  download_options = TRUE)
+write_csv(pd, '~/Desktop/moz_recon.csv')
+```
+
+## TZA
+
+```{r}
+pd <- recon_data %>%
+  filter(`1. Country` == 'Tanzania') %>%
+  dplyr::select(-`1. Country`,
+                -`Manually write your 3 digit worker ID here`,
+                -`Scan your worker ID QR code`)
+bohemia::prettify(pd,
+                  nrows = nrow(pd),
+                  download_options = TRUE)
+write_csv(pd, '~/Desktop/tza_recon.csv')
+
+```

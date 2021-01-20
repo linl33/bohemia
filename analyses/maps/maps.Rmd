@@ -1,0 +1,639 @@
+---
+title: "Ad-hoc maps"
+author: "www.databrew.cc"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: "hide"
+---
+
+
+```{r setup, include=FALSE, echo = FALSE}
+# Basic knitr options
+library(knitr)
+opts_chunk$set(comment = NA, 
+               echo = TRUE,
+               warning = FALSE, 
+               message = FALSE, 
+               error = TRUE, 
+               cache = FALSE,
+               fig.width = 9.64,
+               fig.height = 5.9,
+               fig.path = 'figures/')
+```
+
+```{r}
+## Load libraries
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+library(ggplot2)
+library(sp)
+library(raster)
+library(viridis)
+library(ggthemes)
+library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(RColorBrewer)
+library(readr)
+library(zoo)
+library(tidyr)
+options(scipen = '999')
+library(bohemia)
+library(geosphere)
+```
+
+```{r}
+# Define function for calculating distance
+calculate_distance <- function(shp, lat, lng){
+  p <- c(lng, lat)
+  # ll <- length(shp@polygons[[1]]@Polygons)
+  ll <- nrow(coordinates(shp))
+  out_list <- list()
+  for(i in 1:ll){
+    temp_points <- coordinates(shp)[i,]#shp@polygons[[1]]@Polygons[[ll]]@coords
+    out_list[[i]] <- temp_points
+  }
+  the_points <- do.call('rbind', out_list)
+  the_line <- SpatialPointsDataFrame(coords = the_points,
+                                     data = data.frame(id = 1:nrow(the_points)))
+  proj4string(the_line) <- proj4string(shp)
+  i = 1
+  out <- rep(NA, nrow(the_points))
+  for(i in 1:nrow(the_points)){
+    out[i] <- distm(c(the_points[i,]), c(lng, lat), fun = distHaversine)
+  }
+  df <- data.frame(the_points)
+  df$distance <- out
+  df$lng <- lng
+  df$lat <- lat
+  return(df)
+}
+```
+
+
+```{r}
+# Define function for drawing
+draw <- function(df,
+                 shp,
+                 n = 20){
+  shp_fort <- fortify(shp, id = NAME_2)
+  sub_df <- dplyr::sample_n(df, size = n)
+  
+  g1 <- ggplot() +
+    geom_polygon(data = shp_fort,
+         aes(x = long,
+             y = lat,
+             group = group)) +
+    geom_segment(data = sub_df,
+                 aes(x = x,
+                     y = y,
+                     xend = lng,
+                     yend = lat)) +
+    geom_text(data = sub_df,
+              aes(x = x,
+                  y = y,
+                  label = round(distance / 1000, digits = 2)))
+  
+  g2 <- ggplot(data = df,
+               aes(x = distance/1000)) +
+    geom_density() +
+    labs(x = 'Km',
+         y = 'Density',
+         title = paste0('Max: ', round(max(df$distance)/1000, 2)))
+  Rmisc::multiplot(g1, g2, cols = 2)
+}
+```
+
+```{r}
+# Health facilities map for MOZ
+hf_moz <- bohemia::mopeia_health_facilities
+hf_moz
+
+ggplot() +
+  geom_polygon(data = bohemia::mop2_fortified,
+               aes(x = long,
+                   y = lat, 
+                   group = group),
+               fill = 'lightblue') +
+  geom_point(data = bohemia::mopeia_health_facilities,
+             aes(x = lng,
+                 y = lat),
+             size = 3) +
+  geom_point(data = tibble(lng = 35.711553,
+                         lat = -17.979446,
+                         name = 'HQ'),
+             color = 'red',
+             pch = 11,
+             aes(x = lng,
+                 y = lat)) +
+  ggrepel::geom_text_repel(data = bohemia::mopeia_health_facilities,
+                           aes(x = lng,
+                               y = lat,
+                               label = name),
+                           size = 2) +
+  theme_solid()
+ggsave('~/Desktop/mopeia_health_facilities.png')
+
+
+library(leaflet)
+leaflet()  %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>%
+  addPolylines(data = bohemia::mop2) %>%
+  addMarkers(data = bohemia::mopeia_health_facilities,
+             popup = bohemia::mopeia_health_facilities$name)
+
+```
+
+
+```{r}
+# Clinical trial map for TZA
+# Read in hamlets locations
+gps_sp <- gps <- bohemia::gps %>% filter(!is.na(lng)) %>%
+  mutate(x = lng, y = lat)
+coordinates(gps_sp) <- ~x+y
+# Segregate by country
+gps_tza <- gps_sp[gps_sp@data$iso == 'TZA',]
+```
+
+```{r}
+ggplot() +
+  geom_polygon(data = bohemia::ruf2_fortified,
+               aes(x = long,
+                   y = lat, 
+                   group = group),
+               fill = 'beige') +
+  geom_point(data = gps_tza@data %>%
+               mutate(ct = ifelse(clinical_trial == 1, 'Clinical trial', 'No clinical trial')),
+             aes(x = lng,
+                 y = lat,
+                 color = ct),
+             size = 1, 
+             alpha = 0.6) +
+  # ggrepel::geom_text_repel(data = gps_tza@data,
+  #                          aes(x = lng,
+  #                              y = lat,
+  #                              label = code),
+  #                          size = 1) +
+  theme_map() +
+  scale_color_manual(name = '',
+                     values = c('red', 'black')) +
+  theme(legend.position = 'bottom',
+        legend.text = element_text(color = 'black'))
+ggsave('~/Desktop/clinical_trials.png')
+```
+
+```{r}
+ggplot() +
+  geom_polygon(data = bohemia::ruf2_fortified,
+               aes(x = long,
+                   y = lat, 
+                   group = group),
+               fill = 'beige') +
+  geom_point(data = gps_tza@data %>%
+               mutate(ct = ifelse(clinical_trial == 1, 'Clinical trial', 'No clinical trial')),
+             aes(x = lng,
+                 y = lat,
+                 color = ct),
+             size = 1, 
+             alpha = 0.6) +
+  # ggrepel::geom_text_repel(data = gps_tza@data,
+  #                          aes(x = lng,
+  #                              y = lat,
+  #                              label = code),
+  #                          size = 1) +
+  theme_map() +
+  scale_color_manual(name = '',
+                     values = c('red', 'black')) +
+  theme(legend.position = 'bottom',
+        legend.text = element_text(color = 'black')) +
+  geom_point(data = bohemia::rufiji_health_facilities,
+             aes(x = lng,
+                 y = lat),
+             size = 6, 
+             color = 'blue',
+             pch = "+") 
+
+```
+
+```{r}
+# See which hamlet is closest to each rufiji health facility
+rufiji_health_facilities_sp <- bohemia::rufiji_health_facilities %>%
+  mutate(x = lng,
+         y = lat)
+coordinates(rufiji_health_facilities_sp) <- ~x+y
+proj4string(rufiji_health_facilities_sp) <- proj4string(gps_tza)
+distances <- distm(
+  x = rufiji_health_facilities_sp,
+  y = gps_tza
+)
+
+closest <- apply(distances, 1, which.min)
+nearest_hamlet <- gps_tza@data$code[closest]
+clinical_trial <- gps_tza@data$clinical_trial[closest]
+
+rufiji_health_facilities_sp@data$nearest_hamlet <- nearest_hamlet
+rufiji_health_facilities_sp@data$clinical_trial <- clinical_trial
+```
+
+```{r}
+ggplot() +
+  geom_polygon(data = bohemia::ruf2_fortified,
+               aes(x = long,
+                   y = lat, 
+                   group = group),
+               fill = 'beige') +
+  # geom_point(data = gps_tza@data %>%
+  #              mutate(ct = ifelse(clinical_trial == 1, 'Clinical trial', 'No clinical trial')),
+  #            aes(x = lng,
+  #                y = lat,
+  #                color = ct),
+  #            size = 1, 
+  #            alpha = 0.6) +
+  theme_map() +
+  theme(legend.position = 'bottom',
+        legend.text = element_text(color = 'black')) +
+  geom_point(data = rufiji_health_facilities_sp@data %>%
+               mutate(ct = ifelse(clinical_trial == 1, 'Clinical trial', 'No clinical trial')),
+             aes(x = lng,
+                 y = lat,
+                 color = ct),
+             size = 6, 
+             pch = "+") +
+    scale_color_manual(name = '',
+                     values = c('red', 'black')) 
+
+```
+
+```{r}
+rf <- rufiji_health_facilities_sp@data %>%
+               mutate(ct = ifelse(clinical_trial == 1, 'Clinical trial', 'No clinical trial')) %>% dplyr::select(-clinical_trial)
+
+write_csv(rf, '~/Desktop/estimated_clinical_trial_status_of_rufiji_health_facilities.csv')
+```
+
+
+```{r}
+library(leaflet)
+leaflet()  %>%
+  addProviderTiles(providers$Esri.WorldImagery) %>%
+  addPolylines(data = bohemia::ruf2) %>%
+  addCircleMarkers(data = gps_tza@data %>% filter(clinical_trial == 0),
+                   color = 'black', popup = gps_tza@data$code[gps_tza@data$clinical_trial == 0]) %>%
+  addCircleMarkers(data = gps_tza@data %>% filter(clinical_trial == 1),
+                   color = 'red', popup = gps_tza@data$code[gps_tza@data$clinical_trial == 1])
+
+```
+
+```{r}
+# Read in hamlets locations
+gps_sp <- gps <- bohemia::gps %>% filter(!is.na(lng)) %>%
+  mutate(x = lng, y = lat)
+coordinates(gps_sp) <- ~x+y
+# Segregate by country
+gps_tza <- gps_sp[gps_sp@data$iso == 'TZA',]
+gps_moz <- gps_sp[gps_sp@data$iso == 'MOZ',]
+# Calculate distances
+
+df_moz <- calculate_distance(shp = gps_moz,
+                         lng = 35.711553,
+                         lat = -17.979446)
+df_moz$code <- gps_moz@data$code
+df_moz$n_households <- round(gps_moz@data$n_households * 0.55, digits = 0)
+df_moz$lat <- gps_moz@data$lat
+df_moz$lng <- gps_moz@data$lng
+df_moz$hamlet <- gps_moz@data$hamlet
+
+df_tza <- calculate_distance(shp = gps_tza,
+                         lng = 38.984170,
+                         lat = -7.947843)
+df_tza$code <- gps_tza@data$code
+df_tza$n_households <- gps_tza@data$n_households
+df_tza$lat <- gps_tza@data$lat
+df_tza$lng <- gps_tza@data$lng
+df_tza$hamlet <- gps_tza@data$hamlet
+```
+
+```{r}
+# Function to chart distances
+chart_distances <- function(df){
+  g <- ggplot(data = df,
+         aes(x = distance / 1000)) +
+    geom_histogram(alpha = 0.6,
+                   fill = 'lightblue',
+                   color = 'black') +
+    databrew::theme_simple() +
+    labs(x = 'Kilometers from HQ',
+         y = 'Hamlets')
+  return(g)
+}
+
+chart_distances_people <- function(df){
+  out_list <- list()
+  for(i in 1:nrow(df)){
+    out <- data.frame(km = df$distance[i] / 1000,
+                      id = 1:df$n_households[i])
+    out_list[[i]] <- out
+  }
+  out <- bind_rows(out_list)
+  
+  g <- ggplot(data = out,
+         aes(x = km)) +
+    geom_histogram(alpha = 0.6,
+                   fill = 'lightblue',
+                   color = 'black') +
+    databrew::theme_simple() +
+    labs(x = 'Kilometers from HQ',
+         y = 'Households')
+  return(g)
+}
+
+chart_distances_xy <- function(df){
+  out <- df %>%
+    mutate(km = distance / 1000) %>%
+    arrange(km) %>%
+    mutate(dummy = 1) %>%
+    mutate(cs = cumsum(dummy)) %>%
+    mutate(p = cs / sum(dummy) * 100) %>%
+    group_by(km) %>%
+    summarise(p = max(p))
+  
+  g <- ggplot(data = out,
+         aes(x = km,
+             y = p)) +
+    geom_area(alpha = 0.6,
+                   fill = 'lightblue',
+                   color = 'black') +
+    databrew::theme_simple() +
+    labs(x = 'Kilometers from HQ',
+         y = '% of hamlets within this distance') +
+    geom_hline(yintercept = seq(0, 100, by = 25),
+               alpha = 0.3) +
+    geom_vline(xintercept = max(out$km))
+  return(g)
+}
+
+
+chart_distances_people_xy <- function(df){
+  out_list <- list()
+  for(i in 1:nrow(df)){
+    out <- data.frame(km = df$distance[i] / 1000,
+                      id = 1:df$n_households[i])
+    out_list[[i]] <- out
+  }
+  out <- bind_rows(out_list) %>%
+    arrange(km) %>%
+    mutate(dummy = 1) %>%
+    mutate(cs = cumsum(dummy)) %>%
+    mutate(p = cs / sum(dummy) * 100) %>%
+    group_by(km) %>%
+    summarise(p = max(p))
+  
+  g <- ggplot(data = out,
+         aes(x = km,
+             y = p)) +
+    geom_area(alpha = 0.6,
+                   fill = 'lightblue',
+                   color = 'black') +
+    databrew::theme_simple() +
+    labs(x = 'Kilometers from HQ',
+         y = '% of households within this distance') +
+    geom_hline(yintercept = seq(0, 100, by = 25),
+               alpha = 0.3) +
+    geom_vline(xintercept = max(out$km))
+  return(g)
+}
+
+# Lealet map
+library(leaflet)
+make_leaf <- function(df){
+  # mapview::mapview() %>%
+    leaflet() %>%
+    addProviderTiles(providers$OpenStreetMap) %>%
+    addMarkers(data = df,
+               popup = paste0(df$code, ' (', df$hamlet, '), ',
+                              round(df$distance/1000, digits = 1),
+                              ' km')) 
+}
+
+make_leaf_cocentric <- function(df){
+  # use one coordinate to detect country
+  lat <- df$lat[1]
+  if(lat <= -12){
+    iso <- 'MOZ'
+    hq <- data.frame(lng = 35.711553, lat = -17.979446)
+  } else {
+    iso <- 'TZA'
+    hq <- data.frame(lng = 38.984170, lat = -7.947843)
+  }
+  
+  # Make hq spatial
+  hq_sp <- hq %>% mutate(x = lng, y = lat)
+  coordinates(hq_sp) <- ~x+y
+  
+  proj4string(hq_sp) <- CRS("+init=epsg:4326") # define as lat/lng
+  zone <- 36
+  # Project
+  new_proj <- CRS(paste0("+proj=utm +zone=", 
+                       zone, 
+                       " +south +ellps=WGS84 +datum=WGS84 +units=m +no_defs"))
+  hq_sp <- spTransform(hq_sp,
+                       new_proj)
+  
+  l <- leaflet() %>%
+    addProviderTiles(providers$OpenStreetMap) %>%
+    addMarkers(data = hq)
+  
+  # Get cocentric circles
+  distances <- c(10, 20, 50, 100)
+  cols <- rainbow(length(distances))
+  counter <- 0
+  for(i in distances){
+    counter <- counter +1
+    the_name <- paste0('c', i)
+    the_distance <- paste0(i, ' km radius')
+    the_poly <- spTransform(rgeos::gBuffer(hq_sp, width = i * 1000), CRS("+init=epsg:4326"))
+    assign(the_name, 
+           the_poly)
+    l <- l %>%
+      addPolylines(data = the_poly,
+                   popup = the_distance,
+                   color = cols[counter])
+  }
+  l <- l %>%
+    addCircleMarkers(data = df,
+                     popup = paste0(df$code, ' (', df$hamlet, '), ',
+                                    round(df$distance/1000, digits = 1),
+                                    ' km'),
+                     color = 'black',
+                     fillColor = 'black',
+                     opacity = 0.8,
+                     radius = 3)
+  return(l)
+}
+library(class)
+library(cluster)
+make_knn <- function(df){
+ kmeans2 <- kmeans(x = df[,c('lng', 'lat')], centers = 6, nstart = 25)
+  pd <- df
+  pd$cluster <- kmeans2$cluster
+  n_cols <- max(pd$cluster)
+  cols <- rainbow(n_cols)
+  l <- leaflet() %>%
+    addTiles() %>%
+    addCircleMarkers(data = pd,
+                     color = cols[pd$cluster],
+                     popup = paste0(pd$code, ' ',
+                                    '(',
+                                    pd$hamlet,
+                                    '), team: ',
+                                    pd$cluster),
+                     radius = 2)
+  return(l)
+}
+
+```
+
+
+# Hamlet distance analysis {.tabset}
+
+## Mozambique
+
+```{r}
+df <- df_moz
+```
+
+### Distribution of kilometers from HQ (hamlet-level)
+
+The below chart shows the distribution of distances from headquarters. The x-axis is distance in kilometers (as the crow flies) from HQ, and the y-axis is the number of hamlets at that distance.
+
+```{r}
+chart_distances(df = df)
+```
+
+
+### Distribution of kilometers from HQ (household-level)
+
+
+The below chart shows the distribution of distances from headquarters. The x-axis is distance in kilometers (as the crow flies) from HQ, and the y-axis is the number of estimated households (from recon) at that distance.
+
+```{r}
+chart_distances_people(df = df)
+```
+
+### Percentage of hamlets within X kilometers 
+
+The below chart shows what percentage of hamlets (y-axis) are located at or less kilometers (x-axis) from headquarters.
+
+```{r}
+chart_distances_xy(df = df)
+```
+
+### Percentage of households within X kilometers 
+
+The below chart shows what percentage of households (y-axis) are located at or less kilometers (x-axis) from headquarters.
+
+```{r}
+chart_distances_people_xy(df = df)
+```
+
+### Interactive map of hamlet locations
+
+The below map shows all hamlet locations, per recon. It is interactive (you can zoom in/out, or click on a hamlet for more information).
+
+```{r}
+make_leaf(df = df)
+```
+
+
+### Interactive map of cocentric distance circles
+
+The below map shows all hamlet locations, per recon. It is interactive (you can zoom in/out, or click on a hamlet for more information). The cocentric radial circles are drawn at 20km, 50km, and 100km.
+
+```{r}
+make_leaf_cocentric(df = df)
+```
+
+### Suggested geographic-based team assignments
+
+The below is an examle of how we might assign teams based on location using an algorithm like K-nearest neighbors. 
+
+```{r}
+make_knn(df = df)
+```
+
+
+## Tanzania
+
+
+```{r}
+df <- df_tza
+```
+
+
+### Distribution of kilometers from HQ (hamlet-level)
+
+The below chart shows the distribution of distances from headquarters. The x-axis is distance in kilometers (as the crow flies) from HQ, and the y-axis is the number of hamlets at that distance.
+
+```{r}
+chart_distances(df = df)
+```
+
+
+### Distribution of kilometers from HQ (household-level)
+
+
+The below chart shows the distribution of distances from headquarters. The x-axis is distance in kilometers (as the crow flies) from HQ, and the y-axis is the number of estimated households (from recon) at that distance.
+
+```{r}
+chart_distances_people(df = df)
+```
+
+### Percentage of hamlets within X kilometers 
+
+The below chart shows what percentage of hamlets (y-axis) are located at or less kilometers (x-axis) from headquarters.
+
+```{r}
+chart_distances_xy(df = df)
+```
+
+### Percentage of households within X kilometers 
+
+The below chart shows what percentage of households (y-axis) are located at or less kilometers (x-axis) from headquarters.
+
+```{r}
+chart_distances_people_xy(df = df)
+```
+
+### Interactive map of hamlet locations
+
+The below map shows all hamlet locations, per recon. It is interactive (you can zoom in/out, or click on a hamlet for more information).
+
+```{r}
+make_leaf(df = df)
+```
+
+
+### Interactive map of cocentric distance circles
+
+The below map shows all hamlet locations, per recon. It is interactive (you can zoom in/out, or click on a hamlet for more information). The cocentric radial circles are drawn at 20km, 50km, and 100km.
+
+```{r}
+make_leaf_cocentric(df = df)
+```
+
+### Suggested geographic-based team assignments
+
+The below is an examle of how we might assign teams based on location using an algorithm like K-nearest neighbors. 
+
+```{r}
+make_knn(df = df)
+```
+
+```{r}
+write_csv(df_moz %>% mutate(km = distance / 1000) %>% dplyr::rename(meters = distance) %>%
+            left_join(locations %>% dplyr::select(code, Country, Region, District, Ward)), '~/Desktop/distances_moz.csv')
+write_csv(df_tza %>% mutate(km = distance / 1000) %>% dplyr::rename(meters = distance) %>%
+            left_join(locations %>% dplyr::select(code, Country, Region, District, Ward)), '~/Desktop/distances_tza.csv')
+```
