@@ -27,6 +27,21 @@ chmod +x suitcase/ODK-X_Suitcase_v2.1.7.jar
   - To download CSV of table table_id from app default with attachments as an anonymous user to the default directory: 
   - `java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "table_id" -username "user" -password "pass" -path "path"`
 
+
+- In order to add, delete, or update data on the ODK-X Cloud Endpoint, you will need to create a CSV. You will need a separate CSV file for each table_id and these CSV files need to be named table_id.csv.
+- When uploading, you need a correctly formatted csv file: (Tip: use the.csv file from `Download` as a template).
+- All the columns besides "hh_id" are `meta-variables` and MUST be present in the csv. To change the value of a column, simple add the column name (in this example "hh_id") with the new value (AAA-222). 
+  
+  An example of updating a csv:
+![](img/example_spreadsheet.png)
+
+ - The first column of the CSV must have the header operation. The value in the operation column instructs ODK-X Suitcase how to handle that row. The valid values for this operation column are: UPDATE, FORCE_UPDATE, NEW and DELETE.
+   - `UPDATE` is used for updating data that already exists on the server. The update is done by matching on the `_id`column. The `_id` for an instance can be found by downloading the data using ODK-X suitcase.
+   - `FORCE_UPDATE` is used for updating data with a more aggressive strategy, if -UPDATE failed.
+   - `NEW` is used for adding new rows (instances) to the server.
+   - `DELETE` is used for deleting rows (instances) from the server by matching on the `_id` column.
+   - The CSV file must also include `_id` and `_form_id` columns. If you are updating particular variables in the server, the column headers for the variables you are updating will also need to be added with the edited values.
+
 - Upload
   - `java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default -username 'user' -password 'pass' -upload -tableId 'table_id'-path 'table_id.csv'`
 
@@ -68,19 +83,6 @@ alias suitcase='java -jar ~/Documents/suitcase/ODK-X_Suitcase_v2.1.7.jar &'
     - (3) Extra metadata columns
       - When this option is selected, two more columns will be included in the CSV, create_user and last_update_user.
 
-- `Upload`
- - The first column of the CSV must have the header operation. The value in the operation column instructs ODK-X Suitcase how to handle that row. The valid values for this operation column are: UPDATE, FORCE_UPDATE, NEW and DELETE.
-   - `UPDATE` is used for updating data that already exists on the server. The update is done by matching on the `_id`column. The `_id` for an instance can be found by downloading the data using ODK-X suitcase.
-   - `FORCE_UPDATE` is used for updating data with a more aggressive strategy, if -UPDATE failed.
-   - `NEW` is used for adding new rows (instances) to the server.
-   - `DELETE` is used for deleting rows (instances) from the server by matching on the `_id` column.
-   - The CSV file must also include `_id` and `_form_id` columns. If you are updating particular variables in the server, the column headers for the variables you are updating will also need to be added with the edited values.
 
-  - In order to add, delete, or update data on the ODK-X Cloud Endpoint, you will need to create a CSV. You will need a separate CSV file for each table_id and these CSV files need to be named table_id.csv.
-  - When uploading, you need a correctly formatted csv file: (Tip: use the.csv file from `Download` as a template).
-  - All the columns besides "hh_id" are `meta-variables` and MUST be present in the csv. To change the value of a column, simple add the column name (in this example "hh_id") with the new value (AAA-222). 
-  
-  An example of updating a csv:
-![](img/example_spreadsheet.png)
 
 
