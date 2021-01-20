@@ -20,6 +20,7 @@
 #' @import shinybusy
 #' @import ggrepel
 #' @import osmextract
+
 app_ui <- function(request) {
   options(scipen = '999')
   tagList(
@@ -475,6 +476,7 @@ mobile_golem_add_external_resources <- function(){
 #' @import gt
 #' @import DT
 app_server <- function(input, output, session) {
+  sizex <- 18
   
   # Define whether local or not
   if(grepl('brew', getwd())){
@@ -1708,9 +1710,9 @@ app_server <- function(input, output, session) {
       
       # condition text size on which geography was chosen
       if(by_geo=='Hamlet'){
-        text_size = 3
+        text_size = 4
       } else {
-        text_size = 6
+        text_size = 7
       }
       
       message('---created progess plot for Overview by geography')
@@ -1724,31 +1726,36 @@ app_server <- function(input, output, session) {
           labs(x = '',
                y ='') + 
           theme_bohemia(base_size = 18) +
-          theme(axis.text.x  = element_text(angle=90, vjust=0.5),
+          theme(axis.text.x  = element_text(angle=90, vjust=0.5, size = sizex),
                 axis.ticks.x = element_blank())
         
       } else {
         if(make_percent){
           out <- ggplot(monitor_plot, aes(reorder(location,-`Percent finished`), `Percent finished`)) + geom_bar(stat='identity', fill = 'grey', alpha=0.5) +
-            geom_text(aes(label=plot_text), vjust=0.5, size = text_size)+
+            geom_text(aes(label=numerator), vjust=1, hjust = 0, size = text_size, angle = 90)+
+            geom_text(aes(label=`Percent finished`), vjust=0, hjust = 1, size = text_size, angle = 90)+
             labs(x = '',
                  y ='') + 
             theme_bohemia(base_size = 18) +
-            theme(axis.text.x  = element_text(angle=90, vjust=0.5),
-                  axis.ticks.x = element_blank())
+            theme(axis.text.x  = element_text(angle=90, vjust=0.5, size = sizex),
+                  axis.ticks.x = element_blank()) +
+            ylim(0, max(monitor_plot$`Percent finished`, na.rm = TRUE) * 1.2)
           
         } else {
           out <- ggplot(monitor_plot, aes(reorder(location, -numerator), numerator)) + geom_bar(stat='identity', fill='grey', alpha=0.7) +
-            geom_text(aes(label=plot_text), vjust=0.5, size = text_size)+
+            geom_text(aes(label=numerator), vjust=1, hjust = 0, size = text_size, angle = 90)+
+            geom_text(aes(label=`Percent finished`), vjust=0, hjust = 1, size = text_size, angle = 90)+            
             labs(x = '',
                  y ='') + 
             theme_bohemia(base_size = 18) +
-            theme(axis.text.x  = element_text(angle=90, vjust=0.5),
-                  axis.ticks.x = element_blank())
+            theme(axis.text.x  = element_text(angle=90, vjust=0.5, size = sizex),
+                  axis.ticks.x = element_blank()) +
+            ylim(0, max(monitor_plot$numerator, na.rm = TRUE) * 1.2)
+          
         }
         
       }
-      
+
       
       
     }
@@ -2308,7 +2315,7 @@ app_server <- function(input, output, session) {
                           values = c('black', 'grey')) +
         labs(x='Date', y='', title='Number of errors and anomalies') +
         theme_bohemia() +
-        theme(axis.text = element_text(size = 10),
+        theme(axis.text = element_text(size = 12),
               axis.title = element_text(size = 14),
               plot.title = element_text(size = 20))
     } else {
@@ -2380,7 +2387,7 @@ app_server <- function(input, output, session) {
           scale_color_manual(name = '',
                              values = c('red', 'blue')) +
           theme(legend.position = 'bottom') +
-          theme(axis.text = element_text(size = 10),
+          theme(axis.text = element_text(size = 12),
                 axis.title = element_text(size = 14),
                 plot.title = element_text(size = 20))
         
@@ -2430,7 +2437,7 @@ app_server <- function(input, output, session) {
                y = 'Forms collected',
                title = 'Forms collected by date') +
           theme_bohemia() +
-          theme(axis.text = element_text(size = 10),
+          theme(axis.text = element_text(size = 12),
                 axis.title = element_text(size = 14),
                 plot.title = element_text(size = 20))
         
@@ -2480,7 +2487,7 @@ app_server <- function(input, output, session) {
                title = paste0('Distribution of time taken per form for FW ',
                               who, '; ', n, ' forms, ', avg, ' ', units_taken)) +
           theme_bohemia() +
-          theme(axis.text = element_text(size = 10),
+          theme(axis.text = element_text(size = 12),
                 axis.title = element_text(size = 14),
                 plot.title = element_text(size = 20))
         
@@ -2653,7 +2660,7 @@ app_server <- function(input, output, session) {
           scale_color_manual(name = '', values = cols) +
           theme(legend.position = 'none') +
           labs(subtitle = 'Diamond: start time; Cross: end time') +
-          theme(axis.text = element_text(size = 10),
+          theme(axis.text = element_text(size = 12),
                 axis.title = element_text(size = 14),
                 plot.title = element_text(size = 20))
         
@@ -3315,7 +3322,7 @@ app_server <- function(input, output, session) {
             labs(x = '',
                  y='# of forms', title = 'VAs past due') +
             theme_bohemia() +
-            theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+            theme(axis.text = element_text(size = 14, angle=90, vjust=0.5),
                   axis.title = element_text(size = 14),
                   plot.title = element_text(size = 20))
           
@@ -3332,8 +3339,8 @@ app_server <- function(input, output, session) {
             labs(x = '',
                  y='# of forms', title = 'VAs past due') +
             theme_bohemia() +
-            theme(axis.text.x = element_text(angle=90, vjust=0.5)) +
-            theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+            theme(axis.text.x = element_text(angle=90, vjust=0.5, size = sizex)) +
+            theme(axis.text = element_text(size = sizex, angle=90, vjust=0.5),
                   axis.title = element_text(size = 14),
                   plot.title = element_text(size = 20))
           
@@ -3729,7 +3736,9 @@ app_server <- function(input, output, session) {
                                 nudge_y = -0.5, size = 5, alpha = 0.8,angle = 90) +
                       scale_color_manual(name ='', 
                                          values =colors) +
-                      theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5))
+                      theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5, size = sizex),
+                            legend.position = 'top',
+                            legend.text = element_text(size = 18))
                     p
                     return(p)
                   } else {
@@ -3783,10 +3792,12 @@ app_server <- function(input, output, session) {
                               nudge_y = -0.5, size = 5, alpha = 0.8, angle = 90) +
                     scale_color_manual(name ='', 
                                        values =colors) +
-                    theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
-                    theme(axis.text = element_text(size = 10),
+                    theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5, size = sizex)) +
+                    theme(axis.text = element_text(size = 12),
                           axis.title = element_text(size = 14),
-                          plot.title = element_text(size = 20))
+                          plot.title = element_text(size = 20),
+                          legend.position = 'top',
+                          legend.text = element_text(size = 8))
                 }
                 
                 
@@ -3913,10 +3924,11 @@ app_server <- function(input, output, session) {
                   geom_text(aes(label = label),
                             nudge_y = 0, size = 5, alpha = 0.8,
                             angle = 90) +
-                  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5)) +
-                  theme(axis.text = element_text(size = 10),
+                  theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5, size = sizex)) +
+                  theme(axis.text = element_text(size = 12),
                         axis.title = element_text(size = 14),
-                        plot.title = element_text(size = 20))
+                        plot.title = element_text(size = 20),
+                        plot.caption = element_text(size = 14))
                 
               } else {
                 NULL
@@ -4808,8 +4820,7 @@ app_server <- function(input, output, session) {
                     names(out_rf)[1] <- 'V1'
                     ggplot(out_rf, aes(reorder(V1, -`Number of refusals`), `Number of refusals`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
-                      theme(axis.text.x = element_text(angle=90, vjust = 0.5)) +
-                      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+                      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5, size = sizex),
                             axis.title = element_text(size = 14),
                             plot.title = element_text(size = 20))
                   })
@@ -4818,8 +4829,7 @@ app_server <- function(input, output, session) {
                     names(out_ab)[1] <- 'V1'
                     ggplot(out_ab, aes(reorder(V1, -`Number of absences`), `Number of absences`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
-                      theme(axis.text.x = element_text(angle=90, vjust = 0.5)) +
-                      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+                      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5, size = sizex),
                             axis.title = element_text(size = 14),
                             plot.title = element_text(size = 20))
                   })
@@ -6504,7 +6514,7 @@ app_server <- function(input, output, session) {
            y = 'Number of anomalies',
            title = 'Anomalies/errors and status over time') +
       theme_bohemia() +
-      theme(axis.text.x = element_text(angle=45, hjust=1))
+      theme(axis.text.x = element_text(angle=45, hjust=1, size = sizex))
   })
   
   # Alert ui
