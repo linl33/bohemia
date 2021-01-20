@@ -27,17 +27,17 @@ chmod +x suitcase/ODK-X_Suitcase_v2.1.7.jar
   - `java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "hh_geo_location" -username "data" -password "data" -path "Download"`
   
 - update
-  - In order to add, delete, or update data on the ODK-X Cloud Endpoint, you will need a correctly formatted csv (Tip: use the.csv file from `Download` as a template).
+  -`java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'hh_geo_locations' -path 'hh_geo_locations.csv'`
+  - The above command workd for adding, deleting, or updating data on the ODK-X Cloud Endpoint. You will need a correctly formatted csv (Tip: use the.csv file from `Download` as a template).
  - The first column of the CSV must have the header operation. The value in the operation column instructs ODK-X Suitcase how to handle that row. The valid values for this operation column are: UPDATE, FORCE_UPDATE, NEW and DELETE.
    - `UPDATE` is used for updating data that already exists on the server. The update is done by matching on the `_id`column. The `_id` for an instance can be found by downloading the data using ODK-X suitcase.
 ![](img/example_spreadsheet.png)
  -All the columns besides "hh_id" are `meta-variables` and MUST be present in the csv. To change the value of a column, simple add the column name (in this example "hh_id") with the new value (AAA-222). 
- - `java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'hh_geo_locations' -path 'hh_geo_locations.csv'`
    - `FORCE_UPDATE` is used for updating data with a more aggressive strategy, if -UPDATE failed.
-   - `NEW` is used for adding new rows (instances) to the server.
+   - `NEW` is used for adding new rows (instances) to the server. We can add the entry `NEW` to our existing csv.
    ![](img/example_spreadsheet_new.png)
-   - `DELETE` is used for deleting rows (instances) from the server by matching on the `_id` column.
-      ![](img/example_spreadsheet_delete.png)
+   - `DELETE` is used for deleting rows (instances) from the server by matching on the `_id` column. In the image below, we delete the newly created instance. 
+   ![](img/example_spreadsheet_delete.png)
 
 
 
