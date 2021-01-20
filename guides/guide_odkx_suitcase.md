@@ -25,7 +25,7 @@ chmod +x suitcase/ODK-X_Suitcase_v2.1.7.jar
 alias suitcase='java -jar ~/Documents/suitcase/ODK-X_Suitcase_v2.1.7.jar &'
 ```
 - Run `source ~/.bashrc`
-- Then, to run the program, simply type `suitcase` into the terminal (in the suitcase directory).
+- Then, to run the program, simply type `suitcase` into the terminal (in the `suitcase` directory).
 - Alternatively, double-click the .jar file.
   - A window will popup and enter the following fields:
   - Cloud Endpoint Address: https://server_url
