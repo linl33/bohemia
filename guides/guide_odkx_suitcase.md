@@ -23,10 +23,10 @@ chmod +x suitcase/ODK-X_Suitcase_v2.1.7.jar
 - For a list of available options:
   - `java -jar ~/Documents/suitcase/ODK-X_Suitcase_v2.1.7.jar --help`
 
-- Download (specifying "Download" as the path creates a folder called "Download" in your current directory:
+- Download (specifying "Download" as the path creates a folder called "Download" in your current directory):
   - `java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "hh_geo_location" -username "data" -password "data" -path "Download"`
   
-- Upload
+- Upload (not important)
   - `java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default -username 'user' -password 'pass' -upload -tableId 'table_id'-path 'table_id.csv'`
 
 - Update
