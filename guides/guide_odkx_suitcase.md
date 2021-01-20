@@ -23,14 +23,17 @@ chmod +x suitcase/ODK-X_Suitcase_v2.1.7.jar
 - For a list of available options:
   - `java -jar ~/Documents/suitcase/ODK-X_Suitcase_v2.1.7.jar --help`
 
-- Download
-  - To download CSV of table table_id from app default with attachments as an anonymous user to the default directory: 
-  - `java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "table_id" -username "user" -password "pass" -path "path"`
+- Download (specifying "Download" as the path creates a folder called "Download" in your current directory:
+  - `java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "hh_geo_location" -username "data" -password "data" -path "Download"`
+  
+- Upload
+  - `java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default -username 'user' -password 'pass' -upload -tableId 'table_id'-path 'table_id.csv'`
 
-
-- In order to add, delete, or update data on the ODK-X Cloud Endpoint, you will need to create a CSV. You will need a separate CSV file for each table_id and these CSV files need to be named table_id.csv.
-- When uploading, you need a correctly formatted csv file: (Tip: use the.csv file from `Download` as a template).
-- All the columns besides "hh_id" are `meta-variables` and MUST be present in the csv. To change the value of a column, simple add the column name (in this example "hh_id") with the new value (AAA-222). 
+- Update
+  - In order to add, delete, or update data on the ODK-X Cloud Endpoint, you will need to create a CSV. 
+  - The CSV file must also include `_id` and `_form_id` columns. 
+  - When uploading, you need a correctly formatted csv file: (Tip: use the.csv file from `Download` as a template).
+  - All the columns besides "hh_id" are `meta-variables` and MUST be present in the csv. To change the value of a column, simple add the column name (in this example "hh_id") with the new value (AAA-222). 
   
   An example of updating a csv:
 ![](img/example_spreadsheet.png)
@@ -40,17 +43,8 @@ chmod +x suitcase/ODK-X_Suitcase_v2.1.7.jar
    - `FORCE_UPDATE` is used for updating data with a more aggressive strategy, if -UPDATE failed.
    - `NEW` is used for adding new rows (instances) to the server.
    - `DELETE` is used for deleting rows (instances) from the server by matching on the `_id` column.
-   - The CSV file must also include `_id` and `_form_id` columns. If you are updating particular variables in the server, the column headers for the variables you are updating will also need to be added with the edited values.
-
-- Upload
-  - `java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default -username 'user' -password 'pass' -upload -tableId 'table_id'-path 'table_id.csv'`
-
-- Update
-  - `java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'user' -password 'pass' -update -tableId 'table_id' -path 'table_id.csv'`
-
-- Delete
-  - `java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default -username 'user' -password 'pass' -upload -tableId 'table_id' -path 'table_id.csv'`
-
+ - Once you have specified a command in the "operation" column, run the following:
+ - `java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'hh_geo_locations' -path 'hh_geo_locations.csv'`
 
 ## Open the Suitcase GUI
 
