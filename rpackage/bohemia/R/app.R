@@ -3797,7 +3797,7 @@ app_server <- function(input, output, session) {
                           axis.title = element_text(size = 14),
                           plot.title = element_text(size = 20),
                           legend.position = 'top',
-                          legend.text = element_text(size = 8))
+                          legend.text = element_text(size = 16))
                 }
                 
                 
