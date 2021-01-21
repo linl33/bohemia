@@ -30,8 +30,9 @@ chmod +x suitcase/ODK-X_Suitcase_v2.1.7.jar
 - update data:
 - `java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'hh_geo_locations' -path 'hh_geo_locations.csv'`
 - The above command workd for updating, deleting, or adding new data on the ODK-X Cloud Endpoint. You will need a correctly formatted csv (Tip: use the.csv file from `Download` as a template).
-- The contents of the first column ("operation") in the csv file will determing if new data should be added, or existing data should be updated or deleted. 
--  The valid values for this operation column are: `UPDATE`, `FORCE_UPDATE`, `NEW` and `DELETE`. All the columns besides "hh_id" are "meta-variables" and MUST be present in the csv. To change the value of an existing column, simply add the column name (in this example "hh_id") with the new value (AAA-222). 
+- The contents of the first column ("operation") in the csv file will determe if new data should be added, or if existing data should be updated or deleted. 
+- The valid values for the "operation" column are: `UPDATE`, `FORCE_UPDATE`, `NEW` and `DELETE`. 
+- In the example below, all the columns besides "hh_id" are "meta-variables" and MUST be present in the csv. To change the value of an existing column, simply add the column name (in this example "hh_id") with the new value (AAA-222). 
     - `UPDATE` is used for updating data that already exists on the server. The update is done by matching on the `_id`column. The `_id` for an instance can be found by downloading the data using ODK-X suitcase.
 ![](img/example_spreadsheet.png)
     - `FORCE_UPDATE` is used for updating data with a more aggressive strategy, if -UPDATE failed.
