@@ -27,7 +27,7 @@ java -jar ~/Documents/suitcase/ODK-X_Suitcase_v2.1.7.jar --help
 
 - download data: 
   ```
-  java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "hh_geo_location" -username "data" -password "data" -path "Download"
+java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "hh_geo_location" -username "data" -password "data" -path "Download"
   ```
 (NOTE: specifying "Download" as the path creates a folder called "Download" in your current directory):
 
