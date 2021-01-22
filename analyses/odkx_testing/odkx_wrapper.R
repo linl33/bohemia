@@ -16,7 +16,9 @@ update_odkx_data <- function(server_url, table_id, user, pass, update_path){
   system(update_string)
 }
 
+###########
 # EXAMPLE 
+###########
 
 # First download the census form and store it in a "Download" folder in the suitcase repo (Documents/suitcase)
 
@@ -27,6 +29,9 @@ dat <- read.csv('~/Documents/suitcase/Download/default/census/data_unformatted.c
 
 # remove X from meta column names
 names(dat) <- gsub('X_', '_', names(dat))
+
+# subset to the first row in case there are more than one. I use only one row for the n replications. 
+dat <- dat[1,]
 
 # remove contents of _id and _row_etag column so they will be generated on upload
 dat$`_id` <- ''
@@ -39,7 +44,7 @@ dat[is.na(dat)] <- ''
 # set the number of forms you want 
 n= 2
 
-# push 100 forms to the server, each with a unique hh_id
+# push n forms to the server, each with a unique hh_id
 for(i in 1:n){
   # create n number of random house ids
   hh_letters <- Hmisc::capitalize(sample(letters, 3, replace = TRUE))
