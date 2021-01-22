@@ -117,7 +117,9 @@ load_odk_data <- function(the_country = 'Mozambique',
           
         } else  if(this_name == 'minicensus_repeat_death_info'){
           
-          this_data <- dbGetQuery(con, paste0("SELECT instance_id, death_id, death_dod, death_number, death_initials FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+          # Doing full data for deaths due to request from hansel and paul
+          # this_data <- dbGetQuery(con, paste0("SELECT instance_id, death_id, death_dod, death_number, death_initials FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
+          this_data <- dbGetQuery(con, paste0("SELECT * FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
           
         } else if(this_name =='minicensus_repeat_hh_sub'){
           this_data <- dbGetQuery(con, paste0("SELECT instance_id, hh_sub_id FROM clean_", this_name, " WHERE instance_id IN ", ok_uuids))
