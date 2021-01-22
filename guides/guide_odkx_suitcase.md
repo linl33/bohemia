@@ -44,7 +44,7 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
 - The contents of the first column ("operation") in the csv file will determe if new data should be added, or if existing data should be updated or deleted. 
 - The valid values for the "operation" column are: `UPDATE`, `FORCE_UPDATE`, `NEW` and `DELETE`. 
 - In the example below, all the columns besides "hh_id" are "meta-variables" and MUST be present in the csv. To change the value of an existing column, simply add the column name (in this example "hh_id") with the new value (AAA-222). 
-- If you are using downloaded data as template,then all the columns are already present and you just need to change the values you want.
+- If you are using downloaded data as template, then all the columns are already present and you just need to change the values you want (I only included hh_id in the example below).
     - `UPDATE` is used for updating data that already exists on the server. The update is done by matching on the `_id`column. The `_id` for an instance can be found by downloading the data using ODK-X suitcase.
     - If an update is successfully implemented, a folder will be create called "Update" in your working directory with a .txt file showing the results of the update (ex: "Thu Jan 21 14:18:43 EST 2021 row Id: uuid:08870f9d-493c-40ed-ae0e-cd4985a9f038 had outcome SUCCESS").
 ![](img/example_spreadsheet.png)
