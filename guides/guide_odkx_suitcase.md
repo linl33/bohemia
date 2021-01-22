@@ -49,7 +49,7 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
         - If the `_id` column is empty, a row id and row e tag will be generated automatically. 
         - If the `_id` column is filled with an existing id, the existing data on the server will be overwritten (works the same as update).
         - A new entry will only update the variables specified. If a variable is not specified or left blank, it will remain unchanged on the server.
-            - if a new entry includes a variable not present on the server, then the push to the server will fail with a "BAD_COLUMN_NAME" error. 
+        - if a new entry includes a variable not present on the server, then the push to the server will fail with a "BAD_COLUMN_NAME" error. 
    ![](img/example_spreadsheet_new.png)
     - `DELETE` is used for deleting rows (instances) from the server by matching on the `_id` column. In the image below, we delete the newly created instance. 
    ![](img/example_spreadsheet_delete.png)
