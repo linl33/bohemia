@@ -37,7 +37,10 @@ java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://data
 ```
 java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'hh_geo_locations' -path 'hh_geo_locations.csv'
 ```
-- The above command workd for updating, deleting, or adding new data on the ODK-X Cloud Endpoint. You will need a correctly formatted csv (Tip: use the.csv file from `Download` as a template).
+- The above command workd for updating, deleting, or adding new data on the ODK-X Cloud Endpoint. You will need a correctly formatted csv.
+
+``Tip: use the.csv file from `Download` as a template and simply add the "operation" column with the desired command``
+
 - The contents of the first column ("operation") in the csv file will determe if new data should be added, or if existing data should be updated or deleted. 
 - The valid values for the "operation" column are: `UPDATE`, `FORCE_UPDATE`, `NEW` and `DELETE`. 
 - In the example below, all the columns besides "hh_id" are "meta-variables" and MUST be present in the csv. To change the value of an existing column, simply add the column name (in this example "hh_id") with the new value (AAA-222). 
