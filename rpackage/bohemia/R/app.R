@@ -6745,6 +6745,13 @@ app_server <- function(input, output, session) {
     content = function(file){
       
       which_download <- input$which_download
+      the_country <- country()
+      if(the_country == 'Mozambique'){
+        the_server <- 'https://sap.manhica.net:4442/ODKAggregate'
+      } else {
+        the_server <- 'https://bohemia.ihi.or.tz'
+      }
+      
       
       if(which_download == 'Minicensus main'){
         df <- odk_data$data$minicensus_main
@@ -6765,12 +6772,6 @@ app_server <- function(input, output, session) {
       } else if(which_download == 'VA'){
         df <- odk_data$data$va
       } else if(which_download == 'VA (full)'){
-        the_country <- country()
-        if(the_country == 'Mozambique'){
-          the_server <- 'https://sap.manhica.net:4442/ODKAggregate'
-        } else {
-          the_server <- 'https://bohemia.ihi.or.tz'
-        }
         df <- dbGetQuery(conn = con,
                                 statement = paste0("SELECT * FROM va WHERE server = '", the_server, "'"))
       } else if(which_download == 'Modifications'){
