@@ -15,7 +15,7 @@ wget https://github.com/odk-x/suitcase/releases/download/2.1.7/ODK-X_Suitcase_v2
 
 - Make sure the .jar file is executable
 ```
-chmod +x suitcase/ODK-X_Suitcase_v2.1.7.jar
+chmod +x ODK-X_Suitcase_v2.1.7.jar
 ```
 
 ## Suitcase CLI
