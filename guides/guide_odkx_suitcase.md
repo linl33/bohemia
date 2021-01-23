@@ -97,6 +97,6 @@ This will download the census table manifest data to this location: ~/Documents/
 
 6) Check the server to see if the old data was deleted and new data added. Synch with the server on your android device to as well. 
 
-
+Note: `UPDATE` existing data works the same way the `NEW` command works, but you must specify the correct `_id` to update, rather than leaving it blank (as in the case with `NEW`).
 
 
