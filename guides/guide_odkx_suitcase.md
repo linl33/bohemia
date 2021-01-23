@@ -81,13 +81,15 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
 This will download the census table manifest data to this location: ~/Documents/suitcast/Download/default/census/data_unformatted.csv)
 
 2) In order to update the data, we mush change the name from "data_unformatted.csv" to the name of the table in question: "census.csv". 
-(guide_1)
+ ![](img/guide_1.png)
 
 3) Then open the csv file and add the "operation" column as the leading column. In this example, we will test all operations: NEW and DELETE.
-(picture).
+ ![](img/guide_2.png)
+
 
 4) In this example we copy and paste the original entry to create a fake entry. Remove the `_id` entry for the new row - they will be generated upon upload. Add `NEW` in the "operation" column next to the fake entry and `DELETE` next to the original entry. Make sure you change one of the survey fields (hh_id, snake_bite, etc) so you are able to confirm the new data on the server.
-(picture)
+ ![](img/guide_3.png)
+
 
 5) Run this command to update the server:
 ```java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'census' -path 'Download/default/census/census.csv'```
