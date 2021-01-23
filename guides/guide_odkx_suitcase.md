@@ -25,14 +25,14 @@ chmod +x ODK-X_Suitcase_v2.1.7.jar
 java -jar ~/Documents/suitcase/ODK-X_Suitcase_v2.1.7.jar --help
 ```
 
-- download data: 
+### download data: 
 
 ```
 java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "hh_geo_location" -username "data" -password "data" -path "Download"
 ```
 (NOTE: specifying "Download" as the path creates a folder called "Download" in your current directory that holds the data manifest csv: ~/Documents/suitcast/Download/default/hh_geo_location/data_unformatted.csv)
 
-- update data:
+### update data:
 
 ```
 java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'hh_geo_location' -path 'hh_geo_location.csv'
@@ -58,7 +58,7 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
     - `DELETE` is used for deleting rows (instances) from the server by matching on the `_id` column. In the image below, we delete the newly created instance. 
    ![](img/example_spreadsheet_delete.png)
 
-- Reset the server
+### Reset the server
     - To completely wipe all the data from the server:
 ```java -jar "ODK-X_Suitcase_v2.1.7.jar" -cloudEndpointUrl "https://databrew.app" -appId "default" -dataVersion 2  -username "dbrew" -password "admin" -reset```
     - To wipe the data for one form on the server:
