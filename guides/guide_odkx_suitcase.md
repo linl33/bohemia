@@ -76,7 +76,7 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
 
 1) Having installed `suitcase` in the following path: `~/Documents/suitcase/`, pull the census table with the following command into the suitcase directory:
 
-```java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "census" -username "data" -password "data" -path "Download"```
+    - ```java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "census" -username "data" -password "data" -path "Download"```
 
 This will download the census table manifest data to this location: ~/Documents/suitcast/Download/default/census/data_unformatted.csv)
 
@@ -92,7 +92,8 @@ This will download the census table manifest data to this location: ~/Documents/
 
 
 5) Run this command to update the server:
-```java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'census' -path 'Download/default/census/census.csv'```
+
+    - ```java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'census' -path 'Download/default/census/census.csv'```
 
 6) Check the server to see if the old data was deleted and new data added. Synch with the server on your android device to as well. 
 
