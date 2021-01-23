@@ -58,7 +58,8 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
     - `DELETE` is used for deleting rows (instances) from the server by matching on the `_id` column. In the image below, we delete the newly created instance. 
    ![](img/example_spreadsheet_delete.png)
 
-### Reset the server
+### Reset the server 
+
     - To completely wipe all the data from the server:
 ```java -jar "ODK-X_Suitcase_v2.1.7.jar" -cloudEndpointUrl "https://databrew.app" -appId "default" -dataVersion 2  -username "dbrew" -password "admin" -reset```
     - To wipe the data for one form on the server:
