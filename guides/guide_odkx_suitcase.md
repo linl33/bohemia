@@ -60,8 +60,8 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
 
 ### Reset the server 
 
-    - To completely wipe all the data from the server:
+   - To completely wipe all the data from the server:
 ```java -jar "ODK-X_Suitcase_v2.1.7.jar" -cloudEndpointUrl "https://databrew.app" -appId "default" -dataVersion 2  -username "dbrew" -password "admin" -reset```
-    - To wipe the data for one form on the server:
+   - To wipe the data for one form on the server:
 ```java -jar "ODK-X_Suitcase_v2.1.7.jar" -cloudEndpointUrl "https://databrew.app" -appId "default" -dataVersion 2  -username "dbrew" -password "admin" -reset -tableId "hh_geo_location"```
 
