@@ -1771,7 +1771,7 @@ app_server <- function(input, output, session) {
     co <- country()
     the_iso <- ifelse(co == 'Tanzania', 'TZA', 'MOZ')
     pd <- pd %>% filter(hh_country == co)
-    save(pd, the_iso, co, file = '/tmp/leaf.RData')
+    # save(pd, the_iso, co, file = ''/tmp/leaf.RData'/tmp/leaf.RData')
     pd_ok <- FALSE
     if(!is.null(pd)){
       if(nrow(pd) > 0){
@@ -1824,7 +1824,7 @@ app_server <- function(input, output, session) {
         left_join(right %>% dplyr::group_by(id) %>% summarise(n_households = sum(n_households, na.rm = TRUE)), by = 'id') %>%
         mutate(p = n / n_households * 100) %>%
         mutate(p = ifelse(is.na(p), 0, p))
-      
+      pdx <- pdx %>% filter(!is.na(x), !is.na(y))
       coordinates(pdx) <- ~x+y
       proj4string(pdx) <- proj4string(moz1)
       out <- voronoi(pdx)
