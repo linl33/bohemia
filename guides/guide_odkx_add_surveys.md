@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This guide is a description of the steps to follow in order to upload new ODK-X forms to the server. 
+This guide is a description of the steps to follow in order to upload new/updated ODK-X survey forms to the server. This will not delete the data already on the server. 
 
 #### Overview
 
@@ -15,30 +15,15 @@ The ODK-X suite of applications needed are:
 
 See [ODK X Server Client setup](https://github.com/databrew/bohemia/blob/feature/odkx_server_reset_guide/guides/guide_odkx_client.md) for download instructions if you do not yet have the apps above. 
 
-# **** IMPORTANT NOTE: This will erase all data currently on the server! **** 
-
 # Instructions
-
-_If you have previously synced your device with the server (i.e., you have survey forms on your device), follow the steps to 'Clear ODK-X files on your Android device'. If not, then skip to 'Push survey forms from your computer to Android device'_
 
 ## Clear ODK-X files on your Android device
 
 - Open OI File Manager 
 - Open the `opendatakit` folder, where you should see a single folder `default` 
-- Press and hold the `default` folder and you will see a trash can option at the top of the page 
-- Click it to delete the default folder
+- Press and hold the `default` folder and you will see a trash can icon at the top of the page 
+- Click it to delete the `default` folder
 - This should delete all the files currently on ODK-X Survey and reset the server settings
-
-## Push survey forms from your computer to Android device
-
-- Connect the device to your computer via a USB cable.
-_Note: You must have USB debugging enabled on your device in order to perform the next step. See [these instructions](https://www.phonearena.com/news/How-to-enable-USB-debugging-on-Android_id53909) for help._
-
-- Open a cmd or terminal window and cd into the Application Designer directory
-- Use the command `grunt adbpush` to push the designer files from your computer onto your phone/tablet
-- Once done, you should see all your files in the OI File Manager > `opendatakit` > `default` folder
-
-_For detailed instructions please refer to: https://docs.odk-x.org/build-app/#moving-files-to-the-device_
 
 ## Set up server connection 
 
@@ -54,9 +39,24 @@ _For detailed instructions please refer to: https://docs.odk-x.org/build-app/#mo
 - Click "Verify User Permissions"  
 - You should see a "Verification successful" window. Click "OK".  
 
-## Uploading new forms to the server
+## Push the ODK-X Application Designer files from your computer to Android device
 
-- You should see a "Reset App Server" button at the bottom right corner of the page
+- Connect the device to your computer via a USB cable.
+_Note: You must have USB debugging enabled on your device in order to perform the next step. See [these instructions](https://www.phonearena.com/news/How-to-enable-USB-debugging-on-Android_id53909) for help._
+
+- Open a cmd or terminal window and cd into the ODK-X Application Designer directory 
+- Use the command `grunt adbpush` to push the designer files from your computer onto your phone/tablet
+- Once done, you should see all your new files in the OI File Manager > `opendatakit` > `default` folder
+
+_For detailed instructions on moving files from computer to Android device, please refer to: https://docs.odk-x.org/build-app/#moving-files-to-the-device_
+
+## Uploading new survey forms to the server
+- Return to ODK-X Survey 
+- Click the 'reload' icon at the top of the page 
+- The Server URL should be https://databrew.app and Username is that of the super user account
+- You should see a "Reset App Server" button at the bottom right corner of the page. Click it. 
 - A pop up that says "Confirm Reset App Server" will appear
 - Click "Reset" to upload the updated survey forms to the server
+
+If you wish to delete all the data on the server, please refer to [this guide](https://github.com/databrew/bohemia/blob/master/guides/guide_odkx_suitcase.md#reset-the-server)
 
