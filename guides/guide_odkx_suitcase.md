@@ -69,5 +69,31 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
    - After clearing the data from the server make sure that all data is deleted on your android device by deleting the "opendatakit" folder in your "OI File Manager". If this is not deleted, the next synch will add all forms on your phone to the server. 
    - Follow this guide to add new forms: https://github.com/databrew/bohemia/blob/master/guides/guide_odkx_add_surveys.md
 
+### Example: 
+
+- This example will pull the census table, modify the instances (update, delete, new), and update accordingly on the server.
+- Checks are made to make sure the android app synchs properly with the server.
+
+1) Having installed `suitcase` in the following path: `~/Documents/suitcase/`, pull the census table with the following command into the suitcase directory:
+
+```java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "census" -username "data" -password "data" -path "Download"```
+
+This will download the census table manifest data to this location: ~/Documents/suitcast/Download/default/census/data_unformatted.csv)
+
+2) In order to update the data, we mush change the name from "data_unformatted.csv" to the name of the table in question: "census.csv". 
+(guide_1)
+
+3) Then open the csv file and add the "operation" column as the leading column. In this example, we will test all operations: NEW and DELETE.
+(picture).
+
+4) In this example we copy and paste the original entry to create a fake entry. Remove the `_id` entry for the new row - they will be generated upon upload. Add `NEW` in the "operation" column next to the fake entry and `DELETE` next to the original entry. Make sure you change one of the survey fields (hh_id, snake_bite, etc) so you are able to confirm the new data on the server.
+(picture)
+
+5) Run this command to update the server:
+```java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'data' -password 'data' -update -tableId 'census' -path 'Download/default/census/census.csv'```
+
+6) Check the server to see if the old data was deleted and new data added. Synch with the server on your android device to as well. 
+
+
 
 
