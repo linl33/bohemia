@@ -42,7 +42,7 @@ dat <- cbind(operation = 'NEW', dat)
 dat[is.na(dat)] <- ''
 
 # set the number of forms you want 
-n= 2
+n= 2000
 
 # push n forms to the server, each with a unique hh_id
 for(i in 1:n){
@@ -60,5 +60,6 @@ for(i in 1:n){
   
   # write this csv to the suitcase directory
   message('finished ', i,' iteration' )
+  Sys.sleep(0.5)
 }
 

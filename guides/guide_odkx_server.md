@@ -169,7 +169,7 @@ After gathering this data the script will begin the install and you should see a
 
 #### Launching LDAP Admin
 
-1. Using the IP address of the virtual machine, navigate to `https://[IP_ADDRESS]:40000` within your browser in order to access the services screen. It will warn you about your connection not being private but should give you the option to proceed at the bottom.
+1. Using the IP address of the virtual machine, navigate to `https://13.36.9.244:40000/` within your browser in order to access the services screen. It will warn you about your connection not being private but should give you the option to proceed at the bottom.
 
 2. If you see the following screen after proceeding, you are good to go!
 ![](img/ldapscreen.png)
@@ -190,7 +190,7 @@ Official documentation reference: https://docs.odk-x.org/sync-endpoint-cloud-set
 
 4. Select the `Generic: User Account` template.
 
-5. Fill out information for the new user and `create object`
+5. Fill out information for the new user (data, data, uid 1000) and `create object`
 
 6. Assign the user object to `default_prefix_synchronize_tables` group.
 
@@ -207,6 +207,12 @@ When you have created a user, you need to add the user to the respective group f
 3. Click on `Add new attribute` which should show a pull-down menu and then select `memberUid`.
 4. Enter the `memberUid` of the user, _this is the 'username' you created_, and then update the object.
 
+
+#### create admin user
+
+click ou=people, create a child entry, just like above, but instead of data / data make it dbrew / admin (uid 1001) and make `default_prefix_super_user_tables`
+- go to gidnumber=502, click add new attribute, member uid, dbrew
+- do same for all numbers for dbrew
 
 #### Web Login to the Server
 
