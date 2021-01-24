@@ -68,6 +68,9 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
 ### Add fresh forms
    - After clearing the data from the server make sure that all data is deleted on your android device by deleting the "opendatakit" folder in your "OI File Manager". If this is not deleted, the next synch will add all forms on your phone to the server. 
    - Follow this guide to add new forms: https://github.com/databrew/bohemia/blob/master/guides/guide_odkx_add_surveys.md
+   - The "upload" functionality of suitcase can also add new forms by pointing to your local app.
+   ```java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -appId 'default' -dataVersion 2 -username 'dbrew' -password 'admin' -upload -path /home/benbrew88/Documents/ODK-X_ApplicationDesigner_v2.1.7/app/config/```
+
 
 ### Example: 
 
