@@ -45,7 +45,7 @@ You'll start by downloading and installing 4 applications on the android device.
 
 ## Set up server connection
 
-- Open the ODK-X Survey app.  
+- Open the ODK-X Tables app.  
 - Press the settings button (gear icon in upper right)  
 - Select "Server Settings"  
 - Slick "Server URL"  
@@ -62,8 +62,36 @@ You'll start by downloading and installing 4 applications on the android device.
 - Click "Sync now"  
 
 ## Opening census form
-
+### Using ODK-X Survey
 - On the main page, you'll see a list of forms. Most of these are really sub-forms of the main form (ie, "repeats"). The form of interest / relevance is the "Bohemia Census" form.
 - Click on the "Bohemia Census" form to open it  
 - For a new household, click "Create new instance"
 - For an existing household, find the ID number from the list and click the pencil icon next to that ID number  
+
+### Using ODK-X Tables
+- Open the app, you'll see the home page of the census.
+- Click on the button for the action you want to take
+
+## Refreshing the app with new data from server
+
+- To push to and retrieve data from the server, you can use the refresh button as described in the `Set up server connection` above.
+Alternatively, from the ODK-X Table home page, click on the `Send Data` button
+
+- If the server has changed e.g. a new database structure has been set up, you will get the feedback as an error.
+
+![](img/remove_default.png)
+
+- In this instance, you should delete the folder `default` as shown in the error message
+
+![](img/oimanager_delete.png)
+
+- After deleting the folder, return to the app and attempt a new sync. Follow the `Set up server connection` steps to re-authenticate to the server and retrieve new version of forms and database. 
+
+IMPORTANT: This will lose all the data in the local app instance that was not pushed to the server prior. This is why its critical that server resets are well coordinated to prevent data loss.
+
+### Handling Navigation from Content Pages view
+When filling out a survey, there are some sections that are populated via the `Create New Instance` button. 
+When such a section is entered, clicking the `Back` button will _not_ take you back to the census question you were at.
+If you should realize that the section was entered in error, please click the `Next` button and that will take you to the census section.
+
+It is counterintutive at first but the logic is, the 'new instance' is a separate form which has no history of which form initiated a call to load it. Thus, when the `Back` button is clicked in it, it defaults to the `Contents` page.

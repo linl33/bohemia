@@ -174,6 +174,8 @@ After gathering this data the script will begin the install and you should see a
 2. If you see the following screen after proceeding, you are good to go!
 ![](img/ldapscreen.png)
 
+_Hack tip: If you can't get the option to proceed on your browser when using the domain name, especially with the error `NET::ERR_CERT_AUTHORITY_INVALID` you can access the page by using its IP Address. Log in to AWS and open the url from the instance page._
+
 
 ### Creating Users
 
@@ -207,6 +209,45 @@ When you have created a user, you need to add the user to the respective group f
 3. Click on `Add new attribute` which should show a pull-down menu and then select `memberUid`.
 4. Enter the `memberUid` of the user, _this is the 'username' you created_, and then update the object.
 
+#### Creating Admin User
+
+1. Click login on the left and log in into the ldap-service using the credentials:
+
+    - login DN: `cn=admin,dc=example,dc=org`
+    - password: `admin`
+
+2. Click the `+` sign next to `dc=example, dc=org` to expand it. Within the unfolded menu, in the `ou=people` section
+
+3. Click on `Create a child entry`.
+
+4. Select the `Generic: User Account` template.
+
+5. Fill out information for the new user and `create object`
+
+6. Assign the user object to `default_prefix super_user_tables` group.
+
+7. Commit (confirm) that you want to create this entry on the next screen
+
+#### Add Admin User to Groups
+
+When you have created an admin user, you need to add the user to the respective groups from the group settings.
+The steps are the same as for the regular user, except we add this user to multiple groups.
+
+1. Click the `+` sign next `ou=groups` to expand it.
+2. Within the unfolded menu, in the `ou=default_prefix` section, click on `gidNumber=502`, which is the group ID that corresponds to `default_prefix super_user_tables`. _Groups correspond to the access permissions available to a certain user._
+
+3. Click on `Add new attribute` which should show a pull-down menu and then select `memberUid`.
+4. Enter the `memberUid` of the user, _this is the 'username' you created_, and then update the object.
+
+Repeat the steps to add the user to the following groups
+- `gidNumber=500` -- `default_prefix site_admins`
+- `gidNumber=501` -- `default_prefix administer_tables`
+- `gidNumber=503` -- `default_prefix synchronize_tables`
+- `gidNumber=504` -- `default_prefix form_managers`
+
+Note: The final view when the admin user logs in to the server should be similar to:
+
+![](img/admin_user_ldap.jpeg)
 
 #### create admin user
 
@@ -250,4 +291,3 @@ _After creating the users required, there is no longer need access to the LDAP a
 ### Outstanding Tasks
 
 - [ ] Production set up for the LDAP as advised in the [Advanced LDAP](https://github.com/odk-x/sync-endpoint-default-setup#warnings)
-- [ ] Test successful sync with the ODK-X Services app using the created server endpoint domain
