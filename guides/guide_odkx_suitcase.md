@@ -71,8 +71,7 @@ java -jar 'ODK-X_Suitcase_v2.1.7.jar' -cloudEndpointUrl 'https://databrew.app' -
 
 ### Example: 
 
-- This example will pull the census table, modify the instances (update, delete, new), and update accordingly on the server.
-- Checks are made to make sure the android app synchs properly with the server.
+- This example will pull the census table, modify the instances, and update accordingly on the server.
 
 1) Having installed `suitcase` in the following path: `~/Documents/suitcase/`, pull the census table with the following command into the suitcase directory:
 
