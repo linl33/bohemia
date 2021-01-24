@@ -21,7 +21,6 @@ update_odkx_data <- function(server_url, table_id, user, pass, update_path){
 ###########
 
 # First download the census form and store it in a "Download" folder in the suitcase repo (Documents/suitcase)
-
 get_odkx_data(server_url = 'https://databrew.app', table_id = 'census', user = 'dbrew', pass = 'admin', download_path = 'Download')
 
 # read in that csv (because it is already in the format needed)
@@ -41,25 +40,44 @@ dat$`_row_etag` <- ''
 dat <- cbind(operation = 'NEW', dat)
 dat[is.na(dat)] <- ''
 
-# set the number of forms you want 
-n= 2000
 
-# push n forms to the server, each with a unique hh_id
+# set the number of forms you want 
+n= 1000
+
+# repeat the first tow n times
+dat <- dat[rep(seq_len(nrow(dat)), n), ]
+
+
+# add unique hh_id to all rows
+dat$hh_id <- as.character(dat$hh_id)
 for(i in 1:n){
   # create n number of random house ids
   hh_letters <- Hmisc::capitalize(sample(letters, 3, replace = TRUE))
   hh_numbers <- sample(0:9, 3, replace=TRUE)
   hh_ids <- c(hh_letters, '-', hh_numbers)
-  dat$hh_id <- paste0(hh_ids, collapse = '')
+  dat$hh_id[i] <- paste0(hh_ids, collapse = '')
   
-  # write the csv to be used in the upload
-  write_csv(dat, file = '~/Documents/suitcase/census.csv')
-  
-  # upload to server
-  update_odkx_data(server_url = 'https://databrew.app', table_id='census', user = 'dbrew', pass = 'admin', update_path = 'census.csv')
-  
-  # write this csv to the suitcase directory
-  message('finished ', i,' iteration' )
-  Sys.sleep(0.5)
 }
+
+write_csv(dat, file = '~/Documents/suitcase/census.csv')
+update_odkx_data(server_url = 'https://databrew.app', table_id='census', user = 'dbrew', pass = 'admin', update_path = 'census.csv')
+
+# # push n forms to the server, each with a unique hh_id
+# for(i in 1:n){
+#   # create n number of random house ids
+#   hh_letters <- Hmisc::capitalize(sample(letters, 3, replace = TRUE))
+#   hh_numbers <- sample(0:9, 3, replace=TRUE)
+#   hh_ids <- c(hh_letters, '-', hh_numbers)
+#   dat$hh_id <- paste0(hh_ids, collapse = '')
+#   
+#   # write the csv to be used in the upload
+#   write_csv(dat, file = '~/Documents/suitcase/census.csv')
+#   
+#   # upload to server
+#   update_odkx_data(server_url = 'https://databrew.app', table_id='census', user = 'dbrew', pass = 'admin', update_path = 'census.csv')
+#   
+#   # write this csv to the suitcase directory
+#   message('finished ', i,' iteration' )
+#   Sys.sleep(0.5)
+# }
 
