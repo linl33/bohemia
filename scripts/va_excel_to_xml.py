@@ -10,8 +10,9 @@ s.downloadAsExcel()
 # Read in locations
 import pandas as pd
 
-df = pd.read_csv('https://raw.githubusercontent.com/databrew/bohemia/master/forms/locations.csv')
-df.to_csv('locations.csv', index=False)
+d = ezsheets.Spreadsheet('https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit#gid=640399777')
+d.downloadAsCSV('locations.csv')
+
 
 ## Convert to xml
 os.system('xls2xform va153b.xlsx va153b.xml')
