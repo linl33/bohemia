@@ -106,6 +106,8 @@ draw <- function(df,
 }
 ```
 
+
+
 ```{r}
 # Health facilities map for MOZ
 hf_moz <- bohemia::mopeia_health_facilities
@@ -183,6 +185,55 @@ ggplot() +
         legend.text = element_text(color = 'black'))
 ggsave('~/Desktop/clinical_trials.png')
 ```
+
+# Same as above but add locations of health facilities sent by Mwaka
+
+```{r}
+library(readxl)
+mwaka <- read_excel('data/Copy of 20200812 IHI Health Facilities in Kibiti and Rufiji - Amended.xlsx', skip = 1)
+mwaka2 <- read_excel('data/Copy of 20200812 IHI Health Facilities in Kibiti and Rufiji - Amended.xlsx', skip = 1, sheet = 2)
+mwaka2$bohemia <- TRUE
+mwaka$bohemia <- NA
+mwaka <- bind_rows(
+  mwaka2,
+  mwaka
+) %>%
+  mutate(id = paste0(`Facility Number`, `Facility Name`, `Date Opened`)) %>%
+  dplyr::distinct(id, .keep_all = TRUE) %>%
+  mutate(bohemia = ifelse(is.na(bohemia), FALSE, bohemia)) %>%
+  mutate(bohemia = ifelse(bohemia, 'Bohemia', 'Not Bohemia'))
+
+ggplot() +
+  geom_polygon(data = bohemia::ruf2_fortified,
+               aes(x = long,
+                   y = lat, 
+                   group = group),
+               fill = 'beige') +
+  geom_point(data = gps_tza@data %>%
+               mutate(ct = ifelse(clinical_trial == 1, 'Clinical trial', 'No clinical trial')),
+             aes(x = lng,
+                 y = lat,
+                 color = ct),
+             size = 1, 
+             alpha = 0.6) +
+  geom_point(data = mwaka,
+             aes(x = Longitude,
+                 y = Latitude,
+                 color = bohemia),
+             pch = 2) +
+  # ggrepel::geom_text_repel(data = gps_tza@data,
+  #                          aes(x = lng,
+  #                              y = lat,
+  #                              label = code),
+  #                          size = 1) +
+  theme_map() +
+  scale_color_manual(name = '',
+                     values = c('red', 'green', 'darkred', 'darkgreen')) +
+  theme(legend.position = 'bottom',
+        legend.text = element_text(color = 'black'))
+ggsave('~/Desktop/clinical_trials_with_hf.png')
+```
+
 
 ```{r}
 ggplot() +
