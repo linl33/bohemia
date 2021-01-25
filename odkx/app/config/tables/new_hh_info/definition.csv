@@ -1,0 +1,17 @@
+_element_key,_element_name,_element_type,_list_child_element_keys
+hh_id,hh_id,string,[]
+new_hh_member_censed,new_hh_member_censed,string,[]
+new_hh_member_censed_extid,new_hh_member_censed_extid,string,[]
+new_hh_member_censed_extid_not_possible,new_hh_member_censed_extid_not_possible,array,"[""new_hh_member_censed_extid_not_possible_items""]"
+new_hh_member_censed_extid_not_possible_items,items,string,[]
+new_hh_member_dob,new_hh_member_dob,date,[]
+new_hh_member_dob_approx,new_hh_member_dob_approx,array,"[""new_hh_member_dob_approx_items""]"
+new_hh_member_dob_approx_items,items,string,[]
+new_hh_member_dob_date,new_hh_member_dob_date,string,[]
+new_hh_member_dob_enter,new_hh_member_dob_enter,integer,[]
+new_hh_member_dob_month,new_hh_member_dob_month,string,[]
+new_hh_member_dob_year,new_hh_member_dob_year,string,[]
+new_hh_member_gender,new_hh_member_gender,string,[]
+new_hh_member_name,new_hh_member_name,string,[]
+new_hh_member_resident,new_hh_member_resident,string,[]
+new_hh_member_surname,new_hh_member_surname,string,[]

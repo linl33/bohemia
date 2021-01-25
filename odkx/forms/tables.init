@@ -1,0 +1,6 @@
+table_keys=census,hh_members,hh_geo_location,hh_latrines,hh_snake_bites
+census.filename=config/assets/csv/census.csv
+hh_members.filename=config/assets/csv/hh_members.csv
+hh_geo_location.filename=config/assets/csv/hh_geo_location.csv
+hh_latrines.filename=config/assets/csv/hh_latrines.csv
+hh_snake_bites.filename=config/assets/csv/hh_snake_bites.csv

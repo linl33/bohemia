@@ -1,0 +1,10 @@
+_partition,_aspect,_key,_type,_value
+Column,new_hh_member_censed,displayChoicesList,object,"[{""choice_list_name"":""yndk"",""data_value"":""yes"",""display"":{""title"":{""text"":""Yes""}},""_row_num"":170},{""choice_list_name"":""yndk"",""data_value"":""no"",""display"":{""title"":{""text"":""No""}},""_row_num"":171},{""choice_list_name"":""yndk"",""data_value"":""dk"",""display"":{""title"":{""text"":""Don't Know""}},""_row_num"":172}]"
+Column,new_hh_member_censed_extid_not_possible,displayChoicesList,object,"[{""choice_list_name"":""not_possible"",""data_value"":""not_possible"",""display"":{""title"":{""text"":""Not possible to retrieve""}},""_row_num"":173}]"
+Column,new_hh_member_dob_approx,displayChoicesList,object,"[{""choice_list_name"":""approx"",""data_value"":""approx"",""display"":{""title"":{""text"":""Approximate age""}},""_row_num"":164}]"
+Column,new_hh_member_gender,displayChoicesList,object,"[{""choice_list_name"":""gender"",""data_value"":""male"",""display"":{""title"":{""text"":""Male""}},""_row_num"":165},{""choice_list_name"":""gender"",""data_value"":""female"",""display"":{""title"":{""text"":""Female""}},""_row_num"":166}]"
+Column,new_hh_member_resident,displayChoicesList,object,"[{""choice_list_name"":""resident_status"",""data_value"":""resident"",""display"":{""title"":{""text"":""Resident member""}},""_row_num"":16},{""choice_list_name"":""resident_status"",""data_value"":""non_resident"",""display"":{""title"":{""text"":""Non-Resident member""}},""_row_num"":17}]"
+FormType,default,FormType.formType,string,SURVEY
+SurveyUtil,default,SurveyUtil.formId,string,new_hh_info
+Table,default,defaultViewType,string,SPREADSHEET
+Table,default,displayName,object,"{""text"":""New Household - Members Details""}"

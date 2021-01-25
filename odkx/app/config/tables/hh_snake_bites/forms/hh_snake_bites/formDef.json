@@ -1,0 +1,1617 @@
+{
+  "xlsx": {
+    "initial": [
+      {
+        "clause": "do section survey",
+        "_row_num": 2
+      },
+      {
+        "clause": "goto _finalize",
+        "_row_num": 3
+      }
+    ],
+    "survey": [
+      {
+        "clause": "begin screen",
+        "_row_num": 2
+      },
+      {
+        "type": "note",
+        "name": "group_snake",
+        "display": {
+          "prompt": {
+            "text": "Snake Bite details"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "type": "integer",
+        "name": "snake_bite_num_times",
+        "display": {
+          "prompt": {
+            "text": "59b. How many times (separate instances) was {{data.name}} bitten?"
+          }
+        },
+        "_row_num": 4
+      },
+      {
+        "type": "select_multiple",
+        "values_list": "month",
+        "name": "snake_bite_months",
+        "display": {
+          "prompt": {
+            "text": "59c. In what month(s) was {{data.name}} bitten? (check all that apply)"
+          },
+          "constraint_message": {
+            "text": "You cannot select more months than times bitten."
+          }
+        },
+        "constraint": "countSelected(data('snake_bite_months')) <= data('snake_bite_num_times')",
+        "_row_num": 5
+      },
+      {
+        "type": "select_one",
+        "values_list": "yndk",
+        "name": "snake_bite_miss_work_school",
+        "display": {
+          "prompt": {
+            "text": "59d. Did this person miss school/work days because of the bite?"
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('snake_bite_miss_work_school'), 'yes')",
+        "_row_num": 7
+      },
+      {
+        "type": "integer",
+        "name": "snake_bite_miss_work_school_days",
+        "display": {
+          "prompt": {
+            "text": "59d(i). How many days?"
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "clause": "end if",
+        "_row_num": 9
+      },
+      {
+        "type": "select_multiple",
+        "values_list": "bite_occur",
+        "name": "snake_bite_occur",
+        "display": {
+          "prompt": {
+            "text": "59e. Where did the bites occur? (check all that apply)"
+          },
+          "constraint_message": {
+            "text": "You cannot select more places than times bitten."
+          }
+        },
+        "constraint": "countSelected(data('snake_bite_occur')) <= data('snake_bite_num_times')",
+        "_row_num": 10
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('snake_bite_occur'), 'other')",
+        "_row_num": 11
+      },
+      {
+        "type": "text",
+        "name": "snake_bite_occur_other",
+        "display": {
+          "prompt": {
+            "text": "Specify"
+          }
+        },
+        "_row_num": 12
+      },
+      {
+        "clause": "end if",
+        "_row_num": 13
+      },
+      {
+        "type": "select_one",
+        "values_list": "bite_outcome",
+        "name": "snake_bite_outcome",
+        "display": {
+          "prompt": {
+            "text": "59f. What was the outcome of the bite? (If bitten more than once, answer about the most severe bite)"
+          }
+        },
+        "_row_num": 14
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 15
+      }
+    ],
+    "choices": [
+      {
+        "choice_list_name": "bite_outcome",
+        "data_value": "death",
+        "display": {
+          "title": {
+            "text": "Death"
+          }
+        },
+        "_row_num": 2
+      },
+      {
+        "choice_list_name": "bite_outcome",
+        "data_value": "loss_limb",
+        "display": {
+          "title": {
+            "text": "Loss of limb"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "choice_list_name": "bite_outcome",
+        "data_value": "full_recovery",
+        "display": {
+          "title": {
+            "text": "Full recovery"
+          }
+        },
+        "_row_num": 4
+      },
+      {
+        "choice_list_name": "bite_outcome",
+        "data_value": "partial_recovery",
+        "display": {
+          "title": {
+            "text": "Partial recovery"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "home",
+        "display": {
+          "title": {
+            "text": "Inside the home"
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "compound",
+        "display": {
+          "title": {
+            "text": "Inside the compound"
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "field",
+        "display": {
+          "title": {
+            "text": "Field"
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "road",
+        "display": {
+          "title": {
+            "text": "Road"
+          }
+        },
+        "_row_num": 9
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "other",
+        "display": {
+          "title": {
+            "text": "Other"
+          }
+        },
+        "_row_num": 10
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 11
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "all",
+        "display": {
+          "title": {
+            "text": "All"
+          }
+        },
+        "_row_num": 12
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "january",
+        "display": {
+          "title": {
+            "text": "January"
+          }
+        },
+        "_row_num": 13
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "february",
+        "display": {
+          "title": {
+            "text": "February"
+          }
+        },
+        "_row_num": 14
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "march",
+        "display": {
+          "title": {
+            "text": "March"
+          }
+        },
+        "_row_num": 15
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "april",
+        "display": {
+          "title": {
+            "text": "April"
+          }
+        },
+        "_row_num": 16
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "may",
+        "display": {
+          "title": {
+            "text": "May"
+          }
+        },
+        "_row_num": 17
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "june",
+        "display": {
+          "title": {
+            "text": "June"
+          }
+        },
+        "_row_num": 18
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "july",
+        "display": {
+          "title": {
+            "text": "July"
+          }
+        },
+        "_row_num": 19
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "august",
+        "display": {
+          "title": {
+            "text": "August"
+          }
+        },
+        "_row_num": 20
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "september",
+        "display": {
+          "title": {
+            "text": "September"
+          }
+        },
+        "_row_num": 21
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "october",
+        "display": {
+          "title": {
+            "text": "October"
+          }
+        },
+        "_row_num": 22
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "november",
+        "display": {
+          "title": {
+            "text": "November"
+          }
+        },
+        "_row_num": 23
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "december",
+        "display": {
+          "title": {
+            "text": "December"
+          }
+        },
+        "_row_num": 24
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 25
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 26
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 27
+      }
+    ],
+    "model": [
+      {
+        "name": "hh_id",
+        "type": "string",
+        "_row_num": 2
+      },
+      {
+        "comment": "hh_members",
+        "name": "id",
+        "type": "string",
+        "_row_num": 3
+      },
+      {
+        "name": "snake_bite_num_times",
+        "type": "integer",
+        "_row_num": 4
+      },
+      {
+        "name": "snake_bite_months",
+        "type": "select_multiple",
+        "_row_num": 5
+      },
+      {
+        "name": "snake_bite_miss_work_school",
+        "type": "select_one",
+        "_row_num": 6
+      },
+      {
+        "name": "snake_bite_miss_work_school_days",
+        "type": "integer",
+        "_row_num": 7
+      },
+      {
+        "name": "snake_bite_occur",
+        "type": "select_multiple",
+        "_row_num": 8
+      },
+      {
+        "name": "snake_bite_occur_other",
+        "type": "string",
+        "_row_num": 9
+      },
+      {
+        "name": "snake_bite_outcome",
+        "type": "select_one",
+        "_row_num": 10
+      }
+    ],
+    "settings": [
+      {
+        "setting_name": "form_id",
+        "value": "hh_snake_bites",
+        "_row_num": 2
+      },
+      {
+        "setting_name": "form_version",
+        "value": 202101120001,
+        "_row_num": 3
+      },
+      {
+        "setting_name": "table_id",
+        "value": "hh_snake_bites",
+        "_row_num": 4
+      },
+      {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Snake Bites Info"
+          }
+        },
+        "_row_num": 5
+      }
+    ]
+  },
+  "specification": {
+    "column_types": {
+      "_screen_block": "function",
+      "condition": "formula",
+      "constraint": "formula",
+      "required": "formula",
+      "calculation": "formula",
+      "newRowInitialElementKeyToValueMap": "formula",
+      "openRowInitialElementKeyToValueMap": "formula",
+      "selectionArgs": "formula",
+      "url": "formula",
+      "uri": "formula",
+      "callback": "formula(context)",
+      "choice_filter": "formula(choice_item)",
+      "templatePath": "requirejs_path"
+    },
+    "settings": {
+      "form_id": {
+        "setting_name": "form_id",
+        "value": "hh_snake_bites",
+        "_row_num": 2
+      },
+      "form_version": {
+        "setting_name": "form_version",
+        "value": 202101120001,
+        "_row_num": 3
+      },
+      "table_id": {
+        "setting_name": "table_id",
+        "value": "hh_snake_bites",
+        "_row_num": 4
+      },
+      "survey": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Snake Bites Info"
+          }
+        },
+        "_row_num": 5
+      },
+      "_locales": {
+        "setting_name": "_locales",
+        "_row_num": 5,
+        "value": [
+          {
+            "display": {
+              "locale": {
+                "text": "default"
+              }
+            },
+            "name": "default"
+          }
+        ]
+      },
+      "_default_locale": {
+        "setting_name": "_default_locale",
+        "_row_num": 5,
+        "value": "default"
+      },
+      "initial": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Snake Bites Info"
+          }
+        },
+        "_row_num": 5
+      }
+    },
+    "choices": {
+      "bite_outcome": [
+        {
+          "choice_list_name": "bite_outcome",
+          "data_value": "death",
+          "display": {
+            "title": {
+              "text": "Death"
+            }
+          },
+          "_row_num": 2
+        },
+        {
+          "choice_list_name": "bite_outcome",
+          "data_value": "loss_limb",
+          "display": {
+            "title": {
+              "text": "Loss of limb"
+            }
+          },
+          "_row_num": 3
+        },
+        {
+          "choice_list_name": "bite_outcome",
+          "data_value": "full_recovery",
+          "display": {
+            "title": {
+              "text": "Full recovery"
+            }
+          },
+          "_row_num": 4
+        },
+        {
+          "choice_list_name": "bite_outcome",
+          "data_value": "partial_recovery",
+          "display": {
+            "title": {
+              "text": "Partial recovery"
+            }
+          },
+          "_row_num": 5
+        }
+      ],
+      "bite_occur": [
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "home",
+          "display": {
+            "title": {
+              "text": "Inside the home"
+            }
+          },
+          "_row_num": 6
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "compound",
+          "display": {
+            "title": {
+              "text": "Inside the compound"
+            }
+          },
+          "_row_num": 7
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "field",
+          "display": {
+            "title": {
+              "text": "Field"
+            }
+          },
+          "_row_num": 8
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "road",
+          "display": {
+            "title": {
+              "text": "Road"
+            }
+          },
+          "_row_num": 9
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "other",
+          "display": {
+            "title": {
+              "text": "Other"
+            }
+          },
+          "_row_num": 10
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 11
+        }
+      ],
+      "month": [
+        {
+          "choice_list_name": "month",
+          "data_value": "all",
+          "display": {
+            "title": {
+              "text": "All"
+            }
+          },
+          "_row_num": 12
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "january",
+          "display": {
+            "title": {
+              "text": "January"
+            }
+          },
+          "_row_num": 13
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "february",
+          "display": {
+            "title": {
+              "text": "February"
+            }
+          },
+          "_row_num": 14
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "march",
+          "display": {
+            "title": {
+              "text": "March"
+            }
+          },
+          "_row_num": 15
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "april",
+          "display": {
+            "title": {
+              "text": "April"
+            }
+          },
+          "_row_num": 16
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "may",
+          "display": {
+            "title": {
+              "text": "May"
+            }
+          },
+          "_row_num": 17
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "june",
+          "display": {
+            "title": {
+              "text": "June"
+            }
+          },
+          "_row_num": 18
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "july",
+          "display": {
+            "title": {
+              "text": "July"
+            }
+          },
+          "_row_num": 19
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "august",
+          "display": {
+            "title": {
+              "text": "August"
+            }
+          },
+          "_row_num": 20
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "september",
+          "display": {
+            "title": {
+              "text": "September"
+            }
+          },
+          "_row_num": 21
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "october",
+          "display": {
+            "title": {
+              "text": "October"
+            }
+          },
+          "_row_num": 22
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "november",
+          "display": {
+            "title": {
+              "text": "November"
+            }
+          },
+          "_row_num": 23
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "december",
+          "display": {
+            "title": {
+              "text": "December"
+            }
+          },
+          "_row_num": 24
+        }
+      ],
+      "yndk": [
+        {
+          "choice_list_name": "yndk",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 25
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 26
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 27
+        }
+      ]
+    },
+    "table_specific_definitions": {
+      "_tokens": {}
+    },
+    "queries": {},
+    "calculates": {},
+    "model": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id"
+      },
+      "id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 3,
+            "section_name": "model"
+          }
+        ],
+        "comment": "hh_members",
+        "elementKey": "id"
+      },
+      "snake_bite_num_times": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 4,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_num_times"
+      },
+      "snake_bite_months": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_months_items"
+        },
+        "valuesList": "month",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_months"
+      },
+      "snake_bite_miss_work_school": {
+        "type": "string",
+        "valuesList": "yndk",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_miss_work_school"
+      },
+      "snake_bite_miss_work_school_days": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 7,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_miss_work_school_days"
+      },
+      "snake_bite_occur": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_occur_items"
+        },
+        "valuesList": "bite_occur",
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 8,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_occur"
+      },
+      "snake_bite_occur_other": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 12,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 9,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_occur_other"
+      },
+      "snake_bite_outcome": {
+        "type": "string",
+        "valuesList": "bite_outcome",
+        "_defn": [
+          {
+            "_row_num": 14,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 10,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_outcome"
+      }
+    },
+    "section_names": [
+      "initial",
+      "survey"
+    ],
+    "sections": {
+      "initial": {
+        "section_name": "initial",
+        "nested_sections": {
+          "survey": true
+        },
+        "reachable_sections": {
+          "survey": true
+        },
+        "prompts": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "prompt",
+            "_do_section_name": "survey",
+            "_type": "_section",
+            "promptIdx": 0,
+            "display": {
+              "title": {
+                "text": "Snake Bites Info"
+              }
+            },
+            "_branch_label_enclosing_screen": "survey/0"
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 4,
+            "_branch_label_enclosing_screen": "initial/_screen4",
+            "promptIdx": 1
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": []
+        },
+        "operations": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "do_section",
+            "_do_section_name": "survey",
+            "operationIdx": 0
+          },
+          {
+            "clause": "goto _finalize",
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "goto_label",
+            "_branch_label": "_finalize",
+            "operationIdx": 1
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 4,
+            "operationIdx": 2
+          },
+          {
+            "_row_num": 4,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 3
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 4
+          },
+          {
+            "_token_type": "validate",
+            "clause": "validate finalize",
+            "_sweep_name": "finalize",
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 5
+          },
+          {
+            "_token_type": "save_and_terminate",
+            "clause": "save and terminate",
+            "calculation": true,
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 6
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 7
+          }
+        ],
+        "branch_label_map": {
+          "_contents": 3,
+          "_screen4": 3,
+          "_finalize": 5
+        }
+      },
+      "survey": {
+        "section_name": "survey",
+        "nested_sections": {},
+        "reachable_sections": {},
+        "prompts": [
+          {
+            "type": "note",
+            "name": "group_snake",
+            "display": {
+              "prompt": {
+                "text": "Snake Bite details"
+              }
+            },
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 0
+          },
+          {
+            "type": "integer",
+            "name": "snake_bite_num_times",
+            "display": {
+              "prompt": {
+                "text": "59b. How many times (separate instances) was {{data.name}} bitten?"
+              }
+            },
+            "_row_num": 4,
+            "__rowNum__": 3,
+            "_token_type": "prompt",
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 1
+          },
+          {
+            "type": "select_multiple",
+            "values_list": "month",
+            "name": "snake_bite_months",
+            "display": {
+              "prompt": {
+                "text": "59c. In what month(s) was {{data.name}} bitten? (check all that apply)"
+              },
+              "constraint_message": {
+                "text": "You cannot select more months than times bitten."
+              }
+            },
+            "constraint": "countSelected(data('snake_bite_months')) <= data('snake_bite_num_times')",
+            "_row_num": 5,
+            "__rowNum__": 4,
+            "_token_type": "prompt",
+            "_type": "select_multiple",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 2
+          },
+          {
+            "type": "select_one",
+            "values_list": "yndk",
+            "name": "snake_bite_miss_work_school",
+            "display": {
+              "prompt": {
+                "text": "59d. Did this person miss school/work days because of the bite?"
+              }
+            },
+            "_row_num": 6,
+            "__rowNum__": 5,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 3
+          },
+          {
+            "type": "integer",
+            "name": "snake_bite_miss_work_school_days",
+            "display": {
+              "prompt": {
+                "text": "59d(i). How many days?"
+              }
+            },
+            "_row_num": 8,
+            "__rowNum__": 7,
+            "_token_type": "prompt",
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 4
+          },
+          {
+            "type": "select_multiple",
+            "values_list": "bite_occur",
+            "name": "snake_bite_occur",
+            "display": {
+              "prompt": {
+                "text": "59e. Where did the bites occur? (check all that apply)"
+              },
+              "constraint_message": {
+                "text": "You cannot select more places than times bitten."
+              }
+            },
+            "constraint": "countSelected(data('snake_bite_occur')) <= data('snake_bite_num_times')",
+            "_row_num": 10,
+            "__rowNum__": 9,
+            "_token_type": "prompt",
+            "_type": "select_multiple",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 5
+          },
+          {
+            "type": "text",
+            "name": "snake_bite_occur_other",
+            "display": {
+              "prompt": {
+                "text": "Specify"
+              }
+            },
+            "_row_num": 12,
+            "__rowNum__": 11,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 6
+          },
+          {
+            "type": "select_one",
+            "values_list": "bite_outcome",
+            "name": "snake_bite_outcome",
+            "display": {
+              "prompt": {
+                "text": "59f. What was the outcome of the bite? (If bitten more than once, answer about the most severe bite)"
+              }
+            },
+            "_row_num": 14,
+            "__rowNum__": 13,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 7
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 16,
+            "_branch_label_enclosing_screen": "survey/_screen16",
+            "promptIdx": 8
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": [
+            2,
+            5
+          ]
+        },
+        "operations": [
+          {
+            "clause": "begin screen",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "begin_screen",
+            "_end_screen_clause": {
+              "clause": "end screen",
+              "_row_num": 15,
+              "__rowNum__": 14,
+              "_token_type": "end_screen"
+            },
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nif (selected(data('snake_bite_miss_work_school'), 'yes')) {\nactivePromptIndicies.push(4);\n}\nactivePromptIndicies.push(5);\nif (selected(data('snake_bite_occur'), 'other')) {\nactivePromptIndicies.push(6);\n}\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 0
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 16,
+            "operationIdx": 1
+          },
+          {
+            "_row_num": 16,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(8);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 2
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 16,
+            "operationIdx": 3
+          }
+        ],
+        "branch_label_map": {
+          "_screen2": 0,
+          "_contents": 2,
+          "_screen16": 2
+        }
+      }
+    },
+    "dataTableModel": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id",
+        "elementName": "hh_id",
+        "elementSet": "data",
+        "elementPath": "hh_id"
+      },
+      "id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 3,
+            "section_name": "model"
+          }
+        ],
+        "comment": "hh_members",
+        "elementKey": "id",
+        "elementName": "id",
+        "elementSet": "data",
+        "elementPath": "id"
+      },
+      "snake_bite_num_times": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 4,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_num_times",
+        "elementName": "snake_bite_num_times",
+        "elementSet": "data",
+        "elementPath": "snake_bite_num_times"
+      },
+      "snake_bite_months": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_months_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "snake_bite_months.items",
+          "notUnitOfRetention": true
+        },
+        "valuesList": "month",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_months",
+        "elementName": "snake_bite_months",
+        "elementSet": "data",
+        "elementPath": "snake_bite_months",
+        "listChildElementKeys": [
+          "snake_bite_months_items"
+        ]
+      },
+      "snake_bite_miss_work_school": {
+        "type": "string",
+        "valuesList": "yndk",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_miss_work_school",
+        "elementName": "snake_bite_miss_work_school",
+        "elementSet": "data",
+        "elementPath": "snake_bite_miss_work_school"
+      },
+      "snake_bite_miss_work_school_days": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 7,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_miss_work_school_days",
+        "elementName": "snake_bite_miss_work_school_days",
+        "elementSet": "data",
+        "elementPath": "snake_bite_miss_work_school_days"
+      },
+      "snake_bite_occur": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_occur_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "snake_bite_occur.items",
+          "notUnitOfRetention": true
+        },
+        "valuesList": "bite_occur",
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 8,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_occur",
+        "elementName": "snake_bite_occur",
+        "elementSet": "data",
+        "elementPath": "snake_bite_occur",
+        "listChildElementKeys": [
+          "snake_bite_occur_items"
+        ]
+      },
+      "snake_bite_occur_other": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 12,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 9,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_occur_other",
+        "elementName": "snake_bite_occur_other",
+        "elementSet": "data",
+        "elementPath": "snake_bite_occur_other"
+      },
+      "snake_bite_outcome": {
+        "type": "string",
+        "valuesList": "bite_outcome",
+        "_defn": [
+          {
+            "_row_num": 14,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 10,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_outcome",
+        "elementName": "snake_bite_outcome",
+        "elementSet": "data",
+        "elementPath": "snake_bite_outcome"
+      },
+      "snake_bite_months_items": {
+        "type": "string",
+        "elementKey": "snake_bite_months_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "snake_bite_months.items",
+        "notUnitOfRetention": true
+      },
+      "snake_bite_occur_items": {
+        "type": "string",
+        "elementKey": "snake_bite_occur_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "snake_bite_occur.items",
+        "notUnitOfRetention": true
+      },
+      "_id": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_id",
+        "elementName": "_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_id"
+      },
+      "_row_etag": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_etag",
+        "elementName": "_row_etag",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_etag"
+      },
+      "_sync_state": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_sync_state",
+        "elementName": "_sync_state",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_sync_state"
+      },
+      "_conflict_type": {
+        "type": "integer",
+        "isNotNullable": false,
+        "elementKey": "_conflict_type",
+        "elementName": "_conflict_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_conflict_type"
+      },
+      "_default_access": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_default_access",
+        "elementName": "_default_access",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_default_access"
+      },
+      "_form_id": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_form_id",
+        "elementName": "_form_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_form_id"
+      },
+      "_group_modify": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_modify",
+        "elementName": "_group_modify",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_modify"
+      },
+      "_group_privileged": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_privileged",
+        "elementName": "_group_privileged",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_privileged"
+      },
+      "_group_read_only": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_read_only",
+        "elementName": "_group_read_only",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_read_only"
+      },
+      "_locale": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_locale",
+        "elementName": "_locale",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_locale"
+      },
+      "_row_owner": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_owner",
+        "elementName": "_row_owner",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_owner"
+      },
+      "_savepoint_type": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_type",
+        "elementName": "_savepoint_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_type"
+      },
+      "_savepoint_timestamp": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_savepoint_timestamp",
+        "elementName": "_savepoint_timestamp",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_timestamp"
+      },
+      "_savepoint_creator": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_creator",
+        "elementName": "_savepoint_creator",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_creator"
+      }
+    },
+    "properties": [
+      {
+        "_partition": "Column",
+        "_aspect": "snake_bite_miss_work_school",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"yndk\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":25},{\"choice_list_name\":\"yndk\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":26},{\"choice_list_name\":\"yndk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":27}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "snake_bite_months",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"month\",\"data_value\":\"all\",\"display\":{\"title\":{\"text\":\"All\"}},\"_row_num\":12},{\"choice_list_name\":\"month\",\"data_value\":\"january\",\"display\":{\"title\":{\"text\":\"January\"}},\"_row_num\":13},{\"choice_list_name\":\"month\",\"data_value\":\"february\",\"display\":{\"title\":{\"text\":\"February\"}},\"_row_num\":14},{\"choice_list_name\":\"month\",\"data_value\":\"march\",\"display\":{\"title\":{\"text\":\"March\"}},\"_row_num\":15},{\"choice_list_name\":\"month\",\"data_value\":\"april\",\"display\":{\"title\":{\"text\":\"April\"}},\"_row_num\":16},{\"choice_list_name\":\"month\",\"data_value\":\"may\",\"display\":{\"title\":{\"text\":\"May\"}},\"_row_num\":17},{\"choice_list_name\":\"month\",\"data_value\":\"june\",\"display\":{\"title\":{\"text\":\"June\"}},\"_row_num\":18},{\"choice_list_name\":\"month\",\"data_value\":\"july\",\"display\":{\"title\":{\"text\":\"July\"}},\"_row_num\":19},{\"choice_list_name\":\"month\",\"data_value\":\"august\",\"display\":{\"title\":{\"text\":\"August\"}},\"_row_num\":20},{\"choice_list_name\":\"month\",\"data_value\":\"september\",\"display\":{\"title\":{\"text\":\"September\"}},\"_row_num\":21},{\"choice_list_name\":\"month\",\"data_value\":\"october\",\"display\":{\"title\":{\"text\":\"October\"}},\"_row_num\":22},{\"choice_list_name\":\"month\",\"data_value\":\"november\",\"display\":{\"title\":{\"text\":\"November\"}},\"_row_num\":23},{\"choice_list_name\":\"month\",\"data_value\":\"december\",\"display\":{\"title\":{\"text\":\"December\"}},\"_row_num\":24}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "snake_bite_occur",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"bite_occur\",\"data_value\":\"home\",\"display\":{\"title\":{\"text\":\"Inside the home\"}},\"_row_num\":6},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"compound\",\"display\":{\"title\":{\"text\":\"Inside the compound\"}},\"_row_num\":7},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"field\",\"display\":{\"title\":{\"text\":\"Field\"}},\"_row_num\":8},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"road\",\"display\":{\"title\":{\"text\":\"Road\"}},\"_row_num\":9},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":10},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":11}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "snake_bite_outcome",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"bite_outcome\",\"data_value\":\"death\",\"display\":{\"title\":{\"text\":\"Death\"}},\"_row_num\":2},{\"choice_list_name\":\"bite_outcome\",\"data_value\":\"loss_limb\",\"display\":{\"title\":{\"text\":\"Loss of limb\"}},\"_row_num\":3},{\"choice_list_name\":\"bite_outcome\",\"data_value\":\"full_recovery\",\"display\":{\"title\":{\"text\":\"Full recovery\"}},\"_row_num\":4},{\"choice_list_name\":\"bite_outcome\",\"data_value\":\"partial_recovery\",\"display\":{\"title\":{\"text\":\"Partial recovery\"}},\"_row_num\":5}]"
+      },
+      {
+        "_partition": "FormType",
+        "_aspect": "default",
+        "_key": "FormType.formType",
+        "_type": "string",
+        "_value": "SURVEY"
+      },
+      {
+        "_partition": "SurveyUtil",
+        "_aspect": "default",
+        "_key": "SurveyUtil.formId",
+        "_type": "string",
+        "_value": "hh_snake_bites"
+      },
+      {
+        "_partition": "Table",
+        "_aspect": "default",
+        "_key": "defaultViewType",
+        "_type": "string",
+        "_value": "SPREADSHEET"
+      },
+      {
+        "_partition": "Table",
+        "_aspect": "default",
+        "_key": "displayName",
+        "_type": "object",
+        "_value": "{\"text\":\"Snake Bites Info\"}"
+      }
+    ]
+  }
+}
