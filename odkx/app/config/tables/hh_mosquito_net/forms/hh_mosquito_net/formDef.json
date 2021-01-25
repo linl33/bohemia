@@ -1,0 +1,1191 @@
+{
+  "xlsx": {
+    "initial": [
+      {
+        "clause": "do section survey",
+        "_row_num": 2
+      },
+      {
+        "clause": "goto _finalize",
+        "_row_num": 3
+      }
+    ],
+    "survey": [
+      {
+        "clause": "begin screen",
+        "_row_num": 2
+      },
+      {
+        "type": "select_one",
+        "values_list": "obtain_net",
+        "name": "obtain_net_how_long_ago",
+        "display": {
+          "prompt": {
+            "text": "55a. How long ago did you obtain the net?"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "type": "select_one",
+        "values_list": "yndk",
+        "name": "net_sleep_last_night",
+        "display": {
+          "prompt": {
+            "text": "55b. Did someone sleep inside this net last night?"
+          }
+        },
+        "_row_num": 4
+      },
+      {
+        "type": "select_one",
+        "values_list": "net_purpose",
+        "name": "net_used_other_purpose",
+        "display": {
+          "prompt": {
+            "text": "55c. Is the net being used for anything else other than sleeping under?"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('net_used_other_purpose'), 'other')",
+        "_row_num": 6
+      },
+      {
+        "type": "text",
+        "name": "net_used_other_purpose_other",
+        "display": {
+          "prompt": {
+            "text": "Specify"
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "clause": "end if",
+        "_row_num": 8
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 9
+      }
+    ],
+    "choices": [
+      {
+        "choice_list_name": "yndk",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 2
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 4
+      },
+      {
+        "choice_list_name": "obtain_net",
+        "data_value": "1_year_ago_or_less",
+        "display": {
+          "title": {
+            "text": "1 year ago or less"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "choice_list_name": "obtain_net",
+        "data_value": "within_the_past_1-3_years",
+        "display": {
+          "title": {
+            "text": "Within the past 1-3 years"
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "choice_list_name": "obtain_net",
+        "data_value": "more_than_3_years",
+        "display": {
+          "title": {
+            "text": "More than 3 years"
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "choice_list_name": "obtain_net",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don’t know"
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "during_the_immunization_of_the_children_at_a_health_facility",
+        "display": {
+          "title": {
+            "text": "During the immunization of the children at a health facility"
+          }
+        },
+        "_row_num": 9
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "during_the_vaccination_campaign",
+        "display": {
+          "title": {
+            "text": "During the vaccination campaign"
+          }
+        },
+        "_row_num": 10
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "from_a_chw",
+        "display": {
+          "title": {
+            "text": "From a CHW"
+          }
+        },
+        "_row_num": 11
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "at_the_pharmacy",
+        "display": {
+          "title": {
+            "text": "At the pharmacy"
+          }
+        },
+        "_row_num": 12
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "in_the_shop",
+        "display": {
+          "title": {
+            "text": "In the shop"
+          }
+        },
+        "_row_num": 13
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "ante-natal_clinic",
+        "display": {
+          "title": {
+            "text": "Ante-natal clinic"
+          }
+        },
+        "_row_num": 14
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "mass_distribution_campaign_of_nets",
+        "display": {
+          "title": {
+            "text": "Mass distribution campaign of nets"
+          }
+        },
+        "_row_num": 15
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "bought_it_from_an_informal_vendor",
+        "display": {
+          "title": {
+            "text": "Bought it from an informal vendor"
+          }
+        },
+        "_row_num": 16
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "other",
+        "display": {
+          "title": {
+            "text": "Other"
+          }
+        },
+        "_row_num": 17
+      },
+      {
+        "choice_list_name": "obtain_net_how",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don’t know"
+          }
+        },
+        "_row_num": 18
+      },
+      {
+        "choice_list_name": "net_purpose",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No, just for sleeping under"
+          }
+        },
+        "_row_num": 19
+      },
+      {
+        "choice_list_name": "net_purpose",
+        "data_value": "garden_netting",
+        "display": {
+          "title": {
+            "text": "For garden netting"
+          }
+        },
+        "_row_num": 20
+      },
+      {
+        "choice_list_name": "net_purpose",
+        "data_value": "fishing",
+        "display": {
+          "title": {
+            "text": "For fishing"
+          }
+        },
+        "_row_num": 21
+      },
+      {
+        "choice_list_name": "net_purpose",
+        "data_value": "surrounding_hennery/hennery_construction",
+        "display": {
+          "title": {
+            "text": "To surround hennery/hennery construction"
+          }
+        },
+        "_row_num": 22
+      },
+      {
+        "choice_list_name": "net_purpose",
+        "data_value": "preparing_cereals/corn",
+        "display": {
+          "title": {
+            "text": "To protect/cover vegetables/crops"
+          }
+        },
+        "_row_num": 23
+      },
+      {
+        "choice_list_name": "net_purpose",
+        "data_value": "other",
+        "display": {
+          "title": {
+            "text": "Other"
+          }
+        },
+        "_row_num": 24
+      }
+    ],
+    "settings": [
+      {
+        "setting_name": "form_id",
+        "value": "hh_mosquito_net",
+        "_row_num": 2
+      },
+      {
+        "setting_name": "form_version",
+        "value": 20210119001,
+        "_row_num": 3
+      },
+      {
+        "setting_name": "table_id",
+        "value": "hh_mosquito_net",
+        "_row_num": 4
+      },
+      {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Mosquito Nets"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "setting_name": "instance_name",
+        "value": "name",
+        "_row_num": 6
+      }
+    ],
+    "model": [
+      {
+        "name": "hh_id",
+        "type": "string",
+        "_row_num": 2
+      }
+    ]
+  },
+  "specification": {
+    "column_types": {
+      "_screen_block": "function",
+      "condition": "formula",
+      "constraint": "formula",
+      "required": "formula",
+      "calculation": "formula",
+      "newRowInitialElementKeyToValueMap": "formula",
+      "openRowInitialElementKeyToValueMap": "formula",
+      "selectionArgs": "formula",
+      "url": "formula",
+      "uri": "formula",
+      "callback": "formula(context)",
+      "choice_filter": "formula(choice_item)",
+      "templatePath": "requirejs_path"
+    },
+    "settings": {
+      "form_id": {
+        "setting_name": "form_id",
+        "value": "hh_mosquito_net",
+        "_row_num": 2
+      },
+      "form_version": {
+        "setting_name": "form_version",
+        "value": 20210119001,
+        "_row_num": 3
+      },
+      "table_id": {
+        "setting_name": "table_id",
+        "value": "hh_mosquito_net",
+        "_row_num": 4
+      },
+      "survey": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Mosquito Nets"
+          }
+        },
+        "_row_num": 5
+      },
+      "instance_name": {
+        "setting_name": "instance_name",
+        "value": "name",
+        "_row_num": 6
+      },
+      "_locales": {
+        "setting_name": "_locales",
+        "_row_num": 5,
+        "value": [
+          {
+            "display": {
+              "locale": {
+                "text": "default"
+              }
+            },
+            "name": "default"
+          }
+        ]
+      },
+      "_default_locale": {
+        "setting_name": "_default_locale",
+        "_row_num": 5,
+        "value": "default"
+      },
+      "initial": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Mosquito Nets"
+          }
+        },
+        "_row_num": 5
+      }
+    },
+    "choices": {
+      "yndk": [
+        {
+          "choice_list_name": "yndk",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 2
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 3
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 4
+        }
+      ],
+      "obtain_net": [
+        {
+          "choice_list_name": "obtain_net",
+          "data_value": "1_year_ago_or_less",
+          "display": {
+            "title": {
+              "text": "1 year ago or less"
+            }
+          },
+          "_row_num": 5
+        },
+        {
+          "choice_list_name": "obtain_net",
+          "data_value": "within_the_past_1-3_years",
+          "display": {
+            "title": {
+              "text": "Within the past 1-3 years"
+            }
+          },
+          "_row_num": 6
+        },
+        {
+          "choice_list_name": "obtain_net",
+          "data_value": "more_than_3_years",
+          "display": {
+            "title": {
+              "text": "More than 3 years"
+            }
+          },
+          "_row_num": 7
+        },
+        {
+          "choice_list_name": "obtain_net",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don’t know"
+            }
+          },
+          "_row_num": 8
+        }
+      ],
+      "obtain_net_how": [
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "during_the_immunization_of_the_children_at_a_health_facility",
+          "display": {
+            "title": {
+              "text": "During the immunization of the children at a health facility"
+            }
+          },
+          "_row_num": 9
+        },
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "during_the_vaccination_campaign",
+          "display": {
+            "title": {
+              "text": "During the vaccination campaign"
+            }
+          },
+          "_row_num": 10
+        },
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "from_a_chw",
+          "display": {
+            "title": {
+              "text": "From a CHW"
+            }
+          },
+          "_row_num": 11
+        },
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "at_the_pharmacy",
+          "display": {
+            "title": {
+              "text": "At the pharmacy"
+            }
+          },
+          "_row_num": 12
+        },
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "in_the_shop",
+          "display": {
+            "title": {
+              "text": "In the shop"
+            }
+          },
+          "_row_num": 13
+        },
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "ante-natal_clinic",
+          "display": {
+            "title": {
+              "text": "Ante-natal clinic"
+            }
+          },
+          "_row_num": 14
+        },
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "mass_distribution_campaign_of_nets",
+          "display": {
+            "title": {
+              "text": "Mass distribution campaign of nets"
+            }
+          },
+          "_row_num": 15
+        },
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "bought_it_from_an_informal_vendor",
+          "display": {
+            "title": {
+              "text": "Bought it from an informal vendor"
+            }
+          },
+          "_row_num": 16
+        },
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "other",
+          "display": {
+            "title": {
+              "text": "Other"
+            }
+          },
+          "_row_num": 17
+        },
+        {
+          "choice_list_name": "obtain_net_how",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don’t know"
+            }
+          },
+          "_row_num": 18
+        }
+      ],
+      "net_purpose": [
+        {
+          "choice_list_name": "net_purpose",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No, just for sleeping under"
+            }
+          },
+          "_row_num": 19
+        },
+        {
+          "choice_list_name": "net_purpose",
+          "data_value": "garden_netting",
+          "display": {
+            "title": {
+              "text": "For garden netting"
+            }
+          },
+          "_row_num": 20
+        },
+        {
+          "choice_list_name": "net_purpose",
+          "data_value": "fishing",
+          "display": {
+            "title": {
+              "text": "For fishing"
+            }
+          },
+          "_row_num": 21
+        },
+        {
+          "choice_list_name": "net_purpose",
+          "data_value": "surrounding_hennery/hennery_construction",
+          "display": {
+            "title": {
+              "text": "To surround hennery/hennery construction"
+            }
+          },
+          "_row_num": 22
+        },
+        {
+          "choice_list_name": "net_purpose",
+          "data_value": "preparing_cereals/corn",
+          "display": {
+            "title": {
+              "text": "To protect/cover vegetables/crops"
+            }
+          },
+          "_row_num": 23
+        },
+        {
+          "choice_list_name": "net_purpose",
+          "data_value": "other",
+          "display": {
+            "title": {
+              "text": "Other"
+            }
+          },
+          "_row_num": 24
+        }
+      ]
+    },
+    "table_specific_definitions": {
+      "_tokens": {}
+    },
+    "queries": {},
+    "calculates": {},
+    "model": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id"
+      },
+      "obtain_net_how_long_ago": {
+        "_defn": [
+          {
+            "_row_num": 3,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "valuesList": "obtain_net",
+        "elementKey": "obtain_net_how_long_ago"
+      },
+      "net_sleep_last_night": {
+        "_defn": [
+          {
+            "_row_num": 4,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "valuesList": "yndk",
+        "elementKey": "net_sleep_last_night"
+      },
+      "net_used_other_purpose": {
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "valuesList": "net_purpose",
+        "elementKey": "net_used_other_purpose"
+      },
+      "net_used_other_purpose_other": {
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "elementKey": "net_used_other_purpose_other"
+      }
+    },
+    "section_names": [
+      "initial",
+      "survey"
+    ],
+    "sections": {
+      "initial": {
+        "section_name": "initial",
+        "nested_sections": {
+          "survey": true
+        },
+        "reachable_sections": {
+          "survey": true
+        },
+        "prompts": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "prompt",
+            "_do_section_name": "survey",
+            "_type": "_section",
+            "promptIdx": 0,
+            "display": {
+              "title": {
+                "text": "Mosquito Nets"
+              }
+            },
+            "_branch_label_enclosing_screen": "survey/0"
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 4,
+            "_branch_label_enclosing_screen": "initial/_screen4",
+            "promptIdx": 1
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": []
+        },
+        "operations": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "do_section",
+            "_do_section_name": "survey",
+            "operationIdx": 0
+          },
+          {
+            "clause": "goto _finalize",
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "goto_label",
+            "_branch_label": "_finalize",
+            "operationIdx": 1
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 4,
+            "operationIdx": 2
+          },
+          {
+            "_row_num": 4,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 3
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 4
+          },
+          {
+            "_token_type": "validate",
+            "clause": "validate finalize",
+            "_sweep_name": "finalize",
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 5
+          },
+          {
+            "_token_type": "save_and_terminate",
+            "clause": "save and terminate",
+            "calculation": true,
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 6
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 7
+          }
+        ],
+        "branch_label_map": {
+          "_contents": 3,
+          "_screen4": 3,
+          "_finalize": 5
+        }
+      },
+      "survey": {
+        "section_name": "survey",
+        "nested_sections": {},
+        "reachable_sections": {},
+        "prompts": [
+          {
+            "type": "select_one",
+            "values_list": "obtain_net",
+            "name": "obtain_net_how_long_ago",
+            "display": {
+              "prompt": {
+                "text": "55a. How long ago did you obtain the net?"
+              }
+            },
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 0
+          },
+          {
+            "type": "select_one",
+            "values_list": "yndk",
+            "name": "net_sleep_last_night",
+            "display": {
+              "prompt": {
+                "text": "55b. Did someone sleep inside this net last night?"
+              }
+            },
+            "_row_num": 4,
+            "__rowNum__": 3,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 1
+          },
+          {
+            "type": "select_one",
+            "values_list": "net_purpose",
+            "name": "net_used_other_purpose",
+            "display": {
+              "prompt": {
+                "text": "55c. Is the net being used for anything else other than sleeping under?"
+              }
+            },
+            "_row_num": 5,
+            "__rowNum__": 4,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 2
+          },
+          {
+            "type": "text",
+            "name": "net_used_other_purpose_other",
+            "display": {
+              "prompt": {
+                "text": "Specify"
+              }
+            },
+            "_row_num": 7,
+            "__rowNum__": 6,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 3
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 10,
+            "_branch_label_enclosing_screen": "survey/_screen10",
+            "promptIdx": 4
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": []
+        },
+        "operations": [
+          {
+            "clause": "begin screen",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "begin_screen",
+            "_end_screen_clause": {
+              "clause": "end screen",
+              "_row_num": 9,
+              "__rowNum__": 8,
+              "_token_type": "end_screen"
+            },
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nif (selected(data('net_used_other_purpose'), 'other')) {\nactivePromptIndicies.push(3);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 0
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 10,
+            "operationIdx": 1
+          },
+          {
+            "_row_num": 10,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(4);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 2
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 10,
+            "operationIdx": 3
+          }
+        ],
+        "branch_label_map": {
+          "_screen2": 0,
+          "_contents": 2,
+          "_screen10": 2
+        }
+      }
+    },
+    "dataTableModel": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id",
+        "elementName": "hh_id",
+        "elementSet": "data",
+        "elementPath": "hh_id"
+      },
+      "obtain_net_how_long_ago": {
+        "_defn": [
+          {
+            "_row_num": 3,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "valuesList": "obtain_net",
+        "elementKey": "obtain_net_how_long_ago",
+        "elementName": "obtain_net_how_long_ago",
+        "elementSet": "data",
+        "elementPath": "obtain_net_how_long_ago"
+      },
+      "net_sleep_last_night": {
+        "_defn": [
+          {
+            "_row_num": 4,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "valuesList": "yndk",
+        "elementKey": "net_sleep_last_night",
+        "elementName": "net_sleep_last_night",
+        "elementSet": "data",
+        "elementPath": "net_sleep_last_night"
+      },
+      "net_used_other_purpose": {
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "valuesList": "net_purpose",
+        "elementKey": "net_used_other_purpose",
+        "elementName": "net_used_other_purpose",
+        "elementSet": "data",
+        "elementPath": "net_used_other_purpose"
+      },
+      "net_used_other_purpose_other": {
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "elementKey": "net_used_other_purpose_other",
+        "elementName": "net_used_other_purpose_other",
+        "elementSet": "data",
+        "elementPath": "net_used_other_purpose_other"
+      },
+      "_id": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_id",
+        "elementName": "_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_id"
+      },
+      "_row_etag": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_etag",
+        "elementName": "_row_etag",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_etag"
+      },
+      "_sync_state": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_sync_state",
+        "elementName": "_sync_state",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_sync_state"
+      },
+      "_conflict_type": {
+        "type": "integer",
+        "isNotNullable": false,
+        "elementKey": "_conflict_type",
+        "elementName": "_conflict_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_conflict_type"
+      },
+      "_default_access": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_default_access",
+        "elementName": "_default_access",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_default_access"
+      },
+      "_form_id": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_form_id",
+        "elementName": "_form_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_form_id"
+      },
+      "_group_modify": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_modify",
+        "elementName": "_group_modify",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_modify"
+      },
+      "_group_privileged": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_privileged",
+        "elementName": "_group_privileged",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_privileged"
+      },
+      "_group_read_only": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_read_only",
+        "elementName": "_group_read_only",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_read_only"
+      },
+      "_locale": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_locale",
+        "elementName": "_locale",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_locale"
+      },
+      "_row_owner": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_owner",
+        "elementName": "_row_owner",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_owner"
+      },
+      "_savepoint_type": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_type",
+        "elementName": "_savepoint_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_type"
+      },
+      "_savepoint_timestamp": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_savepoint_timestamp",
+        "elementName": "_savepoint_timestamp",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_timestamp"
+      },
+      "_savepoint_creator": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_creator",
+        "elementName": "_savepoint_creator",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_creator"
+      }
+    },
+    "properties": [
+      {
+        "_partition": "Column",
+        "_aspect": "net_sleep_last_night",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"yndk\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":2},{\"choice_list_name\":\"yndk\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":3},{\"choice_list_name\":\"yndk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":4}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "net_used_other_purpose",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"net_purpose\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No, just for sleeping under\"}},\"_row_num\":19},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"garden_netting\",\"display\":{\"title\":{\"text\":\"For garden netting\"}},\"_row_num\":20},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"fishing\",\"display\":{\"title\":{\"text\":\"For fishing\"}},\"_row_num\":21},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"surrounding_hennery/hennery_construction\",\"display\":{\"title\":{\"text\":\"To surround hennery/hennery construction\"}},\"_row_num\":22},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"preparing_cereals/corn\",\"display\":{\"title\":{\"text\":\"To protect/cover vegetables/crops\"}},\"_row_num\":23},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":24}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "obtain_net_how_long_ago",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"obtain_net\",\"data_value\":\"1_year_ago_or_less\",\"display\":{\"title\":{\"text\":\"1 year ago or less\"}},\"_row_num\":5},{\"choice_list_name\":\"obtain_net\",\"data_value\":\"within_the_past_1-3_years\",\"display\":{\"title\":{\"text\":\"Within the past 1-3 years\"}},\"_row_num\":6},{\"choice_list_name\":\"obtain_net\",\"data_value\":\"more_than_3_years\",\"display\":{\"title\":{\"text\":\"More than 3 years\"}},\"_row_num\":7},{\"choice_list_name\":\"obtain_net\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don’t know\"}},\"_row_num\":8}]"
+      },
+      {
+        "_partition": "FormType",
+        "_aspect": "default",
+        "_key": "FormType.formType",
+        "_type": "string",
+        "_value": "SURVEY"
+      },
+      {
+        "_partition": "SurveyUtil",
+        "_aspect": "default",
+        "_key": "SurveyUtil.formId",
+        "_type": "string",
+        "_value": "hh_mosquito_net"
+      },
+      {
+        "_partition": "Table",
+        "_aspect": "default",
+        "_key": "defaultViewType",
+        "_type": "string",
+        "_value": "SPREADSHEET"
+      },
+      {
+        "_partition": "Table",
+        "_aspect": "default",
+        "_key": "displayName",
+        "_type": "object",
+        "_value": "{\"text\":\"Mosquito Nets\"}"
+      }
+    ]
+  }
+}

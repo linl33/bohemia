@@ -1,0 +1,4831 @@
+{
+  "xlsx": {
+    "initial": [
+      {
+        "clause": "do section survey",
+        "_row_num": 2
+      },
+      {
+        "clause": "goto _finalize",
+        "comments": "skips the finalize screen where the user chooses to save as incomplete or finalized and instead saves as finalized.",
+        "_row_num": 3
+      }
+    ],
+    "survey": [
+      {
+        "clause": "begin screen",
+        "_row_num": 2
+      },
+      {
+        "type": "note",
+        "name": "hh_id",
+        "display": {
+          "prompt": {
+            "text": "Household ID: {{data.hh_id}}"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "type": "note",
+        "name": "note_new_hh_info",
+        "display": {
+          "prompt": {
+            "text": "Section to be filled out for households that were not part of the minicensus"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "type": "note",
+        "name": "note_new_hh_members",
+        "display": {
+          "prompt": {
+            "text": "Household members list:"
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "type": "text",
+        "name": "new_hh_member_name",
+        "display": {
+          "prompt": {
+            "text": "1. Given name"
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "type": "text",
+        "name": "new_hh_member_surname",
+        "display": {
+          "prompt": {
+            "text": "2. Surname"
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "type": "date",
+        "name": "new_hh_member_dob",
+        "display": {
+          "prompt": {
+            "text": "3. Date of birth"
+          }
+        },
+        "_row_num": 9
+      },
+      {
+        "type": "integer",
+        "name": "new_hh_member_dob_enter",
+        "display": {
+          "prompt": {
+            "text": "3a. If year is not known please add age"
+          }
+        },
+        "_row_num": 13
+      },
+      {
+        "type": "select_multiple",
+        "values_list": "approx",
+        "name": "new_hh_member_dob_approx",
+        "display": {
+          "prompt": {
+            "text": "Tick this box if approximate"
+          }
+        },
+        "_row_num": 14
+      },
+      {
+        "type": "select_one",
+        "values_list": "gender",
+        "name": "new_hh_member_gender",
+        "display": {
+          "prompt": {
+            "text": "4. Gender"
+          }
+        },
+        "_row_num": 15
+      },
+      {
+        "type": "select_one",
+        "values_list": "resident_status",
+        "name": "new_hh_member_resident",
+        "display": {
+          "prompt": {
+            "text": "5. Is this participant a resident of the household?"
+          },
+          "hint": {
+            "text": "(A resident member is a person who intends to live in the household during the following 3 months at least)"
+          }
+        },
+        "_row_num": 16
+      },
+      {
+        "type": "select_one",
+        "values_list": "yndk",
+        "name": "new_hh_member_censed",
+        "display": {
+          "prompt": {
+            "text": "6. Was this participant registered in the district census a few months ago?"
+          }
+        },
+        "_row_num": 17
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('new_hh_member_censed'), 'yes')",
+        "_row_num": 18
+      },
+      {
+        "type": "text",
+        "name": "new_hh_member_censed_extid",
+        "display": {
+          "prompt": {
+            "text": "ExtID"
+          }
+        },
+        "_row_num": 19
+      },
+      {
+        "type": "select_multiple",
+        "values_list": "not_possible",
+        "name": "new_hh_member_censed_extid_not_possible",
+        "display": {
+          "prompt": {
+            "text": "Not possible to retrieve"
+          }
+        },
+        "_row_num": 20
+      },
+      {
+        "clause": "end if",
+        "_row_num": 21
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 22
+      }
+    ],
+    "choices": [
+      {
+        "choice_list_name": "dmy_ago_dk",
+        "data_value": "days_ago",
+        "display": {
+          "title": {
+            "text": "Day(s) ago"
+          }
+        },
+        "_row_num": 2
+      },
+      {
+        "choice_list_name": "dmy_ago_dk",
+        "data_value": "weeks_ago",
+        "display": {
+          "title": {
+            "text": "Week(s) ago"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "choice_list_name": "dmy_ago_dk",
+        "data_value": "months_ago",
+        "display": {
+          "title": {
+            "text": "Month(s) ago"
+          }
+        },
+        "_row_num": 4
+      },
+      {
+        "choice_list_name": "dmy_ago_dk",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "choice_list_name": "dwmydk",
+        "data_value": "days",
+        "display": {
+          "title": {
+            "text": "Day(s)"
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "choice_list_name": "dwmydk",
+        "data_value": "weeks",
+        "display": {
+          "title": {
+            "text": "Week(s)"
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "choice_list_name": "dwmydk",
+        "data_value": "months",
+        "display": {
+          "title": {
+            "text": "Month(s)"
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "choice_list_name": "dwmydk",
+        "data_value": "years",
+        "display": {
+          "title": {
+            "text": "Year(s)"
+          }
+        },
+        "_row_num": 9
+      },
+      {
+        "choice_list_name": "dwmydk",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 10
+      },
+      {
+        "choice_list_name": "yn",
+        "data_value": "y",
+        "display": {
+          "title": {
+            "text": "yes"
+          }
+        },
+        "_row_num": 11
+      },
+      {
+        "choice_list_name": "yn",
+        "data_value": "n",
+        "display": {
+          "title": {
+            "text": "no"
+          }
+        },
+        "_row_num": 12
+      },
+      {
+        "choice_list_name": "wmy",
+        "data_value": "weeks",
+        "display": {
+          "title": {
+            "text": "Week(s)"
+          }
+        },
+        "_row_num": 13
+      },
+      {
+        "choice_list_name": "wmy",
+        "data_value": "months",
+        "display": {
+          "title": {
+            "text": "Month(s)"
+          }
+        },
+        "_row_num": 14
+      },
+      {
+        "choice_list_name": "wmy",
+        "data_value": "years",
+        "display": {
+          "title": {
+            "text": "Year(s)"
+          }
+        },
+        "_row_num": 15
+      },
+      {
+        "choice_list_name": "resident_status",
+        "data_value": "resident",
+        "display": {
+          "title": {
+            "text": "Resident member"
+          }
+        },
+        "_row_num": 16
+      },
+      {
+        "choice_list_name": "resident_status",
+        "data_value": "non_resident",
+        "display": {
+          "title": {
+            "text": "Non-Resident member"
+          }
+        },
+        "_row_num": 17
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 1,
+        "display": {
+          "title": {
+            "text": 1
+          }
+        },
+        "_row_num": 18
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 2,
+        "display": {
+          "title": {
+            "text": 2
+          }
+        },
+        "_row_num": 19
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 3,
+        "display": {
+          "title": {
+            "text": 3
+          }
+        },
+        "_row_num": 20
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 4,
+        "display": {
+          "title": {
+            "text": 4
+          }
+        },
+        "_row_num": 21
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 5,
+        "display": {
+          "title": {
+            "text": 5
+          }
+        },
+        "_row_num": 22
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 6,
+        "display": {
+          "title": {
+            "text": 6
+          }
+        },
+        "_row_num": 23
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 7,
+        "display": {
+          "title": {
+            "text": 7
+          }
+        },
+        "_row_num": 24
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 8,
+        "display": {
+          "title": {
+            "text": 8
+          }
+        },
+        "_row_num": 25
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 9,
+        "display": {
+          "title": {
+            "text": 9
+          }
+        },
+        "_row_num": 26
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 10,
+        "display": {
+          "title": {
+            "text": 10
+          }
+        },
+        "_row_num": 27
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 11,
+        "display": {
+          "title": {
+            "text": 11
+          }
+        },
+        "_row_num": 28
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 12,
+        "display": {
+          "title": {
+            "text": 12
+          }
+        },
+        "_row_num": 29
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 13,
+        "display": {
+          "title": {
+            "text": 13
+          }
+        },
+        "_row_num": 30
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 14,
+        "display": {
+          "title": {
+            "text": 14
+          }
+        },
+        "_row_num": 31
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 15,
+        "display": {
+          "title": {
+            "text": 15
+          }
+        },
+        "_row_num": 32
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 16,
+        "display": {
+          "title": {
+            "text": 16
+          }
+        },
+        "_row_num": 33
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 17,
+        "display": {
+          "title": {
+            "text": 17
+          }
+        },
+        "_row_num": 34
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 18,
+        "display": {
+          "title": {
+            "text": 18
+          }
+        },
+        "_row_num": 35
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 19,
+        "display": {
+          "title": {
+            "text": 19
+          }
+        },
+        "_row_num": 36
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 20,
+        "display": {
+          "title": {
+            "text": 20
+          }
+        },
+        "_row_num": 37
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 21,
+        "display": {
+          "title": {
+            "text": 21
+          }
+        },
+        "_row_num": 38
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 22,
+        "display": {
+          "title": {
+            "text": 22
+          }
+        },
+        "_row_num": 39
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 23,
+        "display": {
+          "title": {
+            "text": 23
+          }
+        },
+        "_row_num": 40
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 24,
+        "display": {
+          "title": {
+            "text": 24
+          }
+        },
+        "_row_num": 41
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 25,
+        "display": {
+          "title": {
+            "text": 25
+          }
+        },
+        "_row_num": 42
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 26,
+        "display": {
+          "title": {
+            "text": 26
+          }
+        },
+        "_row_num": 43
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 27,
+        "display": {
+          "title": {
+            "text": 27
+          }
+        },
+        "_row_num": 44
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 28,
+        "display": {
+          "title": {
+            "text": 28
+          }
+        },
+        "_row_num": 45
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 29,
+        "display": {
+          "title": {
+            "text": 29
+          }
+        },
+        "_row_num": 46
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 30,
+        "display": {
+          "title": {
+            "text": 30
+          }
+        },
+        "_row_num": 47
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": 31,
+        "display": {
+          "title": {
+            "text": 31
+          }
+        },
+        "_row_num": 48
+      },
+      {
+        "choice_list_name": "dob_day",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 49
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 1,
+        "display": {
+          "title": {
+            "text": 1
+          }
+        },
+        "_row_num": 50
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 2,
+        "display": {
+          "title": {
+            "text": 2
+          }
+        },
+        "_row_num": 51
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 3,
+        "display": {
+          "title": {
+            "text": 3
+          }
+        },
+        "_row_num": 52
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 4,
+        "display": {
+          "title": {
+            "text": 4
+          }
+        },
+        "_row_num": 53
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 5,
+        "display": {
+          "title": {
+            "text": 5
+          }
+        },
+        "_row_num": 54
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 6,
+        "display": {
+          "title": {
+            "text": 6
+          }
+        },
+        "_row_num": 55
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 7,
+        "display": {
+          "title": {
+            "text": 7
+          }
+        },
+        "_row_num": 56
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 8,
+        "display": {
+          "title": {
+            "text": 8
+          }
+        },
+        "_row_num": 57
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 9,
+        "display": {
+          "title": {
+            "text": 9
+          }
+        },
+        "_row_num": 58
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 10,
+        "display": {
+          "title": {
+            "text": 10
+          }
+        },
+        "_row_num": 59
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 11,
+        "display": {
+          "title": {
+            "text": 11
+          }
+        },
+        "_row_num": 60
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": 12,
+        "display": {
+          "title": {
+            "text": 12
+          }
+        },
+        "_row_num": 61
+      },
+      {
+        "choice_list_name": "dob_month",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 62
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1920,
+        "display": {
+          "title": {
+            "text": 1920
+          }
+        },
+        "_row_num": 63
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1921,
+        "display": {
+          "title": {
+            "text": 1921
+          }
+        },
+        "_row_num": 64
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1922,
+        "display": {
+          "title": {
+            "text": 1922
+          }
+        },
+        "_row_num": 65
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1923,
+        "display": {
+          "title": {
+            "text": 1923
+          }
+        },
+        "_row_num": 66
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1924,
+        "display": {
+          "title": {
+            "text": 1924
+          }
+        },
+        "_row_num": 67
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1925,
+        "display": {
+          "title": {
+            "text": 1925
+          }
+        },
+        "_row_num": 68
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1926,
+        "display": {
+          "title": {
+            "text": 1926
+          }
+        },
+        "_row_num": 69
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1927,
+        "display": {
+          "title": {
+            "text": 1927
+          }
+        },
+        "_row_num": 70
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1928,
+        "display": {
+          "title": {
+            "text": 1928
+          }
+        },
+        "_row_num": 71
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1929,
+        "display": {
+          "title": {
+            "text": 1929
+          }
+        },
+        "_row_num": 72
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1930,
+        "display": {
+          "title": {
+            "text": 1930
+          }
+        },
+        "_row_num": 73
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1931,
+        "display": {
+          "title": {
+            "text": 1931
+          }
+        },
+        "_row_num": 74
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1932,
+        "display": {
+          "title": {
+            "text": 1932
+          }
+        },
+        "_row_num": 75
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1933,
+        "display": {
+          "title": {
+            "text": 1933
+          }
+        },
+        "_row_num": 76
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1934,
+        "display": {
+          "title": {
+            "text": 1934
+          }
+        },
+        "_row_num": 77
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1935,
+        "display": {
+          "title": {
+            "text": 1935
+          }
+        },
+        "_row_num": 78
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1936,
+        "display": {
+          "title": {
+            "text": 1936
+          }
+        },
+        "_row_num": 79
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1937,
+        "display": {
+          "title": {
+            "text": 1937
+          }
+        },
+        "_row_num": 80
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1938,
+        "display": {
+          "title": {
+            "text": 1938
+          }
+        },
+        "_row_num": 81
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1939,
+        "display": {
+          "title": {
+            "text": 1939
+          }
+        },
+        "_row_num": 82
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1940,
+        "display": {
+          "title": {
+            "text": 1940
+          }
+        },
+        "_row_num": 83
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1941,
+        "display": {
+          "title": {
+            "text": 1941
+          }
+        },
+        "_row_num": 84
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1942,
+        "display": {
+          "title": {
+            "text": 1942
+          }
+        },
+        "_row_num": 85
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1943,
+        "display": {
+          "title": {
+            "text": 1943
+          }
+        },
+        "_row_num": 86
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1944,
+        "display": {
+          "title": {
+            "text": 1944
+          }
+        },
+        "_row_num": 87
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1945,
+        "display": {
+          "title": {
+            "text": 1945
+          }
+        },
+        "_row_num": 88
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1946,
+        "display": {
+          "title": {
+            "text": 1946
+          }
+        },
+        "_row_num": 89
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1947,
+        "display": {
+          "title": {
+            "text": 1947
+          }
+        },
+        "_row_num": 90
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1948,
+        "display": {
+          "title": {
+            "text": 1948
+          }
+        },
+        "_row_num": 91
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1949,
+        "display": {
+          "title": {
+            "text": 1949
+          }
+        },
+        "_row_num": 92
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1950,
+        "display": {
+          "title": {
+            "text": 1950
+          }
+        },
+        "_row_num": 93
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1951,
+        "display": {
+          "title": {
+            "text": 1951
+          }
+        },
+        "_row_num": 94
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1952,
+        "display": {
+          "title": {
+            "text": 1952
+          }
+        },
+        "_row_num": 95
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1953,
+        "display": {
+          "title": {
+            "text": 1953
+          }
+        },
+        "_row_num": 96
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1954,
+        "display": {
+          "title": {
+            "text": 1954
+          }
+        },
+        "_row_num": 97
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1955,
+        "display": {
+          "title": {
+            "text": 1955
+          }
+        },
+        "_row_num": 98
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1956,
+        "display": {
+          "title": {
+            "text": 1956
+          }
+        },
+        "_row_num": 99
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1957,
+        "display": {
+          "title": {
+            "text": 1957
+          }
+        },
+        "_row_num": 100
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1958,
+        "display": {
+          "title": {
+            "text": 1958
+          }
+        },
+        "_row_num": 101
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1959,
+        "display": {
+          "title": {
+            "text": 1959
+          }
+        },
+        "_row_num": 102
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1960,
+        "display": {
+          "title": {
+            "text": 1960
+          }
+        },
+        "_row_num": 103
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1961,
+        "display": {
+          "title": {
+            "text": 1961
+          }
+        },
+        "_row_num": 104
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1962,
+        "display": {
+          "title": {
+            "text": 1962
+          }
+        },
+        "_row_num": 105
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1963,
+        "display": {
+          "title": {
+            "text": 1963
+          }
+        },
+        "_row_num": 106
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1964,
+        "display": {
+          "title": {
+            "text": 1964
+          }
+        },
+        "_row_num": 107
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1965,
+        "display": {
+          "title": {
+            "text": 1965
+          }
+        },
+        "_row_num": 108
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1966,
+        "display": {
+          "title": {
+            "text": 1966
+          }
+        },
+        "_row_num": 109
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1967,
+        "display": {
+          "title": {
+            "text": 1967
+          }
+        },
+        "_row_num": 110
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1968,
+        "display": {
+          "title": {
+            "text": 1968
+          }
+        },
+        "_row_num": 111
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1969,
+        "display": {
+          "title": {
+            "text": 1969
+          }
+        },
+        "_row_num": 112
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1970,
+        "display": {
+          "title": {
+            "text": 1970
+          }
+        },
+        "_row_num": 113
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1971,
+        "display": {
+          "title": {
+            "text": 1971
+          }
+        },
+        "_row_num": 114
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1972,
+        "display": {
+          "title": {
+            "text": 1972
+          }
+        },
+        "_row_num": 115
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1973,
+        "display": {
+          "title": {
+            "text": 1973
+          }
+        },
+        "_row_num": 116
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1974,
+        "display": {
+          "title": {
+            "text": 1974
+          }
+        },
+        "_row_num": 117
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1975,
+        "display": {
+          "title": {
+            "text": 1975
+          }
+        },
+        "_row_num": 118
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1976,
+        "display": {
+          "title": {
+            "text": 1976
+          }
+        },
+        "_row_num": 119
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1977,
+        "display": {
+          "title": {
+            "text": 1977
+          }
+        },
+        "_row_num": 120
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1978,
+        "display": {
+          "title": {
+            "text": 1978
+          }
+        },
+        "_row_num": 121
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1979,
+        "display": {
+          "title": {
+            "text": 1979
+          }
+        },
+        "_row_num": 122
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1980,
+        "display": {
+          "title": {
+            "text": 1980
+          }
+        },
+        "_row_num": 123
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1981,
+        "display": {
+          "title": {
+            "text": 1981
+          }
+        },
+        "_row_num": 124
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1982,
+        "display": {
+          "title": {
+            "text": 1982
+          }
+        },
+        "_row_num": 125
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1983,
+        "display": {
+          "title": {
+            "text": 1983
+          }
+        },
+        "_row_num": 126
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1984,
+        "display": {
+          "title": {
+            "text": 1984
+          }
+        },
+        "_row_num": 127
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1985,
+        "display": {
+          "title": {
+            "text": 1985
+          }
+        },
+        "_row_num": 128
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1986,
+        "display": {
+          "title": {
+            "text": 1986
+          }
+        },
+        "_row_num": 129
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1987,
+        "display": {
+          "title": {
+            "text": 1987
+          }
+        },
+        "_row_num": 130
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1988,
+        "display": {
+          "title": {
+            "text": 1988
+          }
+        },
+        "_row_num": 131
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1989,
+        "display": {
+          "title": {
+            "text": 1989
+          }
+        },
+        "_row_num": 132
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1990,
+        "display": {
+          "title": {
+            "text": 1990
+          }
+        },
+        "_row_num": 133
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1991,
+        "display": {
+          "title": {
+            "text": 1991
+          }
+        },
+        "_row_num": 134
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1992,
+        "display": {
+          "title": {
+            "text": 1992
+          }
+        },
+        "_row_num": 135
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1993,
+        "display": {
+          "title": {
+            "text": 1993
+          }
+        },
+        "_row_num": 136
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1994,
+        "display": {
+          "title": {
+            "text": 1994
+          }
+        },
+        "_row_num": 137
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1995,
+        "display": {
+          "title": {
+            "text": 1995
+          }
+        },
+        "_row_num": 138
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1996,
+        "display": {
+          "title": {
+            "text": 1996
+          }
+        },
+        "_row_num": 139
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1997,
+        "display": {
+          "title": {
+            "text": 1997
+          }
+        },
+        "_row_num": 140
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1998,
+        "display": {
+          "title": {
+            "text": 1998
+          }
+        },
+        "_row_num": 141
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 1999,
+        "display": {
+          "title": {
+            "text": 1999
+          }
+        },
+        "_row_num": 142
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2000,
+        "display": {
+          "title": {
+            "text": 2000
+          }
+        },
+        "_row_num": 143
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2001,
+        "display": {
+          "title": {
+            "text": 2001
+          }
+        },
+        "_row_num": 144
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2002,
+        "display": {
+          "title": {
+            "text": 2002
+          }
+        },
+        "_row_num": 145
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2003,
+        "display": {
+          "title": {
+            "text": 2003
+          }
+        },
+        "_row_num": 146
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2004,
+        "display": {
+          "title": {
+            "text": 2004
+          }
+        },
+        "_row_num": 147
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2005,
+        "display": {
+          "title": {
+            "text": 2005
+          }
+        },
+        "_row_num": 148
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2006,
+        "display": {
+          "title": {
+            "text": 2006
+          }
+        },
+        "_row_num": 149
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2007,
+        "display": {
+          "title": {
+            "text": 2007
+          }
+        },
+        "_row_num": 150
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2008,
+        "display": {
+          "title": {
+            "text": 2008
+          }
+        },
+        "_row_num": 151
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2009,
+        "display": {
+          "title": {
+            "text": 2009
+          }
+        },
+        "_row_num": 152
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2010,
+        "display": {
+          "title": {
+            "text": 2010
+          }
+        },
+        "_row_num": 153
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2011,
+        "display": {
+          "title": {
+            "text": 2011
+          }
+        },
+        "_row_num": 154
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2012,
+        "display": {
+          "title": {
+            "text": 2012
+          }
+        },
+        "_row_num": 155
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2013,
+        "display": {
+          "title": {
+            "text": 2013
+          }
+        },
+        "_row_num": 156
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2014,
+        "display": {
+          "title": {
+            "text": 2014
+          }
+        },
+        "_row_num": 157
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2015,
+        "display": {
+          "title": {
+            "text": 2015
+          }
+        },
+        "_row_num": 158
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2016,
+        "display": {
+          "title": {
+            "text": 2016
+          }
+        },
+        "_row_num": 159
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2017,
+        "display": {
+          "title": {
+            "text": 2017
+          }
+        },
+        "_row_num": 160
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2018,
+        "display": {
+          "title": {
+            "text": 2018
+          }
+        },
+        "_row_num": 161
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2019,
+        "display": {
+          "title": {
+            "text": 2019
+          }
+        },
+        "_row_num": 162
+      },
+      {
+        "choice_list_name": "dob_year",
+        "data_value": 2020,
+        "display": {
+          "title": {
+            "text": 2020
+          }
+        },
+        "_row_num": 163
+      },
+      {
+        "choice_list_name": "approx",
+        "data_value": "approx",
+        "display": {
+          "title": {
+            "text": "Approximate age"
+          }
+        },
+        "_row_num": 164
+      },
+      {
+        "choice_list_name": "gender",
+        "data_value": "male",
+        "display": {
+          "title": {
+            "text": "Male"
+          }
+        },
+        "_row_num": 165
+      },
+      {
+        "choice_list_name": "gender",
+        "data_value": "female",
+        "display": {
+          "title": {
+            "text": "Female"
+          }
+        },
+        "_row_num": 166
+      },
+      {
+        "choice_list_name": "in_outside_district",
+        "data_value": "in_district",
+        "display": {
+          "title": {
+            "text": "Within this district"
+          }
+        },
+        "_row_num": 167
+      },
+      {
+        "choice_list_name": "in_outside_district",
+        "data_value": "outside_district",
+        "display": {
+          "title": {
+            "text": "Outside this district"
+          }
+        },
+        "_row_num": 168
+      },
+      {
+        "choice_list_name": "in_outside_district",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 169
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 170
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 171
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 172
+      },
+      {
+        "choice_list_name": "not_possible",
+        "data_value": "not_possible",
+        "display": {
+          "title": {
+            "text": "Not possible to retrieve"
+          }
+        },
+        "_row_num": 173
+      }
+    ],
+    "settings": [
+      {
+        "setting_name": "form_id",
+        "value": "new_hh_info",
+        "_row_num": 2
+      },
+      {
+        "setting_name": "form_version",
+        "value": 20210114001,
+        "_row_num": 3
+      },
+      {
+        "setting_name": "table_id",
+        "value": "new_hh_info",
+        "_row_num": 4
+      },
+      {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "New Household - Members Details"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "setting_name": "instance_name",
+        "value": "new_hh_member_name",
+        "_row_num": 6
+      }
+    ],
+    "model": [
+      {
+        "name": "hh_id",
+        "type": "string",
+        "_row_num": 2
+      },
+      {
+        "name": "new_hh_member_name",
+        "type": "string",
+        "_row_num": 3
+      },
+      {
+        "name": "new_hh_member_surname",
+        "type": "string",
+        "_row_num": 4
+      },
+      {
+        "name": "new_hh_member_dob_date",
+        "type": "select_one",
+        "_row_num": 5
+      },
+      {
+        "name": "new_hh_member_dob_month",
+        "type": "select_one",
+        "_row_num": 6
+      },
+      {
+        "name": "new_hh_member_dob_year",
+        "type": "select_one",
+        "_row_num": 7
+      },
+      {
+        "name": "new_hh_member_dob_enter",
+        "type": "integer",
+        "_row_num": 8
+      },
+      {
+        "name": "new_hh_member_dob_approx",
+        "type": "select_multiple",
+        "_row_num": 9
+      },
+      {
+        "name": "new_hh_member_gender",
+        "type": "select_one",
+        "_row_num": 10
+      },
+      {
+        "name": "new_hh_member_resident",
+        "type": "select_one",
+        "_row_num": 11
+      },
+      {
+        "name": "new_hh_member_censed",
+        "type": "select_one",
+        "_row_num": 12
+      },
+      {
+        "name": "new_hh_member_censed_extid",
+        "type": "string",
+        "_row_num": 13
+      },
+      {
+        "name": "new_hh_member_censed_extid_not_possible",
+        "type": "select_multiple",
+        "_row_num": 14
+      }
+    ]
+  },
+  "specification": {
+    "column_types": {
+      "_screen_block": "function",
+      "condition": "formula",
+      "constraint": "formula",
+      "required": "formula",
+      "calculation": "formula",
+      "newRowInitialElementKeyToValueMap": "formula",
+      "openRowInitialElementKeyToValueMap": "formula",
+      "selectionArgs": "formula",
+      "url": "formula",
+      "uri": "formula",
+      "callback": "formula(context)",
+      "choice_filter": "formula(choice_item)",
+      "templatePath": "requirejs_path"
+    },
+    "settings": {
+      "form_id": {
+        "setting_name": "form_id",
+        "value": "new_hh_info",
+        "_row_num": 2
+      },
+      "form_version": {
+        "setting_name": "form_version",
+        "value": 20210114001,
+        "_row_num": 3
+      },
+      "table_id": {
+        "setting_name": "table_id",
+        "value": "new_hh_info",
+        "_row_num": 4
+      },
+      "survey": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "New Household - Members Details"
+          }
+        },
+        "_row_num": 5
+      },
+      "instance_name": {
+        "setting_name": "instance_name",
+        "value": "new_hh_member_name",
+        "_row_num": 6
+      },
+      "_locales": {
+        "setting_name": "_locales",
+        "_row_num": 5,
+        "value": [
+          {
+            "display": {
+              "locale": {
+                "text": "default"
+              }
+            },
+            "name": "default"
+          }
+        ]
+      },
+      "_default_locale": {
+        "setting_name": "_default_locale",
+        "_row_num": 5,
+        "value": "default"
+      },
+      "initial": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "New Household - Members Details"
+          }
+        },
+        "_row_num": 5
+      }
+    },
+    "choices": {
+      "dmy_ago_dk": [
+        {
+          "choice_list_name": "dmy_ago_dk",
+          "data_value": "days_ago",
+          "display": {
+            "title": {
+              "text": "Day(s) ago"
+            }
+          },
+          "_row_num": 2
+        },
+        {
+          "choice_list_name": "dmy_ago_dk",
+          "data_value": "weeks_ago",
+          "display": {
+            "title": {
+              "text": "Week(s) ago"
+            }
+          },
+          "_row_num": 3
+        },
+        {
+          "choice_list_name": "dmy_ago_dk",
+          "data_value": "months_ago",
+          "display": {
+            "title": {
+              "text": "Month(s) ago"
+            }
+          },
+          "_row_num": 4
+        },
+        {
+          "choice_list_name": "dmy_ago_dk",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 5
+        }
+      ],
+      "dwmydk": [
+        {
+          "choice_list_name": "dwmydk",
+          "data_value": "days",
+          "display": {
+            "title": {
+              "text": "Day(s)"
+            }
+          },
+          "_row_num": 6
+        },
+        {
+          "choice_list_name": "dwmydk",
+          "data_value": "weeks",
+          "display": {
+            "title": {
+              "text": "Week(s)"
+            }
+          },
+          "_row_num": 7
+        },
+        {
+          "choice_list_name": "dwmydk",
+          "data_value": "months",
+          "display": {
+            "title": {
+              "text": "Month(s)"
+            }
+          },
+          "_row_num": 8
+        },
+        {
+          "choice_list_name": "dwmydk",
+          "data_value": "years",
+          "display": {
+            "title": {
+              "text": "Year(s)"
+            }
+          },
+          "_row_num": 9
+        },
+        {
+          "choice_list_name": "dwmydk",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 10
+        }
+      ],
+      "yn": [
+        {
+          "choice_list_name": "yn",
+          "data_value": "y",
+          "display": {
+            "title": {
+              "text": "yes"
+            }
+          },
+          "_row_num": 11
+        },
+        {
+          "choice_list_name": "yn",
+          "data_value": "n",
+          "display": {
+            "title": {
+              "text": "no"
+            }
+          },
+          "_row_num": 12
+        }
+      ],
+      "wmy": [
+        {
+          "choice_list_name": "wmy",
+          "data_value": "weeks",
+          "display": {
+            "title": {
+              "text": "Week(s)"
+            }
+          },
+          "_row_num": 13
+        },
+        {
+          "choice_list_name": "wmy",
+          "data_value": "months",
+          "display": {
+            "title": {
+              "text": "Month(s)"
+            }
+          },
+          "_row_num": 14
+        },
+        {
+          "choice_list_name": "wmy",
+          "data_value": "years",
+          "display": {
+            "title": {
+              "text": "Year(s)"
+            }
+          },
+          "_row_num": 15
+        }
+      ],
+      "resident_status": [
+        {
+          "choice_list_name": "resident_status",
+          "data_value": "resident",
+          "display": {
+            "title": {
+              "text": "Resident member"
+            }
+          },
+          "_row_num": 16
+        },
+        {
+          "choice_list_name": "resident_status",
+          "data_value": "non_resident",
+          "display": {
+            "title": {
+              "text": "Non-Resident member"
+            }
+          },
+          "_row_num": 17
+        }
+      ],
+      "dob_day": [
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 1,
+          "display": {
+            "title": {
+              "text": 1
+            }
+          },
+          "_row_num": 18
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 2,
+          "display": {
+            "title": {
+              "text": 2
+            }
+          },
+          "_row_num": 19
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 3,
+          "display": {
+            "title": {
+              "text": 3
+            }
+          },
+          "_row_num": 20
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 4,
+          "display": {
+            "title": {
+              "text": 4
+            }
+          },
+          "_row_num": 21
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 5,
+          "display": {
+            "title": {
+              "text": 5
+            }
+          },
+          "_row_num": 22
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 6,
+          "display": {
+            "title": {
+              "text": 6
+            }
+          },
+          "_row_num": 23
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 7,
+          "display": {
+            "title": {
+              "text": 7
+            }
+          },
+          "_row_num": 24
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 8,
+          "display": {
+            "title": {
+              "text": 8
+            }
+          },
+          "_row_num": 25
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 9,
+          "display": {
+            "title": {
+              "text": 9
+            }
+          },
+          "_row_num": 26
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 10,
+          "display": {
+            "title": {
+              "text": 10
+            }
+          },
+          "_row_num": 27
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 11,
+          "display": {
+            "title": {
+              "text": 11
+            }
+          },
+          "_row_num": 28
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 12,
+          "display": {
+            "title": {
+              "text": 12
+            }
+          },
+          "_row_num": 29
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 13,
+          "display": {
+            "title": {
+              "text": 13
+            }
+          },
+          "_row_num": 30
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 14,
+          "display": {
+            "title": {
+              "text": 14
+            }
+          },
+          "_row_num": 31
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 15,
+          "display": {
+            "title": {
+              "text": 15
+            }
+          },
+          "_row_num": 32
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 16,
+          "display": {
+            "title": {
+              "text": 16
+            }
+          },
+          "_row_num": 33
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 17,
+          "display": {
+            "title": {
+              "text": 17
+            }
+          },
+          "_row_num": 34
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 18,
+          "display": {
+            "title": {
+              "text": 18
+            }
+          },
+          "_row_num": 35
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 19,
+          "display": {
+            "title": {
+              "text": 19
+            }
+          },
+          "_row_num": 36
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 20,
+          "display": {
+            "title": {
+              "text": 20
+            }
+          },
+          "_row_num": 37
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 21,
+          "display": {
+            "title": {
+              "text": 21
+            }
+          },
+          "_row_num": 38
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 22,
+          "display": {
+            "title": {
+              "text": 22
+            }
+          },
+          "_row_num": 39
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 23,
+          "display": {
+            "title": {
+              "text": 23
+            }
+          },
+          "_row_num": 40
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 24,
+          "display": {
+            "title": {
+              "text": 24
+            }
+          },
+          "_row_num": 41
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 25,
+          "display": {
+            "title": {
+              "text": 25
+            }
+          },
+          "_row_num": 42
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 26,
+          "display": {
+            "title": {
+              "text": 26
+            }
+          },
+          "_row_num": 43
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 27,
+          "display": {
+            "title": {
+              "text": 27
+            }
+          },
+          "_row_num": 44
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 28,
+          "display": {
+            "title": {
+              "text": 28
+            }
+          },
+          "_row_num": 45
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 29,
+          "display": {
+            "title": {
+              "text": 29
+            }
+          },
+          "_row_num": 46
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 30,
+          "display": {
+            "title": {
+              "text": 30
+            }
+          },
+          "_row_num": 47
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": 31,
+          "display": {
+            "title": {
+              "text": 31
+            }
+          },
+          "_row_num": 48
+        },
+        {
+          "choice_list_name": "dob_day",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 49
+        }
+      ],
+      "dob_month": [
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 1,
+          "display": {
+            "title": {
+              "text": 1
+            }
+          },
+          "_row_num": 50
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 2,
+          "display": {
+            "title": {
+              "text": 2
+            }
+          },
+          "_row_num": 51
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 3,
+          "display": {
+            "title": {
+              "text": 3
+            }
+          },
+          "_row_num": 52
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 4,
+          "display": {
+            "title": {
+              "text": 4
+            }
+          },
+          "_row_num": 53
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 5,
+          "display": {
+            "title": {
+              "text": 5
+            }
+          },
+          "_row_num": 54
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 6,
+          "display": {
+            "title": {
+              "text": 6
+            }
+          },
+          "_row_num": 55
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 7,
+          "display": {
+            "title": {
+              "text": 7
+            }
+          },
+          "_row_num": 56
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 8,
+          "display": {
+            "title": {
+              "text": 8
+            }
+          },
+          "_row_num": 57
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 9,
+          "display": {
+            "title": {
+              "text": 9
+            }
+          },
+          "_row_num": 58
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 10,
+          "display": {
+            "title": {
+              "text": 10
+            }
+          },
+          "_row_num": 59
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 11,
+          "display": {
+            "title": {
+              "text": 11
+            }
+          },
+          "_row_num": 60
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": 12,
+          "display": {
+            "title": {
+              "text": 12
+            }
+          },
+          "_row_num": 61
+        },
+        {
+          "choice_list_name": "dob_month",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 62
+        }
+      ],
+      "dob_year": [
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1920,
+          "display": {
+            "title": {
+              "text": 1920
+            }
+          },
+          "_row_num": 63
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1921,
+          "display": {
+            "title": {
+              "text": 1921
+            }
+          },
+          "_row_num": 64
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1922,
+          "display": {
+            "title": {
+              "text": 1922
+            }
+          },
+          "_row_num": 65
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1923,
+          "display": {
+            "title": {
+              "text": 1923
+            }
+          },
+          "_row_num": 66
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1924,
+          "display": {
+            "title": {
+              "text": 1924
+            }
+          },
+          "_row_num": 67
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1925,
+          "display": {
+            "title": {
+              "text": 1925
+            }
+          },
+          "_row_num": 68
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1926,
+          "display": {
+            "title": {
+              "text": 1926
+            }
+          },
+          "_row_num": 69
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1927,
+          "display": {
+            "title": {
+              "text": 1927
+            }
+          },
+          "_row_num": 70
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1928,
+          "display": {
+            "title": {
+              "text": 1928
+            }
+          },
+          "_row_num": 71
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1929,
+          "display": {
+            "title": {
+              "text": 1929
+            }
+          },
+          "_row_num": 72
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1930,
+          "display": {
+            "title": {
+              "text": 1930
+            }
+          },
+          "_row_num": 73
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1931,
+          "display": {
+            "title": {
+              "text": 1931
+            }
+          },
+          "_row_num": 74
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1932,
+          "display": {
+            "title": {
+              "text": 1932
+            }
+          },
+          "_row_num": 75
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1933,
+          "display": {
+            "title": {
+              "text": 1933
+            }
+          },
+          "_row_num": 76
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1934,
+          "display": {
+            "title": {
+              "text": 1934
+            }
+          },
+          "_row_num": 77
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1935,
+          "display": {
+            "title": {
+              "text": 1935
+            }
+          },
+          "_row_num": 78
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1936,
+          "display": {
+            "title": {
+              "text": 1936
+            }
+          },
+          "_row_num": 79
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1937,
+          "display": {
+            "title": {
+              "text": 1937
+            }
+          },
+          "_row_num": 80
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1938,
+          "display": {
+            "title": {
+              "text": 1938
+            }
+          },
+          "_row_num": 81
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1939,
+          "display": {
+            "title": {
+              "text": 1939
+            }
+          },
+          "_row_num": 82
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1940,
+          "display": {
+            "title": {
+              "text": 1940
+            }
+          },
+          "_row_num": 83
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1941,
+          "display": {
+            "title": {
+              "text": 1941
+            }
+          },
+          "_row_num": 84
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1942,
+          "display": {
+            "title": {
+              "text": 1942
+            }
+          },
+          "_row_num": 85
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1943,
+          "display": {
+            "title": {
+              "text": 1943
+            }
+          },
+          "_row_num": 86
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1944,
+          "display": {
+            "title": {
+              "text": 1944
+            }
+          },
+          "_row_num": 87
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1945,
+          "display": {
+            "title": {
+              "text": 1945
+            }
+          },
+          "_row_num": 88
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1946,
+          "display": {
+            "title": {
+              "text": 1946
+            }
+          },
+          "_row_num": 89
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1947,
+          "display": {
+            "title": {
+              "text": 1947
+            }
+          },
+          "_row_num": 90
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1948,
+          "display": {
+            "title": {
+              "text": 1948
+            }
+          },
+          "_row_num": 91
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1949,
+          "display": {
+            "title": {
+              "text": 1949
+            }
+          },
+          "_row_num": 92
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1950,
+          "display": {
+            "title": {
+              "text": 1950
+            }
+          },
+          "_row_num": 93
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1951,
+          "display": {
+            "title": {
+              "text": 1951
+            }
+          },
+          "_row_num": 94
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1952,
+          "display": {
+            "title": {
+              "text": 1952
+            }
+          },
+          "_row_num": 95
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1953,
+          "display": {
+            "title": {
+              "text": 1953
+            }
+          },
+          "_row_num": 96
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1954,
+          "display": {
+            "title": {
+              "text": 1954
+            }
+          },
+          "_row_num": 97
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1955,
+          "display": {
+            "title": {
+              "text": 1955
+            }
+          },
+          "_row_num": 98
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1956,
+          "display": {
+            "title": {
+              "text": 1956
+            }
+          },
+          "_row_num": 99
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1957,
+          "display": {
+            "title": {
+              "text": 1957
+            }
+          },
+          "_row_num": 100
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1958,
+          "display": {
+            "title": {
+              "text": 1958
+            }
+          },
+          "_row_num": 101
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1959,
+          "display": {
+            "title": {
+              "text": 1959
+            }
+          },
+          "_row_num": 102
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1960,
+          "display": {
+            "title": {
+              "text": 1960
+            }
+          },
+          "_row_num": 103
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1961,
+          "display": {
+            "title": {
+              "text": 1961
+            }
+          },
+          "_row_num": 104
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1962,
+          "display": {
+            "title": {
+              "text": 1962
+            }
+          },
+          "_row_num": 105
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1963,
+          "display": {
+            "title": {
+              "text": 1963
+            }
+          },
+          "_row_num": 106
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1964,
+          "display": {
+            "title": {
+              "text": 1964
+            }
+          },
+          "_row_num": 107
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1965,
+          "display": {
+            "title": {
+              "text": 1965
+            }
+          },
+          "_row_num": 108
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1966,
+          "display": {
+            "title": {
+              "text": 1966
+            }
+          },
+          "_row_num": 109
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1967,
+          "display": {
+            "title": {
+              "text": 1967
+            }
+          },
+          "_row_num": 110
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1968,
+          "display": {
+            "title": {
+              "text": 1968
+            }
+          },
+          "_row_num": 111
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1969,
+          "display": {
+            "title": {
+              "text": 1969
+            }
+          },
+          "_row_num": 112
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1970,
+          "display": {
+            "title": {
+              "text": 1970
+            }
+          },
+          "_row_num": 113
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1971,
+          "display": {
+            "title": {
+              "text": 1971
+            }
+          },
+          "_row_num": 114
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1972,
+          "display": {
+            "title": {
+              "text": 1972
+            }
+          },
+          "_row_num": 115
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1973,
+          "display": {
+            "title": {
+              "text": 1973
+            }
+          },
+          "_row_num": 116
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1974,
+          "display": {
+            "title": {
+              "text": 1974
+            }
+          },
+          "_row_num": 117
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1975,
+          "display": {
+            "title": {
+              "text": 1975
+            }
+          },
+          "_row_num": 118
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1976,
+          "display": {
+            "title": {
+              "text": 1976
+            }
+          },
+          "_row_num": 119
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1977,
+          "display": {
+            "title": {
+              "text": 1977
+            }
+          },
+          "_row_num": 120
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1978,
+          "display": {
+            "title": {
+              "text": 1978
+            }
+          },
+          "_row_num": 121
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1979,
+          "display": {
+            "title": {
+              "text": 1979
+            }
+          },
+          "_row_num": 122
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1980,
+          "display": {
+            "title": {
+              "text": 1980
+            }
+          },
+          "_row_num": 123
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1981,
+          "display": {
+            "title": {
+              "text": 1981
+            }
+          },
+          "_row_num": 124
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1982,
+          "display": {
+            "title": {
+              "text": 1982
+            }
+          },
+          "_row_num": 125
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1983,
+          "display": {
+            "title": {
+              "text": 1983
+            }
+          },
+          "_row_num": 126
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1984,
+          "display": {
+            "title": {
+              "text": 1984
+            }
+          },
+          "_row_num": 127
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1985,
+          "display": {
+            "title": {
+              "text": 1985
+            }
+          },
+          "_row_num": 128
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1986,
+          "display": {
+            "title": {
+              "text": 1986
+            }
+          },
+          "_row_num": 129
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1987,
+          "display": {
+            "title": {
+              "text": 1987
+            }
+          },
+          "_row_num": 130
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1988,
+          "display": {
+            "title": {
+              "text": 1988
+            }
+          },
+          "_row_num": 131
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1989,
+          "display": {
+            "title": {
+              "text": 1989
+            }
+          },
+          "_row_num": 132
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1990,
+          "display": {
+            "title": {
+              "text": 1990
+            }
+          },
+          "_row_num": 133
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1991,
+          "display": {
+            "title": {
+              "text": 1991
+            }
+          },
+          "_row_num": 134
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1992,
+          "display": {
+            "title": {
+              "text": 1992
+            }
+          },
+          "_row_num": 135
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1993,
+          "display": {
+            "title": {
+              "text": 1993
+            }
+          },
+          "_row_num": 136
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1994,
+          "display": {
+            "title": {
+              "text": 1994
+            }
+          },
+          "_row_num": 137
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1995,
+          "display": {
+            "title": {
+              "text": 1995
+            }
+          },
+          "_row_num": 138
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1996,
+          "display": {
+            "title": {
+              "text": 1996
+            }
+          },
+          "_row_num": 139
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1997,
+          "display": {
+            "title": {
+              "text": 1997
+            }
+          },
+          "_row_num": 140
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1998,
+          "display": {
+            "title": {
+              "text": 1998
+            }
+          },
+          "_row_num": 141
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 1999,
+          "display": {
+            "title": {
+              "text": 1999
+            }
+          },
+          "_row_num": 142
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2000,
+          "display": {
+            "title": {
+              "text": 2000
+            }
+          },
+          "_row_num": 143
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2001,
+          "display": {
+            "title": {
+              "text": 2001
+            }
+          },
+          "_row_num": 144
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2002,
+          "display": {
+            "title": {
+              "text": 2002
+            }
+          },
+          "_row_num": 145
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2003,
+          "display": {
+            "title": {
+              "text": 2003
+            }
+          },
+          "_row_num": 146
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2004,
+          "display": {
+            "title": {
+              "text": 2004
+            }
+          },
+          "_row_num": 147
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2005,
+          "display": {
+            "title": {
+              "text": 2005
+            }
+          },
+          "_row_num": 148
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2006,
+          "display": {
+            "title": {
+              "text": 2006
+            }
+          },
+          "_row_num": 149
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2007,
+          "display": {
+            "title": {
+              "text": 2007
+            }
+          },
+          "_row_num": 150
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2008,
+          "display": {
+            "title": {
+              "text": 2008
+            }
+          },
+          "_row_num": 151
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2009,
+          "display": {
+            "title": {
+              "text": 2009
+            }
+          },
+          "_row_num": 152
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2010,
+          "display": {
+            "title": {
+              "text": 2010
+            }
+          },
+          "_row_num": 153
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2011,
+          "display": {
+            "title": {
+              "text": 2011
+            }
+          },
+          "_row_num": 154
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2012,
+          "display": {
+            "title": {
+              "text": 2012
+            }
+          },
+          "_row_num": 155
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2013,
+          "display": {
+            "title": {
+              "text": 2013
+            }
+          },
+          "_row_num": 156
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2014,
+          "display": {
+            "title": {
+              "text": 2014
+            }
+          },
+          "_row_num": 157
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2015,
+          "display": {
+            "title": {
+              "text": 2015
+            }
+          },
+          "_row_num": 158
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2016,
+          "display": {
+            "title": {
+              "text": 2016
+            }
+          },
+          "_row_num": 159
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2017,
+          "display": {
+            "title": {
+              "text": 2017
+            }
+          },
+          "_row_num": 160
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2018,
+          "display": {
+            "title": {
+              "text": 2018
+            }
+          },
+          "_row_num": 161
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2019,
+          "display": {
+            "title": {
+              "text": 2019
+            }
+          },
+          "_row_num": 162
+        },
+        {
+          "choice_list_name": "dob_year",
+          "data_value": 2020,
+          "display": {
+            "title": {
+              "text": 2020
+            }
+          },
+          "_row_num": 163
+        }
+      ],
+      "approx": [
+        {
+          "choice_list_name": "approx",
+          "data_value": "approx",
+          "display": {
+            "title": {
+              "text": "Approximate age"
+            }
+          },
+          "_row_num": 164
+        }
+      ],
+      "gender": [
+        {
+          "choice_list_name": "gender",
+          "data_value": "male",
+          "display": {
+            "title": {
+              "text": "Male"
+            }
+          },
+          "_row_num": 165
+        },
+        {
+          "choice_list_name": "gender",
+          "data_value": "female",
+          "display": {
+            "title": {
+              "text": "Female"
+            }
+          },
+          "_row_num": 166
+        }
+      ],
+      "in_outside_district": [
+        {
+          "choice_list_name": "in_outside_district",
+          "data_value": "in_district",
+          "display": {
+            "title": {
+              "text": "Within this district"
+            }
+          },
+          "_row_num": 167
+        },
+        {
+          "choice_list_name": "in_outside_district",
+          "data_value": "outside_district",
+          "display": {
+            "title": {
+              "text": "Outside this district"
+            }
+          },
+          "_row_num": 168
+        },
+        {
+          "choice_list_name": "in_outside_district",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 169
+        }
+      ],
+      "yndk": [
+        {
+          "choice_list_name": "yndk",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 170
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 171
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 172
+        }
+      ],
+      "not_possible": [
+        {
+          "choice_list_name": "not_possible",
+          "data_value": "not_possible",
+          "display": {
+            "title": {
+              "text": "Not possible to retrieve"
+            }
+          },
+          "_row_num": 173
+        }
+      ]
+    },
+    "table_specific_definitions": {
+      "_tokens": {}
+    },
+    "queries": {},
+    "calculates": {},
+    "model": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id"
+      },
+      "new_hh_member_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 3,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_name"
+      },
+      "new_hh_member_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_surname"
+      },
+      "new_hh_member_dob_date": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_date"
+      },
+      "new_hh_member_dob_month": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_month"
+      },
+      "new_hh_member_dob_year": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_year"
+      },
+      "new_hh_member_dob_enter": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 13,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 8,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_enter"
+      },
+      "new_hh_member_dob_approx": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "new_hh_member_dob_approx_items"
+        },
+        "valuesList": "approx",
+        "_defn": [
+          {
+            "_row_num": 14,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 9,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_approx"
+      },
+      "new_hh_member_gender": {
+        "type": "string",
+        "valuesList": "gender",
+        "_defn": [
+          {
+            "_row_num": 15,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 10,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_gender"
+      },
+      "new_hh_member_resident": {
+        "type": "string",
+        "valuesList": "resident_status",
+        "_defn": [
+          {
+            "_row_num": 16,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 11,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_resident"
+      },
+      "new_hh_member_censed": {
+        "type": "string",
+        "valuesList": "yndk",
+        "_defn": [
+          {
+            "_row_num": 17,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 12,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_censed"
+      },
+      "new_hh_member_censed_extid": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 19,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 13,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_censed_extid"
+      },
+      "new_hh_member_censed_extid_not_possible": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "new_hh_member_censed_extid_not_possible_items"
+        },
+        "valuesList": "not_possible",
+        "_defn": [
+          {
+            "_row_num": 20,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 14,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_censed_extid_not_possible"
+      },
+      "new_hh_member_dob": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "elementType": "date",
+        "elementKey": "new_hh_member_dob"
+      }
+    },
+    "section_names": [
+      "initial",
+      "survey"
+    ],
+    "sections": {
+      "initial": {
+        "section_name": "initial",
+        "nested_sections": {
+          "survey": true
+        },
+        "reachable_sections": {
+          "survey": true
+        },
+        "prompts": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "prompt",
+            "_do_section_name": "survey",
+            "_type": "_section",
+            "promptIdx": 0,
+            "display": {
+              "title": {
+                "text": "New Household - Members Details"
+              }
+            },
+            "_branch_label_enclosing_screen": "survey/0"
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 4,
+            "_branch_label_enclosing_screen": "initial/_screen4",
+            "promptIdx": 1
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": []
+        },
+        "operations": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "do_section",
+            "_do_section_name": "survey",
+            "operationIdx": 0
+          },
+          {
+            "clause": "goto _finalize",
+            "comments": "skips the finalize screen where the user chooses to save as incomplete or finalized and instead saves as finalized.",
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "goto_label",
+            "_branch_label": "_finalize",
+            "operationIdx": 1
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 4,
+            "operationIdx": 2
+          },
+          {
+            "_row_num": 4,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 3
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 4
+          },
+          {
+            "_token_type": "validate",
+            "clause": "validate finalize",
+            "_sweep_name": "finalize",
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 5
+          },
+          {
+            "_token_type": "save_and_terminate",
+            "clause": "save and terminate",
+            "calculation": true,
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 6
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 7
+          }
+        ],
+        "branch_label_map": {
+          "_contents": 3,
+          "_screen4": 3,
+          "_finalize": 5
+        }
+      },
+      "survey": {
+        "section_name": "survey",
+        "nested_sections": {},
+        "reachable_sections": {},
+        "prompts": [
+          {
+            "type": "note",
+            "name": "hh_id",
+            "display": {
+              "prompt": {
+                "text": "Household ID: {{data.hh_id}}"
+              }
+            },
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 0
+          },
+          {
+            "type": "note",
+            "name": "note_new_hh_info",
+            "display": {
+              "prompt": {
+                "text": "Section to be filled out for households that were not part of the minicensus"
+              }
+            },
+            "_row_num": 5,
+            "__rowNum__": 4,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 1
+          },
+          {
+            "type": "note",
+            "name": "note_new_hh_members",
+            "display": {
+              "prompt": {
+                "text": "Household members list:"
+              }
+            },
+            "_row_num": 6,
+            "__rowNum__": 5,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 2
+          },
+          {
+            "type": "text",
+            "name": "new_hh_member_name",
+            "display": {
+              "prompt": {
+                "text": "1. Given name"
+              }
+            },
+            "_row_num": 7,
+            "__rowNum__": 6,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 3
+          },
+          {
+            "type": "text",
+            "name": "new_hh_member_surname",
+            "display": {
+              "prompt": {
+                "text": "2. Surname"
+              }
+            },
+            "_row_num": 8,
+            "__rowNum__": 7,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 4
+          },
+          {
+            "type": "date",
+            "name": "new_hh_member_dob",
+            "display": {
+              "prompt": {
+                "text": "3. Date of birth"
+              }
+            },
+            "_row_num": 9,
+            "__rowNum__": 8,
+            "_token_type": "prompt",
+            "_type": "date",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 5
+          },
+          {
+            "type": "integer",
+            "name": "new_hh_member_dob_enter",
+            "display": {
+              "prompt": {
+                "text": "3a. If year is not known please add age"
+              }
+            },
+            "_row_num": 13,
+            "__rowNum__": 12,
+            "_token_type": "prompt",
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 6
+          },
+          {
+            "type": "select_multiple",
+            "values_list": "approx",
+            "name": "new_hh_member_dob_approx",
+            "display": {
+              "prompt": {
+                "text": "Tick this box if approximate"
+              }
+            },
+            "_row_num": 14,
+            "__rowNum__": 13,
+            "_token_type": "prompt",
+            "_type": "select_multiple",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 7
+          },
+          {
+            "type": "select_one",
+            "values_list": "gender",
+            "name": "new_hh_member_gender",
+            "display": {
+              "prompt": {
+                "text": "4. Gender"
+              }
+            },
+            "_row_num": 15,
+            "__rowNum__": 14,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 8
+          },
+          {
+            "type": "select_one",
+            "values_list": "resident_status",
+            "name": "new_hh_member_resident",
+            "display": {
+              "prompt": {
+                "text": "5. Is this participant a resident of the household?"
+              },
+              "hint": {
+                "text": "(A resident member is a person who intends to live in the household during the following 3 months at least)"
+              }
+            },
+            "_row_num": 16,
+            "__rowNum__": 15,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 9
+          },
+          {
+            "type": "select_one",
+            "values_list": "yndk",
+            "name": "new_hh_member_censed",
+            "display": {
+              "prompt": {
+                "text": "6. Was this participant registered in the district census a few months ago?"
+              }
+            },
+            "_row_num": 17,
+            "__rowNum__": 16,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 10
+          },
+          {
+            "type": "text",
+            "name": "new_hh_member_censed_extid",
+            "display": {
+              "prompt": {
+                "text": "ExtID"
+              }
+            },
+            "_row_num": 19,
+            "__rowNum__": 18,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 11
+          },
+          {
+            "type": "select_multiple",
+            "values_list": "not_possible",
+            "name": "new_hh_member_censed_extid_not_possible",
+            "display": {
+              "prompt": {
+                "text": "Not possible to retrieve"
+              }
+            },
+            "_row_num": 20,
+            "__rowNum__": 19,
+            "_token_type": "prompt",
+            "_type": "select_multiple",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 12
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 23,
+            "_branch_label_enclosing_screen": "survey/_screen23",
+            "promptIdx": 13
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": []
+        },
+        "operations": [
+          {
+            "clause": "begin screen",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "begin_screen",
+            "_end_screen_clause": {
+              "clause": "end screen",
+              "_row_num": 22,
+              "__rowNum__": 21,
+              "_token_type": "end_screen"
+            },
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\nactivePromptIndicies.push(10);\nif (selected(data('new_hh_member_censed'), 'yes')) {\nactivePromptIndicies.push(11);\nactivePromptIndicies.push(12);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 0
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 23,
+            "operationIdx": 1
+          },
+          {
+            "_row_num": 23,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(13);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 2
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 23,
+            "operationIdx": 3
+          }
+        ],
+        "branch_label_map": {
+          "_screen2": 0,
+          "_contents": 2,
+          "_screen23": 2
+        }
+      }
+    },
+    "dataTableModel": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id",
+        "elementName": "hh_id",
+        "elementSet": "data",
+        "elementPath": "hh_id"
+      },
+      "new_hh_member_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 3,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_name",
+        "elementName": "new_hh_member_name",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_name"
+      },
+      "new_hh_member_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_surname",
+        "elementName": "new_hh_member_surname",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_surname"
+      },
+      "new_hh_member_dob_date": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_date",
+        "elementName": "new_hh_member_dob_date",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_dob_date"
+      },
+      "new_hh_member_dob_month": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_month",
+        "elementName": "new_hh_member_dob_month",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_dob_month"
+      },
+      "new_hh_member_dob_year": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_year",
+        "elementName": "new_hh_member_dob_year",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_dob_year"
+      },
+      "new_hh_member_dob_enter": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 13,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 8,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_enter",
+        "elementName": "new_hh_member_dob_enter",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_dob_enter"
+      },
+      "new_hh_member_dob_approx": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "new_hh_member_dob_approx_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "new_hh_member_dob_approx.items",
+          "notUnitOfRetention": true
+        },
+        "valuesList": "approx",
+        "_defn": [
+          {
+            "_row_num": 14,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 9,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob_approx",
+        "elementName": "new_hh_member_dob_approx",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_dob_approx",
+        "listChildElementKeys": [
+          "new_hh_member_dob_approx_items"
+        ]
+      },
+      "new_hh_member_gender": {
+        "type": "string",
+        "valuesList": "gender",
+        "_defn": [
+          {
+            "_row_num": 15,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 10,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_gender",
+        "elementName": "new_hh_member_gender",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_gender"
+      },
+      "new_hh_member_resident": {
+        "type": "string",
+        "valuesList": "resident_status",
+        "_defn": [
+          {
+            "_row_num": 16,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 11,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_resident",
+        "elementName": "new_hh_member_resident",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_resident"
+      },
+      "new_hh_member_censed": {
+        "type": "string",
+        "valuesList": "yndk",
+        "_defn": [
+          {
+            "_row_num": 17,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 12,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_censed",
+        "elementName": "new_hh_member_censed",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_censed"
+      },
+      "new_hh_member_censed_extid": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 19,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 13,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_censed_extid",
+        "elementName": "new_hh_member_censed_extid",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_censed_extid"
+      },
+      "new_hh_member_censed_extid_not_possible": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "new_hh_member_censed_extid_not_possible_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "new_hh_member_censed_extid_not_possible.items",
+          "notUnitOfRetention": true
+        },
+        "valuesList": "not_possible",
+        "_defn": [
+          {
+            "_row_num": 20,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 14,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_censed_extid_not_possible",
+        "elementName": "new_hh_member_censed_extid_not_possible",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_censed_extid_not_possible",
+        "listChildElementKeys": [
+          "new_hh_member_censed_extid_not_possible_items"
+        ]
+      },
+      "new_hh_member_dob": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "elementType": "date",
+        "elementKey": "new_hh_member_dob",
+        "elementName": "new_hh_member_dob",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_dob"
+      },
+      "new_hh_member_dob_approx_items": {
+        "type": "string",
+        "elementKey": "new_hh_member_dob_approx_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_dob_approx.items",
+        "notUnitOfRetention": true
+      },
+      "new_hh_member_censed_extid_not_possible_items": {
+        "type": "string",
+        "elementKey": "new_hh_member_censed_extid_not_possible_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_censed_extid_not_possible.items",
+        "notUnitOfRetention": true
+      },
+      "_id": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_id",
+        "elementName": "_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_id"
+      },
+      "_row_etag": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_etag",
+        "elementName": "_row_etag",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_etag"
+      },
+      "_sync_state": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_sync_state",
+        "elementName": "_sync_state",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_sync_state"
+      },
+      "_conflict_type": {
+        "type": "integer",
+        "isNotNullable": false,
+        "elementKey": "_conflict_type",
+        "elementName": "_conflict_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_conflict_type"
+      },
+      "_default_access": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_default_access",
+        "elementName": "_default_access",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_default_access"
+      },
+      "_form_id": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_form_id",
+        "elementName": "_form_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_form_id"
+      },
+      "_group_modify": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_modify",
+        "elementName": "_group_modify",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_modify"
+      },
+      "_group_privileged": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_privileged",
+        "elementName": "_group_privileged",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_privileged"
+      },
+      "_group_read_only": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_read_only",
+        "elementName": "_group_read_only",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_read_only"
+      },
+      "_locale": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_locale",
+        "elementName": "_locale",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_locale"
+      },
+      "_row_owner": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_owner",
+        "elementName": "_row_owner",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_owner"
+      },
+      "_savepoint_type": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_type",
+        "elementName": "_savepoint_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_type"
+      },
+      "_savepoint_timestamp": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_savepoint_timestamp",
+        "elementName": "_savepoint_timestamp",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_timestamp"
+      },
+      "_savepoint_creator": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_creator",
+        "elementName": "_savepoint_creator",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_creator"
+      }
+    },
+    "properties": [
+      {
+        "_partition": "Column",
+        "_aspect": "new_hh_member_censed",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"yndk\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":170},{\"choice_list_name\":\"yndk\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":171},{\"choice_list_name\":\"yndk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":172}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "new_hh_member_censed_extid_not_possible",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"not_possible\",\"data_value\":\"not_possible\",\"display\":{\"title\":{\"text\":\"Not possible to retrieve\"}},\"_row_num\":173}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "new_hh_member_dob_approx",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"approx\",\"data_value\":\"approx\",\"display\":{\"title\":{\"text\":\"Approximate age\"}},\"_row_num\":164}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "new_hh_member_gender",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"gender\",\"data_value\":\"male\",\"display\":{\"title\":{\"text\":\"Male\"}},\"_row_num\":165},{\"choice_list_name\":\"gender\",\"data_value\":\"female\",\"display\":{\"title\":{\"text\":\"Female\"}},\"_row_num\":166}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "new_hh_member_resident",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"resident_status\",\"data_value\":\"resident\",\"display\":{\"title\":{\"text\":\"Resident member\"}},\"_row_num\":16},{\"choice_list_name\":\"resident_status\",\"data_value\":\"non_resident\",\"display\":{\"title\":{\"text\":\"Non-Resident member\"}},\"_row_num\":17}]"
+      },
+      {
+        "_partition": "FormType",
+        "_aspect": "default",
+        "_key": "FormType.formType",
+        "_type": "string",
+        "_value": "SURVEY"
+      },
+      {
+        "_partition": "SurveyUtil",
+        "_aspect": "default",
+        "_key": "SurveyUtil.formId",
+        "_type": "string",
+        "_value": "new_hh_info"
+      },
+      {
+        "_partition": "Table",
+        "_aspect": "default",
+        "_key": "defaultViewType",
+        "_type": "string",
+        "_value": "SPREADSHEET"
+      },
+      {
+        "_partition": "Table",
+        "_aspect": "default",
+        "_key": "displayName",
+        "_type": "object",
+        "_value": "{\"text\":\"New Household - Members Details\"}"
+      }
+    ]
+  }
+}

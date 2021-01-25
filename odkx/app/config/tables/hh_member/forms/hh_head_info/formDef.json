@@ -1,0 +1,4039 @@
+{
+  "xlsx": {
+    "initial": [
+      {
+        "clause": "do section survey",
+        "_row_num": 2
+      },
+      {
+        "clause": "goto _finalize",
+        "comments": "skips to the finalize screen where the user chooses to save as incomplete or finalized and instead saves as finalized",
+        "_row_num": 3
+      }
+    ],
+    "survey": [
+      {
+        "clause": "begin screen",
+        "_row_num": 2
+      },
+      {
+        "type": "select_one",
+        "name": "head_name",
+        "display": {
+          "prompt": {
+            "text": "Please enter the name of the new household head"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "type": "assign",
+        "name": "hh_head",
+        "calculation": "assign('hh_head', 'yes')",
+        "_row_num": 4
+      },
+      {
+        "type": "text",
+        "name": "sub_name",
+        "display": {
+          "prompt": {
+            "text": "Please enter the name of the new household head substitute"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "type": "text",
+        "name": "sub_surname",
+        "display": {
+          "prompt": {
+            "text": "Please enter the last name of the new household head substitute"
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "type": "text",
+        "name": "sub_id",
+        "display": {
+          "prompt": {
+            "text": "Ext_ID of the new household head substitute"
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "type": "assign",
+        "name": "hh_sub",
+        "calculation": "assign('hh_sub','yes')",
+        "_row_num": 8
+      },
+      {
+        "type": "select_one",
+        "values_list": "relation_to_hh_head",
+        "name": "hh_sub_relationship",
+        "display": {
+          "prompt": {
+            "text": "28. Household head’s substitute’s relationship with household head"
+          }
+        },
+        "_row_num": 9
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 10
+      },
+      {
+        "type": "note",
+        "name": "debug_hhead",
+        "display": {
+          "prompt": {
+            "text": "the saved hh_head {{data.hh_head}}"
+          }
+        },
+        "_row_num": 12
+      },
+      {
+        "type": "note",
+        "name": "debug_hsub",
+        "display": {
+          "prompt": {
+            "text": "the saved hh_sub {{data.hh_sub}}"
+          }
+        },
+        "_row_num": 13
+      }
+    ],
+    "choices": [
+      {
+        "choice_list_name": "yn",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 2
+      },
+      {
+        "choice_list_name": "yn",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "choice_list_name": "ynpna",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 4
+      },
+      {
+        "choice_list_name": "ynpna",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "choice_list_name": "ynpna",
+        "data_value": "pna",
+        "display": {
+          "title": {
+            "text": "Prefer not to answer"
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 9
+      },
+      {
+        "choice_list_name": "yndkpna",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 10
+      },
+      {
+        "choice_list_name": "yndkpna",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 11
+      },
+      {
+        "choice_list_name": "yndkpna",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 12
+      },
+      {
+        "choice_list_name": "yndkpna",
+        "data_value": "pna",
+        "display": {
+          "title": {
+            "text": "Prefer not to answer"
+          }
+        },
+        "_row_num": 13
+      },
+      {
+        "choice_list_name": "ynna",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 14
+      },
+      {
+        "choice_list_name": "ynna",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 15
+      },
+      {
+        "choice_list_name": "ynna",
+        "data_value": "name",
+        "display": {
+          "title": {
+            "text": "Not Applicable"
+          }
+        },
+        "_row_num": 16
+      },
+      {
+        "choice_list_name": "yno",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 17
+      },
+      {
+        "choice_list_name": "yno",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 18
+      },
+      {
+        "choice_list_name": "yno",
+        "data_value": "other",
+        "display": {
+          "title": {
+            "text": "Other"
+          }
+        },
+        "_row_num": 19
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "husband_wife",
+        "display": {
+          "title": {
+            "text": "Husband/wife of household head"
+          }
+        },
+        "_row_num": 20
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "son_daughter",
+        "display": {
+          "title": {
+            "text": "Son/daughter of household head"
+          }
+        },
+        "_row_num": 21
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "brother_sister",
+        "display": {
+          "title": {
+            "text": "Brother/sister of household head"
+          }
+        },
+        "_row_num": 22
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "father_mother",
+        "display": {
+          "title": {
+            "text": "Father/mother of household head"
+          }
+        },
+        "_row_num": 23
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "son_daughterinlaw",
+        "display": {
+          "title": {
+            "text": "Son/daughter in law of household head"
+          }
+        },
+        "_row_num": 24
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "brother_sisterinlaw",
+        "display": {
+          "title": {
+            "text": "Brother/sister in law of household head"
+          }
+        },
+        "_row_num": 25
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "uncle_aunt",
+        "display": {
+          "title": {
+            "text": "Uncle/aunt of household head"
+          }
+        },
+        "_row_num": 26
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "grandson_granddaughter",
+        "display": {
+          "title": {
+            "text": "Grandson /granddaughter of household head"
+          }
+        },
+        "_row_num": 27
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "stepchild",
+        "display": {
+          "title": {
+            "text": "Stepchild of household head"
+          }
+        },
+        "_row_num": 28
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "adopted_son_daughter",
+        "display": {
+          "title": {
+            "text": "Adopted son/daughter of household head"
+          }
+        },
+        "_row_num": 29
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "cousin",
+        "display": {
+          "title": {
+            "text": "Cousin of household head"
+          }
+        },
+        "_row_num": 30
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "nephew_niece",
+        "display": {
+          "title": {
+            "text": "Nephew/Niece of household head"
+          }
+        },
+        "_row_num": 31
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "unrelated",
+        "display": {
+          "title": {
+            "text": "Unrelated"
+          }
+        },
+        "_row_num": 32
+      },
+      {
+        "choice_list_name": "relation_to_hh_head",
+        "data_value": "other",
+        "display": {
+          "title": {
+            "text": "Other"
+          }
+        },
+        "_row_num": 33
+      }
+    ],
+    "settings": [
+      {
+        "setting_name": "form_id",
+        "value": "hh_head_info",
+        "display": {
+          "title": {
+            "text": "Household Head"
+          }
+        },
+        "_row_num": 2
+      },
+      {
+        "setting_name": "table_id",
+        "value": "hh_member",
+        "_row_num": 3
+      },
+      {
+        "setting_name": "form_version",
+        "value": 20210124001,
+        "_row_num": 4
+      },
+      {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Household Head Info"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "setting_name": "instance_name",
+        "value": "name",
+        "_row_num": 6
+      }
+    ],
+    "model": [
+      {
+        "name": "before_bed_activities",
+        "type": "string",
+        "_row_num": 2
+      },
+      {
+        "name": "dob",
+        "type": "date",
+        "_row_num": 3
+      },
+      {
+        "name": "dob_age",
+        "type": "integer",
+        "_row_num": 4
+      },
+      {
+        "name": "dob_enter_age_new",
+        "type": "string",
+        "_row_num": 5
+      },
+      {
+        "name": "dob_nb",
+        "type": "date",
+        "_row_num": 6
+      },
+      {
+        "name": "dob_new",
+        "type": "date",
+        "_row_num": 7
+      },
+      {
+        "name": "emigrated_where",
+        "type": "string",
+        "_row_num": 8
+      },
+      {
+        "name": "gender",
+        "type": "string",
+        "_row_num": 9
+      },
+      {
+        "name": "head_id",
+        "type": "string",
+        "_row_num": 10
+      },
+      {
+        "name": "head_name",
+        "type": "string",
+        "_row_num": 11
+      },
+      {
+        "name": "head_surname",
+        "type": "string",
+        "_row_num": 12
+      },
+      {
+        "name": "hh_head",
+        "type": "string",
+        "_row_num": 13
+      },
+      {
+        "name": "hh_head_same",
+        "type": "string",
+        "_row_num": 14
+      },
+      {
+        "name": "hh_head_sub_same",
+        "type": "string",
+        "_row_num": 15
+      },
+      {
+        "name": "hh_id",
+        "type": "string",
+        "_row_num": 16
+      },
+      {
+        "name": "hh_sub_relationship",
+        "type": "string",
+        "_row_num": 17
+      },
+      {
+        "name": "id",
+        "type": "string",
+        "_row_num": 18
+      },
+      {
+        "name": "ind_bed_bugs",
+        "type": "string",
+        "_row_num": 19
+      },
+      {
+        "name": "ind_chronic_disease",
+        "type": "string",
+        "_row_num": 20
+      },
+      {
+        "name": "ind_chronic_disease_other",
+        "type": "string",
+        "_row_num": 21
+      },
+      {
+        "name": "ind_deficiency",
+        "type": "string",
+        "_row_num": 22
+      },
+      {
+        "name": "ind_hh_member",
+        "type": "string",
+        "_row_num": 23
+      },
+      {
+        "name": "ind_itchy",
+        "type": "string",
+        "_row_num": 24
+      },
+      {
+        "name": "ind_language",
+        "type": "string",
+        "_row_num": 25
+      },
+      {
+        "name": "ind_malaria_test",
+        "type": "string",
+        "_row_num": 26
+      },
+      {
+        "name": "ind_malaria_test_result",
+        "type": "string",
+        "_row_num": 27
+      },
+      {
+        "name": "ind_malaria_treatment",
+        "type": "string",
+        "_row_num": 28
+      },
+      {
+        "name": "ind_malaria_treatment_no",
+        "type": "string",
+        "_row_num": 29
+      },
+      {
+        "name": "ind_parent_sign_consent",
+        "type": "string",
+        "_row_num": 30
+      },
+      {
+        "name": "ind_parents_alive",
+        "type": "string",
+        "_row_num": 31
+      },
+      {
+        "name": "ind_recent_disease",
+        "type": "string",
+        "_row_num": 32
+      },
+      {
+        "name": "ind_rel_hh_head",
+        "type": "string",
+        "_row_num": 33
+      },
+      {
+        "name": "ind_religion",
+        "type": "string",
+        "_row_num": 34
+      },
+      {
+        "name": "ind_sign_assent",
+        "type": "string",
+        "_row_num": 35
+      },
+      {
+        "name": "ind_sign_consent",
+        "type": "string",
+        "_row_num": 36
+      },
+      {
+        "name": "ind_treatment",
+        "type": "string",
+        "_row_num": 37
+      },
+      {
+        "name": "ind_tunga",
+        "type": "string",
+        "_row_num": 38
+      },
+      {
+        "name": "ind_under_12_parent_sign_consent",
+        "type": "string",
+        "_row_num": 39
+      },
+      {
+        "name": "ind_under_12_parent_sign_consent_who",
+        "type": "string",
+        "_row_num": 40
+      },
+      {
+        "name": "ind_who_respondent",
+        "type": "string",
+        "_row_num": 41
+      },
+      {
+        "name": "ind_worms",
+        "type": "string",
+        "_row_num": 42
+      },
+      {
+        "name": "member_died_when",
+        "type": "date",
+        "_row_num": 43
+      },
+      {
+        "name": "member_died_when_dk",
+        "type": "string",
+        "_row_num": 44
+      },
+      {
+        "name": "member_emigrated_when_date",
+        "type": "date",
+        "_row_num": 45
+      },
+      {
+        "name": "member_emigrated_when_dmy_ago",
+        "type": "string",
+        "_row_num": 46
+      },
+      {
+        "name": "member_emigrated_when_num",
+        "type": "integer",
+        "_row_num": 47
+      },
+      {
+        "name": "member_where_now",
+        "type": "string",
+        "_row_num": 48
+      },
+      {
+        "name": "move_from",
+        "type": "string",
+        "_row_num": 49
+      },
+      {
+        "name": "move_from_census_extid",
+        "type": "string",
+        "_row_num": 50
+      },
+      {
+        "name": "move_from_census_extid_not_possible",
+        "type": "string",
+        "_row_num": 51
+      },
+      {
+        "name": "move_from_district_census",
+        "type": "string",
+        "_row_num": 52
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "_row_num": 53
+      },
+      {
+        "name": "nb_extid",
+        "type": "string",
+        "_row_num": 54
+      },
+      {
+        "name": "nb_name",
+        "type": "string",
+        "_row_num": 55
+      },
+      {
+        "name": "nb_surname",
+        "type": "string",
+        "_row_num": 56
+      },
+      {
+        "name": "new_member_dob_approx",
+        "type": "string",
+        "_row_num": 57
+      },
+      {
+        "name": "new_member_gender",
+        "type": "string",
+        "_row_num": 58
+      },
+      {
+        "name": "new_member_move_in_date",
+        "type": "date",
+        "_row_num": 59
+      },
+      {
+        "name": "new_member_move_in_resident",
+        "type": "string",
+        "_row_num": 60
+      },
+      {
+        "name": "new_member_move_in_select",
+        "type": "string",
+        "_row_num": 61
+      },
+      {
+        "name": "new_member_newborn_dob_approx",
+        "type": "string",
+        "_row_num": 62
+      },
+      {
+        "name": "new_member_newborn_dob_enter",
+        "type": "integer",
+        "_row_num": 63
+      },
+      {
+        "name": "new_member_newborn_or_moved_in",
+        "type": "string",
+        "_row_num": 64
+      },
+      {
+        "name": "new_member_newborn_resident",
+        "type": "string",
+        "_row_num": 65
+      },
+      {
+        "name": "nm_name",
+        "type": "string",
+        "_row_num": 66
+      },
+      {
+        "name": "nm_surname",
+        "type": "string",
+        "_row_num": 67
+      },
+      {
+        "name": "recent_disease_care_type",
+        "type": "string",
+        "_row_num": 68
+      },
+      {
+        "name": "recent_disease_seek_care",
+        "type": "string",
+        "_row_num": 69
+      },
+      {
+        "name": "recent_disease_symptoms",
+        "type": "string",
+        "_row_num": 70
+      },
+      {
+        "name": "recent_disease_yes",
+        "type": "string",
+        "_row_num": 71
+      },
+      {
+        "name": "recent_disease_yes_other",
+        "type": "string",
+        "_row_num": 72
+      },
+      {
+        "name": "resident_status",
+        "type": "string",
+        "_row_num": 73
+      },
+      {
+        "name": "sleep_net_last_night",
+        "type": "string",
+        "_row_num": 74
+      },
+      {
+        "name": "sleep_net_last_night_num",
+        "type": "integer",
+        "_row_num": 75
+      },
+      {
+        "name": "sleep_net_last_night_num_dk",
+        "type": "string",
+        "_row_num": 76
+      },
+      {
+        "name": "sub_id",
+        "type": "string",
+        "_row_num": 77
+      },
+      {
+        "name": "sub_name",
+        "type": "string",
+        "_row_num": 78
+      },
+      {
+        "name": "sub_surname",
+        "type": "string",
+        "_row_num": 79
+      },
+      {
+        "name": "surname",
+        "type": "string",
+        "_row_num": 80
+      },
+      {
+        "name": "time_get_out_bed",
+        "type": "string",
+        "_row_num": 81
+      },
+      {
+        "name": "time_go_bed",
+        "type": "string",
+        "_row_num": 82
+      },
+      {
+        "name": "time_go_outside",
+        "type": "string",
+        "_row_num": 83
+      },
+      {
+        "name": "time_indoors",
+        "type": "string",
+        "_row_num": 84
+      },
+      {
+        "name": "travel_abroad",
+        "type": "string",
+        "_row_num": 85
+      },
+      {
+        "name": "travel_countries",
+        "type": "string",
+        "_row_num": 86
+      },
+      {
+        "name": "travel_months",
+        "type": "string",
+        "_row_num": 87
+      },
+      {
+        "name": "travel_regularly",
+        "type": "string",
+        "_row_num": 88
+      },
+      {
+        "name": "travel_regularly_trips",
+        "type": "integer",
+        "_row_num": 89
+      },
+      {
+        "name": "travel_regularly_trips_district",
+        "type": "string",
+        "_row_num": 90
+      },
+      {
+        "name": "travel_regularly_trips_reason",
+        "type": "string",
+        "_row_num": 91
+      },
+      {
+        "name": "travel_sleep_net",
+        "type": "string",
+        "_row_num": 92
+      },
+      {
+        "name": "what_do_before_sunrise",
+        "type": "string",
+        "_row_num": 93
+      },
+      {
+        "name": "wra_breastfeed",
+        "type": "string",
+        "_row_num": 94
+      },
+      {
+        "name": "wra_iptp",
+        "type": "string",
+        "_row_num": 95
+      },
+      {
+        "name": "wra_period",
+        "type": "string",
+        "_row_num": 96
+      },
+      {
+        "name": "wra_pregnant",
+        "type": "string",
+        "_row_num": 97
+      }
+    ]
+  },
+  "specification": {
+    "column_types": {
+      "_screen_block": "function",
+      "condition": "formula",
+      "constraint": "formula",
+      "required": "formula",
+      "calculation": "formula",
+      "newRowInitialElementKeyToValueMap": "formula",
+      "openRowInitialElementKeyToValueMap": "formula",
+      "selectionArgs": "formula",
+      "url": "formula",
+      "uri": "formula",
+      "callback": "formula(context)",
+      "choice_filter": "formula(choice_item)",
+      "templatePath": "requirejs_path"
+    },
+    "settings": {
+      "form_id": {
+        "setting_name": "form_id",
+        "value": "hh_head_info",
+        "display": {
+          "title": {
+            "text": "Household Head"
+          }
+        },
+        "_row_num": 2
+      },
+      "table_id": {
+        "setting_name": "table_id",
+        "value": "hh_member",
+        "_row_num": 3
+      },
+      "form_version": {
+        "setting_name": "form_version",
+        "value": 20210124001,
+        "_row_num": 4
+      },
+      "survey": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Household Head Info"
+          }
+        },
+        "_row_num": 5
+      },
+      "instance_name": {
+        "setting_name": "instance_name",
+        "value": "name",
+        "_row_num": 6
+      },
+      "_locales": {
+        "setting_name": "_locales",
+        "_row_num": 5,
+        "value": [
+          {
+            "display": {
+              "locale": {
+                "text": "default"
+              }
+            },
+            "name": "default"
+          }
+        ]
+      },
+      "_default_locale": {
+        "setting_name": "_default_locale",
+        "_row_num": 5,
+        "value": "default"
+      },
+      "initial": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Household Head Info"
+          }
+        },
+        "_row_num": 5
+      }
+    },
+    "choices": {
+      "yn": [
+        {
+          "choice_list_name": "yn",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 2
+        },
+        {
+          "choice_list_name": "yn",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 3
+        }
+      ],
+      "ynpna": [
+        {
+          "choice_list_name": "ynpna",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 4
+        },
+        {
+          "choice_list_name": "ynpna",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 5
+        },
+        {
+          "choice_list_name": "ynpna",
+          "data_value": "pna",
+          "display": {
+            "title": {
+              "text": "Prefer not to answer"
+            }
+          },
+          "_row_num": 6
+        }
+      ],
+      "yndk": [
+        {
+          "choice_list_name": "yndk",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 7
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 8
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 9
+        }
+      ],
+      "yndkpna": [
+        {
+          "choice_list_name": "yndkpna",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 10
+        },
+        {
+          "choice_list_name": "yndkpna",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 11
+        },
+        {
+          "choice_list_name": "yndkpna",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 12
+        },
+        {
+          "choice_list_name": "yndkpna",
+          "data_value": "pna",
+          "display": {
+            "title": {
+              "text": "Prefer not to answer"
+            }
+          },
+          "_row_num": 13
+        }
+      ],
+      "ynna": [
+        {
+          "choice_list_name": "ynna",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 14
+        },
+        {
+          "choice_list_name": "ynna",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 15
+        },
+        {
+          "choice_list_name": "ynna",
+          "data_value": "name",
+          "display": {
+            "title": {
+              "text": "Not Applicable"
+            }
+          },
+          "_row_num": 16
+        }
+      ],
+      "yno": [
+        {
+          "choice_list_name": "yno",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 17
+        },
+        {
+          "choice_list_name": "yno",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 18
+        },
+        {
+          "choice_list_name": "yno",
+          "data_value": "other",
+          "display": {
+            "title": {
+              "text": "Other"
+            }
+          },
+          "_row_num": 19
+        }
+      ],
+      "relation_to_hh_head": [
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "husband_wife",
+          "display": {
+            "title": {
+              "text": "Husband/wife of household head"
+            }
+          },
+          "_row_num": 20
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "son_daughter",
+          "display": {
+            "title": {
+              "text": "Son/daughter of household head"
+            }
+          },
+          "_row_num": 21
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "brother_sister",
+          "display": {
+            "title": {
+              "text": "Brother/sister of household head"
+            }
+          },
+          "_row_num": 22
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "father_mother",
+          "display": {
+            "title": {
+              "text": "Father/mother of household head"
+            }
+          },
+          "_row_num": 23
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "son_daughterinlaw",
+          "display": {
+            "title": {
+              "text": "Son/daughter in law of household head"
+            }
+          },
+          "_row_num": 24
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "brother_sisterinlaw",
+          "display": {
+            "title": {
+              "text": "Brother/sister in law of household head"
+            }
+          },
+          "_row_num": 25
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "uncle_aunt",
+          "display": {
+            "title": {
+              "text": "Uncle/aunt of household head"
+            }
+          },
+          "_row_num": 26
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "grandson_granddaughter",
+          "display": {
+            "title": {
+              "text": "Grandson /granddaughter of household head"
+            }
+          },
+          "_row_num": 27
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "stepchild",
+          "display": {
+            "title": {
+              "text": "Stepchild of household head"
+            }
+          },
+          "_row_num": 28
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "adopted_son_daughter",
+          "display": {
+            "title": {
+              "text": "Adopted son/daughter of household head"
+            }
+          },
+          "_row_num": 29
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "cousin",
+          "display": {
+            "title": {
+              "text": "Cousin of household head"
+            }
+          },
+          "_row_num": 30
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "nephew_niece",
+          "display": {
+            "title": {
+              "text": "Nephew/Niece of household head"
+            }
+          },
+          "_row_num": 31
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "unrelated",
+          "display": {
+            "title": {
+              "text": "Unrelated"
+            }
+          },
+          "_row_num": 32
+        },
+        {
+          "choice_list_name": "relation_to_hh_head",
+          "data_value": "other",
+          "display": {
+            "title": {
+              "text": "Other"
+            }
+          },
+          "_row_num": 33
+        }
+      ]
+    },
+    "queries": {},
+    "calculates": {},
+    "model": {
+      "before_bed_activities": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "before_bed_activities"
+      },
+      "dob": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 3,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob"
+      },
+      "dob_age": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob_age"
+      },
+      "dob_enter_age_new": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob_enter_age_new"
+      },
+      "dob_nb": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob_nb"
+      },
+      "dob_new": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob_new"
+      },
+      "emigrated_where": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "emigrated_where"
+      },
+      "gender": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "gender"
+      },
+      "head_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "head_id"
+      },
+      "head_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 3,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 11,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "head_name"
+      },
+      "head_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 12,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "head_surname"
+      },
+      "hh_head": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 13,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_head"
+      },
+      "hh_head_same": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 14,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_head_same"
+      },
+      "hh_head_sub_same": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 15,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_head_sub_same"
+      },
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 16,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id"
+      },
+      "hh_sub_relationship": {
+        "type": "string",
+        "valuesList": "relation_to_hh_head",
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 17,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_sub_relationship"
+      },
+      "id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 18,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "id"
+      },
+      "ind_bed_bugs": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 19,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_bed_bugs"
+      },
+      "ind_chronic_disease": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 20,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_chronic_disease"
+      },
+      "ind_chronic_disease_other": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 21,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_chronic_disease_other"
+      },
+      "ind_deficiency": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 22,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_deficiency"
+      },
+      "ind_hh_member": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 23,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_hh_member"
+      },
+      "ind_itchy": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 24,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_itchy"
+      },
+      "ind_language": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 25,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_language"
+      },
+      "ind_malaria_test": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 26,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_malaria_test"
+      },
+      "ind_malaria_test_result": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 27,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_malaria_test_result"
+      },
+      "ind_malaria_treatment": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 28,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_malaria_treatment"
+      },
+      "ind_malaria_treatment_no": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 29,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_malaria_treatment_no"
+      },
+      "ind_parent_sign_consent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 30,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_parent_sign_consent"
+      },
+      "ind_parents_alive": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 31,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_parents_alive"
+      },
+      "ind_recent_disease": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 32,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_recent_disease"
+      },
+      "ind_rel_hh_head": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 33,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_rel_hh_head"
+      },
+      "ind_religion": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 34,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_religion"
+      },
+      "ind_sign_assent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 35,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_sign_assent"
+      },
+      "ind_sign_consent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 36,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_sign_consent"
+      },
+      "ind_treatment": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 37,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_treatment"
+      },
+      "ind_tunga": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 38,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_tunga"
+      },
+      "ind_under_12_parent_sign_consent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 39,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_under_12_parent_sign_consent"
+      },
+      "ind_under_12_parent_sign_consent_who": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 40,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_under_12_parent_sign_consent_who"
+      },
+      "ind_who_respondent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 41,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_who_respondent"
+      },
+      "ind_worms": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 42,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_worms"
+      },
+      "member_died_when": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 43,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_died_when"
+      },
+      "member_died_when_dk": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 44,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_died_when_dk"
+      },
+      "member_emigrated_when_date": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 45,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_emigrated_when_date"
+      },
+      "member_emigrated_when_dmy_ago": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 46,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_emigrated_when_dmy_ago"
+      },
+      "member_emigrated_when_num": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 47,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_emigrated_when_num"
+      },
+      "member_where_now": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 48,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_where_now"
+      },
+      "move_from": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 49,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "move_from"
+      },
+      "move_from_census_extid": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 50,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "move_from_census_extid"
+      },
+      "move_from_census_extid_not_possible": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 51,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "move_from_census_extid_not_possible"
+      },
+      "move_from_district_census": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 52,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "move_from_district_census"
+      },
+      "name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 53,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "name"
+      },
+      "nb_extid": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 54,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nb_extid"
+      },
+      "nb_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 55,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nb_name"
+      },
+      "nb_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 56,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nb_surname"
+      },
+      "new_member_dob_approx": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 57,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_dob_approx"
+      },
+      "new_member_gender": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 58,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_gender"
+      },
+      "new_member_move_in_date": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 59,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_move_in_date"
+      },
+      "new_member_move_in_resident": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 60,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_move_in_resident"
+      },
+      "new_member_move_in_select": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 61,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_move_in_select"
+      },
+      "new_member_newborn_dob_approx": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 62,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_newborn_dob_approx"
+      },
+      "new_member_newborn_dob_enter": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 63,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_newborn_dob_enter"
+      },
+      "new_member_newborn_or_moved_in": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 64,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_newborn_or_moved_in"
+      },
+      "new_member_newborn_resident": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 65,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_newborn_resident"
+      },
+      "nm_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 66,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nm_name"
+      },
+      "nm_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 67,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nm_surname"
+      },
+      "recent_disease_care_type": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 68,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_care_type"
+      },
+      "recent_disease_seek_care": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 69,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_seek_care"
+      },
+      "recent_disease_symptoms": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 70,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_symptoms"
+      },
+      "recent_disease_yes": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 71,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_yes"
+      },
+      "recent_disease_yes_other": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 72,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_yes_other"
+      },
+      "resident_status": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 73,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "resident_status"
+      },
+      "sleep_net_last_night": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 74,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sleep_net_last_night"
+      },
+      "sleep_net_last_night_num": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 75,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sleep_net_last_night_num"
+      },
+      "sleep_net_last_night_num_dk": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 76,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sleep_net_last_night_num_dk"
+      },
+      "sub_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 77,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sub_id"
+      },
+      "sub_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 78,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sub_name"
+      },
+      "sub_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 79,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sub_surname"
+      },
+      "surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 80,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "surname"
+      },
+      "time_get_out_bed": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 81,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "time_get_out_bed"
+      },
+      "time_go_bed": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 82,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "time_go_bed"
+      },
+      "time_go_outside": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 83,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "time_go_outside"
+      },
+      "time_indoors": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 84,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "time_indoors"
+      },
+      "travel_abroad": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 85,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_abroad"
+      },
+      "travel_countries": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 86,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_countries"
+      },
+      "travel_months": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 87,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_months"
+      },
+      "travel_regularly": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 88,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_regularly"
+      },
+      "travel_regularly_trips": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 89,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_regularly_trips"
+      },
+      "travel_regularly_trips_district": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 90,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_regularly_trips_district"
+      },
+      "travel_regularly_trips_reason": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 91,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_regularly_trips_reason"
+      },
+      "travel_sleep_net": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 92,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_sleep_net"
+      },
+      "what_do_before_sunrise": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 93,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "what_do_before_sunrise"
+      },
+      "wra_breastfeed": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 94,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "wra_breastfeed"
+      },
+      "wra_iptp": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 95,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "wra_iptp"
+      },
+      "wra_period": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 96,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "wra_period"
+      },
+      "wra_pregnant": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 97,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "wra_pregnant"
+      }
+    },
+    "section_names": [
+      "initial",
+      "survey"
+    ],
+    "sections": {
+      "initial": {
+        "section_name": "initial",
+        "nested_sections": {
+          "survey": true
+        },
+        "reachable_sections": {
+          "survey": true
+        },
+        "prompts": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "prompt",
+            "_do_section_name": "survey",
+            "_type": "_section",
+            "promptIdx": 0,
+            "display": {
+              "title": {
+                "text": "Household Head Info"
+              }
+            },
+            "_branch_label_enclosing_screen": "survey/0"
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 4,
+            "_branch_label_enclosing_screen": "initial/_screen4",
+            "promptIdx": 1
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": []
+        },
+        "operations": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "do_section",
+            "_do_section_name": "survey",
+            "operationIdx": 0
+          },
+          {
+            "clause": "goto _finalize",
+            "comments": "skips to the finalize screen where the user chooses to save as incomplete or finalized and instead saves as finalized",
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "goto_label",
+            "_branch_label": "_finalize",
+            "operationIdx": 1
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 4,
+            "operationIdx": 2
+          },
+          {
+            "_row_num": 4,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 3
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 4
+          },
+          {
+            "_token_type": "validate",
+            "clause": "validate finalize",
+            "_sweep_name": "finalize",
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 5
+          },
+          {
+            "_token_type": "save_and_terminate",
+            "clause": "save and terminate",
+            "calculation": true,
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 6
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 7
+          }
+        ],
+        "branch_label_map": {
+          "_contents": 3,
+          "_screen4": 3,
+          "_finalize": 5
+        }
+      },
+      "survey": {
+        "section_name": "survey",
+        "nested_sections": {},
+        "reachable_sections": {},
+        "prompts": [
+          {
+            "type": "select_one",
+            "name": "head_name",
+            "display": {
+              "prompt": {
+                "text": "Please enter the name of the new household head"
+              }
+            },
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 0
+          },
+          {
+            "type": "text",
+            "name": "sub_name",
+            "display": {
+              "prompt": {
+                "text": "Please enter the name of the new household head substitute"
+              }
+            },
+            "_row_num": 5,
+            "__rowNum__": 4,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 1
+          },
+          {
+            "type": "text",
+            "name": "sub_surname",
+            "display": {
+              "prompt": {
+                "text": "Please enter the last name of the new household head substitute"
+              }
+            },
+            "_row_num": 6,
+            "__rowNum__": 5,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 2
+          },
+          {
+            "type": "text",
+            "name": "sub_id",
+            "display": {
+              "prompt": {
+                "text": "Ext_ID of the new household head substitute"
+              }
+            },
+            "_row_num": 7,
+            "__rowNum__": 6,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 3
+          },
+          {
+            "type": "select_one",
+            "values_list": "relation_to_hh_head",
+            "name": "hh_sub_relationship",
+            "display": {
+              "prompt": {
+                "text": "28. Household head’s substitute’s relationship with household head"
+              }
+            },
+            "_row_num": 9,
+            "__rowNum__": 8,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 4
+          },
+          {
+            "type": "note",
+            "name": "debug_hhead",
+            "display": {
+              "prompt": {
+                "text": "the saved hh_head {{data.hh_head}}"
+              }
+            },
+            "_row_num": 12,
+            "__rowNum__": 11,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen12",
+            "promptIdx": 5
+          },
+          {
+            "type": "note",
+            "name": "debug_hsub",
+            "display": {
+              "prompt": {
+                "text": "the saved hh_sub {{data.hh_sub}}"
+              }
+            },
+            "_row_num": 13,
+            "__rowNum__": 12,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen13",
+            "promptIdx": 6
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 14,
+            "_branch_label_enclosing_screen": "survey/_screen14",
+            "promptIdx": 7
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": []
+        },
+        "operations": [
+          {
+            "clause": "begin screen",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "begin_screen",
+            "_end_screen_clause": {
+              "clause": "end screen",
+              "_row_num": 10,
+              "__rowNum__": 9,
+              "_token_type": "end_screen"
+            },
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nassign('hh_head', assign('hh_head', 'yes'));\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nassign('hh_sub', assign('hh_sub','yes'));\nactivePromptIndicies.push(4);\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 0
+          },
+          {
+            "_row_num": 12,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(5);\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 1
+          },
+          {
+            "_row_num": 13,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(6);\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 2
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 14,
+            "operationIdx": 3
+          },
+          {
+            "_row_num": 14,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 4
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 14,
+            "operationIdx": 5
+          }
+        ],
+        "branch_label_map": {
+          "_screen2": 0,
+          "_screen12": 1,
+          "_screen13": 2,
+          "_contents": 4,
+          "_screen14": 4
+        }
+      }
+    },
+    "dataTableModel": {
+      "before_bed_activities": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "before_bed_activities",
+        "elementName": "before_bed_activities",
+        "elementSet": "data",
+        "elementPath": "before_bed_activities"
+      },
+      "dob": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 3,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob",
+        "elementName": "dob",
+        "elementSet": "data",
+        "elementPath": "dob"
+      },
+      "dob_age": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob_age",
+        "elementName": "dob_age",
+        "elementSet": "data",
+        "elementPath": "dob_age"
+      },
+      "dob_enter_age_new": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob_enter_age_new",
+        "elementName": "dob_enter_age_new",
+        "elementSet": "data",
+        "elementPath": "dob_enter_age_new"
+      },
+      "dob_nb": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob_nb",
+        "elementName": "dob_nb",
+        "elementSet": "data",
+        "elementPath": "dob_nb"
+      },
+      "dob_new": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "dob_new",
+        "elementName": "dob_new",
+        "elementSet": "data",
+        "elementPath": "dob_new"
+      },
+      "emigrated_where": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "emigrated_where",
+        "elementName": "emigrated_where",
+        "elementSet": "data",
+        "elementPath": "emigrated_where"
+      },
+      "gender": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "gender",
+        "elementName": "gender",
+        "elementSet": "data",
+        "elementPath": "gender"
+      },
+      "head_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "head_id",
+        "elementName": "head_id",
+        "elementSet": "data",
+        "elementPath": "head_id"
+      },
+      "head_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 3,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 11,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "head_name",
+        "elementName": "head_name",
+        "elementSet": "data",
+        "elementPath": "head_name"
+      },
+      "head_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 12,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "head_surname",
+        "elementName": "head_surname",
+        "elementSet": "data",
+        "elementPath": "head_surname"
+      },
+      "hh_head": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 13,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_head",
+        "elementName": "hh_head",
+        "elementSet": "data",
+        "elementPath": "hh_head"
+      },
+      "hh_head_same": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 14,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_head_same",
+        "elementName": "hh_head_same",
+        "elementSet": "data",
+        "elementPath": "hh_head_same"
+      },
+      "hh_head_sub_same": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 15,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_head_sub_same",
+        "elementName": "hh_head_sub_same",
+        "elementSet": "data",
+        "elementPath": "hh_head_sub_same"
+      },
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 16,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id",
+        "elementName": "hh_id",
+        "elementSet": "data",
+        "elementPath": "hh_id"
+      },
+      "hh_sub_relationship": {
+        "type": "string",
+        "valuesList": "relation_to_hh_head",
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 17,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_sub_relationship",
+        "elementName": "hh_sub_relationship",
+        "elementSet": "data",
+        "elementPath": "hh_sub_relationship"
+      },
+      "id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 18,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "id",
+        "elementName": "id",
+        "elementSet": "data",
+        "elementPath": "id"
+      },
+      "ind_bed_bugs": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 19,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_bed_bugs",
+        "elementName": "ind_bed_bugs",
+        "elementSet": "data",
+        "elementPath": "ind_bed_bugs"
+      },
+      "ind_chronic_disease": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 20,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_chronic_disease",
+        "elementName": "ind_chronic_disease",
+        "elementSet": "data",
+        "elementPath": "ind_chronic_disease"
+      },
+      "ind_chronic_disease_other": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 21,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_chronic_disease_other",
+        "elementName": "ind_chronic_disease_other",
+        "elementSet": "data",
+        "elementPath": "ind_chronic_disease_other"
+      },
+      "ind_deficiency": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 22,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_deficiency",
+        "elementName": "ind_deficiency",
+        "elementSet": "data",
+        "elementPath": "ind_deficiency"
+      },
+      "ind_hh_member": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 23,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_hh_member",
+        "elementName": "ind_hh_member",
+        "elementSet": "data",
+        "elementPath": "ind_hh_member"
+      },
+      "ind_itchy": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 24,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_itchy",
+        "elementName": "ind_itchy",
+        "elementSet": "data",
+        "elementPath": "ind_itchy"
+      },
+      "ind_language": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 25,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_language",
+        "elementName": "ind_language",
+        "elementSet": "data",
+        "elementPath": "ind_language"
+      },
+      "ind_malaria_test": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 26,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_malaria_test",
+        "elementName": "ind_malaria_test",
+        "elementSet": "data",
+        "elementPath": "ind_malaria_test"
+      },
+      "ind_malaria_test_result": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 27,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_malaria_test_result",
+        "elementName": "ind_malaria_test_result",
+        "elementSet": "data",
+        "elementPath": "ind_malaria_test_result"
+      },
+      "ind_malaria_treatment": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 28,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_malaria_treatment",
+        "elementName": "ind_malaria_treatment",
+        "elementSet": "data",
+        "elementPath": "ind_malaria_treatment"
+      },
+      "ind_malaria_treatment_no": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 29,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_malaria_treatment_no",
+        "elementName": "ind_malaria_treatment_no",
+        "elementSet": "data",
+        "elementPath": "ind_malaria_treatment_no"
+      },
+      "ind_parent_sign_consent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 30,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_parent_sign_consent",
+        "elementName": "ind_parent_sign_consent",
+        "elementSet": "data",
+        "elementPath": "ind_parent_sign_consent"
+      },
+      "ind_parents_alive": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 31,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_parents_alive",
+        "elementName": "ind_parents_alive",
+        "elementSet": "data",
+        "elementPath": "ind_parents_alive"
+      },
+      "ind_recent_disease": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 32,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_recent_disease",
+        "elementName": "ind_recent_disease",
+        "elementSet": "data",
+        "elementPath": "ind_recent_disease"
+      },
+      "ind_rel_hh_head": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 33,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_rel_hh_head",
+        "elementName": "ind_rel_hh_head",
+        "elementSet": "data",
+        "elementPath": "ind_rel_hh_head"
+      },
+      "ind_religion": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 34,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_religion",
+        "elementName": "ind_religion",
+        "elementSet": "data",
+        "elementPath": "ind_religion"
+      },
+      "ind_sign_assent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 35,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_sign_assent",
+        "elementName": "ind_sign_assent",
+        "elementSet": "data",
+        "elementPath": "ind_sign_assent"
+      },
+      "ind_sign_consent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 36,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_sign_consent",
+        "elementName": "ind_sign_consent",
+        "elementSet": "data",
+        "elementPath": "ind_sign_consent"
+      },
+      "ind_treatment": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 37,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_treatment",
+        "elementName": "ind_treatment",
+        "elementSet": "data",
+        "elementPath": "ind_treatment"
+      },
+      "ind_tunga": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 38,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_tunga",
+        "elementName": "ind_tunga",
+        "elementSet": "data",
+        "elementPath": "ind_tunga"
+      },
+      "ind_under_12_parent_sign_consent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 39,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_under_12_parent_sign_consent",
+        "elementName": "ind_under_12_parent_sign_consent",
+        "elementSet": "data",
+        "elementPath": "ind_under_12_parent_sign_consent"
+      },
+      "ind_under_12_parent_sign_consent_who": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 40,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_under_12_parent_sign_consent_who",
+        "elementName": "ind_under_12_parent_sign_consent_who",
+        "elementSet": "data",
+        "elementPath": "ind_under_12_parent_sign_consent_who"
+      },
+      "ind_who_respondent": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 41,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_who_respondent",
+        "elementName": "ind_who_respondent",
+        "elementSet": "data",
+        "elementPath": "ind_who_respondent"
+      },
+      "ind_worms": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 42,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "ind_worms",
+        "elementName": "ind_worms",
+        "elementSet": "data",
+        "elementPath": "ind_worms"
+      },
+      "member_died_when": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 43,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_died_when",
+        "elementName": "member_died_when",
+        "elementSet": "data",
+        "elementPath": "member_died_when"
+      },
+      "member_died_when_dk": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 44,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_died_when_dk",
+        "elementName": "member_died_when_dk",
+        "elementSet": "data",
+        "elementPath": "member_died_when_dk"
+      },
+      "member_emigrated_when_date": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 45,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_emigrated_when_date",
+        "elementName": "member_emigrated_when_date",
+        "elementSet": "data",
+        "elementPath": "member_emigrated_when_date"
+      },
+      "member_emigrated_when_dmy_ago": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 46,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_emigrated_when_dmy_ago",
+        "elementName": "member_emigrated_when_dmy_ago",
+        "elementSet": "data",
+        "elementPath": "member_emigrated_when_dmy_ago"
+      },
+      "member_emigrated_when_num": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 47,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_emigrated_when_num",
+        "elementName": "member_emigrated_when_num",
+        "elementSet": "data",
+        "elementPath": "member_emigrated_when_num"
+      },
+      "member_where_now": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 48,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "member_where_now",
+        "elementName": "member_where_now",
+        "elementSet": "data",
+        "elementPath": "member_where_now"
+      },
+      "move_from": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 49,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "move_from",
+        "elementName": "move_from",
+        "elementSet": "data",
+        "elementPath": "move_from"
+      },
+      "move_from_census_extid": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 50,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "move_from_census_extid",
+        "elementName": "move_from_census_extid",
+        "elementSet": "data",
+        "elementPath": "move_from_census_extid"
+      },
+      "move_from_census_extid_not_possible": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 51,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "move_from_census_extid_not_possible",
+        "elementName": "move_from_census_extid_not_possible",
+        "elementSet": "data",
+        "elementPath": "move_from_census_extid_not_possible"
+      },
+      "move_from_district_census": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 52,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "move_from_district_census",
+        "elementName": "move_from_district_census",
+        "elementSet": "data",
+        "elementPath": "move_from_district_census"
+      },
+      "name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 53,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "name",
+        "elementName": "name",
+        "elementSet": "data",
+        "elementPath": "name"
+      },
+      "nb_extid": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 54,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nb_extid",
+        "elementName": "nb_extid",
+        "elementSet": "data",
+        "elementPath": "nb_extid"
+      },
+      "nb_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 55,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nb_name",
+        "elementName": "nb_name",
+        "elementSet": "data",
+        "elementPath": "nb_name"
+      },
+      "nb_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 56,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nb_surname",
+        "elementName": "nb_surname",
+        "elementSet": "data",
+        "elementPath": "nb_surname"
+      },
+      "new_member_dob_approx": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 57,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_dob_approx",
+        "elementName": "new_member_dob_approx",
+        "elementSet": "data",
+        "elementPath": "new_member_dob_approx"
+      },
+      "new_member_gender": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 58,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_gender",
+        "elementName": "new_member_gender",
+        "elementSet": "data",
+        "elementPath": "new_member_gender"
+      },
+      "new_member_move_in_date": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 59,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_move_in_date",
+        "elementName": "new_member_move_in_date",
+        "elementSet": "data",
+        "elementPath": "new_member_move_in_date"
+      },
+      "new_member_move_in_resident": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 60,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_move_in_resident",
+        "elementName": "new_member_move_in_resident",
+        "elementSet": "data",
+        "elementPath": "new_member_move_in_resident"
+      },
+      "new_member_move_in_select": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 61,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_move_in_select",
+        "elementName": "new_member_move_in_select",
+        "elementSet": "data",
+        "elementPath": "new_member_move_in_select"
+      },
+      "new_member_newborn_dob_approx": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 62,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_newborn_dob_approx",
+        "elementName": "new_member_newborn_dob_approx",
+        "elementSet": "data",
+        "elementPath": "new_member_newborn_dob_approx"
+      },
+      "new_member_newborn_dob_enter": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 63,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_newborn_dob_enter",
+        "elementName": "new_member_newborn_dob_enter",
+        "elementSet": "data",
+        "elementPath": "new_member_newborn_dob_enter"
+      },
+      "new_member_newborn_or_moved_in": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 64,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_newborn_or_moved_in",
+        "elementName": "new_member_newborn_or_moved_in",
+        "elementSet": "data",
+        "elementPath": "new_member_newborn_or_moved_in"
+      },
+      "new_member_newborn_resident": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 65,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_member_newborn_resident",
+        "elementName": "new_member_newborn_resident",
+        "elementSet": "data",
+        "elementPath": "new_member_newborn_resident"
+      },
+      "nm_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 66,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nm_name",
+        "elementName": "nm_name",
+        "elementSet": "data",
+        "elementPath": "nm_name"
+      },
+      "nm_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 67,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "nm_surname",
+        "elementName": "nm_surname",
+        "elementSet": "data",
+        "elementPath": "nm_surname"
+      },
+      "recent_disease_care_type": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 68,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_care_type",
+        "elementName": "recent_disease_care_type",
+        "elementSet": "data",
+        "elementPath": "recent_disease_care_type"
+      },
+      "recent_disease_seek_care": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 69,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_seek_care",
+        "elementName": "recent_disease_seek_care",
+        "elementSet": "data",
+        "elementPath": "recent_disease_seek_care"
+      },
+      "recent_disease_symptoms": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 70,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_symptoms",
+        "elementName": "recent_disease_symptoms",
+        "elementSet": "data",
+        "elementPath": "recent_disease_symptoms"
+      },
+      "recent_disease_yes": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 71,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_yes",
+        "elementName": "recent_disease_yes",
+        "elementSet": "data",
+        "elementPath": "recent_disease_yes"
+      },
+      "recent_disease_yes_other": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 72,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "recent_disease_yes_other",
+        "elementName": "recent_disease_yes_other",
+        "elementSet": "data",
+        "elementPath": "recent_disease_yes_other"
+      },
+      "resident_status": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 73,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "resident_status",
+        "elementName": "resident_status",
+        "elementSet": "data",
+        "elementPath": "resident_status"
+      },
+      "sleep_net_last_night": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 74,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sleep_net_last_night",
+        "elementName": "sleep_net_last_night",
+        "elementSet": "data",
+        "elementPath": "sleep_net_last_night"
+      },
+      "sleep_net_last_night_num": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 75,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sleep_net_last_night_num",
+        "elementName": "sleep_net_last_night_num",
+        "elementSet": "data",
+        "elementPath": "sleep_net_last_night_num"
+      },
+      "sleep_net_last_night_num_dk": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 76,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sleep_net_last_night_num_dk",
+        "elementName": "sleep_net_last_night_num_dk",
+        "elementSet": "data",
+        "elementPath": "sleep_net_last_night_num_dk"
+      },
+      "sub_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 77,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sub_id",
+        "elementName": "sub_id",
+        "elementSet": "data",
+        "elementPath": "sub_id"
+      },
+      "sub_name": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 78,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sub_name",
+        "elementName": "sub_name",
+        "elementSet": "data",
+        "elementPath": "sub_name"
+      },
+      "sub_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 79,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "sub_surname",
+        "elementName": "sub_surname",
+        "elementSet": "data",
+        "elementPath": "sub_surname"
+      },
+      "surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 80,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "surname",
+        "elementName": "surname",
+        "elementSet": "data",
+        "elementPath": "surname"
+      },
+      "time_get_out_bed": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 81,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "time_get_out_bed",
+        "elementName": "time_get_out_bed",
+        "elementSet": "data",
+        "elementPath": "time_get_out_bed"
+      },
+      "time_go_bed": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 82,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "time_go_bed",
+        "elementName": "time_go_bed",
+        "elementSet": "data",
+        "elementPath": "time_go_bed"
+      },
+      "time_go_outside": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 83,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "time_go_outside",
+        "elementName": "time_go_outside",
+        "elementSet": "data",
+        "elementPath": "time_go_outside"
+      },
+      "time_indoors": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 84,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "time_indoors",
+        "elementName": "time_indoors",
+        "elementSet": "data",
+        "elementPath": "time_indoors"
+      },
+      "travel_abroad": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 85,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_abroad",
+        "elementName": "travel_abroad",
+        "elementSet": "data",
+        "elementPath": "travel_abroad"
+      },
+      "travel_countries": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 86,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_countries",
+        "elementName": "travel_countries",
+        "elementSet": "data",
+        "elementPath": "travel_countries"
+      },
+      "travel_months": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 87,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_months",
+        "elementName": "travel_months",
+        "elementSet": "data",
+        "elementPath": "travel_months"
+      },
+      "travel_regularly": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 88,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_regularly",
+        "elementName": "travel_regularly",
+        "elementSet": "data",
+        "elementPath": "travel_regularly"
+      },
+      "travel_regularly_trips": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 89,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_regularly_trips",
+        "elementName": "travel_regularly_trips",
+        "elementSet": "data",
+        "elementPath": "travel_regularly_trips"
+      },
+      "travel_regularly_trips_district": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 90,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_regularly_trips_district",
+        "elementName": "travel_regularly_trips_district",
+        "elementSet": "data",
+        "elementPath": "travel_regularly_trips_district"
+      },
+      "travel_regularly_trips_reason": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 91,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_regularly_trips_reason",
+        "elementName": "travel_regularly_trips_reason",
+        "elementSet": "data",
+        "elementPath": "travel_regularly_trips_reason"
+      },
+      "travel_sleep_net": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 92,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "travel_sleep_net",
+        "elementName": "travel_sleep_net",
+        "elementSet": "data",
+        "elementPath": "travel_sleep_net"
+      },
+      "what_do_before_sunrise": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 93,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "what_do_before_sunrise",
+        "elementName": "what_do_before_sunrise",
+        "elementSet": "data",
+        "elementPath": "what_do_before_sunrise"
+      },
+      "wra_breastfeed": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 94,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "wra_breastfeed",
+        "elementName": "wra_breastfeed",
+        "elementSet": "data",
+        "elementPath": "wra_breastfeed"
+      },
+      "wra_iptp": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 95,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "wra_iptp",
+        "elementName": "wra_iptp",
+        "elementSet": "data",
+        "elementPath": "wra_iptp"
+      },
+      "wra_period": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 96,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "wra_period",
+        "elementName": "wra_period",
+        "elementSet": "data",
+        "elementPath": "wra_period"
+      },
+      "wra_pregnant": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 97,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "wra_pregnant",
+        "elementName": "wra_pregnant",
+        "elementSet": "data",
+        "elementPath": "wra_pregnant"
+      },
+      "_id": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_id",
+        "elementName": "_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_id"
+      },
+      "_row_etag": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_etag",
+        "elementName": "_row_etag",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_etag"
+      },
+      "_sync_state": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_sync_state",
+        "elementName": "_sync_state",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_sync_state"
+      },
+      "_conflict_type": {
+        "type": "integer",
+        "isNotNullable": false,
+        "elementKey": "_conflict_type",
+        "elementName": "_conflict_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_conflict_type"
+      },
+      "_default_access": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_default_access",
+        "elementName": "_default_access",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_default_access"
+      },
+      "_form_id": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_form_id",
+        "elementName": "_form_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_form_id"
+      },
+      "_group_modify": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_modify",
+        "elementName": "_group_modify",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_modify"
+      },
+      "_group_privileged": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_privileged",
+        "elementName": "_group_privileged",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_privileged"
+      },
+      "_group_read_only": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_read_only",
+        "elementName": "_group_read_only",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_read_only"
+      },
+      "_locale": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_locale",
+        "elementName": "_locale",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_locale"
+      },
+      "_row_owner": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_owner",
+        "elementName": "_row_owner",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_owner"
+      },
+      "_savepoint_type": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_type",
+        "elementName": "_savepoint_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_type"
+      },
+      "_savepoint_timestamp": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_savepoint_timestamp",
+        "elementName": "_savepoint_timestamp",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_timestamp"
+      },
+      "_savepoint_creator": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_creator",
+        "elementName": "_savepoint_creator",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_creator"
+      }
+    }
+  }
+}
