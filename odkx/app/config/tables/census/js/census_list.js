@@ -1,99 +1,103 @@
 /**
  * This is the file that will be creating the list view.
  */
-/* global $, control, data */
+/* global $, odkTables, odkData, odkCommon */
+/*exported display, handleClick, getResults */
 'use strict';
 
-if (JSON.parse(control.getPlatformInfo()).container === 'Chrome') {
-    console.log('Welcome to Tables debugging in Chrome!');
-    $.ajax({
-        url: control.getFileAsUrl('output/debug/census_data.json'),
-        async: false,  // do it first
-        success: function(dataObj) {
-            if (dataObj === undefined || dataObj === null) {
-                console.log('Could not load data json for table: census');
-            }
-            window.data.setBackingObject(dataObj);
-        }
-    });
+var census = {};
+
+/** Handles clicking on a list item. Applied via a string. */
+function handleClick(index) {
+    if (!$.isEmptyObject(census)) {
+        odkTables.openDetailView(null,
+            census.getTableId(),
+            index,
+            'config/tables/census/html/census_detail.html');
+    }
+
 }
 
-// Use chunked list view for larger tables: We want to chunk the displays so
-// that there is less load time.
-            
-/**
- * Called when page loads. idxStart is the index of the row that should be
- * displayed at this iteration through the loop.
- */
-var resumeFn = function(idxStart) {
-
-    console.log('resumeFn called. idxStart: ' + idxStart);
-    // The first time through construct any constants you need to refer to
-    // and set the click handler on the list elements.
-    if (idxStart === 0) {
-        // This add a click handler on the wrapper ul that will handle all of
-        // the clicks on its children.
-        $('#list').click(function(e) {
-            var tableId = data.getTableId();
-            // We have set the rowId while as the li id. However, we may have
-            // clicked on the li or anything in the li. Thus we need to get
-            // the original li, which we'll do with jQuery's closest()
-            // method. First, however, we need to wrap up the target
-            // element in a jquery object.
-            // wrap up the object so we can call closest()
-            var jqueryObject = $(e.target);
-            // we want the closest thing with class item_space, which we
-            // have set up to have the row id
-            var containingDiv = jqueryObject.closest('.item_space');
-            var rowId = containingDiv.attr('rowId');
-            console.log('clicked with rowId: ' + rowId);
-            // make sure we retrieved the rowId
-            if (rowId !== null && rowId !== undefined) {
-                // we'll pass null as the relative path to use the default file
-                control.openDetailView(tableId, rowId, null);
-            }
-        });
+function cbSRSuccess(searchData) {
+    console.log('cbSRSuccess data is' + searchData);
+    if(searchData.getCount() > 0) {
+        // open filtered list view if househild found
+        var rowId = searchData.getRowId(0);
+        odkTables.openTableToListView(null,
+                'census',
+                '_id = ?',
+                [rowId],
+                'config/tables/census/html/census_list.html');
+    } else {
+        document.getElementById("search").value = "";
+        document.getElementsByName("query")[0].placeholder="Household not found";
     }
-    
-    return (function() {
-        displayGroup(idxStart);
-    }());
-};
-            
-/**
- * Displays the list view in chunks. The number of list entries per chunk
- * can be modified. The list view is designed so that each row in the table is
- * represented as a list item. If you click a particular list item, it will
- * call the click handler defined in resumeFn. In the example case it opens
- * a detail view on the clicked row.
- */
-var displayGroup = function(idxStart) {
-    // Number of rows displayed per chunk
-    var chunk = 50;
-    for (var i = idxStart; i < idxStart + chunk; i++) {
-        if (i >= data.getCount()) {
-            break;
+}
+
+function cbSRFailure(error) {
+    console.log('census_list: cbSRFailure failed with error: ' + error);
+}
+
+// filters list view by client id entered by user
+function getResults() {
+    var searchText = document.getElementById('search').value;
+
+    odkData.query('census', 'hh_id = ?', [searchText], 
+        null, null, null, null, null, null, true, cbSRSuccess, cbSRFailure);
+}
+
+// displays list view of clients
+function render() {
+
+    /* create button that launches graph display */
+    var graphView = document.createElement('p');
+    graphView.onclick = function() {
+        odkTables.openTableToListView(null,
+                'census',
+                null,
+                null,
+                'config/tables/census/html/graph_view.html');
+    };
+    graphView.setAttribute('class', 'launchForm');
+    graphView.innerHTML = 'Graph View';
+    document.getElementById('searchBox').appendChild(graphView);
+
+    for (var i = 0; i < census.getCount(); i++) {
+
+        var hh_id = census.getData(i, 'hh_id');
+
+        // make list entry only if household id exists
+        if (hh_id !== null &&
+            hh_id !== '' 
+            ) {
+            /*    Creating the item space    */
+            var item = document.createElement('li');
+            item.setAttribute('class', 'item_space');
+            item.setAttribute(
+                    'onClick',
+                    'handleClick("' + census.getRowId(i) + '")');
+            item.innerHTML = hh_id;
+            document.getElementById('list').appendChild(item);
+
+            var chevron = document.createElement('img');
+            chevron.setAttribute(
+                    'src',
+                    odkCommon.getFileAsUrl('config/assets/img/little_arrow.png'));
+            chevron.setAttribute('class', 'chevron');
+            item.appendChild(chevron);         
         }
-
-        // Creates the space for a single element in the list. We add rowId as
-        // an attribute so that the click handler set in resumeFn knows which
-        // row was clicked.
-        var item = $('<li>');
-        item.attr('rowId', data.getRowId(i));
-        item.attr('class', 'item_space');
-        item.text(data.getData(i, 'Name'));
-                
-        /* Creates arrow icon (Nothing to edit here) */
-        var chevron = $('<img>');
-        chevron.attr('src', control.getFileAsUrl('assets/img/little_arrow.png'));
-        chevron.attr('class', 'chevron');
-        item.append(chevron);
-
-        // Add any other details in your list item here.
-                
-        $('#list').append(item);
     }
-    if (i < data.getCount()) {
-        setTimeout(resumeFn, 0, i);
-    }
-};
+}
+
+function cbSuccess(result) {
+    census = result;
+    render();
+}
+
+function cbFailure(error) {
+    console.log('census_list: failed with error: ' + error);
+}
+
+function display() {
+    odkData.getViewData(cbSuccess, cbFailure);
+}
