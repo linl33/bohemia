@@ -476,7 +476,7 @@ mobile_golem_add_external_resources <- function(){
 #' @import gt
 #' @import DT
 app_server <- function(input, output, session) {
-  sizex <- 18
+  sizex <- 24
   
   # Define whether local or not
   if(grepl('brew', getwd())){
@@ -1726,8 +1726,9 @@ app_server <- function(input, output, session) {
           labs(x = '',
                y ='') + 
           theme_bohemia(base_size = 18) +
-          theme(axis.text.x  = element_text(angle=90, vjust=0.5, size = sizex),
-                axis.ticks.x = element_blank())
+          theme(axis.text.x  = element_text(angle=90, vjust=0.5, hjust = 1, size = sizex),
+                axis.ticks.x = element_blank(),
+                axis.text.y = element_text(size = sizex))
         
       } else {
         if(make_percent){
@@ -1737,8 +1738,9 @@ app_server <- function(input, output, session) {
             labs(x = '',
                  y ='') + 
             theme_bohemia(base_size = 18) +
-            theme(axis.text.x  = element_text(angle=90, vjust=0.5, size = sizex),
-                  axis.ticks.x = element_blank()) +
+            theme(axis.text.x  = element_text(angle=90, vjust=0.5, hjust = 1, size = sizex),
+                  axis.ticks.x = element_blank(),
+                  axis.text.y = element_text(size = sizex)) +
             ylim(0, max(monitor_plot$`Percent finished`, na.rm = TRUE) * 1.2)
           
         } else {
@@ -1748,7 +1750,7 @@ app_server <- function(input, output, session) {
             labs(x = '',
                  y ='') + 
             theme_bohemia(base_size = 18) +
-            theme(axis.text.x  = element_text(angle=90, vjust=0.5, size = sizex),
+            theme(axis.text.x  = element_text(angle=90, vjust=0.5, hjust = 1, size = sizex),
                   axis.ticks.x = element_blank()) +
             ylim(0, max(monitor_plot$numerator, na.rm = TRUE) * 1.2)
           
@@ -3792,7 +3794,7 @@ app_server <- function(input, output, session) {
                               nudge_y = -0.5, size = 5, alpha = 0.8, angle = 90) +
                     scale_color_manual(name ='', 
                                        values =colors) +
-                    theme(axis.text.x = element_text(angle = 90, hjust = 0, vjust = 0.5, size = sizex)) +
+                    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = sizex)) +
                     theme(axis.text = element_text(size = 12),
                           axis.title = element_text(size = 14),
                           plot.title = element_text(size = 20),
@@ -4150,7 +4152,7 @@ app_server <- function(input, output, session) {
                                               'VA'),
                                   selected = 'Minicensus')),
                column(6,
-                      checkboxInput(inputId = 'ui_show_percent', label = 'Show percentage', value = FALSE))
+                      checkboxInput(inputId = 'ui_show_percent', label = 'Show percentage on y-axis', value = FALSE))
       ),
      
       fluidRow(column(12,
@@ -4820,7 +4822,7 @@ app_server <- function(input, output, session) {
                     names(out_rf)[1] <- 'V1'
                     ggplot(out_rf, aes(reorder(V1, -`Number of refusals`), `Number of refusals`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
-                      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5, size = sizex),
+                      theme(axis.text = element_text(angle=90, vjust=0.5, size = sizex),
                             axis.title = element_text(size = 14),
                             plot.title = element_text(size = 20))
                   })
@@ -4829,7 +4831,7 @@ app_server <- function(input, output, session) {
                     names(out_ab)[1] <- 'V1'
                     ggplot(out_ab, aes(reorder(V1, -`Number of absences`), `Number of absences`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
-                      theme(axis.text = element_text(size = 10, angle=90, vjust=0.5, size = sizex),
+                      theme(axis.text = element_text(angle=90, vjust=0.5, size = sizex),
                             axis.title = element_text(size = 14),
                             plot.title = element_text(size = 20))
                   })
@@ -5234,7 +5236,7 @@ app_server <- function(input, output, session) {
               #   addLayersControl(overlayGroups = "pts3")
               output$dat_leaf_output <- renderLeafgl({
                 dat_leaf
-              })
+              }, height = 800)
               message('---Created Enrollment map')
               
               
