@@ -1,0 +1,1006 @@
+{
+  "xlsx": {
+    "initial": [
+      {
+        "clause": "do section survey",
+        "_row_num": 2
+      },
+      {
+        "clause": "goto _finalize",
+        "_row_num": 3
+      }
+    ],
+    "survey": [
+      {
+        "clause": "begin screen",
+        "_row_num": 2
+      },
+      {
+        "type": "note",
+        "name": "hh_id",
+        "display": {
+          "prompt": {
+            "text": "Household ID: {{data.hh_id}}"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "type": "select_one",
+        "values_list": "latrine_type",
+        "name": "latrine_type",
+        "display": {
+          "prompt": {
+            "text": "41c(i). What type of latrine is it?"
+          }
+        },
+        "_row_num": 4
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('latrine_type'), 'other')",
+        "_row_num": 5
+      },
+      {
+        "type": "text",
+        "name": "latrine_type_specify",
+        "display": {
+          "prompt": {
+            "text": "Specify"
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "clause": "end if",
+        "_row_num": 7
+      },
+      {
+        "type": "select_one",
+        "values_list": "yndk",
+        "name": "latrine_shared",
+        "display": {
+          "prompt": {
+            "text": "41c(ii). Is the latrine shared with another household?"
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('latrine_shared'), 'yes')",
+        "_row_num": 9
+      },
+      {
+        "type": "integer",
+        "name": "latrine_shared_num_hh",
+        "display": {
+          "prompt": {
+            "text": "41c(iii). With how many households? Not including this household"
+          }
+        },
+        "constraint": "data('latrine_shared_num_hh') >= 0",
+        "_row_num": 10
+      },
+      {
+        "clause": "end if",
+        "_row_num": 11
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 12
+      }
+    ],
+    "choices": [
+      {
+        "choice_list_name": "yndk",
+        "data_value": "yes",
+        "display": {
+          "title": {
+            "text": "Yes"
+          }
+        },
+        "_row_num": 2
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "no",
+        "display": {
+          "title": {
+            "text": "No"
+          }
+        },
+        "_row_num": 3
+      },
+      {
+        "choice_list_name": "yndk",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 4
+      },
+      {
+        "choice_list_name": "latrine_type",
+        "data_value": "toilet_septic",
+        "display": {
+          "title": {
+            "text": "Toilet connected to septic tank"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "choice_list_name": "latrine_type",
+        "data_value": "ventilated_latrine",
+        "display": {
+          "title": {
+            "text": "Ventilated latrine"
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "choice_list_name": "latrine_type",
+        "data_value": "unimproved_latrine",
+        "display": {
+          "title": {
+            "text": "Unimproved latrine"
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "choice_list_name": "latrine_type",
+        "data_value": "traditional_latrine",
+        "display": {
+          "title": {
+            "text": "Traditional latrine"
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "choice_list_name": "latrine_type",
+        "data_value": "latrine_unventilated_slab",
+        "display": {
+          "title": {
+            "text": "Latrine with unventilated slab"
+          }
+        },
+        "_row_num": 9
+      },
+      {
+        "choice_list_name": "latrine_type",
+        "data_value": "autoclaving",
+        "display": {
+          "title": {
+            "text": "Autoclaving"
+          }
+        },
+        "_row_num": 10
+      },
+      {
+        "choice_list_name": "latrine_type",
+        "data_value": "other",
+        "display": {
+          "title": {
+            "text": "Other"
+          }
+        },
+        "_row_num": 11
+      }
+    ],
+    "settings": [
+      {
+        "setting_name": "form_id",
+        "value": "hh_latrine",
+        "_row_num": 2
+      },
+      {
+        "setting_name": "form_version",
+        "value": 20210114001,
+        "_row_num": 3
+      },
+      {
+        "setting_name": "table_id",
+        "value": "hh_latrine",
+        "_row_num": 4
+      },
+      {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Household Latrines"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "setting_name": "instance_name",
+        "value": "name",
+        "_row_num": 6
+      }
+    ],
+    "model": [
+      {
+        "name": "hh_id",
+        "type": "string",
+        "_row_num": 2
+      },
+      {
+        "name": "latrine_type",
+        "type": "select_one",
+        "_row_num": 3
+      },
+      {
+        "name": "latrine_type_specify",
+        "type": "text",
+        "_row_num": 4
+      },
+      {
+        "name": "latrine_shared",
+        "type": "select_one",
+        "_row_num": 5
+      },
+      {
+        "name": "latrine_shared_num_hh",
+        "type": "integer",
+        "_row_num": 6
+      }
+    ]
+  },
+  "specification": {
+    "column_types": {
+      "_screen_block": "function",
+      "condition": "formula",
+      "constraint": "formula",
+      "required": "formula",
+      "calculation": "formula",
+      "newRowInitialElementKeyToValueMap": "formula",
+      "openRowInitialElementKeyToValueMap": "formula",
+      "selectionArgs": "formula",
+      "url": "formula",
+      "uri": "formula",
+      "callback": "formula(context)",
+      "choice_filter": "formula(choice_item)",
+      "templatePath": "requirejs_path"
+    },
+    "settings": {
+      "form_id": {
+        "setting_name": "form_id",
+        "value": "hh_latrine",
+        "_row_num": 2
+      },
+      "form_version": {
+        "setting_name": "form_version",
+        "value": 20210114001,
+        "_row_num": 3
+      },
+      "table_id": {
+        "setting_name": "table_id",
+        "value": "hh_latrine",
+        "_row_num": 4
+      },
+      "survey": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Household Latrines"
+          }
+        },
+        "_row_num": 5
+      },
+      "instance_name": {
+        "setting_name": "instance_name",
+        "value": "name",
+        "_row_num": 6
+      },
+      "_locales": {
+        "setting_name": "_locales",
+        "_row_num": 5,
+        "value": [
+          {
+            "display": {
+              "locale": {
+                "text": "default"
+              }
+            },
+            "name": "default"
+          }
+        ]
+      },
+      "_default_locale": {
+        "setting_name": "_default_locale",
+        "_row_num": 5,
+        "value": "default"
+      },
+      "initial": {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "Household Latrines"
+          }
+        },
+        "_row_num": 5
+      }
+    },
+    "choices": {
+      "yndk": [
+        {
+          "choice_list_name": "yndk",
+          "data_value": "yes",
+          "display": {
+            "title": {
+              "text": "Yes"
+            }
+          },
+          "_row_num": 2
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "no",
+          "display": {
+            "title": {
+              "text": "No"
+            }
+          },
+          "_row_num": 3
+        },
+        {
+          "choice_list_name": "yndk",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 4
+        }
+      ],
+      "latrine_type": [
+        {
+          "choice_list_name": "latrine_type",
+          "data_value": "toilet_septic",
+          "display": {
+            "title": {
+              "text": "Toilet connected to septic tank"
+            }
+          },
+          "_row_num": 5
+        },
+        {
+          "choice_list_name": "latrine_type",
+          "data_value": "ventilated_latrine",
+          "display": {
+            "title": {
+              "text": "Ventilated latrine"
+            }
+          },
+          "_row_num": 6
+        },
+        {
+          "choice_list_name": "latrine_type",
+          "data_value": "unimproved_latrine",
+          "display": {
+            "title": {
+              "text": "Unimproved latrine"
+            }
+          },
+          "_row_num": 7
+        },
+        {
+          "choice_list_name": "latrine_type",
+          "data_value": "traditional_latrine",
+          "display": {
+            "title": {
+              "text": "Traditional latrine"
+            }
+          },
+          "_row_num": 8
+        },
+        {
+          "choice_list_name": "latrine_type",
+          "data_value": "latrine_unventilated_slab",
+          "display": {
+            "title": {
+              "text": "Latrine with unventilated slab"
+            }
+          },
+          "_row_num": 9
+        },
+        {
+          "choice_list_name": "latrine_type",
+          "data_value": "autoclaving",
+          "display": {
+            "title": {
+              "text": "Autoclaving"
+            }
+          },
+          "_row_num": 10
+        },
+        {
+          "choice_list_name": "latrine_type",
+          "data_value": "other",
+          "display": {
+            "title": {
+              "text": "Other"
+            }
+          },
+          "_row_num": 11
+        }
+      ]
+    },
+    "table_specific_definitions": {
+      "_tokens": {}
+    },
+    "queries": {},
+    "calculates": {},
+    "model": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id"
+      },
+      "latrine_type": {
+        "type": "string",
+        "valuesList": "latrine_type",
+        "_defn": [
+          {
+            "_row_num": 4,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 3,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "latrine_type"
+      },
+      "latrine_type_specify": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "latrine_type_specify"
+      },
+      "latrine_shared": {
+        "type": "string",
+        "valuesList": "yndk",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "latrine_shared"
+      },
+      "latrine_shared_num_hh": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "latrine_shared_num_hh"
+      }
+    },
+    "section_names": [
+      "initial",
+      "survey"
+    ],
+    "sections": {
+      "initial": {
+        "section_name": "initial",
+        "nested_sections": {
+          "survey": true
+        },
+        "reachable_sections": {
+          "survey": true
+        },
+        "prompts": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "prompt",
+            "_do_section_name": "survey",
+            "_type": "_section",
+            "promptIdx": 0,
+            "display": {
+              "title": {
+                "text": "Household Latrines"
+              }
+            },
+            "_branch_label_enclosing_screen": "survey/0"
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 4,
+            "_branch_label_enclosing_screen": "initial/_screen4",
+            "promptIdx": 1
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": []
+        },
+        "operations": [
+          {
+            "clause": "do section survey",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "do_section",
+            "_do_section_name": "survey",
+            "operationIdx": 0
+          },
+          {
+            "clause": "goto _finalize",
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "goto_label",
+            "_branch_label": "_finalize",
+            "operationIdx": 1
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 4,
+            "operationIdx": 2
+          },
+          {
+            "_row_num": 4,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 3
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 4
+          },
+          {
+            "_token_type": "validate",
+            "clause": "validate finalize",
+            "_sweep_name": "finalize",
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 5
+          },
+          {
+            "_token_type": "save_and_terminate",
+            "clause": "save and terminate",
+            "calculation": true,
+            "_row_num": 4,
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 6
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 4,
+            "operationIdx": 7
+          }
+        ],
+        "branch_label_map": {
+          "_contents": 3,
+          "_screen4": 3,
+          "_finalize": 5
+        }
+      },
+      "survey": {
+        "section_name": "survey",
+        "nested_sections": {},
+        "reachable_sections": {},
+        "prompts": [
+          {
+            "type": "note",
+            "name": "hh_id",
+            "display": {
+              "prompt": {
+                "text": "Household ID: {{data.hh_id}}"
+              }
+            },
+            "_row_num": 3,
+            "__rowNum__": 2,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 0
+          },
+          {
+            "type": "select_one",
+            "values_list": "latrine_type",
+            "name": "latrine_type",
+            "display": {
+              "prompt": {
+                "text": "41c(i). What type of latrine is it?"
+              }
+            },
+            "_row_num": 4,
+            "__rowNum__": 3,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 1
+          },
+          {
+            "type": "text",
+            "name": "latrine_type_specify",
+            "display": {
+              "prompt": {
+                "text": "Specify"
+              }
+            },
+            "_row_num": 6,
+            "__rowNum__": 5,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 2
+          },
+          {
+            "type": "select_one",
+            "values_list": "yndk",
+            "name": "latrine_shared",
+            "display": {
+              "prompt": {
+                "text": "41c(ii). Is the latrine shared with another household?"
+              }
+            },
+            "_row_num": 8,
+            "__rowNum__": 7,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 3
+          },
+          {
+            "type": "integer",
+            "name": "latrine_shared_num_hh",
+            "display": {
+              "prompt": {
+                "text": "41c(iii). With how many households? Not including this household"
+              }
+            },
+            "constraint": "data('latrine_shared_num_hh') >= 0",
+            "_row_num": 10,
+            "__rowNum__": 9,
+            "_token_type": "prompt",
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 4
+          },
+          {
+            "_token_type": "prompt",
+            "type": "contents",
+            "_type": "contents",
+            "_row_num": 13,
+            "_branch_label_enclosing_screen": "survey/_screen13",
+            "promptIdx": 5
+          }
+        ],
+        "validation_tag_map": {
+          "finalize": [
+            4
+          ]
+        },
+        "operations": [
+          {
+            "clause": "begin screen",
+            "_row_num": 2,
+            "__rowNum__": 1,
+            "_token_type": "begin_screen",
+            "_end_screen_clause": {
+              "clause": "end screen",
+              "_row_num": 12,
+              "__rowNum__": 11,
+              "_token_type": "end_screen"
+            },
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nif (selected(data('latrine_type'), 'other')) {\nactivePromptIndicies.push(2);\n}\nactivePromptIndicies.push(3);\nif (selected(data('latrine_shared'), 'yes')) {\nactivePromptIndicies.push(4);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 0
+          },
+          {
+            "_token_type": "exit_section",
+            "clause": "exit section",
+            "_row_num": 13,
+            "operationIdx": 1
+          },
+          {
+            "_row_num": 13,
+            "_token_type": "begin_screen",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(5);\n\nreturn activePromptIndicies;\n}\n",
+            "screen": {
+              "hideInBackHistory": true
+            },
+            "operationIdx": 2
+          },
+          {
+            "_token_type": "resume",
+            "clause": "resume",
+            "_row_num": 13,
+            "operationIdx": 3
+          }
+        ],
+        "branch_label_map": {
+          "_screen2": 0,
+          "_contents": 2,
+          "_screen13": 2
+        }
+      }
+    },
+    "dataTableModel": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id",
+        "elementName": "hh_id",
+        "elementSet": "data",
+        "elementPath": "hh_id"
+      },
+      "latrine_type": {
+        "type": "string",
+        "valuesList": "latrine_type",
+        "_defn": [
+          {
+            "_row_num": 4,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 3,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "latrine_type",
+        "elementName": "latrine_type",
+        "elementSet": "data",
+        "elementPath": "latrine_type"
+      },
+      "latrine_type_specify": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "latrine_type_specify",
+        "elementName": "latrine_type_specify",
+        "elementSet": "data",
+        "elementPath": "latrine_type_specify"
+      },
+      "latrine_shared": {
+        "type": "string",
+        "valuesList": "yndk",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "latrine_shared",
+        "elementName": "latrine_shared",
+        "elementSet": "data",
+        "elementPath": "latrine_shared"
+      },
+      "latrine_shared_num_hh": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "latrine_shared_num_hh",
+        "elementName": "latrine_shared_num_hh",
+        "elementSet": "data",
+        "elementPath": "latrine_shared_num_hh"
+      },
+      "_id": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_id",
+        "elementName": "_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_id"
+      },
+      "_row_etag": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_etag",
+        "elementName": "_row_etag",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_etag"
+      },
+      "_sync_state": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_sync_state",
+        "elementName": "_sync_state",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_sync_state"
+      },
+      "_conflict_type": {
+        "type": "integer",
+        "isNotNullable": false,
+        "elementKey": "_conflict_type",
+        "elementName": "_conflict_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_conflict_type"
+      },
+      "_default_access": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_default_access",
+        "elementName": "_default_access",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_default_access"
+      },
+      "_form_id": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_form_id",
+        "elementName": "_form_id",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_form_id"
+      },
+      "_group_modify": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_modify",
+        "elementName": "_group_modify",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_modify"
+      },
+      "_group_privileged": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_privileged",
+        "elementName": "_group_privileged",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_privileged"
+      },
+      "_group_read_only": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_group_read_only",
+        "elementName": "_group_read_only",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_group_read_only"
+      },
+      "_locale": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_locale",
+        "elementName": "_locale",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_locale"
+      },
+      "_row_owner": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_row_owner",
+        "elementName": "_row_owner",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_row_owner"
+      },
+      "_savepoint_type": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_type",
+        "elementName": "_savepoint_type",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_type"
+      },
+      "_savepoint_timestamp": {
+        "type": "string",
+        "isNotNullable": true,
+        "elementKey": "_savepoint_timestamp",
+        "elementName": "_savepoint_timestamp",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_timestamp"
+      },
+      "_savepoint_creator": {
+        "type": "string",
+        "isNotNullable": false,
+        "elementKey": "_savepoint_creator",
+        "elementName": "_savepoint_creator",
+        "elementSet": "instanceMetadata",
+        "elementPath": "_savepoint_creator"
+      }
+    },
+    "properties": [
+      {
+        "_partition": "Column",
+        "_aspect": "latrine_shared",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"yndk\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":2},{\"choice_list_name\":\"yndk\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":3},{\"choice_list_name\":\"yndk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":4}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "latrine_type",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"latrine_type\",\"data_value\":\"toilet_septic\",\"display\":{\"title\":{\"text\":\"Toilet connected to septic tank\"}},\"_row_num\":5},{\"choice_list_name\":\"latrine_type\",\"data_value\":\"ventilated_latrine\",\"display\":{\"title\":{\"text\":\"Ventilated latrine\"}},\"_row_num\":6},{\"choice_list_name\":\"latrine_type\",\"data_value\":\"unimproved_latrine\",\"display\":{\"title\":{\"text\":\"Unimproved latrine\"}},\"_row_num\":7},{\"choice_list_name\":\"latrine_type\",\"data_value\":\"traditional_latrine\",\"display\":{\"title\":{\"text\":\"Traditional latrine\"}},\"_row_num\":8},{\"choice_list_name\":\"latrine_type\",\"data_value\":\"latrine_unventilated_slab\",\"display\":{\"title\":{\"text\":\"Latrine with unventilated slab\"}},\"_row_num\":9},{\"choice_list_name\":\"latrine_type\",\"data_value\":\"autoclaving\",\"display\":{\"title\":{\"text\":\"Autoclaving\"}},\"_row_num\":10},{\"choice_list_name\":\"latrine_type\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":11}]"
+      },
+      {
+        "_partition": "FormType",
+        "_aspect": "default",
+        "_key": "FormType.formType",
+        "_type": "string",
+        "_value": "SURVEY"
+      },
+      {
+        "_partition": "SurveyUtil",
+        "_aspect": "default",
+        "_key": "SurveyUtil.formId",
+        "_type": "string",
+        "_value": "hh_latrine"
+      },
+      {
+        "_partition": "Table",
+        "_aspect": "default",
+        "_key": "defaultViewType",
+        "_type": "string",
+        "_value": "SPREADSHEET"
+      },
+      {
+        "_partition": "Table",
+        "_aspect": "default",
+        "_key": "displayName",
+        "_type": "object",
+        "_value": "{\"text\":\"Household Latrines\"}"
+      }
+    ]
+  }
+}
