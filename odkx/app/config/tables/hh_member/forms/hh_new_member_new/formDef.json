@@ -1898,7 +1898,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210114001,
+        "value": 20210125001,
         "_row_num": 3
       },
       {
@@ -1923,33 +1923,33 @@
     ],
     "model": [
       {
-        "name": "hh_id",
+        "name": "new_hh_member_name",
         "type": "string",
         "_row_num": 2
       },
       {
-        "name": "new_hh_member_name",
+        "name": "new_hh_member_surname",
         "type": "string",
         "_row_num": 3
       },
       {
-        "name": "new_hh_member_surname",
-        "type": "string",
+        "name": "new_hh_member_dob",
+        "type": "date",
         "_row_num": 4
       },
       {
         "name": "new_hh_member_dob_date",
-        "type": "select_one",
+        "type": "string",
         "_row_num": 5
       },
       {
         "name": "new_hh_member_dob_month",
-        "type": "select_one",
+        "type": "string",
         "_row_num": 6
       },
       {
         "name": "new_hh_member_dob_year",
-        "type": "select_one",
+        "type": "string",
         "_row_num": 7
       },
       {
@@ -1959,22 +1959,22 @@
       },
       {
         "name": "new_hh_member_dob_approx",
-        "type": "select_multiple",
+        "type": "string",
         "_row_num": 9
       },
       {
         "name": "new_hh_member_gender",
-        "type": "select_one",
+        "type": "string",
         "_row_num": 10
       },
       {
         "name": "new_hh_member_resident",
-        "type": "select_one",
+        "type": "string",
         "_row_num": 11
       },
       {
         "name": "new_hh_member_censed",
-        "type": "select_one",
+        "type": "string",
         "_row_num": 12
       },
       {
@@ -1984,7 +1984,7 @@
       },
       {
         "name": "new_hh_member_censed_extid_not_possible",
-        "type": "select_multiple",
+        "type": "string",
         "_row_num": 14
       }
     ]
@@ -2013,7 +2013,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210114001,
+        "value": 20210125001,
         "_row_num": 3
       },
       "table_id": {
@@ -3818,16 +3818,6 @@
     "queries": {},
     "calculates": {},
     "model": {
-      "hh_id": {
-        "type": "string",
-        "_defn": [
-          {
-            "_row_num": 2,
-            "section_name": "model"
-          }
-        ],
-        "elementKey": "hh_id"
-      },
       "new_hh_member_name": {
         "type": "string",
         "_defn": [
@@ -3836,7 +3826,7 @@
             "section_name": "survey"
           },
           {
-            "_row_num": 3,
+            "_row_num": 2,
             "section_name": "model"
           }
         ],
@@ -3850,11 +3840,26 @@
             "section_name": "survey"
           },
           {
-            "_row_num": 4,
+            "_row_num": 3,
             "section_name": "model"
           }
         ],
         "elementKey": "new_hh_member_surname"
+      },
+      "new_hh_member_dob": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob"
       },
       "new_hh_member_dob_date": {
         "type": "string",
@@ -3901,10 +3906,9 @@
         "elementKey": "new_hh_member_dob_enter"
       },
       "new_hh_member_dob_approx": {
-        "type": "array",
+        "type": "string",
         "items": {
-          "type": "string",
-          "elementKey": "new_hh_member_dob_approx_items"
+          "type": "string"
         },
         "valuesList": "approx",
         "_defn": [
@@ -3979,10 +3983,9 @@
         "elementKey": "new_hh_member_censed_extid"
       },
       "new_hh_member_censed_extid_not_possible": {
-        "type": "array",
+        "type": "string",
         "items": {
-          "type": "string",
-          "elementKey": "new_hh_member_censed_extid_not_possible_items"
+          "type": "string"
         },
         "valuesList": "not_possible",
         "_defn": [
@@ -3996,17 +3999,6 @@
           }
         ],
         "elementKey": "new_hh_member_censed_extid_not_possible"
-      },
-      "new_hh_member_dob": {
-        "_defn": [
-          {
-            "_row_num": 9,
-            "section_name": "survey"
-          }
-        ],
-        "type": "string",
-        "elementType": "date",
-        "elementKey": "new_hh_member_dob"
       }
     },
     "section_names": [
@@ -4387,19 +4379,6 @@
       }
     },
     "dataTableModel": {
-      "hh_id": {
-        "type": "string",
-        "_defn": [
-          {
-            "_row_num": 2,
-            "section_name": "model"
-          }
-        ],
-        "elementKey": "hh_id",
-        "elementName": "hh_id",
-        "elementSet": "data",
-        "elementPath": "hh_id"
-      },
       "new_hh_member_name": {
         "type": "string",
         "_defn": [
@@ -4408,7 +4387,7 @@
             "section_name": "survey"
           },
           {
-            "_row_num": 3,
+            "_row_num": 2,
             "section_name": "model"
           }
         ],
@@ -4425,7 +4404,7 @@
             "section_name": "survey"
           },
           {
-            "_row_num": 4,
+            "_row_num": 3,
             "section_name": "model"
           }
         ],
@@ -4433,6 +4412,24 @@
         "elementName": "new_hh_member_surname",
         "elementSet": "data",
         "elementPath": "new_hh_member_surname"
+      },
+      "new_hh_member_dob": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "new_hh_member_dob",
+        "elementName": "new_hh_member_dob",
+        "elementSet": "data",
+        "elementPath": "new_hh_member_dob"
       },
       "new_hh_member_dob_date": {
         "type": "string",
@@ -4491,14 +4488,9 @@
         "elementPath": "new_hh_member_dob_enter"
       },
       "new_hh_member_dob_approx": {
-        "type": "array",
+        "type": "string",
         "items": {
-          "type": "string",
-          "elementKey": "new_hh_member_dob_approx_items",
-          "elementName": "items",
-          "elementSet": "data",
-          "elementPath": "new_hh_member_dob_approx.items",
-          "notUnitOfRetention": true
+          "type": "string"
         },
         "valuesList": "approx",
         "_defn": [
@@ -4514,10 +4506,7 @@
         "elementKey": "new_hh_member_dob_approx",
         "elementName": "new_hh_member_dob_approx",
         "elementSet": "data",
-        "elementPath": "new_hh_member_dob_approx",
-        "listChildElementKeys": [
-          "new_hh_member_dob_approx_items"
-        ]
+        "elementPath": "new_hh_member_dob_approx"
       },
       "new_hh_member_gender": {
         "type": "string",
@@ -4591,14 +4580,9 @@
         "elementPath": "new_hh_member_censed_extid"
       },
       "new_hh_member_censed_extid_not_possible": {
-        "type": "array",
+        "type": "string",
         "items": {
-          "type": "string",
-          "elementKey": "new_hh_member_censed_extid_not_possible_items",
-          "elementName": "items",
-          "elementSet": "data",
-          "elementPath": "new_hh_member_censed_extid_not_possible.items",
-          "notUnitOfRetention": true
+          "type": "string"
         },
         "valuesList": "not_possible",
         "_defn": [
@@ -4614,40 +4598,7 @@
         "elementKey": "new_hh_member_censed_extid_not_possible",
         "elementName": "new_hh_member_censed_extid_not_possible",
         "elementSet": "data",
-        "elementPath": "new_hh_member_censed_extid_not_possible",
-        "listChildElementKeys": [
-          "new_hh_member_censed_extid_not_possible_items"
-        ]
-      },
-      "new_hh_member_dob": {
-        "_defn": [
-          {
-            "_row_num": 9,
-            "section_name": "survey"
-          }
-        ],
-        "type": "string",
-        "elementType": "date",
-        "elementKey": "new_hh_member_dob",
-        "elementName": "new_hh_member_dob",
-        "elementSet": "data",
-        "elementPath": "new_hh_member_dob"
-      },
-      "new_hh_member_dob_approx_items": {
-        "type": "string",
-        "elementKey": "new_hh_member_dob_approx_items",
-        "elementName": "items",
-        "elementSet": "data",
-        "elementPath": "new_hh_member_dob_approx.items",
-        "notUnitOfRetention": true
-      },
-      "new_hh_member_censed_extid_not_possible_items": {
-        "type": "string",
-        "elementKey": "new_hh_member_censed_extid_not_possible_items",
-        "elementName": "items",
-        "elementSet": "data",
-        "elementPath": "new_hh_member_censed_extid_not_possible.items",
-        "notUnitOfRetention": true
+        "elementPath": "new_hh_member_censed_extid_not_possible"
       },
       "_id": {
         "type": "string",
