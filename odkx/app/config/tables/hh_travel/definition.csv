@@ -1,0 +1,7 @@
+_element_key,_element_name,_element_type,_list_child_element_keys
+member_id,member_id,string,[]
+travel_months,travel_months,array,"[""travel_months_items""]"
+travel_months_items,items,string,[]
+travel_regularly_trips_district,travel_regularly_trips_district,string,[]
+travel_regularly_trips_reason,travel_regularly_trips_reason,string,[]
+travel_sleep_net,travel_sleep_net,string,[]
