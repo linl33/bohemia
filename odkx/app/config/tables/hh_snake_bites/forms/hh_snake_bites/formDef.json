@@ -17,7 +17,6 @@
       },
       {
         "type": "note",
-        "name": "group_snake",
         "display": {
           "prompt": {
             "text": "Snake Bite details"
@@ -32,6 +31,10 @@
           "prompt": {
             "text": "59b. How many times (separate instances) was {{data.name}} bitten?"
           }
+        },
+        "inputAttributes": {
+          "min": 1,
+          "step": 1
         },
         "_row_num": 4
       },
@@ -77,8 +80,14 @@
         "_row_num": 8
       },
       {
-        "clause": "end if",
+        "type": "select_multiple",
+        "values_list": "dk",
+        "name": "snake_bite_miss_work_school_days_unknown",
         "_row_num": 9
+      },
+      {
+        "clause": "end if",
+        "_row_num": 10
       },
       {
         "type": "select_multiple",
@@ -93,12 +102,12 @@
           }
         },
         "constraint": "countSelected(data('snake_bite_occur')) <= data('snake_bite_num_times')",
-        "_row_num": 10
+        "_row_num": 11
       },
       {
         "clause": "if",
         "condition": "selected(data('snake_bite_occur'), 'other')",
-        "_row_num": 11
+        "_row_num": 12
       },
       {
         "type": "text",
@@ -108,11 +117,11 @@
             "text": "Specify"
           }
         },
-        "_row_num": 12
+        "_row_num": 13
       },
       {
         "clause": "end if",
-        "_row_num": 13
+        "_row_num": 14
       },
       {
         "type": "select_one",
@@ -123,11 +132,11 @@
             "text": "59f. What was the outcome of the bite? (If bitten more than once, answer about the most severe bite)"
           }
         },
-        "_row_num": 14
+        "_row_num": 15
       },
       {
         "clause": "end screen",
-        "_row_num": 15
+        "_row_num": 16
       }
     ],
     "choices": [
@@ -233,23 +242,13 @@
       },
       {
         "choice_list_name": "month",
-        "data_value": "all",
-        "display": {
-          "title": {
-            "text": "All"
-          }
-        },
-        "_row_num": 12
-      },
-      {
-        "choice_list_name": "month",
         "data_value": "january",
         "display": {
           "title": {
             "text": "January"
           }
         },
-        "_row_num": 13
+        "_row_num": 12
       },
       {
         "choice_list_name": "month",
@@ -259,7 +258,7 @@
             "text": "February"
           }
         },
-        "_row_num": 14
+        "_row_num": 13
       },
       {
         "choice_list_name": "month",
@@ -269,7 +268,7 @@
             "text": "March"
           }
         },
-        "_row_num": 15
+        "_row_num": 14
       },
       {
         "choice_list_name": "month",
@@ -279,7 +278,7 @@
             "text": "April"
           }
         },
-        "_row_num": 16
+        "_row_num": 15
       },
       {
         "choice_list_name": "month",
@@ -289,7 +288,7 @@
             "text": "May"
           }
         },
-        "_row_num": 17
+        "_row_num": 16
       },
       {
         "choice_list_name": "month",
@@ -299,7 +298,7 @@
             "text": "June"
           }
         },
-        "_row_num": 18
+        "_row_num": 17
       },
       {
         "choice_list_name": "month",
@@ -309,7 +308,7 @@
             "text": "July"
           }
         },
-        "_row_num": 19
+        "_row_num": 18
       },
       {
         "choice_list_name": "month",
@@ -319,7 +318,7 @@
             "text": "August"
           }
         },
-        "_row_num": 20
+        "_row_num": 19
       },
       {
         "choice_list_name": "month",
@@ -329,7 +328,7 @@
             "text": "September"
           }
         },
-        "_row_num": 21
+        "_row_num": 20
       },
       {
         "choice_list_name": "month",
@@ -339,7 +338,7 @@
             "text": "October"
           }
         },
-        "_row_num": 22
+        "_row_num": 21
       },
       {
         "choice_list_name": "month",
@@ -349,7 +348,7 @@
             "text": "November"
           }
         },
-        "_row_num": 23
+        "_row_num": 22
       },
       {
         "choice_list_name": "month",
@@ -357,6 +356,16 @@
         "display": {
           "title": {
             "text": "December"
+          }
+        },
+        "_row_num": 23
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
           }
         },
         "_row_num": 24
@@ -390,6 +399,16 @@
           }
         },
         "_row_num": 27
+      },
+      {
+        "choice_list_name": "dk",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 28
       }
     ],
     "model": [
@@ -645,23 +664,13 @@
       "month": [
         {
           "choice_list_name": "month",
-          "data_value": "all",
-          "display": {
-            "title": {
-              "text": "All"
-            }
-          },
-          "_row_num": 12
-        },
-        {
-          "choice_list_name": "month",
           "data_value": "january",
           "display": {
             "title": {
               "text": "January"
             }
           },
-          "_row_num": 13
+          "_row_num": 12
         },
         {
           "choice_list_name": "month",
@@ -671,7 +680,7 @@
               "text": "February"
             }
           },
-          "_row_num": 14
+          "_row_num": 13
         },
         {
           "choice_list_name": "month",
@@ -681,7 +690,7 @@
               "text": "March"
             }
           },
-          "_row_num": 15
+          "_row_num": 14
         },
         {
           "choice_list_name": "month",
@@ -691,7 +700,7 @@
               "text": "April"
             }
           },
-          "_row_num": 16
+          "_row_num": 15
         },
         {
           "choice_list_name": "month",
@@ -701,7 +710,7 @@
               "text": "May"
             }
           },
-          "_row_num": 17
+          "_row_num": 16
         },
         {
           "choice_list_name": "month",
@@ -711,7 +720,7 @@
               "text": "June"
             }
           },
-          "_row_num": 18
+          "_row_num": 17
         },
         {
           "choice_list_name": "month",
@@ -721,7 +730,7 @@
               "text": "July"
             }
           },
-          "_row_num": 19
+          "_row_num": 18
         },
         {
           "choice_list_name": "month",
@@ -731,7 +740,7 @@
               "text": "August"
             }
           },
-          "_row_num": 20
+          "_row_num": 19
         },
         {
           "choice_list_name": "month",
@@ -741,7 +750,7 @@
               "text": "September"
             }
           },
-          "_row_num": 21
+          "_row_num": 20
         },
         {
           "choice_list_name": "month",
@@ -751,7 +760,7 @@
               "text": "October"
             }
           },
-          "_row_num": 22
+          "_row_num": 21
         },
         {
           "choice_list_name": "month",
@@ -761,7 +770,7 @@
               "text": "November"
             }
           },
-          "_row_num": 23
+          "_row_num": 22
         },
         {
           "choice_list_name": "month",
@@ -769,6 +778,16 @@
           "display": {
             "title": {
               "text": "December"
+            }
+          },
+          "_row_num": 23
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
             }
           },
           "_row_num": 24
@@ -804,6 +823,18 @@
             }
           },
           "_row_num": 27
+        }
+      ],
+      "dk": [
+        {
+          "choice_list_name": "dk",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 28
         }
       ]
     },
@@ -905,7 +936,7 @@
         "valuesList": "bite_occur",
         "_defn": [
           {
-            "_row_num": 10,
+            "_row_num": 11,
             "section_name": "survey"
           },
           {
@@ -919,7 +950,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 12,
+            "_row_num": 13,
             "section_name": "survey"
           },
           {
@@ -934,7 +965,7 @@
         "valuesList": "bite_outcome",
         "_defn": [
           {
-            "_row_num": 14,
+            "_row_num": 15,
             "section_name": "survey"
           },
           {
@@ -943,6 +974,21 @@
           }
         ],
         "elementKey": "snake_bite_outcome"
+      },
+      "snake_bite_miss_work_school_days_unknown": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "survey"
+          }
+        ],
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_miss_work_school_days_unknown_items"
+        },
+        "valuesList": "dk",
+        "elementKey": "snake_bite_miss_work_school_days_unknown"
       }
     },
     "section_names": [
@@ -1064,7 +1110,6 @@
         "prompts": [
           {
             "type": "note",
-            "name": "group_snake",
             "display": {
               "prompt": {
                 "text": "Snake Bite details"
@@ -1084,6 +1129,10 @@
               "prompt": {
                 "text": "59b. How many times (separate instances) was {{data.name}} bitten?"
               }
+            },
+            "inputAttributes": {
+              "min": 1,
+              "step": 1
             },
             "_row_num": 4,
             "__rowNum__": 3,
@@ -1145,6 +1194,17 @@
           },
           {
             "type": "select_multiple",
+            "values_list": "dk",
+            "name": "snake_bite_miss_work_school_days_unknown",
+            "_row_num": 9,
+            "__rowNum__": 8,
+            "_token_type": "prompt",
+            "_type": "select_multiple",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 5
+          },
+          {
+            "type": "select_multiple",
             "values_list": "bite_occur",
             "name": "snake_bite_occur",
             "display": {
@@ -1156,12 +1216,12 @@
               }
             },
             "constraint": "countSelected(data('snake_bite_occur')) <= data('snake_bite_num_times')",
-            "_row_num": 10,
-            "__rowNum__": 9,
+            "_row_num": 11,
+            "__rowNum__": 10,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 5
+            "promptIdx": 6
           },
           {
             "type": "text",
@@ -1171,12 +1231,12 @@
                 "text": "Specify"
               }
             },
-            "_row_num": 12,
-            "__rowNum__": 11,
+            "_row_num": 13,
+            "__rowNum__": 12,
             "_token_type": "prompt",
             "_type": "text",
             "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 6
+            "promptIdx": 7
           },
           {
             "type": "select_one",
@@ -1187,26 +1247,26 @@
                 "text": "59f. What was the outcome of the bite? (If bitten more than once, answer about the most severe bite)"
               }
             },
-            "_row_num": 14,
-            "__rowNum__": 13,
+            "_row_num": 15,
+            "__rowNum__": 14,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 7
+            "promptIdx": 8
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 16,
-            "_branch_label_enclosing_screen": "survey/_screen16",
-            "promptIdx": 8
+            "_row_num": 17,
+            "_branch_label_enclosing_screen": "survey/_screen17",
+            "promptIdx": 9
           }
         ],
         "validation_tag_map": {
           "finalize": [
             2,
-            5
+            6
           ]
         },
         "operations": [
@@ -1217,23 +1277,23 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 15,
-              "__rowNum__": 14,
+              "_row_num": 16,
+              "__rowNum__": 15,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nif (selected(data('snake_bite_miss_work_school'), 'yes')) {\nactivePromptIndicies.push(4);\n}\nactivePromptIndicies.push(5);\nif (selected(data('snake_bite_occur'), 'other')) {\nactivePromptIndicies.push(6);\n}\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nif (selected(data('snake_bite_miss_work_school'), 'yes')) {\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\n}\nactivePromptIndicies.push(6);\nif (selected(data('snake_bite_occur'), 'other')) {\nactivePromptIndicies.push(7);\n}\nactivePromptIndicies.push(8);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 16,
+            "_row_num": 17,
             "operationIdx": 1
           },
           {
-            "_row_num": 16,
+            "_row_num": 17,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(8);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(9);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -1242,14 +1302,14 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 16,
+            "_row_num": 17,
             "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
           "_contents": 2,
-          "_screen16": 2
+          "_screen17": 2
         }
       }
     },
@@ -1375,7 +1435,7 @@
         "valuesList": "bite_occur",
         "_defn": [
           {
-            "_row_num": 10,
+            "_row_num": 11,
             "section_name": "survey"
           },
           {
@@ -1395,7 +1455,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 12,
+            "_row_num": 13,
             "section_name": "survey"
           },
           {
@@ -1413,7 +1473,7 @@
         "valuesList": "bite_outcome",
         "_defn": [
           {
-            "_row_num": 14,
+            "_row_num": 15,
             "section_name": "survey"
           },
           {
@@ -1425,6 +1485,31 @@
         "elementName": "snake_bite_outcome",
         "elementSet": "data",
         "elementPath": "snake_bite_outcome"
+      },
+      "snake_bite_miss_work_school_days_unknown": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "survey"
+          }
+        ],
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_miss_work_school_days_unknown_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "snake_bite_miss_work_school_days_unknown.items",
+          "notUnitOfRetention": true
+        },
+        "valuesList": "dk",
+        "elementKey": "snake_bite_miss_work_school_days_unknown",
+        "elementName": "snake_bite_miss_work_school_days_unknown",
+        "elementSet": "data",
+        "elementPath": "snake_bite_miss_work_school_days_unknown",
+        "listChildElementKeys": [
+          "snake_bite_miss_work_school_days_unknown_items"
+        ]
       },
       "snake_bite_months_items": {
         "type": "string",
@@ -1440,6 +1525,14 @@
         "elementName": "items",
         "elementSet": "data",
         "elementPath": "snake_bite_occur.items",
+        "notUnitOfRetention": true
+      },
+      "snake_bite_miss_work_school_days_unknown_items": {
+        "type": "string",
+        "elementKey": "snake_bite_miss_work_school_days_unknown_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "snake_bite_miss_work_school_days_unknown.items",
         "notUnitOfRetention": true
       },
       "_id": {
@@ -1565,10 +1658,17 @@
       },
       {
         "_partition": "Column",
+        "_aspect": "snake_bite_miss_work_school_days_unknown",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"dk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":28}]"
+      },
+      {
+        "_partition": "Column",
         "_aspect": "snake_bite_months",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"month\",\"data_value\":\"all\",\"display\":{\"title\":{\"text\":\"All\"}},\"_row_num\":12},{\"choice_list_name\":\"month\",\"data_value\":\"january\",\"display\":{\"title\":{\"text\":\"January\"}},\"_row_num\":13},{\"choice_list_name\":\"month\",\"data_value\":\"february\",\"display\":{\"title\":{\"text\":\"February\"}},\"_row_num\":14},{\"choice_list_name\":\"month\",\"data_value\":\"march\",\"display\":{\"title\":{\"text\":\"March\"}},\"_row_num\":15},{\"choice_list_name\":\"month\",\"data_value\":\"april\",\"display\":{\"title\":{\"text\":\"April\"}},\"_row_num\":16},{\"choice_list_name\":\"month\",\"data_value\":\"may\",\"display\":{\"title\":{\"text\":\"May\"}},\"_row_num\":17},{\"choice_list_name\":\"month\",\"data_value\":\"june\",\"display\":{\"title\":{\"text\":\"June\"}},\"_row_num\":18},{\"choice_list_name\":\"month\",\"data_value\":\"july\",\"display\":{\"title\":{\"text\":\"July\"}},\"_row_num\":19},{\"choice_list_name\":\"month\",\"data_value\":\"august\",\"display\":{\"title\":{\"text\":\"August\"}},\"_row_num\":20},{\"choice_list_name\":\"month\",\"data_value\":\"september\",\"display\":{\"title\":{\"text\":\"September\"}},\"_row_num\":21},{\"choice_list_name\":\"month\",\"data_value\":\"october\",\"display\":{\"title\":{\"text\":\"October\"}},\"_row_num\":22},{\"choice_list_name\":\"month\",\"data_value\":\"november\",\"display\":{\"title\":{\"text\":\"November\"}},\"_row_num\":23},{\"choice_list_name\":\"month\",\"data_value\":\"december\",\"display\":{\"title\":{\"text\":\"December\"}},\"_row_num\":24}]"
+        "_value": "[{\"choice_list_name\":\"month\",\"data_value\":\"january\",\"display\":{\"title\":{\"text\":\"January\"}},\"_row_num\":12},{\"choice_list_name\":\"month\",\"data_value\":\"february\",\"display\":{\"title\":{\"text\":\"February\"}},\"_row_num\":13},{\"choice_list_name\":\"month\",\"data_value\":\"march\",\"display\":{\"title\":{\"text\":\"March\"}},\"_row_num\":14},{\"choice_list_name\":\"month\",\"data_value\":\"april\",\"display\":{\"title\":{\"text\":\"April\"}},\"_row_num\":15},{\"choice_list_name\":\"month\",\"data_value\":\"may\",\"display\":{\"title\":{\"text\":\"May\"}},\"_row_num\":16},{\"choice_list_name\":\"month\",\"data_value\":\"june\",\"display\":{\"title\":{\"text\":\"June\"}},\"_row_num\":17},{\"choice_list_name\":\"month\",\"data_value\":\"july\",\"display\":{\"title\":{\"text\":\"July\"}},\"_row_num\":18},{\"choice_list_name\":\"month\",\"data_value\":\"august\",\"display\":{\"title\":{\"text\":\"August\"}},\"_row_num\":19},{\"choice_list_name\":\"month\",\"data_value\":\"september\",\"display\":{\"title\":{\"text\":\"September\"}},\"_row_num\":20},{\"choice_list_name\":\"month\",\"data_value\":\"october\",\"display\":{\"title\":{\"text\":\"October\"}},\"_row_num\":21},{\"choice_list_name\":\"month\",\"data_value\":\"november\",\"display\":{\"title\":{\"text\":\"November\"}},\"_row_num\":22},{\"choice_list_name\":\"month\",\"data_value\":\"december\",\"display\":{\"title\":{\"text\":\"December\"}},\"_row_num\":23},{\"choice_list_name\":\"month\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":24}]"
       },
       {
         "_partition": "Column",

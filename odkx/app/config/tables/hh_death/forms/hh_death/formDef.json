@@ -16,110 +16,98 @@
         "_row_num": 2
       },
       {
-        "type": "note",
+        "type": "text",
+        "name": "hh_death_id",
         "display": {
           "prompt": {
-            "text": "Household ID: {{data.hh_id}}"
+            "text": "65a. ExtID of the person who died"
+          },
+          "hint": {
+            "text": "ABC-123-700"
           }
         },
         "_row_num": 3
       },
       {
-        "type": "note",
+        "type": "text",
+        "name": "hh_death_name",
         "display": {
           "prompt": {
-            "text": "Water Body Details"
+            "text": "65b. Given name of the person who died"
           }
         },
         "_row_num": 4
       },
       {
-        "type": "geopoint",
-        "name": "water_bodies_geo",
+        "type": "text",
+        "name": "hh_death_surname",
         "display": {
           "prompt": {
-            "text": "53a(i). Record GPS coordinates for this body of water (mandatory)"
+            "text": "65c. Surname of the person who died"
           }
         },
         "_row_num": 5
       },
       {
         "type": "select_one",
-        "values_list": "water_body_type",
-        "name": "water_bodies_type",
+        "values_list": "gender",
+        "name": "hh_death_gender",
         "display": {
           "prompt": {
-            "text": "53a(ii). What is the type of water body close (<50m) to the household?"
+            "text": "65d. Gender of the person who died"
           }
         },
         "_row_num": 6
       },
       {
-        "clause": "end screen",
+        "type": "date",
+        "name": "hh_death_date",
+        "display": {
+          "prompt": {
+            "text": "65e. Date of death of the person who died"
+          }
+        },
         "_row_num": 7
+      },
+      {
+        "type": "integer",
+        "name": "hh_death_age",
+        "display": {
+          "prompt": {
+            "text": "65f. Approximate age of person who died"
+          }
+        },
+        "inputAttributes": {
+          "min": 0,
+          "step": 1
+        },
+        "_row_num": 8
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 9
       }
     ],
     "choices": [
       {
-        "choice_list_name": "water_body_type",
-        "data_value": "permanent",
+        "choice_list_name": "gender",
+        "data_value": "male",
         "display": {
           "title": {
-            "text": "Permanent water (all year)"
+            "text": "Male"
           }
         },
         "_row_num": 2
       },
       {
-        "choice_list_name": "water_body_type",
-        "data_value": "semi_permanent",
+        "choice_list_name": "gender",
+        "data_value": "female",
         "display": {
           "title": {
-            "text": "Semi-permanent water (most of the year)"
+            "text": "Female"
           }
         },
         "_row_num": 3
-      },
-      {
-        "choice_list_name": "water_body_type",
-        "data_value": "transient",
-        "display": {
-          "title": {
-            "text": "Transient water (only present when it rains)"
-          }
-        },
-        "_row_num": 4
-      }
-    ],
-    "settings": [
-      {
-        "setting_name": "form_id",
-        "value": "hh_water_body",
-        "_row_num": 2
-      },
-      {
-        "setting_name": "form_version",
-        "value": 20210119001,
-        "_row_num": 3
-      },
-      {
-        "setting_name": "table_id",
-        "value": "hh_water_body",
-        "_row_num": 4
-      },
-      {
-        "setting_name": "survey",
-        "display": {
-          "title": {
-            "text": "Water Bodies"
-          }
-        },
-        "_row_num": 5
-      },
-      {
-        "setting_name": "instance_name",
-        "value": "name",
-        "_row_num": 6
       }
     ],
     "model": [
@@ -129,14 +117,65 @@
         "_row_num": 2
       },
       {
-        "name": "water_bodies_geo",
-        "type": "geopoint",
+        "name": "hh_death_id",
+        "type": "text",
         "_row_num": 3
       },
       {
-        "name": "water_bodies_type",
-        "type": "string",
+        "name": "hh_death_name",
+        "type": "text",
         "_row_num": 4
+      },
+      {
+        "name": "hh_death_surname",
+        "type": "text",
+        "_row_num": 5
+      },
+      {
+        "name": "hh_death_gender",
+        "type": "select_one",
+        "_row_num": 6
+      },
+      {
+        "name": "hh_death_date",
+        "type": "date",
+        "_row_num": 7
+      },
+      {
+        "name": "hh_death_age",
+        "type": "integer",
+        "_row_num": 8
+      }
+    ],
+    "settings": [
+      {
+        "setting_name": "form_id",
+        "value": "hh_death",
+        "_row_num": 2
+      },
+      {
+        "setting_name": "form_version",
+        "value": 20210128001,
+        "_row_num": 3
+      },
+      {
+        "setting_name": "table_id",
+        "value": "hh_death",
+        "_row_num": 4
+      },
+      {
+        "setting_name": "survey",
+        "display": {
+          "title": {
+            "text": "New Household Recent Deaths"
+          }
+        },
+        "_row_num": 5
+      },
+      {
+        "setting_name": "instance_name",
+        "value": "hh_id",
+        "_row_num": 6
       }
     ]
   },
@@ -159,31 +198,31 @@
     "settings": {
       "form_id": {
         "setting_name": "form_id",
-        "value": "hh_water_body",
+        "value": "hh_death",
         "_row_num": 2
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210119001,
+        "value": 20210128001,
         "_row_num": 3
       },
       "table_id": {
         "setting_name": "table_id",
-        "value": "hh_water_body",
+        "value": "hh_death",
         "_row_num": 4
       },
       "survey": {
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Water Bodies"
+            "text": "New Household Recent Deaths"
           }
         },
         "_row_num": 5
       },
       "instance_name": {
         "setting_name": "instance_name",
-        "value": "name",
+        "value": "hh_id",
         "_row_num": 6
       },
       "_locales": {
@@ -209,43 +248,33 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Water Bodies"
+            "text": "New Household Recent Deaths"
           }
         },
         "_row_num": 5
       }
     },
     "choices": {
-      "water_body_type": [
+      "gender": [
         {
-          "choice_list_name": "water_body_type",
-          "data_value": "permanent",
+          "choice_list_name": "gender",
+          "data_value": "male",
           "display": {
             "title": {
-              "text": "Permanent water (all year)"
+              "text": "Male"
             }
           },
           "_row_num": 2
         },
         {
-          "choice_list_name": "water_body_type",
-          "data_value": "semi_permanent",
+          "choice_list_name": "gender",
+          "data_value": "female",
           "display": {
             "title": {
-              "text": "Semi-permanent water (most of the year)"
+              "text": "Female"
             }
           },
           "_row_num": 3
-        },
-        {
-          "choice_list_name": "water_body_type",
-          "data_value": "transient",
-          "display": {
-            "title": {
-              "text": "Transient water (only present when it rains)"
-            }
-          },
-          "_row_num": 4
         }
       ]
     },
@@ -265,30 +294,11 @@
         ],
         "elementKey": "hh_id"
       },
-      "water_bodies_geo": {
-        "type": "object",
-        "elementType": "geopoint",
-        "properties": {
-          "latitude": {
-            "type": "number",
-            "elementKey": "water_bodies_geo_latitude"
-          },
-          "longitude": {
-            "type": "number",
-            "elementKey": "water_bodies_geo_longitude"
-          },
-          "altitude": {
-            "type": "number",
-            "elementKey": "water_bodies_geo_altitude"
-          },
-          "accuracy": {
-            "type": "number",
-            "elementKey": "water_bodies_geo_accuracy"
-          }
-        },
+      "hh_death_id": {
+        "type": "string",
         "_defn": [
           {
-            "_row_num": 5,
+            "_row_num": 3,
             "section_name": "survey"
           },
           {
@@ -296,14 +306,13 @@
             "section_name": "model"
           }
         ],
-        "elementKey": "water_bodies_geo"
+        "elementKey": "hh_death_id"
       },
-      "water_bodies_type": {
+      "hh_death_name": {
         "type": "string",
-        "valuesList": "water_body_type",
         "_defn": [
           {
-            "_row_num": 6,
+            "_row_num": 4,
             "section_name": "survey"
           },
           {
@@ -311,7 +320,65 @@
             "section_name": "model"
           }
         ],
-        "elementKey": "water_bodies_type"
+        "elementKey": "hh_death_name"
+      },
+      "hh_death_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_death_surname"
+      },
+      "hh_death_gender": {
+        "type": "string",
+        "valuesList": "gender",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_death_gender"
+      },
+      "hh_death_date": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 7,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_death_date"
+      },
+      "hh_death_age": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 8,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_death_age"
       }
     },
     "section_names": [
@@ -338,7 +405,7 @@
             "promptIdx": 0,
             "display": {
               "title": {
-                "text": "Water Bodies"
+                "text": "New Household Recent Deaths"
               }
             },
             "_branch_label_enclosing_screen": "survey/0"
@@ -432,55 +499,60 @@
         "reachable_sections": {},
         "prompts": [
           {
-            "type": "note",
+            "type": "text",
+            "name": "hh_death_id",
             "display": {
               "prompt": {
-                "text": "Household ID: {{data.hh_id}}"
+                "text": "65a. ExtID of the person who died"
+              },
+              "hint": {
+                "text": "ABC-123-700"
               }
             },
             "_row_num": 3,
             "__rowNum__": 2,
             "_token_type": "prompt",
-            "_type": "note",
+            "_type": "text",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 0
           },
           {
-            "type": "note",
+            "type": "text",
+            "name": "hh_death_name",
             "display": {
               "prompt": {
-                "text": "Water Body Details"
+                "text": "65b. Given name of the person who died"
               }
             },
             "_row_num": 4,
             "__rowNum__": 3,
             "_token_type": "prompt",
-            "_type": "note",
+            "_type": "text",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 1
           },
           {
-            "type": "geopoint",
-            "name": "water_bodies_geo",
+            "type": "text",
+            "name": "hh_death_surname",
             "display": {
               "prompt": {
-                "text": "53a(i). Record GPS coordinates for this body of water (mandatory)"
+                "text": "65c. Surname of the person who died"
               }
             },
             "_row_num": 5,
             "__rowNum__": 4,
             "_token_type": "prompt",
-            "_type": "geopoint",
+            "_type": "text",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 2
           },
           {
             "type": "select_one",
-            "values_list": "water_body_type",
-            "name": "water_bodies_type",
+            "values_list": "gender",
+            "name": "hh_death_gender",
             "display": {
               "prompt": {
-                "text": "53a(ii). What is the type of water body close (<50m) to the household?"
+                "text": "65d. Gender of the person who died"
               }
             },
             "_row_num": 6,
@@ -491,12 +563,46 @@
             "promptIdx": 3
           },
           {
+            "type": "date",
+            "name": "hh_death_date",
+            "display": {
+              "prompt": {
+                "text": "65e. Date of death of the person who died"
+              }
+            },
+            "_row_num": 7,
+            "__rowNum__": 6,
+            "_token_type": "prompt",
+            "_type": "date",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 4
+          },
+          {
+            "type": "integer",
+            "name": "hh_death_age",
+            "display": {
+              "prompt": {
+                "text": "65f. Approximate age of person who died"
+              }
+            },
+            "inputAttributes": {
+              "min": 0,
+              "step": 1
+            },
+            "_row_num": 8,
+            "__rowNum__": 7,
+            "_token_type": "prompt",
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 5
+          },
+          {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 8,
-            "_branch_label_enclosing_screen": "survey/_screen8",
-            "promptIdx": 4
+            "_row_num": 10,
+            "_branch_label_enclosing_screen": "survey/_screen10",
+            "promptIdx": 6
           }
         ],
         "validation_tag_map": {
@@ -510,23 +616,23 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 7,
-              "__rowNum__": 6,
+              "_row_num": 9,
+              "__rowNum__": 8,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 8,
+            "_row_num": 10,
             "operationIdx": 1
           },
           {
-            "_row_num": 8,
+            "_row_num": 10,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(4);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(6);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -535,14 +641,14 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 8,
+            "_row_num": 10,
             "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
           "_contents": 2,
-          "_screen8": 2
+          "_screen10": 2
         }
       }
     },
@@ -560,42 +666,11 @@
         "elementSet": "data",
         "elementPath": "hh_id"
       },
-      "water_bodies_geo": {
-        "type": "object",
-        "elementType": "geopoint",
-        "properties": {
-          "latitude": {
-            "type": "number",
-            "elementKey": "water_bodies_geo_latitude",
-            "elementName": "latitude",
-            "elementSet": "data",
-            "elementPath": "water_bodies_geo.latitude"
-          },
-          "longitude": {
-            "type": "number",
-            "elementKey": "water_bodies_geo_longitude",
-            "elementName": "longitude",
-            "elementSet": "data",
-            "elementPath": "water_bodies_geo.longitude"
-          },
-          "altitude": {
-            "type": "number",
-            "elementKey": "water_bodies_geo_altitude",
-            "elementName": "altitude",
-            "elementSet": "data",
-            "elementPath": "water_bodies_geo.altitude"
-          },
-          "accuracy": {
-            "type": "number",
-            "elementKey": "water_bodies_geo_accuracy",
-            "elementName": "accuracy",
-            "elementSet": "data",
-            "elementPath": "water_bodies_geo.accuracy"
-          }
-        },
+      "hh_death_id": {
+        "type": "string",
         "_defn": [
           {
-            "_row_num": 5,
+            "_row_num": 3,
             "section_name": "survey"
           },
           {
@@ -603,24 +678,16 @@
             "section_name": "model"
           }
         ],
-        "elementKey": "water_bodies_geo",
-        "elementName": "water_bodies_geo",
+        "elementKey": "hh_death_id",
+        "elementName": "hh_death_id",
         "elementSet": "data",
-        "elementPath": "water_bodies_geo",
-        "listChildElementKeys": [
-          "water_bodies_geo_accuracy",
-          "water_bodies_geo_altitude",
-          "water_bodies_geo_latitude",
-          "water_bodies_geo_longitude"
-        ],
-        "notUnitOfRetention": true
+        "elementPath": "hh_death_id"
       },
-      "water_bodies_type": {
+      "hh_death_name": {
         "type": "string",
-        "valuesList": "water_body_type",
         "_defn": [
           {
-            "_row_num": 6,
+            "_row_num": 4,
             "section_name": "survey"
           },
           {
@@ -628,38 +695,80 @@
             "section_name": "model"
           }
         ],
-        "elementKey": "water_bodies_type",
-        "elementName": "water_bodies_type",
+        "elementKey": "hh_death_name",
+        "elementName": "hh_death_name",
         "elementSet": "data",
-        "elementPath": "water_bodies_type"
+        "elementPath": "hh_death_name"
       },
-      "water_bodies_geo_latitude": {
-        "type": "number",
-        "elementKey": "water_bodies_geo_latitude",
-        "elementName": "latitude",
+      "hh_death_surname": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 5,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 5,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_death_surname",
+        "elementName": "hh_death_surname",
         "elementSet": "data",
-        "elementPath": "water_bodies_geo.latitude"
+        "elementPath": "hh_death_surname"
       },
-      "water_bodies_geo_longitude": {
-        "type": "number",
-        "elementKey": "water_bodies_geo_longitude",
-        "elementName": "longitude",
+      "hh_death_gender": {
+        "type": "string",
+        "valuesList": "gender",
+        "_defn": [
+          {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 6,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_death_gender",
+        "elementName": "hh_death_gender",
         "elementSet": "data",
-        "elementPath": "water_bodies_geo.longitude"
+        "elementPath": "hh_death_gender"
       },
-      "water_bodies_geo_altitude": {
-        "type": "number",
-        "elementKey": "water_bodies_geo_altitude",
-        "elementName": "altitude",
+      "hh_death_date": {
+        "type": "string",
+        "elementType": "date",
+        "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 7,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_death_date",
+        "elementName": "hh_death_date",
         "elementSet": "data",
-        "elementPath": "water_bodies_geo.altitude"
+        "elementPath": "hh_death_date"
       },
-      "water_bodies_geo_accuracy": {
-        "type": "number",
-        "elementKey": "water_bodies_geo_accuracy",
-        "elementName": "accuracy",
+      "hh_death_age": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
+          {
+            "_row_num": 8,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_death_age",
+        "elementName": "hh_death_age",
         "elementSet": "data",
-        "elementPath": "water_bodies_geo.accuracy"
+        "elementPath": "hh_death_age"
       },
       "_id": {
         "type": "string",
@@ -777,10 +886,10 @@
     "properties": [
       {
         "_partition": "Column",
-        "_aspect": "water_bodies_type",
+        "_aspect": "hh_death_gender",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"water_body_type\",\"data_value\":\"permanent\",\"display\":{\"title\":{\"text\":\"Permanent water (all year)\"}},\"_row_num\":2},{\"choice_list_name\":\"water_body_type\",\"data_value\":\"semi_permanent\",\"display\":{\"title\":{\"text\":\"Semi-permanent water (most of the year)\"}},\"_row_num\":3},{\"choice_list_name\":\"water_body_type\",\"data_value\":\"transient\",\"display\":{\"title\":{\"text\":\"Transient water (only present when it rains)\"}},\"_row_num\":4}]"
+        "_value": "[{\"choice_list_name\":\"gender\",\"data_value\":\"male\",\"display\":{\"title\":{\"text\":\"Male\"}},\"_row_num\":2},{\"choice_list_name\":\"gender\",\"data_value\":\"female\",\"display\":{\"title\":{\"text\":\"Female\"}},\"_row_num\":3}]"
       },
       {
         "_partition": "FormType",
@@ -794,7 +903,7 @@
         "_aspect": "default",
         "_key": "SurveyUtil.formId",
         "_type": "string",
-        "_value": "hh_water_body"
+        "_value": "hh_death"
       },
       {
         "_partition": "Table",
@@ -808,7 +917,7 @@
         "_aspect": "default",
         "_key": "displayName",
         "_type": "object",
-        "_value": "{\"text\":\"Water Bodies\"}"
+        "_value": "{\"text\":\"New Household Recent Deaths\"}"
       }
     ]
   }

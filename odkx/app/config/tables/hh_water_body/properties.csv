@@ -1,5 +1,5 @@
 _partition,_aspect,_key,_type,_value
-Column,water_bodies_type,displayChoicesList,object,"[{""choice_list_name"":""water_body_type"",""data_value"":""permanent"",""display"":{""title"":{""text"":""Permanent water (all year)""}},""_row_num"":5},{""choice_list_name"":""water_body_type"",""data_value"":""semi_permanent"",""display"":{""title"":{""text"":""Semi-permanent water (most of the year)""}},""_row_num"":6},{""choice_list_name"":""water_body_type"",""data_value"":""transient"",""display"":{""title"":{""text"":""Transient water (only present when it rains)""}},""_row_num"":7}]"
+Column,water_bodies_type,displayChoicesList,object,"[{""choice_list_name"":""water_body_type"",""data_value"":""permanent"",""display"":{""title"":{""text"":""Permanent water (all year)""}},""_row_num"":2},{""choice_list_name"":""water_body_type"",""data_value"":""semi_permanent"",""display"":{""title"":{""text"":""Semi-permanent water (most of the year)""}},""_row_num"":3},{""choice_list_name"":""water_body_type"",""data_value"":""transient"",""display"":{""title"":{""text"":""Transient water (only present when it rains)""}},""_row_num"":4}]"
 FormType,default,FormType.formType,string,SURVEY
 SurveyUtil,default,SurveyUtil.formId,string,hh_water_body
 Table,default,defaultViewType,string,SPREADSHEET

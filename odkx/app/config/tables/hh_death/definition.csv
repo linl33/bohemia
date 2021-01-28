@@ -1,0 +1,8 @@
+_element_key,_element_name,_element_type,_list_child_element_keys
+hh_death_age,hh_death_age,integer,[]
+hh_death_date,hh_death_date,date,[]
+hh_death_gender,hh_death_gender,string,[]
+hh_death_id,hh_death_id,string,[]
+hh_death_name,hh_death_name,string,[]
+hh_death_surname,hh_death_surname,string,[]
+hh_id,hh_id,string,[]
