@@ -2005,7 +2005,7 @@
       },
       {
         "type": "select_one_with_other",
-        "values_list": "yno",
+        "values_list": "yn",
         "name": "hh_spray_label_seen",
         "display": {
           "prompt": {
@@ -38821,7 +38821,7 @@
           }
         ],
         "type": "string",
-        "valuesList": "yno",
+        "valuesList": "yn",
         "elementKey": "hh_spray_label_seen"
       },
       "hh_spray_label_date": {
@@ -42091,7 +42091,7 @@
           },
           {
             "type": "select_one_with_other",
-            "values_list": "yno",
+            "values_list": "yn",
             "name": "hh_spray_label_seen",
             "display": {
               "prompt": {
@@ -44316,7 +44316,7 @@
           }
         ],
         "type": "string",
-        "valuesList": "yno",
+        "valuesList": "yn",
         "elementKey": "hh_spray_label_seen",
         "elementName": "hh_spray_label_seen",
         "elementSet": "data",
@@ -45053,7 +45053,7 @@
         "_aspect": "hh_spray_label_seen",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"yno\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":17},{\"choice_list_name\":\"yno\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":18},{\"choice_list_name\":\"yno\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":19}]"
+        "_value": "[{\"choice_list_name\":\"yn\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":2},{\"choice_list_name\":\"yn\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":3}]"
       },
       {
         "_partition": "Column",
