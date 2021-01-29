@@ -6,4 +6,4 @@ Column,travel_sleep_net,displayChoicesList,object,"[{""choice_list_name"":""yndk
 FormType,default,FormType.formType,string,SURVEY
 SurveyUtil,default,SurveyUtil.formId,string,hh_travel
 Table,default,defaultViewType,string,SPREADSHEET
-Table,default,displayName,object,"{""text"":""Member Travel History""}"
+Table,default,displayName,object,"{""text"":{""default"":""Member Travel History"",""pt"":""Member Travel History"",""sw"":""Member Travel History""}}"

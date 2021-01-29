@@ -19790,7 +19790,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Bohemia Census"
+            "text": {
+              "default": "Bohemia Census",
+              "pt": "Bohemia Census",
+              "sw": "Bohemia Census"
+            }
           }
         },
         "_row_num": 5
@@ -19799,7 +19803,11 @@
         "setting_name": "technical_details",
         "display": {
           "title": {
-            "text": "Technical Details"
+            "text": {
+              "default": "Technical Details",
+              "pt": "Technical Details",
+              "sw": "Technical Details"
+            }
           }
         },
         "_row_num": 6
@@ -19808,7 +19816,11 @@
         "setting_name": "census",
         "display": {
           "title": {
-            "text": "Census"
+            "text": {
+              "default": "Census",
+              "pt": "Census",
+              "sw": "Census"
+            }
           }
         },
         "_row_num": 7
@@ -19817,7 +19829,11 @@
         "setting_name": "members_absent",
         "display": {
           "title": {
-            "text": "Household Members Absent"
+            "text": {
+              "default": "Household Members Absent",
+              "pt": "Household Members Absent",
+              "sw": "Household Members Absent"
+            }
           }
         },
         "_row_num": 8
@@ -19826,7 +19842,11 @@
         "setting_name": "hh_head_info",
         "display": {
           "title": {
-            "text": "Household Head Info"
+            "text": {
+              "default": "Household Head Info",
+              "pt": "Household Head Info",
+              "sw": "Household Head Info"
+            }
           }
         },
         "_row_num": 9
@@ -19835,7 +19855,11 @@
         "setting_name": "socioecon",
         "display": {
           "title": {
-            "text": "Socio-Economics"
+            "text": {
+              "default": "Socio-Economics",
+              "pt": "Socio-Economics",
+              "sw": "Socio-Economics"
+            }
           }
         },
         "_row_num": 10
@@ -19844,7 +19868,11 @@
         "setting_name": "livestock",
         "display": {
           "title": {
-            "text": "Livestock"
+            "text": {
+              "default": "Livestock",
+              "pt": "Livestock",
+              "sw": "Livestock"
+            }
           }
         },
         "_row_num": 11
@@ -19853,7 +19881,11 @@
         "setting_name": "environment",
         "display": {
           "title": {
-            "text": "Environment"
+            "text": {
+              "default": "Environment",
+              "pt": "Environment",
+              "sw": "Environment"
+            }
           }
         },
         "_row_num": 12
@@ -19862,7 +19894,11 @@
         "setting_name": "member",
         "display": {
           "title": {
-            "text": "Individual Member Questionnaire"
+            "text": {
+              "default": "Individual Member Questionnaire",
+              "pt": "Individual Member Questionnaire",
+              "sw": "Individual Member Questionnaire"
+            }
           }
         },
         "_row_num": 13
@@ -19871,7 +19907,11 @@
         "setting_name": "death",
         "display": {
           "title": {
-            "text": "Deaths in the Past 12 Months"
+            "text": {
+              "default": "Deaths in the Past 12 Months",
+              "pt": "Deaths in the Past 12 Months",
+              "sw": "Deaths in the Past 12 Months"
+            }
           }
         },
         "_row_num": 14
@@ -19880,6 +19920,45 @@
         "setting_name": "instance_name",
         "value": "hh_id",
         "_row_num": 15
+      },
+      {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 16
+      },
+      {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 17
+      },
+      {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 18
       }
     ],
     "queries": [
@@ -20117,7 +20196,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Bohemia Census"
+            "text": {
+              "default": "Bohemia Census",
+              "pt": "Bohemia Census",
+              "sw": "Bohemia Census"
+            }
           }
         },
         "_row_num": 5
@@ -20126,7 +20209,11 @@
         "setting_name": "technical_details",
         "display": {
           "title": {
-            "text": "Technical Details"
+            "text": {
+              "default": "Technical Details",
+              "pt": "Technical Details",
+              "sw": "Technical Details"
+            }
           }
         },
         "_row_num": 6
@@ -20135,7 +20222,11 @@
         "setting_name": "census",
         "display": {
           "title": {
-            "text": "Census"
+            "text": {
+              "default": "Census",
+              "pt": "Census",
+              "sw": "Census"
+            }
           }
         },
         "_row_num": 7
@@ -20144,7 +20235,11 @@
         "setting_name": "members_absent",
         "display": {
           "title": {
-            "text": "Household Members Absent"
+            "text": {
+              "default": "Household Members Absent",
+              "pt": "Household Members Absent",
+              "sw": "Household Members Absent"
+            }
           }
         },
         "_row_num": 8
@@ -20153,7 +20248,11 @@
         "setting_name": "hh_head_info",
         "display": {
           "title": {
-            "text": "Household Head Info"
+            "text": {
+              "default": "Household Head Info",
+              "pt": "Household Head Info",
+              "sw": "Household Head Info"
+            }
           }
         },
         "_row_num": 9
@@ -20162,7 +20261,11 @@
         "setting_name": "socioecon",
         "display": {
           "title": {
-            "text": "Socio-Economics"
+            "text": {
+              "default": "Socio-Economics",
+              "pt": "Socio-Economics",
+              "sw": "Socio-Economics"
+            }
           }
         },
         "_row_num": 10
@@ -20171,7 +20274,11 @@
         "setting_name": "livestock",
         "display": {
           "title": {
-            "text": "Livestock"
+            "text": {
+              "default": "Livestock",
+              "pt": "Livestock",
+              "sw": "Livestock"
+            }
           }
         },
         "_row_num": 11
@@ -20180,7 +20287,11 @@
         "setting_name": "environment",
         "display": {
           "title": {
-            "text": "Environment"
+            "text": {
+              "default": "Environment",
+              "pt": "Environment",
+              "sw": "Environment"
+            }
           }
         },
         "_row_num": 12
@@ -20189,7 +20300,11 @@
         "setting_name": "member",
         "display": {
           "title": {
-            "text": "Individual Member Questionnaire"
+            "text": {
+              "default": "Individual Member Questionnaire",
+              "pt": "Individual Member Questionnaire",
+              "sw": "Individual Member Questionnaire"
+            }
           }
         },
         "_row_num": 13
@@ -20198,7 +20313,11 @@
         "setting_name": "death",
         "display": {
           "title": {
-            "text": "Deaths in the Past 12 Months"
+            "text": {
+              "default": "Deaths in the Past 12 Months",
+              "pt": "Deaths in the Past 12 Months",
+              "sw": "Deaths in the Past 12 Months"
+            }
           }
         },
         "_row_num": 14
@@ -20208,6 +20327,45 @@
         "value": "hh_id",
         "_row_num": 15
       },
+      "default": {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 16
+      },
+      "pt": {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 17
+      },
+      "sw": {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 18
+      },
       "_locales": {
         "setting_name": "_locales",
         "_row_num": 5,
@@ -20215,10 +20373,41 @@
           {
             "display": {
               "locale": {
-                "text": "default"
+                "text": {
+                  "default": "English",
+                  "pt": "English",
+                  "sw": "English"
+                }
               }
             },
+            "_row_num": 16,
             "name": "default"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Português",
+                  "pt": "Português",
+                  "sw": "Português"
+                }
+              }
+            },
+            "_row_num": 17,
+            "name": "pt"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Kiswahili",
+                  "pt": "Kiswahili",
+                  "sw": "Kiswahili"
+                }
+              }
+            },
+            "_row_num": 18,
+            "name": "sw"
           }
         ]
       },
@@ -20231,7 +20420,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Bohemia Census"
+            "text": {
+              "default": "Bohemia Census",
+              "pt": "Bohemia Census",
+              "sw": "Bohemia Census"
+            }
           }
         },
         "_row_num": 5
@@ -39072,7 +39265,11 @@
             "promptIdx": 0,
             "display": {
               "title": {
-                "text": "Technical Details"
+                "text": {
+                  "default": "Technical Details",
+                  "pt": "Technical Details",
+                  "sw": "Technical Details"
+                }
               }
             },
             "_branch_label_enclosing_screen": "technical_details/0"
@@ -39087,7 +39284,11 @@
             "promptIdx": 1,
             "display": {
               "title": {
-                "text": "Census"
+                "text": {
+                  "default": "Census",
+                  "pt": "Census",
+                  "sw": "Census"
+                }
               }
             },
             "_branch_label_enclosing_screen": "census/0"
@@ -39102,7 +39303,11 @@
             "promptIdx": 2,
             "display": {
               "title": {
-                "text": "Household Members Absent"
+                "text": {
+                  "default": "Household Members Absent",
+                  "pt": "Household Members Absent",
+                  "sw": "Household Members Absent"
+                }
               }
             },
             "_branch_label_enclosing_screen": "members_absent/0"
@@ -39117,7 +39322,11 @@
             "promptIdx": 3,
             "display": {
               "title": {
-                "text": "Household Head Info"
+                "text": {
+                  "default": "Household Head Info",
+                  "pt": "Household Head Info",
+                  "sw": "Household Head Info"
+                }
               }
             },
             "_branch_label_enclosing_screen": "hh_head_info/0"
@@ -39132,7 +39341,11 @@
             "promptIdx": 4,
             "display": {
               "title": {
-                "text": "Socio-Economics"
+                "text": {
+                  "default": "Socio-Economics",
+                  "pt": "Socio-Economics",
+                  "sw": "Socio-Economics"
+                }
               }
             },
             "_branch_label_enclosing_screen": "socioecon/0"
@@ -39147,7 +39360,11 @@
             "promptIdx": 5,
             "display": {
               "title": {
-                "text": "Livestock"
+                "text": {
+                  "default": "Livestock",
+                  "pt": "Livestock",
+                  "sw": "Livestock"
+                }
               }
             },
             "_branch_label_enclosing_screen": "livestock/0"
@@ -39162,7 +39379,11 @@
             "promptIdx": 6,
             "display": {
               "title": {
-                "text": "Environment"
+                "text": {
+                  "default": "Environment",
+                  "pt": "Environment",
+                  "sw": "Environment"
+                }
               }
             },
             "_branch_label_enclosing_screen": "environment/0"
@@ -39177,7 +39398,11 @@
             "promptIdx": 7,
             "display": {
               "title": {
-                "text": "Deaths in the Past 12 Months"
+                "text": {
+                  "default": "Deaths in the Past 12 Months",
+                  "pt": "Deaths in the Past 12 Months",
+                  "sw": "Deaths in the Past 12 Months"
+                }
               }
             },
             "_branch_label_enclosing_screen": "death/0"
@@ -39192,7 +39417,11 @@
             "promptIdx": 8,
             "display": {
               "title": {
-                "text": "Individual Member Questionnaire"
+                "text": {
+                  "default": "Individual Member Questionnaire",
+                  "pt": "Individual Member Questionnaire",
+                  "sw": "Individual Member Questionnaire"
+                }
               }
             },
             "_branch_label_enclosing_screen": "member/0"
@@ -42939,7 +43168,11 @@
             "promptIdx": 1,
             "display": {
               "title": {
-                "text": "Bohemia Census"
+                "text": {
+                  "default": "Bohemia Census",
+                  "pt": "Bohemia Census",
+                  "sw": "Bohemia Census"
+                }
               }
             },
             "_branch_label_enclosing_screen": "survey/0"
@@ -45267,7 +45500,7 @@
         "_aspect": "default",
         "_key": "displayName",
         "_type": "object",
-        "_value": "{\"text\":\"Bohemia Census\"}"
+        "_value": "{\"text\":{\"default\":\"Bohemia Census\",\"pt\":\"Bohemia Census\",\"sw\":\"Bohemia Census\"}}"
       }
     ]
   }

@@ -66,4 +66,4 @@ Column,wra_pregnant,displayChoicesList,object,"[{""choice_list_name"":""yndkpna"
 FormType,default,FormType.formType,string,SURVEY
 SurveyUtil,default,SurveyUtil.formId,string,hh_member
 Table,default,defaultViewType,string,SPREADSHEET
-Table,default,displayName,object,"{""text"":""Household Roster""}"
+Table,default,displayName,object,"{""text"":{""default"":""Household Roster"",""pt"":""Household Roster"",""sw"":""Household Roster""}}"

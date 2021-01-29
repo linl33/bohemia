@@ -2,7 +2,7 @@ _partition,_aspect,_key,_type,_value
 FormType,default,FormType.formType,string,SURVEY
 SurveyUtil,default,SurveyUtil.formId,string,hh_geo_location
 Table,default,defaultViewType,string,MAP
-Table,default,displayName,object,"{""text"":""Geo Location""}"
+Table,default,displayName,object,"{""text"":{""default"":""Geo Location"",""pt"":""Geo Location"",""sw"":""Geo Location""}}"
 Table,default,mapListFileView,configpath,config/tables/hh_geo_location/html/geopoints_maps_list.html
 TableMapFragment,default,keyColorRuleType,string,None
 TableMapFragment,default,keyMapLatCol,string,hh_geo_location_latitude

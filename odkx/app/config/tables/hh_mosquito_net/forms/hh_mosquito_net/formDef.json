@@ -205,7 +205,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Mosquito Nets"
+            "text": {
+              "default": "Mosquito Nets",
+              "pt": "Mosquito Nets",
+              "sw": "Mosquito Nets"
+            }
           }
         },
         "_row_num": 5
@@ -214,9 +218,48 @@
         "setting_name": "instance_name",
         "value": "name",
         "_row_num": 6
+      },
+      {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 9
       }
     ],
-    "model_2": [
+    "model": [
       {
         "name": "hh_id",
         "type": "string",
@@ -275,7 +318,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Mosquito Nets"
+            "text": {
+              "default": "Mosquito Nets",
+              "pt": "Mosquito Nets",
+              "sw": "Mosquito Nets"
+            }
           }
         },
         "_row_num": 5
@@ -285,6 +332,45 @@
         "value": "name",
         "_row_num": 6
       },
+      "default": {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 7
+      },
+      "pt": {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 8
+      },
+      "sw": {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 9
+      },
       "_locales": {
         "setting_name": "_locales",
         "_row_num": 5,
@@ -292,10 +378,41 @@
           {
             "display": {
               "locale": {
-                "text": "default"
+                "text": {
+                  "default": "English",
+                  "pt": "English",
+                  "sw": "English"
+                }
               }
             },
+            "_row_num": 7,
             "name": "default"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Português",
+                  "pt": "Português",
+                  "sw": "Português"
+                }
+              }
+            },
+            "_row_num": 8,
+            "name": "pt"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Kiswahili",
+                  "pt": "Kiswahili",
+                  "sw": "Kiswahili"
+                }
+              }
+            },
+            "_row_num": 9,
+            "name": "sw"
           }
         ]
       },
@@ -308,17 +425,14 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Mosquito Nets"
+            "text": {
+              "default": "Mosquito Nets",
+              "pt": "Mosquito Nets",
+              "sw": "Mosquito Nets"
+            }
           }
         },
         "_row_num": 5
-      },
-      "model_2": {
-        "display": {
-          "title": {
-            "text": "Mosquito Nets"
-          }
-        }
       }
     },
     "choices": {
@@ -465,6 +579,16 @@
     "queries": {},
     "calculates": {},
     "model": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id"
+      },
       "obtain_net_how_long_ago": {
         "type": "string",
         "valuesList": "obtain_net",
@@ -475,7 +599,7 @@
           },
           {
             "_row_num": 3,
-            "section_name": "model_2"
+            "section_name": "model"
           }
         ],
         "elementKey": "obtain_net_how_long_ago"
@@ -490,7 +614,7 @@
           },
           {
             "_row_num": 4,
-            "section_name": "model_2"
+            "section_name": "model"
           }
         ],
         "elementKey": "net_sleep_last_night"
@@ -505,25 +629,14 @@
           },
           {
             "_row_num": 5,
-            "section_name": "model_2"
+            "section_name": "model"
           }
         ],
         "elementKey": "net_used_other_purpose"
-      },
-      "hh_id": {
-        "_defn": [
-          {
-            "_row_num": 2,
-            "section_name": "model_2"
-          }
-        ],
-        "type": "string",
-        "elementKey": "hh_id"
       }
     },
     "section_names": [
       "initial",
-      "model_2",
       "survey"
     ],
     "sections": {
@@ -546,7 +659,11 @@
             "promptIdx": 0,
             "display": {
               "title": {
-                "text": "Mosquito Nets"
+                "text": {
+                  "default": "Mosquito Nets",
+                  "pt": "Mosquito Nets",
+                  "sw": "Mosquito Nets"
+                }
               }
             },
             "_branch_label_enclosing_screen": "survey/0"
@@ -741,122 +858,22 @@
           "_contents": 2,
           "_screen7": 2
         }
-      },
-      "model_2": {
-        "section_name": "model_2",
-        "nested_sections": {},
-        "reachable_sections": {},
-        "prompts": [
-          {
-            "name": "hh_id",
-            "type": "string",
-            "_row_num": 2,
-            "__rowNum__": 1,
-            "_token_type": "prompt",
-            "_type": "string",
-            "_branch_label_enclosing_screen": "model_2/_screen2",
-            "promptIdx": 0
-          },
-          {
-            "name": "obtain_net_how_long_ago",
-            "type": "string",
-            "_row_num": 3,
-            "__rowNum__": 2,
-            "_token_type": "prompt",
-            "_type": "string",
-            "_branch_label_enclosing_screen": "model_2/_screen3",
-            "promptIdx": 1
-          },
-          {
-            "name": "net_sleep_last_night",
-            "type": "string",
-            "_row_num": 4,
-            "__rowNum__": 3,
-            "_token_type": "prompt",
-            "_type": "string",
-            "_branch_label_enclosing_screen": "model_2/_screen4",
-            "promptIdx": 2
-          },
-          {
-            "name": "net_used_other_purpose",
-            "type": "string",
-            "_row_num": 5,
-            "__rowNum__": 4,
-            "_token_type": "prompt",
-            "_type": "string",
-            "_branch_label_enclosing_screen": "model_2/_screen5",
-            "promptIdx": 3
-          },
-          {
-            "_token_type": "prompt",
-            "type": "contents",
-            "_type": "contents",
-            "_row_num": 6,
-            "_branch_label_enclosing_screen": "model_2/_screen6",
-            "promptIdx": 4
-          }
-        ],
-        "validation_tag_map": {
-          "finalize": []
-        },
-        "operations": [
-          {
-            "_row_num": 2,
-            "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 0
-          },
-          {
-            "_row_num": 3,
-            "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 1
-          },
-          {
-            "_row_num": 4,
-            "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(2);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 2
-          },
-          {
-            "_row_num": 5,
-            "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(3);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 3
-          },
-          {
-            "_token_type": "exit_section",
-            "clause": "exit section",
-            "_row_num": 6,
-            "operationIdx": 4
-          },
-          {
-            "_row_num": 6,
-            "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(4);\n\nreturn activePromptIndicies;\n}\n",
-            "screen": {
-              "hideInBackHistory": true
-            },
-            "operationIdx": 5
-          },
-          {
-            "_token_type": "resume",
-            "clause": "resume",
-            "_row_num": 6,
-            "operationIdx": 6
-          }
-        ],
-        "branch_label_map": {
-          "_screen2": 0,
-          "_screen3": 1,
-          "_screen4": 2,
-          "_screen5": 3,
-          "_contents": 5,
-          "_screen6": 5
-        }
       }
     },
     "dataTableModel": {
+      "hh_id": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "hh_id",
+        "elementName": "hh_id",
+        "elementSet": "data",
+        "elementPath": "hh_id"
+      },
       "obtain_net_how_long_ago": {
         "type": "string",
         "valuesList": "obtain_net",
@@ -867,7 +884,7 @@
           },
           {
             "_row_num": 3,
-            "section_name": "model_2"
+            "section_name": "model"
           }
         ],
         "elementKey": "obtain_net_how_long_ago",
@@ -885,7 +902,7 @@
           },
           {
             "_row_num": 4,
-            "section_name": "model_2"
+            "section_name": "model"
           }
         ],
         "elementKey": "net_sleep_last_night",
@@ -903,26 +920,13 @@
           },
           {
             "_row_num": 5,
-            "section_name": "model_2"
+            "section_name": "model"
           }
         ],
         "elementKey": "net_used_other_purpose",
         "elementName": "net_used_other_purpose",
         "elementSet": "data",
         "elementPath": "net_used_other_purpose"
-      },
-      "hh_id": {
-        "_defn": [
-          {
-            "_row_num": 2,
-            "section_name": "model_2"
-          }
-        ],
-        "type": "string",
-        "elementKey": "hh_id",
-        "elementName": "hh_id",
-        "elementSet": "data",
-        "elementPath": "hh_id"
       },
       "_id": {
         "type": "string",
@@ -1085,7 +1089,7 @@
         "_aspect": "default",
         "_key": "displayName",
         "_type": "object",
-        "_value": "{\"text\":\"Mosquito Nets\"}"
+        "_value": "{\"text\":{\"default\":\"Mosquito Nets\",\"pt\":\"Mosquito Nets\",\"sw\":\"Mosquito Nets\"}}"
       }
     ]
   }

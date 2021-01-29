@@ -4428,7 +4428,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Member Questionnaire"
+            "text": {
+              "default": "Member Questionnaire",
+              "pt": "Member Questionnaire",
+              "sw": "Member Questionnaire"
+            }
           }
         },
         "_row_num": 5
@@ -4437,6 +4441,45 @@
         "setting_name": "instance_name",
         "value": "name",
         "_row_num": 6
+      },
+      {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 9
       }
     ],
     "calculates": [
@@ -4528,7 +4571,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Member Questionnaire"
+            "text": {
+              "default": "Member Questionnaire",
+              "pt": "Member Questionnaire",
+              "sw": "Member Questionnaire"
+            }
           }
         },
         "_row_num": 5
@@ -4538,6 +4585,45 @@
         "value": "name",
         "_row_num": 6
       },
+      "default": {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 7
+      },
+      "pt": {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 8
+      },
+      "sw": {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 9
+      },
       "_locales": {
         "setting_name": "_locales",
         "_row_num": 5,
@@ -4545,10 +4631,41 @@
           {
             "display": {
               "locale": {
-                "text": "default"
+                "text": {
+                  "default": "English",
+                  "pt": "English",
+                  "sw": "English"
+                }
               }
             },
+            "_row_num": 7,
             "name": "default"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Português",
+                  "pt": "Português",
+                  "sw": "Português"
+                }
+              }
+            },
+            "_row_num": 8,
+            "name": "pt"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Kiswahili",
+                  "pt": "Kiswahili",
+                  "sw": "Kiswahili"
+                }
+              }
+            },
+            "_row_num": 9,
+            "name": "sw"
           }
         ]
       },
@@ -4561,7 +4678,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Member Questionnaire"
+            "text": {
+              "default": "Member Questionnaire",
+              "pt": "Member Questionnaire",
+              "sw": "Member Questionnaire"
+            }
           }
         },
         "_row_num": 5
@@ -8643,7 +8764,11 @@
             "promptIdx": 0,
             "display": {
               "title": {
-                "text": "Member Questionnaire"
+                "text": {
+                  "default": "Member Questionnaire",
+                  "pt": "Member Questionnaire",
+                  "sw": "Member Questionnaire"
+                }
               }
             },
             "_branch_label_enclosing_screen": "survey/0"

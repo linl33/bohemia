@@ -3,4 +3,4 @@ Column,water_bodies_type,displayChoicesList,object,"[{""choice_list_name"":""wat
 FormType,default,FormType.formType,string,SURVEY
 SurveyUtil,default,SurveyUtil.formId,string,hh_water_body
 Table,default,defaultViewType,string,SPREADSHEET
-Table,default,displayName,object,"{""text"":""Water Bodies""}"
+Table,default,displayName,object,"{""text"":{""default"":""Water Bodies"",""pt"":""Water Bodies"",""sw"":""Water Bodies""}}"

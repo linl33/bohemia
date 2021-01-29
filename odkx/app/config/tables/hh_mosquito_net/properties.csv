@@ -5,4 +5,4 @@ Column,obtain_net_how_long_ago,displayChoicesList,object,"[{""choice_list_name""
 FormType,default,FormType.formType,string,SURVEY
 SurveyUtil,default,SurveyUtil.formId,string,hh_mosquito_net
 Table,default,defaultViewType,string,SPREADSHEET
-Table,default,displayName,object,"{""text"":""Mosquito Nets""}"
+Table,default,displayName,object,"{""text"":{""default"":""Mosquito Nets"",""pt"":""Mosquito Nets"",""sw"":""Mosquito Nets""}}"

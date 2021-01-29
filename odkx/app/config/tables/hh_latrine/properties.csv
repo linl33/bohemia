@@ -4,4 +4,4 @@ Column,latrine_type,displayChoicesList,object,"[{""choice_list_name"":""latrine_
 FormType,default,FormType.formType,string,SURVEY
 SurveyUtil,default,SurveyUtil.formId,string,hh_latrine
 Table,default,defaultViewType,string,SPREADSHEET
-Table,default,displayName,object,"{""text"":""Household Latrines""}"
+Table,default,displayName,object,"{""text"":{""default"":""Household Latrines"",""pt"":""Household Latrines"",""sw"":""Household Latrines""}}"

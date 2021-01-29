@@ -60,4 +60,4 @@ Column,where_pigs_rainy_season,displayChoicesList,object,"[{""choice_list_name""
 FormType,default,FormType.formType,string,SURVEY
 SurveyUtil,default,SurveyUtil.formId,string,census
 Table,default,defaultViewType,string,SPREADSHEET
-Table,default,displayName,object,"{""text"":""Bohemia Census""}"
+Table,default,displayName,object,"{""text"":{""default"":""Bohemia Census"",""pt"":""Bohemia Census"",""sw"":""Bohemia Census""}}"
