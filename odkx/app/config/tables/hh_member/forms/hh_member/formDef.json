@@ -694,6 +694,106 @@
         "_row_num": 53
       },
       {
+        "choice_list_name": "bite_occur",
+        "data_value": "home",
+        "display": {
+          "title": {
+            "text": "Inside the home"
+          }
+        },
+        "_row_num": 54
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "compound",
+        "display": {
+          "title": {
+            "text": "Inside the compound"
+          }
+        },
+        "_row_num": 55
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "field",
+        "display": {
+          "title": {
+            "text": "Field"
+          }
+        },
+        "_row_num": 56
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "road",
+        "display": {
+          "title": {
+            "text": "Road"
+          }
+        },
+        "_row_num": 57
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "other",
+        "display": {
+          "title": {
+            "text": "Other"
+          }
+        },
+        "_row_num": 58
+      },
+      {
+        "choice_list_name": "bite_occur",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 59
+      },
+      {
+        "choice_list_name": "bite_outcome",
+        "data_value": "death",
+        "display": {
+          "title": {
+            "text": "Death"
+          }
+        },
+        "_row_num": 60
+      },
+      {
+        "choice_list_name": "bite_outcome",
+        "data_value": "loss_limb",
+        "display": {
+          "title": {
+            "text": "Loss of limb"
+          }
+        },
+        "_row_num": 61
+      },
+      {
+        "choice_list_name": "bite_outcome",
+        "data_value": "full_recovery",
+        "display": {
+          "title": {
+            "text": "Full recovery"
+          }
+        },
+        "_row_num": 62
+      },
+      {
+        "choice_list_name": "bite_outcome",
+        "data_value": "partial_recovery",
+        "display": {
+          "title": {
+            "text": "Partial recovery"
+          }
+        },
+        "_row_num": 63
+      },
+      {
         "choice_list_name": "breastfeed",
         "data_value": "Own_child",
         "display": {
@@ -701,7 +801,7 @@
             "text": "Own child"
           }
         },
-        "_row_num": 54
+        "_row_num": 64
       },
       {
         "choice_list_name": "breastfeed",
@@ -711,7 +811,7 @@
             "text": "Someone else’s child/children"
           }
         },
-        "_row_num": 55
+        "_row_num": 65
       },
       {
         "choice_list_name": "breastfeed",
@@ -721,7 +821,7 @@
             "text": "No"
           }
         },
-        "_row_num": 56
+        "_row_num": 66
       },
       {
         "choice_list_name": "chronic_disease",
@@ -731,7 +831,7 @@
             "text": "Respiratory disease"
           }
         },
-        "_row_num": 57
+        "_row_num": 67
       },
       {
         "choice_list_name": "chronic_disease",
@@ -741,7 +841,7 @@
             "text": "Diarrhoea"
           }
         },
-        "_row_num": 58
+        "_row_num": 68
       },
       {
         "choice_list_name": "chronic_disease",
@@ -751,7 +851,7 @@
             "text": "Injuries from an accident"
           }
         },
-        "_row_num": 59
+        "_row_num": 69
       },
       {
         "choice_list_name": "chronic_disease",
@@ -761,7 +861,7 @@
             "text": "Skin disease"
           }
         },
-        "_row_num": 60
+        "_row_num": 70
       },
       {
         "choice_list_name": "chronic_disease",
@@ -771,7 +871,7 @@
             "text": "Mental health disorder"
           }
         },
-        "_row_num": 61
+        "_row_num": 71
       },
       {
         "choice_list_name": "chronic_disease",
@@ -781,7 +881,7 @@
             "text": "Worms"
           }
         },
-        "_row_num": 62
+        "_row_num": 72
       },
       {
         "choice_list_name": "chronic_disease",
@@ -791,7 +891,7 @@
             "text": "HIV"
           }
         },
-        "_row_num": 63
+        "_row_num": 73
       },
       {
         "choice_list_name": "chronic_disease",
@@ -801,7 +901,7 @@
             "text": "TB"
           }
         },
-        "_row_num": 64
+        "_row_num": 74
       },
       {
         "choice_list_name": "chronic_disease",
@@ -811,7 +911,7 @@
             "text": "Hepatitis"
           }
         },
-        "_row_num": 65
+        "_row_num": 75
       },
       {
         "choice_list_name": "chronic_disease",
@@ -821,7 +921,7 @@
             "text": "Epilepsy (convulsions)"
           }
         },
-        "_row_num": 66
+        "_row_num": 76
       },
       {
         "choice_list_name": "chronic_disease",
@@ -831,7 +931,7 @@
             "text": "Heart problems"
           }
         },
-        "_row_num": 67
+        "_row_num": 77
       },
       {
         "choice_list_name": "chronic_disease",
@@ -841,7 +941,7 @@
             "text": "Diabetes"
           }
         },
-        "_row_num": 68
+        "_row_num": 78
       },
       {
         "choice_list_name": "chronic_disease",
@@ -851,7 +951,7 @@
             "text": "Cancer"
           }
         },
-        "_row_num": 69
+        "_row_num": 79
       },
       {
         "choice_list_name": "chronic_disease",
@@ -861,7 +961,7 @@
             "text": "Prefer not to answer"
           }
         },
-        "_row_num": 70
+        "_row_num": 80
       },
       {
         "choice_list_name": "chronic_disease",
@@ -871,7 +971,7 @@
             "text": "Other"
           }
         },
-        "_row_num": 71
+        "_row_num": 81
       },
       {
         "choice_list_name": "disability",
@@ -881,7 +981,7 @@
             "text": "Blind"
           }
         },
-        "_row_num": 72
+        "_row_num": 82
       },
       {
         "choice_list_name": "disability",
@@ -891,7 +991,7 @@
             "text": "Deaf"
           }
         },
-        "_row_num": 73
+        "_row_num": 83
       },
       {
         "choice_list_name": "disability",
@@ -901,7 +1001,7 @@
             "text": "Amputated/atrophied arm"
           }
         },
-        "_row_num": 74
+        "_row_num": 84
       },
       {
         "choice_list_name": "disability",
@@ -911,7 +1011,7 @@
             "text": "Amputated/atrophied leg"
           }
         },
-        "_row_num": 75
+        "_row_num": 85
       },
       {
         "choice_list_name": "disability",
@@ -921,7 +1021,7 @@
             "text": "Paralysis"
           }
         },
-        "_row_num": 76
+        "_row_num": 86
       },
       {
         "choice_list_name": "disability",
@@ -931,7 +1031,7 @@
             "text": "Mental"
           }
         },
-        "_row_num": 77
+        "_row_num": 87
       },
       {
         "choice_list_name": "disability",
@@ -941,7 +1041,7 @@
             "text": "None"
           }
         },
-        "_row_num": 78
+        "_row_num": 88
       },
       {
         "choice_list_name": "disability",
@@ -951,7 +1051,7 @@
             "text": "Prefer not to answer"
           }
         },
-        "_row_num": 79
+        "_row_num": 89
       },
       {
         "choice_list_name": "disability",
@@ -961,7 +1061,7 @@
             "text": "Other"
           }
         },
-        "_row_num": 80
+        "_row_num": 90
       },
       {
         "choice_list_name": "dmy_ago_dk",
@@ -971,7 +1071,7 @@
             "text": "Day(s) ago"
           }
         },
-        "_row_num": 81
+        "_row_num": 91
       },
       {
         "choice_list_name": "dmy_ago_dk",
@@ -981,7 +1081,7 @@
             "text": "Week(s) ago"
           }
         },
-        "_row_num": 82
+        "_row_num": 92
       },
       {
         "choice_list_name": "dmy_ago_dk",
@@ -991,7 +1091,7 @@
             "text": "Month(s) ago"
           }
         },
-        "_row_num": 83
+        "_row_num": 93
       },
       {
         "choice_list_name": "dmy_ago_dk",
@@ -1001,7 +1101,7 @@
             "text": "Don't Know"
           }
         },
-        "_row_num": 84
+        "_row_num": 94
       },
       {
         "choice_list_name": "dwmy",
@@ -1011,7 +1111,7 @@
             "text": "Day(s)"
           }
         },
-        "_row_num": 85
+        "_row_num": 95
       },
       {
         "choice_list_name": "dwmy",
@@ -1021,7 +1121,7 @@
             "text": "Week(s)"
           }
         },
-        "_row_num": 86
+        "_row_num": 96
       },
       {
         "choice_list_name": "dwmy",
@@ -1031,7 +1131,7 @@
             "text": "Month(s)"
           }
         },
-        "_row_num": 87
+        "_row_num": 97
       },
       {
         "choice_list_name": "dwmy",
@@ -1041,7 +1141,7 @@
             "text": "Year(s)"
           }
         },
-        "_row_num": 88
+        "_row_num": 98
       },
       {
         "choice_list_name": "form_of_care",
@@ -1051,7 +1151,7 @@
             "text": "Health facility"
           }
         },
-        "_row_num": 89
+        "_row_num": 99
       },
       {
         "choice_list_name": "form_of_care",
@@ -1061,7 +1161,7 @@
             "text": "CHW"
           }
         },
-        "_row_num": 90
+        "_row_num": 100
       },
       {
         "choice_list_name": "form_of_care",
@@ -1071,7 +1171,7 @@
             "text": "Family or friends"
           }
         },
-        "_row_num": 91
+        "_row_num": 101
       },
       {
         "choice_list_name": "form_of_care",
@@ -1081,7 +1181,7 @@
             "text": "Informal drug vendor"
           }
         },
-        "_row_num": 92
+        "_row_num": 102
       },
       {
         "choice_list_name": "form_of_care",
@@ -1091,7 +1191,7 @@
             "text": "Pharmacy"
           }
         },
-        "_row_num": 93
+        "_row_num": 103
       },
       {
         "choice_list_name": "form_of_care",
@@ -1101,7 +1201,7 @@
             "text": "Traditional healer"
           }
         },
-        "_row_num": 94
+        "_row_num": 104
       },
       {
         "choice_list_name": "form_of_care",
@@ -1111,7 +1211,7 @@
             "text": "Community leader"
           }
         },
-        "_row_num": 95
+        "_row_num": 105
       },
       {
         "choice_list_name": "form_of_care",
@@ -1121,7 +1221,7 @@
             "text": "Trusted elderly"
           }
         },
-        "_row_num": 96
+        "_row_num": 106
       },
       {
         "choice_list_name": "form_of_care",
@@ -1131,7 +1231,7 @@
             "text": "Traditional midwife"
           }
         },
-        "_row_num": 97
+        "_row_num": 107
       },
       {
         "choice_list_name": "gender",
@@ -1141,7 +1241,7 @@
             "text": "Male"
           }
         },
-        "_row_num": 98
+        "_row_num": 108
       },
       {
         "choice_list_name": "gender",
@@ -1151,7 +1251,7 @@
             "text": "Female"
           }
         },
-        "_row_num": 99
+        "_row_num": 109
       },
       {
         "choice_list_name": "in_outside_district",
@@ -1161,7 +1261,7 @@
             "text": "Within this district"
           }
         },
-        "_row_num": 100
+        "_row_num": 110
       },
       {
         "choice_list_name": "in_outside_district",
@@ -1171,7 +1271,7 @@
             "text": "Outside this district"
           }
         },
-        "_row_num": 101
+        "_row_num": 111
       },
       {
         "choice_list_name": "in_outside_district",
@@ -1181,7 +1281,7 @@
             "text": "Don't Know"
           }
         },
-        "_row_num": 102
+        "_row_num": 112
       },
       {
         "choice_list_name": "ind_religion",
@@ -1191,7 +1291,7 @@
             "text": "Catholic"
           }
         },
-        "_row_num": 103
+        "_row_num": 113
       },
       {
         "choice_list_name": "ind_religion",
@@ -1201,7 +1301,7 @@
             "text": "Protestant"
           }
         },
-        "_row_num": 104
+        "_row_num": 114
       },
       {
         "choice_list_name": "ind_religion",
@@ -1211,7 +1311,7 @@
             "text": "Anglican"
           }
         },
-        "_row_num": 105
+        "_row_num": 115
       },
       {
         "choice_list_name": "ind_religion",
@@ -1221,7 +1321,7 @@
             "text": "Christian undetermined"
           }
         },
-        "_row_num": 106
+        "_row_num": 116
       },
       {
         "choice_list_name": "ind_religion",
@@ -1231,7 +1331,7 @@
             "text": "Islamic"
           }
         },
-        "_row_num": 107
+        "_row_num": 117
       },
       {
         "choice_list_name": "ind_religion",
@@ -1241,7 +1341,7 @@
             "text": "Hindu"
           }
         },
-        "_row_num": 108
+        "_row_num": 118
       },
       {
         "choice_list_name": "ind_religion",
@@ -1251,7 +1351,7 @@
             "text": "Zionist"
           }
         },
-        "_row_num": 109
+        "_row_num": 119
       },
       {
         "choice_list_name": "ind_religion",
@@ -1261,7 +1361,7 @@
             "text": "Animist"
           }
         },
-        "_row_num": 110
+        "_row_num": 120
       },
       {
         "choice_list_name": "ind_religion",
@@ -1271,7 +1371,7 @@
             "text": "Evangelical"
           }
         },
-        "_row_num": 111
+        "_row_num": 121
       },
       {
         "choice_list_name": "ind_religion",
@@ -1281,7 +1381,7 @@
             "text": "Atheist"
           }
         },
-        "_row_num": 112
+        "_row_num": 122
       },
       {
         "choice_list_name": "ind_religion",
@@ -1291,7 +1391,7 @@
             "text": "Don't know"
           }
         },
-        "_row_num": 113
+        "_row_num": 123
       },
       {
         "choice_list_name": "ind_religion",
@@ -1301,7 +1401,7 @@
             "text": "Prefer not to answer"
           }
         },
-        "_row_num": 114
+        "_row_num": 124
       },
       {
         "choice_list_name": "ind_religion",
@@ -1311,7 +1411,7 @@
             "text": "Other"
           }
         },
-        "_row_num": 115
+        "_row_num": 125
       },
       {
         "choice_list_name": "iptp_current",
@@ -1321,7 +1421,7 @@
             "text": "Yes, already took 1 dose"
           }
         },
-        "_row_num": 116
+        "_row_num": 126
       },
       {
         "choice_list_name": "iptp_current",
@@ -1331,7 +1431,7 @@
             "text": "Yes, already took 2 doses"
           }
         },
-        "_row_num": 117
+        "_row_num": 127
       },
       {
         "choice_list_name": "iptp_current",
@@ -1341,7 +1441,7 @@
             "text": "Yes, already took 3 doses"
           }
         },
-        "_row_num": 118
+        "_row_num": 128
       },
       {
         "choice_list_name": "iptp_current",
@@ -1351,7 +1451,7 @@
             "text": "Yes, already took more than 3 doses"
           }
         },
-        "_row_num": 119
+        "_row_num": 129
       },
       {
         "choice_list_name": "iptp_current",
@@ -1361,7 +1461,7 @@
             "text": "No"
           }
         },
-        "_row_num": 120
+        "_row_num": 130
       },
       {
         "choice_list_name": "iptp_current",
@@ -1371,7 +1471,7 @@
             "text": "Don't Know"
           }
         },
-        "_row_num": 121
+        "_row_num": 131
       },
       {
         "choice_list_name": "itchy",
@@ -1381,7 +1481,7 @@
             "text": "Yes, on the body"
           }
         },
-        "_row_num": 122
+        "_row_num": 132
       },
       {
         "choice_list_name": "itchy",
@@ -1391,7 +1491,7 @@
             "text": "Yes, on the head"
           }
         },
-        "_row_num": 123
+        "_row_num": 133
       },
       {
         "choice_list_name": "itchy",
@@ -1401,7 +1501,7 @@
             "text": "No"
           }
         },
-        "_row_num": 124
+        "_row_num": 134
       },
       {
         "choice_list_name": "itchy",
@@ -1411,7 +1511,7 @@
             "text": "Prefer not to answer"
           }
         },
-        "_row_num": 125
+        "_row_num": 135
       },
       {
         "choice_list_name": "lmp",
@@ -1421,7 +1521,7 @@
             "text": "Less than two weeks ago"
           }
         },
-        "_row_num": 126
+        "_row_num": 136
       },
       {
         "choice_list_name": "lmp",
@@ -1431,7 +1531,7 @@
             "text": "More than two weeks ago"
           }
         },
-        "_row_num": 127
+        "_row_num": 137
       },
       {
         "choice_list_name": "lmp",
@@ -1441,7 +1541,7 @@
             "text": "Don't know"
           }
         },
-        "_row_num": 128
+        "_row_num": 138
       },
       {
         "choice_list_name": "lmp",
@@ -1451,7 +1551,7 @@
             "text": "Never"
           }
         },
-        "_row_num": 129
+        "_row_num": 139
       },
       {
         "choice_list_name": "lmp",
@@ -1461,7 +1561,7 @@
             "text": "Prefer not to answer"
           }
         },
-        "_row_num": 130
+        "_row_num": 140
       },
       {
         "choice_list_name": "malaria_no_treatment",
@@ -1471,7 +1571,7 @@
             "text": "Participant didn’t have malaria"
           }
         },
-        "_row_num": 131
+        "_row_num": 141
       },
       {
         "choice_list_name": "malaria_no_treatment",
@@ -1481,7 +1581,7 @@
             "text": "Treatment was not available"
           }
         },
-        "_row_num": 132
+        "_row_num": 142
       },
       {
         "choice_list_name": "malaria_no_treatment",
@@ -1491,7 +1591,7 @@
             "text": "Treatment was not affordable"
           }
         },
-        "_row_num": 133
+        "_row_num": 143
       },
       {
         "choice_list_name": "malaria_no_treatment",
@@ -1501,7 +1601,7 @@
             "text": "Treatment was not deemed necessary"
           }
         },
-        "_row_num": 134
+        "_row_num": 144
       },
       {
         "choice_list_name": "malaria_no_treatment",
@@ -1511,7 +1611,7 @@
             "text": "Don’t know"
           }
         },
-        "_row_num": 135
+        "_row_num": 145
       },
       {
         "choice_list_name": "malaria_test_result",
@@ -1521,7 +1621,7 @@
             "text": "Positive"
           }
         },
-        "_row_num": 136
+        "_row_num": 146
       },
       {
         "choice_list_name": "malaria_test_result",
@@ -1531,7 +1631,7 @@
             "text": "Negative"
           }
         },
-        "_row_num": 137
+        "_row_num": 147
       },
       {
         "choice_list_name": "malaria_test_result",
@@ -1541,7 +1641,7 @@
             "text": "Invalid"
           }
         },
-        "_row_num": 138
+        "_row_num": 148
       },
       {
         "choice_list_name": "malaria_test_result",
@@ -1551,7 +1651,7 @@
             "text": "Don’t Know"
           }
         },
-        "_row_num": 139
+        "_row_num": 149
       },
       {
         "choice_list_name": "member_where_now",
@@ -1561,7 +1661,7 @@
             "text": "He/she died"
           }
         },
-        "_row_num": 140
+        "_row_num": 150
       },
       {
         "choice_list_name": "member_where_now",
@@ -1571,7 +1671,137 @@
             "text": "He/she emigrated"
           }
         },
-        "_row_num": 141
+        "_row_num": 151
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "january",
+        "display": {
+          "title": {
+            "text": "January"
+          }
+        },
+        "_row_num": 152
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "february",
+        "display": {
+          "title": {
+            "text": "February"
+          }
+        },
+        "_row_num": 153
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "march",
+        "display": {
+          "title": {
+            "text": "March"
+          }
+        },
+        "_row_num": 154
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "april",
+        "display": {
+          "title": {
+            "text": "April"
+          }
+        },
+        "_row_num": 155
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "may",
+        "display": {
+          "title": {
+            "text": "May"
+          }
+        },
+        "_row_num": 156
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "june",
+        "display": {
+          "title": {
+            "text": "June"
+          }
+        },
+        "_row_num": 157
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "july",
+        "display": {
+          "title": {
+            "text": "July"
+          }
+        },
+        "_row_num": 158
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "august",
+        "display": {
+          "title": {
+            "text": "August"
+          }
+        },
+        "_row_num": 159
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "september",
+        "display": {
+          "title": {
+            "text": "September"
+          }
+        },
+        "_row_num": 160
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "october",
+        "display": {
+          "title": {
+            "text": "October"
+          }
+        },
+        "_row_num": 161
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "november",
+        "display": {
+          "title": {
+            "text": "November"
+          }
+        },
+        "_row_num": 162
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "december",
+        "display": {
+          "title": {
+            "text": "December"
+          }
+        },
+        "_row_num": 163
+      },
+      {
+        "choice_list_name": "month",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't Know"
+          }
+        },
+        "_row_num": 164
       },
       {
         "choice_list_name": "new_member",
@@ -1581,7 +1811,7 @@
             "text": "Newborn"
           }
         },
-        "_row_num": 142
+        "_row_num": 165
       },
       {
         "choice_list_name": "new_member",
@@ -1591,7 +1821,7 @@
             "text": "Someone new in the household"
           }
         },
-        "_row_num": 143
+        "_row_num": 166
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1601,7 +1831,7 @@
             "text": "Malaria"
           }
         },
-        "_row_num": 144
+        "_row_num": 167
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1611,7 +1841,7 @@
             "text": "Respiratory disease"
           }
         },
-        "_row_num": 145
+        "_row_num": 168
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1621,7 +1851,7 @@
             "text": "Constipation"
           }
         },
-        "_row_num": 146
+        "_row_num": 169
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1631,7 +1861,7 @@
             "text": "Diarrhoea"
           }
         },
-        "_row_num": 147
+        "_row_num": 170
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1641,7 +1871,7 @@
             "text": "Fever"
           }
         },
-        "_row_num": 148
+        "_row_num": 171
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1651,7 +1881,7 @@
             "text": "Injuries from an accident"
           }
         },
-        "_row_num": 149
+        "_row_num": 172
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1661,7 +1891,7 @@
             "text": "Delivery of a baby"
           }
         },
-        "_row_num": 150
+        "_row_num": 173
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1671,7 +1901,7 @@
             "text": "Skin disease"
           }
         },
-        "_row_num": 151
+        "_row_num": 174
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1681,7 +1911,7 @@
             "text": "Worms"
           }
         },
-        "_row_num": 152
+        "_row_num": 175
       },
       {
         "choice_list_name": "other_recent_disease",
@@ -1691,7 +1921,7 @@
             "text": "Other"
           }
         },
-        "_row_num": 153
+        "_row_num": 176
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1701,7 +1931,7 @@
             "text": "Fever"
           }
         },
-        "_row_num": 154
+        "_row_num": 177
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1711,7 +1941,7 @@
             "text": "Vomiting"
           }
         },
-        "_row_num": 155
+        "_row_num": 178
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1721,7 +1951,7 @@
             "text": "Nausea"
           }
         },
-        "_row_num": 156
+        "_row_num": 179
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1731,7 +1961,7 @@
             "text": "Joints pain"
           }
         },
-        "_row_num": 157
+        "_row_num": 180
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1741,7 +1971,7 @@
             "text": "Dizziness"
           }
         },
-        "_row_num": 158
+        "_row_num": 181
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1751,7 +1981,7 @@
             "text": "Chills-shivers"
           }
         },
-        "_row_num": 159
+        "_row_num": 182
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1761,7 +1991,7 @@
             "text": "Diarrhoea"
           }
         },
-        "_row_num": 160
+        "_row_num": 183
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1771,7 +2001,7 @@
             "text": "Loss of smell and/or taste"
           }
         },
-        "_row_num": 161
+        "_row_num": 184
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1781,7 +2011,7 @@
             "text": "No symptoms"
           }
         },
-        "_row_num": 162
+        "_row_num": 185
       },
       {
         "choice_list_name": "other_symptoms",
@@ -1791,7 +2021,7 @@
             "text": "Other"
           }
         },
-        "_row_num": 163
+        "_row_num": 186
       },
       {
         "choice_list_name": "parents_alive",
@@ -1801,7 +2031,7 @@
             "text": "Both alive"
           }
         },
-        "_row_num": 164
+        "_row_num": 187
       },
       {
         "choice_list_name": "parents_alive",
@@ -1811,7 +2041,7 @@
             "text": "Only living mother"
           }
         },
-        "_row_num": 165
+        "_row_num": 188
       },
       {
         "choice_list_name": "parents_alive",
@@ -1821,7 +2051,7 @@
             "text": "Only living father"
           }
         },
-        "_row_num": 166
+        "_row_num": 189
       },
       {
         "choice_list_name": "parents_alive",
@@ -1831,7 +2061,7 @@
             "text": "Neither are alive"
           }
         },
-        "_row_num": 167
+        "_row_num": 190
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1841,7 +2071,7 @@
             "text": "Husband/wife of household head"
           }
         },
-        "_row_num": 168
+        "_row_num": 191
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1851,7 +2081,7 @@
             "text": "Son/daughter of household head"
           }
         },
-        "_row_num": 169
+        "_row_num": 192
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1861,7 +2091,7 @@
             "text": "Brother/sister of household head"
           }
         },
-        "_row_num": 170
+        "_row_num": 193
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1871,7 +2101,7 @@
             "text": "Father/mother of household head"
           }
         },
-        "_row_num": 171
+        "_row_num": 194
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1881,7 +2111,7 @@
             "text": "Son/daughter in law of household head"
           }
         },
-        "_row_num": 172
+        "_row_num": 195
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1891,7 +2121,7 @@
             "text": "Brother/sister in law of household head"
           }
         },
-        "_row_num": 173
+        "_row_num": 196
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1901,7 +2131,7 @@
             "text": "Uncle/aunt of household head"
           }
         },
-        "_row_num": 174
+        "_row_num": 197
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1911,7 +2141,7 @@
             "text": "Grandson /granddaughter of household head"
           }
         },
-        "_row_num": 175
+        "_row_num": 198
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1921,7 +2151,7 @@
             "text": "Stepchild of household head"
           }
         },
-        "_row_num": 176
+        "_row_num": 199
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1931,7 +2161,7 @@
             "text": "Adopted son/daughter of household head"
           }
         },
-        "_row_num": 177
+        "_row_num": 200
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1941,7 +2171,7 @@
             "text": "Cousin of household head"
           }
         },
-        "_row_num": 178
+        "_row_num": 201
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1951,7 +2181,7 @@
             "text": "Nephew/Niece of household head"
           }
         },
-        "_row_num": 179
+        "_row_num": 202
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1961,7 +2191,7 @@
             "text": "Unrelated"
           }
         },
-        "_row_num": 180
+        "_row_num": 203
       },
       {
         "choice_list_name": "relation_to_hh_head",
@@ -1971,7 +2201,7 @@
             "text": "Other"
           }
         },
-        "_row_num": 181
+        "_row_num": 204
       },
       {
         "choice_list_name": "resident_status",
@@ -1981,7 +2211,7 @@
             "text": "Resident member"
           }
         },
-        "_row_num": 182
+        "_row_num": 205
       },
       {
         "choice_list_name": "resident_status",
@@ -1991,7 +2221,7 @@
             "text": "Non-Resident member"
           }
         },
-        "_row_num": 183
+        "_row_num": 206
       },
       {
         "choice_list_name": "return_time",
@@ -2001,7 +2231,7 @@
             "text": "Today"
           }
         },
-        "_row_num": 184
+        "_row_num": 207
       },
       {
         "choice_list_name": "return_time",
@@ -2011,7 +2241,7 @@
             "text": "Tomorrow"
           }
         },
-        "_row_num": 185
+        "_row_num": 208
       },
       {
         "choice_list_name": "time_awake",
@@ -2021,7 +2251,7 @@
             "text": ">4h before sunrise"
           }
         },
-        "_row_num": 186
+        "_row_num": 209
       },
       {
         "choice_list_name": "time_awake",
@@ -2031,7 +2261,7 @@
             "text": "2-4h before sunrise"
           }
         },
-        "_row_num": 187
+        "_row_num": 210
       },
       {
         "choice_list_name": "time_awake",
@@ -2041,7 +2271,7 @@
             "text": "1-2h before sunrise"
           }
         },
-        "_row_num": 188
+        "_row_num": 211
       },
       {
         "choice_list_name": "time_awake",
@@ -2051,7 +2281,7 @@
             "text": "At sunrise"
           }
         },
-        "_row_num": 189
+        "_row_num": 212
       },
       {
         "choice_list_name": "time_bed",
@@ -2061,7 +2291,7 @@
             "text": "Before sunset"
           }
         },
-        "_row_num": 190
+        "_row_num": 213
       },
       {
         "choice_list_name": "time_bed",
@@ -2071,7 +2301,7 @@
             "text": "At sunset"
           }
         },
-        "_row_num": 191
+        "_row_num": 214
       },
       {
         "choice_list_name": "time_bed",
@@ -2081,7 +2311,7 @@
             "text": "1-2h after sunset"
           }
         },
-        "_row_num": 192
+        "_row_num": 215
       },
       {
         "choice_list_name": "time_bed",
@@ -2091,7 +2321,7 @@
             "text": "2-4h after sunset"
           }
         },
-        "_row_num": 193
+        "_row_num": 216
       },
       {
         "choice_list_name": "time_bed",
@@ -2101,7 +2331,7 @@
             "text": ">4h after sunset"
           }
         },
-        "_row_num": 194
+        "_row_num": 217
       },
       {
         "choice_list_name": "time_indoors",
@@ -2111,7 +2341,7 @@
             "text": "Before sunset"
           }
         },
-        "_row_num": 195
+        "_row_num": 218
       },
       {
         "choice_list_name": "time_indoors",
@@ -2121,7 +2351,7 @@
             "text": "At sunset"
           }
         },
-        "_row_num": 196
+        "_row_num": 219
       },
       {
         "choice_list_name": "time_indoors",
@@ -2131,7 +2361,7 @@
             "text": "1-2h after sunset"
           }
         },
-        "_row_num": 197
+        "_row_num": 220
       },
       {
         "choice_list_name": "time_indoors",
@@ -2141,7 +2371,7 @@
             "text": "2-4h after sunset"
           }
         },
-        "_row_num": 198
+        "_row_num": 221
       },
       {
         "choice_list_name": "time_indoors",
@@ -2151,7 +2381,7 @@
             "text": ">4h after sunset"
           }
         },
-        "_row_num": 199
+        "_row_num": 222
       },
       {
         "choice_list_name": "time_outdoors",
@@ -2161,7 +2391,7 @@
             "text": ">4h before sunrise"
           }
         },
-        "_row_num": 200
+        "_row_num": 223
       },
       {
         "choice_list_name": "time_outdoors",
@@ -2171,7 +2401,7 @@
             "text": "2-4h before sunrise"
           }
         },
-        "_row_num": 201
+        "_row_num": 224
       },
       {
         "choice_list_name": "time_outdoors",
@@ -2181,7 +2411,7 @@
             "text": "1-2h before sunrise"
           }
         },
-        "_row_num": 202
+        "_row_num": 225
       },
       {
         "choice_list_name": "time_outdoors",
@@ -2191,7 +2421,7 @@
             "text": "At sunrise"
           }
         },
-        "_row_num": 203
+        "_row_num": 226
       },
       {
         "choice_list_name": "travel_countries",
@@ -2201,7 +2431,7 @@
             "text": "Angola"
           }
         },
-        "_row_num": 204
+        "_row_num": 227
       },
       {
         "choice_list_name": "travel_countries",
@@ -2211,7 +2441,7 @@
             "text": "Cameroon"
           }
         },
-        "_row_num": 205
+        "_row_num": 228
       },
       {
         "choice_list_name": "travel_countries",
@@ -2221,7 +2451,7 @@
             "text": "Chad"
           }
         },
-        "_row_num": 206
+        "_row_num": 229
       },
       {
         "choice_list_name": "travel_countries",
@@ -2231,7 +2461,7 @@
             "text": "Central African Republic"
           }
         },
-        "_row_num": 207
+        "_row_num": 230
       },
       {
         "choice_list_name": "travel_countries",
@@ -2241,7 +2471,7 @@
             "text": "Congo"
           }
         },
-        "_row_num": 208
+        "_row_num": 231
       },
       {
         "choice_list_name": "travel_countries",
@@ -2251,7 +2481,7 @@
             "text": "Equatorial Guinea"
           }
         },
-        "_row_num": 209
+        "_row_num": 232
       },
       {
         "choice_list_name": "travel_countries",
@@ -2261,7 +2491,7 @@
             "text": "Ethiopia"
           }
         },
-        "_row_num": 210
+        "_row_num": 233
       },
       {
         "choice_list_name": "travel_countries",
@@ -2271,7 +2501,7 @@
             "text": "Gabon"
           }
         },
-        "_row_num": 211
+        "_row_num": 234
       },
       {
         "choice_list_name": "travel_countries",
@@ -2281,7 +2511,7 @@
             "text": "Nigeria"
           }
         },
-        "_row_num": 212
+        "_row_num": 235
       },
       {
         "choice_list_name": "travel_countries",
@@ -2291,7 +2521,7 @@
             "text": "Sudan"
           }
         },
-        "_row_num": 213
+        "_row_num": 236
       },
       {
         "choice_list_name": "travel_countries",
@@ -2301,7 +2531,7 @@
             "text": "None"
           }
         },
-        "_row_num": 214
+        "_row_num": 237
       },
       {
         "choice_list_name": "treatment",
@@ -2311,7 +2541,7 @@
             "text": "Treatment for pain"
           }
         },
-        "_row_num": 215
+        "_row_num": 238
       },
       {
         "choice_list_name": "treatment",
@@ -2321,7 +2551,7 @@
             "text": "Contraceptive"
           }
         },
-        "_row_num": 216
+        "_row_num": 239
       },
       {
         "choice_list_name": "treatment",
@@ -2331,7 +2561,7 @@
             "text": "Treatment for malaria"
           }
         },
-        "_row_num": 217
+        "_row_num": 240
       },
       {
         "choice_list_name": "treatment",
@@ -2341,7 +2571,7 @@
             "text": "Antihistamine"
           }
         },
-        "_row_num": 218
+        "_row_num": 241
       },
       {
         "choice_list_name": "treatment",
@@ -2351,7 +2581,7 @@
             "text": "Antiretrovirals"
           }
         },
-        "_row_num": 219
+        "_row_num": 242
       },
       {
         "choice_list_name": "treatment",
@@ -2361,7 +2591,7 @@
             "text": "Treatment for tuberculosis"
           }
         },
-        "_row_num": 220
+        "_row_num": 243
       },
       {
         "choice_list_name": "treatment",
@@ -2371,7 +2601,7 @@
             "text": "Antibiotic"
           }
         },
-        "_row_num": 221
+        "_row_num": 244
       },
       {
         "choice_list_name": "treatment",
@@ -2381,7 +2611,7 @@
             "text": "Treatment for stress"
           }
         },
-        "_row_num": 222
+        "_row_num": 245
       },
       {
         "choice_list_name": "treatment",
@@ -2391,7 +2621,7 @@
             "text": "Treatment for mental illness"
           }
         },
-        "_row_num": 223
+        "_row_num": 246
       },
       {
         "choice_list_name": "treatment",
@@ -2401,7 +2631,7 @@
             "text": "Anti-fungal treatment"
           }
         },
-        "_row_num": 224
+        "_row_num": 247
       },
       {
         "choice_list_name": "treatment",
@@ -2411,7 +2641,7 @@
             "text": "Treatment for epilepsy"
           }
         },
-        "_row_num": 225
+        "_row_num": 248
       },
       {
         "choice_list_name": "treatment",
@@ -2421,7 +2651,7 @@
             "text": "Treatment for diarrhoea"
           }
         },
-        "_row_num": 226
+        "_row_num": 249
       },
       {
         "choice_list_name": "treatment",
@@ -2431,7 +2661,7 @@
             "text": "Treatment for blood pressure"
           }
         },
-        "_row_num": 227
+        "_row_num": 250
       },
       {
         "choice_list_name": "treatment",
@@ -2441,7 +2671,7 @@
             "text": "Traditional medicine"
           }
         },
-        "_row_num": 228
+        "_row_num": 251
       },
       {
         "choice_list_name": "treatment",
@@ -2451,7 +2681,7 @@
             "text": "Don’t know"
           }
         },
-        "_row_num": 229
+        "_row_num": 252
       },
       {
         "choice_list_name": "treatment",
@@ -2461,7 +2691,7 @@
             "text": "Prefer not to say"
           }
         },
-        "_row_num": 230
+        "_row_num": 253
       },
       {
         "choice_list_name": "treatment",
@@ -2471,7 +2701,7 @@
             "text": "Other"
           }
         },
-        "_row_num": 231
+        "_row_num": 254
       },
       {
         "choice_list_name": "treatment",
@@ -2481,7 +2711,7 @@
             "text": "No"
           }
         },
-        "_row_num": 232
+        "_row_num": 255
       }
     ],
     "model": [
@@ -2703,284 +2933,330 @@
         "_row_num": 39
       },
       {
+        "comment": "Snake Bites",
+        "name": "snake_bite_num_times",
+        "type": "integer",
+        "_row_num": 40
+      },
+      {
+        "name": "snake_bite_months",
+        "type": "select_multiple",
+        "valuesList": "month",
+        "_row_num": 41
+      },
+      {
+        "name": "snake_bite_miss_work_school",
+        "type": "select_one",
+        "valuesList": "yndk",
+        "_row_num": 42
+      },
+      {
+        "name": "snake_bite_miss_work_school_days",
+        "type": "integer",
+        "_row_num": 43
+      },
+      {
+        "name": "snake_bite_miss_work_school_days_unknown",
+        "type": "select_multiple",
+        "valuesList": "dk",
+        "_row_num": 44
+      },
+      {
+        "name": "snake_bite_occur",
+        "type": "select_multiple",
+        "valuesList": "bite_occur",
+        "_row_num": 45
+      },
+      {
+        "name": "snake_bite_occur_other",
+        "type": "text",
+        "_row_num": 46
+      },
+      {
+        "name": "snake_bite_outcome",
+        "type": "select_one",
+        "valuesList": "bite_outcome",
+        "_row_num": 47
+      },
+      {
         "comment": "Individual Questionnaire",
         "name": "ind_sign_consent",
         "type": "select_one",
         "valuesList": "yn",
-        "_row_num": 40
+        "_row_num": 48
       },
       {
         "name": "ind_sign_assent",
         "type": "select_one",
         "valuesList": "yn",
-        "_row_num": 41
+        "_row_num": 49
       },
       {
         "name": "ind_parent_sign_consent",
         "type": "select_one",
         "valuesList": "yn",
-        "_row_num": 42
+        "_row_num": 50
       },
       {
         "name": "ind_parent_sign_who",
         "type": "select_one_dropdown",
-        "_row_num": 43
+        "_row_num": 51
       },
       {
         "name": "ind_under_12_parent_sign_consent",
         "type": "select_one",
         "valuesList": "yn",
-        "_row_num": 44
+        "_row_num": 52
       },
       {
         "name": "ind_under_12_parent_sign_consent_who",
         "type": "select_one_dropdown",
-        "_row_num": 45
+        "_row_num": 53
       },
       {
         "name": "ind_who_respondent",
         "type": "select_one_dropdown",
-        "_row_num": 46
+        "_row_num": 54
       },
       {
         "name": "ind_parents_alive",
         "type": "select_one",
         "valuesList": "parents_alive",
-        "_row_num": 47
+        "_row_num": 55
       },
       {
         "name": "ind_rel_hh_head",
         "type": "select_one",
         "valuesList": "relation_to_hh_head",
-        "_row_num": 48
+        "_row_num": 56
       },
       {
         "name": "ind_religion",
         "type": "select_one",
         "valuesList": "ind_religion",
-        "_row_num": 49
+        "_row_num": 57
       },
       {
         "name": "ind_language",
         "type": "select_one_with_other",
         "valuesList": "ind_main_language",
-        "_row_num": 50
+        "_row_num": 58
       },
       {
         "name": "ind_treatment",
         "type": "select_multiple",
         "valuesList": "treatment",
-        "_row_num": 51
+        "_row_num": 59
       },
       {
         "name": "ind_chronic_disease",
         "type": "select_multiple",
         "valuesList": "chronic_disease",
-        "_row_num": 52
+        "_row_num": 60
       },
       {
         "name": "ind_chronic_disease_other",
         "type": "text",
-        "_row_num": 53
+        "_row_num": 61
       },
       {
         "name": "ind_recent_disease",
         "type": "select_one",
         "valuesList": "yndk",
-        "_row_num": 54
+        "_row_num": 62
       },
       {
         "name": "recent_disease_yes",
         "type": "select_multiple",
         "valuesList": "other_recent_disease",
-        "_row_num": 55
+        "_row_num": 63
       },
       {
         "name": "recent_disease_yes_other",
         "type": "text",
-        "_row_num": 56
+        "_row_num": 64
       },
       {
         "name": "recent_disease_symptoms",
         "type": "select_multiple",
         "valuesList": "other_symptoms",
-        "_row_num": 57
+        "_row_num": 65
       },
       {
         "name": "recent_disease_symptoms_other",
         "type": "text",
-        "_row_num": 58
+        "_row_num": 66
       },
       {
         "name": "recent_disease_seek_care",
         "type": "select_one",
         "valuesList": "yn",
-        "_row_num": 59
+        "_row_num": 67
       },
       {
         "name": "recent_disease_care_type",
         "type": "select_multiple",
         "valuesList": "form_of_care",
-        "_row_num": 60
+        "_row_num": 68
       },
       {
         "name": "recent_disease_care_type_other",
         "type": "text",
-        "_row_num": 61
+        "_row_num": 69
       },
       {
         "name": "ind_malaria_test",
         "type": "select_one",
         "valuesList": "yndk",
-        "_row_num": 62
+        "_row_num": 70
       },
       {
         "name": "ind_malaria_test_result",
         "type": "select_one",
         "valuesList": "malaria_test_result",
-        "_row_num": 63
+        "_row_num": 71
       },
       {
         "name": "ind_malaria_treatment",
         "type": "select_one",
         "valuesList": "yndk",
-        "_row_num": 64
+        "_row_num": 72
       },
       {
         "name": "ind_malaria_treatment_no",
         "type": "select_one",
         "valuesList": "malaria_no_treatment",
-        "_row_num": 65
+        "_row_num": 73
       },
       {
         "name": "ind_deficiency",
         "type": "select_multiple",
         "valuesList": "disability",
-        "_row_num": 66
+        "_row_num": 74
       },
       {
         "name": "ind_itchy",
         "type": "select_multiple",
         "valuesList": "itchy",
-        "_row_num": 67
+        "_row_num": 75
       },
       {
         "name": "ind_tunga",
         "type": "select_one",
         "valuesList": "yndkpna",
-        "_row_num": 68
+        "_row_num": 76
       },
       {
         "name": "ind_bed_bugs",
         "type": "select_one",
         "valuesList": "yndkpna",
-        "_row_num": 69
+        "_row_num": 77
       },
       {
         "name": "ind_worms",
         "type": "select_one",
         "valuesList": "yndkpna",
-        "_row_num": 70
+        "_row_num": 78
       },
       {
         "name": "wra_period",
         "type": "select_one",
         "valuesList": "lmp",
-        "_row_num": 71
+        "_row_num": 79
       },
       {
         "name": "wra_breastfeed",
         "type": "select_one",
         "valuesList": "breastfeed",
-        "_row_num": 72
+        "_row_num": 80
       },
       {
         "name": "wra_pregnant",
         "type": "select_one",
         "valuesList": "yndkpna",
-        "_row_num": 73
+        "_row_num": 81
       },
       {
         "name": "wra_iptp",
         "type": "select_one",
         "valuesList": "iptp_current",
-        "_row_num": 74
+        "_row_num": 82
       },
       {
         "name": "sleep_net_last_night",
         "type": "select_one",
         "valuesList": "yndk",
-        "_row_num": 75
+        "_row_num": 83
       },
       {
         "name": "sleep_net_last_night_num",
         "type": "integer",
-        "_row_num": 76
+        "_row_num": 84
       },
       {
         "name": "sleep_net_last_night_num_dk",
         "type": "select_one",
         "valuesList": "dk",
-        "_row_num": 77
+        "_row_num": 85
       },
       {
         "name": "time_indoors",
         "type": "select_one",
         "valuesList": "time_indoors",
-        "_row_num": 78
+        "_row_num": 86
       },
       {
         "name": "time_go_bed",
         "type": "select_one",
         "valuesList": "time_bed",
-        "_row_num": 79
+        "_row_num": 87
       },
       {
         "name": "before_bed_activities",
         "type": "select_multiple",
         "valuesList": "before_bed_activity",
-        "_row_num": 80
+        "_row_num": 88
       },
       {
         "name": "time_get_out_bed",
         "type": "select_one",
         "valuesList": "time_awake",
-        "_row_num": 81
+        "_row_num": 89
       },
       {
         "name": "time_go_outside",
         "type": "select_one",
         "valuesList": "time_outdoors",
-        "_row_num": 82
+        "_row_num": 90
       },
       {
         "name": "what_do_before_sunrise",
         "type": "select_multiple",
         "valuesList": "before_sunrise_activity",
-        "_row_num": 83
+        "_row_num": 91
       },
       {
         "name": "travel_abroad",
         "type": "select_one",
         "valuesList": "yn",
-        "_row_num": 84
+        "_row_num": 92
       },
       {
         "name": "travel_countries",
         "type": "select_multiple",
         "valuesList": "travel_countries",
-        "_row_num": 85
+        "_row_num": 93
       },
       {
         "name": "travel_regularly",
         "type": "select_one",
         "valuesList": "ynpna",
-        "_row_num": 86
+        "_row_num": 94
       },
       {
         "name": "travel_regularly_trips",
         "type": "integer",
-        "_row_num": 87
+        "_row_num": 95
       }
     ],
     "settings": [
@@ -3631,6 +3907,110 @@
           "_row_num": 53
         }
       ],
+      "bite_occur": [
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "home",
+          "display": {
+            "title": {
+              "text": "Inside the home"
+            }
+          },
+          "_row_num": 54
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "compound",
+          "display": {
+            "title": {
+              "text": "Inside the compound"
+            }
+          },
+          "_row_num": 55
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "field",
+          "display": {
+            "title": {
+              "text": "Field"
+            }
+          },
+          "_row_num": 56
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "road",
+          "display": {
+            "title": {
+              "text": "Road"
+            }
+          },
+          "_row_num": 57
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "other",
+          "display": {
+            "title": {
+              "text": "Other"
+            }
+          },
+          "_row_num": 58
+        },
+        {
+          "choice_list_name": "bite_occur",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 59
+        }
+      ],
+      "bite_outcome": [
+        {
+          "choice_list_name": "bite_outcome",
+          "data_value": "death",
+          "display": {
+            "title": {
+              "text": "Death"
+            }
+          },
+          "_row_num": 60
+        },
+        {
+          "choice_list_name": "bite_outcome",
+          "data_value": "loss_limb",
+          "display": {
+            "title": {
+              "text": "Loss of limb"
+            }
+          },
+          "_row_num": 61
+        },
+        {
+          "choice_list_name": "bite_outcome",
+          "data_value": "full_recovery",
+          "display": {
+            "title": {
+              "text": "Full recovery"
+            }
+          },
+          "_row_num": 62
+        },
+        {
+          "choice_list_name": "bite_outcome",
+          "data_value": "partial_recovery",
+          "display": {
+            "title": {
+              "text": "Partial recovery"
+            }
+          },
+          "_row_num": 63
+        }
+      ],
       "breastfeed": [
         {
           "choice_list_name": "breastfeed",
@@ -3640,7 +4020,7 @@
               "text": "Own child"
             }
           },
-          "_row_num": 54
+          "_row_num": 64
         },
         {
           "choice_list_name": "breastfeed",
@@ -3650,7 +4030,7 @@
               "text": "Someone else’s child/children"
             }
           },
-          "_row_num": 55
+          "_row_num": 65
         },
         {
           "choice_list_name": "breastfeed",
@@ -3660,7 +4040,7 @@
               "text": "No"
             }
           },
-          "_row_num": 56
+          "_row_num": 66
         }
       ],
       "chronic_disease": [
@@ -3672,7 +4052,7 @@
               "text": "Respiratory disease"
             }
           },
-          "_row_num": 57
+          "_row_num": 67
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3682,7 +4062,7 @@
               "text": "Diarrhoea"
             }
           },
-          "_row_num": 58
+          "_row_num": 68
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3692,7 +4072,7 @@
               "text": "Injuries from an accident"
             }
           },
-          "_row_num": 59
+          "_row_num": 69
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3702,7 +4082,7 @@
               "text": "Skin disease"
             }
           },
-          "_row_num": 60
+          "_row_num": 70
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3712,7 +4092,7 @@
               "text": "Mental health disorder"
             }
           },
-          "_row_num": 61
+          "_row_num": 71
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3722,7 +4102,7 @@
               "text": "Worms"
             }
           },
-          "_row_num": 62
+          "_row_num": 72
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3732,7 +4112,7 @@
               "text": "HIV"
             }
           },
-          "_row_num": 63
+          "_row_num": 73
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3742,7 +4122,7 @@
               "text": "TB"
             }
           },
-          "_row_num": 64
+          "_row_num": 74
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3752,7 +4132,7 @@
               "text": "Hepatitis"
             }
           },
-          "_row_num": 65
+          "_row_num": 75
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3762,7 +4142,7 @@
               "text": "Epilepsy (convulsions)"
             }
           },
-          "_row_num": 66
+          "_row_num": 76
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3772,7 +4152,7 @@
               "text": "Heart problems"
             }
           },
-          "_row_num": 67
+          "_row_num": 77
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3782,7 +4162,7 @@
               "text": "Diabetes"
             }
           },
-          "_row_num": 68
+          "_row_num": 78
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3792,7 +4172,7 @@
               "text": "Cancer"
             }
           },
-          "_row_num": 69
+          "_row_num": 79
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3802,7 +4182,7 @@
               "text": "Prefer not to answer"
             }
           },
-          "_row_num": 70
+          "_row_num": 80
         },
         {
           "choice_list_name": "chronic_disease",
@@ -3812,7 +4192,7 @@
               "text": "Other"
             }
           },
-          "_row_num": 71
+          "_row_num": 81
         }
       ],
       "disability": [
@@ -3824,7 +4204,7 @@
               "text": "Blind"
             }
           },
-          "_row_num": 72
+          "_row_num": 82
         },
         {
           "choice_list_name": "disability",
@@ -3834,7 +4214,7 @@
               "text": "Deaf"
             }
           },
-          "_row_num": 73
+          "_row_num": 83
         },
         {
           "choice_list_name": "disability",
@@ -3844,7 +4224,7 @@
               "text": "Amputated/atrophied arm"
             }
           },
-          "_row_num": 74
+          "_row_num": 84
         },
         {
           "choice_list_name": "disability",
@@ -3854,7 +4234,7 @@
               "text": "Amputated/atrophied leg"
             }
           },
-          "_row_num": 75
+          "_row_num": 85
         },
         {
           "choice_list_name": "disability",
@@ -3864,7 +4244,7 @@
               "text": "Paralysis"
             }
           },
-          "_row_num": 76
+          "_row_num": 86
         },
         {
           "choice_list_name": "disability",
@@ -3874,7 +4254,7 @@
               "text": "Mental"
             }
           },
-          "_row_num": 77
+          "_row_num": 87
         },
         {
           "choice_list_name": "disability",
@@ -3884,7 +4264,7 @@
               "text": "None"
             }
           },
-          "_row_num": 78
+          "_row_num": 88
         },
         {
           "choice_list_name": "disability",
@@ -3894,7 +4274,7 @@
               "text": "Prefer not to answer"
             }
           },
-          "_row_num": 79
+          "_row_num": 89
         },
         {
           "choice_list_name": "disability",
@@ -3904,7 +4284,7 @@
               "text": "Other"
             }
           },
-          "_row_num": 80
+          "_row_num": 90
         }
       ],
       "dmy_ago_dk": [
@@ -3916,7 +4296,7 @@
               "text": "Day(s) ago"
             }
           },
-          "_row_num": 81
+          "_row_num": 91
         },
         {
           "choice_list_name": "dmy_ago_dk",
@@ -3926,7 +4306,7 @@
               "text": "Week(s) ago"
             }
           },
-          "_row_num": 82
+          "_row_num": 92
         },
         {
           "choice_list_name": "dmy_ago_dk",
@@ -3936,7 +4316,7 @@
               "text": "Month(s) ago"
             }
           },
-          "_row_num": 83
+          "_row_num": 93
         },
         {
           "choice_list_name": "dmy_ago_dk",
@@ -3946,7 +4326,7 @@
               "text": "Don't Know"
             }
           },
-          "_row_num": 84
+          "_row_num": 94
         }
       ],
       "dwmy": [
@@ -3958,7 +4338,7 @@
               "text": "Day(s)"
             }
           },
-          "_row_num": 85
+          "_row_num": 95
         },
         {
           "choice_list_name": "dwmy",
@@ -3968,7 +4348,7 @@
               "text": "Week(s)"
             }
           },
-          "_row_num": 86
+          "_row_num": 96
         },
         {
           "choice_list_name": "dwmy",
@@ -3978,7 +4358,7 @@
               "text": "Month(s)"
             }
           },
-          "_row_num": 87
+          "_row_num": 97
         },
         {
           "choice_list_name": "dwmy",
@@ -3988,7 +4368,7 @@
               "text": "Year(s)"
             }
           },
-          "_row_num": 88
+          "_row_num": 98
         }
       ],
       "form_of_care": [
@@ -4000,7 +4380,7 @@
               "text": "Health facility"
             }
           },
-          "_row_num": 89
+          "_row_num": 99
         },
         {
           "choice_list_name": "form_of_care",
@@ -4010,7 +4390,7 @@
               "text": "CHW"
             }
           },
-          "_row_num": 90
+          "_row_num": 100
         },
         {
           "choice_list_name": "form_of_care",
@@ -4020,7 +4400,7 @@
               "text": "Family or friends"
             }
           },
-          "_row_num": 91
+          "_row_num": 101
         },
         {
           "choice_list_name": "form_of_care",
@@ -4030,7 +4410,7 @@
               "text": "Informal drug vendor"
             }
           },
-          "_row_num": 92
+          "_row_num": 102
         },
         {
           "choice_list_name": "form_of_care",
@@ -4040,7 +4420,7 @@
               "text": "Pharmacy"
             }
           },
-          "_row_num": 93
+          "_row_num": 103
         },
         {
           "choice_list_name": "form_of_care",
@@ -4050,7 +4430,7 @@
               "text": "Traditional healer"
             }
           },
-          "_row_num": 94
+          "_row_num": 104
         },
         {
           "choice_list_name": "form_of_care",
@@ -4060,7 +4440,7 @@
               "text": "Community leader"
             }
           },
-          "_row_num": 95
+          "_row_num": 105
         },
         {
           "choice_list_name": "form_of_care",
@@ -4070,7 +4450,7 @@
               "text": "Trusted elderly"
             }
           },
-          "_row_num": 96
+          "_row_num": 106
         },
         {
           "choice_list_name": "form_of_care",
@@ -4080,7 +4460,7 @@
               "text": "Traditional midwife"
             }
           },
-          "_row_num": 97
+          "_row_num": 107
         }
       ],
       "gender": [
@@ -4092,7 +4472,7 @@
               "text": "Male"
             }
           },
-          "_row_num": 98
+          "_row_num": 108
         },
         {
           "choice_list_name": "gender",
@@ -4102,7 +4482,7 @@
               "text": "Female"
             }
           },
-          "_row_num": 99
+          "_row_num": 109
         }
       ],
       "in_outside_district": [
@@ -4114,7 +4494,7 @@
               "text": "Within this district"
             }
           },
-          "_row_num": 100
+          "_row_num": 110
         },
         {
           "choice_list_name": "in_outside_district",
@@ -4124,7 +4504,7 @@
               "text": "Outside this district"
             }
           },
-          "_row_num": 101
+          "_row_num": 111
         },
         {
           "choice_list_name": "in_outside_district",
@@ -4134,7 +4514,7 @@
               "text": "Don't Know"
             }
           },
-          "_row_num": 102
+          "_row_num": 112
         }
       ],
       "ind_religion": [
@@ -4146,7 +4526,7 @@
               "text": "Catholic"
             }
           },
-          "_row_num": 103
+          "_row_num": 113
         },
         {
           "choice_list_name": "ind_religion",
@@ -4156,7 +4536,7 @@
               "text": "Protestant"
             }
           },
-          "_row_num": 104
+          "_row_num": 114
         },
         {
           "choice_list_name": "ind_religion",
@@ -4166,7 +4546,7 @@
               "text": "Anglican"
             }
           },
-          "_row_num": 105
+          "_row_num": 115
         },
         {
           "choice_list_name": "ind_religion",
@@ -4176,7 +4556,7 @@
               "text": "Christian undetermined"
             }
           },
-          "_row_num": 106
+          "_row_num": 116
         },
         {
           "choice_list_name": "ind_religion",
@@ -4186,7 +4566,7 @@
               "text": "Islamic"
             }
           },
-          "_row_num": 107
+          "_row_num": 117
         },
         {
           "choice_list_name": "ind_religion",
@@ -4196,7 +4576,7 @@
               "text": "Hindu"
             }
           },
-          "_row_num": 108
+          "_row_num": 118
         },
         {
           "choice_list_name": "ind_religion",
@@ -4206,7 +4586,7 @@
               "text": "Zionist"
             }
           },
-          "_row_num": 109
+          "_row_num": 119
         },
         {
           "choice_list_name": "ind_religion",
@@ -4216,7 +4596,7 @@
               "text": "Animist"
             }
           },
-          "_row_num": 110
+          "_row_num": 120
         },
         {
           "choice_list_name": "ind_religion",
@@ -4226,7 +4606,7 @@
               "text": "Evangelical"
             }
           },
-          "_row_num": 111
+          "_row_num": 121
         },
         {
           "choice_list_name": "ind_religion",
@@ -4236,7 +4616,7 @@
               "text": "Atheist"
             }
           },
-          "_row_num": 112
+          "_row_num": 122
         },
         {
           "choice_list_name": "ind_religion",
@@ -4246,7 +4626,7 @@
               "text": "Don't know"
             }
           },
-          "_row_num": 113
+          "_row_num": 123
         },
         {
           "choice_list_name": "ind_religion",
@@ -4256,7 +4636,7 @@
               "text": "Prefer not to answer"
             }
           },
-          "_row_num": 114
+          "_row_num": 124
         },
         {
           "choice_list_name": "ind_religion",
@@ -4266,7 +4646,7 @@
               "text": "Other"
             }
           },
-          "_row_num": 115
+          "_row_num": 125
         }
       ],
       "iptp_current": [
@@ -4278,7 +4658,7 @@
               "text": "Yes, already took 1 dose"
             }
           },
-          "_row_num": 116
+          "_row_num": 126
         },
         {
           "choice_list_name": "iptp_current",
@@ -4288,7 +4668,7 @@
               "text": "Yes, already took 2 doses"
             }
           },
-          "_row_num": 117
+          "_row_num": 127
         },
         {
           "choice_list_name": "iptp_current",
@@ -4298,7 +4678,7 @@
               "text": "Yes, already took 3 doses"
             }
           },
-          "_row_num": 118
+          "_row_num": 128
         },
         {
           "choice_list_name": "iptp_current",
@@ -4308,7 +4688,7 @@
               "text": "Yes, already took more than 3 doses"
             }
           },
-          "_row_num": 119
+          "_row_num": 129
         },
         {
           "choice_list_name": "iptp_current",
@@ -4318,7 +4698,7 @@
               "text": "No"
             }
           },
-          "_row_num": 120
+          "_row_num": 130
         },
         {
           "choice_list_name": "iptp_current",
@@ -4328,7 +4708,7 @@
               "text": "Don't Know"
             }
           },
-          "_row_num": 121
+          "_row_num": 131
         }
       ],
       "itchy": [
@@ -4340,7 +4720,7 @@
               "text": "Yes, on the body"
             }
           },
-          "_row_num": 122
+          "_row_num": 132
         },
         {
           "choice_list_name": "itchy",
@@ -4350,7 +4730,7 @@
               "text": "Yes, on the head"
             }
           },
-          "_row_num": 123
+          "_row_num": 133
         },
         {
           "choice_list_name": "itchy",
@@ -4360,7 +4740,7 @@
               "text": "No"
             }
           },
-          "_row_num": 124
+          "_row_num": 134
         },
         {
           "choice_list_name": "itchy",
@@ -4370,7 +4750,7 @@
               "text": "Prefer not to answer"
             }
           },
-          "_row_num": 125
+          "_row_num": 135
         }
       ],
       "lmp": [
@@ -4382,7 +4762,7 @@
               "text": "Less than two weeks ago"
             }
           },
-          "_row_num": 126
+          "_row_num": 136
         },
         {
           "choice_list_name": "lmp",
@@ -4392,7 +4772,7 @@
               "text": "More than two weeks ago"
             }
           },
-          "_row_num": 127
+          "_row_num": 137
         },
         {
           "choice_list_name": "lmp",
@@ -4402,7 +4782,7 @@
               "text": "Don't know"
             }
           },
-          "_row_num": 128
+          "_row_num": 138
         },
         {
           "choice_list_name": "lmp",
@@ -4412,7 +4792,7 @@
               "text": "Never"
             }
           },
-          "_row_num": 129
+          "_row_num": 139
         },
         {
           "choice_list_name": "lmp",
@@ -4422,7 +4802,7 @@
               "text": "Prefer not to answer"
             }
           },
-          "_row_num": 130
+          "_row_num": 140
         }
       ],
       "malaria_no_treatment": [
@@ -4434,7 +4814,7 @@
               "text": "Participant didn’t have malaria"
             }
           },
-          "_row_num": 131
+          "_row_num": 141
         },
         {
           "choice_list_name": "malaria_no_treatment",
@@ -4444,7 +4824,7 @@
               "text": "Treatment was not available"
             }
           },
-          "_row_num": 132
+          "_row_num": 142
         },
         {
           "choice_list_name": "malaria_no_treatment",
@@ -4454,7 +4834,7 @@
               "text": "Treatment was not affordable"
             }
           },
-          "_row_num": 133
+          "_row_num": 143
         },
         {
           "choice_list_name": "malaria_no_treatment",
@@ -4464,7 +4844,7 @@
               "text": "Treatment was not deemed necessary"
             }
           },
-          "_row_num": 134
+          "_row_num": 144
         },
         {
           "choice_list_name": "malaria_no_treatment",
@@ -4474,7 +4854,7 @@
               "text": "Don’t know"
             }
           },
-          "_row_num": 135
+          "_row_num": 145
         }
       ],
       "malaria_test_result": [
@@ -4486,7 +4866,7 @@
               "text": "Positive"
             }
           },
-          "_row_num": 136
+          "_row_num": 146
         },
         {
           "choice_list_name": "malaria_test_result",
@@ -4496,7 +4876,7 @@
               "text": "Negative"
             }
           },
-          "_row_num": 137
+          "_row_num": 147
         },
         {
           "choice_list_name": "malaria_test_result",
@@ -4506,7 +4886,7 @@
               "text": "Invalid"
             }
           },
-          "_row_num": 138
+          "_row_num": 148
         },
         {
           "choice_list_name": "malaria_test_result",
@@ -4516,7 +4896,7 @@
               "text": "Don’t Know"
             }
           },
-          "_row_num": 139
+          "_row_num": 149
         }
       ],
       "member_where_now": [
@@ -4528,7 +4908,7 @@
               "text": "He/she died"
             }
           },
-          "_row_num": 140
+          "_row_num": 150
         },
         {
           "choice_list_name": "member_where_now",
@@ -4538,7 +4918,139 @@
               "text": "He/she emigrated"
             }
           },
-          "_row_num": 141
+          "_row_num": 151
+        }
+      ],
+      "month": [
+        {
+          "choice_list_name": "month",
+          "data_value": "january",
+          "display": {
+            "title": {
+              "text": "January"
+            }
+          },
+          "_row_num": 152
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "february",
+          "display": {
+            "title": {
+              "text": "February"
+            }
+          },
+          "_row_num": 153
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "march",
+          "display": {
+            "title": {
+              "text": "March"
+            }
+          },
+          "_row_num": 154
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "april",
+          "display": {
+            "title": {
+              "text": "April"
+            }
+          },
+          "_row_num": 155
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "may",
+          "display": {
+            "title": {
+              "text": "May"
+            }
+          },
+          "_row_num": 156
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "june",
+          "display": {
+            "title": {
+              "text": "June"
+            }
+          },
+          "_row_num": 157
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "july",
+          "display": {
+            "title": {
+              "text": "July"
+            }
+          },
+          "_row_num": 158
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "august",
+          "display": {
+            "title": {
+              "text": "August"
+            }
+          },
+          "_row_num": 159
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "september",
+          "display": {
+            "title": {
+              "text": "September"
+            }
+          },
+          "_row_num": 160
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "october",
+          "display": {
+            "title": {
+              "text": "October"
+            }
+          },
+          "_row_num": 161
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "november",
+          "display": {
+            "title": {
+              "text": "November"
+            }
+          },
+          "_row_num": 162
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "december",
+          "display": {
+            "title": {
+              "text": "December"
+            }
+          },
+          "_row_num": 163
+        },
+        {
+          "choice_list_name": "month",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't Know"
+            }
+          },
+          "_row_num": 164
         }
       ],
       "new_member": [
@@ -4550,7 +5062,7 @@
               "text": "Newborn"
             }
           },
-          "_row_num": 142
+          "_row_num": 165
         },
         {
           "choice_list_name": "new_member",
@@ -4560,7 +5072,7 @@
               "text": "Someone new in the household"
             }
           },
-          "_row_num": 143
+          "_row_num": 166
         }
       ],
       "other_recent_disease": [
@@ -4572,7 +5084,7 @@
               "text": "Malaria"
             }
           },
-          "_row_num": 144
+          "_row_num": 167
         },
         {
           "choice_list_name": "other_recent_disease",
@@ -4582,7 +5094,7 @@
               "text": "Respiratory disease"
             }
           },
-          "_row_num": 145
+          "_row_num": 168
         },
         {
           "choice_list_name": "other_recent_disease",
@@ -4592,7 +5104,7 @@
               "text": "Constipation"
             }
           },
-          "_row_num": 146
+          "_row_num": 169
         },
         {
           "choice_list_name": "other_recent_disease",
@@ -4602,7 +5114,7 @@
               "text": "Diarrhoea"
             }
           },
-          "_row_num": 147
+          "_row_num": 170
         },
         {
           "choice_list_name": "other_recent_disease",
@@ -4612,7 +5124,7 @@
               "text": "Fever"
             }
           },
-          "_row_num": 148
+          "_row_num": 171
         },
         {
           "choice_list_name": "other_recent_disease",
@@ -4622,7 +5134,7 @@
               "text": "Injuries from an accident"
             }
           },
-          "_row_num": 149
+          "_row_num": 172
         },
         {
           "choice_list_name": "other_recent_disease",
@@ -4632,7 +5144,7 @@
               "text": "Delivery of a baby"
             }
           },
-          "_row_num": 150
+          "_row_num": 173
         },
         {
           "choice_list_name": "other_recent_disease",
@@ -4642,7 +5154,7 @@
               "text": "Skin disease"
             }
           },
-          "_row_num": 151
+          "_row_num": 174
         },
         {
           "choice_list_name": "other_recent_disease",
@@ -4652,7 +5164,7 @@
               "text": "Worms"
             }
           },
-          "_row_num": 152
+          "_row_num": 175
         },
         {
           "choice_list_name": "other_recent_disease",
@@ -4662,7 +5174,7 @@
               "text": "Other"
             }
           },
-          "_row_num": 153
+          "_row_num": 176
         }
       ],
       "other_symptoms": [
@@ -4674,7 +5186,7 @@
               "text": "Fever"
             }
           },
-          "_row_num": 154
+          "_row_num": 177
         },
         {
           "choice_list_name": "other_symptoms",
@@ -4684,7 +5196,7 @@
               "text": "Vomiting"
             }
           },
-          "_row_num": 155
+          "_row_num": 178
         },
         {
           "choice_list_name": "other_symptoms",
@@ -4694,7 +5206,7 @@
               "text": "Nausea"
             }
           },
-          "_row_num": 156
+          "_row_num": 179
         },
         {
           "choice_list_name": "other_symptoms",
@@ -4704,7 +5216,7 @@
               "text": "Joints pain"
             }
           },
-          "_row_num": 157
+          "_row_num": 180
         },
         {
           "choice_list_name": "other_symptoms",
@@ -4714,7 +5226,7 @@
               "text": "Dizziness"
             }
           },
-          "_row_num": 158
+          "_row_num": 181
         },
         {
           "choice_list_name": "other_symptoms",
@@ -4724,7 +5236,7 @@
               "text": "Chills-shivers"
             }
           },
-          "_row_num": 159
+          "_row_num": 182
         },
         {
           "choice_list_name": "other_symptoms",
@@ -4734,7 +5246,7 @@
               "text": "Diarrhoea"
             }
           },
-          "_row_num": 160
+          "_row_num": 183
         },
         {
           "choice_list_name": "other_symptoms",
@@ -4744,7 +5256,7 @@
               "text": "Loss of smell and/or taste"
             }
           },
-          "_row_num": 161
+          "_row_num": 184
         },
         {
           "choice_list_name": "other_symptoms",
@@ -4754,7 +5266,7 @@
               "text": "No symptoms"
             }
           },
-          "_row_num": 162
+          "_row_num": 185
         },
         {
           "choice_list_name": "other_symptoms",
@@ -4764,7 +5276,7 @@
               "text": "Other"
             }
           },
-          "_row_num": 163
+          "_row_num": 186
         }
       ],
       "parents_alive": [
@@ -4776,7 +5288,7 @@
               "text": "Both alive"
             }
           },
-          "_row_num": 164
+          "_row_num": 187
         },
         {
           "choice_list_name": "parents_alive",
@@ -4786,7 +5298,7 @@
               "text": "Only living mother"
             }
           },
-          "_row_num": 165
+          "_row_num": 188
         },
         {
           "choice_list_name": "parents_alive",
@@ -4796,7 +5308,7 @@
               "text": "Only living father"
             }
           },
-          "_row_num": 166
+          "_row_num": 189
         },
         {
           "choice_list_name": "parents_alive",
@@ -4806,7 +5318,7 @@
               "text": "Neither are alive"
             }
           },
-          "_row_num": 167
+          "_row_num": 190
         }
       ],
       "relation_to_hh_head": [
@@ -4818,7 +5330,7 @@
               "text": "Husband/wife of household head"
             }
           },
-          "_row_num": 168
+          "_row_num": 191
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4828,7 +5340,7 @@
               "text": "Son/daughter of household head"
             }
           },
-          "_row_num": 169
+          "_row_num": 192
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4838,7 +5350,7 @@
               "text": "Brother/sister of household head"
             }
           },
-          "_row_num": 170
+          "_row_num": 193
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4848,7 +5360,7 @@
               "text": "Father/mother of household head"
             }
           },
-          "_row_num": 171
+          "_row_num": 194
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4858,7 +5370,7 @@
               "text": "Son/daughter in law of household head"
             }
           },
-          "_row_num": 172
+          "_row_num": 195
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4868,7 +5380,7 @@
               "text": "Brother/sister in law of household head"
             }
           },
-          "_row_num": 173
+          "_row_num": 196
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4878,7 +5390,7 @@
               "text": "Uncle/aunt of household head"
             }
           },
-          "_row_num": 174
+          "_row_num": 197
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4888,7 +5400,7 @@
               "text": "Grandson /granddaughter of household head"
             }
           },
-          "_row_num": 175
+          "_row_num": 198
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4898,7 +5410,7 @@
               "text": "Stepchild of household head"
             }
           },
-          "_row_num": 176
+          "_row_num": 199
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4908,7 +5420,7 @@
               "text": "Adopted son/daughter of household head"
             }
           },
-          "_row_num": 177
+          "_row_num": 200
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4918,7 +5430,7 @@
               "text": "Cousin of household head"
             }
           },
-          "_row_num": 178
+          "_row_num": 201
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4928,7 +5440,7 @@
               "text": "Nephew/Niece of household head"
             }
           },
-          "_row_num": 179
+          "_row_num": 202
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4938,7 +5450,7 @@
               "text": "Unrelated"
             }
           },
-          "_row_num": 180
+          "_row_num": 203
         },
         {
           "choice_list_name": "relation_to_hh_head",
@@ -4948,7 +5460,7 @@
               "text": "Other"
             }
           },
-          "_row_num": 181
+          "_row_num": 204
         }
       ],
       "resident_status": [
@@ -4960,7 +5472,7 @@
               "text": "Resident member"
             }
           },
-          "_row_num": 182
+          "_row_num": 205
         },
         {
           "choice_list_name": "resident_status",
@@ -4970,7 +5482,7 @@
               "text": "Non-Resident member"
             }
           },
-          "_row_num": 183
+          "_row_num": 206
         }
       ],
       "return_time": [
@@ -4982,7 +5494,7 @@
               "text": "Today"
             }
           },
-          "_row_num": 184
+          "_row_num": 207
         },
         {
           "choice_list_name": "return_time",
@@ -4992,7 +5504,7 @@
               "text": "Tomorrow"
             }
           },
-          "_row_num": 185
+          "_row_num": 208
         }
       ],
       "time_awake": [
@@ -5004,7 +5516,7 @@
               "text": ">4h before sunrise"
             }
           },
-          "_row_num": 186
+          "_row_num": 209
         },
         {
           "choice_list_name": "time_awake",
@@ -5014,7 +5526,7 @@
               "text": "2-4h before sunrise"
             }
           },
-          "_row_num": 187
+          "_row_num": 210
         },
         {
           "choice_list_name": "time_awake",
@@ -5024,7 +5536,7 @@
               "text": "1-2h before sunrise"
             }
           },
-          "_row_num": 188
+          "_row_num": 211
         },
         {
           "choice_list_name": "time_awake",
@@ -5034,7 +5546,7 @@
               "text": "At sunrise"
             }
           },
-          "_row_num": 189
+          "_row_num": 212
         }
       ],
       "time_bed": [
@@ -5046,7 +5558,7 @@
               "text": "Before sunset"
             }
           },
-          "_row_num": 190
+          "_row_num": 213
         },
         {
           "choice_list_name": "time_bed",
@@ -5056,7 +5568,7 @@
               "text": "At sunset"
             }
           },
-          "_row_num": 191
+          "_row_num": 214
         },
         {
           "choice_list_name": "time_bed",
@@ -5066,7 +5578,7 @@
               "text": "1-2h after sunset"
             }
           },
-          "_row_num": 192
+          "_row_num": 215
         },
         {
           "choice_list_name": "time_bed",
@@ -5076,7 +5588,7 @@
               "text": "2-4h after sunset"
             }
           },
-          "_row_num": 193
+          "_row_num": 216
         },
         {
           "choice_list_name": "time_bed",
@@ -5086,7 +5598,7 @@
               "text": ">4h after sunset"
             }
           },
-          "_row_num": 194
+          "_row_num": 217
         }
       ],
       "time_indoors": [
@@ -5098,7 +5610,7 @@
               "text": "Before sunset"
             }
           },
-          "_row_num": 195
+          "_row_num": 218
         },
         {
           "choice_list_name": "time_indoors",
@@ -5108,7 +5620,7 @@
               "text": "At sunset"
             }
           },
-          "_row_num": 196
+          "_row_num": 219
         },
         {
           "choice_list_name": "time_indoors",
@@ -5118,7 +5630,7 @@
               "text": "1-2h after sunset"
             }
           },
-          "_row_num": 197
+          "_row_num": 220
         },
         {
           "choice_list_name": "time_indoors",
@@ -5128,7 +5640,7 @@
               "text": "2-4h after sunset"
             }
           },
-          "_row_num": 198
+          "_row_num": 221
         },
         {
           "choice_list_name": "time_indoors",
@@ -5138,7 +5650,7 @@
               "text": ">4h after sunset"
             }
           },
-          "_row_num": 199
+          "_row_num": 222
         }
       ],
       "time_outdoors": [
@@ -5150,7 +5662,7 @@
               "text": ">4h before sunrise"
             }
           },
-          "_row_num": 200
+          "_row_num": 223
         },
         {
           "choice_list_name": "time_outdoors",
@@ -5160,7 +5672,7 @@
               "text": "2-4h before sunrise"
             }
           },
-          "_row_num": 201
+          "_row_num": 224
         },
         {
           "choice_list_name": "time_outdoors",
@@ -5170,7 +5682,7 @@
               "text": "1-2h before sunrise"
             }
           },
-          "_row_num": 202
+          "_row_num": 225
         },
         {
           "choice_list_name": "time_outdoors",
@@ -5180,7 +5692,7 @@
               "text": "At sunrise"
             }
           },
-          "_row_num": 203
+          "_row_num": 226
         }
       ],
       "travel_countries": [
@@ -5192,7 +5704,7 @@
               "text": "Angola"
             }
           },
-          "_row_num": 204
+          "_row_num": 227
         },
         {
           "choice_list_name": "travel_countries",
@@ -5202,7 +5714,7 @@
               "text": "Cameroon"
             }
           },
-          "_row_num": 205
+          "_row_num": 228
         },
         {
           "choice_list_name": "travel_countries",
@@ -5212,7 +5724,7 @@
               "text": "Chad"
             }
           },
-          "_row_num": 206
+          "_row_num": 229
         },
         {
           "choice_list_name": "travel_countries",
@@ -5222,7 +5734,7 @@
               "text": "Central African Republic"
             }
           },
-          "_row_num": 207
+          "_row_num": 230
         },
         {
           "choice_list_name": "travel_countries",
@@ -5232,7 +5744,7 @@
               "text": "Congo"
             }
           },
-          "_row_num": 208
+          "_row_num": 231
         },
         {
           "choice_list_name": "travel_countries",
@@ -5242,7 +5754,7 @@
               "text": "Equatorial Guinea"
             }
           },
-          "_row_num": 209
+          "_row_num": 232
         },
         {
           "choice_list_name": "travel_countries",
@@ -5252,7 +5764,7 @@
               "text": "Ethiopia"
             }
           },
-          "_row_num": 210
+          "_row_num": 233
         },
         {
           "choice_list_name": "travel_countries",
@@ -5262,7 +5774,7 @@
               "text": "Gabon"
             }
           },
-          "_row_num": 211
+          "_row_num": 234
         },
         {
           "choice_list_name": "travel_countries",
@@ -5272,7 +5784,7 @@
               "text": "Nigeria"
             }
           },
-          "_row_num": 212
+          "_row_num": 235
         },
         {
           "choice_list_name": "travel_countries",
@@ -5282,7 +5794,7 @@
               "text": "Sudan"
             }
           },
-          "_row_num": 213
+          "_row_num": 236
         },
         {
           "choice_list_name": "travel_countries",
@@ -5292,7 +5804,7 @@
               "text": "None"
             }
           },
-          "_row_num": 214
+          "_row_num": 237
         }
       ],
       "treatment": [
@@ -5304,7 +5816,7 @@
               "text": "Treatment for pain"
             }
           },
-          "_row_num": 215
+          "_row_num": 238
         },
         {
           "choice_list_name": "treatment",
@@ -5314,7 +5826,7 @@
               "text": "Contraceptive"
             }
           },
-          "_row_num": 216
+          "_row_num": 239
         },
         {
           "choice_list_name": "treatment",
@@ -5324,7 +5836,7 @@
               "text": "Treatment for malaria"
             }
           },
-          "_row_num": 217
+          "_row_num": 240
         },
         {
           "choice_list_name": "treatment",
@@ -5334,7 +5846,7 @@
               "text": "Antihistamine"
             }
           },
-          "_row_num": 218
+          "_row_num": 241
         },
         {
           "choice_list_name": "treatment",
@@ -5344,7 +5856,7 @@
               "text": "Antiretrovirals"
             }
           },
-          "_row_num": 219
+          "_row_num": 242
         },
         {
           "choice_list_name": "treatment",
@@ -5354,7 +5866,7 @@
               "text": "Treatment for tuberculosis"
             }
           },
-          "_row_num": 220
+          "_row_num": 243
         },
         {
           "choice_list_name": "treatment",
@@ -5364,7 +5876,7 @@
               "text": "Antibiotic"
             }
           },
-          "_row_num": 221
+          "_row_num": 244
         },
         {
           "choice_list_name": "treatment",
@@ -5374,7 +5886,7 @@
               "text": "Treatment for stress"
             }
           },
-          "_row_num": 222
+          "_row_num": 245
         },
         {
           "choice_list_name": "treatment",
@@ -5384,7 +5896,7 @@
               "text": "Treatment for mental illness"
             }
           },
-          "_row_num": 223
+          "_row_num": 246
         },
         {
           "choice_list_name": "treatment",
@@ -5394,7 +5906,7 @@
               "text": "Anti-fungal treatment"
             }
           },
-          "_row_num": 224
+          "_row_num": 247
         },
         {
           "choice_list_name": "treatment",
@@ -5404,7 +5916,7 @@
               "text": "Treatment for epilepsy"
             }
           },
-          "_row_num": 225
+          "_row_num": 248
         },
         {
           "choice_list_name": "treatment",
@@ -5414,7 +5926,7 @@
               "text": "Treatment for diarrhoea"
             }
           },
-          "_row_num": 226
+          "_row_num": 249
         },
         {
           "choice_list_name": "treatment",
@@ -5424,7 +5936,7 @@
               "text": "Treatment for blood pressure"
             }
           },
-          "_row_num": 227
+          "_row_num": 250
         },
         {
           "choice_list_name": "treatment",
@@ -5434,7 +5946,7 @@
               "text": "Traditional medicine"
             }
           },
-          "_row_num": 228
+          "_row_num": 251
         },
         {
           "choice_list_name": "treatment",
@@ -5444,7 +5956,7 @@
               "text": "Don’t know"
             }
           },
-          "_row_num": 229
+          "_row_num": 252
         },
         {
           "choice_list_name": "treatment",
@@ -5454,7 +5966,7 @@
               "text": "Prefer not to say"
             }
           },
-          "_row_num": 230
+          "_row_num": 253
         },
         {
           "choice_list_name": "treatment",
@@ -5464,7 +5976,7 @@
               "text": "Other"
             }
           },
-          "_row_num": 231
+          "_row_num": 254
         },
         {
           "choice_list_name": "treatment",
@@ -5474,7 +5986,7 @@
               "text": "No"
             }
           },
-          "_row_num": 232
+          "_row_num": 255
         }
       ]
     },
@@ -5979,11 +6491,109 @@
         "valuesList": "not_possible",
         "elementKey": "new_hh_member_censed_extid_not_possible"
       },
+      "snake_bite_num_times": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 40,
+            "section_name": "model"
+          }
+        ],
+        "comment": "Snake Bites",
+        "elementKey": "snake_bite_num_times"
+      },
+      "snake_bite_months": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_months_items"
+        },
+        "_defn": [
+          {
+            "_row_num": 41,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "month",
+        "elementKey": "snake_bite_months"
+      },
+      "snake_bite_miss_work_school": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 42,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "yndk",
+        "elementKey": "snake_bite_miss_work_school"
+      },
+      "snake_bite_miss_work_school_days": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 43,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_miss_work_school_days"
+      },
+      "snake_bite_miss_work_school_days_unknown": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_miss_work_school_days_unknown_items"
+        },
+        "_defn": [
+          {
+            "_row_num": 44,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "dk",
+        "elementKey": "snake_bite_miss_work_school_days_unknown"
+      },
+      "snake_bite_occur": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_occur_items"
+        },
+        "_defn": [
+          {
+            "_row_num": 45,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "bite_occur",
+        "elementKey": "snake_bite_occur"
+      },
+      "snake_bite_occur_other": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 46,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_occur_other"
+      },
+      "snake_bite_outcome": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 47,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "bite_outcome",
+        "elementKey": "snake_bite_outcome"
+      },
       "ind_sign_consent": {
         "type": "string",
         "_defn": [
           {
-            "_row_num": 40,
+            "_row_num": 48,
             "section_name": "model"
           }
         ],
@@ -5995,7 +6605,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 41,
+            "_row_num": 49,
             "section_name": "model"
           }
         ],
@@ -6006,7 +6616,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 42,
+            "_row_num": 50,
             "section_name": "model"
           }
         ],
@@ -6017,7 +6627,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 43,
+            "_row_num": 51,
             "section_name": "model"
           }
         ],
@@ -6027,7 +6637,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 44,
+            "_row_num": 52,
             "section_name": "model"
           }
         ],
@@ -6038,7 +6648,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 45,
+            "_row_num": 53,
             "section_name": "model"
           }
         ],
@@ -6048,7 +6658,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 46,
+            "_row_num": 54,
             "section_name": "model"
           }
         ],
@@ -6058,7 +6668,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 47,
+            "_row_num": 55,
             "section_name": "model"
           }
         ],
@@ -6069,7 +6679,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 48,
+            "_row_num": 56,
             "section_name": "model"
           }
         ],
@@ -6080,7 +6690,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 49,
+            "_row_num": 57,
             "section_name": "model"
           }
         ],
@@ -6091,7 +6701,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 50,
+            "_row_num": 58,
             "section_name": "model"
           }
         ],
@@ -6106,7 +6716,7 @@
         },
         "_defn": [
           {
-            "_row_num": 51,
+            "_row_num": 59,
             "section_name": "model"
           }
         ],
@@ -6121,7 +6731,7 @@
         },
         "_defn": [
           {
-            "_row_num": 52,
+            "_row_num": 60,
             "section_name": "model"
           }
         ],
@@ -6132,7 +6742,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 53,
+            "_row_num": 61,
             "section_name": "model"
           }
         ],
@@ -6142,7 +6752,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 54,
+            "_row_num": 62,
             "section_name": "model"
           }
         ],
@@ -6157,7 +6767,7 @@
         },
         "_defn": [
           {
-            "_row_num": 55,
+            "_row_num": 63,
             "section_name": "model"
           }
         ],
@@ -6168,7 +6778,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 56,
+            "_row_num": 64,
             "section_name": "model"
           }
         ],
@@ -6182,7 +6792,7 @@
         },
         "_defn": [
           {
-            "_row_num": 57,
+            "_row_num": 65,
             "section_name": "model"
           }
         ],
@@ -6193,7 +6803,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 58,
+            "_row_num": 66,
             "section_name": "model"
           }
         ],
@@ -6203,7 +6813,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 59,
+            "_row_num": 67,
             "section_name": "model"
           }
         ],
@@ -6218,7 +6828,7 @@
         },
         "_defn": [
           {
-            "_row_num": 60,
+            "_row_num": 68,
             "section_name": "model"
           }
         ],
@@ -6229,7 +6839,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 61,
+            "_row_num": 69,
             "section_name": "model"
           }
         ],
@@ -6239,7 +6849,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 62,
+            "_row_num": 70,
             "section_name": "model"
           }
         ],
@@ -6250,7 +6860,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 63,
+            "_row_num": 71,
             "section_name": "model"
           }
         ],
@@ -6261,7 +6871,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 64,
+            "_row_num": 72,
             "section_name": "model"
           }
         ],
@@ -6272,7 +6882,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 65,
+            "_row_num": 73,
             "section_name": "model"
           }
         ],
@@ -6287,7 +6897,7 @@
         },
         "_defn": [
           {
-            "_row_num": 66,
+            "_row_num": 74,
             "section_name": "model"
           }
         ],
@@ -6302,7 +6912,7 @@
         },
         "_defn": [
           {
-            "_row_num": 67,
+            "_row_num": 75,
             "section_name": "model"
           }
         ],
@@ -6313,7 +6923,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 68,
+            "_row_num": 76,
             "section_name": "model"
           }
         ],
@@ -6324,7 +6934,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 69,
+            "_row_num": 77,
             "section_name": "model"
           }
         ],
@@ -6335,7 +6945,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 70,
+            "_row_num": 78,
             "section_name": "model"
           }
         ],
@@ -6346,7 +6956,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 71,
+            "_row_num": 79,
             "section_name": "model"
           }
         ],
@@ -6357,7 +6967,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 72,
+            "_row_num": 80,
             "section_name": "model"
           }
         ],
@@ -6368,7 +6978,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 73,
+            "_row_num": 81,
             "section_name": "model"
           }
         ],
@@ -6379,7 +6989,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 74,
+            "_row_num": 82,
             "section_name": "model"
           }
         ],
@@ -6390,7 +7000,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 75,
+            "_row_num": 83,
             "section_name": "model"
           }
         ],
@@ -6401,7 +7011,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 76,
+            "_row_num": 84,
             "section_name": "model"
           }
         ],
@@ -6411,7 +7021,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 77,
+            "_row_num": 85,
             "section_name": "model"
           }
         ],
@@ -6422,7 +7032,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 78,
+            "_row_num": 86,
             "section_name": "model"
           }
         ],
@@ -6433,7 +7043,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 79,
+            "_row_num": 87,
             "section_name": "model"
           }
         ],
@@ -6448,7 +7058,7 @@
         },
         "_defn": [
           {
-            "_row_num": 80,
+            "_row_num": 88,
             "section_name": "model"
           }
         ],
@@ -6459,7 +7069,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 81,
+            "_row_num": 89,
             "section_name": "model"
           }
         ],
@@ -6470,7 +7080,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 82,
+            "_row_num": 90,
             "section_name": "model"
           }
         ],
@@ -6485,7 +7095,7 @@
         },
         "_defn": [
           {
-            "_row_num": 83,
+            "_row_num": 91,
             "section_name": "model"
           }
         ],
@@ -6496,7 +7106,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 84,
+            "_row_num": 92,
             "section_name": "model"
           }
         ],
@@ -6511,7 +7121,7 @@
         },
         "_defn": [
           {
-            "_row_num": 85,
+            "_row_num": 93,
             "section_name": "model"
           }
         ],
@@ -6522,7 +7132,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 86,
+            "_row_num": 94,
             "section_name": "model"
           }
         ],
@@ -6533,7 +7143,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 87,
+            "_row_num": 95,
             "section_name": "model"
           }
         ],
@@ -7606,11 +8216,154 @@
           "new_hh_member_censed_extid_not_possible_items"
         ]
       },
+      "snake_bite_num_times": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 40,
+            "section_name": "model"
+          }
+        ],
+        "comment": "Snake Bites",
+        "elementKey": "snake_bite_num_times",
+        "elementName": "snake_bite_num_times",
+        "elementSet": "data",
+        "elementPath": "snake_bite_num_times"
+      },
+      "snake_bite_months": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_months_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "snake_bite_months.items",
+          "notUnitOfRetention": true
+        },
+        "_defn": [
+          {
+            "_row_num": 41,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "month",
+        "elementKey": "snake_bite_months",
+        "elementName": "snake_bite_months",
+        "elementSet": "data",
+        "elementPath": "snake_bite_months",
+        "listChildElementKeys": [
+          "snake_bite_months_items"
+        ]
+      },
+      "snake_bite_miss_work_school": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 42,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "yndk",
+        "elementKey": "snake_bite_miss_work_school",
+        "elementName": "snake_bite_miss_work_school",
+        "elementSet": "data",
+        "elementPath": "snake_bite_miss_work_school"
+      },
+      "snake_bite_miss_work_school_days": {
+        "type": "integer",
+        "_defn": [
+          {
+            "_row_num": 43,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_miss_work_school_days",
+        "elementName": "snake_bite_miss_work_school_days",
+        "elementSet": "data",
+        "elementPath": "snake_bite_miss_work_school_days"
+      },
+      "snake_bite_miss_work_school_days_unknown": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_miss_work_school_days_unknown_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "snake_bite_miss_work_school_days_unknown.items",
+          "notUnitOfRetention": true
+        },
+        "_defn": [
+          {
+            "_row_num": 44,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "dk",
+        "elementKey": "snake_bite_miss_work_school_days_unknown",
+        "elementName": "snake_bite_miss_work_school_days_unknown",
+        "elementSet": "data",
+        "elementPath": "snake_bite_miss_work_school_days_unknown",
+        "listChildElementKeys": [
+          "snake_bite_miss_work_school_days_unknown_items"
+        ]
+      },
+      "snake_bite_occur": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "snake_bite_occur_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "snake_bite_occur.items",
+          "notUnitOfRetention": true
+        },
+        "_defn": [
+          {
+            "_row_num": 45,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "bite_occur",
+        "elementKey": "snake_bite_occur",
+        "elementName": "snake_bite_occur",
+        "elementSet": "data",
+        "elementPath": "snake_bite_occur",
+        "listChildElementKeys": [
+          "snake_bite_occur_items"
+        ]
+      },
+      "snake_bite_occur_other": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 46,
+            "section_name": "model"
+          }
+        ],
+        "elementKey": "snake_bite_occur_other",
+        "elementName": "snake_bite_occur_other",
+        "elementSet": "data",
+        "elementPath": "snake_bite_occur_other"
+      },
+      "snake_bite_outcome": {
+        "type": "string",
+        "_defn": [
+          {
+            "_row_num": 47,
+            "section_name": "model"
+          }
+        ],
+        "valuesList": "bite_outcome",
+        "elementKey": "snake_bite_outcome",
+        "elementName": "snake_bite_outcome",
+        "elementSet": "data",
+        "elementPath": "snake_bite_outcome"
+      },
       "ind_sign_consent": {
         "type": "string",
         "_defn": [
           {
-            "_row_num": 40,
+            "_row_num": 48,
             "section_name": "model"
           }
         ],
@@ -7625,7 +8378,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 41,
+            "_row_num": 49,
             "section_name": "model"
           }
         ],
@@ -7639,7 +8392,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 42,
+            "_row_num": 50,
             "section_name": "model"
           }
         ],
@@ -7653,7 +8406,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 43,
+            "_row_num": 51,
             "section_name": "model"
           }
         ],
@@ -7666,7 +8419,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 44,
+            "_row_num": 52,
             "section_name": "model"
           }
         ],
@@ -7680,7 +8433,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 45,
+            "_row_num": 53,
             "section_name": "model"
           }
         ],
@@ -7693,7 +8446,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 46,
+            "_row_num": 54,
             "section_name": "model"
           }
         ],
@@ -7706,7 +8459,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 47,
+            "_row_num": 55,
             "section_name": "model"
           }
         ],
@@ -7720,7 +8473,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 48,
+            "_row_num": 56,
             "section_name": "model"
           }
         ],
@@ -7734,7 +8487,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 49,
+            "_row_num": 57,
             "section_name": "model"
           }
         ],
@@ -7748,7 +8501,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 50,
+            "_row_num": 58,
             "section_name": "model"
           }
         ],
@@ -7770,7 +8523,7 @@
         },
         "_defn": [
           {
-            "_row_num": 51,
+            "_row_num": 59,
             "section_name": "model"
           }
         ],
@@ -7795,7 +8548,7 @@
         },
         "_defn": [
           {
-            "_row_num": 52,
+            "_row_num": 60,
             "section_name": "model"
           }
         ],
@@ -7812,7 +8565,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 53,
+            "_row_num": 61,
             "section_name": "model"
           }
         ],
@@ -7825,7 +8578,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 54,
+            "_row_num": 62,
             "section_name": "model"
           }
         ],
@@ -7847,7 +8600,7 @@
         },
         "_defn": [
           {
-            "_row_num": 55,
+            "_row_num": 63,
             "section_name": "model"
           }
         ],
@@ -7864,7 +8617,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 56,
+            "_row_num": 64,
             "section_name": "model"
           }
         ],
@@ -7885,7 +8638,7 @@
         },
         "_defn": [
           {
-            "_row_num": 57,
+            "_row_num": 65,
             "section_name": "model"
           }
         ],
@@ -7902,7 +8655,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 58,
+            "_row_num": 66,
             "section_name": "model"
           }
         ],
@@ -7915,7 +8668,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 59,
+            "_row_num": 67,
             "section_name": "model"
           }
         ],
@@ -7937,7 +8690,7 @@
         },
         "_defn": [
           {
-            "_row_num": 60,
+            "_row_num": 68,
             "section_name": "model"
           }
         ],
@@ -7954,7 +8707,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 61,
+            "_row_num": 69,
             "section_name": "model"
           }
         ],
@@ -7967,7 +8720,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 62,
+            "_row_num": 70,
             "section_name": "model"
           }
         ],
@@ -7981,7 +8734,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 63,
+            "_row_num": 71,
             "section_name": "model"
           }
         ],
@@ -7995,7 +8748,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 64,
+            "_row_num": 72,
             "section_name": "model"
           }
         ],
@@ -8009,7 +8762,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 65,
+            "_row_num": 73,
             "section_name": "model"
           }
         ],
@@ -8031,7 +8784,7 @@
         },
         "_defn": [
           {
-            "_row_num": 66,
+            "_row_num": 74,
             "section_name": "model"
           }
         ],
@@ -8056,7 +8809,7 @@
         },
         "_defn": [
           {
-            "_row_num": 67,
+            "_row_num": 75,
             "section_name": "model"
           }
         ],
@@ -8073,7 +8826,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 68,
+            "_row_num": 76,
             "section_name": "model"
           }
         ],
@@ -8087,7 +8840,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 69,
+            "_row_num": 77,
             "section_name": "model"
           }
         ],
@@ -8101,7 +8854,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 70,
+            "_row_num": 78,
             "section_name": "model"
           }
         ],
@@ -8115,7 +8868,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 71,
+            "_row_num": 79,
             "section_name": "model"
           }
         ],
@@ -8129,7 +8882,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 72,
+            "_row_num": 80,
             "section_name": "model"
           }
         ],
@@ -8143,7 +8896,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 73,
+            "_row_num": 81,
             "section_name": "model"
           }
         ],
@@ -8157,7 +8910,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 74,
+            "_row_num": 82,
             "section_name": "model"
           }
         ],
@@ -8171,7 +8924,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 75,
+            "_row_num": 83,
             "section_name": "model"
           }
         ],
@@ -8185,7 +8938,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 76,
+            "_row_num": 84,
             "section_name": "model"
           }
         ],
@@ -8198,7 +8951,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 77,
+            "_row_num": 85,
             "section_name": "model"
           }
         ],
@@ -8212,7 +8965,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 78,
+            "_row_num": 86,
             "section_name": "model"
           }
         ],
@@ -8226,7 +8979,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 79,
+            "_row_num": 87,
             "section_name": "model"
           }
         ],
@@ -8248,7 +9001,7 @@
         },
         "_defn": [
           {
-            "_row_num": 80,
+            "_row_num": 88,
             "section_name": "model"
           }
         ],
@@ -8265,7 +9018,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 81,
+            "_row_num": 89,
             "section_name": "model"
           }
         ],
@@ -8279,7 +9032,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 82,
+            "_row_num": 90,
             "section_name": "model"
           }
         ],
@@ -8301,7 +9054,7 @@
         },
         "_defn": [
           {
-            "_row_num": 83,
+            "_row_num": 91,
             "section_name": "model"
           }
         ],
@@ -8318,7 +9071,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 84,
+            "_row_num": 92,
             "section_name": "model"
           }
         ],
@@ -8340,7 +9093,7 @@
         },
         "_defn": [
           {
-            "_row_num": 85,
+            "_row_num": 93,
             "section_name": "model"
           }
         ],
@@ -8357,7 +9110,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 86,
+            "_row_num": 94,
             "section_name": "model"
           }
         ],
@@ -8371,7 +9124,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 87,
+            "_row_num": 95,
             "section_name": "model"
           }
         ],
@@ -8442,6 +9195,30 @@
         "elementName": "items",
         "elementSet": "data",
         "elementPath": "new_hh_member_censed_extid_not_possible.items",
+        "notUnitOfRetention": true
+      },
+      "snake_bite_months_items": {
+        "type": "string",
+        "elementKey": "snake_bite_months_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "snake_bite_months.items",
+        "notUnitOfRetention": true
+      },
+      "snake_bite_miss_work_school_days_unknown_items": {
+        "type": "string",
+        "elementKey": "snake_bite_miss_work_school_days_unknown_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "snake_bite_miss_work_school_days_unknown.items",
+        "notUnitOfRetention": true
+      },
+      "snake_bite_occur_items": {
+        "type": "string",
+        "elementKey": "snake_bite_occur_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "snake_bite_occur.items",
         "notUnitOfRetention": true
       },
       "ind_treatment_items": {
@@ -8650,7 +9427,7 @@
         "_aspect": "absent_return",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"return_time\",\"data_value\":\"today\",\"display\":{\"title\":{\"text\":\"Today\"}},\"_row_num\":184},{\"choice_list_name\":\"return_time\",\"data_value\":\"tomorrow\",\"display\":{\"title\":{\"text\":\"Tomorrow\"}},\"_row_num\":185}]"
+        "_value": "[{\"choice_list_name\":\"return_time\",\"data_value\":\"today\",\"display\":{\"title\":{\"text\":\"Today\"}},\"_row_num\":207},{\"choice_list_name\":\"return_time\",\"data_value\":\"tomorrow\",\"display\":{\"title\":{\"text\":\"Tomorrow\"}},\"_row_num\":208}]"
       },
       {
         "_partition": "Column",
@@ -8664,7 +9441,7 @@
         "_aspect": "absent_return_dwmy",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"dwmy\",\"data_value\":\"days\",\"display\":{\"title\":{\"text\":\"Day(s)\"}},\"_row_num\":85},{\"choice_list_name\":\"dwmy\",\"data_value\":\"weeks\",\"display\":{\"title\":{\"text\":\"Week(s)\"}},\"_row_num\":86},{\"choice_list_name\":\"dwmy\",\"data_value\":\"months\",\"display\":{\"title\":{\"text\":\"Month(s)\"}},\"_row_num\":87},{\"choice_list_name\":\"dwmy\",\"data_value\":\"years\",\"display\":{\"title\":{\"text\":\"Year(s)\"}},\"_row_num\":88}]"
+        "_value": "[{\"choice_list_name\":\"dwmy\",\"data_value\":\"days\",\"display\":{\"title\":{\"text\":\"Day(s)\"}},\"_row_num\":95},{\"choice_list_name\":\"dwmy\",\"data_value\":\"weeks\",\"display\":{\"title\":{\"text\":\"Week(s)\"}},\"_row_num\":96},{\"choice_list_name\":\"dwmy\",\"data_value\":\"months\",\"display\":{\"title\":{\"text\":\"Month(s)\"}},\"_row_num\":97},{\"choice_list_name\":\"dwmy\",\"data_value\":\"years\",\"display\":{\"title\":{\"text\":\"Year(s)\"}},\"_row_num\":98}]"
       },
       {
         "_partition": "Column",
@@ -8706,14 +9483,14 @@
         "_aspect": "emigrated_where",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"in_district\",\"display\":{\"title\":{\"text\":\"Within this district\"}},\"_row_num\":100},{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"outside_district\",\"display\":{\"title\":{\"text\":\"Outside this district\"}},\"_row_num\":101},{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":102}]"
+        "_value": "[{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"in_district\",\"display\":{\"title\":{\"text\":\"Within this district\"}},\"_row_num\":110},{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"outside_district\",\"display\":{\"title\":{\"text\":\"Outside this district\"}},\"_row_num\":111},{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":112}]"
       },
       {
         "_partition": "Column",
         "_aspect": "gender",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"gender\",\"data_value\":\"male\",\"display\":{\"title\":{\"text\":\"Male\"}},\"_row_num\":98},{\"choice_list_name\":\"gender\",\"data_value\":\"female\",\"display\":{\"title\":{\"text\":\"Female\"}},\"_row_num\":99}]"
+        "_value": "[{\"choice_list_name\":\"gender\",\"data_value\":\"male\",\"display\":{\"title\":{\"text\":\"Male\"}},\"_row_num\":108},{\"choice_list_name\":\"gender\",\"data_value\":\"female\",\"display\":{\"title\":{\"text\":\"Female\"}},\"_row_num\":109}]"
       },
       {
         "_partition": "Column",
@@ -8727,21 +9504,21 @@
         "_aspect": "ind_chronic_disease",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Respiratory_disease\",\"display\":{\"title\":{\"text\":\"Respiratory disease\"}},\"_row_num\":57},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Diarrhoea\",\"display\":{\"title\":{\"text\":\"Diarrhoea\"}},\"_row_num\":58},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Injuries_from_an_accident\",\"display\":{\"title\":{\"text\":\"Injuries from an accident\"}},\"_row_num\":59},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Skin_disease\",\"display\":{\"title\":{\"text\":\"Skin disease\"}},\"_row_num\":60},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Mental_health_disorder\",\"display\":{\"title\":{\"text\":\"Mental health disorder\"}},\"_row_num\":61},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Worms\",\"display\":{\"title\":{\"text\":\"Worms\"}},\"_row_num\":62},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"HIV\",\"display\":{\"title\":{\"text\":\"HIV\"}},\"_row_num\":63},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"TB\",\"display\":{\"title\":{\"text\":\"TB\"}},\"_row_num\":64},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Hepatitis\",\"display\":{\"title\":{\"text\":\"Hepatitis\"}},\"_row_num\":65},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Epilepsy_(convulsions)\",\"display\":{\"title\":{\"text\":\"Epilepsy (convulsions)\"}},\"_row_num\":66},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Heart_problems\",\"display\":{\"title\":{\"text\":\"Heart problems\"}},\"_row_num\":67},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Diabetes\",\"display\":{\"title\":{\"text\":\"Diabetes\"}},\"_row_num\":68},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Cancer\",\"display\":{\"title\":{\"text\":\"Cancer\"}},\"_row_num\":69},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":70},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":71}]"
+        "_value": "[{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Respiratory_disease\",\"display\":{\"title\":{\"text\":\"Respiratory disease\"}},\"_row_num\":67},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Diarrhoea\",\"display\":{\"title\":{\"text\":\"Diarrhoea\"}},\"_row_num\":68},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Injuries_from_an_accident\",\"display\":{\"title\":{\"text\":\"Injuries from an accident\"}},\"_row_num\":69},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Skin_disease\",\"display\":{\"title\":{\"text\":\"Skin disease\"}},\"_row_num\":70},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Mental_health_disorder\",\"display\":{\"title\":{\"text\":\"Mental health disorder\"}},\"_row_num\":71},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Worms\",\"display\":{\"title\":{\"text\":\"Worms\"}},\"_row_num\":72},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"HIV\",\"display\":{\"title\":{\"text\":\"HIV\"}},\"_row_num\":73},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"TB\",\"display\":{\"title\":{\"text\":\"TB\"}},\"_row_num\":74},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Hepatitis\",\"display\":{\"title\":{\"text\":\"Hepatitis\"}},\"_row_num\":75},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Epilepsy_(convulsions)\",\"display\":{\"title\":{\"text\":\"Epilepsy (convulsions)\"}},\"_row_num\":76},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Heart_problems\",\"display\":{\"title\":{\"text\":\"Heart problems\"}},\"_row_num\":77},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Diabetes\",\"display\":{\"title\":{\"text\":\"Diabetes\"}},\"_row_num\":78},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"Cancer\",\"display\":{\"title\":{\"text\":\"Cancer\"}},\"_row_num\":79},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":80},{\"choice_list_name\":\"chronic_disease\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":81}]"
       },
       {
         "_partition": "Column",
         "_aspect": "ind_deficiency",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"disability\",\"data_value\":\"Blind\",\"display\":{\"title\":{\"text\":\"Blind\"}},\"_row_num\":72},{\"choice_list_name\":\"disability\",\"data_value\":\"Deaf\",\"display\":{\"title\":{\"text\":\"Deaf\"}},\"_row_num\":73},{\"choice_list_name\":\"disability\",\"data_value\":\"Amputated/atrophied_arm\",\"display\":{\"title\":{\"text\":\"Amputated/atrophied arm\"}},\"_row_num\":74},{\"choice_list_name\":\"disability\",\"data_value\":\"Amputated/atrophied_leg\",\"display\":{\"title\":{\"text\":\"Amputated/atrophied leg\"}},\"_row_num\":75},{\"choice_list_name\":\"disability\",\"data_value\":\"Paralysis\",\"display\":{\"title\":{\"text\":\"Paralysis\"}},\"_row_num\":76},{\"choice_list_name\":\"disability\",\"data_value\":\"Mental\",\"display\":{\"title\":{\"text\":\"Mental\"}},\"_row_num\":77},{\"choice_list_name\":\"disability\",\"data_value\":\"none\",\"display\":{\"title\":{\"text\":\"None\"}},\"_row_num\":78},{\"choice_list_name\":\"disability\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":79},{\"choice_list_name\":\"disability\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":80}]"
+        "_value": "[{\"choice_list_name\":\"disability\",\"data_value\":\"Blind\",\"display\":{\"title\":{\"text\":\"Blind\"}},\"_row_num\":82},{\"choice_list_name\":\"disability\",\"data_value\":\"Deaf\",\"display\":{\"title\":{\"text\":\"Deaf\"}},\"_row_num\":83},{\"choice_list_name\":\"disability\",\"data_value\":\"Amputated/atrophied_arm\",\"display\":{\"title\":{\"text\":\"Amputated/atrophied arm\"}},\"_row_num\":84},{\"choice_list_name\":\"disability\",\"data_value\":\"Amputated/atrophied_leg\",\"display\":{\"title\":{\"text\":\"Amputated/atrophied leg\"}},\"_row_num\":85},{\"choice_list_name\":\"disability\",\"data_value\":\"Paralysis\",\"display\":{\"title\":{\"text\":\"Paralysis\"}},\"_row_num\":86},{\"choice_list_name\":\"disability\",\"data_value\":\"Mental\",\"display\":{\"title\":{\"text\":\"Mental\"}},\"_row_num\":87},{\"choice_list_name\":\"disability\",\"data_value\":\"none\",\"display\":{\"title\":{\"text\":\"None\"}},\"_row_num\":88},{\"choice_list_name\":\"disability\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":89},{\"choice_list_name\":\"disability\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":90}]"
       },
       {
         "_partition": "Column",
         "_aspect": "ind_itchy",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"itchy\",\"data_value\":\"body\",\"display\":{\"title\":{\"text\":\"Yes, on the body\"}},\"_row_num\":122},{\"choice_list_name\":\"itchy\",\"data_value\":\"head\",\"display\":{\"title\":{\"text\":\"Yes, on the head\"}},\"_row_num\":123},{\"choice_list_name\":\"itchy\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":124},{\"choice_list_name\":\"itchy\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":125}]"
+        "_value": "[{\"choice_list_name\":\"itchy\",\"data_value\":\"body\",\"display\":{\"title\":{\"text\":\"Yes, on the body\"}},\"_row_num\":132},{\"choice_list_name\":\"itchy\",\"data_value\":\"head\",\"display\":{\"title\":{\"text\":\"Yes, on the head\"}},\"_row_num\":133},{\"choice_list_name\":\"itchy\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":134},{\"choice_list_name\":\"itchy\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":135}]"
       },
       {
         "_partition": "Column",
@@ -8755,7 +9532,7 @@
         "_aspect": "ind_malaria_test_result",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"malaria_test_result\",\"data_value\":\"Positive\",\"display\":{\"title\":{\"text\":\"Positive\"}},\"_row_num\":136},{\"choice_list_name\":\"malaria_test_result\",\"data_value\":\"Negative\",\"display\":{\"title\":{\"text\":\"Negative\"}},\"_row_num\":137},{\"choice_list_name\":\"malaria_test_result\",\"data_value\":\"Invalid\",\"display\":{\"title\":{\"text\":\"Invalid\"}},\"_row_num\":138},{\"choice_list_name\":\"malaria_test_result\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don’t Know\"}},\"_row_num\":139}]"
+        "_value": "[{\"choice_list_name\":\"malaria_test_result\",\"data_value\":\"Positive\",\"display\":{\"title\":{\"text\":\"Positive\"}},\"_row_num\":146},{\"choice_list_name\":\"malaria_test_result\",\"data_value\":\"Negative\",\"display\":{\"title\":{\"text\":\"Negative\"}},\"_row_num\":147},{\"choice_list_name\":\"malaria_test_result\",\"data_value\":\"Invalid\",\"display\":{\"title\":{\"text\":\"Invalid\"}},\"_row_num\":148},{\"choice_list_name\":\"malaria_test_result\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don’t Know\"}},\"_row_num\":149}]"
       },
       {
         "_partition": "Column",
@@ -8769,7 +9546,7 @@
         "_aspect": "ind_malaria_treatment_no",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"Participant didn’t have malaria\",\"display\":{\"title\":{\"text\":\"Participant didn’t have malaria\"}},\"_row_num\":131},{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"Treatment was not available\",\"display\":{\"title\":{\"text\":\"Treatment was not available\"}},\"_row_num\":132},{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"Treatment was not affordable\",\"display\":{\"title\":{\"text\":\"Treatment was not affordable\"}},\"_row_num\":133},{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"Treatment was not deemed necessary\",\"display\":{\"title\":{\"text\":\"Treatment was not deemed necessary\"}},\"_row_num\":134},{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don’t know\"}},\"_row_num\":135}]"
+        "_value": "[{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"Participant didn’t have malaria\",\"display\":{\"title\":{\"text\":\"Participant didn’t have malaria\"}},\"_row_num\":141},{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"Treatment was not available\",\"display\":{\"title\":{\"text\":\"Treatment was not available\"}},\"_row_num\":142},{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"Treatment was not affordable\",\"display\":{\"title\":{\"text\":\"Treatment was not affordable\"}},\"_row_num\":143},{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"Treatment was not deemed necessary\",\"display\":{\"title\":{\"text\":\"Treatment was not deemed necessary\"}},\"_row_num\":144},{\"choice_list_name\":\"malaria_no_treatment\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don’t know\"}},\"_row_num\":145}]"
       },
       {
         "_partition": "Column",
@@ -8783,7 +9560,7 @@
         "_aspect": "ind_parents_alive",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"parents_alive\",\"data_value\":\"both_alive\",\"display\":{\"title\":{\"text\":\"Both alive\"}},\"_row_num\":164},{\"choice_list_name\":\"parents_alive\",\"data_value\":\"mother_alive\",\"display\":{\"title\":{\"text\":\"Only living mother\"}},\"_row_num\":165},{\"choice_list_name\":\"parents_alive\",\"data_value\":\"father_alive\",\"display\":{\"title\":{\"text\":\"Only living father\"}},\"_row_num\":166},{\"choice_list_name\":\"parents_alive\",\"data_value\":\"neither_alive\",\"display\":{\"title\":{\"text\":\"Neither are alive\"}},\"_row_num\":167}]"
+        "_value": "[{\"choice_list_name\":\"parents_alive\",\"data_value\":\"both_alive\",\"display\":{\"title\":{\"text\":\"Both alive\"}},\"_row_num\":187},{\"choice_list_name\":\"parents_alive\",\"data_value\":\"mother_alive\",\"display\":{\"title\":{\"text\":\"Only living mother\"}},\"_row_num\":188},{\"choice_list_name\":\"parents_alive\",\"data_value\":\"father_alive\",\"display\":{\"title\":{\"text\":\"Only living father\"}},\"_row_num\":189},{\"choice_list_name\":\"parents_alive\",\"data_value\":\"neither_alive\",\"display\":{\"title\":{\"text\":\"Neither are alive\"}},\"_row_num\":190}]"
       },
       {
         "_partition": "Column",
@@ -8797,14 +9574,14 @@
         "_aspect": "ind_rel_hh_head",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"husband_wife\",\"display\":{\"title\":{\"text\":\"Husband/wife of household head\"}},\"_row_num\":168},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"son_daughter\",\"display\":{\"title\":{\"text\":\"Son/daughter of household head\"}},\"_row_num\":169},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"brother_sister\",\"display\":{\"title\":{\"text\":\"Brother/sister of household head\"}},\"_row_num\":170},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"father_mother\",\"display\":{\"title\":{\"text\":\"Father/mother of household head\"}},\"_row_num\":171},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"son_daughterinlaw\",\"display\":{\"title\":{\"text\":\"Son/daughter in law of household head\"}},\"_row_num\":172},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"brother_sisterinlaw\",\"display\":{\"title\":{\"text\":\"Brother/sister in law of household head\"}},\"_row_num\":173},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"uncle_aunt\",\"display\":{\"title\":{\"text\":\"Uncle/aunt of household head\"}},\"_row_num\":174},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"grandson_granddaughter\",\"display\":{\"title\":{\"text\":\"Grandson /granddaughter of household head\"}},\"_row_num\":175},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"stepchild\",\"display\":{\"title\":{\"text\":\"Stepchild of household head\"}},\"_row_num\":176},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"adopted_son_daughter\",\"display\":{\"title\":{\"text\":\"Adopted son/daughter of household head\"}},\"_row_num\":177},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"cousin\",\"display\":{\"title\":{\"text\":\"Cousin of household head\"}},\"_row_num\":178},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"nephew_niece\",\"display\":{\"title\":{\"text\":\"Nephew/Niece of household head\"}},\"_row_num\":179},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"unrelated\",\"display\":{\"title\":{\"text\":\"Unrelated\"}},\"_row_num\":180},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":181}]"
+        "_value": "[{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"husband_wife\",\"display\":{\"title\":{\"text\":\"Husband/wife of household head\"}},\"_row_num\":191},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"son_daughter\",\"display\":{\"title\":{\"text\":\"Son/daughter of household head\"}},\"_row_num\":192},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"brother_sister\",\"display\":{\"title\":{\"text\":\"Brother/sister of household head\"}},\"_row_num\":193},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"father_mother\",\"display\":{\"title\":{\"text\":\"Father/mother of household head\"}},\"_row_num\":194},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"son_daughterinlaw\",\"display\":{\"title\":{\"text\":\"Son/daughter in law of household head\"}},\"_row_num\":195},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"brother_sisterinlaw\",\"display\":{\"title\":{\"text\":\"Brother/sister in law of household head\"}},\"_row_num\":196},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"uncle_aunt\",\"display\":{\"title\":{\"text\":\"Uncle/aunt of household head\"}},\"_row_num\":197},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"grandson_granddaughter\",\"display\":{\"title\":{\"text\":\"Grandson /granddaughter of household head\"}},\"_row_num\":198},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"stepchild\",\"display\":{\"title\":{\"text\":\"Stepchild of household head\"}},\"_row_num\":199},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"adopted_son_daughter\",\"display\":{\"title\":{\"text\":\"Adopted son/daughter of household head\"}},\"_row_num\":200},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"cousin\",\"display\":{\"title\":{\"text\":\"Cousin of household head\"}},\"_row_num\":201},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"nephew_niece\",\"display\":{\"title\":{\"text\":\"Nephew/Niece of household head\"}},\"_row_num\":202},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"unrelated\",\"display\":{\"title\":{\"text\":\"Unrelated\"}},\"_row_num\":203},{\"choice_list_name\":\"relation_to_hh_head\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":204}]"
       },
       {
         "_partition": "Column",
         "_aspect": "ind_religion",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Catholic\",\"display\":{\"title\":{\"text\":\"Catholic\"}},\"_row_num\":103},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Protestant\",\"display\":{\"title\":{\"text\":\"Protestant\"}},\"_row_num\":104},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Anglican\",\"display\":{\"title\":{\"text\":\"Anglican\"}},\"_row_num\":105},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Christian undetermined\",\"display\":{\"title\":{\"text\":\"Christian undetermined\"}},\"_row_num\":106},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Islamic\",\"display\":{\"title\":{\"text\":\"Islamic\"}},\"_row_num\":107},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Hindu\",\"display\":{\"title\":{\"text\":\"Hindu\"}},\"_row_num\":108},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Zionist\",\"display\":{\"title\":{\"text\":\"Zionist\"}},\"_row_num\":109},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Animist\",\"display\":{\"title\":{\"text\":\"Animist\"}},\"_row_num\":110},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Evangelical\",\"display\":{\"title\":{\"text\":\"Evangelical\"}},\"_row_num\":111},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Atheist\",\"display\":{\"title\":{\"text\":\"Atheist\"}},\"_row_num\":112},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't know\"}},\"_row_num\":113},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":114},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":115}]"
+        "_value": "[{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Catholic\",\"display\":{\"title\":{\"text\":\"Catholic\"}},\"_row_num\":113},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Protestant\",\"display\":{\"title\":{\"text\":\"Protestant\"}},\"_row_num\":114},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Anglican\",\"display\":{\"title\":{\"text\":\"Anglican\"}},\"_row_num\":115},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Christian undetermined\",\"display\":{\"title\":{\"text\":\"Christian undetermined\"}},\"_row_num\":116},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Islamic\",\"display\":{\"title\":{\"text\":\"Islamic\"}},\"_row_num\":117},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Hindu\",\"display\":{\"title\":{\"text\":\"Hindu\"}},\"_row_num\":118},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Zionist\",\"display\":{\"title\":{\"text\":\"Zionist\"}},\"_row_num\":119},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Animist\",\"display\":{\"title\":{\"text\":\"Animist\"}},\"_row_num\":120},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Evangelical\",\"display\":{\"title\":{\"text\":\"Evangelical\"}},\"_row_num\":121},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"Atheist\",\"display\":{\"title\":{\"text\":\"Atheist\"}},\"_row_num\":122},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't know\"}},\"_row_num\":123},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":124},{\"choice_list_name\":\"ind_religion\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":125}]"
       },
       {
         "_partition": "Column",
@@ -8825,7 +9602,7 @@
         "_aspect": "ind_treatment",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_pain\",\"display\":{\"title\":{\"text\":\"Treatment for pain\"}},\"_row_num\":215},{\"choice_list_name\":\"treatment\",\"data_value\":\"Contraceptive\",\"display\":{\"title\":{\"text\":\"Contraceptive\"}},\"_row_num\":216},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_malaria\",\"display\":{\"title\":{\"text\":\"Treatment for malaria\"}},\"_row_num\":217},{\"choice_list_name\":\"treatment\",\"data_value\":\"Antihistamine\",\"display\":{\"title\":{\"text\":\"Antihistamine\"}},\"_row_num\":218},{\"choice_list_name\":\"treatment\",\"data_value\":\"Antiretrovirals\",\"display\":{\"title\":{\"text\":\"Antiretrovirals\"}},\"_row_num\":219},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_tuberculosis\",\"display\":{\"title\":{\"text\":\"Treatment for tuberculosis\"}},\"_row_num\":220},{\"choice_list_name\":\"treatment\",\"data_value\":\"Antibiotic\",\"display\":{\"title\":{\"text\":\"Antibiotic\"}},\"_row_num\":221},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_stress\",\"display\":{\"title\":{\"text\":\"Treatment for stress\"}},\"_row_num\":222},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_mental_illness\",\"display\":{\"title\":{\"text\":\"Treatment for mental illness\"}},\"_row_num\":223},{\"choice_list_name\":\"treatment\",\"data_value\":\"Anti-fungal_treatment\",\"display\":{\"title\":{\"text\":\"Anti-fungal treatment\"}},\"_row_num\":224},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_epilepsy\",\"display\":{\"title\":{\"text\":\"Treatment for epilepsy\"}},\"_row_num\":225},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_diarrhoea\",\"display\":{\"title\":{\"text\":\"Treatment for diarrhoea\"}},\"_row_num\":226},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_blood_pressure\",\"display\":{\"title\":{\"text\":\"Treatment for blood pressure\"}},\"_row_num\":227},{\"choice_list_name\":\"treatment\",\"data_value\":\"Traditional_medicine\",\"display\":{\"title\":{\"text\":\"Traditional medicine\"}},\"_row_num\":228},{\"choice_list_name\":\"treatment\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don’t know\"}},\"_row_num\":229},{\"choice_list_name\":\"treatment\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to say\"}},\"_row_num\":230},{\"choice_list_name\":\"treatment\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":231},{\"choice_list_name\":\"treatment\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":232}]"
+        "_value": "[{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_pain\",\"display\":{\"title\":{\"text\":\"Treatment for pain\"}},\"_row_num\":238},{\"choice_list_name\":\"treatment\",\"data_value\":\"Contraceptive\",\"display\":{\"title\":{\"text\":\"Contraceptive\"}},\"_row_num\":239},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_malaria\",\"display\":{\"title\":{\"text\":\"Treatment for malaria\"}},\"_row_num\":240},{\"choice_list_name\":\"treatment\",\"data_value\":\"Antihistamine\",\"display\":{\"title\":{\"text\":\"Antihistamine\"}},\"_row_num\":241},{\"choice_list_name\":\"treatment\",\"data_value\":\"Antiretrovirals\",\"display\":{\"title\":{\"text\":\"Antiretrovirals\"}},\"_row_num\":242},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_tuberculosis\",\"display\":{\"title\":{\"text\":\"Treatment for tuberculosis\"}},\"_row_num\":243},{\"choice_list_name\":\"treatment\",\"data_value\":\"Antibiotic\",\"display\":{\"title\":{\"text\":\"Antibiotic\"}},\"_row_num\":244},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_stress\",\"display\":{\"title\":{\"text\":\"Treatment for stress\"}},\"_row_num\":245},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_mental_illness\",\"display\":{\"title\":{\"text\":\"Treatment for mental illness\"}},\"_row_num\":246},{\"choice_list_name\":\"treatment\",\"data_value\":\"Anti-fungal_treatment\",\"display\":{\"title\":{\"text\":\"Anti-fungal treatment\"}},\"_row_num\":247},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_epilepsy\",\"display\":{\"title\":{\"text\":\"Treatment for epilepsy\"}},\"_row_num\":248},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_diarrhoea\",\"display\":{\"title\":{\"text\":\"Treatment for diarrhoea\"}},\"_row_num\":249},{\"choice_list_name\":\"treatment\",\"data_value\":\"Treatment_for_blood_pressure\",\"display\":{\"title\":{\"text\":\"Treatment for blood pressure\"}},\"_row_num\":250},{\"choice_list_name\":\"treatment\",\"data_value\":\"Traditional_medicine\",\"display\":{\"title\":{\"text\":\"Traditional medicine\"}},\"_row_num\":251},{\"choice_list_name\":\"treatment\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don’t know\"}},\"_row_num\":252},{\"choice_list_name\":\"treatment\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to say\"}},\"_row_num\":253},{\"choice_list_name\":\"treatment\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":254},{\"choice_list_name\":\"treatment\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":255}]"
       },
       {
         "_partition": "Column",
@@ -8860,21 +9637,21 @@
         "_aspect": "member_emigrated_when_dmy_ago",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"days_ago\",\"display\":{\"title\":{\"text\":\"Day(s) ago\"}},\"_row_num\":81},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"weeks_ago\",\"display\":{\"title\":{\"text\":\"Week(s) ago\"}},\"_row_num\":82},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"months_ago\",\"display\":{\"title\":{\"text\":\"Month(s) ago\"}},\"_row_num\":83},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":84}]"
+        "_value": "[{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"days_ago\",\"display\":{\"title\":{\"text\":\"Day(s) ago\"}},\"_row_num\":91},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"weeks_ago\",\"display\":{\"title\":{\"text\":\"Week(s) ago\"}},\"_row_num\":92},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"months_ago\",\"display\":{\"title\":{\"text\":\"Month(s) ago\"}},\"_row_num\":93},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":94}]"
       },
       {
         "_partition": "Column",
         "_aspect": "member_where_now",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"member_where_now\",\"data_value\":\"died\",\"display\":{\"title\":{\"text\":\"He/she died\"}},\"_row_num\":140},{\"choice_list_name\":\"member_where_now\",\"data_value\":\"emigrated\",\"display\":{\"title\":{\"text\":\"He/she emigrated\"}},\"_row_num\":141}]"
+        "_value": "[{\"choice_list_name\":\"member_where_now\",\"data_value\":\"died\",\"display\":{\"title\":{\"text\":\"He/she died\"}},\"_row_num\":150},{\"choice_list_name\":\"member_where_now\",\"data_value\":\"emigrated\",\"display\":{\"title\":{\"text\":\"He/she emigrated\"}},\"_row_num\":151}]"
       },
       {
         "_partition": "Column",
         "_aspect": "move_from",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"in_district\",\"display\":{\"title\":{\"text\":\"Within this district\"}},\"_row_num\":100},{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"outside_district\",\"display\":{\"title\":{\"text\":\"Outside this district\"}},\"_row_num\":101},{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":102}]"
+        "_value": "[{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"in_district\",\"display\":{\"title\":{\"text\":\"Within this district\"}},\"_row_num\":110},{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"outside_district\",\"display\":{\"title\":{\"text\":\"Outside this district\"}},\"_row_num\":111},{\"choice_list_name\":\"in_outside_district\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":112}]"
       },
       {
         "_partition": "Column",
@@ -8909,21 +9686,21 @@
         "_aspect": "new_member_move_in_select",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"days_ago\",\"display\":{\"title\":{\"text\":\"Day(s) ago\"}},\"_row_num\":81},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"weeks_ago\",\"display\":{\"title\":{\"text\":\"Week(s) ago\"}},\"_row_num\":82},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"months_ago\",\"display\":{\"title\":{\"text\":\"Month(s) ago\"}},\"_row_num\":83},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":84}]"
+        "_value": "[{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"days_ago\",\"display\":{\"title\":{\"text\":\"Day(s) ago\"}},\"_row_num\":91},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"weeks_ago\",\"display\":{\"title\":{\"text\":\"Week(s) ago\"}},\"_row_num\":92},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"months_ago\",\"display\":{\"title\":{\"text\":\"Month(s) ago\"}},\"_row_num\":93},{\"choice_list_name\":\"dmy_ago_dk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":94}]"
       },
       {
         "_partition": "Column",
         "_aspect": "new_member_newborn_or_moved_in",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"new_member\",\"data_value\":\"newborn\",\"display\":{\"title\":{\"text\":\"Newborn\"}},\"_row_num\":142},{\"choice_list_name\":\"new_member\",\"data_value\":\"someone_new_in_the_household\",\"display\":{\"title\":{\"text\":\"Someone new in the household\"}},\"_row_num\":143}]"
+        "_value": "[{\"choice_list_name\":\"new_member\",\"data_value\":\"newborn\",\"display\":{\"title\":{\"text\":\"Newborn\"}},\"_row_num\":165},{\"choice_list_name\":\"new_member\",\"data_value\":\"someone_new_in_the_household\",\"display\":{\"title\":{\"text\":\"Someone new in the household\"}},\"_row_num\":166}]"
       },
       {
         "_partition": "Column",
         "_aspect": "recent_disease_care_type",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Health_facility\",\"display\":{\"title\":{\"text\":\"Health facility\"}},\"_row_num\":89},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"CHW\",\"display\":{\"title\":{\"text\":\"CHW\"}},\"_row_num\":90},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Family_or_friends\",\"display\":{\"title\":{\"text\":\"Family or friends\"}},\"_row_num\":91},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Informal_drug_vendor\",\"display\":{\"title\":{\"text\":\"Informal drug vendor\"}},\"_row_num\":92},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Pharmacy\",\"display\":{\"title\":{\"text\":\"Pharmacy\"}},\"_row_num\":93},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Traditional_healer\",\"display\":{\"title\":{\"text\":\"Traditional healer\"}},\"_row_num\":94},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Community_leader\",\"display\":{\"title\":{\"text\":\"Community leader\"}},\"_row_num\":95},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Trusted_elderly\",\"display\":{\"title\":{\"text\":\"Trusted elderly\"}},\"_row_num\":96},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Traditional_midwife\",\"display\":{\"title\":{\"text\":\"Traditional midwife\"}},\"_row_num\":97}]"
+        "_value": "[{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Health_facility\",\"display\":{\"title\":{\"text\":\"Health facility\"}},\"_row_num\":99},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"CHW\",\"display\":{\"title\":{\"text\":\"CHW\"}},\"_row_num\":100},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Family_or_friends\",\"display\":{\"title\":{\"text\":\"Family or friends\"}},\"_row_num\":101},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Informal_drug_vendor\",\"display\":{\"title\":{\"text\":\"Informal drug vendor\"}},\"_row_num\":102},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Pharmacy\",\"display\":{\"title\":{\"text\":\"Pharmacy\"}},\"_row_num\":103},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Traditional_healer\",\"display\":{\"title\":{\"text\":\"Traditional healer\"}},\"_row_num\":104},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Community_leader\",\"display\":{\"title\":{\"text\":\"Community leader\"}},\"_row_num\":105},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Trusted_elderly\",\"display\":{\"title\":{\"text\":\"Trusted elderly\"}},\"_row_num\":106},{\"choice_list_name\":\"form_of_care\",\"data_value\":\"Traditional_midwife\",\"display\":{\"title\":{\"text\":\"Traditional midwife\"}},\"_row_num\":107}]"
       },
       {
         "_partition": "Column",
@@ -8937,21 +9714,21 @@
         "_aspect": "recent_disease_symptoms",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Fever\",\"display\":{\"title\":{\"text\":\"Fever\"}},\"_row_num\":154},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Vomiting\",\"display\":{\"title\":{\"text\":\"Vomiting\"}},\"_row_num\":155},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Nausea\",\"display\":{\"title\":{\"text\":\"Nausea\"}},\"_row_num\":156},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Joints_pain\",\"display\":{\"title\":{\"text\":\"Joints pain\"}},\"_row_num\":157},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Dizziness\",\"display\":{\"title\":{\"text\":\"Dizziness\"}},\"_row_num\":158},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Chills-shivers\",\"display\":{\"title\":{\"text\":\"Chills-shivers\"}},\"_row_num\":159},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Diarrhoea\",\"display\":{\"title\":{\"text\":\"Diarrhoea\"}},\"_row_num\":160},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Loss_smell\",\"display\":{\"title\":{\"text\":\"Loss of smell and/or taste\"}},\"_row_num\":161},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"No_symptoms\",\"display\":{\"title\":{\"text\":\"No symptoms\"}},\"_row_num\":162},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":163}]"
+        "_value": "[{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Fever\",\"display\":{\"title\":{\"text\":\"Fever\"}},\"_row_num\":177},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Vomiting\",\"display\":{\"title\":{\"text\":\"Vomiting\"}},\"_row_num\":178},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Nausea\",\"display\":{\"title\":{\"text\":\"Nausea\"}},\"_row_num\":179},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Joints_pain\",\"display\":{\"title\":{\"text\":\"Joints pain\"}},\"_row_num\":180},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Dizziness\",\"display\":{\"title\":{\"text\":\"Dizziness\"}},\"_row_num\":181},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Chills-shivers\",\"display\":{\"title\":{\"text\":\"Chills-shivers\"}},\"_row_num\":182},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Diarrhoea\",\"display\":{\"title\":{\"text\":\"Diarrhoea\"}},\"_row_num\":183},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"Loss_smell\",\"display\":{\"title\":{\"text\":\"Loss of smell and/or taste\"}},\"_row_num\":184},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"No_symptoms\",\"display\":{\"title\":{\"text\":\"No symptoms\"}},\"_row_num\":185},{\"choice_list_name\":\"other_symptoms\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":186}]"
       },
       {
         "_partition": "Column",
         "_aspect": "recent_disease_yes",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Malaria\",\"display\":{\"title\":{\"text\":\"Malaria\"}},\"_row_num\":144},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Respiratory_disease\",\"display\":{\"title\":{\"text\":\"Respiratory disease\"}},\"_row_num\":145},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Constipation\",\"display\":{\"title\":{\"text\":\"Constipation\"}},\"_row_num\":146},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Diarrhoea\",\"display\":{\"title\":{\"text\":\"Diarrhoea\"}},\"_row_num\":147},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Fever\",\"display\":{\"title\":{\"text\":\"Fever\"}},\"_row_num\":148},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Injuries_from_an_accident\",\"display\":{\"title\":{\"text\":\"Injuries from an accident\"}},\"_row_num\":149},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Delivery_of_a_baby\",\"display\":{\"title\":{\"text\":\"Delivery of a baby\"}},\"_row_num\":150},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Skin_disease\",\"display\":{\"title\":{\"text\":\"Skin disease\"}},\"_row_num\":151},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Worms\",\"display\":{\"title\":{\"text\":\"Worms\"}},\"_row_num\":152},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":153}]"
+        "_value": "[{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Malaria\",\"display\":{\"title\":{\"text\":\"Malaria\"}},\"_row_num\":167},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Respiratory_disease\",\"display\":{\"title\":{\"text\":\"Respiratory disease\"}},\"_row_num\":168},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Constipation\",\"display\":{\"title\":{\"text\":\"Constipation\"}},\"_row_num\":169},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Diarrhoea\",\"display\":{\"title\":{\"text\":\"Diarrhoea\"}},\"_row_num\":170},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Fever\",\"display\":{\"title\":{\"text\":\"Fever\"}},\"_row_num\":171},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Injuries_from_an_accident\",\"display\":{\"title\":{\"text\":\"Injuries from an accident\"}},\"_row_num\":172},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Delivery_of_a_baby\",\"display\":{\"title\":{\"text\":\"Delivery of a baby\"}},\"_row_num\":173},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Skin_disease\",\"display\":{\"title\":{\"text\":\"Skin disease\"}},\"_row_num\":174},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"Worms\",\"display\":{\"title\":{\"text\":\"Worms\"}},\"_row_num\":175},{\"choice_list_name\":\"other_recent_disease\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":176}]"
       },
       {
         "_partition": "Column",
         "_aspect": "resident_status",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"resident_status\",\"data_value\":\"resident\",\"display\":{\"title\":{\"text\":\"Resident member\"}},\"_row_num\":182},{\"choice_list_name\":\"resident_status\",\"data_value\":\"non_resident\",\"display\":{\"title\":{\"text\":\"Non-Resident member\"}},\"_row_num\":183}]"
+        "_value": "[{\"choice_list_name\":\"resident_status\",\"data_value\":\"resident\",\"display\":{\"title\":{\"text\":\"Resident member\"}},\"_row_num\":205},{\"choice_list_name\":\"resident_status\",\"data_value\":\"non_resident\",\"display\":{\"title\":{\"text\":\"Non-Resident member\"}},\"_row_num\":206}]"
       },
       {
         "_partition": "Column",
@@ -8969,31 +9746,66 @@
       },
       {
         "_partition": "Column",
+        "_aspect": "snake_bite_miss_work_school",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"yndk\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":6},{\"choice_list_name\":\"yndk\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":7},{\"choice_list_name\":\"yndk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":8}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "snake_bite_miss_work_school_days_unknown",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"dk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":2}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "snake_bite_months",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"month\",\"data_value\":\"january\",\"display\":{\"title\":{\"text\":\"January\"}},\"_row_num\":152},{\"choice_list_name\":\"month\",\"data_value\":\"february\",\"display\":{\"title\":{\"text\":\"February\"}},\"_row_num\":153},{\"choice_list_name\":\"month\",\"data_value\":\"march\",\"display\":{\"title\":{\"text\":\"March\"}},\"_row_num\":154},{\"choice_list_name\":\"month\",\"data_value\":\"april\",\"display\":{\"title\":{\"text\":\"April\"}},\"_row_num\":155},{\"choice_list_name\":\"month\",\"data_value\":\"may\",\"display\":{\"title\":{\"text\":\"May\"}},\"_row_num\":156},{\"choice_list_name\":\"month\",\"data_value\":\"june\",\"display\":{\"title\":{\"text\":\"June\"}},\"_row_num\":157},{\"choice_list_name\":\"month\",\"data_value\":\"july\",\"display\":{\"title\":{\"text\":\"July\"}},\"_row_num\":158},{\"choice_list_name\":\"month\",\"data_value\":\"august\",\"display\":{\"title\":{\"text\":\"August\"}},\"_row_num\":159},{\"choice_list_name\":\"month\",\"data_value\":\"september\",\"display\":{\"title\":{\"text\":\"September\"}},\"_row_num\":160},{\"choice_list_name\":\"month\",\"data_value\":\"october\",\"display\":{\"title\":{\"text\":\"October\"}},\"_row_num\":161},{\"choice_list_name\":\"month\",\"data_value\":\"november\",\"display\":{\"title\":{\"text\":\"November\"}},\"_row_num\":162},{\"choice_list_name\":\"month\",\"data_value\":\"december\",\"display\":{\"title\":{\"text\":\"December\"}},\"_row_num\":163},{\"choice_list_name\":\"month\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":164}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "snake_bite_occur",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"bite_occur\",\"data_value\":\"home\",\"display\":{\"title\":{\"text\":\"Inside the home\"}},\"_row_num\":54},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"compound\",\"display\":{\"title\":{\"text\":\"Inside the compound\"}},\"_row_num\":55},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"field\",\"display\":{\"title\":{\"text\":\"Field\"}},\"_row_num\":56},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"road\",\"display\":{\"title\":{\"text\":\"Road\"}},\"_row_num\":57},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":58},{\"choice_list_name\":\"bite_occur\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":59}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "snake_bite_outcome",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"bite_outcome\",\"data_value\":\"death\",\"display\":{\"title\":{\"text\":\"Death\"}},\"_row_num\":60},{\"choice_list_name\":\"bite_outcome\",\"data_value\":\"loss_limb\",\"display\":{\"title\":{\"text\":\"Loss of limb\"}},\"_row_num\":61},{\"choice_list_name\":\"bite_outcome\",\"data_value\":\"full_recovery\",\"display\":{\"title\":{\"text\":\"Full recovery\"}},\"_row_num\":62},{\"choice_list_name\":\"bite_outcome\",\"data_value\":\"partial_recovery\",\"display\":{\"title\":{\"text\":\"Partial recovery\"}},\"_row_num\":63}]"
+      },
+      {
+        "_partition": "Column",
         "_aspect": "time_get_out_bed",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"time_awake\",\"data_value\":\">4h before sunrise\",\"display\":{\"title\":{\"text\":\">4h before sunrise\"}},\"_row_num\":186},{\"choice_list_name\":\"time_awake\",\"data_value\":\"2-4h before sunrise\",\"display\":{\"title\":{\"text\":\"2-4h before sunrise\"}},\"_row_num\":187},{\"choice_list_name\":\"time_awake\",\"data_value\":\"1-2h before sunrise\",\"display\":{\"title\":{\"text\":\"1-2h before sunrise\"}},\"_row_num\":188},{\"choice_list_name\":\"time_awake\",\"data_value\":\"At sunrise\",\"display\":{\"title\":{\"text\":\"At sunrise\"}},\"_row_num\":189}]"
+        "_value": "[{\"choice_list_name\":\"time_awake\",\"data_value\":\">4h before sunrise\",\"display\":{\"title\":{\"text\":\">4h before sunrise\"}},\"_row_num\":209},{\"choice_list_name\":\"time_awake\",\"data_value\":\"2-4h before sunrise\",\"display\":{\"title\":{\"text\":\"2-4h before sunrise\"}},\"_row_num\":210},{\"choice_list_name\":\"time_awake\",\"data_value\":\"1-2h before sunrise\",\"display\":{\"title\":{\"text\":\"1-2h before sunrise\"}},\"_row_num\":211},{\"choice_list_name\":\"time_awake\",\"data_value\":\"At sunrise\",\"display\":{\"title\":{\"text\":\"At sunrise\"}},\"_row_num\":212}]"
       },
       {
         "_partition": "Column",
         "_aspect": "time_go_bed",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"time_bed\",\"data_value\":\"Before sunset\",\"display\":{\"title\":{\"text\":\"Before sunset\"}},\"_row_num\":190},{\"choice_list_name\":\"time_bed\",\"data_value\":\"At sunset\",\"display\":{\"title\":{\"text\":\"At sunset\"}},\"_row_num\":191},{\"choice_list_name\":\"time_bed\",\"data_value\":\"1-2h after sunset\",\"display\":{\"title\":{\"text\":\"1-2h after sunset\"}},\"_row_num\":192},{\"choice_list_name\":\"time_bed\",\"data_value\":\"2-4h after sunset\",\"display\":{\"title\":{\"text\":\"2-4h after sunset\"}},\"_row_num\":193},{\"choice_list_name\":\"time_bed\",\"data_value\":\">4h after sunset\",\"display\":{\"title\":{\"text\":\">4h after sunset\"}},\"_row_num\":194}]"
+        "_value": "[{\"choice_list_name\":\"time_bed\",\"data_value\":\"Before sunset\",\"display\":{\"title\":{\"text\":\"Before sunset\"}},\"_row_num\":213},{\"choice_list_name\":\"time_bed\",\"data_value\":\"At sunset\",\"display\":{\"title\":{\"text\":\"At sunset\"}},\"_row_num\":214},{\"choice_list_name\":\"time_bed\",\"data_value\":\"1-2h after sunset\",\"display\":{\"title\":{\"text\":\"1-2h after sunset\"}},\"_row_num\":215},{\"choice_list_name\":\"time_bed\",\"data_value\":\"2-4h after sunset\",\"display\":{\"title\":{\"text\":\"2-4h after sunset\"}},\"_row_num\":216},{\"choice_list_name\":\"time_bed\",\"data_value\":\">4h after sunset\",\"display\":{\"title\":{\"text\":\">4h after sunset\"}},\"_row_num\":217}]"
       },
       {
         "_partition": "Column",
         "_aspect": "time_go_outside",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"time_outdoors\",\"data_value\":\">4h before sunrise\",\"display\":{\"title\":{\"text\":\">4h before sunrise\"}},\"_row_num\":200},{\"choice_list_name\":\"time_outdoors\",\"data_value\":\"2-4h before sunrise\",\"display\":{\"title\":{\"text\":\"2-4h before sunrise\"}},\"_row_num\":201},{\"choice_list_name\":\"time_outdoors\",\"data_value\":\"1-2h before sunrise\",\"display\":{\"title\":{\"text\":\"1-2h before sunrise\"}},\"_row_num\":202},{\"choice_list_name\":\"time_outdoors\",\"data_value\":\"At sunrise\",\"display\":{\"title\":{\"text\":\"At sunrise\"}},\"_row_num\":203}]"
+        "_value": "[{\"choice_list_name\":\"time_outdoors\",\"data_value\":\">4h before sunrise\",\"display\":{\"title\":{\"text\":\">4h before sunrise\"}},\"_row_num\":223},{\"choice_list_name\":\"time_outdoors\",\"data_value\":\"2-4h before sunrise\",\"display\":{\"title\":{\"text\":\"2-4h before sunrise\"}},\"_row_num\":224},{\"choice_list_name\":\"time_outdoors\",\"data_value\":\"1-2h before sunrise\",\"display\":{\"title\":{\"text\":\"1-2h before sunrise\"}},\"_row_num\":225},{\"choice_list_name\":\"time_outdoors\",\"data_value\":\"At sunrise\",\"display\":{\"title\":{\"text\":\"At sunrise\"}},\"_row_num\":226}]"
       },
       {
         "_partition": "Column",
         "_aspect": "time_indoors",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"time_indoors\",\"data_value\":\"Before sunset\",\"display\":{\"title\":{\"text\":\"Before sunset\"}},\"_row_num\":195},{\"choice_list_name\":\"time_indoors\",\"data_value\":\"At sunset\",\"display\":{\"title\":{\"text\":\"At sunset\"}},\"_row_num\":196},{\"choice_list_name\":\"time_indoors\",\"data_value\":\"1-2h after sunset\",\"display\":{\"title\":{\"text\":\"1-2h after sunset\"}},\"_row_num\":197},{\"choice_list_name\":\"time_indoors\",\"data_value\":\"2-4h after sunset\",\"display\":{\"title\":{\"text\":\"2-4h after sunset\"}},\"_row_num\":198},{\"choice_list_name\":\"time_indoors\",\"data_value\":\">4h after sunset\",\"display\":{\"title\":{\"text\":\">4h after sunset\"}},\"_row_num\":199}]"
+        "_value": "[{\"choice_list_name\":\"time_indoors\",\"data_value\":\"Before sunset\",\"display\":{\"title\":{\"text\":\"Before sunset\"}},\"_row_num\":218},{\"choice_list_name\":\"time_indoors\",\"data_value\":\"At sunset\",\"display\":{\"title\":{\"text\":\"At sunset\"}},\"_row_num\":219},{\"choice_list_name\":\"time_indoors\",\"data_value\":\"1-2h after sunset\",\"display\":{\"title\":{\"text\":\"1-2h after sunset\"}},\"_row_num\":220},{\"choice_list_name\":\"time_indoors\",\"data_value\":\"2-4h after sunset\",\"display\":{\"title\":{\"text\":\"2-4h after sunset\"}},\"_row_num\":221},{\"choice_list_name\":\"time_indoors\",\"data_value\":\">4h after sunset\",\"display\":{\"title\":{\"text\":\">4h after sunset\"}},\"_row_num\":222}]"
       },
       {
         "_partition": "Column",
@@ -9007,7 +9819,7 @@
         "_aspect": "travel_countries",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Angola\",\"display\":{\"title\":{\"text\":\"Angola\"}},\"_row_num\":204},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Cameroon\",\"display\":{\"title\":{\"text\":\"Cameroon\"}},\"_row_num\":205},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Chad\",\"display\":{\"title\":{\"text\":\"Chad\"}},\"_row_num\":206},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"CAR\",\"display\":{\"title\":{\"text\":\"Central African Republic\"}},\"_row_num\":207},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Congo\",\"display\":{\"title\":{\"text\":\"Congo\"}},\"_row_num\":208},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"EG\",\"display\":{\"title\":{\"text\":\"Equatorial Guinea\"}},\"_row_num\":209},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Ethiopia\",\"display\":{\"title\":{\"text\":\"Ethiopia\"}},\"_row_num\":210},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Gabon\",\"display\":{\"title\":{\"text\":\"Gabon\"}},\"_row_num\":211},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Nigeria\",\"display\":{\"title\":{\"text\":\"Nigeria\"}},\"_row_num\":212},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Sudan\",\"display\":{\"title\":{\"text\":\"Sudan\"}},\"_row_num\":213},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"none\",\"display\":{\"title\":{\"text\":\"None\"}},\"_row_num\":214}]"
+        "_value": "[{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Angola\",\"display\":{\"title\":{\"text\":\"Angola\"}},\"_row_num\":227},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Cameroon\",\"display\":{\"title\":{\"text\":\"Cameroon\"}},\"_row_num\":228},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Chad\",\"display\":{\"title\":{\"text\":\"Chad\"}},\"_row_num\":229},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"CAR\",\"display\":{\"title\":{\"text\":\"Central African Republic\"}},\"_row_num\":230},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Congo\",\"display\":{\"title\":{\"text\":\"Congo\"}},\"_row_num\":231},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"EG\",\"display\":{\"title\":{\"text\":\"Equatorial Guinea\"}},\"_row_num\":232},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Ethiopia\",\"display\":{\"title\":{\"text\":\"Ethiopia\"}},\"_row_num\":233},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Gabon\",\"display\":{\"title\":{\"text\":\"Gabon\"}},\"_row_num\":234},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Nigeria\",\"display\":{\"title\":{\"text\":\"Nigeria\"}},\"_row_num\":235},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"Sudan\",\"display\":{\"title\":{\"text\":\"Sudan\"}},\"_row_num\":236},{\"choice_list_name\":\"travel_countries\",\"data_value\":\"none\",\"display\":{\"title\":{\"text\":\"None\"}},\"_row_num\":237}]"
       },
       {
         "_partition": "Column",
@@ -9028,21 +9840,21 @@
         "_aspect": "wra_breastfeed",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"breastfeed\",\"data_value\":\"Own_child\",\"display\":{\"title\":{\"text\":\"Own child\"}},\"_row_num\":54},{\"choice_list_name\":\"breastfeed\",\"data_value\":\"other_child\",\"display\":{\"title\":{\"text\":\"Someone else’s child/children\"}},\"_row_num\":55},{\"choice_list_name\":\"breastfeed\",\"data_value\":\"No\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":56}]"
+        "_value": "[{\"choice_list_name\":\"breastfeed\",\"data_value\":\"Own_child\",\"display\":{\"title\":{\"text\":\"Own child\"}},\"_row_num\":64},{\"choice_list_name\":\"breastfeed\",\"data_value\":\"other_child\",\"display\":{\"title\":{\"text\":\"Someone else’s child/children\"}},\"_row_num\":65},{\"choice_list_name\":\"breastfeed\",\"data_value\":\"No\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":66}]"
       },
       {
         "_partition": "Column",
         "_aspect": "wra_iptp",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"iptp_current\",\"data_value\":\"Yes, already took 1 dose\",\"display\":{\"title\":{\"text\":\"Yes, already took 1 dose\"}},\"_row_num\":116},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"Yes, already took 2 doses\",\"display\":{\"title\":{\"text\":\"Yes, already took 2 doses\"}},\"_row_num\":117},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"Yes, already took 3 doses\",\"display\":{\"title\":{\"text\":\"Yes, already took 3 doses\"}},\"_row_num\":118},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"Yes, already took more than 3 doses\",\"display\":{\"title\":{\"text\":\"Yes, already took more than 3 doses\"}},\"_row_num\":119},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"No\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":120},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":121}]"
+        "_value": "[{\"choice_list_name\":\"iptp_current\",\"data_value\":\"Yes, already took 1 dose\",\"display\":{\"title\":{\"text\":\"Yes, already took 1 dose\"}},\"_row_num\":126},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"Yes, already took 2 doses\",\"display\":{\"title\":{\"text\":\"Yes, already took 2 doses\"}},\"_row_num\":127},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"Yes, already took 3 doses\",\"display\":{\"title\":{\"text\":\"Yes, already took 3 doses\"}},\"_row_num\":128},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"Yes, already took more than 3 doses\",\"display\":{\"title\":{\"text\":\"Yes, already took more than 3 doses\"}},\"_row_num\":129},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"No\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":130},{\"choice_list_name\":\"iptp_current\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":131}]"
       },
       {
         "_partition": "Column",
         "_aspect": "wra_period",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"lmp\",\"data_value\":\"Less_than_two_weeks_ago\",\"display\":{\"title\":{\"text\":\"Less than two weeks ago\"}},\"_row_num\":126},{\"choice_list_name\":\"lmp\",\"data_value\":\"More_than_two_weeks_ago\",\"display\":{\"title\":{\"text\":\"More than two weeks ago\"}},\"_row_num\":127},{\"choice_list_name\":\"lmp\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't know\"}},\"_row_num\":128},{\"choice_list_name\":\"lmp\",\"data_value\":\"never\",\"display\":{\"title\":{\"text\":\"Never\"}},\"_row_num\":129},{\"choice_list_name\":\"lmp\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":130}]"
+        "_value": "[{\"choice_list_name\":\"lmp\",\"data_value\":\"Less_than_two_weeks_ago\",\"display\":{\"title\":{\"text\":\"Less than two weeks ago\"}},\"_row_num\":136},{\"choice_list_name\":\"lmp\",\"data_value\":\"More_than_two_weeks_ago\",\"display\":{\"title\":{\"text\":\"More than two weeks ago\"}},\"_row_num\":137},{\"choice_list_name\":\"lmp\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't know\"}},\"_row_num\":138},{\"choice_list_name\":\"lmp\",\"data_value\":\"never\",\"display\":{\"title\":{\"text\":\"Never\"}},\"_row_num\":139},{\"choice_list_name\":\"lmp\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":140}]"
       },
       {
         "_partition": "Column",

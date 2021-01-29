@@ -12,441 +12,149 @@
     ],
     "survey": [
       {
-        "type": "note",
-        "display": {
-          "prompt": {
-            "text": "Household ID: {{data.hh_id}}"
-          }
-        },
+        "clause": "begin screen",
         "_row_num": 2
       },
       {
-        "clause": "begin screen",
+        "type": "note",
+        "display": {
+          "prompt": {
+            "text": "Snake Bite details"
+          }
+        },
         "_row_num": 3
       },
       {
-        "type": "select_one",
-        "values_list": "new_member",
-        "name": "new_member_newborn_or_moved_in",
+        "type": "note",
         "display": {
           "prompt": {
-            "text": "12. Is this person a newborn or someone who moved into the house?"
+            "text": "59a. Who was bitten?"
           }
         },
         "_row_num": 4
       },
       {
-        "clause": "if",
-        "condition": "selected(data('new_member_newborn_or_moved_in'), 'newborn')",
-        "_row_num": 5
-      },
-      {
         "type": "note",
         "display": {
           "prompt": {
-            "text": "If newborn:"
+            "text": "{{ data.name }} {{data.surname }} [{{ data.id }}]"
           }
+        },
+        "_row_num": 5
+      },
+      {
+        "type": "integer",
+        "name": "snake_bite_num_times",
+        "display": {
+          "prompt": {
+            "text": "59b. How many times (separate instances) was {{data.name}} bitten?"
+          }
+        },
+        "inputAttributes": {
+          "min": 1,
+          "step": 1
         },
         "_row_num": 6
       },
       {
-        "type": "text",
-        "name": "name",
+        "type": "select_multiple",
+        "values_list": "month",
+        "name": "snake_bite_months",
         "display": {
           "prompt": {
-            "text": "13. Given name"
+            "text": "59c. In what month(s) was {{data.name}} bitten? (check all that apply)"
+          },
+          "constraint_message": {
+            "text": "You cannot select more months than times bitten."
           }
         },
+        "constraint": "countSelected(data('snake_bite_months')) <= data('snake_bite_num_times')",
         "_row_num": 7
       },
       {
-        "type": "text",
-        "name": "surname",
+        "type": "select_one",
+        "values_list": "yndk",
+        "name": "snake_bite_miss_work_school",
         "display": {
           "prompt": {
-            "text": "14. Surname"
+            "text": "59d. Did this person miss school/work days because of the bite?"
           }
         },
         "_row_num": 8
       },
       {
-        "type": "note",
-        "display": {
-          "prompt": {
-            "text": "15. Date of birth:"
-          }
-        },
+        "clause": "if",
+        "condition": "selected(data('snake_bite_miss_work_school'), 'yes')",
         "_row_num": 9
       },
       {
         "type": "integer",
-        "name": "dob_day",
+        "name": "snake_bite_miss_work_school_days",
         "display": {
           "prompt": {
-            "text": "Day"
+            "text": "59d(i). How many days?"
           }
-        },
-        "required": "not(selected(data('dob_day_dk'), 'dk'))",
-        "inputAttributes": {
-          "min": 1,
-          "max": 31,
-          "step": 1
         },
         "_row_num": 10
       },
       {
         "type": "select_multiple",
         "values_list": "dk",
-        "name": "dob_day_dk",
+        "name": "snake_bite_miss_work_school_days_unknown",
         "_row_num": 11
       },
       {
-        "type": "integer",
-        "name": "dob_month",
-        "display": {
-          "prompt": {
-            "text": "Month"
-          }
-        },
-        "required": "not(selected(data('dob_month_dk'), 'dk'))",
-        "inputAttributes": {
-          "min": 1,
-          "max": 12,
-          "step": 1
-        },
+        "clause": "end if",
         "_row_num": 12
       },
       {
         "type": "select_multiple",
-        "values_list": "dk",
-        "name": "dob_month_dk",
+        "values_list": "bite_occur",
+        "name": "snake_bite_occur",
+        "display": {
+          "prompt": {
+            "text": "59e. Where did the bites occur? (check all that apply)"
+          },
+          "constraint_message": {
+            "text": "You cannot select more places than times bitten."
+          }
+        },
+        "constraint": "countSelected(data('snake_bite_occur')) <= data('snake_bite_num_times')",
         "_row_num": 13
       },
       {
-        "type": "integer",
-        "name": "dob_year",
-        "display": {
-          "prompt": {
-            "text": "Year"
-          }
-        },
-        "required": "not(selected(data('dob_year_dk'), 'dk'))",
-        "inputAttributes": {
-          "min": 1920,
-          "max": 2021,
-          "step": 1
-        },
+        "clause": "if",
+        "condition": "selected(data('snake_bite_occur'), 'other')",
         "_row_num": 14
       },
       {
-        "type": "select_multiple",
-        "values_list": "dk",
-        "name": "dob_year_dk",
+        "type": "text",
+        "name": "snake_bite_occur_other",
+        "display": {
+          "prompt": {
+            "text": "Specify"
+          }
+        },
         "_row_num": 15
       },
       {
-        "type": "integer",
-        "name": "dob_enter_age",
-        "display": {
-          "prompt": {
-            "text": "15a. If year is not known please add age"
-          }
-        },
-        "required": "selected(data('dob_year_dk'), 'dk')",
-        "inputAttributes": {
-          "min": 0,
-          "step": 1
-        },
+        "clause": "end if",
         "_row_num": 16
       },
       {
-        "type": "select_multiple",
-        "values_list": "approx",
-        "name": "dob_enter_age_approx",
+        "type": "select_one",
+        "values_list": "bite_outcome",
+        "name": "snake_bite_outcome",
+        "display": {
+          "prompt": {
+            "text": "59f. What was the outcome of the bite? (If bitten more than once, answer about the most severe bite)"
+          }
+        },
         "_row_num": 17
       },
       {
-        "type": "select_one",
-        "values_list": "resident_status",
-        "name": "resident_status",
-        "display": {
-          "prompt": {
-            "text": "16. Is this participant a resident of the household?"
-          },
-          "hint": {
-            "text": "(A resident member is a person who intends to live in the household during the following 3 months at least)"
-          }
-        },
-        "_row_num": 18
-      },
-      {
-        "type": "text",
-        "name": "id",
-        "display": {
-          "prompt": {
-            "text": "16a. ExtID"
-          },
-          "hint": {
-            "text": "ABC-123-123"
-          }
-        },
-        "_row_num": 19
-      },
-      {
-        "clause": "end if",
-        "_row_num": 20
-      },
-      {
-        "clause": "if",
-        "condition": "selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household')",
-        "_row_num": 21
-      },
-      {
-        "type": "note",
-        "display": {
-          "prompt": {
-            "text": "If someone who moved into the house:"
-          }
-        },
-        "_row_num": 22
-      },
-      {
-        "type": "text",
-        "name": "name",
-        "display": {
-          "prompt": {
-            "text": "17. Given name"
-          }
-        },
-        "_row_num": 23
-      },
-      {
-        "type": "text",
-        "name": "surname",
-        "display": {
-          "prompt": {
-            "text": "18. Surname"
-          }
-        },
-        "_row_num": 24
-      },
-      {
-        "type": "note",
-        "display": {
-          "prompt": {
-            "text": "19. Date of birth:"
-          }
-        },
-        "_row_num": 25
-      },
-      {
-        "type": "integer",
-        "name": "dob_day",
-        "display": {
-          "prompt": {
-            "text": "Day"
-          }
-        },
-        "required": "not(selected(data('dob_day_dk'), 'dk'))",
-        "inputAttributes": {
-          "min": 1,
-          "max": 31,
-          "step": 1
-        },
-        "_row_num": 26
-      },
-      {
-        "type": "select_multiple",
-        "values_list": "dk",
-        "name": "dob_day_dk",
-        "_row_num": 27
-      },
-      {
-        "type": "integer",
-        "name": "dob_month",
-        "display": {
-          "prompt": {
-            "text": "Month"
-          }
-        },
-        "required": "not(selected(data('dob_month_dk'), 'dk'))",
-        "inputAttributes": {
-          "min": 1,
-          "max": 12,
-          "step": 1
-        },
-        "_row_num": 28
-      },
-      {
-        "type": "select_multiple",
-        "values_list": "dk",
-        "name": "dob_month_dk",
-        "_row_num": 29
-      },
-      {
-        "type": "integer",
-        "name": "dob_year",
-        "display": {
-          "prompt": {
-            "text": "Year"
-          }
-        },
-        "required": "not(selected(data('dob_year_dk'), 'dk'))",
-        "inputAttributes": {
-          "min": 1920,
-          "max": 2021,
-          "step": 1
-        },
-        "_row_num": 30
-      },
-      {
-        "type": "select_multiple",
-        "values_list": "dk",
-        "name": "dob_year_dk",
-        "_row_num": 31
-      },
-      {
-        "type": "integer",
-        "name": "dob_enter_age",
-        "display": {
-          "prompt": {
-            "text": "19a. If year is not known please add age in years"
-          }
-        },
-        "required": "selected(data('dob_year_dk'), 'dk')",
-        "inputAttributes": {
-          "min": 0,
-          "step": 1
-        },
-        "_row_num": 32
-      },
-      {
-        "type": "select_multiple",
-        "values_list": "approx",
-        "name": "dob_enter_age_approx",
-        "_row_num": 33
-      },
-      {
-        "type": "select_one",
-        "values_list": "gender",
-        "name": "gender",
-        "display": {
-          "prompt": {
-            "text": "20. Gender"
-          }
-        },
-        "_row_num": 34
-      },
-      {
-        "type": "select_one",
-        "values_list": "resident_status",
-        "name": "resident_status",
-        "display": {
-          "prompt": {
-            "text": "21. Is this participant a resident of the household?"
-          },
-          "hint": {
-            "text": "(A resident member is a person who intends to live in the household during the following 3 months at least)"
-          }
-        },
-        "_row_num": 35
-      },
-      {
-        "type": "date",
-        "name": "new_member_move_in_date",
-        "display": {
-          "prompt": {
-            "text": "22. When did this person move into the household?"
-          }
-        },
-        "_row_num": 36
-      },
-      {
-        "type": "integer",
-        "name": "new_member_move_in_enter",
-        "display": {
-          "prompt": {
-            "text": "or Days/Weeks/Months Ago"
-          }
-        },
-        "inputAttributes": {
-          "min": 0,
-          "step": 1
-        },
-        "_row_num": 37
-      },
-      {
-        "type": "select_one",
-        "values_list": "dmy_ago_dk",
-        "name": "new_member_move_in_select",
-        "_row_num": 38
-      },
-      {
-        "type": "select_one",
-        "values_list": "in_outside_district",
-        "name": "move_from",
-        "display": {
-          "prompt": {
-            "text": "23. Where is the person coming from?"
-          }
-        },
-        "_row_num": 39
-      },
-      {
-        "clause": "if",
-        "condition": "selected(data('move_from'),  'in_district')",
-        "_row_num": 40
-      },
-      {
-        "type": "select_one",
-        "values_list": "yndk",
-        "name": "move_from_district_census",
-        "display": {
-          "prompt": {
-            "text": "23a. Was this participant registered in the district census a few months ago?"
-          }
-        },
-        "_row_num": 41
-      },
-      {
-        "clause": "if",
-        "condition": "selected(data('move_from_district_census'), 'yes')",
-        "_row_num": 42
-      },
-      {
-        "type": "text",
-        "name": "id",
-        "display": {
-          "prompt": {
-            "text": "23a(i). Retrieve ExtID of participant"
-          },
-          "hint": {
-            "text": "ABC-123-123"
-          }
-        },
-        "_row_num": 43
-      },
-      {
-        "type": "select_multiple",
-        "values_list": "not_possible",
-        "name": "move_from_census_extid_not_possible",
-        "_row_num": 44
-      },
-      {
-        "clause": "end if",
-        "_row_num": 45
-      },
-      {
-        "clause": "end if",
-        "_row_num": 46
-      },
-      {
-        "clause": "end if",
-        "_row_num": 47
-      },
-      {
         "clause": "end screen",
-        "_row_num": 48
+        "_row_num": 18
       }
     ],
     "choices": [
@@ -3539,12 +3247,12 @@
     "settings": [
       {
         "setting_name": "form_id",
-        "value": "hh_member_new",
+        "value": "hh_member_snake",
         "_row_num": 2
       },
       {
         "setting_name": "form_version",
-        "value": 20210124001,
+        "value": 202101290001,
         "_row_num": 3
       },
       {
@@ -3556,7 +3264,7 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Household Members New"
+            "text": "Snake Bites Info"
           }
         },
         "_row_num": 5
@@ -3587,12 +3295,12 @@
     "settings": {
       "form_id": {
         "setting_name": "form_id",
-        "value": "hh_member_new",
+        "value": "hh_member_snake",
         "_row_num": 2
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210124001,
+        "value": 202101290001,
         "_row_num": 3
       },
       "table_id": {
@@ -3604,7 +3312,7 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Household Members New"
+            "text": "Snake Bites Info"
           }
         },
         "_row_num": 5
@@ -3637,7 +3345,7 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Household Members New"
+            "text": "Snake Bites Info"
           }
         },
         "_row_num": 5
@@ -6305,14 +6013,6 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 7,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 23,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 5,
             "section_name": "model"
           }
@@ -6324,14 +6024,6 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 8,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 24,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 6,
             "section_name": "model"
           }
@@ -6341,14 +6033,6 @@
       "dob_day": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 10,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 26,
-            "section_name": "survey"
-          },
           {
             "_row_num": 7,
             "section_name": "model"
@@ -6362,34 +6046,18 @@
           "type": "string",
           "elementKey": "dob_day_dk_items"
         },
-        "valuesList": "dk",
         "_defn": [
-          {
-            "_row_num": 11,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 27,
-            "section_name": "survey"
-          },
           {
             "_row_num": 8,
             "section_name": "model"
           }
         ],
+        "valuesList": "dk",
         "elementKey": "dob_day_dk"
       },
       "dob_month": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 12,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 28,
-            "section_name": "survey"
-          },
           {
             "_row_num": 9,
             "section_name": "model"
@@ -6403,34 +6071,18 @@
           "type": "string",
           "elementKey": "dob_month_dk_items"
         },
-        "valuesList": "dk",
         "_defn": [
-          {
-            "_row_num": 13,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 29,
-            "section_name": "survey"
-          },
           {
             "_row_num": 10,
             "section_name": "model"
           }
         ],
+        "valuesList": "dk",
         "elementKey": "dob_month_dk"
       },
       "dob_year": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 14,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 30,
-            "section_name": "survey"
-          },
           {
             "_row_num": 11,
             "section_name": "model"
@@ -6444,34 +6096,18 @@
           "type": "string",
           "elementKey": "dob_year_dk_items"
         },
-        "valuesList": "dk",
         "_defn": [
-          {
-            "_row_num": 15,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 31,
-            "section_name": "survey"
-          },
           {
             "_row_num": 12,
             "section_name": "model"
           }
         ],
+        "valuesList": "dk",
         "elementKey": "dob_year_dk"
       },
       "dob_enter_age": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 16,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 32,
-            "section_name": "survey"
-          },
           {
             "_row_num": 13,
             "section_name": "model"
@@ -6485,68 +6121,40 @@
           "type": "string",
           "elementKey": "dob_enter_age_approx_items"
         },
-        "valuesList": "approx",
         "_defn": [
-          {
-            "_row_num": 17,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 33,
-            "section_name": "survey"
-          },
           {
             "_row_num": 14,
             "section_name": "model"
           }
         ],
+        "valuesList": "approx",
         "elementKey": "dob_enter_age_approx"
       },
       "gender": {
         "type": "string",
-        "valuesList": "gender",
         "_defn": [
-          {
-            "_row_num": 34,
-            "section_name": "survey"
-          },
           {
             "_row_num": 15,
             "section_name": "model"
           }
         ],
+        "valuesList": "gender",
         "elementKey": "gender"
       },
       "resident_status": {
         "type": "string",
-        "valuesList": "resident_status",
         "_defn": [
-          {
-            "_row_num": 18,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 35,
-            "section_name": "survey"
-          },
           {
             "_row_num": 16,
             "section_name": "model"
           }
         ],
+        "valuesList": "resident_status",
         "elementKey": "resident_status"
       },
       "id": {
         "type": "string",
         "_defn": [
-          {
-            "_row_num": 19,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 43,
-            "section_name": "survey"
-          },
           {
             "_row_num": 17,
             "section_name": "model"
@@ -6707,28 +6315,20 @@
       },
       "new_member_newborn_or_moved_in": {
         "type": "string",
-        "valuesList": "new_member",
         "_defn": [
-          {
-            "_row_num": 4,
-            "section_name": "survey"
-          },
           {
             "_row_num": 31,
             "section_name": "model"
           }
         ],
         "comment": "New Member",
+        "valuesList": "new_member",
         "elementKey": "new_member_newborn_or_moved_in"
       },
       "new_member_move_in_date": {
         "type": "string",
         "elementType": "date",
         "_defn": [
-          {
-            "_row_num": 36,
-            "section_name": "survey"
-          },
           {
             "_row_num": 32,
             "section_name": "model"
@@ -6740,10 +6340,6 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 37,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 33,
             "section_name": "model"
           }
@@ -6752,47 +6348,35 @@
       },
       "new_member_move_in_select": {
         "type": "string",
-        "valuesList": "dmy_ago_dk",
         "_defn": [
-          {
-            "_row_num": 38,
-            "section_name": "survey"
-          },
           {
             "_row_num": 34,
             "section_name": "model"
           }
         ],
+        "valuesList": "dmy_ago_dk",
         "elementKey": "new_member_move_in_select"
       },
       "move_from": {
         "type": "string",
-        "valuesList": "in_outside_district",
         "_defn": [
-          {
-            "_row_num": 39,
-            "section_name": "survey"
-          },
           {
             "_row_num": 35,
             "section_name": "model"
           }
         ],
+        "valuesList": "in_outside_district",
         "elementKey": "move_from"
       },
       "move_from_district_census": {
         "type": "string",
-        "valuesList": "yndk",
         "_defn": [
-          {
-            "_row_num": 41,
-            "section_name": "survey"
-          },
           {
             "_row_num": 36,
             "section_name": "model"
           }
         ],
+        "valuesList": "yndk",
         "elementKey": "move_from_district_census"
       },
       "move_from_census_extid_not_possible": {
@@ -6801,17 +6385,13 @@
           "type": "string",
           "elementKey": "move_from_census_extid_not_possible_items"
         },
-        "valuesList": "not_possible",
         "_defn": [
-          {
-            "_row_num": 44,
-            "section_name": "survey"
-          },
           {
             "_row_num": 37,
             "section_name": "model"
           }
         ],
+        "valuesList": "not_possible",
         "elementKey": "move_from_census_extid_not_possible"
       },
       "new_hh_member_censed": {
@@ -6845,6 +6425,10 @@
         "type": "integer",
         "_defn": [
           {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
             "_row_num": 40,
             "section_name": "model"
           }
@@ -6858,29 +6442,41 @@
           "type": "string",
           "elementKey": "snake_bite_months_items"
         },
+        "valuesList": "month",
         "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
           {
             "_row_num": 41,
             "section_name": "model"
           }
         ],
-        "valuesList": "month",
         "elementKey": "snake_bite_months"
       },
       "snake_bite_miss_work_school": {
         "type": "string",
+        "valuesList": "yndk",
         "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
           {
             "_row_num": 42,
             "section_name": "model"
           }
         ],
-        "valuesList": "yndk",
         "elementKey": "snake_bite_miss_work_school"
       },
       "snake_bite_miss_work_school_days": {
         "type": "integer",
         "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "survey"
+          },
           {
             "_row_num": 43,
             "section_name": "model"
@@ -6894,13 +6490,17 @@
           "type": "string",
           "elementKey": "snake_bite_miss_work_school_days_unknown_items"
         },
+        "valuesList": "dk",
         "_defn": [
+          {
+            "_row_num": 11,
+            "section_name": "survey"
+          },
           {
             "_row_num": 44,
             "section_name": "model"
           }
         ],
-        "valuesList": "dk",
         "elementKey": "snake_bite_miss_work_school_days_unknown"
       },
       "snake_bite_occur": {
@@ -6909,18 +6509,26 @@
           "type": "string",
           "elementKey": "snake_bite_occur_items"
         },
+        "valuesList": "bite_occur",
         "_defn": [
+          {
+            "_row_num": 13,
+            "section_name": "survey"
+          },
           {
             "_row_num": 45,
             "section_name": "model"
           }
         ],
-        "valuesList": "bite_occur",
         "elementKey": "snake_bite_occur"
       },
       "snake_bite_occur_other": {
         "type": "string",
         "_defn": [
+          {
+            "_row_num": 15,
+            "section_name": "survey"
+          },
           {
             "_row_num": 46,
             "section_name": "model"
@@ -6930,13 +6538,17 @@
       },
       "snake_bite_outcome": {
         "type": "string",
+        "valuesList": "bite_outcome",
         "_defn": [
+          {
+            "_row_num": 17,
+            "section_name": "survey"
+          },
           {
             "_row_num": 47,
             "section_name": "model"
           }
         ],
-        "valuesList": "bite_outcome",
         "elementKey": "snake_bite_outcome"
       },
       "ind_sign_consent": {
@@ -7524,7 +7136,7 @@
             "promptIdx": 0,
             "display": {
               "title": {
-                "text": "Household Members New"
+                "text": "Snake Bites Info"
               }
             },
             "_branch_label_enclosing_screen": "survey/0"
@@ -7621,649 +7233,232 @@
             "type": "note",
             "display": {
               "prompt": {
-                "text": "Household ID: {{data.hh_id}}"
+                "text": "Snake Bite details"
               }
             },
-            "_row_num": 2,
-            "__rowNum__": 1,
+            "_row_num": 3,
+            "__rowNum__": 2,
             "_token_type": "prompt",
             "_type": "note",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 0
           },
           {
-            "type": "select_one",
-            "values_list": "new_member",
-            "name": "new_member_newborn_or_moved_in",
+            "type": "note",
             "display": {
               "prompt": {
-                "text": "12. Is this person a newborn or someone who moved into the house?"
+                "text": "59a. Who was bitten?"
               }
             },
             "_row_num": 4,
             "__rowNum__": 3,
             "_token_type": "prompt",
-            "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 1
           },
           {
             "type": "note",
             "display": {
               "prompt": {
-                "text": "If newborn:"
+                "text": "{{ data.name }} {{data.surname }} [{{ data.id }}]"
               }
+            },
+            "_row_num": 5,
+            "__rowNum__": 4,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 2
+          },
+          {
+            "type": "integer",
+            "name": "snake_bite_num_times",
+            "display": {
+              "prompt": {
+                "text": "59b. How many times (separate instances) was {{data.name}} bitten?"
+              }
+            },
+            "inputAttributes": {
+              "min": 1,
+              "step": 1
             },
             "_row_num": 6,
             "__rowNum__": 5,
             "_token_type": "prompt",
-            "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 2
-          },
-          {
-            "type": "text",
-            "name": "name",
-            "display": {
-              "prompt": {
-                "text": "13. Given name"
-              }
-            },
-            "_row_num": 7,
-            "__rowNum__": 6,
-            "_token_type": "prompt",
-            "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen3",
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 3
           },
           {
-            "type": "text",
-            "name": "surname",
+            "type": "select_multiple",
+            "values_list": "month",
+            "name": "snake_bite_months",
             "display": {
               "prompt": {
-                "text": "14. Surname"
+                "text": "59c. In what month(s) was {{data.name}} bitten? (check all that apply)"
+              },
+              "constraint_message": {
+                "text": "You cannot select more months than times bitten."
+              }
+            },
+            "constraint": "countSelected(data('snake_bite_months')) <= data('snake_bite_num_times')",
+            "_row_num": 7,
+            "__rowNum__": 6,
+            "_token_type": "prompt",
+            "_type": "select_multiple",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 4
+          },
+          {
+            "type": "select_one",
+            "values_list": "yndk",
+            "name": "snake_bite_miss_work_school",
+            "display": {
+              "prompt": {
+                "text": "59d. Did this person miss school/work days because of the bite?"
               }
             },
             "_row_num": 8,
             "__rowNum__": 7,
             "_token_type": "prompt",
-            "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 4
-          },
-          {
-            "type": "note",
-            "display": {
-              "prompt": {
-                "text": "15. Date of birth:"
-              }
-            },
-            "_row_num": 9,
-            "__rowNum__": 8,
-            "_token_type": "prompt",
-            "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen3",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 5
           },
           {
             "type": "integer",
-            "name": "dob_day",
+            "name": "snake_bite_miss_work_school_days",
             "display": {
               "prompt": {
-                "text": "Day"
+                "text": "59d(i). How many days?"
               }
-            },
-            "required": "not(selected(data('dob_day_dk'), 'dk'))",
-            "inputAttributes": {
-              "min": 1,
-              "max": 31,
-              "step": 1
             },
             "_row_num": 10,
             "__rowNum__": 9,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
+            "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 6
           },
           {
             "type": "select_multiple",
             "values_list": "dk",
-            "name": "dob_day_dk",
+            "name": "snake_bite_miss_work_school_days_unknown",
             "_row_num": 11,
             "__rowNum__": 10,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
+            "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 7
           },
           {
-            "type": "integer",
-            "name": "dob_month",
+            "type": "select_multiple",
+            "values_list": "bite_occur",
+            "name": "snake_bite_occur",
             "display": {
               "prompt": {
-                "text": "Month"
+                "text": "59e. Where did the bites occur? (check all that apply)"
+              },
+              "constraint_message": {
+                "text": "You cannot select more places than times bitten."
               }
             },
-            "required": "not(selected(data('dob_month_dk'), 'dk'))",
-            "inputAttributes": {
-              "min": 1,
-              "max": 12,
-              "step": 1
-            },
-            "_row_num": 12,
-            "__rowNum__": 11,
-            "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 8
-          },
-          {
-            "type": "select_multiple",
-            "values_list": "dk",
-            "name": "dob_month_dk",
+            "constraint": "countSelected(data('snake_bite_occur')) <= data('snake_bite_num_times')",
             "_row_num": 13,
             "__rowNum__": 12,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 9
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 8
           },
           {
-            "type": "integer",
-            "name": "dob_year",
+            "type": "text",
+            "name": "snake_bite_occur_other",
             "display": {
               "prompt": {
-                "text": "Year"
+                "text": "Specify"
               }
             },
-            "required": "not(selected(data('dob_year_dk'), 'dk'))",
-            "inputAttributes": {
-              "min": 1920,
-              "max": 2021,
-              "step": 1
-            },
-            "_row_num": 14,
-            "__rowNum__": 13,
-            "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 10
-          },
-          {
-            "type": "select_multiple",
-            "values_list": "dk",
-            "name": "dob_year_dk",
             "_row_num": 15,
             "__rowNum__": 14,
             "_token_type": "prompt",
-            "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 11
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 9
           },
           {
-            "type": "integer",
-            "name": "dob_enter_age",
+            "type": "select_one",
+            "values_list": "bite_outcome",
+            "name": "snake_bite_outcome",
             "display": {
               "prompt": {
-                "text": "15a. If year is not known please add age"
+                "text": "59f. What was the outcome of the bite? (If bitten more than once, answer about the most severe bite)"
               }
             },
-            "required": "selected(data('dob_year_dk'), 'dk')",
-            "inputAttributes": {
-              "min": 0,
-              "step": 1
-            },
-            "_row_num": 16,
-            "__rowNum__": 15,
-            "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 12
-          },
-          {
-            "type": "select_multiple",
-            "values_list": "approx",
-            "name": "dob_enter_age_approx",
             "_row_num": 17,
             "__rowNum__": 16,
             "_token_type": "prompt",
-            "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 13
-          },
-          {
-            "type": "select_one",
-            "values_list": "resident_status",
-            "name": "resident_status",
-            "display": {
-              "prompt": {
-                "text": "16. Is this participant a resident of the household?"
-              },
-              "hint": {
-                "text": "(A resident member is a person who intends to live in the household during the following 3 months at least)"
-              }
-            },
-            "_row_num": 18,
-            "__rowNum__": 17,
-            "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 14
-          },
-          {
-            "type": "text",
-            "name": "id",
-            "display": {
-              "prompt": {
-                "text": "16a. ExtID"
-              },
-              "hint": {
-                "text": "ABC-123-123"
-              }
-            },
-            "_row_num": 19,
-            "__rowNum__": 18,
-            "_token_type": "prompt",
-            "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 15
-          },
-          {
-            "type": "note",
-            "display": {
-              "prompt": {
-                "text": "If someone who moved into the house:"
-              }
-            },
-            "_row_num": 22,
-            "__rowNum__": 21,
-            "_token_type": "prompt",
-            "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 16
-          },
-          {
-            "type": "text",
-            "name": "name",
-            "display": {
-              "prompt": {
-                "text": "17. Given name"
-              }
-            },
-            "_row_num": 23,
-            "__rowNum__": 22,
-            "_token_type": "prompt",
-            "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 17
-          },
-          {
-            "type": "text",
-            "name": "surname",
-            "display": {
-              "prompt": {
-                "text": "18. Surname"
-              }
-            },
-            "_row_num": 24,
-            "__rowNum__": 23,
-            "_token_type": "prompt",
-            "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 18
-          },
-          {
-            "type": "note",
-            "display": {
-              "prompt": {
-                "text": "19. Date of birth:"
-              }
-            },
-            "_row_num": 25,
-            "__rowNum__": 24,
-            "_token_type": "prompt",
-            "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 19
-          },
-          {
-            "type": "integer",
-            "name": "dob_day",
-            "display": {
-              "prompt": {
-                "text": "Day"
-              }
-            },
-            "required": "not(selected(data('dob_day_dk'), 'dk'))",
-            "inputAttributes": {
-              "min": 1,
-              "max": 31,
-              "step": 1
-            },
-            "_row_num": 26,
-            "__rowNum__": 25,
-            "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 20
-          },
-          {
-            "type": "select_multiple",
-            "values_list": "dk",
-            "name": "dob_day_dk",
-            "_row_num": 27,
-            "__rowNum__": 26,
-            "_token_type": "prompt",
-            "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 21
-          },
-          {
-            "type": "integer",
-            "name": "dob_month",
-            "display": {
-              "prompt": {
-                "text": "Month"
-              }
-            },
-            "required": "not(selected(data('dob_month_dk'), 'dk'))",
-            "inputAttributes": {
-              "min": 1,
-              "max": 12,
-              "step": 1
-            },
-            "_row_num": 28,
-            "__rowNum__": 27,
-            "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 22
-          },
-          {
-            "type": "select_multiple",
-            "values_list": "dk",
-            "name": "dob_month_dk",
-            "_row_num": 29,
-            "__rowNum__": 28,
-            "_token_type": "prompt",
-            "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 23
-          },
-          {
-            "type": "integer",
-            "name": "dob_year",
-            "display": {
-              "prompt": {
-                "text": "Year"
-              }
-            },
-            "required": "not(selected(data('dob_year_dk'), 'dk'))",
-            "inputAttributes": {
-              "min": 1920,
-              "max": 2021,
-              "step": 1
-            },
-            "_row_num": 30,
-            "__rowNum__": 29,
-            "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 24
-          },
-          {
-            "type": "select_multiple",
-            "values_list": "dk",
-            "name": "dob_year_dk",
-            "_row_num": 31,
-            "__rowNum__": 30,
-            "_token_type": "prompt",
-            "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 25
-          },
-          {
-            "type": "integer",
-            "name": "dob_enter_age",
-            "display": {
-              "prompt": {
-                "text": "19a. If year is not known please add age in years"
-              }
-            },
-            "required": "selected(data('dob_year_dk'), 'dk')",
-            "inputAttributes": {
-              "min": 0,
-              "step": 1
-            },
-            "_row_num": 32,
-            "__rowNum__": 31,
-            "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 26
-          },
-          {
-            "type": "select_multiple",
-            "values_list": "approx",
-            "name": "dob_enter_age_approx",
-            "_row_num": 33,
-            "__rowNum__": 32,
-            "_token_type": "prompt",
-            "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 27
-          },
-          {
-            "type": "select_one",
-            "values_list": "gender",
-            "name": "gender",
-            "display": {
-              "prompt": {
-                "text": "20. Gender"
-              }
-            },
-            "_row_num": 34,
-            "__rowNum__": 33,
-            "_token_type": "prompt",
-            "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 28
-          },
-          {
-            "type": "select_one",
-            "values_list": "resident_status",
-            "name": "resident_status",
-            "display": {
-              "prompt": {
-                "text": "21. Is this participant a resident of the household?"
-              },
-              "hint": {
-                "text": "(A resident member is a person who intends to live in the household during the following 3 months at least)"
-              }
-            },
-            "_row_num": 35,
-            "__rowNum__": 34,
-            "_token_type": "prompt",
-            "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 29
-          },
-          {
-            "type": "date",
-            "name": "new_member_move_in_date",
-            "display": {
-              "prompt": {
-                "text": "22. When did this person move into the household?"
-              }
-            },
-            "_row_num": 36,
-            "__rowNum__": 35,
-            "_token_type": "prompt",
-            "_type": "date",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 30
-          },
-          {
-            "type": "integer",
-            "name": "new_member_move_in_enter",
-            "display": {
-              "prompt": {
-                "text": "or Days/Weeks/Months Ago"
-              }
-            },
-            "inputAttributes": {
-              "min": 0,
-              "step": 1
-            },
-            "_row_num": 37,
-            "__rowNum__": 36,
-            "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 31
-          },
-          {
-            "type": "select_one",
-            "values_list": "dmy_ago_dk",
-            "name": "new_member_move_in_select",
-            "_row_num": 38,
-            "__rowNum__": 37,
-            "_token_type": "prompt",
-            "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 32
-          },
-          {
-            "type": "select_one",
-            "values_list": "in_outside_district",
-            "name": "move_from",
-            "display": {
-              "prompt": {
-                "text": "23. Where is the person coming from?"
-              }
-            },
-            "_row_num": 39,
-            "__rowNum__": 38,
-            "_token_type": "prompt",
-            "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 33
-          },
-          {
-            "type": "select_one",
-            "values_list": "yndk",
-            "name": "move_from_district_census",
-            "display": {
-              "prompt": {
-                "text": "23a. Was this participant registered in the district census a few months ago?"
-              }
-            },
-            "_row_num": 41,
-            "__rowNum__": 40,
-            "_token_type": "prompt",
-            "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 34
-          },
-          {
-            "type": "text",
-            "name": "id",
-            "display": {
-              "prompt": {
-                "text": "23a(i). Retrieve ExtID of participant"
-              },
-              "hint": {
-                "text": "ABC-123-123"
-              }
-            },
-            "_row_num": 43,
-            "__rowNum__": 42,
-            "_token_type": "prompt",
-            "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 35
-          },
-          {
-            "type": "select_multiple",
-            "values_list": "not_possible",
-            "name": "move_from_census_extid_not_possible",
-            "_row_num": 44,
-            "__rowNum__": 43,
-            "_token_type": "prompt",
-            "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 36
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 10
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 49,
-            "_branch_label_enclosing_screen": "survey/_screen49",
-            "promptIdx": 37
+            "_row_num": 19,
+            "_branch_label_enclosing_screen": "survey/_screen19",
+            "promptIdx": 11
           }
         ],
         "validation_tag_map": {
           "finalize": [
-            6,
-            8,
-            10,
-            12,
-            20,
-            22,
-            24,
-            26
+            4,
+            8
           ]
         },
         "operations": [
           {
-            "_row_num": 2,
-            "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 0
-          },
-          {
             "clause": "begin screen",
-            "_row_num": 3,
-            "__rowNum__": 2,
+            "_row_num": 2,
+            "__rowNum__": 1,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 48,
-              "__rowNum__": 47,
+              "_row_num": 18,
+              "__rowNum__": 17,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\nif (selected(data('new_member_newborn_or_moved_in'), 'newborn')) {\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\nactivePromptIndicies.push(10);\nactivePromptIndicies.push(11);\nactivePromptIndicies.push(12);\nactivePromptIndicies.push(13);\nactivePromptIndicies.push(14);\nactivePromptIndicies.push(15);\n}\nif (selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household')) {\nactivePromptIndicies.push(16);\nactivePromptIndicies.push(17);\nactivePromptIndicies.push(18);\nactivePromptIndicies.push(19);\nactivePromptIndicies.push(20);\nactivePromptIndicies.push(21);\nactivePromptIndicies.push(22);\nactivePromptIndicies.push(23);\nactivePromptIndicies.push(24);\nactivePromptIndicies.push(25);\nactivePromptIndicies.push(26);\nactivePromptIndicies.push(27);\nactivePromptIndicies.push(28);\nactivePromptIndicies.push(29);\nactivePromptIndicies.push(30);\nactivePromptIndicies.push(31);\nactivePromptIndicies.push(32);\nactivePromptIndicies.push(33);\nif (selected(data('move_from'),  'in_district')) {\nactivePromptIndicies.push(34);\nif (selected(data('move_from_district_census'), 'yes')) {\nactivePromptIndicies.push(35);\nactivePromptIndicies.push(36);\n}\n}\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 1
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nif (selected(data('snake_bite_miss_work_school'), 'yes')) {\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\n}\nactivePromptIndicies.push(8);\nif (selected(data('snake_bite_occur'), 'other')) {\nactivePromptIndicies.push(9);\n}\nactivePromptIndicies.push(10);\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 49,
-            "operationIdx": 2
+            "_row_num": 19,
+            "operationIdx": 1
           },
           {
-            "_row_num": 49,
+            "_row_num": 19,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(37);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(11);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
-            "operationIdx": 3
+            "operationIdx": 2
           },
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 49,
-            "operationIdx": 4
+            "_row_num": 19,
+            "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
-          "_screen3": 1,
-          "_contents": 3,
-          "_screen49": 3
+          "_contents": 2,
+          "_screen19": 2
         }
       }
     },
@@ -8312,14 +7507,6 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 7,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 23,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 5,
             "section_name": "model"
           }
@@ -8334,14 +7521,6 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 8,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 24,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 6,
             "section_name": "model"
           }
@@ -8354,14 +7533,6 @@
       "dob_day": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 10,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 26,
-            "section_name": "survey"
-          },
           {
             "_row_num": 7,
             "section_name": "model"
@@ -8382,21 +7553,13 @@
           "elementPath": "dob_day_dk.items",
           "notUnitOfRetention": true
         },
-        "valuesList": "dk",
         "_defn": [
-          {
-            "_row_num": 11,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 27,
-            "section_name": "survey"
-          },
           {
             "_row_num": 8,
             "section_name": "model"
           }
         ],
+        "valuesList": "dk",
         "elementKey": "dob_day_dk",
         "elementName": "dob_day_dk",
         "elementSet": "data",
@@ -8408,14 +7571,6 @@
       "dob_month": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 12,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 28,
-            "section_name": "survey"
-          },
           {
             "_row_num": 9,
             "section_name": "model"
@@ -8436,21 +7591,13 @@
           "elementPath": "dob_month_dk.items",
           "notUnitOfRetention": true
         },
-        "valuesList": "dk",
         "_defn": [
-          {
-            "_row_num": 13,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 29,
-            "section_name": "survey"
-          },
           {
             "_row_num": 10,
             "section_name": "model"
           }
         ],
+        "valuesList": "dk",
         "elementKey": "dob_month_dk",
         "elementName": "dob_month_dk",
         "elementSet": "data",
@@ -8462,14 +7609,6 @@
       "dob_year": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 14,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 30,
-            "section_name": "survey"
-          },
           {
             "_row_num": 11,
             "section_name": "model"
@@ -8490,21 +7629,13 @@
           "elementPath": "dob_year_dk.items",
           "notUnitOfRetention": true
         },
-        "valuesList": "dk",
         "_defn": [
-          {
-            "_row_num": 15,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 31,
-            "section_name": "survey"
-          },
           {
             "_row_num": 12,
             "section_name": "model"
           }
         ],
+        "valuesList": "dk",
         "elementKey": "dob_year_dk",
         "elementName": "dob_year_dk",
         "elementSet": "data",
@@ -8516,14 +7647,6 @@
       "dob_enter_age": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 16,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 32,
-            "section_name": "survey"
-          },
           {
             "_row_num": 13,
             "section_name": "model"
@@ -8544,21 +7667,13 @@
           "elementPath": "dob_enter_age_approx.items",
           "notUnitOfRetention": true
         },
-        "valuesList": "approx",
         "_defn": [
-          {
-            "_row_num": 17,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 33,
-            "section_name": "survey"
-          },
           {
             "_row_num": 14,
             "section_name": "model"
           }
         ],
+        "valuesList": "approx",
         "elementKey": "dob_enter_age_approx",
         "elementName": "dob_enter_age_approx",
         "elementSet": "data",
@@ -8569,17 +7684,13 @@
       },
       "gender": {
         "type": "string",
-        "valuesList": "gender",
         "_defn": [
-          {
-            "_row_num": 34,
-            "section_name": "survey"
-          },
           {
             "_row_num": 15,
             "section_name": "model"
           }
         ],
+        "valuesList": "gender",
         "elementKey": "gender",
         "elementName": "gender",
         "elementSet": "data",
@@ -8587,21 +7698,13 @@
       },
       "resident_status": {
         "type": "string",
-        "valuesList": "resident_status",
         "_defn": [
-          {
-            "_row_num": 18,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 35,
-            "section_name": "survey"
-          },
           {
             "_row_num": 16,
             "section_name": "model"
           }
         ],
+        "valuesList": "resident_status",
         "elementKey": "resident_status",
         "elementName": "resident_status",
         "elementSet": "data",
@@ -8610,14 +7713,6 @@
       "id": {
         "type": "string",
         "_defn": [
-          {
-            "_row_num": 19,
-            "section_name": "survey"
-          },
-          {
-            "_row_num": 43,
-            "section_name": "survey"
-          },
           {
             "_row_num": 17,
             "section_name": "model"
@@ -8834,18 +7929,14 @@
       },
       "new_member_newborn_or_moved_in": {
         "type": "string",
-        "valuesList": "new_member",
         "_defn": [
-          {
-            "_row_num": 4,
-            "section_name": "survey"
-          },
           {
             "_row_num": 31,
             "section_name": "model"
           }
         ],
         "comment": "New Member",
+        "valuesList": "new_member",
         "elementKey": "new_member_newborn_or_moved_in",
         "elementName": "new_member_newborn_or_moved_in",
         "elementSet": "data",
@@ -8855,10 +7946,6 @@
         "type": "string",
         "elementType": "date",
         "_defn": [
-          {
-            "_row_num": 36,
-            "section_name": "survey"
-          },
           {
             "_row_num": 32,
             "section_name": "model"
@@ -8873,10 +7960,6 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 37,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 33,
             "section_name": "model"
           }
@@ -8888,17 +7971,13 @@
       },
       "new_member_move_in_select": {
         "type": "string",
-        "valuesList": "dmy_ago_dk",
         "_defn": [
-          {
-            "_row_num": 38,
-            "section_name": "survey"
-          },
           {
             "_row_num": 34,
             "section_name": "model"
           }
         ],
+        "valuesList": "dmy_ago_dk",
         "elementKey": "new_member_move_in_select",
         "elementName": "new_member_move_in_select",
         "elementSet": "data",
@@ -8906,17 +7985,13 @@
       },
       "move_from": {
         "type": "string",
-        "valuesList": "in_outside_district",
         "_defn": [
-          {
-            "_row_num": 39,
-            "section_name": "survey"
-          },
           {
             "_row_num": 35,
             "section_name": "model"
           }
         ],
+        "valuesList": "in_outside_district",
         "elementKey": "move_from",
         "elementName": "move_from",
         "elementSet": "data",
@@ -8924,17 +7999,13 @@
       },
       "move_from_district_census": {
         "type": "string",
-        "valuesList": "yndk",
         "_defn": [
-          {
-            "_row_num": 41,
-            "section_name": "survey"
-          },
           {
             "_row_num": 36,
             "section_name": "model"
           }
         ],
+        "valuesList": "yndk",
         "elementKey": "move_from_district_census",
         "elementName": "move_from_district_census",
         "elementSet": "data",
@@ -8950,17 +8021,13 @@
           "elementPath": "move_from_census_extid_not_possible.items",
           "notUnitOfRetention": true
         },
-        "valuesList": "not_possible",
         "_defn": [
-          {
-            "_row_num": 44,
-            "section_name": "survey"
-          },
           {
             "_row_num": 37,
             "section_name": "model"
           }
         ],
+        "valuesList": "not_possible",
         "elementKey": "move_from_census_extid_not_possible",
         "elementName": "move_from_census_extid_not_possible",
         "elementSet": "data",
@@ -9013,6 +8080,10 @@
         "type": "integer",
         "_defn": [
           {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
             "_row_num": 40,
             "section_name": "model"
           }
@@ -9033,13 +8104,17 @@
           "elementPath": "snake_bite_months.items",
           "notUnitOfRetention": true
         },
+        "valuesList": "month",
         "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
           {
             "_row_num": 41,
             "section_name": "model"
           }
         ],
-        "valuesList": "month",
         "elementKey": "snake_bite_months",
         "elementName": "snake_bite_months",
         "elementSet": "data",
@@ -9050,13 +8125,17 @@
       },
       "snake_bite_miss_work_school": {
         "type": "string",
+        "valuesList": "yndk",
         "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
           {
             "_row_num": 42,
             "section_name": "model"
           }
         ],
-        "valuesList": "yndk",
         "elementKey": "snake_bite_miss_work_school",
         "elementName": "snake_bite_miss_work_school",
         "elementSet": "data",
@@ -9065,6 +8144,10 @@
       "snake_bite_miss_work_school_days": {
         "type": "integer",
         "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "survey"
+          },
           {
             "_row_num": 43,
             "section_name": "model"
@@ -9085,13 +8168,17 @@
           "elementPath": "snake_bite_miss_work_school_days_unknown.items",
           "notUnitOfRetention": true
         },
+        "valuesList": "dk",
         "_defn": [
+          {
+            "_row_num": 11,
+            "section_name": "survey"
+          },
           {
             "_row_num": 44,
             "section_name": "model"
           }
         ],
-        "valuesList": "dk",
         "elementKey": "snake_bite_miss_work_school_days_unknown",
         "elementName": "snake_bite_miss_work_school_days_unknown",
         "elementSet": "data",
@@ -9110,13 +8197,17 @@
           "elementPath": "snake_bite_occur.items",
           "notUnitOfRetention": true
         },
+        "valuesList": "bite_occur",
         "_defn": [
+          {
+            "_row_num": 13,
+            "section_name": "survey"
+          },
           {
             "_row_num": 45,
             "section_name": "model"
           }
         ],
-        "valuesList": "bite_occur",
         "elementKey": "snake_bite_occur",
         "elementName": "snake_bite_occur",
         "elementSet": "data",
@@ -9129,6 +8220,10 @@
         "type": "string",
         "_defn": [
           {
+            "_row_num": 15,
+            "section_name": "survey"
+          },
+          {
             "_row_num": 46,
             "section_name": "model"
           }
@@ -9140,13 +8235,17 @@
       },
       "snake_bite_outcome": {
         "type": "string",
+        "valuesList": "bite_outcome",
         "_defn": [
+          {
+            "_row_num": 17,
+            "section_name": "survey"
+          },
           {
             "_row_num": 47,
             "section_name": "model"
           }
         ],
-        "valuesList": "bite_outcome",
         "elementKey": "snake_bite_outcome",
         "elementName": "snake_bite_outcome",
         "elementSet": "data",

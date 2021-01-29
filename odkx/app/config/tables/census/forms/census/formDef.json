@@ -230,8 +230,7 @@
         "display": {
           "prompt": {
             "text": "Which member(s) is/are no longer present in the household?"
-          },
-          "hide_delete_button": 1
+          }
         },
         "_row_num": 15
       },
@@ -259,6 +258,7 @@
           "hide_delete_button": 1
         },
         "choice_filter": "_.contains(data('hh_roster_not_correct'),choice_item.instance_id)",
+        "hide_add_instance": 1,
         "_row_num": 18
       },
       {
@@ -2005,7 +2005,7 @@
       },
       {
         "type": "select_one_with_other",
-        "values_list": "yno",
+        "values_list": "yn",
         "name": "hh_spray_label_seen",
         "display": {
           "prompt": {
@@ -2257,6 +2257,7 @@
           "prompt": {
             "text": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>"
           },
+          "hide_add_instance": 1,
           "hide_delete_button": 1
         },
         "choice_filter": "_.contains(data('snake_bite_who'), choice_item.instance_id)",
@@ -2489,6 +2490,7 @@
           "prompt": {
             "text": "Individual Information"
           },
+          "hide_add_instance": 1,
           "hide_delete_button": 1
         },
         "_row_num": 5
@@ -20045,10 +20047,10 @@
         "_row_num": 18
       },
       {
-        "query_name": "linked_mosquito_net",
+        "query_name": "linked_member_snake_bit",
         "query_type": "linked_table",
-        "linked_form_id": "hh_mosquito_net",
-        "linked_table_id": "hh_mosquito_net",
+        "linked_form_id": "hh_member_snake",
+        "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
@@ -20056,10 +20058,10 @@
         "_row_num": 19
       },
       {
-        "query_name": "linked_member_snake_bit",
+        "query_name": "linked_mosquito_net",
         "query_type": "linked_table",
-        "linked_form_id": "hh_snake_bites",
-        "linked_table_id": "hh_snake_bites",
+        "linked_form_id": "hh_mosquito_net",
+        "linked_table_id": "hh_mosquito_net",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
@@ -37860,22 +37862,22 @@
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 18
       },
-      "linked_mosquito_net": {
-        "query_name": "linked_mosquito_net",
+      "linked_member_snake_bit": {
+        "query_name": "linked_member_snake_bit",
         "query_type": "linked_table",
-        "linked_form_id": "hh_mosquito_net",
-        "linked_table_id": "hh_mosquito_net",
+        "linked_form_id": "hh_member_snake",
+        "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 19
       },
-      "linked_member_snake_bit": {
-        "query_name": "linked_member_snake_bit",
+      "linked_mosquito_net": {
+        "query_name": "linked_mosquito_net",
         "query_type": "linked_table",
-        "linked_form_id": "hh_snake_bites",
-        "linked_table_id": "hh_snake_bites",
+        "linked_form_id": "hh_mosquito_net",
+        "linked_table_id": "hh_mosquito_net",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
@@ -38821,7 +38823,7 @@
           }
         ],
         "type": "string",
-        "valuesList": "yno",
+        "valuesList": "yn",
         "elementKey": "hh_spray_label_seen"
       },
       "hh_spray_label_date": {
@@ -39631,8 +39633,7 @@
             "display": {
               "prompt": {
                 "text": "Which member(s) is/are no longer present in the household?"
-              },
-              "hide_delete_button": 1
+              }
             },
             "_row_num": 15,
             "__rowNum__": 14,
@@ -39665,6 +39666,7 @@
               "hide_delete_button": 1
             },
             "choice_filter": "_.contains(data('hh_roster_not_correct'),choice_item.instance_id)",
+            "hide_add_instance": 1,
             "_row_num": 18,
             "__rowNum__": 17,
             "_token_type": "prompt",
@@ -42091,7 +42093,7 @@
           },
           {
             "type": "select_one_with_other",
-            "values_list": "yno",
+            "values_list": "yn",
             "name": "hh_spray_label_seen",
             "display": {
               "prompt": {
@@ -42369,6 +42371,7 @@
               "prompt": {
                 "text": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>"
               },
+              "hide_add_instance": 1,
               "hide_delete_button": 1
             },
             "choice_filter": "_.contains(data('snake_bite_who'), choice_item.instance_id)",
@@ -42833,6 +42836,7 @@
               "prompt": {
                 "text": "Individual Information"
               },
+              "hide_add_instance": 1,
               "hide_delete_button": 1
             },
             "_row_num": 5,
@@ -44316,7 +44320,7 @@
           }
         ],
         "type": "string",
-        "valuesList": "yno",
+        "valuesList": "yn",
         "elementKey": "hh_spray_label_seen",
         "elementName": "hh_spray_label_seen",
         "elementSet": "data",
@@ -45053,7 +45057,7 @@
         "_aspect": "hh_spray_label_seen",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"yno\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":17},{\"choice_list_name\":\"yno\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":18},{\"choice_list_name\":\"yno\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":19}]"
+        "_value": "[{\"choice_list_name\":\"yn\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":2},{\"choice_list_name\":\"yn\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":3}]"
       },
       {
         "_partition": "Column",
