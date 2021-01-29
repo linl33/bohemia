@@ -87,6 +87,17 @@ resident_status,resident_status,string,[]
 sleep_net_last_night,sleep_net_last_night,string,[]
 sleep_net_last_night_num,sleep_net_last_night_num,integer,[]
 sleep_net_last_night_num_dk,sleep_net_last_night_num_dk,string,[]
+snake_bite_miss_work_school,snake_bite_miss_work_school,string,[]
+snake_bite_miss_work_school_days,snake_bite_miss_work_school_days,integer,[]
+snake_bite_miss_work_school_days_unknown,snake_bite_miss_work_school_days_unknown,array,"[""snake_bite_miss_work_school_days_unknown_items""]"
+snake_bite_miss_work_school_days_unknown_items,items,string,[]
+snake_bite_months,snake_bite_months,array,"[""snake_bite_months_items""]"
+snake_bite_months_items,items,string,[]
+snake_bite_num_times,snake_bite_num_times,integer,[]
+snake_bite_occur,snake_bite_occur,array,"[""snake_bite_occur_items""]"
+snake_bite_occur_items,items,string,[]
+snake_bite_occur_other,snake_bite_occur_other,string,[]
+snake_bite_outcome,snake_bite_outcome,string,[]
 surname,surname,string,[]
 time_get_out_bed,time_get_out_bed,string,[]
 time_go_bed,time_go_bed,string,[]
