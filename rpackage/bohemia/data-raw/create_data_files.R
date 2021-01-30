@@ -441,6 +441,18 @@ mopeia_health_facilities <- read_csv('health_facilities/Mopeia_HealthFacilities_
   mutate(details = NA) %>%
   mutate(facility_number = as.character(facility_number)) %>%
   dplyr::select(name, lng, lat, facility_number, details, district)
+# Add a manual one (jan 2021)
+mopeia_health_facilities <- bind_rows(
+  mopeia_health_facilities,
+  tibble(
+    name = 'Centro de Saude de Ndingo',
+    lng = 35.8473326,
+    lat = -17.6067083,
+    facility_number = NA,
+    details = NA,
+    district = 'Mopeia'
+  )
+)
 health_facilities <- bind_rows(mopeia_health_facilities,
                                rufiji_health_facilities)
 usethis::use_data(health_facilities,
