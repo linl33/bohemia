@@ -1,0 +1,6 @@
+_partition,_aspect,_key,_type,_value
+Column,hh_death_gender,displayChoicesList,object,"[{""choice_list_name"":""gender"",""data_value"":""male"",""display"":{""title"":{""text"":""Male""}},""_row_num"":2},{""choice_list_name"":""gender"",""data_value"":""female"",""display"":{""title"":{""text"":""Female""}},""_row_num"":3}]"
+FormType,default,FormType.formType,string,SURVEY
+SurveyUtil,default,SurveyUtil.formId,string,hh_death
+Table,default,defaultViewType,string,SPREADSHEET
+Table,default,displayName,object,"{""text"":{""default"":""New Household Recent Deaths"",""pt"":""New Household Recent Deaths"",""sw"":""New Household Recent Deaths""}}"

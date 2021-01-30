@@ -45,10 +45,53 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Geo Location"
+            "text": {
+              "default": "Geo Location",
+              "pt": "Geo Location",
+              "sw": "Geo Location"
+            }
           }
         },
         "_row_num": 5
+      },
+      {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 6
+      },
+      {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 8
       }
     ],
     "properties": [
@@ -142,10 +185,53 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Geo Location"
+            "text": {
+              "default": "Geo Location",
+              "pt": "Geo Location",
+              "sw": "Geo Location"
+            }
           }
         },
         "_row_num": 5
+      },
+      "default": {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 6
+      },
+      "pt": {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 7
+      },
+      "sw": {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 8
       },
       "_locales": {
         "setting_name": "_locales",
@@ -154,10 +240,41 @@
           {
             "display": {
               "locale": {
-                "text": "default"
+                "text": {
+                  "default": "English",
+                  "pt": "English",
+                  "sw": "English"
+                }
               }
             },
+            "_row_num": 6,
             "name": "default"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Português",
+                  "pt": "Português",
+                  "sw": "Português"
+                }
+              }
+            },
+            "_row_num": 7,
+            "name": "pt"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Kiswahili",
+                  "pt": "Kiswahili",
+                  "sw": "Kiswahili"
+                }
+              }
+            },
+            "_row_num": 8,
+            "name": "sw"
           }
         ]
       },
@@ -170,7 +287,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Geo Location"
+            "text": {
+              "default": "Geo Location",
+              "pt": "Geo Location",
+              "sw": "Geo Location"
+            }
           }
         },
         "_row_num": 5
@@ -251,7 +372,11 @@
             "promptIdx": 0,
             "display": {
               "title": {
-                "text": "Geo Location"
+                "text": {
+                  "default": "Geo Location",
+                  "pt": "Geo Location",
+                  "sw": "Geo Location"
+                }
               }
             },
             "_branch_label_enclosing_screen": "survey/0"
@@ -647,7 +772,7 @@
         "_aspect": "default",
         "_key": "displayName",
         "_type": "object",
-        "_value": "{\"text\":\"Geo Location\"}"
+        "_value": "{\"text\":{\"default\":\"Geo Location\",\"pt\":\"Geo Location\",\"sw\":\"Geo Location\"}}"
       },
       {
         "_partition": "Table",

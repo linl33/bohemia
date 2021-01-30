@@ -7,139 +7,154 @@
       },
       {
         "clause": "goto _finalize",
-        "comments": "skips the finalize screen where the user chooses to save as incomplete or finalized and instead saves as finalized.",
         "_row_num": 3
       }
     ],
     "survey": [
       {
-        "type": "note",
-        "display": {
-          "prompt": {
-            "text": "Household ID: {{data.hh_id}}"
-          }
-        },
+        "clause": "begin screen",
         "_row_num": 2
       },
       {
-        "clause": "begin screen",
+        "type": "note",
+        "display": {
+          "prompt": {
+            "text": "Snake Bite details"
+          }
+        },
         "_row_num": 3
       },
       {
-        "type": "select_one",
-        "values_list": "member_where_now",
-        "name": "member_where_now",
+        "type": "note",
         "display": {
           "prompt": {
-            "text": "7. What happened to this person or where is he/she now?"
+            "text": "59a. Who was bitten?"
+          }
+        },
+        "_row_num": 4
+      },
+      {
+        "type": "note",
+        "display": {
+          "prompt": {
+            "text": "{{ data.name }} {{data.surname }} [{{ data.id }}]"
           }
         },
         "_row_num": 5
       },
       {
-        "clause": "if",
-        "condition": "selected(data('member_where_now'), 'died')",
+        "type": "integer",
+        "name": "snake_bite_num_times",
+        "display": {
+          "prompt": {
+            "text": "59b. How many times (separate instances) was {{data.name}} bitten?"
+          }
+        },
+        "inputAttributes": {
+          "min": 1,
+          "step": 1
+        },
+        "_row_num": 6
+      },
+      {
+        "type": "select_multiple",
+        "values_list": "month",
+        "name": "snake_bite_months",
+        "display": {
+          "prompt": {
+            "text": "59c. In what month(s) was {{data.name}} bitten? (check all that apply)"
+          },
+          "constraint_message": {
+            "text": "You cannot select more months than times bitten."
+          }
+        },
+        "constraint": "countSelected(data('snake_bite_months')) <= data('snake_bite_num_times')",
         "_row_num": 7
       },
       {
-        "type": "note",
+        "type": "select_one",
+        "values_list": "yndk",
+        "name": "snake_bite_miss_work_school",
         "display": {
           "prompt": {
-            "text": "If person died, a VA form will be carried out in a subsequent visit"
+            "text": "59d. Did this person miss school/work days because of the bite?"
           }
         },
         "_row_num": 8
       },
       {
-        "type": "date",
-        "name": "member_died_when",
+        "clause": "if",
+        "condition": "selected(data('snake_bite_miss_work_school'), 'yes')",
+        "_row_num": 9
+      },
+      {
+        "type": "integer",
+        "name": "snake_bite_miss_work_school_days",
         "display": {
           "prompt": {
-            "text": "8. When did this person die?"
+            "text": "59d(i). How many days?"
           }
         },
-        "_row_num": 9
+        "_row_num": 10
       },
       {
         "type": "select_multiple",
         "values_list": "dk",
-        "name": "member_died_when_dk",
-        "_row_num": 10
-      },
-      {
-        "clause": "end if",
+        "name": "snake_bite_miss_work_school_days_unknown",
         "_row_num": 11
       },
       {
-        "clause": "if",
-        "condition": "selected(data('member_where_now'), 'emigrated')",
+        "clause": "end if",
         "_row_num": 12
       },
       {
-        "type": "note",
+        "type": "select_multiple",
+        "values_list": "bite_occur",
+        "name": "snake_bite_occur",
         "display": {
           "prompt": {
-            "text": "<h4>If the person emigrated</h4>"
+            "text": "59e. Where did the bites occur? (check all that apply)"
+          },
+          "constraint_message": {
+            "text": "You cannot select more places than times bitten."
           }
         },
+        "constraint": "countSelected(data('snake_bite_occur')) <= data('snake_bite_num_times')",
         "_row_num": 13
       },
       {
-        "type": "date",
-        "name": "member_emigrated_when_date",
-        "display": {
-          "prompt": {
-            "text": "9. When did this person leave?"
-          }
-        },
+        "clause": "if",
+        "condition": "selected(data('snake_bite_occur'), 'other')",
         "_row_num": 14
       },
       {
-        "type": "integer",
-        "name": "member_emigrated_when_num",
+        "type": "text",
+        "name": "snake_bite_occur_other",
         "display": {
           "prompt": {
-            "text": "or"
-          },
-          "hint": {
-            "text": "Enter number"
+            "text": "Specify"
           }
-        },
-        "inpuAttributes": {
-          "min": 0,
-          "step": 1
         },
         "_row_num": 15
       },
       {
-        "type": "select_one",
-        "values_list": "dmy_ago_dk",
-        "name": "member_emigrated_when_dmy_ago",
-        "display": {
-          "prompt": {
-            "text": "Days/Weeks/Months Ago or Don't Know"
-          }
-        },
+        "clause": "end if",
         "_row_num": 16
       },
       {
         "type": "select_one",
-        "values_list": "in_outside_district",
-        "name": "emigrated_where",
+        "values_list": "bite_outcome",
+        "name": "snake_bite_outcome",
         "display": {
           "prompt": {
-            "text": "10. Where did the person go?"
+            "text": "59f. What was the outcome of the bite? (If bitten more than once, answer about the most severe bite)"
           }
         },
         "_row_num": 17
       },
       {
-        "clause": "end if",
-        "_row_num": 18
-      },
-      {
         "clause": "end screen",
-        "_row_num": 19
+        "_row_num": 18
       }
     ],
     "choices": [
@@ -3232,12 +3247,12 @@
     "settings": [
       {
         "setting_name": "form_id",
-        "value": "hh_member_exit",
+        "value": "hh_member_snake",
         "_row_num": 2
       },
       {
         "setting_name": "form_version",
-        "value": 20210124001,
+        "value": 202101290001,
         "_row_num": 3
       },
       {
@@ -3250,9 +3265,9 @@
         "display": {
           "title": {
             "text": {
-              "default": "Household Members Gone",
-              "pt": "Household Members Gone",
-              "sw": "Household Members Gone"
+              "default": "Snake Bites Info",
+              "pt": "Snake Bites Info",
+              "sw": "Snake Bites Info"
             }
           }
         },
@@ -3323,12 +3338,12 @@
     "settings": {
       "form_id": {
         "setting_name": "form_id",
-        "value": "hh_member_exit",
+        "value": "hh_member_snake",
         "_row_num": 2
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210124001,
+        "value": 202101290001,
         "_row_num": 3
       },
       "table_id": {
@@ -3341,9 +3356,9 @@
         "display": {
           "title": {
             "text": {
-              "default": "Household Members Gone",
-              "pt": "Household Members Gone",
-              "sw": "Household Members Gone"
+              "default": "Snake Bites Info",
+              "pt": "Snake Bites Info",
+              "sw": "Snake Bites Info"
             }
           }
         },
@@ -3448,9 +3463,9 @@
         "display": {
           "title": {
             "text": {
-              "default": "Household Members Gone",
-              "pt": "Household Members Gone",
-              "sw": "Household Members Gone"
+              "default": "Snake Bites Info",
+              "pt": "Snake Bites Info",
+              "sw": "Snake Bites Info"
             }
           }
         },
@@ -6340,28 +6355,20 @@
       },
       "member_where_now": {
         "type": "string",
-        "valuesList": "member_where_now",
         "_defn": [
-          {
-            "_row_num": 5,
-            "section_name": "survey"
-          },
           {
             "_row_num": 24,
             "section_name": "model"
           }
         ],
         "comment": "Member Left",
+        "valuesList": "member_where_now",
         "elementKey": "member_where_now"
       },
       "member_died_when": {
         "type": "string",
         "elementType": "date",
         "_defn": [
-          {
-            "_row_num": 9,
-            "section_name": "survey"
-          },
           {
             "_row_num": 25,
             "section_name": "model"
@@ -6375,27 +6382,19 @@
           "type": "string",
           "elementKey": "member_died_when_dk_items"
         },
-        "valuesList": "dk",
         "_defn": [
-          {
-            "_row_num": 10,
-            "section_name": "survey"
-          },
           {
             "_row_num": 26,
             "section_name": "model"
           }
         ],
+        "valuesList": "dk",
         "elementKey": "member_died_when_dk"
       },
       "member_emigrated_when_date": {
         "type": "string",
         "elementType": "date",
         "_defn": [
-          {
-            "_row_num": 14,
-            "section_name": "survey"
-          },
           {
             "_row_num": 27,
             "section_name": "model"
@@ -6407,10 +6406,6 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 15,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 28,
             "section_name": "model"
           }
@@ -6419,32 +6414,24 @@
       },
       "member_emigrated_when_dmy_ago": {
         "type": "string",
-        "valuesList": "dmy_ago_dk",
         "_defn": [
-          {
-            "_row_num": 16,
-            "section_name": "survey"
-          },
           {
             "_row_num": 29,
             "section_name": "model"
           }
         ],
+        "valuesList": "dmy_ago_dk",
         "elementKey": "member_emigrated_when_dmy_ago"
       },
       "emigrated_where": {
         "type": "string",
-        "valuesList": "in_outside_district",
         "_defn": [
-          {
-            "_row_num": 17,
-            "section_name": "survey"
-          },
           {
             "_row_num": 30,
             "section_name": "model"
           }
         ],
+        "valuesList": "in_outside_district",
         "elementKey": "emigrated_where"
       },
       "new_member_newborn_or_moved_in": {
@@ -6559,6 +6546,10 @@
         "type": "integer",
         "_defn": [
           {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
             "_row_num": 40,
             "section_name": "model"
           }
@@ -6572,29 +6563,41 @@
           "type": "string",
           "elementKey": "snake_bite_months_items"
         },
+        "valuesList": "month",
         "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
           {
             "_row_num": 41,
             "section_name": "model"
           }
         ],
-        "valuesList": "month",
         "elementKey": "snake_bite_months"
       },
       "snake_bite_miss_work_school": {
         "type": "string",
+        "valuesList": "yndk",
         "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
           {
             "_row_num": 42,
             "section_name": "model"
           }
         ],
-        "valuesList": "yndk",
         "elementKey": "snake_bite_miss_work_school"
       },
       "snake_bite_miss_work_school_days": {
         "type": "integer",
         "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "survey"
+          },
           {
             "_row_num": 43,
             "section_name": "model"
@@ -6608,13 +6611,17 @@
           "type": "string",
           "elementKey": "snake_bite_miss_work_school_days_unknown_items"
         },
+        "valuesList": "dk",
         "_defn": [
+          {
+            "_row_num": 11,
+            "section_name": "survey"
+          },
           {
             "_row_num": 44,
             "section_name": "model"
           }
         ],
-        "valuesList": "dk",
         "elementKey": "snake_bite_miss_work_school_days_unknown"
       },
       "snake_bite_occur": {
@@ -6623,18 +6630,26 @@
           "type": "string",
           "elementKey": "snake_bite_occur_items"
         },
+        "valuesList": "bite_occur",
         "_defn": [
+          {
+            "_row_num": 13,
+            "section_name": "survey"
+          },
           {
             "_row_num": 45,
             "section_name": "model"
           }
         ],
-        "valuesList": "bite_occur",
         "elementKey": "snake_bite_occur"
       },
       "snake_bite_occur_other": {
         "type": "string",
         "_defn": [
+          {
+            "_row_num": 15,
+            "section_name": "survey"
+          },
           {
             "_row_num": 46,
             "section_name": "model"
@@ -6644,13 +6659,17 @@
       },
       "snake_bite_outcome": {
         "type": "string",
+        "valuesList": "bite_outcome",
         "_defn": [
+          {
+            "_row_num": 17,
+            "section_name": "survey"
+          },
           {
             "_row_num": 47,
             "section_name": "model"
           }
         ],
-        "valuesList": "bite_outcome",
         "elementKey": "snake_bite_outcome"
       },
       "ind_sign_consent": {
@@ -7239,9 +7258,9 @@
             "display": {
               "title": {
                 "text": {
-                  "default": "Household Members Gone",
-                  "pt": "Household Members Gone",
-                  "sw": "Household Members Gone"
+                  "default": "Snake Bites Info",
+                  "pt": "Snake Bites Info",
+                  "sw": "Snake Bites Info"
                 }
               }
             },
@@ -7270,7 +7289,6 @@
           },
           {
             "clause": "goto _finalize",
-            "comments": "skips the finalize screen where the user chooses to save as incomplete or finalized and instead saves as finalized.",
             "_row_num": 3,
             "__rowNum__": 2,
             "_token_type": "goto_label",
@@ -7340,215 +7358,232 @@
             "type": "note",
             "display": {
               "prompt": {
-                "text": "Household ID: {{data.hh_id}}"
+                "text": "Snake Bite details"
               }
             },
-            "_row_num": 2,
-            "__rowNum__": 1,
+            "_row_num": 3,
+            "__rowNum__": 2,
             "_token_type": "prompt",
             "_type": "note",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 0
           },
           {
-            "type": "select_one",
-            "values_list": "member_where_now",
-            "name": "member_where_now",
+            "type": "note",
             "display": {
               "prompt": {
-                "text": "7. What happened to this person or where is he/she now?"
+                "text": "59a. Who was bitten?"
               }
             },
-            "_row_num": 5,
-            "__rowNum__": 4,
+            "_row_num": 4,
+            "__rowNum__": 3,
             "_token_type": "prompt",
-            "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 1
           },
           {
             "type": "note",
             "display": {
               "prompt": {
-                "text": "If person died, a VA form will be carried out in a subsequent visit"
+                "text": "{{ data.name }} {{data.surname }} [{{ data.id }}]"
+              }
+            },
+            "_row_num": 5,
+            "__rowNum__": 4,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 2
+          },
+          {
+            "type": "integer",
+            "name": "snake_bite_num_times",
+            "display": {
+              "prompt": {
+                "text": "59b. How many times (separate instances) was {{data.name}} bitten?"
+              }
+            },
+            "inputAttributes": {
+              "min": 1,
+              "step": 1
+            },
+            "_row_num": 6,
+            "__rowNum__": 5,
+            "_token_type": "prompt",
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 3
+          },
+          {
+            "type": "select_multiple",
+            "values_list": "month",
+            "name": "snake_bite_months",
+            "display": {
+              "prompt": {
+                "text": "59c. In what month(s) was {{data.name}} bitten? (check all that apply)"
+              },
+              "constraint_message": {
+                "text": "You cannot select more months than times bitten."
+              }
+            },
+            "constraint": "countSelected(data('snake_bite_months')) <= data('snake_bite_num_times')",
+            "_row_num": 7,
+            "__rowNum__": 6,
+            "_token_type": "prompt",
+            "_type": "select_multiple",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 4
+          },
+          {
+            "type": "select_one",
+            "values_list": "yndk",
+            "name": "snake_bite_miss_work_school",
+            "display": {
+              "prompt": {
+                "text": "59d. Did this person miss school/work days because of the bite?"
               }
             },
             "_row_num": 8,
             "__rowNum__": 7,
             "_token_type": "prompt",
-            "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 2
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 5
           },
           {
-            "type": "date",
-            "name": "member_died_when",
+            "type": "integer",
+            "name": "snake_bite_miss_work_school_days",
             "display": {
               "prompt": {
-                "text": "8. When did this person die?"
+                "text": "59d(i). How many days?"
               }
             },
-            "_row_num": 9,
-            "__rowNum__": 8,
+            "_row_num": 10,
+            "__rowNum__": 9,
             "_token_type": "prompt",
-            "_type": "date",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 3
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 6
           },
           {
             "type": "select_multiple",
             "values_list": "dk",
-            "name": "member_died_when_dk",
-            "_row_num": 10,
-            "__rowNum__": 9,
+            "name": "snake_bite_miss_work_school_days_unknown",
+            "_row_num": 11,
+            "__rowNum__": 10,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 4
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 7
           },
           {
-            "type": "note",
+            "type": "select_multiple",
+            "values_list": "bite_occur",
+            "name": "snake_bite_occur",
             "display": {
               "prompt": {
-                "text": "<h4>If the person emigrated</h4>"
+                "text": "59e. Where did the bites occur? (check all that apply)"
+              },
+              "constraint_message": {
+                "text": "You cannot select more places than times bitten."
               }
             },
+            "constraint": "countSelected(data('snake_bite_occur')) <= data('snake_bite_num_times')",
             "_row_num": 13,
             "__rowNum__": 12,
             "_token_type": "prompt",
-            "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 5
+            "_type": "select_multiple",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 8
           },
           {
-            "type": "date",
-            "name": "member_emigrated_when_date",
+            "type": "text",
+            "name": "snake_bite_occur_other",
             "display": {
               "prompt": {
-                "text": "9. When did this person leave?"
+                "text": "Specify"
               }
-            },
-            "_row_num": 14,
-            "__rowNum__": 13,
-            "_token_type": "prompt",
-            "_type": "date",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 6
-          },
-          {
-            "type": "integer",
-            "name": "member_emigrated_when_num",
-            "display": {
-              "prompt": {
-                "text": "or"
-              },
-              "hint": {
-                "text": "Enter number"
-              }
-            },
-            "inpuAttributes": {
-              "min": 0,
-              "step": 1
             },
             "_row_num": 15,
             "__rowNum__": 14,
             "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 7
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 9
           },
           {
             "type": "select_one",
-            "values_list": "dmy_ago_dk",
-            "name": "member_emigrated_when_dmy_ago",
+            "values_list": "bite_outcome",
+            "name": "snake_bite_outcome",
             "display": {
               "prompt": {
-                "text": "Days/Weeks/Months Ago or Don't Know"
-              }
-            },
-            "_row_num": 16,
-            "__rowNum__": 15,
-            "_token_type": "prompt",
-            "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 8
-          },
-          {
-            "type": "select_one",
-            "values_list": "in_outside_district",
-            "name": "emigrated_where",
-            "display": {
-              "prompt": {
-                "text": "10. Where did the person go?"
+                "text": "59f. What was the outcome of the bite? (If bitten more than once, answer about the most severe bite)"
               }
             },
             "_row_num": 17,
             "__rowNum__": 16,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 9
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 10
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 20,
-            "_branch_label_enclosing_screen": "survey/_screen20",
-            "promptIdx": 10
+            "_row_num": 19,
+            "_branch_label_enclosing_screen": "survey/_screen19",
+            "promptIdx": 11
           }
         ],
         "validation_tag_map": {
-          "finalize": []
+          "finalize": [
+            4,
+            8
+          ]
         },
         "operations": [
           {
-            "_row_num": 2,
-            "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 0
-          },
-          {
             "clause": "begin screen",
-            "_row_num": 3,
-            "__rowNum__": 2,
+            "_row_num": 2,
+            "__rowNum__": 1,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 19,
-              "__rowNum__": 18,
+              "_row_num": 18,
+              "__rowNum__": 17,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\nif (selected(data('member_where_now'), 'died')) {\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\n}\nif (selected(data('member_where_now'), 'emigrated')) {\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 1
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nif (selected(data('snake_bite_miss_work_school'), 'yes')) {\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\n}\nactivePromptIndicies.push(8);\nif (selected(data('snake_bite_occur'), 'other')) {\nactivePromptIndicies.push(9);\n}\nactivePromptIndicies.push(10);\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 20,
-            "operationIdx": 2
+            "_row_num": 19,
+            "operationIdx": 1
           },
           {
-            "_row_num": 20,
+            "_row_num": 19,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(10);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(11);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
-            "operationIdx": 3
+            "operationIdx": 2
           },
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 20,
-            "operationIdx": 4
+            "_row_num": 19,
+            "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
-          "_screen3": 1,
-          "_contents": 3,
-          "_screen20": 3
+          "_contents": 2,
+          "_screen19": 2
         }
       }
     },
@@ -7910,18 +7945,14 @@
       },
       "member_where_now": {
         "type": "string",
-        "valuesList": "member_where_now",
         "_defn": [
-          {
-            "_row_num": 5,
-            "section_name": "survey"
-          },
           {
             "_row_num": 24,
             "section_name": "model"
           }
         ],
         "comment": "Member Left",
+        "valuesList": "member_where_now",
         "elementKey": "member_where_now",
         "elementName": "member_where_now",
         "elementSet": "data",
@@ -7931,10 +7962,6 @@
         "type": "string",
         "elementType": "date",
         "_defn": [
-          {
-            "_row_num": 9,
-            "section_name": "survey"
-          },
           {
             "_row_num": 25,
             "section_name": "model"
@@ -7955,17 +7982,13 @@
           "elementPath": "member_died_when_dk.items",
           "notUnitOfRetention": true
         },
-        "valuesList": "dk",
         "_defn": [
-          {
-            "_row_num": 10,
-            "section_name": "survey"
-          },
           {
             "_row_num": 26,
             "section_name": "model"
           }
         ],
+        "valuesList": "dk",
         "elementKey": "member_died_when_dk",
         "elementName": "member_died_when_dk",
         "elementSet": "data",
@@ -7978,10 +8001,6 @@
         "type": "string",
         "elementType": "date",
         "_defn": [
-          {
-            "_row_num": 14,
-            "section_name": "survey"
-          },
           {
             "_row_num": 27,
             "section_name": "model"
@@ -7996,10 +8015,6 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 15,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 28,
             "section_name": "model"
           }
@@ -8011,17 +8026,13 @@
       },
       "member_emigrated_when_dmy_ago": {
         "type": "string",
-        "valuesList": "dmy_ago_dk",
         "_defn": [
-          {
-            "_row_num": 16,
-            "section_name": "survey"
-          },
           {
             "_row_num": 29,
             "section_name": "model"
           }
         ],
+        "valuesList": "dmy_ago_dk",
         "elementKey": "member_emigrated_when_dmy_ago",
         "elementName": "member_emigrated_when_dmy_ago",
         "elementSet": "data",
@@ -8029,17 +8040,13 @@
       },
       "emigrated_where": {
         "type": "string",
-        "valuesList": "in_outside_district",
         "_defn": [
-          {
-            "_row_num": 17,
-            "section_name": "survey"
-          },
           {
             "_row_num": 30,
             "section_name": "model"
           }
         ],
+        "valuesList": "in_outside_district",
         "elementKey": "emigrated_where",
         "elementName": "emigrated_where",
         "elementSet": "data",
@@ -8198,6 +8205,10 @@
         "type": "integer",
         "_defn": [
           {
+            "_row_num": 6,
+            "section_name": "survey"
+          },
+          {
             "_row_num": 40,
             "section_name": "model"
           }
@@ -8218,13 +8229,17 @@
           "elementPath": "snake_bite_months.items",
           "notUnitOfRetention": true
         },
+        "valuesList": "month",
         "_defn": [
+          {
+            "_row_num": 7,
+            "section_name": "survey"
+          },
           {
             "_row_num": 41,
             "section_name": "model"
           }
         ],
-        "valuesList": "month",
         "elementKey": "snake_bite_months",
         "elementName": "snake_bite_months",
         "elementSet": "data",
@@ -8235,13 +8250,17 @@
       },
       "snake_bite_miss_work_school": {
         "type": "string",
+        "valuesList": "yndk",
         "_defn": [
+          {
+            "_row_num": 8,
+            "section_name": "survey"
+          },
           {
             "_row_num": 42,
             "section_name": "model"
           }
         ],
-        "valuesList": "yndk",
         "elementKey": "snake_bite_miss_work_school",
         "elementName": "snake_bite_miss_work_school",
         "elementSet": "data",
@@ -8250,6 +8269,10 @@
       "snake_bite_miss_work_school_days": {
         "type": "integer",
         "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "survey"
+          },
           {
             "_row_num": 43,
             "section_name": "model"
@@ -8270,13 +8293,17 @@
           "elementPath": "snake_bite_miss_work_school_days_unknown.items",
           "notUnitOfRetention": true
         },
+        "valuesList": "dk",
         "_defn": [
+          {
+            "_row_num": 11,
+            "section_name": "survey"
+          },
           {
             "_row_num": 44,
             "section_name": "model"
           }
         ],
-        "valuesList": "dk",
         "elementKey": "snake_bite_miss_work_school_days_unknown",
         "elementName": "snake_bite_miss_work_school_days_unknown",
         "elementSet": "data",
@@ -8295,13 +8322,17 @@
           "elementPath": "snake_bite_occur.items",
           "notUnitOfRetention": true
         },
+        "valuesList": "bite_occur",
         "_defn": [
+          {
+            "_row_num": 13,
+            "section_name": "survey"
+          },
           {
             "_row_num": 45,
             "section_name": "model"
           }
         ],
-        "valuesList": "bite_occur",
         "elementKey": "snake_bite_occur",
         "elementName": "snake_bite_occur",
         "elementSet": "data",
@@ -8314,6 +8345,10 @@
         "type": "string",
         "_defn": [
           {
+            "_row_num": 15,
+            "section_name": "survey"
+          },
+          {
             "_row_num": 46,
             "section_name": "model"
           }
@@ -8325,13 +8360,17 @@
       },
       "snake_bite_outcome": {
         "type": "string",
+        "valuesList": "bite_outcome",
         "_defn": [
+          {
+            "_row_num": 17,
+            "section_name": "survey"
+          },
           {
             "_row_num": 47,
             "section_name": "model"
           }
         ],
-        "valuesList": "bite_outcome",
         "elementKey": "snake_bite_outcome",
         "elementName": "snake_bite_outcome",
         "elementSet": "data",

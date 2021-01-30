@@ -38,7 +38,7 @@
         "_row_num": 4
       },
       {
-        "type": "select_one",
+        "type": "select_one_with_other",
         "values_list": "net_purpose",
         "name": "net_used_other_purpose",
         "display": {
@@ -49,27 +49,8 @@
         "_row_num": 5
       },
       {
-        "clause": "if",
-        "condition": "selected(data('net_used_other_purpose'), 'other')",
-        "_row_num": 6
-      },
-      {
-        "type": "text",
-        "name": "net_used_other_purpose_other",
-        "display": {
-          "prompt": {
-            "text": "Specify"
-          }
-        },
-        "_row_num": 7
-      },
-      {
-        "clause": "end if",
-        "_row_num": 8
-      },
-      {
         "clause": "end screen",
-        "_row_num": 9
+        "_row_num": 6
       }
     ],
     "choices": [
@@ -144,106 +125,6 @@
         "_row_num": 8
       },
       {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "during_the_immunization_of_the_children_at_a_health_facility",
-        "display": {
-          "title": {
-            "text": "During the immunization of the children at a health facility"
-          }
-        },
-        "_row_num": 9
-      },
-      {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "during_the_vaccination_campaign",
-        "display": {
-          "title": {
-            "text": "During the vaccination campaign"
-          }
-        },
-        "_row_num": 10
-      },
-      {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "from_a_chw",
-        "display": {
-          "title": {
-            "text": "From a CHW"
-          }
-        },
-        "_row_num": 11
-      },
-      {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "at_the_pharmacy",
-        "display": {
-          "title": {
-            "text": "At the pharmacy"
-          }
-        },
-        "_row_num": 12
-      },
-      {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "in_the_shop",
-        "display": {
-          "title": {
-            "text": "In the shop"
-          }
-        },
-        "_row_num": 13
-      },
-      {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "ante-natal_clinic",
-        "display": {
-          "title": {
-            "text": "Ante-natal clinic"
-          }
-        },
-        "_row_num": 14
-      },
-      {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "mass_distribution_campaign_of_nets",
-        "display": {
-          "title": {
-            "text": "Mass distribution campaign of nets"
-          }
-        },
-        "_row_num": 15
-      },
-      {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "bought_it_from_an_informal_vendor",
-        "display": {
-          "title": {
-            "text": "Bought it from an informal vendor"
-          }
-        },
-        "_row_num": 16
-      },
-      {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "other",
-        "display": {
-          "title": {
-            "text": "Other"
-          }
-        },
-        "_row_num": 17
-      },
-      {
-        "choice_list_name": "obtain_net_how",
-        "data_value": "dk",
-        "display": {
-          "title": {
-            "text": "Don’t know"
-          }
-        },
-        "_row_num": 18
-      },
-      {
         "choice_list_name": "net_purpose",
         "data_value": "no",
         "display": {
@@ -251,7 +132,7 @@
             "text": "No, just for sleeping under"
           }
         },
-        "_row_num": 19
+        "_row_num": 9
       },
       {
         "choice_list_name": "net_purpose",
@@ -261,7 +142,7 @@
             "text": "For garden netting"
           }
         },
-        "_row_num": 20
+        "_row_num": 10
       },
       {
         "choice_list_name": "net_purpose",
@@ -271,7 +152,7 @@
             "text": "For fishing"
           }
         },
-        "_row_num": 21
+        "_row_num": 11
       },
       {
         "choice_list_name": "net_purpose",
@@ -281,27 +162,27 @@
             "text": "To surround hennery/hennery construction"
           }
         },
-        "_row_num": 22
+        "_row_num": 12
       },
       {
         "choice_list_name": "net_purpose",
         "data_value": "preparing_cereals/corn",
         "display": {
           "title": {
-            "text": "To protect/cover vegetables/crops"
+            "text": "To prepare cereals/corn"
           }
         },
-        "_row_num": 23
+        "_row_num": 13
       },
       {
         "choice_list_name": "net_purpose",
-        "data_value": "other",
+        "data_value": "cover_vegetables_crops",
         "display": {
           "title": {
-            "text": "Other"
+            "text": "To protect/cover vegetables/crops"
           }
         },
-        "_row_num": 24
+        "_row_num": 14
       }
     ],
     "settings": [
@@ -324,7 +205,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Mosquito Nets"
+            "text": {
+              "default": "Mosquito Nets",
+              "pt": "Mosquito Nets",
+              "sw": "Mosquito Nets"
+            }
           }
         },
         "_row_num": 5
@@ -333,6 +218,45 @@
         "setting_name": "instance_name",
         "value": "name",
         "_row_num": 6
+      },
+      {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 7
+      },
+      {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 8
+      },
+      {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 9
       }
     ],
     "model": [
@@ -340,6 +264,21 @@
         "name": "hh_id",
         "type": "string",
         "_row_num": 2
+      },
+      {
+        "name": "obtain_net_how_long_ago",
+        "type": "string",
+        "_row_num": 3
+      },
+      {
+        "name": "net_sleep_last_night",
+        "type": "string",
+        "_row_num": 4
+      },
+      {
+        "name": "net_used_other_purpose",
+        "type": "string",
+        "_row_num": 5
       }
     ]
   },
@@ -379,7 +318,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Mosquito Nets"
+            "text": {
+              "default": "Mosquito Nets",
+              "pt": "Mosquito Nets",
+              "sw": "Mosquito Nets"
+            }
           }
         },
         "_row_num": 5
@@ -389,6 +332,45 @@
         "value": "name",
         "_row_num": 6
       },
+      "default": {
+        "setting_name": "default",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "English",
+              "pt": "English",
+              "sw": "English"
+            }
+          }
+        },
+        "_row_num": 7
+      },
+      "pt": {
+        "setting_name": "pt",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Português",
+              "pt": "Português",
+              "sw": "Português"
+            }
+          }
+        },
+        "_row_num": 8
+      },
+      "sw": {
+        "setting_name": "sw",
+        "display": {
+          "locale": {
+            "text": {
+              "default": "Kiswahili",
+              "pt": "Kiswahili",
+              "sw": "Kiswahili"
+            }
+          }
+        },
+        "_row_num": 9
+      },
       "_locales": {
         "setting_name": "_locales",
         "_row_num": 5,
@@ -396,10 +378,41 @@
           {
             "display": {
               "locale": {
-                "text": "default"
+                "text": {
+                  "default": "English",
+                  "pt": "English",
+                  "sw": "English"
+                }
               }
             },
+            "_row_num": 7,
             "name": "default"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Português",
+                  "pt": "Português",
+                  "sw": "Português"
+                }
+              }
+            },
+            "_row_num": 8,
+            "name": "pt"
+          },
+          {
+            "display": {
+              "locale": {
+                "text": {
+                  "default": "Kiswahili",
+                  "pt": "Kiswahili",
+                  "sw": "Kiswahili"
+                }
+              }
+            },
+            "_row_num": 9,
+            "name": "sw"
           }
         ]
       },
@@ -412,7 +425,11 @@
         "setting_name": "survey",
         "display": {
           "title": {
-            "text": "Mosquito Nets"
+            "text": {
+              "default": "Mosquito Nets",
+              "pt": "Mosquito Nets",
+              "sw": "Mosquito Nets"
+            }
           }
         },
         "_row_num": 5
@@ -493,108 +510,6 @@
           "_row_num": 8
         }
       ],
-      "obtain_net_how": [
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "during_the_immunization_of_the_children_at_a_health_facility",
-          "display": {
-            "title": {
-              "text": "During the immunization of the children at a health facility"
-            }
-          },
-          "_row_num": 9
-        },
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "during_the_vaccination_campaign",
-          "display": {
-            "title": {
-              "text": "During the vaccination campaign"
-            }
-          },
-          "_row_num": 10
-        },
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "from_a_chw",
-          "display": {
-            "title": {
-              "text": "From a CHW"
-            }
-          },
-          "_row_num": 11
-        },
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "at_the_pharmacy",
-          "display": {
-            "title": {
-              "text": "At the pharmacy"
-            }
-          },
-          "_row_num": 12
-        },
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "in_the_shop",
-          "display": {
-            "title": {
-              "text": "In the shop"
-            }
-          },
-          "_row_num": 13
-        },
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "ante-natal_clinic",
-          "display": {
-            "title": {
-              "text": "Ante-natal clinic"
-            }
-          },
-          "_row_num": 14
-        },
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "mass_distribution_campaign_of_nets",
-          "display": {
-            "title": {
-              "text": "Mass distribution campaign of nets"
-            }
-          },
-          "_row_num": 15
-        },
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "bought_it_from_an_informal_vendor",
-          "display": {
-            "title": {
-              "text": "Bought it from an informal vendor"
-            }
-          },
-          "_row_num": 16
-        },
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "other",
-          "display": {
-            "title": {
-              "text": "Other"
-            }
-          },
-          "_row_num": 17
-        },
-        {
-          "choice_list_name": "obtain_net_how",
-          "data_value": "dk",
-          "display": {
-            "title": {
-              "text": "Don’t know"
-            }
-          },
-          "_row_num": 18
-        }
-      ],
       "net_purpose": [
         {
           "choice_list_name": "net_purpose",
@@ -604,7 +519,7 @@
               "text": "No, just for sleeping under"
             }
           },
-          "_row_num": 19
+          "_row_num": 9
         },
         {
           "choice_list_name": "net_purpose",
@@ -614,7 +529,7 @@
               "text": "For garden netting"
             }
           },
-          "_row_num": 20
+          "_row_num": 10
         },
         {
           "choice_list_name": "net_purpose",
@@ -624,7 +539,7 @@
               "text": "For fishing"
             }
           },
-          "_row_num": 21
+          "_row_num": 11
         },
         {
           "choice_list_name": "net_purpose",
@@ -634,27 +549,27 @@
               "text": "To surround hennery/hennery construction"
             }
           },
-          "_row_num": 22
+          "_row_num": 12
         },
         {
           "choice_list_name": "net_purpose",
           "data_value": "preparing_cereals/corn",
           "display": {
             "title": {
-              "text": "To protect/cover vegetables/crops"
+              "text": "To prepare cereals/corn"
             }
           },
-          "_row_num": 23
+          "_row_num": 13
         },
         {
           "choice_list_name": "net_purpose",
-          "data_value": "other",
+          "data_value": "cover_vegetables_crops",
           "display": {
             "title": {
-              "text": "Other"
+              "text": "To protect/cover vegetables/crops"
             }
           },
-          "_row_num": 24
+          "_row_num": 14
         }
       ]
     },
@@ -675,47 +590,49 @@
         "elementKey": "hh_id"
       },
       "obtain_net_how_long_ago": {
+        "type": "string",
+        "valuesList": "obtain_net",
         "_defn": [
           {
             "_row_num": 3,
             "section_name": "survey"
+          },
+          {
+            "_row_num": 3,
+            "section_name": "model"
           }
         ],
-        "type": "string",
-        "valuesList": "obtain_net",
         "elementKey": "obtain_net_how_long_ago"
       },
       "net_sleep_last_night": {
+        "type": "string",
+        "valuesList": "yndk",
         "_defn": [
           {
             "_row_num": 4,
             "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
           }
         ],
-        "type": "string",
-        "valuesList": "yndk",
         "elementKey": "net_sleep_last_night"
       },
       "net_used_other_purpose": {
+        "type": "string",
+        "valuesList": "net_purpose",
         "_defn": [
           {
             "_row_num": 5,
             "section_name": "survey"
-          }
-        ],
-        "type": "string",
-        "valuesList": "net_purpose",
-        "elementKey": "net_used_other_purpose"
-      },
-      "net_used_other_purpose_other": {
-        "_defn": [
+          },
           {
-            "_row_num": 7,
-            "section_name": "survey"
+            "_row_num": 5,
+            "section_name": "model"
           }
         ],
-        "type": "string",
-        "elementKey": "net_used_other_purpose_other"
+        "elementKey": "net_used_other_purpose"
       }
     },
     "section_names": [
@@ -742,7 +659,11 @@
             "promptIdx": 0,
             "display": {
               "title": {
-                "text": "Mosquito Nets"
+                "text": {
+                  "default": "Mosquito Nets",
+                  "pt": "Mosquito Nets",
+                  "sw": "Mosquito Nets"
+                }
               }
             },
             "_branch_label_enclosing_screen": "survey/0"
@@ -868,7 +789,7 @@
             "promptIdx": 1
           },
           {
-            "type": "select_one",
+            "type": "select_one_with_other",
             "values_list": "net_purpose",
             "name": "net_used_other_purpose",
             "display": {
@@ -879,32 +800,17 @@
             "_row_num": 5,
             "__rowNum__": 4,
             "_token_type": "prompt",
-            "_type": "select_one",
+            "_type": "select_one_with_other",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 2
-          },
-          {
-            "type": "text",
-            "name": "net_used_other_purpose_other",
-            "display": {
-              "prompt": {
-                "text": "Specify"
-              }
-            },
-            "_row_num": 7,
-            "__rowNum__": 6,
-            "_token_type": "prompt",
-            "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 3
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 10,
-            "_branch_label_enclosing_screen": "survey/_screen10",
-            "promptIdx": 4
+            "_row_num": 7,
+            "_branch_label_enclosing_screen": "survey/_screen7",
+            "promptIdx": 3
           }
         ],
         "validation_tag_map": {
@@ -918,23 +824,23 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 9,
-              "__rowNum__": 8,
+              "_row_num": 6,
+              "__rowNum__": 5,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nif (selected(data('net_used_other_purpose'), 'other')) {\nactivePromptIndicies.push(3);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 10,
+            "_row_num": 7,
             "operationIdx": 1
           },
           {
-            "_row_num": 10,
+            "_row_num": 7,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(4);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(3);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -943,14 +849,14 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 10,
+            "_row_num": 7,
             "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
           "_contents": 2,
-          "_screen10": 2
+          "_screen7": 2
         }
       }
     },
@@ -969,59 +875,58 @@
         "elementPath": "hh_id"
       },
       "obtain_net_how_long_ago": {
+        "type": "string",
+        "valuesList": "obtain_net",
         "_defn": [
           {
             "_row_num": 3,
             "section_name": "survey"
+          },
+          {
+            "_row_num": 3,
+            "section_name": "model"
           }
         ],
-        "type": "string",
-        "valuesList": "obtain_net",
         "elementKey": "obtain_net_how_long_ago",
         "elementName": "obtain_net_how_long_ago",
         "elementSet": "data",
         "elementPath": "obtain_net_how_long_ago"
       },
       "net_sleep_last_night": {
+        "type": "string",
+        "valuesList": "yndk",
         "_defn": [
           {
             "_row_num": 4,
             "section_name": "survey"
+          },
+          {
+            "_row_num": 4,
+            "section_name": "model"
           }
         ],
-        "type": "string",
-        "valuesList": "yndk",
         "elementKey": "net_sleep_last_night",
         "elementName": "net_sleep_last_night",
         "elementSet": "data",
         "elementPath": "net_sleep_last_night"
       },
       "net_used_other_purpose": {
+        "type": "string",
+        "valuesList": "net_purpose",
         "_defn": [
           {
             "_row_num": 5,
             "section_name": "survey"
+          },
+          {
+            "_row_num": 5,
+            "section_name": "model"
           }
         ],
-        "type": "string",
-        "valuesList": "net_purpose",
         "elementKey": "net_used_other_purpose",
         "elementName": "net_used_other_purpose",
         "elementSet": "data",
         "elementPath": "net_used_other_purpose"
-      },
-      "net_used_other_purpose_other": {
-        "_defn": [
-          {
-            "_row_num": 7,
-            "section_name": "survey"
-          }
-        ],
-        "type": "string",
-        "elementKey": "net_used_other_purpose_other",
-        "elementName": "net_used_other_purpose_other",
-        "elementSet": "data",
-        "elementPath": "net_used_other_purpose_other"
       },
       "_id": {
         "type": "string",
@@ -1149,7 +1054,7 @@
         "_aspect": "net_used_other_purpose",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"net_purpose\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No, just for sleeping under\"}},\"_row_num\":19},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"garden_netting\",\"display\":{\"title\":{\"text\":\"For garden netting\"}},\"_row_num\":20},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"fishing\",\"display\":{\"title\":{\"text\":\"For fishing\"}},\"_row_num\":21},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"surrounding_hennery/hennery_construction\",\"display\":{\"title\":{\"text\":\"To surround hennery/hennery construction\"}},\"_row_num\":22},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"preparing_cereals/corn\",\"display\":{\"title\":{\"text\":\"To protect/cover vegetables/crops\"}},\"_row_num\":23},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":24}]"
+        "_value": "[{\"choice_list_name\":\"net_purpose\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No, just for sleeping under\"}},\"_row_num\":9},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"garden_netting\",\"display\":{\"title\":{\"text\":\"For garden netting\"}},\"_row_num\":10},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"fishing\",\"display\":{\"title\":{\"text\":\"For fishing\"}},\"_row_num\":11},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"surrounding_hennery/hennery_construction\",\"display\":{\"title\":{\"text\":\"To surround hennery/hennery construction\"}},\"_row_num\":12},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"preparing_cereals/corn\",\"display\":{\"title\":{\"text\":\"To prepare cereals/corn\"}},\"_row_num\":13},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"cover_vegetables_crops\",\"display\":{\"title\":{\"text\":\"To protect/cover vegetables/crops\"}},\"_row_num\":14}]"
       },
       {
         "_partition": "Column",
@@ -1184,7 +1089,7 @@
         "_aspect": "default",
         "_key": "displayName",
         "_type": "object",
-        "_value": "{\"text\":\"Mosquito Nets\"}"
+        "_value": "{\"text\":{\"default\":\"Mosquito Nets\",\"pt\":\"Mosquito Nets\",\"sw\":\"Mosquito Nets\"}}"
       }
     ]
   }
