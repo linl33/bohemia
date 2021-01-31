@@ -1250,6 +1250,7 @@
             "text": "33. Does this participant regularly travel or sleep outside of the home during the first part of the year? (January-June)"
           }
         },
+        "required": 1,
         "_row_num": 167
       },
       {
@@ -1265,6 +1266,7 @@
             "text": "33a. If yes, how many different trips does this participant have during the first part of the year?"
           }
         },
+        "required": "selected(data('travel_regularly'), 'yes')",
         "_row_num": 169
       },
       {
@@ -1277,8 +1279,19 @@
         "_row_num": 170
       },
       {
-        "type": "linked_table",
+        "type": "linked_table_counting",
         "values_list": "hh_member_travel",
+        "name": "trip_count",
+        "constraint": "data('trip_count') === null || selected(data('travel_regularly'), 'no') || data('trip_count') == data('travel_regularly_trips')",
+        "display": {
+          "constraint_message": {
+            "text": "Unexpected number of trips recorded"
+          }
+        },
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "hh_member_travel"
+        },
         "_row_num": 171
       },
       {
@@ -4532,6 +4545,13 @@
         "calculation_name": "no_is_exclusive",
         "calculation": "countSelected(data('ind_treatment')) > 1 && selected(data('ind_treatment'), 'no')",
         "_row_num": 11
+      }
+    ],
+    "prompt_types": [
+      {
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "_row_num": 2
       }
     ]
   },
@@ -8738,6 +8758,19 @@
           }
         ],
         "elementKey": "travel_regularly_trips"
+      },
+      "trip_count": {
+        "_defn": [
+          {
+            "_row_num": 171,
+            "section_name": "survey"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "hh_member_travel",
+        "elementKey": "trip_count"
       }
     },
     "section_names": [
@@ -10222,6 +10255,7 @@
                 "text": "33. Does this participant regularly travel or sleep outside of the home during the first part of the year? (January-June)"
               }
             },
+            "required": 1,
             "_row_num": 167,
             "__rowNum__": 166,
             "_token_type": "prompt",
@@ -10237,6 +10271,7 @@
                 "text": "33a. If yes, how many different trips does this participant have during the first part of the year?"
               }
             },
+            "required": "selected(data('travel_regularly'), 'yes')",
             "_row_num": 169,
             "__rowNum__": 168,
             "_token_type": "prompt",
@@ -10259,12 +10294,23 @@
             "promptIdx": 90
           },
           {
-            "type": "linked_table",
+            "type": "linked_table_counting",
             "values_list": "hh_member_travel",
+            "name": "trip_count",
+            "constraint": "data('trip_count') === null || selected(data('travel_regularly'), 'no') || data('trip_count') == data('travel_regularly_trips')",
+            "display": {
+              "constraint_message": {
+                "text": "Unexpected number of trips recorded"
+              }
+            },
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "hh_member_travel"
+            },
             "_row_num": 171,
             "__rowNum__": 170,
             "_token_type": "prompt",
-            "_type": "linked_table",
+            "_type": "linked_table_counting",
             "_branch_label_enclosing_screen": "survey/_screen159",
             "promptIdx": 91
           },
@@ -10283,7 +10329,10 @@
             8,
             10,
             12,
-            73
+            73,
+            88,
+            89,
+            91
           ]
         },
         "operations": [
@@ -12237,6 +12286,22 @@
         "elementName": "travel_regularly_trips",
         "elementSet": "data",
         "elementPath": "travel_regularly_trips"
+      },
+      "trip_count": {
+        "_defn": [
+          {
+            "_row_num": 171,
+            "section_name": "survey"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "hh_member_travel",
+        "elementKey": "trip_count",
+        "elementName": "trip_count",
+        "elementSet": "data",
+        "elementPath": "trip_count"
       },
       "dob_day_dk_items": {
         "type": "string",

@@ -89,6 +89,7 @@
             "text": "Country"
           }
         },
+        "required": 1,
         "_row_num": 6
       },
       {
@@ -99,6 +100,7 @@
             "text": "Household ID"
           }
         },
+        "required": 1,
         "_row_num": 7
       },
       {
@@ -111,13 +113,22 @@
         "_row_num": 8
       },
       {
-        "type": "linked_table",
+        "type": "linked_table_counting",
         "values_list": "hh_geo_locations",
+        "name": "location_count",
         "display": {
           "prompt": {
             "text": "Record Location"
+          },
+          "constraint_message": {
+            "text": "The location must be provided"
           }
         },
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "hh_geo_locations"
+        },
+        "constraint": "data('location_count') === null || data('location_count') === 1",
         "_row_num": 9
       },
       {
@@ -153,6 +164,7 @@
             "text": "Was this household part of the minicensus?"
           }
         },
+        "required": 1,
         "_row_num": 4
       },
       {
@@ -286,6 +298,7 @@
             "text": "11. Are there new members in the household? (besides those already in roster)"
           }
         },
+        "required": "selected(data('hh_minicenced'), 'yes')",
         "_row_num": 23
       },
       {
@@ -301,16 +314,26 @@
             "text": "11a. How many new members are in the household?"
           }
         },
+        "required": "selected(data('new_hh_members'), 'yes')",
         "_row_num": 25
       },
       {
-        "type": "linked_table",
+        "type": "linked_table_counting",
         "values_list": "linked_members_new",
+        "name": "new_count",
         "display": {
           "new_instance_label": {
             "text": "New member addition"
           },
-          "hide_delete_button": 1
+          "hide_delete_button": 1,
+          "constraint_message": {
+            "text": "Unexpected number of members registered"
+          }
+        },
+        "constraint": "selected(data('new_hh_members'), 'no')  || selected(data('hh_minicenced'), 'no') || data('new_count') === null || data('new_count') == data('new_hh_members_number')",
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "linked_members_new"
         },
         "_row_num": 26
       },
@@ -355,15 +378,25 @@
             "text": "Household members refer to the total number of people who belong to the household, including residents (members intending to sleep in the household in the following 3 months) and non-residents (members not intending to sleep in the household in the following 3 months)"
           }
         },
+        "required": "selected(data('hh_minicenced'), 'no')",
         "_row_num": 33
       },
       {
-        "type": "linked_table",
+        "type": "linked_table_counting",
         "values_list": "linked_new_hh_info",
+        "name": "new_hh_count",
         "display": {
           "prompt": {
             "text": "Details about household member"
+          },
+          "constraint_message": {
+            "text": "Unexpected number of members registered"
           }
+        },
+        "constraint": "selected(data('hh_minicenced'), 'yes') || data('new_hh_count') === null || data('new_hh_count') == data('new_hh_n_residents')",
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "linked_new_hh_info"
         },
         "_row_num": 35
       },
@@ -861,6 +894,7 @@
             "text": "41. Does the household possess a latrine?"
           }
         },
+        "required": 1,
         "_row_num": 49
       },
       {
@@ -913,12 +947,22 @@
         "_row_num": 55
       },
       {
-        "type": "linked_table",
+        "type": "linked_table_counting",
         "values_list": "linked_hh_latrine",
+        "name": "latrine_count",
         "display": {
           "prompt": {
             "text": "<h4>Latrine details</h4>"
+          },
+          "constraint_message": {
+            "text": "Unexpected number of latrines recorded"
           }
+        },
+        "required": 1,
+        "constraint": "data('latrine_count') === null || selected(data('hh_have_latrine'),'no')  || data('latrine_count') == data('hh_how_many_latrines')",
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "linked_hh_latrine"
         },
         "_row_num": 56
       },
@@ -1887,6 +1931,7 @@
             "text": "53. Are there any water bodies within the 50m surrounding the household buildings?"
           }
         },
+        "required": 1,
         "_row_num": 4
       },
       {
@@ -1902,6 +1947,7 @@
             "text": "53a. How many?"
           }
         },
+        "required": "selected(data('water_bodies'), 'yes')",
         "_row_num": 6
       },
       {
@@ -1923,12 +1969,21 @@
         "_row_num": 8
       },
       {
-        "type": "linked_table",
+        "type": "linked_table_counting",
         "values_list": "linked_water_body",
+        "name": "water_count",
         "display": {
           "prompt": {
             "text": "<h4>Add body of water</h4>"
+          },
+          "constraint_message": {
+            "text": "Unexpected number of water bodies recorded"
           }
+        },
+        "constraint": "data('water_count') === null || selected(data('water_bodies'), 'no')  || data('water_count') == data('water_bodies_num')",
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "linked_water_body"
         },
         "_row_num": 9
       },
@@ -2052,6 +2107,7 @@
             "text": "Cannot exceed 50."
           }
         },
+        "required": 1,
         "constraint": "data('hh_num_nets') < 51",
         "_row_num": 28
       },
@@ -2079,12 +2135,21 @@
         "_row_num": 32
       },
       {
-        "type": "linked_table",
+        "type": "linked_table_counting",
         "values_list": "linked_mosquito_net",
+        "name": "net_count",
         "display": {
           "prompt": {
             "text": "<h4>Add mosquito net</h4>"
+          },
+          "constraint_message": {
+            "text": "Unexpected number of nets recorded"
           }
+        },
+        "constraint": "data('net_count') === null || data('net_count') == data('hh_num_nets')",
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "linked_mosquito_net"
         },
         "_row_num": 33
       },
@@ -2204,6 +2269,7 @@
             "text": "58. Has any household member been bitten by a snake in the past 12 months?"
           }
         },
+        "required": 1,
         "_row_num": 50
       },
       {
@@ -2219,6 +2285,7 @@
             "text": "58a. How many household members were bitten in the past 12 months?"
           }
         },
+        "required": "selected(data('any_snake_bite'), 'yes')",
         "_row_num": 52
       },
       {
@@ -2251,16 +2318,25 @@
         "_row_num": 55
       },
       {
-        "type": "linked_table",
+        "type": "linked_table_counting",
         "values_list": "linked_member_snake_bit",
+        "name": "snake_count",
         "display": {
           "prompt": {
             "text": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>"
           },
+          "constraint_message": {
+            "text": "Unexpected number of bites recorded"
+          },
           "hide_add_instance": 1,
           "hide_delete_button": 1
         },
+        "constraint": "data('snake_count') === null || selected(data('any_snake_bite'), 'no') || data('snake_count') == data('any_snake_bite_num')",
         "choice_filter": "_.contains(data('snake_bite_who'), choice_item.instance_id)",
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "linked_member_snake_bit"
+        },
         "_row_num": 56
       },
       {
@@ -2413,6 +2489,7 @@
             "text": "64. Have there been any deaths in the household in the past 12 months?"
           }
         },
+        "required": "selected(data('hh_minicenced'), 'no')",
         "_row_num": 5
       },
       {
@@ -2444,8 +2521,20 @@
         "_row_num": 8
       },
       {
-        "type": "linked_table",
+        "type": "linked_table_counting",
         "values_list": "linked_hh_death",
+        "name": "death_count",
+        "required": "selected(data('hh_death'), 'yes')",
+        "constraint": "data('death_count') === null || selected(data('hh_death'), 'no') || selected(data('hh_minicenced'), 'yes') || data('death_count') == data('hh_death_count')",
+        "display": {
+          "constraint_message": {
+            "text": "Unexpected number of deaths recorded"
+          }
+        },
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "linked_hh_death"
+        },
         "_row_num": 9
       },
       {
@@ -20157,6 +20246,13 @@
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 21
+      }
+    ],
+    "prompt_types": [
+      {
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "_row_num": 2
       }
     ]
   },
@@ -38133,6 +38229,19 @@
         "type": "string",
         "elementKey": "hh_id"
       },
+      "location_count": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "technical_details"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "hh_geo_locations",
+        "elementKey": "location_count"
+      },
       "hh_minicenced": {
         "_defn": [
           {
@@ -38201,6 +38310,19 @@
         "type": "integer",
         "elementKey": "new_hh_members_number"
       },
+      "new_count": {
+        "_defn": [
+          {
+            "_row_num": 26,
+            "section_name": "census"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_members_new",
+        "elementKey": "new_count"
+      },
       "new_hh_n_residents": {
         "_defn": [
           {
@@ -38210,6 +38332,19 @@
         ],
         "type": "integer",
         "elementKey": "new_hh_n_residents"
+      },
+      "new_hh_count": {
+        "_defn": [
+          {
+            "_row_num": 35,
+            "section_name": "census"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_new_hh_info",
+        "elementKey": "new_hh_count"
       },
       "hh_head_new_select": {
         "_defn": [
@@ -38479,6 +38614,19 @@
         ],
         "type": "integer",
         "elementKey": "hh_how_many_latrines"
+      },
+      "latrine_count": {
+        "_defn": [
+          {
+            "_row_num": 56,
+            "section_name": "socioecon"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_hh_latrine",
+        "elementKey": "latrine_count"
       },
       "main_energy_lighting": {
         "_defn": [
@@ -38986,6 +39134,19 @@
         "type": "integer",
         "elementKey": "water_bodies_num"
       },
+      "water_count": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "environment"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_water_body",
+        "elementKey": "water_count"
+      },
       "hh_spray": {
         "_defn": [
           {
@@ -39039,6 +39200,19 @@
         ],
         "type": "integer",
         "elementKey": "hh_num_nets"
+      },
+      "net_count": {
+        "_defn": [
+          {
+            "_row_num": 33,
+            "section_name": "environment"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_mosquito_net",
+        "elementKey": "net_count"
       },
       "malaria_prevention_method": {
         "_defn": [
@@ -39111,6 +39285,19 @@
         },
         "valuesList": "hh_members_roster",
         "elementKey": "snake_bite_who"
+      },
+      "snake_count": {
+        "_defn": [
+          {
+            "_row_num": 56,
+            "section_name": "environment"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_member_snake_bit",
+        "elementKey": "snake_count"
       },
       "hh_contact": {
         "_defn": [
@@ -39214,6 +39401,19 @@
         ],
         "type": "integer",
         "elementKey": "hh_death_count"
+      },
+      "death_count": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "death"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_hh_death",
+        "elementKey": "death_count"
       }
     },
     "section_names": [
@@ -39621,6 +39821,7 @@
                 "text": "Country"
               }
             },
+            "required": 1,
             "_row_num": 6,
             "__rowNum__": 5,
             "_token_type": "prompt",
@@ -39636,6 +39837,7 @@
                 "text": "Household ID"
               }
             },
+            "required": 1,
             "_row_num": 7,
             "__rowNum__": 6,
             "_token_type": "prompt",
@@ -39658,17 +39860,26 @@
             "promptIdx": 5
           },
           {
-            "type": "linked_table",
+            "type": "linked_table_counting",
             "values_list": "hh_geo_locations",
+            "name": "location_count",
             "display": {
               "prompt": {
                 "text": "Record Location"
+              },
+              "constraint_message": {
+                "text": "The location must be provided"
               }
             },
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "hh_geo_locations"
+            },
+            "constraint": "data('location_count') === null || data('location_count') === 1",
             "_row_num": 9,
             "__rowNum__": 8,
             "_token_type": "prompt",
-            "_type": "linked_table",
+            "_type": "linked_table_counting",
             "_branch_label_enclosing_screen": "technical_details/_screen2",
             "promptIdx": 6
           },
@@ -39682,7 +39893,11 @@
           }
         ],
         "validation_tag_map": {
-          "finalize": []
+          "finalize": [
+            3,
+            4,
+            6
+          ]
         },
         "operations": [
           {
@@ -39769,6 +39984,7 @@
                 "text": "Was this household part of the minicensus?"
               }
             },
+            "required": 1,
             "_row_num": 4,
             "__rowNum__": 3,
             "_token_type": "prompt",
@@ -39912,6 +40128,7 @@
                 "text": "11. Are there new members in the household? (besides those already in roster)"
               }
             },
+            "required": "selected(data('hh_minicenced'), 'yes')",
             "_row_num": 23,
             "__rowNum__": 22,
             "_token_type": "prompt",
@@ -39927,6 +40144,7 @@
                 "text": "11a. How many new members are in the household?"
               }
             },
+            "required": "selected(data('new_hh_members'), 'yes')",
             "_row_num": 25,
             "__rowNum__": 24,
             "_token_type": "prompt",
@@ -39935,18 +40153,27 @@
             "promptIdx": 12
           },
           {
-            "type": "linked_table",
+            "type": "linked_table_counting",
             "values_list": "linked_members_new",
+            "name": "new_count",
             "display": {
               "new_instance_label": {
                 "text": "New member addition"
               },
-              "hide_delete_button": 1
+              "hide_delete_button": 1,
+              "constraint_message": {
+                "text": "Unexpected number of members registered"
+              }
+            },
+            "constraint": "selected(data('new_hh_members'), 'no')  || selected(data('hh_minicenced'), 'no') || data('new_count') === null || data('new_count') == data('new_hh_members_number')",
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "linked_members_new"
             },
             "_row_num": 26,
             "__rowNum__": 25,
             "_token_type": "prompt",
-            "_type": "linked_table",
+            "_type": "linked_table_counting",
             "_branch_label_enclosing_screen": "census/_screen22",
             "promptIdx": 13
           },
@@ -39975,6 +40202,7 @@
                 "text": "Household members refer to the total number of people who belong to the household, including residents (members intending to sleep in the household in the following 3 months) and non-residents (members not intending to sleep in the household in the following 3 months)"
               }
             },
+            "required": "selected(data('hh_minicenced'), 'no')",
             "_row_num": 33,
             "__rowNum__": 32,
             "_token_type": "prompt",
@@ -39983,17 +40211,26 @@
             "promptIdx": 15
           },
           {
-            "type": "linked_table",
+            "type": "linked_table_counting",
             "values_list": "linked_new_hh_info",
+            "name": "new_hh_count",
             "display": {
               "prompt": {
                 "text": "Details about household member"
+              },
+              "constraint_message": {
+                "text": "Unexpected number of members registered"
               }
+            },
+            "constraint": "selected(data('hh_minicenced'), 'yes') || data('new_hh_count') === null || data('new_hh_count') == data('new_hh_n_residents')",
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "linked_new_hh_info"
             },
             "_row_num": 35,
             "__rowNum__": 34,
             "_token_type": "prompt",
-            "_type": "linked_table",
+            "_type": "linked_table_counting",
             "_branch_label_enclosing_screen": "census/_screen31",
             "promptIdx": 16
           },
@@ -40007,7 +40244,14 @@
           }
         ],
         "validation_tag_map": {
-          "finalize": []
+          "finalize": [
+            2,
+            11,
+            12,
+            13,
+            15,
+            16
+          ]
         },
         "operations": [
           {
@@ -40817,6 +41061,7 @@
                 "text": "41. Does the household possess a latrine?"
               }
             },
+            "required": 1,
             "_row_num": 49,
             "__rowNum__": 48,
             "_token_type": "prompt",
@@ -40875,17 +41120,27 @@
             "promptIdx": 27
           },
           {
-            "type": "linked_table",
+            "type": "linked_table_counting",
             "values_list": "linked_hh_latrine",
+            "name": "latrine_count",
             "display": {
               "prompt": {
                 "text": "<h4>Latrine details</h4>"
+              },
+              "constraint_message": {
+                "text": "Unexpected number of latrines recorded"
               }
+            },
+            "required": 1,
+            "constraint": "data('latrine_count') === null || selected(data('hh_have_latrine'),'no')  || data('latrine_count') == data('hh_how_many_latrines')",
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "linked_hh_latrine"
             },
             "_row_num": 56,
             "__rowNum__": 55,
             "_token_type": "prompt",
-            "_type": "linked_table",
+            "_type": "linked_table_counting",
             "_branch_label_enclosing_screen": "socioecon/_screen47",
             "promptIdx": 28
           },
@@ -40960,7 +41215,10 @@
           }
         ],
         "validation_tag_map": {
-          "finalize": []
+          "finalize": [
+            24,
+            28
+          ]
         },
         "operations": [
           {
@@ -42195,6 +42453,7 @@
                 "text": "53. Are there any water bodies within the 50m surrounding the household buildings?"
               }
             },
+            "required": 1,
             "_row_num": 4,
             "__rowNum__": 3,
             "_token_type": "prompt",
@@ -42210,6 +42469,7 @@
                 "text": "53a. How many?"
               }
             },
+            "required": "selected(data('water_bodies'), 'yes')",
             "_row_num": 6,
             "__rowNum__": 5,
             "_token_type": "prompt",
@@ -42246,17 +42506,26 @@
             "promptIdx": 4
           },
           {
-            "type": "linked_table",
+            "type": "linked_table_counting",
             "values_list": "linked_water_body",
+            "name": "water_count",
             "display": {
               "prompt": {
                 "text": "<h4>Add body of water</h4>"
+              },
+              "constraint_message": {
+                "text": "Unexpected number of water bodies recorded"
               }
+            },
+            "constraint": "data('water_count') === null || selected(data('water_bodies'), 'no')  || data('water_count') == data('water_bodies_num')",
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "linked_water_body"
             },
             "_row_num": 9,
             "__rowNum__": 8,
             "_token_type": "prompt",
-            "_type": "linked_table",
+            "_type": "linked_table_counting",
             "_branch_label_enclosing_screen": "environment/_screen2",
             "promptIdx": 5
           },
@@ -42362,6 +42631,7 @@
                 "text": "Cannot exceed 50."
               }
             },
+            "required": 1,
             "constraint": "data('hh_num_nets') < 51",
             "_row_num": 28,
             "__rowNum__": 27,
@@ -42399,17 +42669,26 @@
             "promptIdx": 14
           },
           {
-            "type": "linked_table",
+            "type": "linked_table_counting",
             "values_list": "linked_mosquito_net",
+            "name": "net_count",
             "display": {
               "prompt": {
                 "text": "<h4>Add mosquito net</h4>"
+              },
+              "constraint_message": {
+                "text": "Unexpected number of nets recorded"
               }
+            },
+            "constraint": "data('net_count') === null || data('net_count') == data('hh_num_nets')",
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "linked_mosquito_net"
             },
             "_row_num": 33,
             "__rowNum__": 32,
             "_token_type": "prompt",
-            "_type": "linked_table",
+            "_type": "linked_table_counting",
             "_branch_label_enclosing_screen": "environment/_screen13",
             "promptIdx": 15
           },
@@ -42527,6 +42806,7 @@
                 "text": "58. Has any household member been bitten by a snake in the past 12 months?"
               }
             },
+            "required": 1,
             "_row_num": 50,
             "__rowNum__": 49,
             "_token_type": "prompt",
@@ -42542,6 +42822,7 @@
                 "text": "58a. How many household members were bitten in the past 12 months?"
               }
             },
+            "required": "selected(data('any_snake_bite'), 'yes')",
             "_row_num": 52,
             "__rowNum__": 51,
             "_token_type": "prompt",
@@ -42594,20 +42875,29 @@
             "promptIdx": 27
           },
           {
-            "type": "linked_table",
+            "type": "linked_table_counting",
             "values_list": "linked_member_snake_bit",
+            "name": "snake_count",
             "display": {
               "prompt": {
                 "text": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>"
               },
+              "constraint_message": {
+                "text": "Unexpected number of bites recorded"
+              },
               "hide_add_instance": 1,
               "hide_delete_button": 1
             },
+            "constraint": "data('snake_count') === null || selected(data('any_snake_bite'), 'no') || data('snake_count') == data('any_snake_bite_num')",
             "choice_filter": "_.contains(data('snake_bite_who'), choice_item.instance_id)",
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "linked_member_snake_bit"
+            },
             "_row_num": 56,
             "__rowNum__": 55,
             "_token_type": "prompt",
-            "_type": "linked_table",
+            "_type": "linked_table_counting",
             "_branch_label_enclosing_screen": "environment/_screen47",
             "promptIdx": 28
           },
@@ -42754,7 +43044,14 @@
         ],
         "validation_tag_map": {
           "finalize": [
-            12
+            1,
+            2,
+            5,
+            12,
+            15,
+            23,
+            24,
+            28
           ]
         },
         "operations": [
@@ -42917,6 +43214,7 @@
                 "text": "64. Have there been any deaths in the household in the past 12 months?"
               }
             },
+            "required": "selected(data('hh_minicenced'), 'no')",
             "_row_num": 5,
             "__rowNum__": 4,
             "_token_type": "prompt",
@@ -42958,12 +43256,24 @@
             "promptIdx": 4
           },
           {
-            "type": "linked_table",
+            "type": "linked_table_counting",
             "values_list": "linked_hh_death",
+            "name": "death_count",
+            "required": "selected(data('hh_death'), 'yes')",
+            "constraint": "data('death_count') === null || selected(data('hh_death'), 'no') || selected(data('hh_minicenced'), 'yes') || data('death_count') == data('hh_death_count')",
+            "display": {
+              "constraint_message": {
+                "text": "Unexpected number of deaths recorded"
+              }
+            },
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "linked_hh_death"
+            },
             "_row_num": 9,
             "__rowNum__": 8,
             "_token_type": "prompt",
-            "_type": "linked_table",
+            "_type": "linked_table_counting",
             "_branch_label_enclosing_screen": "death/_screen2",
             "promptIdx": 5
           },
@@ -42977,7 +43287,10 @@
           }
         ],
         "validation_tag_map": {
-          "finalize": []
+          "finalize": [
+            2,
+            5
+          ]
         },
         "operations": [
           {
@@ -43362,6 +43675,22 @@
         "elementSet": "data",
         "elementPath": "hh_id"
       },
+      "location_count": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "technical_details"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "hh_geo_locations",
+        "elementKey": "location_count",
+        "elementName": "location_count",
+        "elementSet": "data",
+        "elementPath": "location_count"
+      },
       "hh_minicenced": {
         "_defn": [
           {
@@ -43455,6 +43784,22 @@
         "elementSet": "data",
         "elementPath": "new_hh_members_number"
       },
+      "new_count": {
+        "_defn": [
+          {
+            "_row_num": 26,
+            "section_name": "census"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_members_new",
+        "elementKey": "new_count",
+        "elementName": "new_count",
+        "elementSet": "data",
+        "elementPath": "new_count"
+      },
       "new_hh_n_residents": {
         "_defn": [
           {
@@ -43467,6 +43812,22 @@
         "elementName": "new_hh_n_residents",
         "elementSet": "data",
         "elementPath": "new_hh_n_residents"
+      },
+      "new_hh_count": {
+        "_defn": [
+          {
+            "_row_num": 35,
+            "section_name": "census"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_new_hh_info",
+        "elementKey": "new_hh_count",
+        "elementName": "new_hh_count",
+        "elementSet": "data",
+        "elementPath": "new_hh_count"
       },
       "hh_head_new_select": {
         "_defn": [
@@ -43829,6 +44190,22 @@
         "elementName": "hh_how_many_latrines",
         "elementSet": "data",
         "elementPath": "hh_how_many_latrines"
+      },
+      "latrine_count": {
+        "_defn": [
+          {
+            "_row_num": 56,
+            "section_name": "socioecon"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_hh_latrine",
+        "elementKey": "latrine_count",
+        "elementName": "latrine_count",
+        "elementSet": "data",
+        "elementPath": "latrine_count"
       },
       "main_energy_lighting": {
         "_defn": [
@@ -44517,6 +44894,22 @@
         "elementSet": "data",
         "elementPath": "water_bodies_num"
       },
+      "water_count": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "environment"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_water_body",
+        "elementKey": "water_count",
+        "elementName": "water_count",
+        "elementSet": "data",
+        "elementPath": "water_count"
+      },
       "hh_spray": {
         "_defn": [
           {
@@ -44585,6 +44978,22 @@
         "elementName": "hh_num_nets",
         "elementSet": "data",
         "elementPath": "hh_num_nets"
+      },
+      "net_count": {
+        "_defn": [
+          {
+            "_row_num": 33,
+            "section_name": "environment"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_mosquito_net",
+        "elementKey": "net_count",
+        "elementName": "net_count",
+        "elementSet": "data",
+        "elementPath": "net_count"
       },
       "malaria_prevention_method": {
         "_defn": [
@@ -44689,6 +45098,22 @@
         "listChildElementKeys": [
           "snake_bite_who_items"
         ]
+      },
+      "snake_count": {
+        "_defn": [
+          {
+            "_row_num": 56,
+            "section_name": "environment"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_member_snake_bit",
+        "elementKey": "snake_count",
+        "elementName": "snake_count",
+        "elementSet": "data",
+        "elementPath": "snake_count"
       },
       "hh_contact": {
         "_defn": [
@@ -44833,6 +45258,22 @@
         "elementName": "hh_death_count",
         "elementSet": "data",
         "elementPath": "hh_death_count"
+      },
+      "death_count": {
+        "_defn": [
+          {
+            "_row_num": 9,
+            "section_name": "death"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_hh_death",
+        "elementKey": "death_count",
+        "elementName": "death_count",
+        "elementSet": "data",
+        "elementPath": "death_count"
       },
       "hh_roster_not_correct_items": {
         "type": "string",
