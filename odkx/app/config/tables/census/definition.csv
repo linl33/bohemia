@@ -26,7 +26,8 @@ health_facility_formal_non_severe_other,health_facility_formal_non_severe_other,
 health_facility_formal_sick,health_facility_formal_sick,string,[]
 hh_answer_questions,hh_answer_questions,string,[]
 hh_cattle_coming_year,hh_cattle_coming_year,string,[]
-hh_consent_who_signed,hh_consent_who_signed,string,[]
+hh_consent_who_signed,hh_consent_who_signed,array,"[""hh_consent_who_signed_items""]"
+hh_consent_who_signed_items,items,string,[]
 hh_contact,hh_contact,string,[]
 hh_contact_alt,hh_contact_alt,string,[]
 hh_contact_alt_2,hh_contact_alt_2,string,[]
@@ -90,6 +91,8 @@ pigs_disease_30_days,pigs_disease_30_days,array,"[""pigs_disease_30_days_items""
 pigs_disease_30_days_items,items,string,[]
 pigs_ivermectin,pigs_ivermectin,string,[]
 pigs_ivermectin_responsible,pigs_ivermectin_responsible,string,[]
+pigs_ivermectin_responsible_dk,pigs_ivermectin_responsible_dk,array,"[""pigs_ivermectin_responsible_dk_items""]"
+pigs_ivermectin_responsible_dk_items,items,string,[]
 pigs_past_12_months,pigs_past_12_months,string,[]
 pigs_slaughter,pigs_slaughter,string,[]
 pigs_slaughter_month,pigs_slaughter_month,array,"[""pigs_slaughter_month_items""]"

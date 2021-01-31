@@ -492,7 +492,7 @@
             "text": "11. Mother language"
           }
         },
-        "choice_filter": "choice_item.country === data.hh_country",
+        "choice_filter": "choice_item.country === data('hh_country')",
         "_row_num": 70
       },
       {
@@ -4498,7 +4498,7 @@
     "calculates": [
       {
         "calculation_name": "currentAge",
-        "calculation": "(function() {\n\tvar dobYear = data('dob_year');\n\tvar dobMonth = data('dob_month') || 1;\n\tvar dobDay = data('dob_day') || 1;\n\tvar manualAge = data('dob_enter_age') || 0;\n\n\tif (!!dobYear) {\n\t\tvar dob = new Date(dobYear, dobMonth - 1, dobDay);\n\t\tvar now = new Date();\n\n\t\treturn (now - dob) / 1000 * 60 * 60 * 24 * 365.25;\n\t} else {\n\t\treturn manualAge;\n\t}\n})()",
+        "calculation": "(function() {\n\tvar dobYear = data('dob_year');\n\tvar dobMonth = data('dob_month') || 1;\n\tvar dobDay = data('dob_day') || 1;\n\tvar manualAge = data('dob_enter_age') || 0;\n\n\tif (!!dobYear) {\n\t\tvar dob = new Date(dobYear, dobMonth - 1, dobDay);\n\t\tvar now = new Date();\n\n\t\treturn (now - dob) / 1000 / 60 / 60 / 24 / 365.25;\n\t} else {\n\t\treturn manualAge;\n\t}\n})()",
         "_row_num": 2
       },
       {
@@ -7366,7 +7366,7 @@
     "calculates": {
       "currentAge": {
         "calculation_name": "currentAge",
-        "calculation": "(function() {\n\tvar dobYear = data('dob_year');\n\tvar dobMonth = data('dob_month') || 1;\n\tvar dobDay = data('dob_day') || 1;\n\tvar manualAge = data('dob_enter_age') || 0;\n\n\tif (!!dobYear) {\n\t\tvar dob = new Date(dobYear, dobMonth - 1, dobDay);\n\t\tvar now = new Date();\n\n\t\treturn (now - dob) / 1000 * 60 * 60 * 24 * 365.25;\n\t} else {\n\t\treturn manualAge;\n\t}\n})()",
+        "calculation": "(function() {\n\tvar dobYear = data('dob_year');\n\tvar dobMonth = data('dob_month') || 1;\n\tvar dobDay = data('dob_day') || 1;\n\tvar manualAge = data('dob_enter_age') || 0;\n\n\tif (!!dobYear) {\n\t\tvar dob = new Date(dobYear, dobMonth - 1, dobDay);\n\t\tvar now = new Date();\n\n\t\treturn (now - dob) / 1000 / 60 / 60 / 24 / 365.25;\n\t} else {\n\t\treturn manualAge;\n\t}\n})()",
         "_row_num": 2
       },
       "over_18": {
@@ -9390,7 +9390,7 @@
                 "text": "11. Mother language"
               }
             },
-            "choice_filter": "choice_item.country === data.hh_country",
+            "choice_filter": "choice_item.country === data('hh_country')",
             "_row_num": 70,
             "__rowNum__": 69,
             "_token_type": "prompt",
