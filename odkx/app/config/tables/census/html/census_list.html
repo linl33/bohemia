@@ -1,27 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<!--List View-->
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="../../../assets/css/clients_list.css" type="text/css" rel="stylesheet" />
-        <script type="text/javascript" src="../../../assets/commonDefinitions.js"></script>
-        <script type="text/javascript" src="../tableSpecificDefinitions.js"></script>
-        <script type="text/javascript" src="../../../assets/libs/jquery-3.4.1.js"></script>
-        <script type="text/javascript" src="../../../assets/libs/jquery-migrate-3.0.0.js"></script>
-        <script type="text/javascript" src="../../../../system/js/odkCommon.js"></script>
-        <script type="text/javascript" src="../../../../system/js/odkData.js"></script>
-        <script type="text/javascript" src="../../../../system/tables/js/odkTables.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link href="../../../assets/css/bootstrap-4.6.0/bootstrap.min.css" type="text/css" rel="stylesheet" />
+
+        <script defer src="../../../assets/commonDefinitions.js"></script>
+        <script defer src="../tableSpecificDefinitions.js"></script>
+        <script defer src="../../../../system/js/odkCommon.js"></script>
+        <script defer src="../../../../system/js/odkData.js"></script>
+        <script defer src="../../../../system/tables/js/odkTables.js"></script>
+
+        <script defer src="../js/census_list.js"></script>
     </head>
-    <body onload="display();">
-        <script type="text/javascript" src="../js/census_list.js"></script>
-        <div id="searchBox">
-            <form id="form" action="javascript:getResults();">
-                <input id="search" type="text" name="query" size="10" placeholder="Enter Household ID..." />
-                <input id="submit" type="submit" value="Search" />
-            </form>
+    <body>
+    <div class="container-fluid mt-3 d-none" id="wrapper">
+        <div class="input-group input-group-lg mb-3">
+            <input type="text" class="form-control" id="hhIdSearchInput" placeholder="ABC-123">
+            <span class="input-group-append">
+                <button id="hhIdSearchButton" class="btn btn-outline-secondary" type="button">Search</button>
+            </span>
         </div>
-        <div id="wrapper">
-            <ul id="list"></ul>
-        </div>
+
+        <div class="list-group" id="hhSearchList"></div>
+    </div>
+    <template id="hhListTemplate">
+        <a href="#" class="list-group-item list-group-item-action d-flex flex-column py-1 px-2">
+            <span class="h5 mb-1 hh-list-field"></span>
+            <div>
+                <span>Head: </span>
+                <span class="hh-list-field"></span>
+            </div>
+        </a>
+    </template>
     </body>
 </html>

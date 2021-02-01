@@ -1,103 +1,74 @@
-/**
- * This is the file that will be creating the list view.
- */
-/* global $, odkTables, odkData, odkCommon */
-/*exported display, handleClick, getResults */
 'use strict';
 
-var census = {};
+(function () {
+  var callbackFailure = function (error) {
+    console.log(error);
+    alert(error);
+  };
 
-/** Handles clicking on a list item. Applied via a string. */
-function handleClick(index) {
-    if (!$.isEmptyObject(census)) {
-        odkTables.openDetailView(null,
-            census.getTableId(),
-            index,
-            'config/tables/census/html/census_detail.html');
+  var callbackSuccess = function (result) {
+    var template = document.getElementById('hhListTemplate');
+    var listContainer = document.getElementById('hhSearchList');
+
+    // clear prev search result
+    listContainer.innerText = '';
+
+    var resultCount = result.getCount();
+    if (resultCount === 0) {
+      alert('No Result');
     }
 
-}
+    for (var i = 0; i < resultCount; i++) {
+      var newListItem = document.importNode(template.content, true);
 
-function cbSRSuccess(searchData) {
-    console.log('cbSRSuccess data is' + searchData);
-    if(searchData.getCount() > 0) {
-        // open filtered list view if househild found
-        var rowId = searchData.getRowId(0);
-        odkTables.openTableToListView(null,
-                'census',
-                '_id = ?',
-                [rowId],
-                'config/tables/census/html/census_list.html');
-    } else {
-        document.getElementById("search").value = "";
-        document.getElementsByName("query")[0].placeholder="Household not found";
+      var fields = newListItem.querySelectorAll('.hh-list-field');
+      fields[0].textContent = result.getData(i, 'hh_id');
+      fields[1].textContent = result.getData(i, 'hh_name') + ' ' + result.getData(i, 'hh_surname');
+
+      newListItem.querySelector('a').dataset['rowId'] = result.getRowId(i);
+
+      listContainer.appendChild(newListItem);
     }
-}
+  };
 
-function cbSRFailure(error) {
-    console.log('census_list: cbSRFailure failed with error: ' + error);
-}
+  document.addEventListener('DOMContentLoaded', function () {
+    var searchBtn = document.getElementById('hhIdSearchButton');
+    var searchInput = document.getElementById('hhIdSearchInput');
 
-// filters list view by client id entered by user
-function getResults() {
-    var searchText = document.getElementById('search').value;
+    searchBtn.addEventListener('click', function () {
+      // the search term trimmed, made upper case, and removed space and dash
+      var searchTerm = searchInput
+        .value
+        .trim()
+        .toUpperCase()
+        .replace(/\s|-/g, '');
 
-    odkData.query('census', 'hh_id = ?', [searchText], 
-        null, null, null, null, null, null, true, cbSRSuccess, cbSRFailure);
-}
+      if (searchTerm !== '') {
+        odkData.arbitraryQuery(
+          'census',
+          'SELECT census.*, hh_member.name AS hh_name, hh_member.surname AS hh_surname FROM census LEFT JOIN hh_member ON census.hh_head_new_select = hh_member._id WHERE replace(census.hh_id, "-", "") LIKE ?',
+          ['%' + searchTerm + '%'],
+          null,
+          null,
+          callbackSuccess,
+          callbackFailure
+        );
+      }
+    });
 
-// displays list view of clients
-function render() {
+    searchInput.addEventListener('keyup', function (evt) {
+      if (evt.key === 'Enter') {
+        searchBtn.click();
+        // use blur to hide the keyboard
+        searchInput.blur();
 
-    /* create button that launches graph display */
-    var graphView = document.createElement('p');
-    graphView.onclick = function() {
-        odkTables.openTableToListView(null,
-                'census',
-                null,
-                null,
-                'config/tables/census/html/graph_view.html');
-    };
-    graphView.setAttribute('class', 'launchForm');
-    graphView.innerHTML = 'Graph View';
-    document.getElementById('searchBox').appendChild(graphView);
+        evt.preventDefault();
+      }
+    });
 
-    for (var i = 0; i < census.getCount(); i++) {
-
-        var hh_id = census.getData(i, 'hh_id');
-
-        // make list entry only if household id exists
-        if (hh_id !== null &&
-            hh_id !== '' 
-            ) {
-            /*    Creating the item space    */
-            var item = document.createElement('li');
-            item.setAttribute('class', 'item_space');
-            item.setAttribute(
-                    'onClick',
-                    'handleClick("' + census.getRowId(i) + '")');
-            item.innerHTML = hh_id;
-            document.getElementById('list').appendChild(item);
-
-            var chevron = document.createElement('img');
-            chevron.setAttribute(
-                    'src',
-                    odkCommon.getFileAsUrl('config/assets/img/little_arrow.png'));
-            chevron.setAttribute('class', 'chevron');
-            item.appendChild(chevron);         
-        }
-    }
-}
-
-function cbSuccess(result) {
-    census = result;
-    render();
-}
-
-function cbFailure(error) {
-    console.log('census_list: failed with error: ' + error);
-}
-
-function display() {
-    odkData.getViewData(cbSuccess, cbFailure);
-}
+    document
+      .getElementById('wrapper')
+      .classList
+      .remove('d-none');
+  });
+})();

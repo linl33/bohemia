@@ -5,11 +5,13 @@
     margin: 0;
     padding: 0;
     text-align: center;
+    display: none;
 }
 
 body {
-    font-family: arial;
+    font-family: arial, serif;
     margin: 0;
+    width: 100%;
 }
 
 div { 
@@ -38,15 +40,15 @@ button:active {
     background-color: lightskyblue;
 }
 
-#button1 {
+#newHhButton, #searchButton {
     border-color: #003D5C;
 }
 
-#button2 {
+#editHhButton, #mapButton {
     border-color: #006699;
 }
 
-#button3 {
+#syncHhButton, #navigateButton {
     border-color: #66A3C2;
 }
 

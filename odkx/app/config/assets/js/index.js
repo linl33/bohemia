@@ -1,0 +1,33 @@
+'use strict';
+
+// Button to add a new household
+document.addEventListener('DOMContentLoaded', function (evt) {
+  document.getElementById('newHhButton').addEventListener('click', function () {
+    odkTables.addRowWithSurvey(
+      null,
+      'census',
+      'census',
+      null,
+      null
+    );
+  });
+
+  // Button to modify an existing household
+  document.getElementById('editHhButton').addEventListener('click', function () {
+    odkTables.launchHTML(null, 'config/assets/householdMenu.html');
+  });
+
+  // Button to sync
+  document.getElementById('syncHhButton').addEventListener('click', function () {
+    odkCommon.doAction(
+      null,
+      'org.opendatakit.services.sync.actions.activities.SyncActivity',
+      {
+        componentPackage: 'org.opendatakit.services',
+        componentActivity: 'org.opendatakit.services.sync.actions.activities.SyncActivity'
+      }
+    );
+  });
+
+  document.getElementById('wrapper').style.display = 'inherit';
+});
