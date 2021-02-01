@@ -2032,6 +2032,82 @@ app_server <- function(input, output, session) {
     return(overview)
   })
   
+  output$plot_weekly_progress <- renderPlot({
+    # Get the odk data
+    pd <- odk_data$data
+    co <- country()
+    ehd <- estimated_households$data
+    # save(pd, file = '/tmp/pd.RData')
+    enums <- pd$enumerations
+    va <- pd$va
+    pd <- pd$minicensus_main
+    
+    if(co == 'Mozambique'){
+      the_server <- 'https://sap.manhica.net:4442/ODKAggregate'
+    } else {
+      the_server <- 'https://bohemia.ihi.or.tz'
+    }
+    
+    pd <- pd %>% filter(hh_country == co)
+    va <- va %>% filter(server == the_server)
+    
+    pd_ok <- FALSE
+    if(!is.null(pd)){
+      if(nrow(pd) > 0){
+        pd_ok <- TRUE
+      }
+    }
+    if(pd_ok){
+      target <- ifelse(co == 'Tanzania', 
+                       ehd %>% filter(iso == 'TZA', clinical_trial == 0) %>% summarise(x = sum(n_households)) %>% .$x,
+                       30803)
+      x <- pd %>%
+        group_by(date = as.Date(todays_date)) %>%
+        tally %>%
+        mutate(denom = target) %>%
+        mutate(cs = cumsum(n)) %>%
+        mutate(p = cs / denom * 100)
+      y <- enums %>%
+        group_by(date = as.Date(todays_date)) %>%
+        summarise(enums = n())
+      z <- va %>%
+        group_by(date = as.Date(todays_date)) %>%
+        summarise(vas = n())
+      joined <- 
+        full_join(x, y) %>% full_join(z)
+      plot_data <- joined %>%
+        dplyr::select(date, Minicensus = n,
+                      Enumerations = enums,
+                      VA = vas) %>%
+        tidyr::gather(key, value, Minicensus:VA) %>%
+        mutate(week = lubridate::ceiling_date(date, unit = 'weeks')) %>%
+        group_by(week, key) %>%
+        summarise(value = sum(value, na.rm = TRUE))
+      g <- ggplot(data = plot_data,
+                  aes(x = week,
+                      y = value)) +
+        geom_bar(stat = 'identity') +
+        facet_wrap(~key, scales = 'free_y') +
+        theme_bohemia() +
+        labs(x = 'Week ending on',
+             y = 'Forms') +
+        theme(axis.text.x = element_text(angle = 90, 
+                                         vjust = 1,
+                                         hjust = 0.5)) +
+        scale_x_date(labels = sort(unique(plot_data$week)),
+                     breaks = sort(unique(plot_data$week))) +
+        geom_text(aes(label = value,
+                      hjust = 1),
+                  alpha = 0.6,
+                  angle = 90,
+                  color = 'white')
+    } else {
+      g <- ggplot() 
+    }
+    message('---Created weekly progress plot ')
+    return(g)
+  })
+  
   output$plot_progress <- renderPlot({
     # Get the odk data
     pd <- odk_data$data
@@ -2113,6 +2189,9 @@ app_server <- function(input, output, session) {
             ok = {
               fluidPage(
                 gt::gt_output('gt_overview'),
+                fluidRow(column(12,
+                                h3('Weekly progress plot'),
+                                plotOutput('plot_weekly_progress'))),
                 fluidRow(
                   column(6,
                          h3('Overall progress plot'),
