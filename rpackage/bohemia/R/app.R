@@ -1169,40 +1169,83 @@ app_server <- function(input, output, session) {
       va <- pd$va
       death <- pd$minicensus_repeat_death_info
       pd <- pd$minicensus_main
+      pd$day <- weekdays(pd$todays_date)
+      
+      # get expanded all dates and days
+      all_days <- pd %>% group_by(todays_date, day) %>% summarise(counts =n())
+      all_days$counts <- NULL
+      
+      # get the most recent sunday
+      pd <- pd %>% group_by(todays_date, day) %>% summarise(counts = n()) %>% arrange(todays_date) 
+      # get max date equal to monday
+      last_sunday = max(pd$todays_date[pd$day=='Sunday'])
+      pd_sub <- pd %>% filter(todays_date <= last_sunday)
+      last_monday <- max(pd_sub$todays_date[pd_sub$day=='Monday'])
+      pd_week <- pd %>% filter(todays_date>= last_monday, todays_date<=last_sunday)
+      num_forms_since_monday <-sum(pd_week$counts, na.rm = TRUE)
       forms_complete <- nrow(pd)
       date_today <- Sys.Date()
       seconds_in_day <- 86400
-      forms_complete_24_hours <- pd %>% filter(end_time >= Sys.time() - (seconds_in_day))
-      forms_complete_24_hours <- nrow(forms_complete_24_hours)
       title_mini <- paste0('Minicensus forms finished: ', forms_complete)
-      sub_title_mini <- paste0('Last 24 hours: ', forms_complete_24_hours)
+      sub_title_mini <- paste0(last_monday, ' - ', last_sunday, ': ', num_forms_since_monday)
       
       # get va info
       va_num_deaths <- length(which(va$death_id %in% death$death_id))
       total_deaths <- length(unique(death$death_id))
       forms_complete <- length(unique(va$death_id))
-      forms_complete_24_hours <- va %>% filter(todays_date >= Sys.time() - (seconds_in_day))
-      forms_complete_24_hours <- nrow(forms_complete_24_hours)
+      
+      va$day <- weekdays(va$todays_date)
+      va <- va %>% group_by(todays_date, day) %>% summarise(counts = n()) %>% arrange(todays_date) 
+      
+      va <- left_join(all_days,va) 
+      # get max date equal to monday
+      last_sunday = max(va$todays_date[va$day=='Sunday'])
+      va_sub <- va %>% filter(todays_date <= last_sunday)
+      last_monday <- max(va_sub$todays_date[va_sub$day=='Monday'])
+      va_week <- va %>% filter(todays_date>= last_monday, todays_date<=last_sunday)
+      num_forms_since_monday <-sum(va_week$counts, na.rm = TRUE)
+      
       title_va <- paste0('VA forms finished: ', forms_complete, ' out of ', total_deaths)
-      sub_title_va <- paste0('Last 24 hours: ', forms_complete_24_hours)
+      sub_title_va <- paste0(last_monday, ' - ', last_sunday, ': ', num_forms_since_monday)
       
       # get error info
       total_errors <- length(which(an$type=='error'))
       error_ids <- an$id[an$type=='error']
       error_corrected <- length(which(corrections$id  %in% error_ids))
-      total_errors_24 <- length(which(an$type=='error' & an$date>= Sys.time() - (seconds_in_day)))
+      errors <- an %>% filter(type =='error')
+      errors$day <- weekdays(errors$date)
+      errors <- errors %>% group_by(date, day) %>% summarise(counts = n()) %>% arrange(date) 
+      
+      errors <- left_join(all_days,errors) 
+      # get max date equal to monday
+      last_sunday = max(errors$todays_date[errors$day=='Sunday'])
+      errors_sub <- errors %>% filter(date <= last_sunday)
+      last_monday <- max(errors_sub$date[errors_sub$day=='Monday'])
+      errors_week <- errors %>% filter(date>= last_monday, date<=last_sunday)
+      num_forms_since_monday <-sum(errors_week$counts, na.rm = TRUE)
+      
       title_errors <- paste0('Errors resolved: ', error_corrected, ' out of ',total_errors)
-      sub_title_errors <- paste0('Last 24 hours: ', total_errors_24)
+      sub_title_errors <- paste0(last_monday, ' - ', last_sunday, ': ', num_forms_since_monday)
       
       # get anomaly info
       total_anom <- length(which(an$type=='anomaly'))
       anom_ids <- an$id[an$type=='anomaly']
       anom_corrected <- length(which(corrections$id  %in% anom_ids))
+      anom <- an %>% filter(type =='anomaly')
+      anom$day <- weekdays(anom$date)
+      anom <- anom %>% group_by(date, day) %>% summarise(counts = n()) %>% arrange(date) 
       
-      total_anom_24 <- length(which(an$type=='anomaly' & an$date>= Sys.time() - (seconds_in_day)))
+      anom <- left_join(all_days,anom) 
+      # get max date equal to monday
+      last_sunday = max(anom$todays_date[anom$day=='Sunday'])
+      anom_sub <- anom %>% filter(date <= last_sunday)
+      last_monday <- max(anom_sub$date[anom_sub$day=='Monday'])
+      anom_week <- anom %>% filter(date>= last_monday, date<=last_sunday)
+      num_forms_since_monday <-sum(anom_week$counts, na.rm = TRUE)
+      sub_title_anom <- paste0(last_monday, ' - ', last_sunday, ': ', num_forms_since_monday)
+      
       title_anom <- paste0('Anomalies resolved: ', anom_corrected,' out of ',total_anom)
-      sub_title_anom <- paste0('Last 24 hours: ', total_anom_24)
-      
+
       fluidPage(
         fluidRow(
           br(),
@@ -1414,7 +1457,7 @@ app_server <- function(input, output, session) {
     # get country
     pd <- pd %>% filter(hh_country==co)
     enum <- enum %>% filter(country==co)
-    va <- va %>% filter(the_country==co)
+    # va <- va %>% filter(the_country==co)
     # ref <- ref %>% filter(country==co)
     
     # subset by date
