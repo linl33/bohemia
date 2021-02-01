@@ -5831,6 +5831,14 @@ app_server <- function(input, output, session) {
                 anx <- an
               }
               
+              by_fw_type <-anx %>%
+                mutate(date = as.Date(date)) %>%
+                filter(date >=date_range[1], 
+                       date <= date_range[2]) %>%
+                group_by(`FW ID` = wid, Description = description) %>%
+                summarise(Occurrences = n()) %>%
+                arrange(`FW ID`, Description)
+              
               by_type <- anx %>%
                 mutate(date = as.Date(date)) %>%
                 filter(date >=date_range[1], 
@@ -5994,6 +6002,14 @@ app_server <- function(input, output, session) {
                                            nrows = nrow(joined),
                                            download_options = TRUE))
                   
+                ),
+                fluidRow(
+                  column(12,
+                         h3('Anomalies by fieldworker and type'),
+                         bohemia::prettify(by_fw_type,
+                                           nrows = nrow(by_type),
+                                           download_options = TRUE)
+                         )
                 ),
                 fluidRow(
                   column(12,
