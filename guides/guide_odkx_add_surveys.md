@@ -13,7 +13,9 @@ The ODK-X suite of applications needed are:
 - [ODK-X Survey](https://github.com/odk-x/survey/releases/latest)
 - [ODK-X Tables](https://github.com/odk-x/tables/releases/latest)
 
-See [ODK X Server Client setup](https://github.com/databrew/bohemia/blob/feature/odkx_server_reset_guide/guides/guide_odkx_client.md) for download instructions if you do not yet have the apps above. 
+See [ODK X Server Client setup](https://github.com/databrew/bohemia/blob/feature/odkx_server_reset_guide/guides/guide_odkx_client.md) for download instructions if you do not yet have the apps above.
+
+You will also need to have the ODK-X Application Designer downloaded on your computer.  [You can download it from  here](https://github.com/odk-x/app-designer/releases/tag/2.1.7) if you don't already have it. 
 
 # Instructions
 
@@ -39,6 +41,13 @@ See [ODK X Server Client setup](https://github.com/databrew/bohemia/blob/feature
 - Click "Verify User Permissions"  
 - You should see a "Verification successful" window. Click "OK".  
 
+## Ensure that you have the most updated version of the ODK-X census form in your Application Designer
+
+- Open your cmd or terminal window, cd into your `databrew/bohemia` folder, and pull the Master branch
+- Within the `databrew/bohemia/odkx/` folder, there is a folder called `app`
+- If you open your ODK-X Application Designer folder, you will see a folder named `app` here as well
+- Delete the `app` folder in your ODK-X Application Designer and replace it with a copy of the `app` folder found in `databrew/bohemia/odkx/` 
+
 ## Push the ODK-X Application Designer files from your computer to Android device
 
 - Connect the device to your computer via a USB cable.
@@ -53,7 +62,7 @@ _For detailed instructions on moving files from computer to Android device, plea
 ## Uploading new survey forms to the server
 - Return to ODK-X Survey 
 - Click the 'reload' icon at the top of the page 
-- The Server URL should be https://databrew.app and Username is that of the super user account
+- The Server URL should be https://databrew.app and the username/password is that of the *super user* account
 - You should see a "Reset App Server" button at the bottom right corner of the page. Click it. 
 - A pop up that says "Confirm Reset App Server" will appear
 - Click "Reset" to upload the updated survey forms to the server
