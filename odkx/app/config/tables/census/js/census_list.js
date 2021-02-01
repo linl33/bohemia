@@ -25,11 +25,23 @@
       fields[0].textContent = result.getData(i, 'hh_id');
       fields[1].textContent = result.getData(i, 'hh_name') + ' ' + result.getData(i, 'hh_surname');
 
-      newListItem.querySelector('a').dataset['rowId'] = result.getRowId(i);
+      var anchor = newListItem.querySelector('a');
+      anchor.dataset['rowId'] = result.getRowId(i);
+      anchor.addEventListener('click', hhOnClick);
 
       listContainer.appendChild(newListItem);
     }
   };
+
+  var hhOnClick = function (evt) {
+    odkTables.editRowWithSurvey(
+      null,
+      'census',
+      evt.currentTarget.dataset['rowId'],
+      'census',
+      null
+    );
+  }
 
   document.addEventListener('DOMContentLoaded', function () {
     var searchBtn = document.getElementById('hhIdSearchButton');
