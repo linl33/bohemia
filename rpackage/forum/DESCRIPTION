@@ -2,7 +2,7 @@ Package: forum
 Title: Forum
 Version: 0.0.0.9000
 Authors@R: person('Joe', 'Brew', email = 'joe@databrew.cc', role = c('cre', 'aut'))
-Description: Dashboard for the SAINT clinical trial
+Description: Dashboard 
 License: MIT + file LICENSE
 Imports: 
     config,

@@ -32,7 +32,6 @@ make_it <- function(){
   usethis::use_package('maps')
   usethis::use_package('Hmisc')
   usethis::use_package('extrafont')
-  usethis::use_package('rgdal')
   usethis::use_package('deldir')
   usethis::use_package('kableExtra')
   usethis::use_package('PKI')

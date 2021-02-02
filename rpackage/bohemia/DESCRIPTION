@@ -43,7 +43,6 @@ Imports:
     qrcode,
     readr,
     rmarkdown,
-    rgdal,
     deldir,
     kableExtra,
     xml2,
@@ -57,7 +56,7 @@ Imports:
     htmlTable,
     PKI,
     mapview (>= 2.9.8)
-Depends: 
+Depends:
     R (>= 2.10)
-Remotes:  
+Remotes:
     https://github.com/r-spatial/mapview
