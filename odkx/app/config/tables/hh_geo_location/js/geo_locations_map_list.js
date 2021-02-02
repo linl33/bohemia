@@ -1,88 +1,79 @@
-/**
- * This is the file that will be creating the list view.
- */
-/* global odkTables, odkData, odkCommon */
-/* exported display, handleClick */
 'use strict';
 
-var geoResult = {};
-var tableId = null;
-var hh_id = null;
-function handleClick(rowId) {
-    odkTables.openDetailView(null,
-        tableId,
-        rowId,
-        'config/tables/hh_geo_location/html/geo_locations_detail.html');
-}
+(function () {
+  var template = document.getElementById('hhMapListTemplate');
+  var listContainer = document.getElementById('hhMapList');
 
-function render(result) {
-    // The client id should have been passed to us as the hash.
-    // var hash = window.location.hash;
-    // if (hash === '') {
-    //     console.log('The hash containing the client id was not present!');
-    //     console.log('Inferring from table');
-    //     hh_id = result.get('client_id');
-    // } else {
-    //     // The has begins a physical hash. Strip it.
-    hh_id = hash.substring(1);
-    //     console.log('client id is: ' + hh_id);
-    // }
+  var callbackFailure = function (error) {
+    console.log(error);
+    alert(error);
+  };
 
-    if (hh_id === null || hh_id === '' ||
-        hh_id === undefined) {
-        return;
+  var callbackSuccess = function (result) {
+    var resultCount = result.getCount();
+
+    var selectedOnMap = result.getMapIndex();
+    if (selectedOnMap !== undefined && selectedOnMap !== null && selectedOnMap >= 0) {
+      addListItem(result, selectedOnMap, true);
     }
 
-    geoResult = result;
+    for (var i = 0; i < resultCount; i++) {
+      if (i === selectedOnMap) {
+        continue;
+      }
 
-    tableId = geoResult.getTableId();
+      addListItem(result, i, false);
+    }
+  };
 
-    // Ensure that this is the first displayed in the list
-    var mapIndex = geoResult.getMapIndex();
-    
-    // Make sure that it is valid
-    if (mapIndex !== null && mapIndex !== undefined) {
-        // Make sure that it is not invalid 
-        if (mapIndex !== -1) {
-            // Make this the first item in the list
-            addDataForRow(mapIndex);
-        }
+  var addListItem = function (result, i, highlight) {
+    var newListItem = document.importNode(template.content, true);
+
+    var fields = newListItem.querySelectorAll('.hh-list-field');
+    fields[0].textContent = result.getData(i, 'hh_id');
+
+    var anchor = newListItem.querySelector('a');
+    anchor.dataset['hh_id'] = result.getData(i, 'hh_id');
+    anchor.addEventListener('click', hhOnClick);
+
+    if (highlight) {
+      anchor.classList.add('active');
     }
 
-    for (var i = 0; i < geoResult.getCount(); i++) {
-        // Make sure not to repeat the selected item if one existed
-        if (i === mapIndex) {
-            continue;
-        }
+    listContainer.appendChild(newListItem);
+  }
 
-        addDataForRow(i);
-    }
-}
+  var hhOnClick = function (evt) {
+    odkData.query(
+      'census',
+      'hh_id = ?',
+      [evt.currentTarget.dataset['hh_id']],
+      null,
+      null,
+      null,
+      null,
+      1,
+      0,
+      false,
+      function (result) {
+        odkTables.editRowWithSurvey(
+          null,
+          'census',
+          result.getRowId(0),
+          'census',
+          null
+        );
+      },
+      callbackFailure
+    );
+  };
 
-function addDataForRow(rowNumber) {
-    // Creating the item space
-    var item = document.createElement('li');
-    item.setAttribute('class', 'item_space');
-    item.setAttribute(
-        'onClick',
-        'handleClick("' + geoResult.getRowId(rowNumber) + '")');
-    item.innerHTML = hh_id;
-    document.getElementById('list').appendChild(item);
+  document.addEventListener('DOMContentLoaded', function () {
+    odkData.getViewData(callbackSuccess, callbackFailure);
 
-    var chevron = document.createElement('img');
-    chevron.setAttribute(
-        'src',
-        odkCommon.getFileAsUrl('config/assets/img/little_arrow.png'));
-    chevron.setAttribute('class', 'chevron');
-    item.appendChild(chevron);
-
-}
-
-function cbFailure(error) {
-    console.log('geo_locations_map_list: cbFailure failed with error: ' + error);
-}
-
-
-function display() {
-    odkData.getViewData(render, cbFailure);
-}
+    document
+      .getElementById('wrapper')
+      .classList
+      .remove('d-none');
+  });
+})();

@@ -34,7 +34,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210109001,
+        "value": 20210202001,
         "_row_num": 3
       },
       {
@@ -99,9 +99,9 @@
       {
         "partition": "Table",
         "aspect": "default",
-        "key": "mapListFileView",
-        "type": "configpath",
-        "value": "config/tables/hh_geo_location/html/geopoints_maps_list.html",
+        "key": "mapListViewFileName",
+        "type": "string",
+        "value": "config/tables/hh_geo_location/html/geo_locations_map_list.html",
         "_row_num": 2
       },
       {
@@ -174,7 +174,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210109001,
+        "value": 20210202001,
         "_row_num": 3
       },
       "table_id": {
@@ -781,9 +781,9 @@
       {
         "_partition": "Table",
         "_aspect": "default",
-        "_key": "mapListFileView",
-        "_type": "configpath",
-        "_value": "config/tables/hh_geo_location/html/geopoints_maps_list.html"
+        "_key": "mapListViewFileName",
+        "_type": "string",
+        "_value": "config/tables/hh_geo_location/html/geo_locations_map_list.html"
       },
       {
         "_partition": "TableMapFragment",

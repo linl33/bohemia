@@ -41,7 +41,7 @@
       'census',
       null
     );
-  }
+  };
 
   document.addEventListener('DOMContentLoaded', function () {
     var searchBtn = document.getElementById('hhIdSearchButton');
