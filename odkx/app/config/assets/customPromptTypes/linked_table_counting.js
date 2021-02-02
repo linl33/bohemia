@@ -1,3 +1,5 @@
+'use strict';
+
 define(['promptTypes', 'jquery', 'prompts'], function(promptTypes, $) {
   return {
     linked_table_counting: promptTypes.linked_table.extend({
