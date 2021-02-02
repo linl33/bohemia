@@ -205,6 +205,8 @@
             "text": "ABC-123-123"
           }
         },
+        "required": "selected(data('new_member_newborn_or_moved_in'), 'newborn')",
+        "constraint": "selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household') || /^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
         "_row_num": 22
       },
       {
@@ -439,6 +441,8 @@
             "text": "ABC-123-123"
           }
         },
+        "required": "selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household')",
+        "constraint": "selected(data('new_member_newborn_or_moved_in'), 'newborn') || /^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
         "_row_num": 46
       },
       {
@@ -3580,7 +3584,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210124001,
+        "value": 20210202001,
         "_row_num": 3
       },
       {
@@ -3671,7 +3675,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210124001,
+        "value": 20210202001,
         "_row_num": 3
       },
       "table_id": {
@@ -8034,6 +8038,8 @@
                 "text": "ABC-123-123"
               }
             },
+            "required": "selected(data('new_member_newborn_or_moved_in'), 'newborn')",
+            "constraint": "selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household') || /^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
             "_row_num": 22,
             "__rowNum__": 21,
             "_token_type": "prompt",
@@ -8349,6 +8355,8 @@
                 "text": "ABC-123-123"
               }
             },
+            "required": "selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household')",
+            "constraint": "selected(data('new_member_newborn_or_moved_in'), 'newborn') || /^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
             "_row_num": 46,
             "__rowNum__": 45,
             "_token_type": "prompt",
@@ -8382,10 +8390,12 @@
             8,
             10,
             12,
+            15,
             20,
             22,
             24,
-            26
+            26,
+            35
           ]
         },
         "operations": [

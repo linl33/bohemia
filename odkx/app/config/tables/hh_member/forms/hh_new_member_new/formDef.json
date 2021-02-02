@@ -202,6 +202,8 @@
             "text": "ABC-123-123"
           }
         },
+        "required": 1,
+        "constraint": "/^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
         "_row_num": 20
       },
       {
@@ -3340,7 +3342,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210125001,
+        "value": 20210202001,
         "_row_num": 3
       },
       {
@@ -3431,7 +3433,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210125001,
+        "value": 20210202001,
         "_row_num": 3
       },
       "table_id": {
@@ -7743,6 +7745,8 @@
                 "text": "ABC-123-123"
               }
             },
+            "required": 1,
+            "constraint": "/^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
             "_row_num": 20,
             "__rowNum__": 19,
             "_token_type": "prompt",
@@ -7780,7 +7784,8 @@
             5,
             7,
             9,
-            11
+            11,
+            16
           ]
         },
         "operations": [
