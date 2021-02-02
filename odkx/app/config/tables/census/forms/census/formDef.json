@@ -226,7 +226,7 @@
       },
       {
         "clause": "if",
-        "condition": "data('roster_counter') === 0",
+        "condition": "data('roster_count') === 0",
         "_row_num": 12
       },
       {
@@ -248,7 +248,7 @@
         "name": "hh_minicenced_members_correct",
         "display": {
           "prompt": {
-            "text": "Is this list correct?"
+            "text": "Have any members left the household?"
           }
         },
         "_row_num": 15
@@ -40181,7 +40181,7 @@
             "name": "hh_minicenced_members_correct",
             "display": {
               "prompt": {
-                "text": "Is this list correct?"
+                "text": "Have any members left the household?"
               }
             },
             "_row_num": 15,
@@ -40419,7 +40419,7 @@
               "__rowNum__": 22,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nif (data('roster_counter') === 0) {\nactivePromptIndicies.push(7);\n}\nactivePromptIndicies.push(8);\nif (selected(data('hh_minicenced_members_correct'), 'no')) {\nactivePromptIndicies.push(9);\nif (countSelected(data('hh_roster_not_correct')) > 0) {\nactivePromptIndicies.push(10);\nactivePromptIndicies.push(11);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nif (data('roster_count') === 0) {\nactivePromptIndicies.push(7);\n}\nactivePromptIndicies.push(8);\nif (selected(data('hh_minicenced_members_correct'), 'no')) {\nactivePromptIndicies.push(9);\nif (countSelected(data('hh_roster_not_correct')) > 0) {\nactivePromptIndicies.push(10);\nactivePromptIndicies.push(11);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 5
           },
           {
