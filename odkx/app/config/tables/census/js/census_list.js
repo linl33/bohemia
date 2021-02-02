@@ -58,7 +58,9 @@
       if (searchTerm !== '') {
         odkData.arbitraryQuery(
           'census',
-          'SELECT census.*, hh_member.name AS hh_name, hh_member.surname AS hh_surname FROM census LEFT JOIN hh_member ON census.hh_head_new_select = hh_member._id WHERE replace(census.hh_id, "-", "") LIKE ?',
+          'SELECT census.*, hh_member.name AS hh_name, hh_member.surname AS hh_surname ' +
+          'FROM census LEFT JOIN hh_member ON census.hh_head_new_select = hh_member._id ' +
+          'WHERE replace(census.hh_id, "-", "") LIKE ?',
           ['%' + searchTerm + '%'],
           null,
           null,
