@@ -68,11 +68,11 @@ Alternatively, from the ODK-X Table home page, click on the `Send Data` button
 
 - If the server has changed e.g. a new database structure has been set up, you will get the feedback as an error.
 
-![](img/remove_default.png =500px)
+![](img/remove_default.png =500)
 
 - In this instance, you should delete the folder `default` as shown in the error message
 
-![](img/oimanager_delete.png =500px)
+![](img/oimanager_delete.png =500)
 
 - After deleting the folder, return to the app and attempt a new sync. Follow the `Set up server connection` steps to re-authenticate to the server and retrieve new version of forms and database. 
 
