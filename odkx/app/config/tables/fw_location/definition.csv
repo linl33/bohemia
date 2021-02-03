@@ -1,0 +1,9 @@
+_element_key,_element_name,_element_type,_list_child_element_keys
+fw_location,fw_location,geopoint,"[""fw_location_accuracy"",""fw_location_altitude"",""fw_location_latitude"",""fw_location_longitude""]"
+fw_location_accuracy,accuracy,number,[]
+fw_location_altitude,altitude,number,[]
+fw_location_latitude,latitude,number,[]
+fw_location_longitude,longitude,number,[]
+hh_id,hh_id,string,[]
+hh_row_id,hh_row_id,string,[]
+timestamp,timestamp,integer,[]

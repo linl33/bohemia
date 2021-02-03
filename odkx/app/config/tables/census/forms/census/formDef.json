@@ -133,8 +133,24 @@
         "_row_num": 9
       },
       {
-        "clause": "end screen",
+        "type": "linked_table_counting",
+        "values_list": "linked_fw_location",
+        "name": "fw_location_count",
+        "display": {
+          "prompt": {
+            "text": "Record where this survey took place"
+          }
+        },
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "linked_fw_location"
+        },
+        "constraint": "data('fw_location_count') >= 1",
         "_row_num": 10
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 11
       }
     ],
     "census": [
@@ -18899,6 +18915,18 @@
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 21
+      },
+      {
+        "query_name": "linked_fw_location",
+        "query_type": "linked_table",
+        "linked_form_id": "fw_location",
+        "linked_table_id": "fw_location",
+        "selection": "hh_id = ? AND timestamp >= ? AND timestamp <= ?",
+        "selectionArgs": "[ data('hh_id'), new Date().getTime() - 43200000, new Date().getTime() + 43200000 ]",
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_row_id: opendatakit.getCurrentInstanceId(), timestamp: new Date().getTime() }",
+        "openRowInitialElementKeyToValueMap": "{}",
+        "comment": "This queries the fw_location for rows with a matching hh_id and timestamp within +- 12 hrs.",
+        "_row_num": 22
       }
     ],
     "prompt_types": [
@@ -35407,6 +35435,18 @@
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 21
+      },
+      "linked_fw_location": {
+        "query_name": "linked_fw_location",
+        "query_type": "linked_table",
+        "linked_form_id": "fw_location",
+        "linked_table_id": "fw_location",
+        "selection": "hh_id = ? AND timestamp >= ? AND timestamp <= ?",
+        "selectionArgs": "[ data('hh_id'), new Date().getTime() - 43200000, new Date().getTime() + 43200000 ]",
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_row_id: opendatakit.getCurrentInstanceId(), timestamp: new Date().getTime() }",
+        "openRowInitialElementKeyToValueMap": "{}",
+        "comment": "This queries the fw_location for rows with a matching hh_id and timestamp within +- 12 hrs.",
+        "_row_num": 22
       }
     },
     "calculates": {
@@ -35465,6 +35505,19 @@
         "isSessionVariable": 1,
         "valuesList": "hh_geo_locations",
         "elementKey": "location_count"
+      },
+      "fw_location_count": {
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "technical_details"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_fw_location",
+        "elementKey": "fw_location_count"
       },
       "hh_minicenced": {
         "_defn": [
@@ -37177,19 +37230,41 @@
             "promptIdx": 6
           },
           {
+            "type": "linked_table_counting",
+            "values_list": "linked_fw_location",
+            "name": "fw_location_count",
+            "display": {
+              "prompt": {
+                "text": "Record where this survey took place"
+              }
+            },
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "linked_fw_location"
+            },
+            "constraint": "data('fw_location_count') >= 1",
+            "_row_num": 10,
+            "__rowNum__": 9,
+            "_token_type": "prompt",
+            "_type": "linked_table_counting",
+            "_branch_label_enclosing_screen": "technical_details/_screen2",
+            "promptIdx": 7
+          },
+          {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 11,
-            "_branch_label_enclosing_screen": "technical_details/_screen11",
-            "promptIdx": 7
+            "_row_num": 12,
+            "_branch_label_enclosing_screen": "technical_details/_screen12",
+            "promptIdx": 8
           }
         ],
         "validation_tag_map": {
           "finalize": [
             3,
             4,
-            6
+            6,
+            7
           ]
         },
         "operations": [
@@ -37200,23 +37275,23 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 10,
-              "__rowNum__": 9,
+              "_row_num": 11,
+              "__rowNum__": 10,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 11,
+            "_row_num": 12,
             "operationIdx": 1
           },
           {
-            "_row_num": 11,
+            "_row_num": 12,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(8);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -37225,14 +37300,14 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 11,
+            "_row_num": 12,
             "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
           "_contents": 2,
-          "_screen11": 2
+          "_screen12": 2
         }
       },
       "census": {
@@ -41058,6 +41133,22 @@
         "elementName": "location_count",
         "elementSet": "data",
         "elementPath": "location_count"
+      },
+      "fw_location_count": {
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "technical_details"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_fw_location",
+        "elementKey": "fw_location_count",
+        "elementName": "fw_location_count",
+        "elementSet": "data",
+        "elementPath": "fw_location_count"
       },
       "hh_minicenced": {
         "_defn": [
