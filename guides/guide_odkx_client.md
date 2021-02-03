@@ -81,7 +81,7 @@ IMPORTANT: This will lose all the data in the local app instance that was not pu
 
 ## Opening census form
 
-_For detailed instructions on testing the census form, refer to the guide: [How to fill out the Bohemia ODK-X Census Form]((https://github.com/databrew/bohemia/blob/master/guides/guide_census_form_testing.md)_
+_For detailed instructions on testing the census form, refer to the guide: [How to fill out the Bohemia ODK-X Census Form](https://github.com/databrew/bohemia/blob/master/guides/guide_census_form_testing.md)_
 
 ### Using ODK-X Tables
 - Open the app, you'll see the home page of the census
