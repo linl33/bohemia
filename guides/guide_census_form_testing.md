@@ -23,12 +23,11 @@ You have the option of filling out the census form for a new household (i.e., on
 - You will be taken to a screen with the form name, version, and message that reads "You are at the start of a new instance"
 - Click on the `Click to Proceed` button
 - You will be taken to a screen titled "Technical Details-TBD"
-- If you would like to change the language of the survey form, click the button at the top left of the screen. A pop up menu will appear. Click the `Language` button and select the language you would like
-- On the "Technical Details" page, select a country, enter a Household ID in the format "AAA-111"", and geocode the location by clicking the `Create new instance` button under the heading "Record Location"
+- On the "Technical Details" page, select a country, enter a Household ID in the format "AAA-111", and geocode your location by clicking the `Create new instance` button under the heading "Record Location"
 - Once done, swipe left or click the `next` button at the top of the screen to navigate to the next page
 - You will arrive at the "Household Questionnaire" page and see the question "Was this household part of the minicensus?" Select "No" and click the `next` button to proceed
-- On the "Meta-Information" page that follows, enter the number of household members and add details about new member by clicking the `Create new instance` button under "Details about household member" to add details about the new household member
-- Once you have filled out the details for the first member, click `next` button and you will return to the previous page where you can click the "Create new instance" button to add details about other household members
+- On the "Meta-Information" page that follows, enter the number of household members and add details about new member by clicking the `Create new instance` button under "Details about household member" 
+- Once you have filled out the details for the first member, click `next` button and you will return to the main page where you can click the "Create new instance" button to add details about other household members
 - If you need edit information about a specific household member, click the pencil icon next to his/her name to make changes
 - Once you have entered information about all household members, click the `next` button to move on to the next survey question
  
@@ -43,6 +42,13 @@ You have the option of filling out the census form for a new household (i.e., on
 - You will be taken to a screen titled "Technical Details-TBD" with pre-populated fields
 - Click the `next` button or swipe left to proceed to fill out the census form for this household
 - You will see that the members roster is prepopulated with member names. To edit details about a certain member, click on the pencil icon next to his or her name. Once done editing details, click the `next` button to return to the main screen
+
+### Changing the form language
+If you would like to change the language of the survey form, once you enter into a form instance (i.e., open a survey for a new or existing household) click the button at the top left of the screen. A pop up menu will appear. Click the `Language` button and select the language you would like
+
+### Saving a form and sending data to the server
+- To save an incomplete form and exit the survey, click the button at the top left of the screen. A pop up menu will appear. Click `Save changes + Exit`
+- Once you have saved and exited the survey form, you can upload your data to the server but navigating back to the ODK-X Tables app, clicking the `Send Data` button, then clicking the `Sync Now` button
 
 ## Handling Navigation from Content Pages view
 When filling out a survey, there are some sections that are populated via the `Create New Instance` button. 
