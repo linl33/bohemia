@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function (evt) {
 
   // Button to modify an existing household
   document.getElementById('editHhButton').addEventListener('click', function () {
-    odkTables.launchHTML(null, 'config/assets/householdMenu.html');
+    odkTables.openTableToListView(null, 'census');
   });
 
   // Button to sync
@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', function (evt) {
       }
     );
   });
+
+  window.localStorage.removeItem('bohemiaHhSearch');
 
   document.getElementById('wrapper').style.display = 'inherit';
 });

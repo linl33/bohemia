@@ -138,6 +138,17 @@
         "_row_num": 14
       },
       {
+        "clause": "if",
+        "condition": "selected(data('dob_year_dk'), 'dk')",
+        "_row_num": 15
+      },
+      {
+        "type": "assign",
+        "name": "dob_year",
+        "calculation": "null",
+        "_row_num": 16
+      },
+      {
         "type": "integer",
         "name": "dob_enter_age",
         "display": {
@@ -150,13 +161,47 @@
           "min": 0,
           "step": 1
         },
-        "_row_num": 15
+        "_row_num": 17
       },
       {
         "type": "select_multiple",
         "values_list": "approx",
         "name": "dob_enter_age_approx",
-        "_row_num": 16
+        "_row_num": 18
+      },
+      {
+        "clause": "end if",
+        "_row_num": 19
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('dob_day_dk'), 'dk')",
+        "_row_num": 20
+      },
+      {
+        "type": "assign",
+        "name": "dob_day",
+        "calculation": "null",
+        "_row_num": 21
+      },
+      {
+        "clause": "end if",
+        "_row_num": 22
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('dob_month_dk'), 'dk')",
+        "_row_num": 23
+      },
+      {
+        "type": "assign",
+        "name": "dob_month",
+        "calculation": "null",
+        "_row_num": 24
+      },
+      {
+        "clause": "end if",
+        "_row_num": 25
       },
       {
         "type": "select_one",
@@ -167,20 +212,20 @@
             "text": "3. Gender"
           }
         },
-        "_row_num": 17
+        "_row_num": 26
       },
       {
         "clause": "end screen",
-        "_row_num": 18
+        "_row_num": 27
       },
       {
         "clause": "begin screen",
-        "_row_num": 19
+        "_row_num": 28
       },
       {
         "clause": "if",
         "condition": "calculates.over_18()",
-        "_row_num": 20
+        "_row_num": 29
       },
       {
         "type": "select_one",
@@ -191,12 +236,12 @@
             "text": "4. Has this participant signed the informed consent?"
           }
         },
-        "_row_num": 21
+        "_row_num": 30
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_sign_consent'), 'no')",
-        "_row_num": 22
+        "_row_num": 31
       },
       {
         "type": "note",
@@ -205,20 +250,20 @@
             "text": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>"
           }
         },
-        "_row_num": 23
+        "_row_num": 32
       },
       {
         "clause": "end if",
-        "_row_num": 24
+        "_row_num": 33
       },
       {
         "clause": "end if",
-        "_row_num": 25
+        "_row_num": 34
       },
       {
         "clause": "if",
         "condition": "calculates.over_12_under_18()",
-        "_row_num": 27
+        "_row_num": 36
       },
       {
         "type": "select_one",
@@ -229,12 +274,12 @@
             "text": "5. Has this participant signed the assent form?"
           }
         },
-        "_row_num": 28
+        "_row_num": 37
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_sign_assent'), 'no')",
-        "_row_num": 29
+        "_row_num": 38
       },
       {
         "type": "note",
@@ -243,11 +288,11 @@
             "text": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>"
           }
         },
-        "_row_num": 30
+        "_row_num": 39
       },
       {
         "clause": "end if",
-        "_row_num": 31
+        "_row_num": 40
       },
       {
         "type": "select_one",
@@ -258,73 +303,18 @@
             "text": "5a. Has the legal guardian/parent signed the consent form?"
           }
         },
-        "_row_num": 32
+        "_row_num": 41
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_parent_sign_consent'), 'no')",
-        "_row_num": 33
+        "_row_num": 42
       },
       {
         "type": "note",
         "display": {
           "prompt": {
             "text": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>"
-          }
-        },
-        "_row_num": 34
-      },
-      {
-        "clause": "else",
-        "_row_num": 35
-      },
-      {
-        "type": "select_one_dropdown",
-        "values_list": "hh_members_roster",
-        "name": "ind_parent_sign_who",
-        "display": {
-          "prompt": {
-            "text": "5a(i). Who signed?"
-          }
-        },
-        "_row_num": 36
-      },
-      {
-        "clause": "end if",
-        "_row_num": 37
-      },
-      {
-        "clause": "end if",
-        "_row_num": 38
-      },
-      {
-        "clause": "if",
-        "condition": "calculates.under_12()",
-        "_row_num": 40
-      },
-      {
-        "type": "select_one",
-        "values_list": "yn",
-        "name": "ind_under_12_parent_sign_consent",
-        "display": {
-          "prompt": {
-            "text": "6. Has the legal guardian/parent signed the consent form?"
-          }
-        },
-        "_row_num": 41
-      },
-      {
-        "clause": "if",
-        "condition": "selected(data('ind_under_12_parent_sign_consent'), 'yes')",
-        "_row_num": 42
-      },
-      {
-        "type": "select_one_dropdown",
-        "values_list": "hh_members_roster",
-        "name": "ind_under_12_parent_sign_consent_who",
-        "display": {
-          "prompt": {
-            "text": "6a. Who signed?"
           }
         },
         "_row_num": 43
@@ -334,10 +324,12 @@
         "_row_num": 44
       },
       {
-        "type": "note",
+        "type": "select_one_dropdown",
+        "values_list": "hh_members_roster",
+        "name": "ind_parent_sign_who",
         "display": {
           "prompt": {
-            "text": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>"
+            "text": "5a(i). Who signed?"
           }
         },
         "_row_num": 45
@@ -351,17 +343,70 @@
         "_row_num": 47
       },
       {
-        "clause": "end screen",
-        "_row_num": 48
+        "clause": "if",
+        "condition": "calculates.under_12()",
+        "_row_num": 49
       },
       {
-        "clause": "begin screen",
+        "type": "select_one",
+        "values_list": "yn",
+        "name": "ind_under_12_parent_sign_consent",
+        "display": {
+          "prompt": {
+            "text": "6. Has the legal guardian/parent signed the consent form?"
+          }
+        },
         "_row_num": 50
       },
       {
         "clause": "if",
-        "condition": "calculates.signed_consent_assent()",
+        "condition": "selected(data('ind_under_12_parent_sign_consent'), 'yes')",
         "_row_num": 51
+      },
+      {
+        "type": "select_one_dropdown",
+        "values_list": "hh_members_roster",
+        "name": "ind_under_12_parent_sign_consent_who",
+        "display": {
+          "prompt": {
+            "text": "6a. Who signed?"
+          }
+        },
+        "_row_num": 52
+      },
+      {
+        "clause": "else",
+        "_row_num": 53
+      },
+      {
+        "type": "note",
+        "display": {
+          "prompt": {
+            "text": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>"
+          }
+        },
+        "_row_num": 54
+      },
+      {
+        "clause": "end if",
+        "_row_num": 55
+      },
+      {
+        "clause": "end if",
+        "_row_num": 56
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 57
+      },
+      {
+        "clause": "begin screen",
+        "_row_num": 59
+      },
+      {
+        "clause": "if",
+        "condition": "calculates.signed_consent_assent()",
+        "_row_num": 60
       },
       {
         "type": "select_one_dropdown",
@@ -372,12 +417,12 @@
             "text": "7. Who is answering the questions?"
           }
         },
-        "_row_num": 52
+        "_row_num": 61
       },
       {
         "clause": "if",
         "condition": "calculates.under_18()",
-        "_row_num": 53
+        "_row_num": 62
       },
       {
         "type": "select_one",
@@ -388,16 +433,16 @@
             "text": "8. Are his/her biological parents alive?"
           }
         },
-        "_row_num": 54
+        "_row_num": 63
       },
       {
         "clause": "end if",
-        "_row_num": 55
+        "_row_num": 64
       },
       {
         "clause": "if",
         "condition": "data('hh_head') !== opendatakit.getCurrentInstanceId()",
-        "_row_num": 56
+        "_row_num": 65
       },
       {
         "type": "select_one",
@@ -408,16 +453,16 @@
             "text": "9. Participant’s relationship with the head of household"
           }
         },
-        "_row_num": 57
+        "_row_num": 66
       },
       {
         "clause": "end if",
-        "_row_num": 58
+        "_row_num": 67
       },
       {
         "clause": "if",
         "condition": "calculates.check_rel_father_alive()",
-        "_row_num": 59
+        "_row_num": 68
       },
       {
         "type": "note",
@@ -426,16 +471,16 @@
             "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>"
           }
         },
-        "_row_num": 60
+        "_row_num": 69
       },
       {
         "clause": "end if",
-        "_row_num": 61
+        "_row_num": 70
       },
       {
         "clause": "if",
         "condition": "calculates.check_rel_mother_alive()",
-        "_row_num": 62
+        "_row_num": 71
       },
       {
         "type": "note",
@@ -444,16 +489,16 @@
             "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>"
           }
         },
-        "_row_num": 63
+        "_row_num": 72
       },
       {
         "clause": "end if",
-        "_row_num": 64
+        "_row_num": 73
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_rel_hh_head'), 'son_daughter') && selected(data('ind_parents_alive'), 'neither_alive')",
-        "_row_num": 65
+        "_row_num": 74
       },
       {
         "type": "note",
@@ -462,15 +507,15 @@
             "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>"
           }
         },
-        "_row_num": 66
+        "_row_num": 75
       },
       {
         "clause": "end if",
-        "_row_num": 67
+        "_row_num": 76
       },
       {
         "clause": "end if",
-        "_row_num": 68
+        "_row_num": 77
       },
       {
         "type": "select_one",
@@ -481,7 +526,7 @@
             "text": "10. Religion"
           }
         },
-        "_row_num": 69
+        "_row_num": 78
       },
       {
         "type": "select_one_with_other",
@@ -493,15 +538,15 @@
           }
         },
         "choice_filter": "choice_item.country === data('hh_country')",
-        "_row_num": 70
+        "_row_num": 79
       },
       {
         "clause": "end screen",
-        "_row_num": 71
+        "_row_num": 80
       },
       {
         "clause": "begin screen",
-        "_row_num": 72
+        "_row_num": 81
       },
       {
         "type": "note",
@@ -510,7 +555,7 @@
             "text": "Health and Morbidity"
           }
         },
-        "_row_num": 73
+        "_row_num": 82
       },
       {
         "type": "note",
@@ -519,7 +564,7 @@
             "text": "<h2>Health / Morbidity information</h2>"
           }
         },
-        "_row_num": 74
+        "_row_num": 83
       },
       {
         "type": "note",
@@ -528,7 +573,7 @@
             "text": "Treatment"
           }
         },
-        "_row_num": 75
+        "_row_num": 84
       },
       {
         "type": "note",
@@ -537,7 +582,7 @@
             "text": "<h3>Treatment</h3>"
           }
         },
-        "_row_num": 76
+        "_row_num": 85
       },
       {
         "type": "select_multiple",
@@ -548,15 +593,15 @@
             "text": "12. Is this participant currently taking any treatment? (check all that apply):"
           }
         },
-        "_row_num": 77
+        "_row_num": 86
       },
       {
         "clause": "end screen",
-        "_row_num": 78
+        "_row_num": 87
       },
       {
         "clause": "begin screen",
-        "_row_num": 79
+        "_row_num": 88
       },
       {
         "type": "note",
@@ -565,7 +610,7 @@
             "text": "Chronic Diseases"
           }
         },
-        "_row_num": 80
+        "_row_num": 89
       },
       {
         "type": "note",
@@ -574,7 +619,7 @@
             "text": "<h3>Chronic diseases</h3>"
           }
         },
-        "_row_num": 81
+        "_row_num": 90
       },
       {
         "type": "select_multiple",
@@ -585,12 +630,12 @@
             "text": "13. Is this participant currently suffering from any chronic disease? (long term disease)"
           }
         },
-        "_row_num": 82
+        "_row_num": 91
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_chronic_disease'), 'other')",
-        "_row_num": 83
+        "_row_num": 92
       },
       {
         "type": "text",
@@ -600,19 +645,19 @@
             "text": "Specify"
           }
         },
-        "_row_num": 84
+        "_row_num": 93
       },
       {
         "clause": "end if",
-        "_row_num": 85
+        "_row_num": 94
       },
       {
         "clause": "end screen",
-        "_row_num": 86
+        "_row_num": 95
       },
       {
         "clause": "begin screen",
-        "_row_num": 87
+        "_row_num": 96
       },
       {
         "type": "note",
@@ -621,7 +666,7 @@
             "text": "Other diseases"
           }
         },
-        "_row_num": 88
+        "_row_num": 97
       },
       {
         "type": "note",
@@ -630,7 +675,7 @@
             "text": "<h3>Recent & current diseases</h3>"
           }
         },
-        "_row_num": 89
+        "_row_num": 98
       },
       {
         "type": "select_one",
@@ -641,12 +686,12 @@
             "text": "14. Has this participant had any other diseases or medical issues in the past 15 days (including now)?"
           }
         },
-        "_row_num": 90
+        "_row_num": 99
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_recent_disease'), 'yes')",
-        "_row_num": 91
+        "_row_num": 100
       },
       {
         "type": "note",
@@ -655,7 +700,7 @@
             "text": "Recent Diseases"
           }
         },
-        "_row_num": 92
+        "_row_num": 101
       },
       {
         "type": "select_multiple",
@@ -666,12 +711,12 @@
             "text": "15. Which of the following? (check all that apply)"
           }
         },
-        "_row_num": 93
+        "_row_num": 102
       },
       {
         "clause": "if",
         "condition": "selected(data('recent_disease_yes'), 'other')",
-        "_row_num": 94
+        "_row_num": 103
       },
       {
         "type": "text",
@@ -681,11 +726,11 @@
             "text": "Specify"
           }
         },
-        "_row_num": 95
+        "_row_num": 104
       },
       {
         "clause": "end if",
-        "_row_num": 96
+        "_row_num": 105
       },
       {
         "type": "select_multiple",
@@ -696,12 +741,12 @@
             "text": "16. Main symptoms presented (check all that apply):"
           }
         },
-        "_row_num": 97
+        "_row_num": 106
       },
       {
         "clause": "if",
         "condition": "selected(data('recent_disease_symptoms'), 'other')",
-        "_row_num": 98
+        "_row_num": 107
       },
       {
         "type": "text",
@@ -711,11 +756,11 @@
             "text": "Specify"
           }
         },
-        "_row_num": 99
+        "_row_num": 108
       },
       {
         "clause": "end if",
-        "_row_num": 100
+        "_row_num": 109
       },
       {
         "type": "select_one",
@@ -726,12 +771,12 @@
             "text": "17. Did the participant seek care?"
           }
         },
-        "_row_num": 101
+        "_row_num": 110
       },
       {
         "clause": "if",
         "condition": "selected(data('recent_disease_seek_care'), 'yes')",
-        "_row_num": 102
+        "_row_num": 111
       },
       {
         "type": "select_multiple",
@@ -742,12 +787,12 @@
             "text": "17a. What form of care did this participant seek?"
           }
         },
-        "_row_num": 103
+        "_row_num": 112
       },
       {
         "clause": "if",
         "condition": "selected(data('recent_disease_care_type'), 'other')",
-        "_row_num": 104
+        "_row_num": 113
       },
       {
         "type": "text",
@@ -757,11 +802,11 @@
             "text": "Specify"
           }
         },
-        "_row_num": 105
+        "_row_num": 114
       },
       {
         "clause": "end if",
-        "_row_num": 106
+        "_row_num": 115
       },
       {
         "type": "select_one",
@@ -772,12 +817,12 @@
             "text": "17b. Did this participant receive a test for malaria?"
           }
         },
-        "_row_num": 107
+        "_row_num": 116
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_malaria_test'), 'yes')",
-        "_row_num": 108
+        "_row_num": 117
       },
       {
         "type": "select_one",
@@ -788,11 +833,11 @@
             "text": "17b(i). Result of the malaria test"
           }
         },
-        "_row_num": 109
+        "_row_num": 118
       },
       {
         "clause": "end if",
-        "_row_num": 110
+        "_row_num": 119
       },
       {
         "type": "select_one",
@@ -803,12 +848,12 @@
             "text": "17c. Did this participant get treatment for malaria?"
           }
         },
-        "_row_num": 111
+        "_row_num": 120
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_malaria_treatment'), 'no')",
-        "_row_num": 112
+        "_row_num": 121
       },
       {
         "type": "select_one",
@@ -819,27 +864,27 @@
             "text": "17c(i). Why not?"
           }
         },
-        "_row_num": 113
+        "_row_num": 122
       },
       {
         "clause": "end if",
-        "_row_num": 114
+        "_row_num": 123
       },
       {
         "clause": "end if",
-        "_row_num": 115
+        "_row_num": 124
       },
       {
         "clause": "end if",
-        "_row_num": 116
+        "_row_num": 125
       },
       {
         "clause": "end screen",
-        "_row_num": 117
+        "_row_num": 126
       },
       {
         "clause": "begin screen",
-        "_row_num": 118
+        "_row_num": 127
       },
       {
         "type": "select_multiple",
@@ -853,7 +898,7 @@
             "text": "You selected \"None\" or \"Prefer not to answer\", so you cannot select other options."
           }
         },
-        "_row_num": 119
+        "_row_num": 128
       },
       {
         "type": "note",
@@ -862,7 +907,7 @@
             "text": "<h4>Syndromic survey of other diseases that may be targeted by ivermectin or albendazole</h4>"
           }
         },
-        "_row_num": 120
+        "_row_num": 129
       },
       {
         "type": "select_multiple",
@@ -876,7 +921,7 @@
             "text": "You selected \"No\" or \"Prefer not to answer\", so you cannot select other options."
           }
         },
-        "_row_num": 121
+        "_row_num": 130
       },
       {
         "type": "select_one",
@@ -887,7 +932,7 @@
             "text": "20. Does this participant have tunga?"
           }
         },
-        "_row_num": 122
+        "_row_num": 131
       },
       {
         "type": "select_one",
@@ -898,7 +943,7 @@
             "text": "21. Does this participant have bed bugs in his/her house?"
           }
         },
-        "_row_num": 123
+        "_row_num": 132
       },
       {
         "type": "select_one",
@@ -909,20 +954,20 @@
             "text": "22. Has this participant recently passed worms in the stool in the last 15 days?"
           }
         },
-        "_row_num": 124
+        "_row_num": 133
       },
       {
         "clause": "end screen",
-        "_row_num": 125
+        "_row_num": 134
       },
       {
         "clause": "begin screen",
-        "_row_num": 126
+        "_row_num": 135
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_hh_member_gender'), 'female') && calculates.check_female_reproductive_age()",
-        "_row_num": 127
+        "_row_num": 136
       },
       {
         "type": "note",
@@ -931,7 +976,7 @@
             "text": "WRA"
           }
         },
-        "_row_num": 129
+        "_row_num": 138
       },
       {
         "type": "note",
@@ -940,7 +985,7 @@
             "text": "<h3>If the participant is a Woman of Reproductive Age (WRA)</h3>"
           }
         },
-        "_row_num": 130
+        "_row_num": 139
       },
       {
         "type": "select_one",
@@ -951,7 +996,7 @@
             "text": "23. When was this participant’s last menstrual period?"
           }
         },
-        "_row_num": 131
+        "_row_num": 140
       },
       {
         "type": "select_one",
@@ -962,7 +1007,7 @@
             "text": "24. Is this participant currently breastfeeding?"
           }
         },
-        "_row_num": 132
+        "_row_num": 141
       },
       {
         "type": "note",
@@ -971,7 +1016,7 @@
             "text": "<h3>Current pregnancy status</h3>"
           }
         },
-        "_row_num": 133
+        "_row_num": 142
       },
       {
         "type": "select_one",
@@ -982,12 +1027,12 @@
             "text": "25. Is this participant currently pregnant?"
           }
         },
-        "_row_num": 134
+        "_row_num": 143
       },
       {
         "clause": "if",
         "condition": "selected(data('wra_pregnant'), 'yes')",
-        "_row_num": 135
+        "_row_num": 144
       },
       {
         "type": "select_one",
@@ -998,15 +1043,15 @@
             "text": "25a. Is this participant taking Intermittent Preventive Treatment (IPTp) for malaria?"
           }
         },
-        "_row_num": 136
+        "_row_num": 145
       },
       {
         "clause": "end if",
-        "_row_num": 137
+        "_row_num": 146
       },
       {
         "clause": "end if",
-        "_row_num": 138
+        "_row_num": 147
       },
       {
         "type": "note",
@@ -1015,7 +1060,7 @@
             "text": "Malaria Risk"
           }
         },
-        "_row_num": 139
+        "_row_num": 148
       },
       {
         "type": "note",
@@ -1024,7 +1069,7 @@
             "text": "<h3>Malaria risk and prevention information</h3>"
           }
         },
-        "_row_num": 140
+        "_row_num": 149
       },
       {
         "type": "select_one",
@@ -1035,12 +1080,12 @@
             "text": "26. Did this participant sleep under a mosquito net last night?"
           }
         },
-        "_row_num": 141
+        "_row_num": 150
       },
       {
         "clause": "if",
         "condition": "selected(data('sleep_net_last_night'), 'yes')",
-        "_row_num": 142
+        "_row_num": 151
       },
       {
         "type": "integer",
@@ -1054,7 +1099,7 @@
           }
         },
         "constraint": "data('sleep_net_last_night_num') !== 1",
-        "_row_num": 143
+        "_row_num": 152
       },
       {
         "type": "select_multiple",
@@ -1065,19 +1110,19 @@
             "text": "Or if unknown, select:"
           }
         },
-        "_row_num": 144
+        "_row_num": 153
       },
       {
         "clause": "end if",
-        "_row_num": 145
+        "_row_num": 154
       },
       {
         "clause": "end screen",
-        "_row_num": 146
+        "_row_num": 155
       },
       {
         "clause": "begin screen",
-        "_row_num": 147
+        "_row_num": 156
       },
       {
         "type": "note",
@@ -1086,7 +1131,7 @@
             "text": "Residual transmission"
           }
         },
-        "_row_num": 148
+        "_row_num": 157
       },
       {
         "type": "note",
@@ -1095,7 +1140,7 @@
             "text": "<h3>Residual transmission information</h3>"
           }
         },
-        "_row_num": 149
+        "_row_num": 158
       },
       {
         "type": "select_one",
@@ -1106,7 +1151,7 @@
             "text": "27. At what time does this participant usually go indoors?"
           }
         },
-        "_row_num": 150
+        "_row_num": 159
       },
       {
         "type": "select_one",
@@ -1117,7 +1162,7 @@
             "text": "28. At what time does this participant usually go to bed?"
           }
         },
-        "_row_num": 151
+        "_row_num": 160
       },
       {
         "type": "select_multiple",
@@ -1128,7 +1173,7 @@
             "text": "29. What does this participant do in the time before going to bed? (check all that apply, please consider the time frame 1-3 hours before going to bed)"
           }
         },
-        "_row_num": 152
+        "_row_num": 161
       },
       {
         "type": "select_one",
@@ -1139,7 +1184,7 @@
             "text": "30. At what time does this participant usually get out of bed?"
           }
         },
-        "_row_num": 153
+        "_row_num": 162
       },
       {
         "type": "select_one",
@@ -1150,12 +1195,12 @@
             "text": "31. At what time does this participant usually go outside?"
           }
         },
-        "_row_num": 154
+        "_row_num": 163
       },
       {
         "clause": "if",
         "condition": "selected(data('time_go_outside'), '>4h before sunrise') || selected(data('time_go_outside'), '2-4h before sunrise') || selected(data('time_go_outside'), '1-2h before sunrise')",
-        "_row_num": 155
+        "_row_num": 164
       },
       {
         "type": "select_multiple",
@@ -1166,19 +1211,19 @@
             "text": "31a. What is this participant doing?"
           }
         },
-        "_row_num": 156
+        "_row_num": 165
       },
       {
         "clause": "end if",
-        "_row_num": 157
+        "_row_num": 166
       },
       {
         "clause": "end screen",
-        "_row_num": 158
+        "_row_num": 167
       },
       {
         "clause": "begin screen",
-        "_row_num": 159
+        "_row_num": 168
       },
       {
         "type": "note",
@@ -1187,7 +1232,7 @@
             "text": "<h3>Travel information</h3>"
           }
         },
-        "_row_num": 160
+        "_row_num": 169
       },
       {
         "type": "note",
@@ -1196,7 +1241,7 @@
             "text": "<h4>Travel to Loa loa countries</h4>"
           }
         },
-        "_row_num": 161
+        "_row_num": 170
       },
       {
         "type": "select_one",
@@ -1207,12 +1252,12 @@
             "text": "32. Has this participant ever travelled outside of this country?"
           }
         },
-        "_row_num": 162
+        "_row_num": 171
       },
       {
         "clause": "if",
         "condition": "selected(data('travel_abroad'), 'yes')",
-        "_row_num": 163
+        "_row_num": 172
       },
       {
         "type": "select_multiple",
@@ -1226,11 +1271,11 @@
             "text": "You selected \"None\", so you cannot select other options."
           }
         },
-        "_row_num": 164
+        "_row_num": 173
       },
       {
         "clause": "end if",
-        "_row_num": 165
+        "_row_num": 174
       },
       {
         "type": "note",
@@ -1239,7 +1284,7 @@
             "text": "<h4>Regular travel</h4>"
           }
         },
-        "_row_num": 166
+        "_row_num": 175
       },
       {
         "type": "select_one",
@@ -1251,12 +1296,12 @@
           }
         },
         "required": 1,
-        "_row_num": 167
+        "_row_num": 176
       },
       {
         "clause": "if",
         "condition": "selected(data('travel_regularly'), 'yes')",
-        "_row_num": 168
+        "_row_num": 177
       },
       {
         "type": "integer",
@@ -1267,7 +1312,7 @@
           }
         },
         "required": "selected(data('travel_regularly'), 'yes')",
-        "_row_num": 169
+        "_row_num": 178
       },
       {
         "type": "note",
@@ -1276,7 +1321,7 @@
             "text": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>"
           }
         },
-        "_row_num": 170
+        "_row_num": 179
       },
       {
         "type": "linked_table_counting",
@@ -1292,15 +1337,15 @@
           "isSessionVariable": 1,
           "valuesList": "hh_member_travel"
         },
-        "_row_num": 171
+        "_row_num": 180
       },
       {
         "clause": "end if",
-        "_row_num": 172
+        "_row_num": 181
       },
       {
         "clause": "end screen",
-        "_row_num": 173
+        "_row_num": 182
       }
     ],
     "queries": [
@@ -7596,7 +7641,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 15,
+            "_row_num": 17,
             "section_name": "survey"
           },
           {
@@ -7615,7 +7660,7 @@
         "valuesList": "approx",
         "_defn": [
           {
-            "_row_num": 16,
+            "_row_num": 18,
             "section_name": "survey"
           },
           {
@@ -7630,7 +7675,7 @@
         "valuesList": "gender",
         "_defn": [
           {
-            "_row_num": 17,
+            "_row_num": 26,
             "section_name": "survey"
           },
           {
@@ -8023,7 +8068,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 21,
+            "_row_num": 30,
             "section_name": "survey"
           },
           {
@@ -8039,7 +8084,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 28,
+            "_row_num": 37,
             "section_name": "survey"
           },
           {
@@ -8054,7 +8099,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 32,
+            "_row_num": 41,
             "section_name": "survey"
           },
           {
@@ -8069,7 +8114,7 @@
         "valuesList": "hh_members_roster",
         "_defn": [
           {
-            "_row_num": 36,
+            "_row_num": 45,
             "section_name": "survey"
           },
           {
@@ -8084,7 +8129,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 41,
+            "_row_num": 50,
             "section_name": "survey"
           },
           {
@@ -8099,7 +8144,7 @@
         "valuesList": "hh_members_roster",
         "_defn": [
           {
-            "_row_num": 43,
+            "_row_num": 52,
             "section_name": "survey"
           },
           {
@@ -8114,7 +8159,7 @@
         "valuesList": "hh_members_roster",
         "_defn": [
           {
-            "_row_num": 52,
+            "_row_num": 61,
             "section_name": "survey"
           },
           {
@@ -8129,7 +8174,7 @@
         "valuesList": "parents_alive",
         "_defn": [
           {
-            "_row_num": 54,
+            "_row_num": 63,
             "section_name": "survey"
           },
           {
@@ -8144,7 +8189,7 @@
         "valuesList": "relation_to_hh_head",
         "_defn": [
           {
-            "_row_num": 57,
+            "_row_num": 66,
             "section_name": "survey"
           },
           {
@@ -8159,7 +8204,7 @@
         "valuesList": "ind_religion",
         "_defn": [
           {
-            "_row_num": 69,
+            "_row_num": 78,
             "section_name": "survey"
           },
           {
@@ -8174,7 +8219,7 @@
         "valuesList": "ind_main_language",
         "_defn": [
           {
-            "_row_num": 70,
+            "_row_num": 79,
             "section_name": "survey"
           },
           {
@@ -8193,7 +8238,7 @@
         "valuesList": "treatment",
         "_defn": [
           {
-            "_row_num": 77,
+            "_row_num": 86,
             "section_name": "survey"
           },
           {
@@ -8212,7 +8257,7 @@
         "valuesList": "chronic_disease",
         "_defn": [
           {
-            "_row_num": 82,
+            "_row_num": 91,
             "section_name": "survey"
           },
           {
@@ -8226,7 +8271,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 84,
+            "_row_num": 93,
             "section_name": "survey"
           },
           {
@@ -8241,7 +8286,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 90,
+            "_row_num": 99,
             "section_name": "survey"
           },
           {
@@ -8260,7 +8305,7 @@
         "valuesList": "other_recent_disease",
         "_defn": [
           {
-            "_row_num": 93,
+            "_row_num": 102,
             "section_name": "survey"
           },
           {
@@ -8274,7 +8319,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 95,
+            "_row_num": 104,
             "section_name": "survey"
           },
           {
@@ -8293,7 +8338,7 @@
         "valuesList": "other_symptoms",
         "_defn": [
           {
-            "_row_num": 97,
+            "_row_num": 106,
             "section_name": "survey"
           },
           {
@@ -8307,7 +8352,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 99,
+            "_row_num": 108,
             "section_name": "survey"
           },
           {
@@ -8322,7 +8367,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 101,
+            "_row_num": 110,
             "section_name": "survey"
           },
           {
@@ -8341,7 +8386,7 @@
         "valuesList": "form_of_care",
         "_defn": [
           {
-            "_row_num": 103,
+            "_row_num": 112,
             "section_name": "survey"
           },
           {
@@ -8355,7 +8400,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 105,
+            "_row_num": 114,
             "section_name": "survey"
           },
           {
@@ -8370,7 +8415,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 107,
+            "_row_num": 116,
             "section_name": "survey"
           },
           {
@@ -8385,7 +8430,7 @@
         "valuesList": "malaria_test_result",
         "_defn": [
           {
-            "_row_num": 109,
+            "_row_num": 118,
             "section_name": "survey"
           },
           {
@@ -8400,7 +8445,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 111,
+            "_row_num": 120,
             "section_name": "survey"
           },
           {
@@ -8415,7 +8460,7 @@
         "valuesList": "malaria_no_treatment",
         "_defn": [
           {
-            "_row_num": 113,
+            "_row_num": 122,
             "section_name": "survey"
           },
           {
@@ -8434,7 +8479,7 @@
         "valuesList": "disability",
         "_defn": [
           {
-            "_row_num": 119,
+            "_row_num": 128,
             "section_name": "survey"
           },
           {
@@ -8453,7 +8498,7 @@
         "valuesList": "itchy",
         "_defn": [
           {
-            "_row_num": 121,
+            "_row_num": 130,
             "section_name": "survey"
           },
           {
@@ -8468,7 +8513,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 122,
+            "_row_num": 131,
             "section_name": "survey"
           },
           {
@@ -8483,7 +8528,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 123,
+            "_row_num": 132,
             "section_name": "survey"
           },
           {
@@ -8498,7 +8543,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 124,
+            "_row_num": 133,
             "section_name": "survey"
           },
           {
@@ -8513,7 +8558,7 @@
         "valuesList": "lmp",
         "_defn": [
           {
-            "_row_num": 131,
+            "_row_num": 140,
             "section_name": "survey"
           },
           {
@@ -8528,7 +8573,7 @@
         "valuesList": "breastfeed",
         "_defn": [
           {
-            "_row_num": 132,
+            "_row_num": 141,
             "section_name": "survey"
           },
           {
@@ -8543,7 +8588,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 134,
+            "_row_num": 143,
             "section_name": "survey"
           },
           {
@@ -8558,7 +8603,7 @@
         "valuesList": "iptp_current",
         "_defn": [
           {
-            "_row_num": 136,
+            "_row_num": 145,
             "section_name": "survey"
           },
           {
@@ -8573,7 +8618,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 141,
+            "_row_num": 150,
             "section_name": "survey"
           },
           {
@@ -8587,7 +8632,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 143,
+            "_row_num": 152,
             "section_name": "survey"
           },
           {
@@ -8605,7 +8650,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 144,
+            "_row_num": 153,
             "section_name": "survey"
           },
           {
@@ -8620,7 +8665,7 @@
         "valuesList": "time_indoors",
         "_defn": [
           {
-            "_row_num": 150,
+            "_row_num": 159,
             "section_name": "survey"
           },
           {
@@ -8635,7 +8680,7 @@
         "valuesList": "time_bed",
         "_defn": [
           {
-            "_row_num": 151,
+            "_row_num": 160,
             "section_name": "survey"
           },
           {
@@ -8654,7 +8699,7 @@
         "valuesList": "before_bed_activity",
         "_defn": [
           {
-            "_row_num": 152,
+            "_row_num": 161,
             "section_name": "survey"
           },
           {
@@ -8669,7 +8714,7 @@
         "valuesList": "time_awake",
         "_defn": [
           {
-            "_row_num": 153,
+            "_row_num": 162,
             "section_name": "survey"
           },
           {
@@ -8684,7 +8729,7 @@
         "valuesList": "time_outdoors",
         "_defn": [
           {
-            "_row_num": 154,
+            "_row_num": 163,
             "section_name": "survey"
           },
           {
@@ -8703,7 +8748,7 @@
         "valuesList": "before_sunrise_activity",
         "_defn": [
           {
-            "_row_num": 156,
+            "_row_num": 165,
             "section_name": "survey"
           },
           {
@@ -8718,7 +8763,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 162,
+            "_row_num": 171,
             "section_name": "survey"
           },
           {
@@ -8737,7 +8782,7 @@
         "valuesList": "travel_countries",
         "_defn": [
           {
-            "_row_num": 164,
+            "_row_num": 173,
             "section_name": "survey"
           },
           {
@@ -8752,7 +8797,7 @@
         "valuesList": "ynpna",
         "_defn": [
           {
-            "_row_num": 167,
+            "_row_num": 176,
             "section_name": "survey"
           },
           {
@@ -8766,7 +8811,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 169,
+            "_row_num": 178,
             "section_name": "survey"
           },
           {
@@ -8779,7 +8824,7 @@
       "trip_count": {
         "_defn": [
           {
-            "_row_num": 171,
+            "_row_num": 180,
             "section_name": "survey"
           }
         ],
@@ -9106,8 +9151,8 @@
               "min": 0,
               "step": 1
             },
-            "_row_num": 15,
-            "__rowNum__": 14,
+            "_row_num": 17,
+            "__rowNum__": 16,
             "_token_type": "prompt",
             "_type": "integer",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -9117,8 +9162,8 @@
             "type": "select_multiple",
             "values_list": "approx",
             "name": "dob_enter_age_approx",
-            "_row_num": 16,
-            "__rowNum__": 15,
+            "_row_num": 18,
+            "__rowNum__": 17,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -9133,8 +9178,8 @@
                 "text": "3. Gender"
               }
             },
-            "_row_num": 17,
-            "__rowNum__": 16,
+            "_row_num": 26,
+            "__rowNum__": 25,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -9149,11 +9194,11 @@
                 "text": "4. Has this participant signed the informed consent?"
               }
             },
-            "_row_num": 21,
-            "__rowNum__": 20,
+            "_row_num": 30,
+            "__rowNum__": 29,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 15
           },
           {
@@ -9163,11 +9208,11 @@
                 "text": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>"
               }
             },
-            "_row_num": 23,
-            "__rowNum__": 22,
+            "_row_num": 32,
+            "__rowNum__": 31,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 16
           },
           {
@@ -9179,11 +9224,11 @@
                 "text": "5. Has this participant signed the assent form?"
               }
             },
-            "_row_num": 28,
-            "__rowNum__": 27,
+            "_row_num": 37,
+            "__rowNum__": 36,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 17
           },
           {
@@ -9193,11 +9238,11 @@
                 "text": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>"
               }
             },
-            "_row_num": 30,
-            "__rowNum__": 29,
+            "_row_num": 39,
+            "__rowNum__": 38,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 18
           },
           {
@@ -9209,11 +9254,11 @@
                 "text": "5a. Has the legal guardian/parent signed the consent form?"
               }
             },
-            "_row_num": 32,
-            "__rowNum__": 31,
+            "_row_num": 41,
+            "__rowNum__": 40,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 19
           },
           {
@@ -9223,11 +9268,11 @@
                 "text": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>"
               }
             },
-            "_row_num": 34,
-            "__rowNum__": 33,
+            "_row_num": 43,
+            "__rowNum__": 42,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 20
           },
           {
@@ -9239,11 +9284,11 @@
                 "text": "5a(i). Who signed?"
               }
             },
-            "_row_num": 36,
-            "__rowNum__": 35,
+            "_row_num": 45,
+            "__rowNum__": 44,
             "_token_type": "prompt",
             "_type": "select_one_dropdown",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 21
           },
           {
@@ -9255,11 +9300,11 @@
                 "text": "6. Has the legal guardian/parent signed the consent form?"
               }
             },
-            "_row_num": 41,
-            "__rowNum__": 40,
+            "_row_num": 50,
+            "__rowNum__": 49,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 22
           },
           {
@@ -9271,11 +9316,11 @@
                 "text": "6a. Who signed?"
               }
             },
-            "_row_num": 43,
-            "__rowNum__": 42,
+            "_row_num": 52,
+            "__rowNum__": 51,
             "_token_type": "prompt",
             "_type": "select_one_dropdown",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 23
           },
           {
@@ -9285,11 +9330,11 @@
                 "text": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>"
               }
             },
-            "_row_num": 45,
-            "__rowNum__": 44,
+            "_row_num": 54,
+            "__rowNum__": 53,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen19",
+            "_branch_label_enclosing_screen": "survey/_screen28",
             "promptIdx": 24
           },
           {
@@ -9301,11 +9346,11 @@
                 "text": "7. Who is answering the questions?"
               }
             },
-            "_row_num": 52,
-            "__rowNum__": 51,
+            "_row_num": 61,
+            "__rowNum__": 60,
             "_token_type": "prompt",
             "_type": "select_one_dropdown",
-            "_branch_label_enclosing_screen": "survey/_screen50",
+            "_branch_label_enclosing_screen": "survey/_screen59",
             "promptIdx": 25
           },
           {
@@ -9317,11 +9362,11 @@
                 "text": "8. Are his/her biological parents alive?"
               }
             },
-            "_row_num": 54,
-            "__rowNum__": 53,
+            "_row_num": 63,
+            "__rowNum__": 62,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen50",
+            "_branch_label_enclosing_screen": "survey/_screen59",
             "promptIdx": 26
           },
           {
@@ -9333,11 +9378,11 @@
                 "text": "9. Participant’s relationship with the head of household"
               }
             },
-            "_row_num": 57,
-            "__rowNum__": 56,
+            "_row_num": 66,
+            "__rowNum__": 65,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen50",
+            "_branch_label_enclosing_screen": "survey/_screen59",
             "promptIdx": 27
           },
           {
@@ -9347,11 +9392,11 @@
                 "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>"
               }
             },
-            "_row_num": 60,
-            "__rowNum__": 59,
+            "_row_num": 69,
+            "__rowNum__": 68,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen50",
+            "_branch_label_enclosing_screen": "survey/_screen59",
             "promptIdx": 28
           },
           {
@@ -9361,11 +9406,11 @@
                 "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>"
               }
             },
-            "_row_num": 63,
-            "__rowNum__": 62,
+            "_row_num": 72,
+            "__rowNum__": 71,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen50",
+            "_branch_label_enclosing_screen": "survey/_screen59",
             "promptIdx": 29
           },
           {
@@ -9375,11 +9420,11 @@
                 "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>"
               }
             },
-            "_row_num": 66,
-            "__rowNum__": 65,
+            "_row_num": 75,
+            "__rowNum__": 74,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen50",
+            "_branch_label_enclosing_screen": "survey/_screen59",
             "promptIdx": 30
           },
           {
@@ -9391,11 +9436,11 @@
                 "text": "10. Religion"
               }
             },
-            "_row_num": 69,
-            "__rowNum__": 68,
+            "_row_num": 78,
+            "__rowNum__": 77,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen50",
+            "_branch_label_enclosing_screen": "survey/_screen59",
             "promptIdx": 31
           },
           {
@@ -9408,11 +9453,11 @@
               }
             },
             "choice_filter": "choice_item.country === data('hh_country')",
-            "_row_num": 70,
-            "__rowNum__": 69,
+            "_row_num": 79,
+            "__rowNum__": 78,
             "_token_type": "prompt",
             "_type": "select_one_with_other",
-            "_branch_label_enclosing_screen": "survey/_screen50",
+            "_branch_label_enclosing_screen": "survey/_screen59",
             "promptIdx": 32
           },
           {
@@ -9422,11 +9467,11 @@
                 "text": "Health and Morbidity"
               }
             },
-            "_row_num": 73,
-            "__rowNum__": 72,
+            "_row_num": 82,
+            "__rowNum__": 81,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen72",
+            "_branch_label_enclosing_screen": "survey/_screen81",
             "promptIdx": 33
           },
           {
@@ -9436,11 +9481,11 @@
                 "text": "<h2>Health / Morbidity information</h2>"
               }
             },
-            "_row_num": 74,
-            "__rowNum__": 73,
+            "_row_num": 83,
+            "__rowNum__": 82,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen72",
+            "_branch_label_enclosing_screen": "survey/_screen81",
             "promptIdx": 34
           },
           {
@@ -9450,11 +9495,11 @@
                 "text": "Treatment"
               }
             },
-            "_row_num": 75,
-            "__rowNum__": 74,
+            "_row_num": 84,
+            "__rowNum__": 83,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen72",
+            "_branch_label_enclosing_screen": "survey/_screen81",
             "promptIdx": 35
           },
           {
@@ -9464,11 +9509,11 @@
                 "text": "<h3>Treatment</h3>"
               }
             },
-            "_row_num": 76,
-            "__rowNum__": 75,
+            "_row_num": 85,
+            "__rowNum__": 84,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen72",
+            "_branch_label_enclosing_screen": "survey/_screen81",
             "promptIdx": 36
           },
           {
@@ -9480,11 +9525,11 @@
                 "text": "12. Is this participant currently taking any treatment? (check all that apply):"
               }
             },
-            "_row_num": 77,
-            "__rowNum__": 76,
+            "_row_num": 86,
+            "__rowNum__": 85,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen72",
+            "_branch_label_enclosing_screen": "survey/_screen81",
             "promptIdx": 37
           },
           {
@@ -9494,11 +9539,11 @@
                 "text": "Chronic Diseases"
               }
             },
-            "_row_num": 80,
-            "__rowNum__": 79,
+            "_row_num": 89,
+            "__rowNum__": 88,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen79",
+            "_branch_label_enclosing_screen": "survey/_screen88",
             "promptIdx": 38
           },
           {
@@ -9508,11 +9553,11 @@
                 "text": "<h3>Chronic diseases</h3>"
               }
             },
-            "_row_num": 81,
-            "__rowNum__": 80,
+            "_row_num": 90,
+            "__rowNum__": 89,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen79",
+            "_branch_label_enclosing_screen": "survey/_screen88",
             "promptIdx": 39
           },
           {
@@ -9524,11 +9569,11 @@
                 "text": "13. Is this participant currently suffering from any chronic disease? (long term disease)"
               }
             },
-            "_row_num": 82,
-            "__rowNum__": 81,
+            "_row_num": 91,
+            "__rowNum__": 90,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen79",
+            "_branch_label_enclosing_screen": "survey/_screen88",
             "promptIdx": 40
           },
           {
@@ -9539,11 +9584,11 @@
                 "text": "Specify"
               }
             },
-            "_row_num": 84,
-            "__rowNum__": 83,
+            "_row_num": 93,
+            "__rowNum__": 92,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen79",
+            "_branch_label_enclosing_screen": "survey/_screen88",
             "promptIdx": 41
           },
           {
@@ -9553,11 +9598,11 @@
                 "text": "Other diseases"
               }
             },
-            "_row_num": 88,
-            "__rowNum__": 87,
+            "_row_num": 97,
+            "__rowNum__": 96,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 42
           },
           {
@@ -9567,11 +9612,11 @@
                 "text": "<h3>Recent & current diseases</h3>"
               }
             },
-            "_row_num": 89,
-            "__rowNum__": 88,
+            "_row_num": 98,
+            "__rowNum__": 97,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 43
           },
           {
@@ -9583,11 +9628,11 @@
                 "text": "14. Has this participant had any other diseases or medical issues in the past 15 days (including now)?"
               }
             },
-            "_row_num": 90,
-            "__rowNum__": 89,
+            "_row_num": 99,
+            "__rowNum__": 98,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 44
           },
           {
@@ -9597,11 +9642,11 @@
                 "text": "Recent Diseases"
               }
             },
-            "_row_num": 92,
-            "__rowNum__": 91,
+            "_row_num": 101,
+            "__rowNum__": 100,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 45
           },
           {
@@ -9613,11 +9658,11 @@
                 "text": "15. Which of the following? (check all that apply)"
               }
             },
-            "_row_num": 93,
-            "__rowNum__": 92,
+            "_row_num": 102,
+            "__rowNum__": 101,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 46
           },
           {
@@ -9628,11 +9673,11 @@
                 "text": "Specify"
               }
             },
-            "_row_num": 95,
-            "__rowNum__": 94,
+            "_row_num": 104,
+            "__rowNum__": 103,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 47
           },
           {
@@ -9644,11 +9689,11 @@
                 "text": "16. Main symptoms presented (check all that apply):"
               }
             },
-            "_row_num": 97,
-            "__rowNum__": 96,
+            "_row_num": 106,
+            "__rowNum__": 105,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 48
           },
           {
@@ -9659,11 +9704,11 @@
                 "text": "Specify"
               }
             },
-            "_row_num": 99,
-            "__rowNum__": 98,
+            "_row_num": 108,
+            "__rowNum__": 107,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 49
           },
           {
@@ -9675,11 +9720,11 @@
                 "text": "17. Did the participant seek care?"
               }
             },
-            "_row_num": 101,
-            "__rowNum__": 100,
+            "_row_num": 110,
+            "__rowNum__": 109,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 50
           },
           {
@@ -9691,11 +9736,11 @@
                 "text": "17a. What form of care did this participant seek?"
               }
             },
-            "_row_num": 103,
-            "__rowNum__": 102,
+            "_row_num": 112,
+            "__rowNum__": 111,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 51
           },
           {
@@ -9706,11 +9751,11 @@
                 "text": "Specify"
               }
             },
-            "_row_num": 105,
-            "__rowNum__": 104,
+            "_row_num": 114,
+            "__rowNum__": 113,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 52
           },
           {
@@ -9722,11 +9767,11 @@
                 "text": "17b. Did this participant receive a test for malaria?"
               }
             },
-            "_row_num": 107,
-            "__rowNum__": 106,
+            "_row_num": 116,
+            "__rowNum__": 115,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 53
           },
           {
@@ -9738,11 +9783,11 @@
                 "text": "17b(i). Result of the malaria test"
               }
             },
-            "_row_num": 109,
-            "__rowNum__": 108,
+            "_row_num": 118,
+            "__rowNum__": 117,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 54
           },
           {
@@ -9754,11 +9799,11 @@
                 "text": "17c. Did this participant get treatment for malaria?"
               }
             },
-            "_row_num": 111,
-            "__rowNum__": 110,
+            "_row_num": 120,
+            "__rowNum__": 119,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 55
           },
           {
@@ -9770,11 +9815,11 @@
                 "text": "17c(i). Why not?"
               }
             },
-            "_row_num": 113,
-            "__rowNum__": 112,
+            "_row_num": 122,
+            "__rowNum__": 121,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen87",
+            "_branch_label_enclosing_screen": "survey/_screen96",
             "promptIdx": 56
           },
           {
@@ -9789,11 +9834,11 @@
                 "text": "You selected \"None\" or \"Prefer not to answer\", so you cannot select other options."
               }
             },
-            "_row_num": 119,
-            "__rowNum__": 118,
+            "_row_num": 128,
+            "__rowNum__": 127,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen118",
+            "_branch_label_enclosing_screen": "survey/_screen127",
             "promptIdx": 57
           },
           {
@@ -9803,11 +9848,11 @@
                 "text": "<h4>Syndromic survey of other diseases that may be targeted by ivermectin or albendazole</h4>"
               }
             },
-            "_row_num": 120,
-            "__rowNum__": 119,
+            "_row_num": 129,
+            "__rowNum__": 128,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen118",
+            "_branch_label_enclosing_screen": "survey/_screen127",
             "promptIdx": 58
           },
           {
@@ -9822,11 +9867,11 @@
                 "text": "You selected \"No\" or \"Prefer not to answer\", so you cannot select other options."
               }
             },
-            "_row_num": 121,
-            "__rowNum__": 120,
+            "_row_num": 130,
+            "__rowNum__": 129,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen118",
+            "_branch_label_enclosing_screen": "survey/_screen127",
             "promptIdx": 59
           },
           {
@@ -9838,11 +9883,11 @@
                 "text": "20. Does this participant have tunga?"
               }
             },
-            "_row_num": 122,
-            "__rowNum__": 121,
+            "_row_num": 131,
+            "__rowNum__": 130,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen118",
+            "_branch_label_enclosing_screen": "survey/_screen127",
             "promptIdx": 60
           },
           {
@@ -9854,11 +9899,11 @@
                 "text": "21. Does this participant have bed bugs in his/her house?"
               }
             },
-            "_row_num": 123,
-            "__rowNum__": 122,
+            "_row_num": 132,
+            "__rowNum__": 131,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen118",
+            "_branch_label_enclosing_screen": "survey/_screen127",
             "promptIdx": 61
           },
           {
@@ -9870,11 +9915,11 @@
                 "text": "22. Has this participant recently passed worms in the stool in the last 15 days?"
               }
             },
-            "_row_num": 124,
-            "__rowNum__": 123,
+            "_row_num": 133,
+            "__rowNum__": 132,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen118",
+            "_branch_label_enclosing_screen": "survey/_screen127",
             "promptIdx": 62
           },
           {
@@ -9884,11 +9929,11 @@
                 "text": "WRA"
               }
             },
-            "_row_num": 129,
-            "__rowNum__": 128,
+            "_row_num": 138,
+            "__rowNum__": 137,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 63
           },
           {
@@ -9898,11 +9943,11 @@
                 "text": "<h3>If the participant is a Woman of Reproductive Age (WRA)</h3>"
               }
             },
-            "_row_num": 130,
-            "__rowNum__": 129,
+            "_row_num": 139,
+            "__rowNum__": 138,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 64
           },
           {
@@ -9914,11 +9959,11 @@
                 "text": "23. When was this participant’s last menstrual period?"
               }
             },
-            "_row_num": 131,
-            "__rowNum__": 130,
+            "_row_num": 140,
+            "__rowNum__": 139,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 65
           },
           {
@@ -9930,11 +9975,11 @@
                 "text": "24. Is this participant currently breastfeeding?"
               }
             },
-            "_row_num": 132,
-            "__rowNum__": 131,
+            "_row_num": 141,
+            "__rowNum__": 140,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 66
           },
           {
@@ -9944,11 +9989,11 @@
                 "text": "<h3>Current pregnancy status</h3>"
               }
             },
-            "_row_num": 133,
-            "__rowNum__": 132,
+            "_row_num": 142,
+            "__rowNum__": 141,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 67
           },
           {
@@ -9960,11 +10005,11 @@
                 "text": "25. Is this participant currently pregnant?"
               }
             },
-            "_row_num": 134,
-            "__rowNum__": 133,
+            "_row_num": 143,
+            "__rowNum__": 142,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 68
           },
           {
@@ -9976,11 +10021,11 @@
                 "text": "25a. Is this participant taking Intermittent Preventive Treatment (IPTp) for malaria?"
               }
             },
-            "_row_num": 136,
-            "__rowNum__": 135,
+            "_row_num": 145,
+            "__rowNum__": 144,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 69
           },
           {
@@ -9990,11 +10035,11 @@
                 "text": "Malaria Risk"
               }
             },
-            "_row_num": 139,
-            "__rowNum__": 138,
+            "_row_num": 148,
+            "__rowNum__": 147,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 70
           },
           {
@@ -10004,11 +10049,11 @@
                 "text": "<h3>Malaria risk and prevention information</h3>"
               }
             },
-            "_row_num": 140,
-            "__rowNum__": 139,
+            "_row_num": 149,
+            "__rowNum__": 148,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 71
           },
           {
@@ -10020,11 +10065,11 @@
                 "text": "26. Did this participant sleep under a mosquito net last night?"
               }
             },
-            "_row_num": 141,
-            "__rowNum__": 140,
+            "_row_num": 150,
+            "__rowNum__": 149,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 72
           },
           {
@@ -10039,11 +10084,11 @@
               }
             },
             "constraint": "data('sleep_net_last_night_num') !== 1",
-            "_row_num": 143,
-            "__rowNum__": 142,
+            "_row_num": 152,
+            "__rowNum__": 151,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 73
           },
           {
@@ -10055,11 +10100,11 @@
                 "text": "Or if unknown, select:"
               }
             },
-            "_row_num": 144,
-            "__rowNum__": 143,
+            "_row_num": 153,
+            "__rowNum__": 152,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen126",
+            "_branch_label_enclosing_screen": "survey/_screen135",
             "promptIdx": 74
           },
           {
@@ -10069,11 +10114,11 @@
                 "text": "Residual transmission"
               }
             },
-            "_row_num": 148,
-            "__rowNum__": 147,
+            "_row_num": 157,
+            "__rowNum__": 156,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen147",
+            "_branch_label_enclosing_screen": "survey/_screen156",
             "promptIdx": 75
           },
           {
@@ -10083,11 +10128,11 @@
                 "text": "<h3>Residual transmission information</h3>"
               }
             },
-            "_row_num": 149,
-            "__rowNum__": 148,
+            "_row_num": 158,
+            "__rowNum__": 157,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen147",
+            "_branch_label_enclosing_screen": "survey/_screen156",
             "promptIdx": 76
           },
           {
@@ -10099,11 +10144,11 @@
                 "text": "27. At what time does this participant usually go indoors?"
               }
             },
-            "_row_num": 150,
-            "__rowNum__": 149,
+            "_row_num": 159,
+            "__rowNum__": 158,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen147",
+            "_branch_label_enclosing_screen": "survey/_screen156",
             "promptIdx": 77
           },
           {
@@ -10115,11 +10160,11 @@
                 "text": "28. At what time does this participant usually go to bed?"
               }
             },
-            "_row_num": 151,
-            "__rowNum__": 150,
+            "_row_num": 160,
+            "__rowNum__": 159,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen147",
+            "_branch_label_enclosing_screen": "survey/_screen156",
             "promptIdx": 78
           },
           {
@@ -10131,11 +10176,11 @@
                 "text": "29. What does this participant do in the time before going to bed? (check all that apply, please consider the time frame 1-3 hours before going to bed)"
               }
             },
-            "_row_num": 152,
-            "__rowNum__": 151,
+            "_row_num": 161,
+            "__rowNum__": 160,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen147",
+            "_branch_label_enclosing_screen": "survey/_screen156",
             "promptIdx": 79
           },
           {
@@ -10147,11 +10192,11 @@
                 "text": "30. At what time does this participant usually get out of bed?"
               }
             },
-            "_row_num": 153,
-            "__rowNum__": 152,
+            "_row_num": 162,
+            "__rowNum__": 161,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen147",
+            "_branch_label_enclosing_screen": "survey/_screen156",
             "promptIdx": 80
           },
           {
@@ -10163,11 +10208,11 @@
                 "text": "31. At what time does this participant usually go outside?"
               }
             },
-            "_row_num": 154,
-            "__rowNum__": 153,
+            "_row_num": 163,
+            "__rowNum__": 162,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen147",
+            "_branch_label_enclosing_screen": "survey/_screen156",
             "promptIdx": 81
           },
           {
@@ -10179,11 +10224,11 @@
                 "text": "31a. What is this participant doing?"
               }
             },
-            "_row_num": 156,
-            "__rowNum__": 155,
+            "_row_num": 165,
+            "__rowNum__": 164,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen147",
+            "_branch_label_enclosing_screen": "survey/_screen156",
             "promptIdx": 82
           },
           {
@@ -10193,11 +10238,11 @@
                 "text": "<h3>Travel information</h3>"
               }
             },
-            "_row_num": 160,
-            "__rowNum__": 159,
+            "_row_num": 169,
+            "__rowNum__": 168,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen159",
+            "_branch_label_enclosing_screen": "survey/_screen168",
             "promptIdx": 83
           },
           {
@@ -10207,11 +10252,11 @@
                 "text": "<h4>Travel to Loa loa countries</h4>"
               }
             },
-            "_row_num": 161,
-            "__rowNum__": 160,
+            "_row_num": 170,
+            "__rowNum__": 169,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen159",
+            "_branch_label_enclosing_screen": "survey/_screen168",
             "promptIdx": 84
           },
           {
@@ -10223,11 +10268,11 @@
                 "text": "32. Has this participant ever travelled outside of this country?"
               }
             },
-            "_row_num": 162,
-            "__rowNum__": 161,
+            "_row_num": 171,
+            "__rowNum__": 170,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen159",
+            "_branch_label_enclosing_screen": "survey/_screen168",
             "promptIdx": 85
           },
           {
@@ -10242,11 +10287,11 @@
                 "text": "You selected \"None\", so you cannot select other options."
               }
             },
-            "_row_num": 164,
-            "__rowNum__": 163,
+            "_row_num": 173,
+            "__rowNum__": 172,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen159",
+            "_branch_label_enclosing_screen": "survey/_screen168",
             "promptIdx": 86
           },
           {
@@ -10256,11 +10301,11 @@
                 "text": "<h4>Regular travel</h4>"
               }
             },
-            "_row_num": 166,
-            "__rowNum__": 165,
+            "_row_num": 175,
+            "__rowNum__": 174,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen159",
+            "_branch_label_enclosing_screen": "survey/_screen168",
             "promptIdx": 87
           },
           {
@@ -10273,11 +10318,11 @@
               }
             },
             "required": 1,
-            "_row_num": 167,
-            "__rowNum__": 166,
+            "_row_num": 176,
+            "__rowNum__": 175,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen159",
+            "_branch_label_enclosing_screen": "survey/_screen168",
             "promptIdx": 88
           },
           {
@@ -10289,11 +10334,11 @@
               }
             },
             "required": "selected(data('travel_regularly'), 'yes')",
-            "_row_num": 169,
-            "__rowNum__": 168,
+            "_row_num": 178,
+            "__rowNum__": 177,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen159",
+            "_branch_label_enclosing_screen": "survey/_screen168",
             "promptIdx": 89
           },
           {
@@ -10303,11 +10348,11 @@
                 "text": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>"
               }
             },
-            "_row_num": 170,
-            "__rowNum__": 169,
+            "_row_num": 179,
+            "__rowNum__": 178,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen159",
+            "_branch_label_enclosing_screen": "survey/_screen168",
             "promptIdx": 90
           },
           {
@@ -10324,19 +10369,19 @@
               "isSessionVariable": 1,
               "valuesList": "hh_member_travel"
             },
-            "_row_num": 171,
-            "__rowNum__": 170,
+            "_row_num": 180,
+            "__rowNum__": 179,
             "_token_type": "prompt",
             "_type": "linked_table_counting",
-            "_branch_label_enclosing_screen": "survey/_screen159",
+            "_branch_label_enclosing_screen": "survey/_screen168",
             "promptIdx": 91
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 174,
-            "_branch_label_enclosing_screen": "survey/_screen174",
+            "_row_num": 183,
+            "_branch_label_enclosing_screen": "survey/_screen183",
             "promptIdx": 92
           }
         ],
@@ -10360,22 +10405,22 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 18,
-              "__rowNum__": 17,
+              "_row_num": 27,
+              "__rowNum__": 26,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\nactivePromptIndicies.push(10);\nactivePromptIndicies.push(11);\nactivePromptIndicies.push(12);\nactivePromptIndicies.push(13);\nactivePromptIndicies.push(14);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\nactivePromptIndicies.push(10);\nactivePromptIndicies.push(11);\nif (selected(data('dob_year_dk'), 'dk')) {\nassign('dob_year', null);\nactivePromptIndicies.push(12);\nactivePromptIndicies.push(13);\n}\nif (selected(data('dob_day_dk'), 'dk')) {\nassign('dob_day', null);\n}\nif (selected(data('dob_month_dk'), 'dk')) {\nassign('dob_month', null);\n}\nactivePromptIndicies.push(14);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "clause": "begin screen",
-            "_row_num": 19,
-            "__rowNum__": 18,
+            "_row_num": 28,
+            "__rowNum__": 27,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 48,
-              "__rowNum__": 47,
+              "_row_num": 57,
+              "__rowNum__": 56,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nif (calculates.over_18()) {\nactivePromptIndicies.push(15);\nif (selected(data('ind_sign_consent'), 'no')) {\nactivePromptIndicies.push(16);\n}\n}\nif (calculates.over_12_under_18()) {\nactivePromptIndicies.push(17);\nif (selected(data('ind_sign_assent'), 'no')) {\nactivePromptIndicies.push(18);\n}\nactivePromptIndicies.push(19);\nif (selected(data('ind_parent_sign_consent'), 'no')) {\nactivePromptIndicies.push(20);\n}\nelse {\nactivePromptIndicies.push(21);\n}\n}\nif (calculates.under_12()) {\nactivePromptIndicies.push(22);\nif (selected(data('ind_under_12_parent_sign_consent'), 'yes')) {\nactivePromptIndicies.push(23);\n}\nelse {\nactivePromptIndicies.push(24);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
@@ -10383,13 +10428,13 @@
           },
           {
             "clause": "begin screen",
-            "_row_num": 50,
-            "__rowNum__": 49,
+            "_row_num": 59,
+            "__rowNum__": 58,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 71,
-              "__rowNum__": 70,
+              "_row_num": 80,
+              "__rowNum__": 79,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nif (calculates.signed_consent_assent()) {\nactivePromptIndicies.push(25);\nif (calculates.under_18()) {\nactivePromptIndicies.push(26);\n}\nif (data('hh_head') !== opendatakit.getCurrentInstanceId()) {\nactivePromptIndicies.push(27);\n}\nif (calculates.check_rel_father_alive()) {\nactivePromptIndicies.push(28);\n}\nif (calculates.check_rel_mother_alive()) {\nactivePromptIndicies.push(29);\n}\nif (selected(data('ind_rel_hh_head'), 'son_daughter') && selected(data('ind_parents_alive'), 'neither_alive')) {\nactivePromptIndicies.push(30);\n}\n}\nactivePromptIndicies.push(31);\nactivePromptIndicies.push(32);\n\nreturn activePromptIndicies;\n}\n",
@@ -10397,13 +10442,13 @@
           },
           {
             "clause": "begin screen",
-            "_row_num": 72,
-            "__rowNum__": 71,
+            "_row_num": 81,
+            "__rowNum__": 80,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 78,
-              "__rowNum__": 77,
+              "_row_num": 87,
+              "__rowNum__": 86,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(33);\nactivePromptIndicies.push(34);\nactivePromptIndicies.push(35);\nactivePromptIndicies.push(36);\nactivePromptIndicies.push(37);\n\nreturn activePromptIndicies;\n}\n",
@@ -10411,13 +10456,13 @@
           },
           {
             "clause": "begin screen",
-            "_row_num": 79,
-            "__rowNum__": 78,
+            "_row_num": 88,
+            "__rowNum__": 87,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 86,
-              "__rowNum__": 85,
+              "_row_num": 95,
+              "__rowNum__": 94,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(38);\nactivePromptIndicies.push(39);\nactivePromptIndicies.push(40);\nif (selected(data('ind_chronic_disease'), 'other')) {\nactivePromptIndicies.push(41);\n}\n\nreturn activePromptIndicies;\n}\n",
@@ -10425,13 +10470,13 @@
           },
           {
             "clause": "begin screen",
-            "_row_num": 87,
-            "__rowNum__": 86,
+            "_row_num": 96,
+            "__rowNum__": 95,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 117,
-              "__rowNum__": 116,
+              "_row_num": 126,
+              "__rowNum__": 125,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(42);\nactivePromptIndicies.push(43);\nactivePromptIndicies.push(44);\nif (selected(data('ind_recent_disease'), 'yes')) {\nactivePromptIndicies.push(45);\nactivePromptIndicies.push(46);\nif (selected(data('recent_disease_yes'), 'other')) {\nactivePromptIndicies.push(47);\n}\nactivePromptIndicies.push(48);\nif (selected(data('recent_disease_symptoms'), 'other')) {\nactivePromptIndicies.push(49);\n}\nactivePromptIndicies.push(50);\nif (selected(data('recent_disease_seek_care'), 'yes')) {\nactivePromptIndicies.push(51);\nif (selected(data('recent_disease_care_type'), 'other')) {\nactivePromptIndicies.push(52);\n}\nactivePromptIndicies.push(53);\nif (selected(data('ind_malaria_test'), 'yes')) {\nactivePromptIndicies.push(54);\n}\nactivePromptIndicies.push(55);\nif (selected(data('ind_malaria_treatment'), 'no')) {\nactivePromptIndicies.push(56);\n}\n}\n}\n\nreturn activePromptIndicies;\n}\n",
@@ -10439,13 +10484,13 @@
           },
           {
             "clause": "begin screen",
-            "_row_num": 118,
-            "__rowNum__": 117,
+            "_row_num": 127,
+            "__rowNum__": 126,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 125,
-              "__rowNum__": 124,
+              "_row_num": 134,
+              "__rowNum__": 133,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(57);\nactivePromptIndicies.push(58);\nactivePromptIndicies.push(59);\nactivePromptIndicies.push(60);\nactivePromptIndicies.push(61);\nactivePromptIndicies.push(62);\n\nreturn activePromptIndicies;\n}\n",
@@ -10453,13 +10498,13 @@
           },
           {
             "clause": "begin screen",
-            "_row_num": 126,
-            "__rowNum__": 125,
+            "_row_num": 135,
+            "__rowNum__": 134,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 146,
-              "__rowNum__": 145,
+              "_row_num": 155,
+              "__rowNum__": 154,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nif (selected(data('ind_hh_member_gender'), 'female') && calculates.check_female_reproductive_age()) {\nactivePromptIndicies.push(63);\nactivePromptIndicies.push(64);\nactivePromptIndicies.push(65);\nactivePromptIndicies.push(66);\nactivePromptIndicies.push(67);\nactivePromptIndicies.push(68);\nif (selected(data('wra_pregnant'), 'yes')) {\nactivePromptIndicies.push(69);\n}\n}\nactivePromptIndicies.push(70);\nactivePromptIndicies.push(71);\nactivePromptIndicies.push(72);\nif (selected(data('sleep_net_last_night'), 'yes')) {\nactivePromptIndicies.push(73);\nactivePromptIndicies.push(74);\n}\n\nreturn activePromptIndicies;\n}\n",
@@ -10467,13 +10512,13 @@
           },
           {
             "clause": "begin screen",
-            "_row_num": 147,
-            "__rowNum__": 146,
+            "_row_num": 156,
+            "__rowNum__": 155,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 158,
-              "__rowNum__": 157,
+              "_row_num": 167,
+              "__rowNum__": 166,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(75);\nactivePromptIndicies.push(76);\nactivePromptIndicies.push(77);\nactivePromptIndicies.push(78);\nactivePromptIndicies.push(79);\nactivePromptIndicies.push(80);\nactivePromptIndicies.push(81);\nif (selected(data('time_go_outside'), '>4h before sunrise') || selected(data('time_go_outside'), '2-4h before sunrise') || selected(data('time_go_outside'), '1-2h before sunrise')) {\nactivePromptIndicies.push(82);\n}\n\nreturn activePromptIndicies;\n}\n",
@@ -10481,13 +10526,13 @@
           },
           {
             "clause": "begin screen",
-            "_row_num": 159,
-            "__rowNum__": 158,
+            "_row_num": 168,
+            "__rowNum__": 167,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 173,
-              "__rowNum__": 172,
+              "_row_num": 182,
+              "__rowNum__": 181,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(83);\nactivePromptIndicies.push(84);\nactivePromptIndicies.push(85);\nif (selected(data('travel_abroad'), 'yes')) {\nactivePromptIndicies.push(86);\n}\nactivePromptIndicies.push(87);\nactivePromptIndicies.push(88);\nif (selected(data('travel_regularly'), 'yes')) {\nactivePromptIndicies.push(89);\nactivePromptIndicies.push(90);\nactivePromptIndicies.push(91);\n}\n\nreturn activePromptIndicies;\n}\n",
@@ -10496,11 +10541,11 @@
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 174,
+            "_row_num": 183,
             "operationIdx": 10
           },
           {
-            "_row_num": 174,
+            "_row_num": 183,
             "_token_type": "begin_screen",
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(92);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
@@ -10511,23 +10556,23 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 174,
+            "_row_num": 183,
             "operationIdx": 12
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
-          "_screen19": 1,
-          "_screen50": 2,
-          "_screen72": 3,
-          "_screen79": 4,
-          "_screen87": 5,
-          "_screen118": 6,
-          "_screen126": 7,
-          "_screen147": 8,
-          "_screen159": 9,
+          "_screen28": 1,
+          "_screen59": 2,
+          "_screen81": 3,
+          "_screen88": 4,
+          "_screen96": 5,
+          "_screen127": 6,
+          "_screen135": 7,
+          "_screen156": 8,
+          "_screen168": 9,
           "_contents": 11,
-          "_screen174": 11
+          "_screen183": 11
         }
       }
     },
@@ -10763,7 +10808,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 15,
+            "_row_num": 17,
             "section_name": "survey"
           },
           {
@@ -10789,7 +10834,7 @@
         "valuesList": "approx",
         "_defn": [
           {
-            "_row_num": 16,
+            "_row_num": 18,
             "section_name": "survey"
           },
           {
@@ -10810,7 +10855,7 @@
         "valuesList": "gender",
         "_defn": [
           {
-            "_row_num": 17,
+            "_row_num": 26,
             "section_name": "survey"
           },
           {
@@ -11351,7 +11396,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 21,
+            "_row_num": 30,
             "section_name": "survey"
           },
           {
@@ -11370,7 +11415,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 28,
+            "_row_num": 37,
             "section_name": "survey"
           },
           {
@@ -11388,7 +11433,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 32,
+            "_row_num": 41,
             "section_name": "survey"
           },
           {
@@ -11406,7 +11451,7 @@
         "valuesList": "hh_members_roster",
         "_defn": [
           {
-            "_row_num": 36,
+            "_row_num": 45,
             "section_name": "survey"
           },
           {
@@ -11424,7 +11469,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 41,
+            "_row_num": 50,
             "section_name": "survey"
           },
           {
@@ -11442,7 +11487,7 @@
         "valuesList": "hh_members_roster",
         "_defn": [
           {
-            "_row_num": 43,
+            "_row_num": 52,
             "section_name": "survey"
           },
           {
@@ -11460,7 +11505,7 @@
         "valuesList": "hh_members_roster",
         "_defn": [
           {
-            "_row_num": 52,
+            "_row_num": 61,
             "section_name": "survey"
           },
           {
@@ -11478,7 +11523,7 @@
         "valuesList": "parents_alive",
         "_defn": [
           {
-            "_row_num": 54,
+            "_row_num": 63,
             "section_name": "survey"
           },
           {
@@ -11496,7 +11541,7 @@
         "valuesList": "relation_to_hh_head",
         "_defn": [
           {
-            "_row_num": 57,
+            "_row_num": 66,
             "section_name": "survey"
           },
           {
@@ -11514,7 +11559,7 @@
         "valuesList": "ind_religion",
         "_defn": [
           {
-            "_row_num": 69,
+            "_row_num": 78,
             "section_name": "survey"
           },
           {
@@ -11532,7 +11577,7 @@
         "valuesList": "ind_main_language",
         "_defn": [
           {
-            "_row_num": 70,
+            "_row_num": 79,
             "section_name": "survey"
           },
           {
@@ -11558,7 +11603,7 @@
         "valuesList": "treatment",
         "_defn": [
           {
-            "_row_num": 77,
+            "_row_num": 86,
             "section_name": "survey"
           },
           {
@@ -11587,7 +11632,7 @@
         "valuesList": "chronic_disease",
         "_defn": [
           {
-            "_row_num": 82,
+            "_row_num": 91,
             "section_name": "survey"
           },
           {
@@ -11607,7 +11652,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 84,
+            "_row_num": 93,
             "section_name": "survey"
           },
           {
@@ -11625,7 +11670,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 90,
+            "_row_num": 99,
             "section_name": "survey"
           },
           {
@@ -11651,7 +11696,7 @@
         "valuesList": "other_recent_disease",
         "_defn": [
           {
-            "_row_num": 93,
+            "_row_num": 102,
             "section_name": "survey"
           },
           {
@@ -11671,7 +11716,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 95,
+            "_row_num": 104,
             "section_name": "survey"
           },
           {
@@ -11697,7 +11742,7 @@
         "valuesList": "other_symptoms",
         "_defn": [
           {
-            "_row_num": 97,
+            "_row_num": 106,
             "section_name": "survey"
           },
           {
@@ -11717,7 +11762,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 99,
+            "_row_num": 108,
             "section_name": "survey"
           },
           {
@@ -11735,7 +11780,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 101,
+            "_row_num": 110,
             "section_name": "survey"
           },
           {
@@ -11761,7 +11806,7 @@
         "valuesList": "form_of_care",
         "_defn": [
           {
-            "_row_num": 103,
+            "_row_num": 112,
             "section_name": "survey"
           },
           {
@@ -11781,7 +11826,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 105,
+            "_row_num": 114,
             "section_name": "survey"
           },
           {
@@ -11799,7 +11844,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 107,
+            "_row_num": 116,
             "section_name": "survey"
           },
           {
@@ -11817,7 +11862,7 @@
         "valuesList": "malaria_test_result",
         "_defn": [
           {
-            "_row_num": 109,
+            "_row_num": 118,
             "section_name": "survey"
           },
           {
@@ -11835,7 +11880,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 111,
+            "_row_num": 120,
             "section_name": "survey"
           },
           {
@@ -11853,7 +11898,7 @@
         "valuesList": "malaria_no_treatment",
         "_defn": [
           {
-            "_row_num": 113,
+            "_row_num": 122,
             "section_name": "survey"
           },
           {
@@ -11879,7 +11924,7 @@
         "valuesList": "disability",
         "_defn": [
           {
-            "_row_num": 119,
+            "_row_num": 128,
             "section_name": "survey"
           },
           {
@@ -11908,7 +11953,7 @@
         "valuesList": "itchy",
         "_defn": [
           {
-            "_row_num": 121,
+            "_row_num": 130,
             "section_name": "survey"
           },
           {
@@ -11929,7 +11974,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 122,
+            "_row_num": 131,
             "section_name": "survey"
           },
           {
@@ -11947,7 +11992,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 123,
+            "_row_num": 132,
             "section_name": "survey"
           },
           {
@@ -11965,7 +12010,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 124,
+            "_row_num": 133,
             "section_name": "survey"
           },
           {
@@ -11983,7 +12028,7 @@
         "valuesList": "lmp",
         "_defn": [
           {
-            "_row_num": 131,
+            "_row_num": 140,
             "section_name": "survey"
           },
           {
@@ -12001,7 +12046,7 @@
         "valuesList": "breastfeed",
         "_defn": [
           {
-            "_row_num": 132,
+            "_row_num": 141,
             "section_name": "survey"
           },
           {
@@ -12019,7 +12064,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 134,
+            "_row_num": 143,
             "section_name": "survey"
           },
           {
@@ -12037,7 +12082,7 @@
         "valuesList": "iptp_current",
         "_defn": [
           {
-            "_row_num": 136,
+            "_row_num": 145,
             "section_name": "survey"
           },
           {
@@ -12055,7 +12100,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 141,
+            "_row_num": 150,
             "section_name": "survey"
           },
           {
@@ -12072,7 +12117,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 143,
+            "_row_num": 152,
             "section_name": "survey"
           },
           {
@@ -12093,7 +12138,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 144,
+            "_row_num": 153,
             "section_name": "survey"
           },
           {
@@ -12111,7 +12156,7 @@
         "valuesList": "time_indoors",
         "_defn": [
           {
-            "_row_num": 150,
+            "_row_num": 159,
             "section_name": "survey"
           },
           {
@@ -12129,7 +12174,7 @@
         "valuesList": "time_bed",
         "_defn": [
           {
-            "_row_num": 151,
+            "_row_num": 160,
             "section_name": "survey"
           },
           {
@@ -12155,7 +12200,7 @@
         "valuesList": "before_bed_activity",
         "_defn": [
           {
-            "_row_num": 152,
+            "_row_num": 161,
             "section_name": "survey"
           },
           {
@@ -12176,7 +12221,7 @@
         "valuesList": "time_awake",
         "_defn": [
           {
-            "_row_num": 153,
+            "_row_num": 162,
             "section_name": "survey"
           },
           {
@@ -12194,7 +12239,7 @@
         "valuesList": "time_outdoors",
         "_defn": [
           {
-            "_row_num": 154,
+            "_row_num": 163,
             "section_name": "survey"
           },
           {
@@ -12220,7 +12265,7 @@
         "valuesList": "before_sunrise_activity",
         "_defn": [
           {
-            "_row_num": 156,
+            "_row_num": 165,
             "section_name": "survey"
           },
           {
@@ -12241,7 +12286,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 162,
+            "_row_num": 171,
             "section_name": "survey"
           },
           {
@@ -12267,7 +12312,7 @@
         "valuesList": "travel_countries",
         "_defn": [
           {
-            "_row_num": 164,
+            "_row_num": 173,
             "section_name": "survey"
           },
           {
@@ -12288,7 +12333,7 @@
         "valuesList": "ynpna",
         "_defn": [
           {
-            "_row_num": 167,
+            "_row_num": 176,
             "section_name": "survey"
           },
           {
@@ -12305,7 +12350,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 169,
+            "_row_num": 178,
             "section_name": "survey"
           },
           {
@@ -12321,7 +12366,7 @@
       "trip_count": {
         "_defn": [
           {
-            "_row_num": 171,
+            "_row_num": 180,
             "section_name": "survey"
           }
         ],

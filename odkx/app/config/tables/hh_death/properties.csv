@@ -1,4 +1,5 @@
 _partition,_aspect,_key,_type,_value
+Column,hh_death_date_dk,displayChoicesList,object,"[{""choice_list_name"":""dk"",""data_value"":""dk"",""display"":{""title"":{""text"":""Don't Know""}},""_row_num"":4}]"
 Column,hh_death_gender,displayChoicesList,object,"[{""choice_list_name"":""gender"",""data_value"":""male"",""display"":{""title"":{""text"":""Male""}},""_row_num"":2},{""choice_list_name"":""gender"",""data_value"":""female"",""display"":{""title"":{""text"":""Female""}},""_row_num"":3}]"
 FormType,default,FormType.formType,string,SURVEY
 SurveyUtil,default,SurveyUtil.formId,string,hh_death

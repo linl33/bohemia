@@ -24,6 +24,7 @@
             "text": "1. Given Name"
           }
         },
+        "required": 1,
         "_row_num": 3
       },
       {
@@ -34,6 +35,7 @@
             "text": "2. Surname"
           }
         },
+        "required": 1,
         "_row_num": 4
       },
       {
@@ -43,6 +45,7 @@
             "text": "3. Date of birth"
           }
         },
+        "required": 1,
         "_row_num": 5
       },
       {
@@ -112,6 +115,17 @@
         "_row_num": 11
       },
       {
+        "clause": "if",
+        "condition": "selected(data('dob_year_dk'), 'dk')",
+        "_row_num": 12
+      },
+      {
+        "type": "assign",
+        "name": "dob_year",
+        "calculation": "null",
+        "_row_num": 13
+      },
+      {
         "type": "integer",
         "name": "dob_enter_age",
         "display": {
@@ -124,13 +138,47 @@
           "min": 0,
           "step": 1
         },
-        "_row_num": 12
+        "_row_num": 14
       },
       {
         "type": "select_multiple",
         "values_list": "approx",
         "name": "dob_enter_age_approx",
-        "_row_num": 13
+        "_row_num": 15
+      },
+      {
+        "clause": "end if",
+        "_row_num": 16
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('dob_day_dk'), 'dk')",
+        "_row_num": 17
+      },
+      {
+        "type": "assign",
+        "name": "dob_day",
+        "calculation": "null",
+        "_row_num": 18
+      },
+      {
+        "clause": "end if",
+        "_row_num": 19
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('dob_month_dk'), 'dk')",
+        "_row_num": 20
+      },
+      {
+        "type": "assign",
+        "name": "dob_month",
+        "calculation": "null",
+        "_row_num": 21
+      },
+      {
+        "clause": "end if",
+        "_row_num": 22
       },
       {
         "type": "select_one",
@@ -141,7 +189,8 @@
             "text": "4. Gender"
           }
         },
-        "_row_num": 14
+        "required": 1,
+        "_row_num": 23
       },
       {
         "type": "select_one",
@@ -152,7 +201,8 @@
             "text": "5. Is this participant a resident of the household?"
           }
         },
-        "_row_num": 15
+        "required": 1,
+        "_row_num": 24
       },
       {
         "type": "text",
@@ -165,11 +215,13 @@
             "text": "ABC-123-123"
           }
         },
-        "_row_num": 16
+        "required": 1,
+        "constraint": "/^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
+        "_row_num": 25
       },
       {
         "clause": "end screen",
-        "_row_num": 17
+        "_row_num": 26
       }
     ],
     "choices": [
@@ -6280,7 +6332,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 12,
+            "_row_num": 14,
             "section_name": "survey"
           },
           {
@@ -6299,7 +6351,7 @@
         "valuesList": "approx",
         "_defn": [
           {
-            "_row_num": 13,
+            "_row_num": 15,
             "section_name": "survey"
           },
           {
@@ -6314,7 +6366,7 @@
         "valuesList": "gender",
         "_defn": [
           {
-            "_row_num": 14,
+            "_row_num": 23,
             "section_name": "survey"
           },
           {
@@ -6329,7 +6381,7 @@
         "valuesList": "resident_status",
         "_defn": [
           {
-            "_row_num": 15,
+            "_row_num": 24,
             "section_name": "survey"
           },
           {
@@ -6343,7 +6395,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 16,
+            "_row_num": 25,
             "section_name": "survey"
           },
           {
@@ -7401,6 +7453,7 @@
                 "text": "1. Given Name"
               }
             },
+            "required": 1,
             "_row_num": 3,
             "__rowNum__": 2,
             "_token_type": "prompt",
@@ -7416,6 +7469,7 @@
                 "text": "2. Surname"
               }
             },
+            "required": 1,
             "_row_num": 4,
             "__rowNum__": 3,
             "_token_type": "prompt",
@@ -7430,6 +7484,7 @@
                 "text": "3. Date of birth"
               }
             },
+            "required": 1,
             "_row_num": 5,
             "__rowNum__": 4,
             "_token_type": "prompt",
@@ -7546,8 +7601,8 @@
               "min": 0,
               "step": 1
             },
-            "_row_num": 12,
-            "__rowNum__": 11,
+            "_row_num": 14,
+            "__rowNum__": 13,
             "_token_type": "prompt",
             "_type": "integer",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -7557,8 +7612,8 @@
             "type": "select_multiple",
             "values_list": "approx",
             "name": "dob_enter_age_approx",
-            "_row_num": 13,
-            "__rowNum__": 12,
+            "_row_num": 15,
+            "__rowNum__": 14,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -7573,8 +7628,9 @@
                 "text": "4. Gender"
               }
             },
-            "_row_num": 14,
-            "__rowNum__": 13,
+            "required": 1,
+            "_row_num": 23,
+            "__rowNum__": 22,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -7589,8 +7645,9 @@
                 "text": "5. Is this participant a resident of the household?"
               }
             },
-            "_row_num": 15,
-            "__rowNum__": 14,
+            "required": 1,
+            "_row_num": 24,
+            "__rowNum__": 23,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -7607,8 +7664,10 @@
                 "text": "ABC-123-123"
               }
             },
-            "_row_num": 16,
-            "__rowNum__": 15,
+            "required": 1,
+            "constraint": "/^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
+            "_row_num": 25,
+            "__rowNum__": 24,
             "_token_type": "prompt",
             "_type": "text",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -7618,17 +7677,23 @@
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 18,
-            "_branch_label_enclosing_screen": "survey/_screen18",
+            "_row_num": 27,
+            "_branch_label_enclosing_screen": "survey/_screen27",
             "promptIdx": 14
           }
         ],
         "validation_tag_map": {
           "finalize": [
+            0,
+            1,
+            2,
             3,
             5,
             7,
-            9
+            9,
+            11,
+            12,
+            13
           ]
         },
         "operations": [
@@ -7639,21 +7704,21 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 17,
-              "__rowNum__": 16,
+              "_row_num": 26,
+              "__rowNum__": 25,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\nactivePromptIndicies.push(10);\nactivePromptIndicies.push(11);\nactivePromptIndicies.push(12);\nactivePromptIndicies.push(13);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nactivePromptIndicies.push(8);\nif (selected(data('dob_year_dk'), 'dk')) {\nassign('dob_year', null);\nactivePromptIndicies.push(9);\nactivePromptIndicies.push(10);\n}\nif (selected(data('dob_day_dk'), 'dk')) {\nassign('dob_day', null);\n}\nif (selected(data('dob_month_dk'), 'dk')) {\nassign('dob_month', null);\n}\nactivePromptIndicies.push(11);\nactivePromptIndicies.push(12);\nactivePromptIndicies.push(13);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 18,
+            "_row_num": 27,
             "operationIdx": 1
           },
           {
-            "_row_num": 18,
+            "_row_num": 27,
             "_token_type": "begin_screen",
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(14);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
@@ -7664,14 +7729,14 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 18,
+            "_row_num": 27,
             "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
           "_contents": 2,
-          "_screen18": 2
+          "_screen27": 2
         }
       }
     },
@@ -7893,7 +7958,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 12,
+            "_row_num": 14,
             "section_name": "survey"
           },
           {
@@ -7919,7 +7984,7 @@
         "valuesList": "approx",
         "_defn": [
           {
-            "_row_num": 13,
+            "_row_num": 15,
             "section_name": "survey"
           },
           {
@@ -7940,7 +8005,7 @@
         "valuesList": "gender",
         "_defn": [
           {
-            "_row_num": 14,
+            "_row_num": 23,
             "section_name": "survey"
           },
           {
@@ -7958,7 +8023,7 @@
         "valuesList": "resident_status",
         "_defn": [
           {
-            "_row_num": 15,
+            "_row_num": 24,
             "section_name": "survey"
           },
           {
@@ -7975,7 +8040,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 16,
+            "_row_num": 25,
             "section_name": "survey"
           },
           {

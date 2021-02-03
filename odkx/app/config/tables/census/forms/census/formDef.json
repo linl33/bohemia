@@ -133,8 +133,24 @@
         "_row_num": 9
       },
       {
-        "clause": "end screen",
+        "type": "linked_table_counting",
+        "values_list": "linked_fw_location",
+        "name": "fw_location_count",
+        "display": {
+          "prompt": {
+            "text": "Record where this survey took place"
+          }
+        },
+        "model": {
+          "isSessionVariable": 1,
+          "valuesList": "linked_fw_location"
+        },
+        "constraint": "data('fw_location_count') >= 1",
         "_row_num": 10
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 11
       }
     ],
     "census": [
@@ -231,6 +247,9 @@
         "display": {
           "prompt": {
             "text": "Current Household Members Roster"
+          },
+          "hint": {
+            "text": "To change resident status, click on 'edit' icon beside the member's name"
           },
           "hide_delete_button": 1,
           "hide_add_instance": 1
@@ -559,6 +578,32 @@
         "_row_num": 7
       },
       {
+        "type": "select_multiple",
+        "values_list": "no_hh_head_sub",
+        "name": "no_hh_head_sub",
+        "_row_num": 8
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('no_hh_head_sub'), 'no_sub')",
+        "_row_num": 9
+      },
+      {
+        "type": "assign",
+        "name": "hh_head_sub_new_select",
+        "calculation": "null",
+        "_row_num": 10
+      },
+      {
+        "clause": "end if",
+        "_row_num": 11
+      },
+      {
+        "clause": "if",
+        "condition": "!!data('hh_head_sub_new_select')",
+        "_row_num": 12
+      },
+      {
         "type": "select_one_dropdown",
         "values_list": "relation_to_hh_head",
         "name": "hh_sub_relationship",
@@ -567,7 +612,12 @@
             "text": "28. Household head’s substitute’s relationship with household head"
           }
         },
-        "_row_num": 8
+        "required": "!!data('hh_head_sub_new_select')",
+        "_row_num": 13
+      },
+      {
+        "clause": "end if",
+        "_row_num": 14
       },
       {
         "type": "select_multiple",
@@ -579,7 +629,7 @@
           }
         },
         "choice_filter": "choice_item.instance_id === data('hh_head_new_select') || choice_item.instance_id === data('hh_head_sub_new_select')",
-        "_row_num": 9
+        "_row_num": 15
       },
       {
         "type": "select_one_dropdown",
@@ -590,11 +640,11 @@
             "text": "30. Who is answering the questions?"
           }
         },
-        "_row_num": 10
+        "_row_num": 16
       },
       {
         "clause": "end screen",
-        "_row_num": 11
+        "_row_num": 17
       }
     ],
     "socioecon": [
@@ -2278,31 +2328,18 @@
         "_row_num": 42
       },
       {
-        "clause": "if",
-        "condition": "selected(data('health_facility_formal_sick'), 'other')",
+        "type": "select_one_with_other",
+        "values_list": "primary_care",
+        "name": "health_facility_formal_type",
         "_row_num": 43
       },
       {
-        "type": "text",
-        "name": "health_facility_formal_non_severe_other",
-        "display": {
-          "prompt": {
-            "text": "Specify"
-          }
-        },
+        "clause": "end screen",
         "_row_num": 44
       },
       {
-        "clause": "end if",
-        "_row_num": 45
-      },
-      {
-        "clause": "end screen",
-        "_row_num": 46
-      },
-      {
         "clause": "begin screen",
-        "_row_num": 47
+        "_row_num": 45
       },
       {
         "type": "note",
@@ -2311,7 +2348,7 @@
             "text": "Snake bites"
           }
         },
-        "_row_num": 48
+        "_row_num": 46
       },
       {
         "type": "note",
@@ -2320,7 +2357,7 @@
             "text": "<h4>Snake bite</h4>"
           }
         },
-        "_row_num": 49
+        "_row_num": 47
       },
       {
         "type": "select_one",
@@ -2332,12 +2369,12 @@
           }
         },
         "required": 1,
-        "_row_num": 50
+        "_row_num": 48
       },
       {
         "clause": "if",
         "condition": "selected(data('any_snake_bite'), 'yes')",
-        "_row_num": 51
+        "_row_num": 49
       },
       {
         "type": "integer",
@@ -2348,7 +2385,7 @@
           }
         },
         "required": "selected(data('any_snake_bite'), 'yes')",
-        "_row_num": 52
+        "_row_num": 50
       },
       {
         "type": "note",
@@ -2357,7 +2394,7 @@
             "text": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>"
           }
         },
-        "_row_num": 53
+        "_row_num": 51
       },
       {
         "type": "note",
@@ -2366,7 +2403,7 @@
             "text": "Snake Bite details"
           }
         },
-        "_row_num": 54
+        "_row_num": 52
       },
       {
         "type": "select_multiple",
@@ -2377,7 +2414,7 @@
             "text": "59a. Who was bitten?"
           }
         },
-        "_row_num": 55
+        "_row_num": 53
       },
       {
         "type": "linked_table_counting",
@@ -2399,19 +2436,19 @@
           "isSessionVariable": 1,
           "valuesList": "linked_member_snake_bit"
         },
-        "_row_num": 56
+        "_row_num": 54
       },
       {
         "clause": "end if",
-        "_row_num": 57
+        "_row_num": 55
       },
       {
         "clause": "end screen",
-        "_row_num": 58
+        "_row_num": 56
       },
       {
         "clause": "begin screen",
-        "_row_num": 59
+        "_row_num": 57
       },
       {
         "type": "note",
@@ -2420,7 +2457,7 @@
             "text": "Contact information"
           }
         },
-        "_row_num": 60
+        "_row_num": 58
       },
       {
         "type": "text",
@@ -2433,7 +2470,7 @@
         "inputAttributes": {
           "type": "tel"
         },
-        "_row_num": 61
+        "_row_num": 59
       },
       {
         "type": "select_multiple",
@@ -2444,7 +2481,7 @@
             "text": "OR"
           }
         },
-        "_row_num": 62
+        "_row_num": 60
       },
       {
         "type": "text",
@@ -2457,7 +2494,7 @@
         "inputAttributes": {
           "type": "tel"
         },
-        "_row_num": 63
+        "_row_num": 61
       },
       {
         "type": "select_multiple",
@@ -2468,12 +2505,12 @@
             "text": "OR"
           }
         },
-        "_row_num": 64
+        "_row_num": 62
       },
       {
         "clause": "if",
         "condition": "!!data('hh_contact_alt')",
-        "_row_num": 65
+        "_row_num": 63
       },
       {
         "type": "select_one",
@@ -2484,7 +2521,7 @@
             "text": "62. Is there an alternative contact number 2"
           }
         },
-        "_row_num": 66
+        "_row_num": 64
       },
       {
         "type": "text",
@@ -2497,11 +2534,11 @@
         "inputAttributes": {
           "type": "tel"
         },
-        "_row_num": 67
+        "_row_num": 65
       },
       {
         "clause": "end if",
-        "_row_num": 68
+        "_row_num": 66
       },
       {
         "type": "select_one",
@@ -2512,11 +2549,11 @@
             "text": "63. Can we call you on any one of the contact numbers indicated above to arrange visits with you in the context of this project?"
           }
         },
-        "_row_num": 69
+        "_row_num": 67
       },
       {
         "clause": "end screen",
-        "_row_num": 70
+        "_row_num": 68
       }
     ],
     "death": [
@@ -18383,1476 +18420,6 @@
         "_row_num": 1574
       },
       {
-        "choice_list_name": "dob_day",
-        "data_value": 1,
-        "display": {
-          "title": {
-            "text": 1
-          }
-        },
-        "_row_num": 1575
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 2,
-        "display": {
-          "title": {
-            "text": 2
-          }
-        },
-        "_row_num": 1576
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 3,
-        "display": {
-          "title": {
-            "text": 3
-          }
-        },
-        "_row_num": 1577
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 4,
-        "display": {
-          "title": {
-            "text": 4
-          }
-        },
-        "_row_num": 1578
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 5,
-        "display": {
-          "title": {
-            "text": 5
-          }
-        },
-        "_row_num": 1579
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 6,
-        "display": {
-          "title": {
-            "text": 6
-          }
-        },
-        "_row_num": 1580
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 7,
-        "display": {
-          "title": {
-            "text": 7
-          }
-        },
-        "_row_num": 1581
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 8,
-        "display": {
-          "title": {
-            "text": 8
-          }
-        },
-        "_row_num": 1582
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 9,
-        "display": {
-          "title": {
-            "text": 9
-          }
-        },
-        "_row_num": 1583
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 10,
-        "display": {
-          "title": {
-            "text": 10
-          }
-        },
-        "_row_num": 1584
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 11,
-        "display": {
-          "title": {
-            "text": 11
-          }
-        },
-        "_row_num": 1585
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 12,
-        "display": {
-          "title": {
-            "text": 12
-          }
-        },
-        "_row_num": 1586
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 13,
-        "display": {
-          "title": {
-            "text": 13
-          }
-        },
-        "_row_num": 1587
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 14,
-        "display": {
-          "title": {
-            "text": 14
-          }
-        },
-        "_row_num": 1588
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 15,
-        "display": {
-          "title": {
-            "text": 15
-          }
-        },
-        "_row_num": 1589
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 16,
-        "display": {
-          "title": {
-            "text": 16
-          }
-        },
-        "_row_num": 1590
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 17,
-        "display": {
-          "title": {
-            "text": 17
-          }
-        },
-        "_row_num": 1591
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 18,
-        "display": {
-          "title": {
-            "text": 18
-          }
-        },
-        "_row_num": 1592
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 19,
-        "display": {
-          "title": {
-            "text": 19
-          }
-        },
-        "_row_num": 1593
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 20,
-        "display": {
-          "title": {
-            "text": 20
-          }
-        },
-        "_row_num": 1594
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 21,
-        "display": {
-          "title": {
-            "text": 21
-          }
-        },
-        "_row_num": 1595
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 22,
-        "display": {
-          "title": {
-            "text": 22
-          }
-        },
-        "_row_num": 1596
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 23,
-        "display": {
-          "title": {
-            "text": 23
-          }
-        },
-        "_row_num": 1597
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 24,
-        "display": {
-          "title": {
-            "text": 24
-          }
-        },
-        "_row_num": 1598
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 25,
-        "display": {
-          "title": {
-            "text": 25
-          }
-        },
-        "_row_num": 1599
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 26,
-        "display": {
-          "title": {
-            "text": 26
-          }
-        },
-        "_row_num": 1600
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 27,
-        "display": {
-          "title": {
-            "text": 27
-          }
-        },
-        "_row_num": 1601
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 28,
-        "display": {
-          "title": {
-            "text": 28
-          }
-        },
-        "_row_num": 1602
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 29,
-        "display": {
-          "title": {
-            "text": 29
-          }
-        },
-        "_row_num": 1603
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 30,
-        "display": {
-          "title": {
-            "text": 30
-          }
-        },
-        "_row_num": 1604
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": 31,
-        "display": {
-          "title": {
-            "text": 31
-          }
-        },
-        "_row_num": 1605
-      },
-      {
-        "choice_list_name": "dob_day",
-        "data_value": "dk",
-        "display": {
-          "title": {
-            "text": "Don't Know"
-          }
-        },
-        "_row_num": 1606
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "jan",
-        "display": {
-          "title": {
-            "text": "January"
-          }
-        },
-        "_row_num": 1607
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "feb",
-        "display": {
-          "title": {
-            "text": "February"
-          }
-        },
-        "_row_num": 1608
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "mar",
-        "display": {
-          "title": {
-            "text": "March"
-          }
-        },
-        "_row_num": 1609
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "apr",
-        "display": {
-          "title": {
-            "text": "April"
-          }
-        },
-        "_row_num": 1610
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "may",
-        "display": {
-          "title": {
-            "text": "May"
-          }
-        },
-        "_row_num": 1611
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "jun",
-        "display": {
-          "title": {
-            "text": "June"
-          }
-        },
-        "_row_num": 1612
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "jul",
-        "display": {
-          "title": {
-            "text": "July"
-          }
-        },
-        "_row_num": 1613
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "aug",
-        "display": {
-          "title": {
-            "text": "August"
-          }
-        },
-        "_row_num": 1614
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "sept",
-        "display": {
-          "title": {
-            "text": "September"
-          }
-        },
-        "_row_num": 1615
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "oct",
-        "display": {
-          "title": {
-            "text": "October"
-          }
-        },
-        "_row_num": 1616
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "nov",
-        "display": {
-          "title": {
-            "text": "November"
-          }
-        },
-        "_row_num": 1617
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "dec",
-        "display": {
-          "title": {
-            "text": "December"
-          }
-        },
-        "_row_num": 1618
-      },
-      {
-        "choice_list_name": "dob_month",
-        "data_value": "dk",
-        "display": {
-          "title": {
-            "text": "Don't Know"
-          }
-        },
-        "_row_num": 1619
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1920,
-        "display": {
-          "title": {
-            "text": 1920
-          }
-        },
-        "_row_num": 1620
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1921,
-        "display": {
-          "title": {
-            "text": 1921
-          }
-        },
-        "_row_num": 1621
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1922,
-        "display": {
-          "title": {
-            "text": 1922
-          }
-        },
-        "_row_num": 1622
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1923,
-        "display": {
-          "title": {
-            "text": 1923
-          }
-        },
-        "_row_num": 1623
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1924,
-        "display": {
-          "title": {
-            "text": 1924
-          }
-        },
-        "_row_num": 1624
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1925,
-        "display": {
-          "title": {
-            "text": 1925
-          }
-        },
-        "_row_num": 1625
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1926,
-        "display": {
-          "title": {
-            "text": 1926
-          }
-        },
-        "_row_num": 1626
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1927,
-        "display": {
-          "title": {
-            "text": 1927
-          }
-        },
-        "_row_num": 1627
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1928,
-        "display": {
-          "title": {
-            "text": 1928
-          }
-        },
-        "_row_num": 1628
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1929,
-        "display": {
-          "title": {
-            "text": 1929
-          }
-        },
-        "_row_num": 1629
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1930,
-        "display": {
-          "title": {
-            "text": 1930
-          }
-        },
-        "_row_num": 1630
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1931,
-        "display": {
-          "title": {
-            "text": 1931
-          }
-        },
-        "_row_num": 1631
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1932,
-        "display": {
-          "title": {
-            "text": 1932
-          }
-        },
-        "_row_num": 1632
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1933,
-        "display": {
-          "title": {
-            "text": 1933
-          }
-        },
-        "_row_num": 1633
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1934,
-        "display": {
-          "title": {
-            "text": 1934
-          }
-        },
-        "_row_num": 1634
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1935,
-        "display": {
-          "title": {
-            "text": 1935
-          }
-        },
-        "_row_num": 1635
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1936,
-        "display": {
-          "title": {
-            "text": 1936
-          }
-        },
-        "_row_num": 1636
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1937,
-        "display": {
-          "title": {
-            "text": 1937
-          }
-        },
-        "_row_num": 1637
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1938,
-        "display": {
-          "title": {
-            "text": 1938
-          }
-        },
-        "_row_num": 1638
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1939,
-        "display": {
-          "title": {
-            "text": 1939
-          }
-        },
-        "_row_num": 1639
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1940,
-        "display": {
-          "title": {
-            "text": 1940
-          }
-        },
-        "_row_num": 1640
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1941,
-        "display": {
-          "title": {
-            "text": 1941
-          }
-        },
-        "_row_num": 1641
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1942,
-        "display": {
-          "title": {
-            "text": 1942
-          }
-        },
-        "_row_num": 1642
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1943,
-        "display": {
-          "title": {
-            "text": 1943
-          }
-        },
-        "_row_num": 1643
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1944,
-        "display": {
-          "title": {
-            "text": 1944
-          }
-        },
-        "_row_num": 1644
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1945,
-        "display": {
-          "title": {
-            "text": 1945
-          }
-        },
-        "_row_num": 1645
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1946,
-        "display": {
-          "title": {
-            "text": 1946
-          }
-        },
-        "_row_num": 1646
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1947,
-        "display": {
-          "title": {
-            "text": 1947
-          }
-        },
-        "_row_num": 1647
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1948,
-        "display": {
-          "title": {
-            "text": 1948
-          }
-        },
-        "_row_num": 1648
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1949,
-        "display": {
-          "title": {
-            "text": 1949
-          }
-        },
-        "_row_num": 1649
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1950,
-        "display": {
-          "title": {
-            "text": 1950
-          }
-        },
-        "_row_num": 1650
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1951,
-        "display": {
-          "title": {
-            "text": 1951
-          }
-        },
-        "_row_num": 1651
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1952,
-        "display": {
-          "title": {
-            "text": 1952
-          }
-        },
-        "_row_num": 1652
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1953,
-        "display": {
-          "title": {
-            "text": 1953
-          }
-        },
-        "_row_num": 1653
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1954,
-        "display": {
-          "title": {
-            "text": 1954
-          }
-        },
-        "_row_num": 1654
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1955,
-        "display": {
-          "title": {
-            "text": 1955
-          }
-        },
-        "_row_num": 1655
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1956,
-        "display": {
-          "title": {
-            "text": 1956
-          }
-        },
-        "_row_num": 1656
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1957,
-        "display": {
-          "title": {
-            "text": 1957
-          }
-        },
-        "_row_num": 1657
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1958,
-        "display": {
-          "title": {
-            "text": 1958
-          }
-        },
-        "_row_num": 1658
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1959,
-        "display": {
-          "title": {
-            "text": 1959
-          }
-        },
-        "_row_num": 1659
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1960,
-        "display": {
-          "title": {
-            "text": 1960
-          }
-        },
-        "_row_num": 1660
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1961,
-        "display": {
-          "title": {
-            "text": 1961
-          }
-        },
-        "_row_num": 1661
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1962,
-        "display": {
-          "title": {
-            "text": 1962
-          }
-        },
-        "_row_num": 1662
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1963,
-        "display": {
-          "title": {
-            "text": 1963
-          }
-        },
-        "_row_num": 1663
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1964,
-        "display": {
-          "title": {
-            "text": 1964
-          }
-        },
-        "_row_num": 1664
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1965,
-        "display": {
-          "title": {
-            "text": 1965
-          }
-        },
-        "_row_num": 1665
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1966,
-        "display": {
-          "title": {
-            "text": 1966
-          }
-        },
-        "_row_num": 1666
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1967,
-        "display": {
-          "title": {
-            "text": 1967
-          }
-        },
-        "_row_num": 1667
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1968,
-        "display": {
-          "title": {
-            "text": 1968
-          }
-        },
-        "_row_num": 1668
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1969,
-        "display": {
-          "title": {
-            "text": 1969
-          }
-        },
-        "_row_num": 1669
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1970,
-        "display": {
-          "title": {
-            "text": 1970
-          }
-        },
-        "_row_num": 1670
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1971,
-        "display": {
-          "title": {
-            "text": 1971
-          }
-        },
-        "_row_num": 1671
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1972,
-        "display": {
-          "title": {
-            "text": 1972
-          }
-        },
-        "_row_num": 1672
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1973,
-        "display": {
-          "title": {
-            "text": 1973
-          }
-        },
-        "_row_num": 1673
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1974,
-        "display": {
-          "title": {
-            "text": 1974
-          }
-        },
-        "_row_num": 1674
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1975,
-        "display": {
-          "title": {
-            "text": 1975
-          }
-        },
-        "_row_num": 1675
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1976,
-        "display": {
-          "title": {
-            "text": 1976
-          }
-        },
-        "_row_num": 1676
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1977,
-        "display": {
-          "title": {
-            "text": 1977
-          }
-        },
-        "_row_num": 1677
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1978,
-        "display": {
-          "title": {
-            "text": 1978
-          }
-        },
-        "_row_num": 1678
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1979,
-        "display": {
-          "title": {
-            "text": 1979
-          }
-        },
-        "_row_num": 1679
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1980,
-        "display": {
-          "title": {
-            "text": 1980
-          }
-        },
-        "_row_num": 1680
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1981,
-        "display": {
-          "title": {
-            "text": 1981
-          }
-        },
-        "_row_num": 1681
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1982,
-        "display": {
-          "title": {
-            "text": 1982
-          }
-        },
-        "_row_num": 1682
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1983,
-        "display": {
-          "title": {
-            "text": 1983
-          }
-        },
-        "_row_num": 1683
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1984,
-        "display": {
-          "title": {
-            "text": 1984
-          }
-        },
-        "_row_num": 1684
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1985,
-        "display": {
-          "title": {
-            "text": 1985
-          }
-        },
-        "_row_num": 1685
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1986,
-        "display": {
-          "title": {
-            "text": 1986
-          }
-        },
-        "_row_num": 1686
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1987,
-        "display": {
-          "title": {
-            "text": 1987
-          }
-        },
-        "_row_num": 1687
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1988,
-        "display": {
-          "title": {
-            "text": 1988
-          }
-        },
-        "_row_num": 1688
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1989,
-        "display": {
-          "title": {
-            "text": 1989
-          }
-        },
-        "_row_num": 1689
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1990,
-        "display": {
-          "title": {
-            "text": 1990
-          }
-        },
-        "_row_num": 1690
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1991,
-        "display": {
-          "title": {
-            "text": 1991
-          }
-        },
-        "_row_num": 1691
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1992,
-        "display": {
-          "title": {
-            "text": 1992
-          }
-        },
-        "_row_num": 1692
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1993,
-        "display": {
-          "title": {
-            "text": 1993
-          }
-        },
-        "_row_num": 1693
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1994,
-        "display": {
-          "title": {
-            "text": 1994
-          }
-        },
-        "_row_num": 1694
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1995,
-        "display": {
-          "title": {
-            "text": 1995
-          }
-        },
-        "_row_num": 1695
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1996,
-        "display": {
-          "title": {
-            "text": 1996
-          }
-        },
-        "_row_num": 1696
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1997,
-        "display": {
-          "title": {
-            "text": 1997
-          }
-        },
-        "_row_num": 1697
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1998,
-        "display": {
-          "title": {
-            "text": 1998
-          }
-        },
-        "_row_num": 1698
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 1999,
-        "display": {
-          "title": {
-            "text": 1999
-          }
-        },
-        "_row_num": 1699
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2000,
-        "display": {
-          "title": {
-            "text": 2000
-          }
-        },
-        "_row_num": 1700
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2001,
-        "display": {
-          "title": {
-            "text": 2001
-          }
-        },
-        "_row_num": 1701
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2002,
-        "display": {
-          "title": {
-            "text": 2002
-          }
-        },
-        "_row_num": 1702
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2003,
-        "display": {
-          "title": {
-            "text": 2003
-          }
-        },
-        "_row_num": 1703
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2004,
-        "display": {
-          "title": {
-            "text": 2004
-          }
-        },
-        "_row_num": 1704
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2005,
-        "display": {
-          "title": {
-            "text": 2005
-          }
-        },
-        "_row_num": 1705
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2006,
-        "display": {
-          "title": {
-            "text": 2006
-          }
-        },
-        "_row_num": 1706
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2007,
-        "display": {
-          "title": {
-            "text": 2007
-          }
-        },
-        "_row_num": 1707
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2008,
-        "display": {
-          "title": {
-            "text": 2008
-          }
-        },
-        "_row_num": 1708
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2009,
-        "display": {
-          "title": {
-            "text": 2009
-          }
-        },
-        "_row_num": 1709
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2010,
-        "display": {
-          "title": {
-            "text": 2010
-          }
-        },
-        "_row_num": 1710
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2011,
-        "display": {
-          "title": {
-            "text": 2011
-          }
-        },
-        "_row_num": 1711
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2012,
-        "display": {
-          "title": {
-            "text": 2012
-          }
-        },
-        "_row_num": 1712
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2013,
-        "display": {
-          "title": {
-            "text": 2013
-          }
-        },
-        "_row_num": 1713
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2014,
-        "display": {
-          "title": {
-            "text": 2014
-          }
-        },
-        "_row_num": 1714
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2015,
-        "display": {
-          "title": {
-            "text": 2015
-          }
-        },
-        "_row_num": 1715
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2016,
-        "display": {
-          "title": {
-            "text": 2016
-          }
-        },
-        "_row_num": 1716
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2017,
-        "display": {
-          "title": {
-            "text": 2017
-          }
-        },
-        "_row_num": 1717
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2018,
-        "display": {
-          "title": {
-            "text": 2018
-          }
-        },
-        "_row_num": 1718
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2019,
-        "display": {
-          "title": {
-            "text": 2019
-          }
-        },
-        "_row_num": 1719
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": 2020,
-        "display": {
-          "title": {
-            "text": 2020
-          }
-        },
-        "_row_num": 1720
-      },
-      {
-        "choice_list_name": "dob_year",
-        "data_value": "dk",
-        "display": {
-          "title": {
-            "text": "Don't know"
-          }
-        },
-        "_row_num": 1721
-      },
-      {
         "choice_list_name": "approx",
         "data_value": "approx",
         "display": {
@@ -19860,37 +18427,67 @@
             "text": "Approximate"
           }
         },
-        "_row_num": 1722
+        "_row_num": 1575
       },
       {
-        "choice_list_name": "members_roster",
-        "data_value": "member1",
+        "choice_list_name": "no_hh_head_sub",
+        "data_value": "no_sub",
         "display": {
           "title": {
-            "text": "Member 1"
+            "text": "No household head substitute"
           }
         },
-        "_row_num": 1723
+        "_row_num": 1576
       },
       {
-        "choice_list_name": "members_roster",
-        "data_value": "member1",
+        "choice_list_name": "primary_care",
+        "data_value": "CHW_go",
         "display": {
           "title": {
-            "text": "Member 2"
+            "text": "We visit the CHW"
           }
         },
-        "_row_num": 1724
+        "_row_num": 1577
       },
       {
-        "choice_list_name": "members_roster",
-        "data_value": "member1",
+        "choice_list_name": "primary_care",
+        "data_value": "CHW_come",
         "display": {
           "title": {
-            "text": "Member 3"
+            "text": "The CHW visits us"
           }
         },
-        "_row_num": 1725
+        "_row_num": 1578
+      },
+      {
+        "choice_list_name": "primary_care",
+        "data_value": "Hospital",
+        "display": {
+          "title": {
+            "text": "Hospital"
+          }
+        },
+        "_row_num": 1579
+      },
+      {
+        "choice_list_name": "primary_care",
+        "data_value": "Pharmacy",
+        "display": {
+          "title": {
+            "text": "Pharmacy"
+          }
+        },
+        "_row_num": 1580
+      },
+      {
+        "choice_list_name": "primary_care",
+        "data_value": "dk",
+        "display": {
+          "title": {
+            "text": "Don't know"
+          }
+        },
+        "_row_num": 1581
       }
     ],
     "calculates": [
@@ -19939,7 +18536,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210202001,
+        "value": 20210203001,
         "_row_num": 3
       },
       {
@@ -20236,8 +18833,8 @@
         "query_type": "linked_table",
         "linked_form_id": "hh_member_absent",
         "linked_table_id": "hh_member",
-        "selection": "hh_id = ?",
-        "selectionArgs": "[ data('hh_id') ]",
+        "selection": "hh_id = ? AND resident_status = ?",
+        "selectionArgs": "[ data('hh_id'), 'resident' ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 14
@@ -20318,6 +18915,18 @@
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 21
+      },
+      {
+        "query_name": "linked_fw_location",
+        "query_type": "linked_table",
+        "linked_form_id": "fw_location",
+        "linked_table_id": "fw_location",
+        "selection": "hh_id = ? AND timestamp >= ? AND timestamp <= ?",
+        "selectionArgs": "[ data('hh_id'), new Date().getTime() - 43200000, new Date().getTime() + 43200000 ]",
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_row_id: opendatakit.getCurrentInstanceId(), timestamp: new Date().getTime() }",
+        "openRowInitialElementKeyToValueMap": "{}",
+        "comment": "This queries the fw_location for rows with a matching hh_id and timestamp within +- 12 hrs.",
+        "_row_num": 22
       }
     ],
     "prompt_types": [
@@ -20357,7 +18966,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210202001,
+        "value": 20210203001,
         "_row_num": 3
       },
       "table_id": {
@@ -36550,1482 +35159,6 @@
           "_row_num": 1574
         }
       ],
-      "dob_day": [
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 1,
-          "display": {
-            "title": {
-              "text": 1
-            }
-          },
-          "_row_num": 1575
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 2,
-          "display": {
-            "title": {
-              "text": 2
-            }
-          },
-          "_row_num": 1576
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 3,
-          "display": {
-            "title": {
-              "text": 3
-            }
-          },
-          "_row_num": 1577
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 4,
-          "display": {
-            "title": {
-              "text": 4
-            }
-          },
-          "_row_num": 1578
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 5,
-          "display": {
-            "title": {
-              "text": 5
-            }
-          },
-          "_row_num": 1579
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 6,
-          "display": {
-            "title": {
-              "text": 6
-            }
-          },
-          "_row_num": 1580
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 7,
-          "display": {
-            "title": {
-              "text": 7
-            }
-          },
-          "_row_num": 1581
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 8,
-          "display": {
-            "title": {
-              "text": 8
-            }
-          },
-          "_row_num": 1582
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 9,
-          "display": {
-            "title": {
-              "text": 9
-            }
-          },
-          "_row_num": 1583
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 10,
-          "display": {
-            "title": {
-              "text": 10
-            }
-          },
-          "_row_num": 1584
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 11,
-          "display": {
-            "title": {
-              "text": 11
-            }
-          },
-          "_row_num": 1585
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 12,
-          "display": {
-            "title": {
-              "text": 12
-            }
-          },
-          "_row_num": 1586
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 13,
-          "display": {
-            "title": {
-              "text": 13
-            }
-          },
-          "_row_num": 1587
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 14,
-          "display": {
-            "title": {
-              "text": 14
-            }
-          },
-          "_row_num": 1588
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 15,
-          "display": {
-            "title": {
-              "text": 15
-            }
-          },
-          "_row_num": 1589
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 16,
-          "display": {
-            "title": {
-              "text": 16
-            }
-          },
-          "_row_num": 1590
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 17,
-          "display": {
-            "title": {
-              "text": 17
-            }
-          },
-          "_row_num": 1591
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 18,
-          "display": {
-            "title": {
-              "text": 18
-            }
-          },
-          "_row_num": 1592
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 19,
-          "display": {
-            "title": {
-              "text": 19
-            }
-          },
-          "_row_num": 1593
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 20,
-          "display": {
-            "title": {
-              "text": 20
-            }
-          },
-          "_row_num": 1594
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 21,
-          "display": {
-            "title": {
-              "text": 21
-            }
-          },
-          "_row_num": 1595
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 22,
-          "display": {
-            "title": {
-              "text": 22
-            }
-          },
-          "_row_num": 1596
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 23,
-          "display": {
-            "title": {
-              "text": 23
-            }
-          },
-          "_row_num": 1597
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 24,
-          "display": {
-            "title": {
-              "text": 24
-            }
-          },
-          "_row_num": 1598
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 25,
-          "display": {
-            "title": {
-              "text": 25
-            }
-          },
-          "_row_num": 1599
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 26,
-          "display": {
-            "title": {
-              "text": 26
-            }
-          },
-          "_row_num": 1600
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 27,
-          "display": {
-            "title": {
-              "text": 27
-            }
-          },
-          "_row_num": 1601
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 28,
-          "display": {
-            "title": {
-              "text": 28
-            }
-          },
-          "_row_num": 1602
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 29,
-          "display": {
-            "title": {
-              "text": 29
-            }
-          },
-          "_row_num": 1603
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 30,
-          "display": {
-            "title": {
-              "text": 30
-            }
-          },
-          "_row_num": 1604
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": 31,
-          "display": {
-            "title": {
-              "text": 31
-            }
-          },
-          "_row_num": 1605
-        },
-        {
-          "choice_list_name": "dob_day",
-          "data_value": "dk",
-          "display": {
-            "title": {
-              "text": "Don't Know"
-            }
-          },
-          "_row_num": 1606
-        }
-      ],
-      "dob_month": [
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "jan",
-          "display": {
-            "title": {
-              "text": "January"
-            }
-          },
-          "_row_num": 1607
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "feb",
-          "display": {
-            "title": {
-              "text": "February"
-            }
-          },
-          "_row_num": 1608
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "mar",
-          "display": {
-            "title": {
-              "text": "March"
-            }
-          },
-          "_row_num": 1609
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "apr",
-          "display": {
-            "title": {
-              "text": "April"
-            }
-          },
-          "_row_num": 1610
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "may",
-          "display": {
-            "title": {
-              "text": "May"
-            }
-          },
-          "_row_num": 1611
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "jun",
-          "display": {
-            "title": {
-              "text": "June"
-            }
-          },
-          "_row_num": 1612
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "jul",
-          "display": {
-            "title": {
-              "text": "July"
-            }
-          },
-          "_row_num": 1613
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "aug",
-          "display": {
-            "title": {
-              "text": "August"
-            }
-          },
-          "_row_num": 1614
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "sept",
-          "display": {
-            "title": {
-              "text": "September"
-            }
-          },
-          "_row_num": 1615
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "oct",
-          "display": {
-            "title": {
-              "text": "October"
-            }
-          },
-          "_row_num": 1616
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "nov",
-          "display": {
-            "title": {
-              "text": "November"
-            }
-          },
-          "_row_num": 1617
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "dec",
-          "display": {
-            "title": {
-              "text": "December"
-            }
-          },
-          "_row_num": 1618
-        },
-        {
-          "choice_list_name": "dob_month",
-          "data_value": "dk",
-          "display": {
-            "title": {
-              "text": "Don't Know"
-            }
-          },
-          "_row_num": 1619
-        }
-      ],
-      "dob_year": [
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1920,
-          "display": {
-            "title": {
-              "text": 1920
-            }
-          },
-          "_row_num": 1620
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1921,
-          "display": {
-            "title": {
-              "text": 1921
-            }
-          },
-          "_row_num": 1621
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1922,
-          "display": {
-            "title": {
-              "text": 1922
-            }
-          },
-          "_row_num": 1622
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1923,
-          "display": {
-            "title": {
-              "text": 1923
-            }
-          },
-          "_row_num": 1623
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1924,
-          "display": {
-            "title": {
-              "text": 1924
-            }
-          },
-          "_row_num": 1624
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1925,
-          "display": {
-            "title": {
-              "text": 1925
-            }
-          },
-          "_row_num": 1625
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1926,
-          "display": {
-            "title": {
-              "text": 1926
-            }
-          },
-          "_row_num": 1626
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1927,
-          "display": {
-            "title": {
-              "text": 1927
-            }
-          },
-          "_row_num": 1627
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1928,
-          "display": {
-            "title": {
-              "text": 1928
-            }
-          },
-          "_row_num": 1628
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1929,
-          "display": {
-            "title": {
-              "text": 1929
-            }
-          },
-          "_row_num": 1629
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1930,
-          "display": {
-            "title": {
-              "text": 1930
-            }
-          },
-          "_row_num": 1630
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1931,
-          "display": {
-            "title": {
-              "text": 1931
-            }
-          },
-          "_row_num": 1631
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1932,
-          "display": {
-            "title": {
-              "text": 1932
-            }
-          },
-          "_row_num": 1632
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1933,
-          "display": {
-            "title": {
-              "text": 1933
-            }
-          },
-          "_row_num": 1633
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1934,
-          "display": {
-            "title": {
-              "text": 1934
-            }
-          },
-          "_row_num": 1634
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1935,
-          "display": {
-            "title": {
-              "text": 1935
-            }
-          },
-          "_row_num": 1635
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1936,
-          "display": {
-            "title": {
-              "text": 1936
-            }
-          },
-          "_row_num": 1636
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1937,
-          "display": {
-            "title": {
-              "text": 1937
-            }
-          },
-          "_row_num": 1637
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1938,
-          "display": {
-            "title": {
-              "text": 1938
-            }
-          },
-          "_row_num": 1638
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1939,
-          "display": {
-            "title": {
-              "text": 1939
-            }
-          },
-          "_row_num": 1639
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1940,
-          "display": {
-            "title": {
-              "text": 1940
-            }
-          },
-          "_row_num": 1640
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1941,
-          "display": {
-            "title": {
-              "text": 1941
-            }
-          },
-          "_row_num": 1641
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1942,
-          "display": {
-            "title": {
-              "text": 1942
-            }
-          },
-          "_row_num": 1642
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1943,
-          "display": {
-            "title": {
-              "text": 1943
-            }
-          },
-          "_row_num": 1643
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1944,
-          "display": {
-            "title": {
-              "text": 1944
-            }
-          },
-          "_row_num": 1644
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1945,
-          "display": {
-            "title": {
-              "text": 1945
-            }
-          },
-          "_row_num": 1645
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1946,
-          "display": {
-            "title": {
-              "text": 1946
-            }
-          },
-          "_row_num": 1646
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1947,
-          "display": {
-            "title": {
-              "text": 1947
-            }
-          },
-          "_row_num": 1647
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1948,
-          "display": {
-            "title": {
-              "text": 1948
-            }
-          },
-          "_row_num": 1648
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1949,
-          "display": {
-            "title": {
-              "text": 1949
-            }
-          },
-          "_row_num": 1649
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1950,
-          "display": {
-            "title": {
-              "text": 1950
-            }
-          },
-          "_row_num": 1650
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1951,
-          "display": {
-            "title": {
-              "text": 1951
-            }
-          },
-          "_row_num": 1651
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1952,
-          "display": {
-            "title": {
-              "text": 1952
-            }
-          },
-          "_row_num": 1652
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1953,
-          "display": {
-            "title": {
-              "text": 1953
-            }
-          },
-          "_row_num": 1653
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1954,
-          "display": {
-            "title": {
-              "text": 1954
-            }
-          },
-          "_row_num": 1654
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1955,
-          "display": {
-            "title": {
-              "text": 1955
-            }
-          },
-          "_row_num": 1655
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1956,
-          "display": {
-            "title": {
-              "text": 1956
-            }
-          },
-          "_row_num": 1656
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1957,
-          "display": {
-            "title": {
-              "text": 1957
-            }
-          },
-          "_row_num": 1657
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1958,
-          "display": {
-            "title": {
-              "text": 1958
-            }
-          },
-          "_row_num": 1658
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1959,
-          "display": {
-            "title": {
-              "text": 1959
-            }
-          },
-          "_row_num": 1659
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1960,
-          "display": {
-            "title": {
-              "text": 1960
-            }
-          },
-          "_row_num": 1660
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1961,
-          "display": {
-            "title": {
-              "text": 1961
-            }
-          },
-          "_row_num": 1661
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1962,
-          "display": {
-            "title": {
-              "text": 1962
-            }
-          },
-          "_row_num": 1662
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1963,
-          "display": {
-            "title": {
-              "text": 1963
-            }
-          },
-          "_row_num": 1663
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1964,
-          "display": {
-            "title": {
-              "text": 1964
-            }
-          },
-          "_row_num": 1664
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1965,
-          "display": {
-            "title": {
-              "text": 1965
-            }
-          },
-          "_row_num": 1665
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1966,
-          "display": {
-            "title": {
-              "text": 1966
-            }
-          },
-          "_row_num": 1666
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1967,
-          "display": {
-            "title": {
-              "text": 1967
-            }
-          },
-          "_row_num": 1667
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1968,
-          "display": {
-            "title": {
-              "text": 1968
-            }
-          },
-          "_row_num": 1668
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1969,
-          "display": {
-            "title": {
-              "text": 1969
-            }
-          },
-          "_row_num": 1669
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1970,
-          "display": {
-            "title": {
-              "text": 1970
-            }
-          },
-          "_row_num": 1670
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1971,
-          "display": {
-            "title": {
-              "text": 1971
-            }
-          },
-          "_row_num": 1671
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1972,
-          "display": {
-            "title": {
-              "text": 1972
-            }
-          },
-          "_row_num": 1672
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1973,
-          "display": {
-            "title": {
-              "text": 1973
-            }
-          },
-          "_row_num": 1673
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1974,
-          "display": {
-            "title": {
-              "text": 1974
-            }
-          },
-          "_row_num": 1674
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1975,
-          "display": {
-            "title": {
-              "text": 1975
-            }
-          },
-          "_row_num": 1675
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1976,
-          "display": {
-            "title": {
-              "text": 1976
-            }
-          },
-          "_row_num": 1676
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1977,
-          "display": {
-            "title": {
-              "text": 1977
-            }
-          },
-          "_row_num": 1677
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1978,
-          "display": {
-            "title": {
-              "text": 1978
-            }
-          },
-          "_row_num": 1678
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1979,
-          "display": {
-            "title": {
-              "text": 1979
-            }
-          },
-          "_row_num": 1679
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1980,
-          "display": {
-            "title": {
-              "text": 1980
-            }
-          },
-          "_row_num": 1680
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1981,
-          "display": {
-            "title": {
-              "text": 1981
-            }
-          },
-          "_row_num": 1681
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1982,
-          "display": {
-            "title": {
-              "text": 1982
-            }
-          },
-          "_row_num": 1682
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1983,
-          "display": {
-            "title": {
-              "text": 1983
-            }
-          },
-          "_row_num": 1683
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1984,
-          "display": {
-            "title": {
-              "text": 1984
-            }
-          },
-          "_row_num": 1684
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1985,
-          "display": {
-            "title": {
-              "text": 1985
-            }
-          },
-          "_row_num": 1685
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1986,
-          "display": {
-            "title": {
-              "text": 1986
-            }
-          },
-          "_row_num": 1686
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1987,
-          "display": {
-            "title": {
-              "text": 1987
-            }
-          },
-          "_row_num": 1687
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1988,
-          "display": {
-            "title": {
-              "text": 1988
-            }
-          },
-          "_row_num": 1688
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1989,
-          "display": {
-            "title": {
-              "text": 1989
-            }
-          },
-          "_row_num": 1689
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1990,
-          "display": {
-            "title": {
-              "text": 1990
-            }
-          },
-          "_row_num": 1690
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1991,
-          "display": {
-            "title": {
-              "text": 1991
-            }
-          },
-          "_row_num": 1691
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1992,
-          "display": {
-            "title": {
-              "text": 1992
-            }
-          },
-          "_row_num": 1692
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1993,
-          "display": {
-            "title": {
-              "text": 1993
-            }
-          },
-          "_row_num": 1693
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1994,
-          "display": {
-            "title": {
-              "text": 1994
-            }
-          },
-          "_row_num": 1694
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1995,
-          "display": {
-            "title": {
-              "text": 1995
-            }
-          },
-          "_row_num": 1695
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1996,
-          "display": {
-            "title": {
-              "text": 1996
-            }
-          },
-          "_row_num": 1696
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1997,
-          "display": {
-            "title": {
-              "text": 1997
-            }
-          },
-          "_row_num": 1697
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1998,
-          "display": {
-            "title": {
-              "text": 1998
-            }
-          },
-          "_row_num": 1698
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 1999,
-          "display": {
-            "title": {
-              "text": 1999
-            }
-          },
-          "_row_num": 1699
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2000,
-          "display": {
-            "title": {
-              "text": 2000
-            }
-          },
-          "_row_num": 1700
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2001,
-          "display": {
-            "title": {
-              "text": 2001
-            }
-          },
-          "_row_num": 1701
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2002,
-          "display": {
-            "title": {
-              "text": 2002
-            }
-          },
-          "_row_num": 1702
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2003,
-          "display": {
-            "title": {
-              "text": 2003
-            }
-          },
-          "_row_num": 1703
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2004,
-          "display": {
-            "title": {
-              "text": 2004
-            }
-          },
-          "_row_num": 1704
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2005,
-          "display": {
-            "title": {
-              "text": 2005
-            }
-          },
-          "_row_num": 1705
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2006,
-          "display": {
-            "title": {
-              "text": 2006
-            }
-          },
-          "_row_num": 1706
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2007,
-          "display": {
-            "title": {
-              "text": 2007
-            }
-          },
-          "_row_num": 1707
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2008,
-          "display": {
-            "title": {
-              "text": 2008
-            }
-          },
-          "_row_num": 1708
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2009,
-          "display": {
-            "title": {
-              "text": 2009
-            }
-          },
-          "_row_num": 1709
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2010,
-          "display": {
-            "title": {
-              "text": 2010
-            }
-          },
-          "_row_num": 1710
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2011,
-          "display": {
-            "title": {
-              "text": 2011
-            }
-          },
-          "_row_num": 1711
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2012,
-          "display": {
-            "title": {
-              "text": 2012
-            }
-          },
-          "_row_num": 1712
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2013,
-          "display": {
-            "title": {
-              "text": 2013
-            }
-          },
-          "_row_num": 1713
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2014,
-          "display": {
-            "title": {
-              "text": 2014
-            }
-          },
-          "_row_num": 1714
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2015,
-          "display": {
-            "title": {
-              "text": 2015
-            }
-          },
-          "_row_num": 1715
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2016,
-          "display": {
-            "title": {
-              "text": 2016
-            }
-          },
-          "_row_num": 1716
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2017,
-          "display": {
-            "title": {
-              "text": 2017
-            }
-          },
-          "_row_num": 1717
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2018,
-          "display": {
-            "title": {
-              "text": 2018
-            }
-          },
-          "_row_num": 1718
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2019,
-          "display": {
-            "title": {
-              "text": 2019
-            }
-          },
-          "_row_num": 1719
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": 2020,
-          "display": {
-            "title": {
-              "text": 2020
-            }
-          },
-          "_row_num": 1720
-        },
-        {
-          "choice_list_name": "dob_year",
-          "data_value": "dk",
-          "display": {
-            "title": {
-              "text": "Don't know"
-            }
-          },
-          "_row_num": 1721
-        }
-      ],
       "approx": [
         {
           "choice_list_name": "approx",
@@ -38035,39 +35168,71 @@
               "text": "Approximate"
             }
           },
-          "_row_num": 1722
+          "_row_num": 1575
         }
       ],
-      "members_roster": [
+      "no_hh_head_sub": [
         {
-          "choice_list_name": "members_roster",
-          "data_value": "member1",
+          "choice_list_name": "no_hh_head_sub",
+          "data_value": "no_sub",
           "display": {
             "title": {
-              "text": "Member 1"
+              "text": "No household head substitute"
             }
           },
-          "_row_num": 1723
+          "_row_num": 1576
+        }
+      ],
+      "primary_care": [
+        {
+          "choice_list_name": "primary_care",
+          "data_value": "CHW_go",
+          "display": {
+            "title": {
+              "text": "We visit the CHW"
+            }
+          },
+          "_row_num": 1577
         },
         {
-          "choice_list_name": "members_roster",
-          "data_value": "member1",
+          "choice_list_name": "primary_care",
+          "data_value": "CHW_come",
           "display": {
             "title": {
-              "text": "Member 2"
+              "text": "The CHW visits us"
             }
           },
-          "_row_num": 1724
+          "_row_num": 1578
         },
         {
-          "choice_list_name": "members_roster",
-          "data_value": "member1",
+          "choice_list_name": "primary_care",
+          "data_value": "Hospital",
           "display": {
             "title": {
-              "text": "Member 3"
+              "text": "Hospital"
             }
           },
-          "_row_num": 1725
+          "_row_num": 1579
+        },
+        {
+          "choice_list_name": "primary_care",
+          "data_value": "Pharmacy",
+          "display": {
+            "title": {
+              "text": "Pharmacy"
+            }
+          },
+          "_row_num": 1580
+        },
+        {
+          "choice_list_name": "primary_care",
+          "data_value": "dk",
+          "display": {
+            "title": {
+              "text": "Don't know"
+            }
+          },
+          "_row_num": 1581
         }
       ]
     },
@@ -38188,8 +35353,8 @@
         "query_type": "linked_table",
         "linked_form_id": "hh_member_absent",
         "linked_table_id": "hh_member",
-        "selection": "hh_id = ?",
-        "selectionArgs": "[ data('hh_id') ]",
+        "selection": "hh_id = ? AND resident_status = ?",
+        "selectionArgs": "[ data('hh_id'), 'resident' ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 14
@@ -38270,6 +35435,18 @@
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 21
+      },
+      "linked_fw_location": {
+        "query_name": "linked_fw_location",
+        "query_type": "linked_table",
+        "linked_form_id": "fw_location",
+        "linked_table_id": "fw_location",
+        "selection": "hh_id = ? AND timestamp >= ? AND timestamp <= ?",
+        "selectionArgs": "[ data('hh_id'), new Date().getTime() - 43200000, new Date().getTime() + 43200000 ]",
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_row_id: opendatakit.getCurrentInstanceId(), timestamp: new Date().getTime() }",
+        "openRowInitialElementKeyToValueMap": "{}",
+        "comment": "This queries the fw_location for rows with a matching hh_id and timestamp within +- 12 hrs.",
+        "_row_num": 22
       }
     },
     "calculates": {
@@ -38328,6 +35505,19 @@
         "isSessionVariable": 1,
         "valuesList": "hh_geo_locations",
         "elementKey": "location_count"
+      },
+      "fw_location_count": {
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "technical_details"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_fw_location",
+        "elementKey": "fw_location_count"
       },
       "hh_minicenced": {
         "_defn": [
@@ -38488,10 +35678,25 @@
         "valuesList": "hh_members_roster",
         "elementKey": "hh_head_sub_new_select"
       },
-      "hh_sub_relationship": {
+      "no_hh_head_sub": {
         "_defn": [
           {
             "_row_num": 8,
+            "section_name": "hh_head_info"
+          }
+        ],
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "no_hh_head_sub_items"
+        },
+        "valuesList": "no_hh_head_sub",
+        "elementKey": "no_hh_head_sub"
+      },
+      "hh_sub_relationship": {
+        "_defn": [
+          {
+            "_row_num": 13,
             "section_name": "hh_head_info"
           }
         ],
@@ -38502,7 +35707,7 @@
       "hh_consent_who_signed": {
         "_defn": [
           {
-            "_row_num": 9,
+            "_row_num": 15,
             "section_name": "hh_head_info"
           }
         ],
@@ -38517,7 +35722,7 @@
       "hh_answer_questions": {
         "_defn": [
           {
-            "_row_num": 10,
+            "_row_num": 16,
             "section_name": "hh_head_info"
           }
         ],
@@ -39379,20 +36584,21 @@
         "valuesList": "choices_hf",
         "elementKey": "health_facility_formal_sick"
       },
-      "health_facility_formal_non_severe_other": {
+      "health_facility_formal_type": {
         "_defn": [
           {
-            "_row_num": 44,
+            "_row_num": 43,
             "section_name": "environment"
           }
         ],
         "type": "string",
-        "elementKey": "health_facility_formal_non_severe_other"
+        "valuesList": "primary_care",
+        "elementKey": "health_facility_formal_type"
       },
       "any_snake_bite": {
         "_defn": [
           {
-            "_row_num": 50,
+            "_row_num": 48,
             "section_name": "environment"
           }
         ],
@@ -39403,7 +36609,7 @@
       "any_snake_bite_num": {
         "_defn": [
           {
-            "_row_num": 52,
+            "_row_num": 50,
             "section_name": "environment"
           }
         ],
@@ -39413,7 +36619,7 @@
       "snake_bite_who": {
         "_defn": [
           {
-            "_row_num": 55,
+            "_row_num": 53,
             "section_name": "environment"
           }
         ],
@@ -39428,7 +36634,7 @@
       "snake_count": {
         "_defn": [
           {
-            "_row_num": 56,
+            "_row_num": 54,
             "section_name": "environment"
           }
         ],
@@ -39441,7 +36647,7 @@
       "hh_contact": {
         "_defn": [
           {
-            "_row_num": 61,
+            "_row_num": 59,
             "section_name": "environment"
           }
         ],
@@ -39451,7 +36657,7 @@
       "hh_contact_no": {
         "_defn": [
           {
-            "_row_num": 62,
+            "_row_num": 60,
             "section_name": "environment"
           }
         ],
@@ -39466,7 +36672,7 @@
       "hh_contact_alt": {
         "_defn": [
           {
-            "_row_num": 63,
+            "_row_num": 61,
             "section_name": "environment"
           }
         ],
@@ -39476,7 +36682,7 @@
       "hh_contact_alt_no": {
         "_defn": [
           {
-            "_row_num": 64,
+            "_row_num": 62,
             "section_name": "environment"
           }
         ],
@@ -39491,7 +36697,7 @@
       "hh_contact_alt_2": {
         "_defn": [
           {
-            "_row_num": 66,
+            "_row_num": 64,
             "section_name": "environment"
           }
         ],
@@ -39502,7 +36708,7 @@
       "hh_contact_alt_2_num": {
         "_defn": [
           {
-            "_row_num": 67,
+            "_row_num": 65,
             "section_name": "environment"
           }
         ],
@@ -39512,7 +36718,7 @@
       "contact_for_project": {
         "_defn": [
           {
-            "_row_num": 69,
+            "_row_num": 67,
             "section_name": "environment"
           }
         ],
@@ -40024,19 +37230,41 @@
             "promptIdx": 6
           },
           {
+            "type": "linked_table_counting",
+            "values_list": "linked_fw_location",
+            "name": "fw_location_count",
+            "display": {
+              "prompt": {
+                "text": "Record where this survey took place"
+              }
+            },
+            "model": {
+              "isSessionVariable": 1,
+              "valuesList": "linked_fw_location"
+            },
+            "constraint": "data('fw_location_count') >= 1",
+            "_row_num": 10,
+            "__rowNum__": 9,
+            "_token_type": "prompt",
+            "_type": "linked_table_counting",
+            "_branch_label_enclosing_screen": "technical_details/_screen2",
+            "promptIdx": 7
+          },
+          {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 11,
-            "_branch_label_enclosing_screen": "technical_details/_screen11",
-            "promptIdx": 7
+            "_row_num": 12,
+            "_branch_label_enclosing_screen": "technical_details/_screen12",
+            "promptIdx": 8
           }
         ],
         "validation_tag_map": {
           "finalize": [
             3,
             4,
-            6
+            6,
+            7
           ]
         },
         "operations": [
@@ -40047,23 +37275,23 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 10,
-              "__rowNum__": 9,
+              "_row_num": 11,
+              "__rowNum__": 10,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 11,
+            "_row_num": 12,
             "operationIdx": 1
           },
           {
-            "_row_num": 11,
+            "_row_num": 12,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(8);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -40072,14 +37300,14 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 11,
+            "_row_num": 12,
             "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
           "_contents": 2,
-          "_screen11": 2
+          "_screen12": 2
         }
       },
       "census": {
@@ -40198,6 +37426,9 @@
             "display": {
               "prompt": {
                 "text": "Current Household Members Roster"
+              },
+              "hint": {
+                "text": "To change resident status, click on 'edit' icon beside the member's name"
               },
               "hide_delete_button": 1,
               "hide_add_instance": 1
@@ -40770,6 +38001,17 @@
             "promptIdx": 4
           },
           {
+            "type": "select_multiple",
+            "values_list": "no_hh_head_sub",
+            "name": "no_hh_head_sub",
+            "_row_num": 8,
+            "__rowNum__": 7,
+            "_token_type": "prompt",
+            "_type": "select_multiple",
+            "_branch_label_enclosing_screen": "hh_head_info/_screen2",
+            "promptIdx": 5
+          },
+          {
             "type": "select_one_dropdown",
             "values_list": "relation_to_hh_head",
             "name": "hh_sub_relationship",
@@ -40778,12 +38020,13 @@
                 "text": "28. Household head’s substitute’s relationship with household head"
               }
             },
-            "_row_num": 8,
-            "__rowNum__": 7,
+            "required": "!!data('hh_head_sub_new_select')",
+            "_row_num": 13,
+            "__rowNum__": 12,
             "_token_type": "prompt",
             "_type": "select_one_dropdown",
             "_branch_label_enclosing_screen": "hh_head_info/_screen2",
-            "promptIdx": 5
+            "promptIdx": 6
           },
           {
             "type": "select_multiple",
@@ -40795,12 +38038,12 @@
               }
             },
             "choice_filter": "choice_item.instance_id === data('hh_head_new_select') || choice_item.instance_id === data('hh_head_sub_new_select')",
-            "_row_num": 9,
-            "__rowNum__": 8,
+            "_row_num": 15,
+            "__rowNum__": 14,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "hh_head_info/_screen2",
-            "promptIdx": 6
+            "promptIdx": 7
           },
           {
             "type": "select_one_dropdown",
@@ -40811,26 +38054,27 @@
                 "text": "30. Who is answering the questions?"
               }
             },
-            "_row_num": 10,
-            "__rowNum__": 9,
+            "_row_num": 16,
+            "__rowNum__": 15,
             "_token_type": "prompt",
             "_type": "select_one_dropdown",
             "_branch_label_enclosing_screen": "hh_head_info/_screen2",
-            "promptIdx": 7
+            "promptIdx": 8
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 12,
-            "_branch_label_enclosing_screen": "hh_head_info/_screen12",
-            "promptIdx": 8
+            "_row_num": 18,
+            "_branch_label_enclosing_screen": "hh_head_info/_screen18",
+            "promptIdx": 9
           }
         ],
         "validation_tag_map": {
           "finalize": [
             2,
-            4
+            4,
+            6
           ]
         },
         "operations": [
@@ -40841,23 +38085,23 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 11,
-              "__rowNum__": 10,
+              "_row_num": 17,
+              "__rowNum__": 16,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nif (selected(data('no_hh_head_sub'), 'no_sub')) {\nassign('hh_head_sub_new_select', null);\n}\nif (!!data('hh_head_sub_new_select')) {\nactivePromptIndicies.push(6);\n}\nactivePromptIndicies.push(7);\nactivePromptIndicies.push(8);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 12,
+            "_row_num": 18,
             "operationIdx": 1
           },
           {
-            "_row_num": 12,
+            "_row_num": 18,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(8);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(9);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -40866,14 +38110,14 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 12,
+            "_row_num": 18,
             "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
           "_contents": 2,
-          "_screen12": 2
+          "_screen18": 2
         }
       },
       "socioecon": {
@@ -42958,17 +40202,13 @@
             "promptIdx": 19
           },
           {
-            "type": "text",
-            "name": "health_facility_formal_non_severe_other",
-            "display": {
-              "prompt": {
-                "text": "Specify"
-              }
-            },
-            "_row_num": 44,
-            "__rowNum__": 43,
+            "type": "select_one_with_other",
+            "values_list": "primary_care",
+            "name": "health_facility_formal_type",
+            "_row_num": 43,
+            "__rowNum__": 42,
             "_token_type": "prompt",
-            "_type": "text",
+            "_type": "select_one_with_other",
             "_branch_label_enclosing_screen": "environment/_screen39",
             "promptIdx": 20
           },
@@ -42979,11 +40219,11 @@
                 "text": "Snake bites"
               }
             },
-            "_row_num": 48,
-            "__rowNum__": 47,
+            "_row_num": 46,
+            "__rowNum__": 45,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "environment/_screen47",
+            "_branch_label_enclosing_screen": "environment/_screen45",
             "promptIdx": 21
           },
           {
@@ -42993,11 +40233,11 @@
                 "text": "<h4>Snake bite</h4>"
               }
             },
-            "_row_num": 49,
-            "__rowNum__": 48,
+            "_row_num": 47,
+            "__rowNum__": 46,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "environment/_screen47",
+            "_branch_label_enclosing_screen": "environment/_screen45",
             "promptIdx": 22
           },
           {
@@ -43010,11 +40250,11 @@
               }
             },
             "required": 1,
-            "_row_num": 50,
-            "__rowNum__": 49,
+            "_row_num": 48,
+            "__rowNum__": 47,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "environment/_screen47",
+            "_branch_label_enclosing_screen": "environment/_screen45",
             "promptIdx": 23
           },
           {
@@ -43026,11 +40266,11 @@
               }
             },
             "required": "selected(data('any_snake_bite'), 'yes')",
-            "_row_num": 52,
-            "__rowNum__": 51,
+            "_row_num": 50,
+            "__rowNum__": 49,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "environment/_screen47",
+            "_branch_label_enclosing_screen": "environment/_screen45",
             "promptIdx": 24
           },
           {
@@ -43040,11 +40280,11 @@
                 "text": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>"
               }
             },
-            "_row_num": 53,
-            "__rowNum__": 52,
+            "_row_num": 51,
+            "__rowNum__": 50,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "environment/_screen47",
+            "_branch_label_enclosing_screen": "environment/_screen45",
             "promptIdx": 25
           },
           {
@@ -43054,11 +40294,11 @@
                 "text": "Snake Bite details"
               }
             },
-            "_row_num": 54,
-            "__rowNum__": 53,
+            "_row_num": 52,
+            "__rowNum__": 51,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "environment/_screen47",
+            "_branch_label_enclosing_screen": "environment/_screen45",
             "promptIdx": 26
           },
           {
@@ -43070,11 +40310,11 @@
                 "text": "59a. Who was bitten?"
               }
             },
-            "_row_num": 55,
-            "__rowNum__": 54,
+            "_row_num": 53,
+            "__rowNum__": 52,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "environment/_screen47",
+            "_branch_label_enclosing_screen": "environment/_screen45",
             "promptIdx": 27
           },
           {
@@ -43097,11 +40337,11 @@
               "isSessionVariable": 1,
               "valuesList": "linked_member_snake_bit"
             },
-            "_row_num": 56,
-            "__rowNum__": 55,
+            "_row_num": 54,
+            "__rowNum__": 53,
             "_token_type": "prompt",
             "_type": "linked_table_counting",
-            "_branch_label_enclosing_screen": "environment/_screen47",
+            "_branch_label_enclosing_screen": "environment/_screen45",
             "promptIdx": 28
           },
           {
@@ -43111,11 +40351,11 @@
                 "text": "Contact information"
               }
             },
-            "_row_num": 60,
-            "__rowNum__": 59,
+            "_row_num": 58,
+            "__rowNum__": 57,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "environment/_screen59",
+            "_branch_label_enclosing_screen": "environment/_screen57",
             "promptIdx": 29
           },
           {
@@ -43129,11 +40369,11 @@
             "inputAttributes": {
               "type": "tel"
             },
-            "_row_num": 61,
-            "__rowNum__": 60,
+            "_row_num": 59,
+            "__rowNum__": 58,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "environment/_screen59",
+            "_branch_label_enclosing_screen": "environment/_screen57",
             "promptIdx": 30
           },
           {
@@ -43145,11 +40385,11 @@
                 "text": "OR"
               }
             },
-            "_row_num": 62,
-            "__rowNum__": 61,
+            "_row_num": 60,
+            "__rowNum__": 59,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "environment/_screen59",
+            "_branch_label_enclosing_screen": "environment/_screen57",
             "promptIdx": 31
           },
           {
@@ -43163,11 +40403,11 @@
             "inputAttributes": {
               "type": "tel"
             },
-            "_row_num": 63,
-            "__rowNum__": 62,
+            "_row_num": 61,
+            "__rowNum__": 60,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "environment/_screen59",
+            "_branch_label_enclosing_screen": "environment/_screen57",
             "promptIdx": 32
           },
           {
@@ -43179,11 +40419,11 @@
                 "text": "OR"
               }
             },
-            "_row_num": 64,
-            "__rowNum__": 63,
+            "_row_num": 62,
+            "__rowNum__": 61,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "environment/_screen59",
+            "_branch_label_enclosing_screen": "environment/_screen57",
             "promptIdx": 33
           },
           {
@@ -43195,11 +40435,11 @@
                 "text": "62. Is there an alternative contact number 2"
               }
             },
-            "_row_num": 66,
-            "__rowNum__": 65,
+            "_row_num": 64,
+            "__rowNum__": 63,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "environment/_screen59",
+            "_branch_label_enclosing_screen": "environment/_screen57",
             "promptIdx": 34
           },
           {
@@ -43213,11 +40453,11 @@
             "inputAttributes": {
               "type": "tel"
             },
-            "_row_num": 67,
-            "__rowNum__": 66,
+            "_row_num": 65,
+            "__rowNum__": 64,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "environment/_screen59",
+            "_branch_label_enclosing_screen": "environment/_screen57",
             "promptIdx": 35
           },
           {
@@ -43229,19 +40469,19 @@
                 "text": "63. Can we call you on any one of the contact numbers indicated above to arrange visits with you in the context of this project?"
               }
             },
-            "_row_num": 69,
-            "__rowNum__": 68,
+            "_row_num": 67,
+            "__rowNum__": 66,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "environment/_screen59",
+            "_branch_label_enclosing_screen": "environment/_screen57",
             "promptIdx": 36
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 71,
-            "_branch_label_enclosing_screen": "environment/_screen71",
+            "_row_num": 69,
+            "_branch_label_enclosing_screen": "environment/_screen69",
             "promptIdx": 37
           }
         ],
@@ -43307,22 +40547,22 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 46,
-              "__rowNum__": 45,
+              "_row_num": 44,
+              "__rowNum__": 43,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(17);\nactivePromptIndicies.push(18);\nactivePromptIndicies.push(19);\nif (selected(data('health_facility_formal_sick'), 'other')) {\nactivePromptIndicies.push(20);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(17);\nactivePromptIndicies.push(18);\nactivePromptIndicies.push(19);\nactivePromptIndicies.push(20);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 3
           },
           {
             "clause": "begin screen",
-            "_row_num": 47,
-            "__rowNum__": 46,
+            "_row_num": 45,
+            "__rowNum__": 44,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 58,
-              "__rowNum__": 57,
+              "_row_num": 56,
+              "__rowNum__": 55,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(21);\nactivePromptIndicies.push(22);\nactivePromptIndicies.push(23);\nif (selected(data('any_snake_bite'), 'yes')) {\nactivePromptIndicies.push(24);\nactivePromptIndicies.push(25);\nactivePromptIndicies.push(26);\nactivePromptIndicies.push(27);\nactivePromptIndicies.push(28);\n}\n\nreturn activePromptIndicies;\n}\n",
@@ -43330,13 +40570,13 @@
           },
           {
             "clause": "begin screen",
-            "_row_num": 59,
-            "__rowNum__": 58,
+            "_row_num": 57,
+            "__rowNum__": 56,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 70,
-              "__rowNum__": 69,
+              "_row_num": 68,
+              "__rowNum__": 67,
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(29);\nactivePromptIndicies.push(30);\nactivePromptIndicies.push(31);\nactivePromptIndicies.push(32);\nactivePromptIndicies.push(33);\nif (!!data('hh_contact_alt')) {\nactivePromptIndicies.push(34);\nactivePromptIndicies.push(35);\n}\nactivePromptIndicies.push(36);\n\nreturn activePromptIndicies;\n}\n",
@@ -43345,11 +40585,11 @@
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 71,
+            "_row_num": 69,
             "operationIdx": 6
           },
           {
-            "_row_num": 71,
+            "_row_num": 69,
             "_token_type": "begin_screen",
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(37);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
@@ -43360,7 +40600,7 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 71,
+            "_row_num": 69,
             "operationIdx": 8
           }
         ],
@@ -43369,10 +40609,10 @@
           "_screen13": 1,
           "_screen36": 2,
           "_screen39": 3,
-          "_screen47": 4,
-          "_screen59": 5,
+          "_screen45": 4,
+          "_screen57": 5,
           "_contents": 7,
-          "_screen71": 7
+          "_screen69": 7
         }
       },
       "death": {
@@ -43894,6 +41134,22 @@
         "elementSet": "data",
         "elementPath": "location_count"
       },
+      "fw_location_count": {
+        "_defn": [
+          {
+            "_row_num": 10,
+            "section_name": "technical_details"
+          }
+        ],
+        "prompt_type_name": "linked_table_counting",
+        "type": "integer",
+        "isSessionVariable": 1,
+        "valuesList": "linked_fw_location",
+        "elementKey": "fw_location_count",
+        "elementName": "fw_location_count",
+        "elementSet": "data",
+        "elementPath": "fw_location_count"
+      },
       "hh_minicenced": {
         "_defn": [
           {
@@ -44099,10 +41355,35 @@
         "elementSet": "data",
         "elementPath": "hh_head_sub_new_select"
       },
-      "hh_sub_relationship": {
+      "no_hh_head_sub": {
         "_defn": [
           {
             "_row_num": 8,
+            "section_name": "hh_head_info"
+          }
+        ],
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "no_hh_head_sub_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "no_hh_head_sub.items",
+          "notUnitOfRetention": true
+        },
+        "valuesList": "no_hh_head_sub",
+        "elementKey": "no_hh_head_sub",
+        "elementName": "no_hh_head_sub",
+        "elementSet": "data",
+        "elementPath": "no_hh_head_sub",
+        "listChildElementKeys": [
+          "no_hh_head_sub_items"
+        ]
+      },
+      "hh_sub_relationship": {
+        "_defn": [
+          {
+            "_row_num": 13,
             "section_name": "hh_head_info"
           }
         ],
@@ -44116,7 +41397,7 @@
       "hh_consent_who_signed": {
         "_defn": [
           {
-            "_row_num": 9,
+            "_row_num": 15,
             "section_name": "hh_head_info"
           }
         ],
@@ -44141,7 +41422,7 @@
       "hh_answer_questions": {
         "_defn": [
           {
-            "_row_num": 10,
+            "_row_num": 16,
             "section_name": "hh_head_info"
           }
         ],
@@ -45312,23 +42593,24 @@
         "elementSet": "data",
         "elementPath": "health_facility_formal_sick"
       },
-      "health_facility_formal_non_severe_other": {
+      "health_facility_formal_type": {
         "_defn": [
           {
-            "_row_num": 44,
+            "_row_num": 43,
             "section_name": "environment"
           }
         ],
         "type": "string",
-        "elementKey": "health_facility_formal_non_severe_other",
-        "elementName": "health_facility_formal_non_severe_other",
+        "valuesList": "primary_care",
+        "elementKey": "health_facility_formal_type",
+        "elementName": "health_facility_formal_type",
         "elementSet": "data",
-        "elementPath": "health_facility_formal_non_severe_other"
+        "elementPath": "health_facility_formal_type"
       },
       "any_snake_bite": {
         "_defn": [
           {
-            "_row_num": 50,
+            "_row_num": 48,
             "section_name": "environment"
           }
         ],
@@ -45342,7 +42624,7 @@
       "any_snake_bite_num": {
         "_defn": [
           {
-            "_row_num": 52,
+            "_row_num": 50,
             "section_name": "environment"
           }
         ],
@@ -45355,7 +42637,7 @@
       "snake_bite_who": {
         "_defn": [
           {
-            "_row_num": 55,
+            "_row_num": 53,
             "section_name": "environment"
           }
         ],
@@ -45380,7 +42662,7 @@
       "snake_count": {
         "_defn": [
           {
-            "_row_num": 56,
+            "_row_num": 54,
             "section_name": "environment"
           }
         ],
@@ -45396,7 +42678,7 @@
       "hh_contact": {
         "_defn": [
           {
-            "_row_num": 61,
+            "_row_num": 59,
             "section_name": "environment"
           }
         ],
@@ -45409,7 +42691,7 @@
       "hh_contact_no": {
         "_defn": [
           {
-            "_row_num": 62,
+            "_row_num": 60,
             "section_name": "environment"
           }
         ],
@@ -45434,7 +42716,7 @@
       "hh_contact_alt": {
         "_defn": [
           {
-            "_row_num": 63,
+            "_row_num": 61,
             "section_name": "environment"
           }
         ],
@@ -45447,7 +42729,7 @@
       "hh_contact_alt_no": {
         "_defn": [
           {
-            "_row_num": 64,
+            "_row_num": 62,
             "section_name": "environment"
           }
         ],
@@ -45472,7 +42754,7 @@
       "hh_contact_alt_2": {
         "_defn": [
           {
-            "_row_num": 66,
+            "_row_num": 64,
             "section_name": "environment"
           }
         ],
@@ -45486,7 +42768,7 @@
       "hh_contact_alt_2_num": {
         "_defn": [
           {
-            "_row_num": 67,
+            "_row_num": 65,
             "section_name": "environment"
           }
         ],
@@ -45499,7 +42781,7 @@
       "contact_for_project": {
         "_defn": [
           {
-            "_row_num": 69,
+            "_row_num": 67,
             "section_name": "environment"
           }
         ],
@@ -45559,6 +42841,14 @@
         "elementName": "items",
         "elementSet": "data",
         "elementPath": "hh_roster_not_correct.items",
+        "notUnitOfRetention": true
+      },
+      "no_hh_head_sub_items": {
+        "type": "string",
+        "elementKey": "no_hh_head_sub_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "no_hh_head_sub.items",
         "notUnitOfRetention": true
       },
       "hh_consent_who_signed_items": {
@@ -45924,6 +43214,13 @@
       },
       {
         "_partition": "Column",
+        "_aspect": "health_facility_formal_type",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"primary_care\",\"data_value\":\"CHW_go\",\"display\":{\"title\":{\"text\":\"We visit the CHW\"}},\"_row_num\":1577},{\"choice_list_name\":\"primary_care\",\"data_value\":\"CHW_come\",\"display\":{\"title\":{\"text\":\"The CHW visits us\"}},\"_row_num\":1578},{\"choice_list_name\":\"primary_care\",\"data_value\":\"Hospital\",\"display\":{\"title\":{\"text\":\"Hospital\"}},\"_row_num\":1579},{\"choice_list_name\":\"primary_care\",\"data_value\":\"Pharmacy\",\"display\":{\"title\":{\"text\":\"Pharmacy\"}},\"_row_num\":1580},{\"choice_list_name\":\"primary_care\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't know\"}},\"_row_num\":1581}]"
+      },
+      {
+        "_partition": "Column",
         "_aspect": "hh_cattle_coming_year",
         "_key": "displayChoicesList",
         "_type": "object",
@@ -46068,6 +43365,13 @@
         "_key": "displayChoicesList",
         "_type": "object",
         "_value": "[{\"choice_list_name\":\"yn\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":2},{\"choice_list_name\":\"yn\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":3}]"
+      },
+      {
+        "_partition": "Column",
+        "_aspect": "no_hh_head_sub",
+        "_key": "displayChoicesList",
+        "_type": "object",
+        "_value": "[{\"choice_list_name\":\"no_hh_head_sub\",\"data_value\":\"no_sub\",\"display\":{\"title\":{\"text\":\"No household head substitute\"}},\"_row_num\":1576}]"
       },
       {
         "_partition": "Column",
