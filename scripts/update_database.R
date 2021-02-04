@@ -553,4 +553,7 @@ message('Done at : ', as.character(Sys.time()))
 time_diff <- end_time - start_time
 message('That took ', as.character(round(as.numeric(time_diff), 2)), ' ', attr(time_diff, 'units'))
 
+# Look at anomalies
+x = anomalies %>%
+  filter(description == "A minicensus form cannot be entered prior to June 2020 or after today's date")
 
