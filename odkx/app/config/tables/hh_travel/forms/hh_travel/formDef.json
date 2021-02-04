@@ -20,9 +20,7 @@
         "values_list": "yndkpna",
         "name": "travel_regularly_trips_district",
         "display": {
-          "prompt": {
-            "text": "34. Is the location of this trip in this district?"
-          }
+          "prompt": "q34"
         },
         "_row_num": 3
       },
@@ -31,9 +29,7 @@
         "values_list": "travel_reason",
         "name": "travel_regularly_trips_reason",
         "display": {
-          "prompt": {
-            "text": "35. What is the main reason for this participant’s regular travel or sleeping away?"
-          }
+          "prompt": "q35"
         },
         "_row_num": 4
       },
@@ -42,9 +38,7 @@
         "values_list": "month_first",
         "name": "travel_months",
         "display": {
-          "prompt": {
-            "text": "36. In which months does this regular travel take place? (check all that apply)"
-          }
+          "prompt": "q36"
         },
         "_row_num": 5
       },
@@ -53,9 +47,7 @@
         "values_list": "yndk",
         "name": "travel_sleep_net",
         "display": {
-          "prompt": {
-            "text": "37. Does this participant sleep under a mosquito net during this regular trip?"
-          }
+          "prompt": "q37"
         },
         "_row_num": 6
       },
@@ -69,9 +61,7 @@
         "choice_list_name": "month_first",
         "data_value": "all",
         "display": {
-          "title": {
-            "text": "All"
-          }
+          "title": "all"
         },
         "_row_num": 2
       },
@@ -79,9 +69,7 @@
         "choice_list_name": "month_first",
         "data_value": "january",
         "display": {
-          "title": {
-            "text": "January"
-          }
+          "title": "january"
         },
         "_row_num": 3
       },
@@ -89,9 +77,7 @@
         "choice_list_name": "month_first",
         "data_value": "february",
         "display": {
-          "title": {
-            "text": "February"
-          }
+          "title": "february"
         },
         "_row_num": 4
       },
@@ -99,9 +85,7 @@
         "choice_list_name": "month_first",
         "data_value": "march",
         "display": {
-          "title": {
-            "text": "March"
-          }
+          "title": "march"
         },
         "_row_num": 5
       },
@@ -109,9 +93,7 @@
         "choice_list_name": "month_first",
         "data_value": "april",
         "display": {
-          "title": {
-            "text": "April"
-          }
+          "title": "april"
         },
         "_row_num": 6
       },
@@ -119,9 +101,7 @@
         "choice_list_name": "month_first",
         "data_value": "may",
         "display": {
-          "title": {
-            "text": "May"
-          }
+          "title": "may"
         },
         "_row_num": 7
       },
@@ -129,9 +109,7 @@
         "choice_list_name": "month_first",
         "data_value": "june",
         "display": {
-          "title": {
-            "text": "June"
-          }
+          "title": "june"
         },
         "_row_num": 8
       },
@@ -139,9 +117,7 @@
         "choice_list_name": "travel_reason",
         "data_value": "Work",
         "display": {
-          "title": {
-            "text": "Work"
-          }
+          "title": "Work"
         },
         "_row_num": 9
       },
@@ -149,9 +125,7 @@
         "choice_list_name": "travel_reason",
         "data_value": "School",
         "display": {
-          "title": {
-            "text": "School"
-          }
+          "title": "School"
         },
         "_row_num": 10
       },
@@ -159,9 +133,7 @@
         "choice_list_name": "travel_reason",
         "data_value": "divorced_parents",
         "display": {
-          "title": {
-            "text": "Divorced parents"
-          }
+          "title": "divorced_parents"
         },
         "_row_num": 11
       },
@@ -169,9 +141,7 @@
         "choice_list_name": "travel_reason",
         "data_value": "relatives",
         "display": {
-          "title": {
-            "text": "Visiting relatives"
-          }
+          "title": "relatives"
         },
         "_row_num": 12
       },
@@ -179,9 +149,7 @@
         "choice_list_name": "travel_reason",
         "data_value": "visit_spouse_friend",
         "display": {
-          "title": {
-            "text": "Visiting another spouse or partner or friend"
-          }
+          "title": "visit_spouse_friend"
         },
         "_row_num": 13
       },
@@ -189,9 +157,7 @@
         "choice_list_name": "travel_reason",
         "data_value": "other",
         "display": {
-          "title": {
-            "text": "Other"
-          }
+          "title": "other"
         },
         "_row_num": 14
       },
@@ -199,9 +165,7 @@
         "choice_list_name": "yndk",
         "data_value": "yes",
         "display": {
-          "title": {
-            "text": "Yes"
-          }
+          "title": "yes"
         },
         "_row_num": 15
       },
@@ -209,9 +173,7 @@
         "choice_list_name": "yndk",
         "data_value": "no",
         "display": {
-          "title": {
-            "text": "No"
-          }
+          "title": "no"
         },
         "_row_num": 16
       },
@@ -219,9 +181,7 @@
         "choice_list_name": "yndk",
         "data_value": "dk",
         "display": {
-          "title": {
-            "text": "Don't Know"
-          }
+          "title": "dk"
         },
         "_row_num": 17
       },
@@ -229,9 +189,7 @@
         "choice_list_name": "yndkpna",
         "data_value": "yes",
         "display": {
-          "title": {
-            "text": "Yes"
-          }
+          "title": "yes"
         },
         "_row_num": 18
       },
@@ -239,9 +197,7 @@
         "choice_list_name": "yndkpna",
         "data_value": "no",
         "display": {
-          "title": {
-            "text": "No"
-          }
+          "title": "no"
         },
         "_row_num": 19
       },
@@ -249,9 +205,7 @@
         "choice_list_name": "yndkpna",
         "data_value": "dk",
         "display": {
-          "title": {
-            "text": "Don't Know"
-          }
+          "title": "dk"
         },
         "_row_num": 20
       },
@@ -259,9 +213,7 @@
         "choice_list_name": "yndkpna",
         "data_value": "pna",
         "display": {
-          "title": {
-            "text": "Prefer not to answer"
-          }
+          "title": "pna"
         },
         "_row_num": 21
       }
@@ -301,7 +253,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210128001,
+        "value": 20210204001,
         "_row_num": 3
       },
       {
@@ -366,6 +318,197 @@
         },
         "_row_num": 9
       }
+    ],
+    "table_specific_translations": [
+      {
+        "string_token": "q34",
+        "text": {
+          "default": "34. Is the location of this trip in this district?",
+          "pt": "34. A viagem ocorreu dentro do distrito?",
+          "sw": "34. Je, eneo la safari hii liko katika wilaya hii?"
+        },
+        "_row_num": 2
+      },
+      {
+        "string_token": "q35",
+        "text": {
+          "default": "35. What is the main reason for this participant’s regular trip or sleeping away?",
+          "pt": "35. Qual é o principal motivo da viagem regular deste participante ou da dormida fora?",
+          "sw": "35. Je, sababu kuu ya mshiriki huyu kufanya safari au kulala mbali mara kwa mara ni ipi?"
+        },
+        "_row_num": 3
+      },
+      {
+        "string_token": "q36",
+        "text": {
+          "default": "36. In which months does this regular trip take place? (check all that apply)",
+          "pt": "36. Em que meses decorre esta viagem regular? (Assinalar todas as opções que se apliquem)",
+          "sw": "36. Ni katika miezi ipi ambapo safari hii ya kawaida hutendeka? (chagua yote yanayohusika)"
+        },
+        "_row_num": 4
+      },
+      {
+        "string_token": "q37",
+        "text": {
+          "default": "37. Does this participant sleep under a mosquito net during this regular trip?",
+          "pt": "37. O participante dorme debaixo de uma rede mosquiteira durante esta viagem regular?",
+          "sw": "37. Mshiriki huyu hulala ndani ya chandarua cha mbu wakati wa safari hii ya kawaida?"
+        },
+        "_row_num": 5
+      },
+      {
+        "string_token": "all",
+        "text": {
+          "default": "All",
+          "pt": "Todos",
+          "sw": "Yote"
+        },
+        "_row_num": 6
+      },
+      {
+        "string_token": "january",
+        "text": {
+          "default": "January",
+          "pt": "Janeiro",
+          "sw": "Januari"
+        },
+        "_row_num": 7
+      },
+      {
+        "string_token": "february",
+        "text": {
+          "default": "February",
+          "pt": "Fevereiro",
+          "sw": "Februari"
+        },
+        "_row_num": 8
+      },
+      {
+        "string_token": "march",
+        "text": {
+          "default": "March",
+          "pt": "Março",
+          "sw": "Machi"
+        },
+        "_row_num": 9
+      },
+      {
+        "string_token": "april",
+        "text": {
+          "default": "April",
+          "pt": "Abril",
+          "sw": "Aprili"
+        },
+        "_row_num": 10
+      },
+      {
+        "string_token": "may",
+        "text": {
+          "default": "May",
+          "pt": "Maio",
+          "sw": "Mei"
+        },
+        "_row_num": 11
+      },
+      {
+        "string_token": "june",
+        "text": {
+          "default": "June",
+          "pt": "Junho",
+          "sw": "Juni"
+        },
+        "_row_num": 12
+      },
+      {
+        "string_token": "yes",
+        "text": {
+          "default": "Yes",
+          "pt": "Sim",
+          "sw": "Ndiyo"
+        },
+        "_row_num": 13
+      },
+      {
+        "string_token": "no",
+        "text": {
+          "default": "No",
+          "pt": "Não",
+          "sw": "Hapana"
+        },
+        "_row_num": 14
+      },
+      {
+        "string_token": "dk",
+        "text": {
+          "default": "Don't Know",
+          "pt": "Não sabe",
+          "sw": "Sijui"
+        },
+        "_row_num": 15
+      },
+      {
+        "string_token": "pna",
+        "text": {
+          "default": "Prefer not to answer",
+          "pt": "Prefere não responder",
+          "sw": "Ningependelea kutojibu"
+        },
+        "_row_num": 16
+      },
+      {
+        "string_token": "other",
+        "text": {
+          "default": "Other",
+          "pt": "Outro",
+          "sw": "Nyingine"
+        },
+        "_row_num": 17
+      },
+      {
+        "string_token": "Work",
+        "text": {
+          "default": "Work",
+          "pt": "Trabalho",
+          "sw": "Kazi"
+        },
+        "_row_num": 18
+      },
+      {
+        "string_token": "School",
+        "text": {
+          "default": "School",
+          "pt": "Escola",
+          "sw": "Shule"
+        },
+        "_row_num": 19
+      },
+      {
+        "string_token": "divorced_parents",
+        "text": {
+          "default": "Divorced parents",
+          "pt": "Pais divorciados",
+          "sw": "Wazazi waliotalakiana"
+        },
+        "_row_num": 20
+      },
+      {
+        "string_token": "relatives",
+        "text": {
+          "default": "Visiting relatives",
+          "pt": "Visitar familiares",
+          "sw": "Kutembelea jamaa"
+        },
+        "_row_num": 21
+      },
+      {
+        "string_token": "visit_spouse_friend",
+        "text": {
+          "default": "Visiting another spouse or partner or friend",
+          "pt": "Visitar outro cônjuge ou parceiro ou amigo",
+          "sw": "Kutembelea mwenza mwingine wa ndoa au mpenzi au rafiki"
+        },
+        "_row_num": 22
+      }
     ]
   },
   "specification": {
@@ -392,7 +535,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210128001,
+        "value": 20210204001,
         "_row_num": 3
       },
       "table_id": {
@@ -527,9 +670,7 @@
           "choice_list_name": "month_first",
           "data_value": "all",
           "display": {
-            "title": {
-              "text": "All"
-            }
+            "title": "all"
           },
           "_row_num": 2
         },
@@ -537,9 +678,7 @@
           "choice_list_name": "month_first",
           "data_value": "january",
           "display": {
-            "title": {
-              "text": "January"
-            }
+            "title": "january"
           },
           "_row_num": 3
         },
@@ -547,9 +686,7 @@
           "choice_list_name": "month_first",
           "data_value": "february",
           "display": {
-            "title": {
-              "text": "February"
-            }
+            "title": "february"
           },
           "_row_num": 4
         },
@@ -557,9 +694,7 @@
           "choice_list_name": "month_first",
           "data_value": "march",
           "display": {
-            "title": {
-              "text": "March"
-            }
+            "title": "march"
           },
           "_row_num": 5
         },
@@ -567,9 +702,7 @@
           "choice_list_name": "month_first",
           "data_value": "april",
           "display": {
-            "title": {
-              "text": "April"
-            }
+            "title": "april"
           },
           "_row_num": 6
         },
@@ -577,9 +710,7 @@
           "choice_list_name": "month_first",
           "data_value": "may",
           "display": {
-            "title": {
-              "text": "May"
-            }
+            "title": "may"
           },
           "_row_num": 7
         },
@@ -587,9 +718,7 @@
           "choice_list_name": "month_first",
           "data_value": "june",
           "display": {
-            "title": {
-              "text": "June"
-            }
+            "title": "june"
           },
           "_row_num": 8
         }
@@ -599,9 +728,7 @@
           "choice_list_name": "travel_reason",
           "data_value": "Work",
           "display": {
-            "title": {
-              "text": "Work"
-            }
+            "title": "Work"
           },
           "_row_num": 9
         },
@@ -609,9 +736,7 @@
           "choice_list_name": "travel_reason",
           "data_value": "School",
           "display": {
-            "title": {
-              "text": "School"
-            }
+            "title": "School"
           },
           "_row_num": 10
         },
@@ -619,9 +744,7 @@
           "choice_list_name": "travel_reason",
           "data_value": "divorced_parents",
           "display": {
-            "title": {
-              "text": "Divorced parents"
-            }
+            "title": "divorced_parents"
           },
           "_row_num": 11
         },
@@ -629,9 +752,7 @@
           "choice_list_name": "travel_reason",
           "data_value": "relatives",
           "display": {
-            "title": {
-              "text": "Visiting relatives"
-            }
+            "title": "relatives"
           },
           "_row_num": 12
         },
@@ -639,9 +760,7 @@
           "choice_list_name": "travel_reason",
           "data_value": "visit_spouse_friend",
           "display": {
-            "title": {
-              "text": "Visiting another spouse or partner or friend"
-            }
+            "title": "visit_spouse_friend"
           },
           "_row_num": 13
         },
@@ -649,9 +768,7 @@
           "choice_list_name": "travel_reason",
           "data_value": "other",
           "display": {
-            "title": {
-              "text": "Other"
-            }
+            "title": "other"
           },
           "_row_num": 14
         }
@@ -661,9 +778,7 @@
           "choice_list_name": "yndk",
           "data_value": "yes",
           "display": {
-            "title": {
-              "text": "Yes"
-            }
+            "title": "yes"
           },
           "_row_num": 15
         },
@@ -671,9 +786,7 @@
           "choice_list_name": "yndk",
           "data_value": "no",
           "display": {
-            "title": {
-              "text": "No"
-            }
+            "title": "no"
           },
           "_row_num": 16
         },
@@ -681,9 +794,7 @@
           "choice_list_name": "yndk",
           "data_value": "dk",
           "display": {
-            "title": {
-              "text": "Don't Know"
-            }
+            "title": "dk"
           },
           "_row_num": 17
         }
@@ -693,9 +804,7 @@
           "choice_list_name": "yndkpna",
           "data_value": "yes",
           "display": {
-            "title": {
-              "text": "Yes"
-            }
+            "title": "yes"
           },
           "_row_num": 18
         },
@@ -703,9 +812,7 @@
           "choice_list_name": "yndkpna",
           "data_value": "no",
           "display": {
-            "title": {
-              "text": "No"
-            }
+            "title": "no"
           },
           "_row_num": 19
         },
@@ -713,9 +820,7 @@
           "choice_list_name": "yndkpna",
           "data_value": "dk",
           "display": {
-            "title": {
-              "text": "Don't Know"
-            }
+            "title": "dk"
           },
           "_row_num": 20
         },
@@ -723,16 +828,204 @@
           "choice_list_name": "yndkpna",
           "data_value": "pna",
           "display": {
-            "title": {
-              "text": "Prefer not to answer"
-            }
+            "title": "pna"
           },
           "_row_num": 21
         }
       ]
     },
     "table_specific_definitions": {
-      "_tokens": {}
+      "_tokens": {
+        "q34": {
+          "string_token": "q34",
+          "text": {
+            "default": "34. Is the location of this trip in this district?",
+            "pt": "34. A viagem ocorreu dentro do distrito?",
+            "sw": "34. Je, eneo la safari hii liko katika wilaya hii?"
+          },
+          "_row_num": 2
+        },
+        "q35": {
+          "string_token": "q35",
+          "text": {
+            "default": "35. What is the main reason for this participant’s regular trip or sleeping away?",
+            "pt": "35. Qual é o principal motivo da viagem regular deste participante ou da dormida fora?",
+            "sw": "35. Je, sababu kuu ya mshiriki huyu kufanya safari au kulala mbali mara kwa mara ni ipi?"
+          },
+          "_row_num": 3
+        },
+        "q36": {
+          "string_token": "q36",
+          "text": {
+            "default": "36. In which months does this regular trip take place? (check all that apply)",
+            "pt": "36. Em que meses decorre esta viagem regular? (Assinalar todas as opções que se apliquem)",
+            "sw": "36. Ni katika miezi ipi ambapo safari hii ya kawaida hutendeka? (chagua yote yanayohusika)"
+          },
+          "_row_num": 4
+        },
+        "q37": {
+          "string_token": "q37",
+          "text": {
+            "default": "37. Does this participant sleep under a mosquito net during this regular trip?",
+            "pt": "37. O participante dorme debaixo de uma rede mosquiteira durante esta viagem regular?",
+            "sw": "37. Mshiriki huyu hulala ndani ya chandarua cha mbu wakati wa safari hii ya kawaida?"
+          },
+          "_row_num": 5
+        },
+        "all": {
+          "string_token": "all",
+          "text": {
+            "default": "All",
+            "pt": "Todos",
+            "sw": "Yote"
+          },
+          "_row_num": 6
+        },
+        "january": {
+          "string_token": "january",
+          "text": {
+            "default": "January",
+            "pt": "Janeiro",
+            "sw": "Januari"
+          },
+          "_row_num": 7
+        },
+        "february": {
+          "string_token": "february",
+          "text": {
+            "default": "February",
+            "pt": "Fevereiro",
+            "sw": "Februari"
+          },
+          "_row_num": 8
+        },
+        "march": {
+          "string_token": "march",
+          "text": {
+            "default": "March",
+            "pt": "Março",
+            "sw": "Machi"
+          },
+          "_row_num": 9
+        },
+        "april": {
+          "string_token": "april",
+          "text": {
+            "default": "April",
+            "pt": "Abril",
+            "sw": "Aprili"
+          },
+          "_row_num": 10
+        },
+        "may": {
+          "string_token": "may",
+          "text": {
+            "default": "May",
+            "pt": "Maio",
+            "sw": "Mei"
+          },
+          "_row_num": 11
+        },
+        "june": {
+          "string_token": "june",
+          "text": {
+            "default": "June",
+            "pt": "Junho",
+            "sw": "Juni"
+          },
+          "_row_num": 12
+        },
+        "yes": {
+          "string_token": "yes",
+          "text": {
+            "default": "Yes",
+            "pt": "Sim",
+            "sw": "Ndiyo"
+          },
+          "_row_num": 13
+        },
+        "no": {
+          "string_token": "no",
+          "text": {
+            "default": "No",
+            "pt": "Não",
+            "sw": "Hapana"
+          },
+          "_row_num": 14
+        },
+        "dk": {
+          "string_token": "dk",
+          "text": {
+            "default": "Don't Know",
+            "pt": "Não sabe",
+            "sw": "Sijui"
+          },
+          "_row_num": 15
+        },
+        "pna": {
+          "string_token": "pna",
+          "text": {
+            "default": "Prefer not to answer",
+            "pt": "Prefere não responder",
+            "sw": "Ningependelea kutojibu"
+          },
+          "_row_num": 16
+        },
+        "other": {
+          "string_token": "other",
+          "text": {
+            "default": "Other",
+            "pt": "Outro",
+            "sw": "Nyingine"
+          },
+          "_row_num": 17
+        },
+        "Work": {
+          "string_token": "Work",
+          "text": {
+            "default": "Work",
+            "pt": "Trabalho",
+            "sw": "Kazi"
+          },
+          "_row_num": 18
+        },
+        "School": {
+          "string_token": "School",
+          "text": {
+            "default": "School",
+            "pt": "Escola",
+            "sw": "Shule"
+          },
+          "_row_num": 19
+        },
+        "divorced_parents": {
+          "string_token": "divorced_parents",
+          "text": {
+            "default": "Divorced parents",
+            "pt": "Pais divorciados",
+            "sw": "Wazazi waliotalakiana"
+          },
+          "_row_num": 20
+        },
+        "relatives": {
+          "string_token": "relatives",
+          "text": {
+            "default": "Visiting relatives",
+            "pt": "Visitar familiares",
+            "sw": "Kutembelea jamaa"
+          },
+          "_row_num": 21
+        },
+        "visit_spouse_friend": {
+          "string_token": "visit_spouse_friend",
+          "text": {
+            "default": "Visiting another spouse or partner or friend",
+            "pt": "Visitar outro cônjuge ou parceiro ou amigo",
+            "sw": "Kutembelea mwenza mwingine wa ndoa au mpenzi au rafiki"
+          },
+          "_row_num": 22
+        }
+      }
     },
     "queries": {},
     "calculates": {},
@@ -938,9 +1231,7 @@
             "values_list": "yndkpna",
             "name": "travel_regularly_trips_district",
             "display": {
-              "prompt": {
-                "text": "34. Is the location of this trip in this district?"
-              }
+              "prompt": "q34"
             },
             "_row_num": 3,
             "__rowNum__": 2,
@@ -954,9 +1245,7 @@
             "values_list": "travel_reason",
             "name": "travel_regularly_trips_reason",
             "display": {
-              "prompt": {
-                "text": "35. What is the main reason for this participant’s regular travel or sleeping away?"
-              }
+              "prompt": "q35"
             },
             "_row_num": 4,
             "__rowNum__": 3,
@@ -970,9 +1259,7 @@
             "values_list": "month_first",
             "name": "travel_months",
             "display": {
-              "prompt": {
-                "text": "36. In which months does this regular travel take place? (check all that apply)"
-              }
+              "prompt": "q36"
             },
             "_row_num": 5,
             "__rowNum__": 4,
@@ -986,9 +1273,7 @@
             "values_list": "yndk",
             "name": "travel_sleep_net",
             "display": {
-              "prompt": {
-                "text": "37. Does this participant sleep under a mosquito net during this regular trip?"
-              }
+              "prompt": "q37"
             },
             "_row_num": 6,
             "__rowNum__": 5,
@@ -1277,28 +1562,28 @@
         "_aspect": "travel_months",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"month_first\",\"data_value\":\"all\",\"display\":{\"title\":{\"text\":\"All\"}},\"_row_num\":2},{\"choice_list_name\":\"month_first\",\"data_value\":\"january\",\"display\":{\"title\":{\"text\":\"January\"}},\"_row_num\":3},{\"choice_list_name\":\"month_first\",\"data_value\":\"february\",\"display\":{\"title\":{\"text\":\"February\"}},\"_row_num\":4},{\"choice_list_name\":\"month_first\",\"data_value\":\"march\",\"display\":{\"title\":{\"text\":\"March\"}},\"_row_num\":5},{\"choice_list_name\":\"month_first\",\"data_value\":\"april\",\"display\":{\"title\":{\"text\":\"April\"}},\"_row_num\":6},{\"choice_list_name\":\"month_first\",\"data_value\":\"may\",\"display\":{\"title\":{\"text\":\"May\"}},\"_row_num\":7},{\"choice_list_name\":\"month_first\",\"data_value\":\"june\",\"display\":{\"title\":{\"text\":\"June\"}},\"_row_num\":8}]"
+        "_value": "[{\"choice_list_name\":\"month_first\",\"data_value\":\"all\",\"display\":{\"title\":\"all\"},\"_row_num\":2},{\"choice_list_name\":\"month_first\",\"data_value\":\"january\",\"display\":{\"title\":\"january\"},\"_row_num\":3},{\"choice_list_name\":\"month_first\",\"data_value\":\"february\",\"display\":{\"title\":\"february\"},\"_row_num\":4},{\"choice_list_name\":\"month_first\",\"data_value\":\"march\",\"display\":{\"title\":\"march\"},\"_row_num\":5},{\"choice_list_name\":\"month_first\",\"data_value\":\"april\",\"display\":{\"title\":\"april\"},\"_row_num\":6},{\"choice_list_name\":\"month_first\",\"data_value\":\"may\",\"display\":{\"title\":\"may\"},\"_row_num\":7},{\"choice_list_name\":\"month_first\",\"data_value\":\"june\",\"display\":{\"title\":\"june\"},\"_row_num\":8}]"
       },
       {
         "_partition": "Column",
         "_aspect": "travel_regularly_trips_district",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"yndkpna\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":18},{\"choice_list_name\":\"yndkpna\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":19},{\"choice_list_name\":\"yndkpna\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":20},{\"choice_list_name\":\"yndkpna\",\"data_value\":\"pna\",\"display\":{\"title\":{\"text\":\"Prefer not to answer\"}},\"_row_num\":21}]"
+        "_value": "[{\"choice_list_name\":\"yndkpna\",\"data_value\":\"yes\",\"display\":{\"title\":\"yes\"},\"_row_num\":18},{\"choice_list_name\":\"yndkpna\",\"data_value\":\"no\",\"display\":{\"title\":\"no\"},\"_row_num\":19},{\"choice_list_name\":\"yndkpna\",\"data_value\":\"dk\",\"display\":{\"title\":\"dk\"},\"_row_num\":20},{\"choice_list_name\":\"yndkpna\",\"data_value\":\"pna\",\"display\":{\"title\":\"pna\"},\"_row_num\":21}]"
       },
       {
         "_partition": "Column",
         "_aspect": "travel_regularly_trips_reason",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"travel_reason\",\"data_value\":\"Work\",\"display\":{\"title\":{\"text\":\"Work\"}},\"_row_num\":9},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"School\",\"display\":{\"title\":{\"text\":\"School\"}},\"_row_num\":10},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"divorced_parents\",\"display\":{\"title\":{\"text\":\"Divorced parents\"}},\"_row_num\":11},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"relatives\",\"display\":{\"title\":{\"text\":\"Visiting relatives\"}},\"_row_num\":12},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"visit_spouse_friend\",\"display\":{\"title\":{\"text\":\"Visiting another spouse or partner or friend\"}},\"_row_num\":13},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"other\",\"display\":{\"title\":{\"text\":\"Other\"}},\"_row_num\":14}]"
+        "_value": "[{\"choice_list_name\":\"travel_reason\",\"data_value\":\"Work\",\"display\":{\"title\":\"Work\"},\"_row_num\":9},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"School\",\"display\":{\"title\":\"School\"},\"_row_num\":10},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"divorced_parents\",\"display\":{\"title\":\"divorced_parents\"},\"_row_num\":11},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"relatives\",\"display\":{\"title\":\"relatives\"},\"_row_num\":12},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"visit_spouse_friend\",\"display\":{\"title\":\"visit_spouse_friend\"},\"_row_num\":13},{\"choice_list_name\":\"travel_reason\",\"data_value\":\"other\",\"display\":{\"title\":\"other\"},\"_row_num\":14}]"
       },
       {
         "_partition": "Column",
         "_aspect": "travel_sleep_net",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"yndk\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":15},{\"choice_list_name\":\"yndk\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":16},{\"choice_list_name\":\"yndk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":17}]"
+        "_value": "[{\"choice_list_name\":\"yndk\",\"data_value\":\"yes\",\"display\":{\"title\":\"yes\"},\"_row_num\":15},{\"choice_list_name\":\"yndk\",\"data_value\":\"no\",\"display\":{\"title\":\"no\"},\"_row_num\":16},{\"choice_list_name\":\"yndk\",\"data_value\":\"dk\",\"display\":{\"title\":\"dk\"},\"_row_num\":17}]"
       },
       {
         "_partition": "FormType",
