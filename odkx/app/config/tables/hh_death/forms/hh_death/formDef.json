@@ -19,9 +19,7 @@
         "type": "text",
         "name": "hh_death_id",
         "display": {
-          "prompt": {
-            "text": "65a. ExtID of the person who died"
-          },
+          "prompt": "q65a",
           "hint": {
             "text": "ABC-123-700"
           }
@@ -33,9 +31,7 @@
         "type": "text",
         "name": "hh_death_name",
         "display": {
-          "prompt": {
-            "text": "65b. Given name of the person who died"
-          }
+          "prompt": "q65b"
         },
         "_row_num": 4
       },
@@ -43,9 +39,7 @@
         "type": "text",
         "name": "hh_death_surname",
         "display": {
-          "prompt": {
-            "text": "65c. Surname of the person who died"
-          }
+          "prompt": "q65c"
         },
         "_row_num": 5
       },
@@ -54,9 +48,7 @@
         "values_list": "gender",
         "name": "hh_death_gender",
         "display": {
-          "prompt": {
-            "text": "65d. Gender of the person who died"
-          }
+          "prompt": "q65d"
         },
         "_row_num": 6
       },
@@ -64,9 +56,7 @@
         "type": "date",
         "name": "hh_death_date",
         "display": {
-          "prompt": {
-            "text": "65e. Date of death of the person who died"
-          }
+          "prompt": "q65e"
         },
         "_row_num": 7
       },
@@ -95,9 +85,7 @@
         "type": "integer",
         "name": "hh_death_age",
         "display": {
-          "prompt": {
-            "text": "65f. Approximate age of person who died"
-          }
+          "prompt": "q65f"
         },
         "inputAttributes": {
           "min": 0,
@@ -115,9 +103,7 @@
         "choice_list_name": "gender",
         "data_value": "male",
         "display": {
-          "title": {
-            "text": "Male"
-          }
+          "title": "male"
         },
         "_row_num": 2
       },
@@ -125,9 +111,7 @@
         "choice_list_name": "gender",
         "data_value": "female",
         "display": {
-          "title": {
-            "text": "Female"
-          }
+          "title": "female"
         },
         "_row_num": 3
       },
@@ -135,9 +119,7 @@
         "choice_list_name": "dk",
         "data_value": "dk",
         "display": {
-          "title": {
-            "text": "Don't Know"
-          }
+          "title": "dk"
         },
         "_row_num": 4
       }
@@ -251,6 +233,89 @@
           }
         },
         "_row_num": 9
+      }
+    ],
+    "table_specific_translations": [
+      {
+        "string_token": "q65a",
+        "text": {
+          "default": "65a. ExtID of the person who died",
+          "pt": "65a. ExtID da pessoa que faleceu",
+          "sw": "65a. ExtID ya mtu aliyefariki"
+        },
+        "_row_num": 2
+      },
+      {
+        "string_token": "q65b",
+        "text": {
+          "default": "65b. Given name of the person who died",
+          "pt": "65b. Nome próprio da pessoa que faleceu",
+          "sw": "65b. Jina la kupewa la mtu aliyefariki"
+        },
+        "_row_num": 3
+      },
+      {
+        "string_token": "q65c",
+        "text": {
+          "default": "65c. Surname of the person who died",
+          "pt": "65c. Apelido da pessoa que faleceu",
+          "sw": "65c. Jina la ukoo la mtu aliyefariki"
+        },
+        "_row_num": 4
+      },
+      {
+        "string_token": "q65d",
+        "text": {
+          "default": "65d. Gender of the person who died",
+          "pt": "65d. Género da pessoa que faleceu",
+          "sw": "65d. Jinsia ya mtu aliyefariki"
+        },
+        "_row_num": 5
+      },
+      {
+        "string_token": "q65e",
+        "text": {
+          "default": "65e. Date of death of the person who died",
+          "pt": "65e. Data do óbito",
+          "sw": "65e. Tarehe ya kifo cha mtu aliyefariki"
+        },
+        "_row_num": 6
+      },
+      {
+        "string_token": "q65f",
+        "text": {
+          "default": "65f. Approximate age of person who died",
+          "pt": "65f. Idade aproximada da pessoa que faleceu",
+          "sw": "65f. Kadirio la umri wa mtu aliyefariki"
+        },
+        "_row_num": 7
+      },
+      {
+        "string_token": "dk",
+        "text": {
+          "default": "Don't Know",
+          "pt": "Não sabe",
+          "sw": "Sijui"
+        },
+        "_row_num": 8
+      },
+      {
+        "string_token": "male",
+        "text": {
+          "default": "Male",
+          "pt": "Masculino",
+          "sw": "Ke"
+        },
+        "_row_num": 9
+      },
+      {
+        "string_token": "female",
+        "text": {
+          "default": "Female",
+          "pt": "Feminino",
+          "sw": "Me"
+        },
+        "_row_num": 10
       }
     ]
   },
@@ -413,9 +478,7 @@
           "choice_list_name": "gender",
           "data_value": "male",
           "display": {
-            "title": {
-              "text": "Male"
-            }
+            "title": "male"
           },
           "_row_num": 2
         },
@@ -423,9 +486,7 @@
           "choice_list_name": "gender",
           "data_value": "female",
           "display": {
-            "title": {
-              "text": "Female"
-            }
+            "title": "female"
           },
           "_row_num": 3
         }
@@ -435,16 +496,96 @@
           "choice_list_name": "dk",
           "data_value": "dk",
           "display": {
-            "title": {
-              "text": "Don't Know"
-            }
+            "title": "dk"
           },
           "_row_num": 4
         }
       ]
     },
     "table_specific_definitions": {
-      "_tokens": {}
+      "_tokens": {
+        "q65a": {
+          "string_token": "q65a",
+          "text": {
+            "default": "65a. ExtID of the person who died",
+            "pt": "65a. ExtID da pessoa que faleceu",
+            "sw": "65a. ExtID ya mtu aliyefariki"
+          },
+          "_row_num": 2
+        },
+        "q65b": {
+          "string_token": "q65b",
+          "text": {
+            "default": "65b. Given name of the person who died",
+            "pt": "65b. Nome próprio da pessoa que faleceu",
+            "sw": "65b. Jina la kupewa la mtu aliyefariki"
+          },
+          "_row_num": 3
+        },
+        "q65c": {
+          "string_token": "q65c",
+          "text": {
+            "default": "65c. Surname of the person who died",
+            "pt": "65c. Apelido da pessoa que faleceu",
+            "sw": "65c. Jina la ukoo la mtu aliyefariki"
+          },
+          "_row_num": 4
+        },
+        "q65d": {
+          "string_token": "q65d",
+          "text": {
+            "default": "65d. Gender of the person who died",
+            "pt": "65d. Género da pessoa que faleceu",
+            "sw": "65d. Jinsia ya mtu aliyefariki"
+          },
+          "_row_num": 5
+        },
+        "q65e": {
+          "string_token": "q65e",
+          "text": {
+            "default": "65e. Date of death of the person who died",
+            "pt": "65e. Data do óbito",
+            "sw": "65e. Tarehe ya kifo cha mtu aliyefariki"
+          },
+          "_row_num": 6
+        },
+        "q65f": {
+          "string_token": "q65f",
+          "text": {
+            "default": "65f. Approximate age of person who died",
+            "pt": "65f. Idade aproximada da pessoa que faleceu",
+            "sw": "65f. Kadirio la umri wa mtu aliyefariki"
+          },
+          "_row_num": 7
+        },
+        "dk": {
+          "string_token": "dk",
+          "text": {
+            "default": "Don't Know",
+            "pt": "Não sabe",
+            "sw": "Sijui"
+          },
+          "_row_num": 8
+        },
+        "male": {
+          "string_token": "male",
+          "text": {
+            "default": "Male",
+            "pt": "Masculino",
+            "sw": "Ke"
+          },
+          "_row_num": 9
+        },
+        "female": {
+          "string_token": "female",
+          "text": {
+            "default": "Female",
+            "pt": "Feminino",
+            "sw": "Me"
+          },
+          "_row_num": 10
+        }
+      }
     },
     "queries": {},
     "calculates": {},
@@ -686,9 +827,7 @@
             "type": "text",
             "name": "hh_death_id",
             "display": {
-              "prompt": {
-                "text": "65a. ExtID of the person who died"
-              },
+              "prompt": "q65a",
               "hint": {
                 "text": "ABC-123-700"
               }
@@ -705,9 +844,7 @@
             "type": "text",
             "name": "hh_death_name",
             "display": {
-              "prompt": {
-                "text": "65b. Given name of the person who died"
-              }
+              "prompt": "q65b"
             },
             "_row_num": 4,
             "__rowNum__": 3,
@@ -720,9 +857,7 @@
             "type": "text",
             "name": "hh_death_surname",
             "display": {
-              "prompt": {
-                "text": "65c. Surname of the person who died"
-              }
+              "prompt": "q65c"
             },
             "_row_num": 5,
             "__rowNum__": 4,
@@ -736,9 +871,7 @@
             "values_list": "gender",
             "name": "hh_death_gender",
             "display": {
-              "prompt": {
-                "text": "65d. Gender of the person who died"
-              }
+              "prompt": "q65d"
             },
             "_row_num": 6,
             "__rowNum__": 5,
@@ -751,9 +884,7 @@
             "type": "date",
             "name": "hh_death_date",
             "display": {
-              "prompt": {
-                "text": "65e. Date of death of the person who died"
-              }
+              "prompt": "q65e"
             },
             "_row_num": 7,
             "__rowNum__": 6,
@@ -777,9 +908,7 @@
             "type": "integer",
             "name": "hh_death_age",
             "display": {
-              "prompt": {
-                "text": "65f. Approximate age of person who died"
-              }
+              "prompt": "q65f"
             },
             "inputAttributes": {
               "min": 0,
@@ -1120,14 +1249,14 @@
         "_aspect": "hh_death_date_dk",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"dk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":4}]"
+        "_value": "[{\"choice_list_name\":\"dk\",\"data_value\":\"dk\",\"display\":{\"title\":\"dk\"},\"_row_num\":4}]"
       },
       {
         "_partition": "Column",
         "_aspect": "hh_death_gender",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"gender\",\"data_value\":\"male\",\"display\":{\"title\":{\"text\":\"Male\"}},\"_row_num\":2},{\"choice_list_name\":\"gender\",\"data_value\":\"female\",\"display\":{\"title\":{\"text\":\"Female\"}},\"_row_num\":3}]"
+        "_value": "[{\"choice_list_name\":\"gender\",\"data_value\":\"male\",\"display\":{\"title\":\"male\"},\"_row_num\":2},{\"choice_list_name\":\"gender\",\"data_value\":\"female\",\"display\":{\"title\":\"female\"},\"_row_num\":3}]"
       },
       {
         "_partition": "FormType",
