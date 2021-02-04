@@ -20,7 +20,9 @@
         "values_list": "obtain_net",
         "name": "obtain_net_how_long_ago",
         "display": {
-          "prompt": "q55a"
+          "prompt": {
+            "text": "55a. How long ago did you obtain the net?"
+          }
         },
         "_row_num": 3
       },
@@ -29,7 +31,9 @@
         "values_list": "yndk",
         "name": "net_sleep_last_night",
         "display": {
-          "prompt": "q55b"
+          "prompt": {
+            "text": "55b. Did someone sleep inside this net last night?"
+          }
         },
         "_row_num": 4
       },
@@ -38,7 +42,9 @@
         "values_list": "net_purpose",
         "name": "net_used_other_purpose",
         "display": {
-          "prompt": "q55c"
+          "prompt": {
+            "text": "55c. Is the net being used for anything else other than sleeping under?"
+          }
         },
         "_row_num": 5
       },
@@ -52,7 +58,9 @@
         "choice_list_name": "yndk",
         "data_value": "yes",
         "display": {
-          "title": "yes"
+          "title": {
+            "text": "Yes"
+          }
         },
         "_row_num": 2
       },
@@ -60,7 +68,9 @@
         "choice_list_name": "yndk",
         "data_value": "no",
         "display": {
-          "title": "no"
+          "title": {
+            "text": "No"
+          }
         },
         "_row_num": 3
       },
@@ -68,7 +78,9 @@
         "choice_list_name": "yndk",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't Know"
+          }
         },
         "_row_num": 4
       },
@@ -76,7 +88,9 @@
         "choice_list_name": "obtain_net",
         "data_value": "1_year_ago_or_less",
         "display": {
-          "title": "1_year_ago_or_less"
+          "title": {
+            "text": "1 year ago or less"
+          }
         },
         "_row_num": 5
       },
@@ -84,7 +98,9 @@
         "choice_list_name": "obtain_net",
         "data_value": "within_the_past_1-3_years",
         "display": {
-          "title": "within_the_past_1-3_years"
+          "title": {
+            "text": "Within the past 1-3 years"
+          }
         },
         "_row_num": 6
       },
@@ -92,7 +108,9 @@
         "choice_list_name": "obtain_net",
         "data_value": "more_than_3_years",
         "display": {
-          "title": "more_than_3_years"
+          "title": {
+            "text": "More than 3 years"
+          }
         },
         "_row_num": 7
       },
@@ -100,7 +118,9 @@
         "choice_list_name": "obtain_net",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don’t know"
+          }
         },
         "_row_num": 8
       },
@@ -108,7 +128,9 @@
         "choice_list_name": "net_purpose",
         "data_value": "no",
         "display": {
-          "title": "sleep_only"
+          "title": {
+            "text": "No, just for sleeping under"
+          }
         },
         "_row_num": 9
       },
@@ -116,7 +138,9 @@
         "choice_list_name": "net_purpose",
         "data_value": "garden_netting",
         "display": {
-          "title": "garden_netting"
+          "title": {
+            "text": "For garden netting"
+          }
         },
         "_row_num": 10
       },
@@ -124,7 +148,9 @@
         "choice_list_name": "net_purpose",
         "data_value": "fishing",
         "display": {
-          "title": "fishing"
+          "title": {
+            "text": "For fishing"
+          }
         },
         "_row_num": 11
       },
@@ -132,7 +158,9 @@
         "choice_list_name": "net_purpose",
         "data_value": "surrounding_hennery/hennery_construction",
         "display": {
-          "title": "surrounding_hennery/hennery_construction"
+          "title": {
+            "text": "To surround hennery/hennery construction"
+          }
         },
         "_row_num": 12
       },
@@ -140,7 +168,9 @@
         "choice_list_name": "net_purpose",
         "data_value": "preparing_cereals/corn",
         "display": {
-          "title": "preparing_cereals/corn"
+          "title": {
+            "text": "To prepare cereals/corn"
+          }
         },
         "_row_num": 13
       },
@@ -148,7 +178,9 @@
         "choice_list_name": "net_purpose",
         "data_value": "cover_vegetables_crops",
         "display": {
-          "title": "cover_vegetables_crops"
+          "title": {
+            "text": "To protect/cover vegetables/crops"
+          }
         },
         "_row_num": 14
       }
@@ -161,7 +193,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210204001,
+        "value": 20210119001,
         "_row_num": 3
       },
       {
@@ -248,143 +280,6 @@
         "type": "string",
         "_row_num": 5
       }
-    ],
-    "table_specific_translations": [
-      {
-        "string_token": "q55a",
-        "text": {
-          "default": "55a. How long ago did you obtain the net?",
-          "pt": "55a. Há quanto tempo adquiriu a rede?",
-          "sw": "55a. Ulipata chandarua hiki muda gani uliopita?"
-        },
-        "_row_num": 2
-      },
-      {
-        "string_token": "q55b",
-        "text": {
-          "default": "55b. Did someone sleep inside this net last night?",
-          "pt": "55b. Alguém dormiu dentro desta rede na noite passada?",
-          "sw": "55b. Je, kunaye aliyelala ndani ya chandarua hiki usiku uliopita?"
-        },
-        "_row_num": 3
-      },
-      {
-        "string_token": "q55c",
-        "text": {
-          "default": "55c. Is the net being used for anything else other than sleeping under?",
-          "pt": "55c. A rede está a ser usada para outra finalidade que não seja dormir debaixo da mesma?",
-          "sw": "55c. Je, chandarua hiki kinatumika kwa kazi nyingine yoyote isipokuwa kulala ndani yake?"
-        },
-        "_row_num": 4
-      },
-      {
-        "string_token": "yes",
-        "text": {
-          "default": "Yes",
-          "pt": "Sim",
-          "sw": "Ndiyo"
-        },
-        "_row_num": 5
-      },
-      {
-        "string_token": "no",
-        "text": {
-          "default": "No",
-          "pt": "Não",
-          "sw": "Hapana"
-        },
-        "_row_num": 6
-      },
-      {
-        "string_token": "dk",
-        "text": {
-          "default": "Don't Know",
-          "pt": "Não sabe",
-          "sw": "Sijui"
-        },
-        "_row_num": 7
-      },
-      {
-        "string_token": "1_year_ago_or_less",
-        "text": {
-          "default": "1 year ago or less",
-          "pt": "Há 1 ano ou menos",
-          "sw": "Mwaka 1 uliopita au chini"
-        },
-        "_row_num": 8
-      },
-      {
-        "string_token": "within_the_past_1-3_years",
-        "text": {
-          "default": "Within the past 1-3 years",
-          "pt": "Nos últimos 1-3 anos",
-          "sw": "Ndani ya mwaka 1-3 iliyopita"
-        },
-        "_row_num": 9
-      },
-      {
-        "string_token": "more_than_3_years",
-        "text": {
-          "default": "More than 3 years",
-          "pt": "Há mais de 3 anos",
-          "sw": "Zaidi ya miaka 3 iliyopita"
-        },
-        "_row_num": 10
-      },
-      {
-        "string_token": "sleep_only",
-        "text": {
-          "default": "No, just for sleeping under",
-          "pt": "Não, apenas para dormir debaixo dela",
-          "sw": "Hapana, kulala ndani yake tu"
-        },
-        "_row_num": 11
-      },
-      {
-        "string_token": "garden_netting",
-        "text": {
-          "default": "For garden netting",
-          "pt": "Para rede de jardim",
-          "sw": "Inatumika kama uzio wa bustani"
-        },
-        "_row_num": 12
-      },
-      {
-        "string_token": "fishing",
-        "text": {
-          "default": "For fishing",
-          "pt": "Para pescar",
-          "sw": "Kutega samaki"
-        },
-        "_row_num": 13
-      },
-      {
-        "string_token": "surrounding_hennery/hennery_construction",
-        "text": {
-          "default": "To surround hennery/hennery construction",
-          "pt": "Para cercar galinhas/capoeiras/",
-          "sw": "Uzio/ujenzi wa banda la kuku"
-        },
-        "_row_num": 14
-      },
-      {
-        "string_token": "preparing_cereals/corn",
-        "text": {
-          "default": "To prepare cereals/corn",
-          "pt": "Para preparar cereais/milho",
-          "sw": "Kuandaa nafaka/mahindi, mchele ngano na mtama"
-        },
-        "_row_num": 15
-      },
-      {
-        "string_token": "cover_vegetables_crops",
-        "text": {
-          "default": "To protect/cover vegetables/crops",
-          "pt": "Para proteger/cobrir hortas/culturas",
-          "sw": "Kulinda/kufunika mboga/mimea"
-        },
-        "_row_num": 16
-      }
     ]
   },
   "specification": {
@@ -411,7 +306,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210204001,
+        "value": 20210119001,
         "_row_num": 3
       },
       "table_id": {
@@ -546,7 +441,9 @@
           "choice_list_name": "yndk",
           "data_value": "yes",
           "display": {
-            "title": "yes"
+            "title": {
+              "text": "Yes"
+            }
           },
           "_row_num": 2
         },
@@ -554,7 +451,9 @@
           "choice_list_name": "yndk",
           "data_value": "no",
           "display": {
-            "title": "no"
+            "title": {
+              "text": "No"
+            }
           },
           "_row_num": 3
         },
@@ -562,7 +461,9 @@
           "choice_list_name": "yndk",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't Know"
+            }
           },
           "_row_num": 4
         }
@@ -572,7 +473,9 @@
           "choice_list_name": "obtain_net",
           "data_value": "1_year_ago_or_less",
           "display": {
-            "title": "1_year_ago_or_less"
+            "title": {
+              "text": "1 year ago or less"
+            }
           },
           "_row_num": 5
         },
@@ -580,7 +483,9 @@
           "choice_list_name": "obtain_net",
           "data_value": "within_the_past_1-3_years",
           "display": {
-            "title": "within_the_past_1-3_years"
+            "title": {
+              "text": "Within the past 1-3 years"
+            }
           },
           "_row_num": 6
         },
@@ -588,7 +493,9 @@
           "choice_list_name": "obtain_net",
           "data_value": "more_than_3_years",
           "display": {
-            "title": "more_than_3_years"
+            "title": {
+              "text": "More than 3 years"
+            }
           },
           "_row_num": 7
         },
@@ -596,7 +503,9 @@
           "choice_list_name": "obtain_net",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don’t know"
+            }
           },
           "_row_num": 8
         }
@@ -606,7 +515,9 @@
           "choice_list_name": "net_purpose",
           "data_value": "no",
           "display": {
-            "title": "sleep_only"
+            "title": {
+              "text": "No, just for sleeping under"
+            }
           },
           "_row_num": 9
         },
@@ -614,7 +525,9 @@
           "choice_list_name": "net_purpose",
           "data_value": "garden_netting",
           "display": {
-            "title": "garden_netting"
+            "title": {
+              "text": "For garden netting"
+            }
           },
           "_row_num": 10
         },
@@ -622,7 +535,9 @@
           "choice_list_name": "net_purpose",
           "data_value": "fishing",
           "display": {
-            "title": "fishing"
+            "title": {
+              "text": "For fishing"
+            }
           },
           "_row_num": 11
         },
@@ -630,7 +545,9 @@
           "choice_list_name": "net_purpose",
           "data_value": "surrounding_hennery/hennery_construction",
           "display": {
-            "title": "surrounding_hennery/hennery_construction"
+            "title": {
+              "text": "To surround hennery/hennery construction"
+            }
           },
           "_row_num": 12
         },
@@ -638,7 +555,9 @@
           "choice_list_name": "net_purpose",
           "data_value": "preparing_cereals/corn",
           "display": {
-            "title": "preparing_cereals/corn"
+            "title": {
+              "text": "To prepare cereals/corn"
+            }
           },
           "_row_num": 13
         },
@@ -646,150 +565,16 @@
           "choice_list_name": "net_purpose",
           "data_value": "cover_vegetables_crops",
           "display": {
-            "title": "cover_vegetables_crops"
+            "title": {
+              "text": "To protect/cover vegetables/crops"
+            }
           },
           "_row_num": 14
         }
       ]
     },
     "table_specific_definitions": {
-      "_tokens": {
-        "q55a": {
-          "string_token": "q55a",
-          "text": {
-            "default": "55a. How long ago did you obtain the net?",
-            "pt": "55a. Há quanto tempo adquiriu a rede?",
-            "sw": "55a. Ulipata chandarua hiki muda gani uliopita?"
-          },
-          "_row_num": 2
-        },
-        "q55b": {
-          "string_token": "q55b",
-          "text": {
-            "default": "55b. Did someone sleep inside this net last night?",
-            "pt": "55b. Alguém dormiu dentro desta rede na noite passada?",
-            "sw": "55b. Je, kunaye aliyelala ndani ya chandarua hiki usiku uliopita?"
-          },
-          "_row_num": 3
-        },
-        "q55c": {
-          "string_token": "q55c",
-          "text": {
-            "default": "55c. Is the net being used for anything else other than sleeping under?",
-            "pt": "55c. A rede está a ser usada para outra finalidade que não seja dormir debaixo da mesma?",
-            "sw": "55c. Je, chandarua hiki kinatumika kwa kazi nyingine yoyote isipokuwa kulala ndani yake?"
-          },
-          "_row_num": 4
-        },
-        "yes": {
-          "string_token": "yes",
-          "text": {
-            "default": "Yes",
-            "pt": "Sim",
-            "sw": "Ndiyo"
-          },
-          "_row_num": 5
-        },
-        "no": {
-          "string_token": "no",
-          "text": {
-            "default": "No",
-            "pt": "Não",
-            "sw": "Hapana"
-          },
-          "_row_num": 6
-        },
-        "dk": {
-          "string_token": "dk",
-          "text": {
-            "default": "Don't Know",
-            "pt": "Não sabe",
-            "sw": "Sijui"
-          },
-          "_row_num": 7
-        },
-        "1_year_ago_or_less": {
-          "string_token": "1_year_ago_or_less",
-          "text": {
-            "default": "1 year ago or less",
-            "pt": "Há 1 ano ou menos",
-            "sw": "Mwaka 1 uliopita au chini"
-          },
-          "_row_num": 8
-        },
-        "within_the_past_1-3_years": {
-          "string_token": "within_the_past_1-3_years",
-          "text": {
-            "default": "Within the past 1-3 years",
-            "pt": "Nos últimos 1-3 anos",
-            "sw": "Ndani ya mwaka 1-3 iliyopita"
-          },
-          "_row_num": 9
-        },
-        "more_than_3_years": {
-          "string_token": "more_than_3_years",
-          "text": {
-            "default": "More than 3 years",
-            "pt": "Há mais de 3 anos",
-            "sw": "Zaidi ya miaka 3 iliyopita"
-          },
-          "_row_num": 10
-        },
-        "sleep_only": {
-          "string_token": "sleep_only",
-          "text": {
-            "default": "No, just for sleeping under",
-            "pt": "Não, apenas para dormir debaixo dela",
-            "sw": "Hapana, kulala ndani yake tu"
-          },
-          "_row_num": 11
-        },
-        "garden_netting": {
-          "string_token": "garden_netting",
-          "text": {
-            "default": "For garden netting",
-            "pt": "Para rede de jardim",
-            "sw": "Inatumika kama uzio wa bustani"
-          },
-          "_row_num": 12
-        },
-        "fishing": {
-          "string_token": "fishing",
-          "text": {
-            "default": "For fishing",
-            "pt": "Para pescar",
-            "sw": "Kutega samaki"
-          },
-          "_row_num": 13
-        },
-        "surrounding_hennery/hennery_construction": {
-          "string_token": "surrounding_hennery/hennery_construction",
-          "text": {
-            "default": "To surround hennery/hennery construction",
-            "pt": "Para cercar galinhas/capoeiras/",
-            "sw": "Uzio/ujenzi wa banda la kuku"
-          },
-          "_row_num": 14
-        },
-        "preparing_cereals/corn": {
-          "string_token": "preparing_cereals/corn",
-          "text": {
-            "default": "To prepare cereals/corn",
-            "pt": "Para preparar cereais/milho",
-            "sw": "Kuandaa nafaka/mahindi, mchele ngano na mtama"
-          },
-          "_row_num": 15
-        },
-        "cover_vegetables_crops": {
-          "string_token": "cover_vegetables_crops",
-          "text": {
-            "default": "To protect/cover vegetables/crops",
-            "pt": "Para proteger/cobrir hortas/culturas",
-            "sw": "Kulinda/kufunika mboga/mimea"
-          },
-          "_row_num": 16
-        }
-      }
+      "_tokens": {}
     },
     "queries": {},
     "calculates": {},
@@ -976,7 +761,9 @@
             "values_list": "obtain_net",
             "name": "obtain_net_how_long_ago",
             "display": {
-              "prompt": "q55a"
+              "prompt": {
+                "text": "55a. How long ago did you obtain the net?"
+              }
             },
             "_row_num": 3,
             "__rowNum__": 2,
@@ -990,7 +777,9 @@
             "values_list": "yndk",
             "name": "net_sleep_last_night",
             "display": {
-              "prompt": "q55b"
+              "prompt": {
+                "text": "55b. Did someone sleep inside this net last night?"
+              }
             },
             "_row_num": 4,
             "__rowNum__": 3,
@@ -1004,7 +793,9 @@
             "values_list": "net_purpose",
             "name": "net_used_other_purpose",
             "display": {
-              "prompt": "q55c"
+              "prompt": {
+                "text": "55c. Is the net being used for anything else other than sleeping under?"
+              }
             },
             "_row_num": 5,
             "__rowNum__": 4,
@@ -1256,21 +1047,21 @@
         "_aspect": "net_sleep_last_night",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"yndk\",\"data_value\":\"yes\",\"display\":{\"title\":\"yes\"},\"_row_num\":2},{\"choice_list_name\":\"yndk\",\"data_value\":\"no\",\"display\":{\"title\":\"no\"},\"_row_num\":3},{\"choice_list_name\":\"yndk\",\"data_value\":\"dk\",\"display\":{\"title\":\"dk\"},\"_row_num\":4}]"
+        "_value": "[{\"choice_list_name\":\"yndk\",\"data_value\":\"yes\",\"display\":{\"title\":{\"text\":\"Yes\"}},\"_row_num\":2},{\"choice_list_name\":\"yndk\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No\"}},\"_row_num\":3},{\"choice_list_name\":\"yndk\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don't Know\"}},\"_row_num\":4}]"
       },
       {
         "_partition": "Column",
         "_aspect": "net_used_other_purpose",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"net_purpose\",\"data_value\":\"no\",\"display\":{\"title\":\"sleep_only\"},\"_row_num\":9},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"garden_netting\",\"display\":{\"title\":\"garden_netting\"},\"_row_num\":10},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"fishing\",\"display\":{\"title\":\"fishing\"},\"_row_num\":11},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"surrounding_hennery/hennery_construction\",\"display\":{\"title\":\"surrounding_hennery/hennery_construction\"},\"_row_num\":12},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"preparing_cereals/corn\",\"display\":{\"title\":\"preparing_cereals/corn\"},\"_row_num\":13},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"cover_vegetables_crops\",\"display\":{\"title\":\"cover_vegetables_crops\"},\"_row_num\":14}]"
+        "_value": "[{\"choice_list_name\":\"net_purpose\",\"data_value\":\"no\",\"display\":{\"title\":{\"text\":\"No, just for sleeping under\"}},\"_row_num\":9},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"garden_netting\",\"display\":{\"title\":{\"text\":\"For garden netting\"}},\"_row_num\":10},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"fishing\",\"display\":{\"title\":{\"text\":\"For fishing\"}},\"_row_num\":11},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"surrounding_hennery/hennery_construction\",\"display\":{\"title\":{\"text\":\"To surround hennery/hennery construction\"}},\"_row_num\":12},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"preparing_cereals/corn\",\"display\":{\"title\":{\"text\":\"To prepare cereals/corn\"}},\"_row_num\":13},{\"choice_list_name\":\"net_purpose\",\"data_value\":\"cover_vegetables_crops\",\"display\":{\"title\":{\"text\":\"To protect/cover vegetables/crops\"}},\"_row_num\":14}]"
       },
       {
         "_partition": "Column",
         "_aspect": "obtain_net_how_long_ago",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"obtain_net\",\"data_value\":\"1_year_ago_or_less\",\"display\":{\"title\":\"1_year_ago_or_less\"},\"_row_num\":5},{\"choice_list_name\":\"obtain_net\",\"data_value\":\"within_the_past_1-3_years\",\"display\":{\"title\":\"within_the_past_1-3_years\"},\"_row_num\":6},{\"choice_list_name\":\"obtain_net\",\"data_value\":\"more_than_3_years\",\"display\":{\"title\":\"more_than_3_years\"},\"_row_num\":7},{\"choice_list_name\":\"obtain_net\",\"data_value\":\"dk\",\"display\":{\"title\":\"dk\"},\"_row_num\":8}]"
+        "_value": "[{\"choice_list_name\":\"obtain_net\",\"data_value\":\"1_year_ago_or_less\",\"display\":{\"title\":{\"text\":\"1 year ago or less\"}},\"_row_num\":5},{\"choice_list_name\":\"obtain_net\",\"data_value\":\"within_the_past_1-3_years\",\"display\":{\"title\":{\"text\":\"Within the past 1-3 years\"}},\"_row_num\":6},{\"choice_list_name\":\"obtain_net\",\"data_value\":\"more_than_3_years\",\"display\":{\"title\":{\"text\":\"More than 3 years\"}},\"_row_num\":7},{\"choice_list_name\":\"obtain_net\",\"data_value\":\"dk\",\"display\":{\"title\":{\"text\":\"Don’t know\"}},\"_row_num\":8}]"
       },
       {
         "_partition": "FormType",

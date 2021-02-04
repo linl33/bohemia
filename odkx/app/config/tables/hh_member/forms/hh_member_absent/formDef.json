@@ -18,7 +18,9 @@
       {
         "type": "note",
         "display": {
-          "prompt": "hh_id_note"
+          "prompt": {
+            "text": "Household ID: {{data.hh_id}}"
+          }
         },
         "_row_num": 3
       },
@@ -27,7 +29,9 @@
         "values_list": "return_time",
         "name": "absent_return",
         "display": {
-          "prompt": "q24"
+          "prompt": {
+            "text": "24. When will the person be back?"
+          }
         },
         "_row_num": 4
       },
@@ -35,7 +39,9 @@
         "type": "date",
         "name": "absent_return_date",
         "display": {
-          "prompt": "date"
+          "prompt": {
+            "text": "Date"
+          }
         },
         "_row_num": 5
       },
@@ -43,7 +49,9 @@
         "type": "integer",
         "name": "absent_return_integer",
         "display": {
-          "prompt": "or_enter_num"
+          "prompt": {
+            "text": "or enter number"
+          }
         },
         "inputAttributes": {
           "min": 1,
@@ -56,7 +64,9 @@
         "values_list": "dwmy",
         "name": "absent_return_dwmy",
         "display": {
-          "prompt": "days_weeks_months_years"
+          "prompt": {
+            "text": "Days/Weeks/Months/Years"
+          }
         },
         "_row_num": 7
       },
@@ -71,7 +81,9 @@
         "values_list": "absence_reason",
         "name": "absence_reason",
         "display": {
-          "prompt": "q25"
+          "prompt": {
+            "text": "25. What is the reason for the absence?"
+          }
         },
         "_row_num": 9
       },
@@ -85,7 +97,9 @@
         "choice_list_name": "dk",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't Know"
+          }
         },
         "_row_num": 2
       },
@@ -93,7 +107,9 @@
         "choice_list_name": "not_possible",
         "data_value": "not_possible",
         "display": {
-          "title": "not_possible"
+          "title": {
+            "text": "Not possible to retrieve"
+          }
         },
         "_row_num": 3
       },
@@ -101,7 +117,9 @@
         "choice_list_name": "yn",
         "data_value": "yes",
         "display": {
-          "title": "yes"
+          "title": {
+            "text": "Yes"
+          }
         },
         "_row_num": 4
       },
@@ -109,7 +127,9 @@
         "choice_list_name": "yn",
         "data_value": "no",
         "display": {
-          "title": "no"
+          "title": {
+            "text": "No"
+          }
         },
         "_row_num": 5
       },
@@ -117,7 +137,9 @@
         "choice_list_name": "yndk",
         "data_value": "yes",
         "display": {
-          "title": "yes"
+          "title": {
+            "text": "Yes"
+          }
         },
         "_row_num": 6
       },
@@ -125,7 +147,9 @@
         "choice_list_name": "yndk",
         "data_value": "no",
         "display": {
-          "title": "no"
+          "title": {
+            "text": "No"
+          }
         },
         "_row_num": 7
       },
@@ -133,7 +157,9 @@
         "choice_list_name": "yndk",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't Know"
+          }
         },
         "_row_num": 8
       },
@@ -141,7 +167,9 @@
         "choice_list_name": "yndkpna",
         "data_value": "yes",
         "display": {
-          "title": "yes"
+          "title": {
+            "text": "Yes"
+          }
         },
         "_row_num": 9
       },
@@ -149,7 +177,9 @@
         "choice_list_name": "yndkpna",
         "data_value": "no",
         "display": {
-          "title": "no"
+          "title": {
+            "text": "No"
+          }
         },
         "_row_num": 10
       },
@@ -157,7 +187,9 @@
         "choice_list_name": "yndkpna",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't Know"
+          }
         },
         "_row_num": 11
       },
@@ -165,7 +197,9 @@
         "choice_list_name": "yndkpna",
         "data_value": "pna",
         "display": {
-          "title": "pna"
+          "title": {
+            "text": "Prefer not to answer"
+          }
         },
         "_row_num": 12
       },
@@ -173,7 +207,9 @@
         "choice_list_name": "ynpna",
         "data_value": "yes",
         "display": {
-          "title": "yes"
+          "title": {
+            "text": "Yes"
+          }
         },
         "_row_num": 13
       },
@@ -181,7 +217,9 @@
         "choice_list_name": "ynpna",
         "data_value": "no",
         "display": {
-          "title": "no"
+          "title": {
+            "text": "No"
+          }
         },
         "_row_num": 14
       },
@@ -189,7 +227,9 @@
         "choice_list_name": "ynpna",
         "data_value": "pna",
         "display": {
-          "title": "pna"
+          "title": {
+            "text": "Prefer not to answer"
+          }
         },
         "_row_num": 15
       },
@@ -197,7 +237,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "work",
         "display": {
-          "title": "work"
+          "title": {
+            "text": "Work"
+          }
         },
         "_row_num": 16
       },
@@ -205,7 +247,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "farm",
         "display": {
-          "title": "farm"
+          "title": {
+            "text": "Farm"
+          }
         },
         "_row_num": 17
       },
@@ -213,7 +257,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "taking_a_walk",
         "display": {
-          "title": "taking_a_walk"
+          "title": {
+            "text": "Taking a walk"
+          }
         },
         "_row_num": 18
       },
@@ -221,7 +267,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "church_mosque",
         "display": {
-          "title": "church_mosque"
+          "title": {
+            "text": "Church/mosque"
+          }
         },
         "_row_num": 19
       },
@@ -229,7 +277,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "school",
         "display": {
-          "title": "school"
+          "title": {
+            "text": "School"
+          }
         },
         "_row_num": 20
       },
@@ -237,7 +287,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "market",
         "display": {
-          "title": "market"
+          "title": {
+            "text": "Market"
+          }
         },
         "_row_num": 21
       },
@@ -245,7 +297,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "searching_for_a_job",
         "display": {
-          "title": "searching_for_a_job"
+          "title": {
+            "text": "Searching for a job"
+          }
         },
         "_row_num": 22
       },
@@ -253,7 +307,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "out_with_friends_family",
         "display": {
-          "title": "out_with_friends_family"
+          "title": {
+            "text": "Out with friends/family"
+          }
         },
         "_row_num": 23
       },
@@ -261,7 +317,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "sick",
         "display": {
-          "title": "sick"
+          "title": {
+            "text": "Sick"
+          }
         },
         "_row_num": 24
       },
@@ -269,7 +327,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "travel",
         "display": {
-          "title": "travel"
+          "title": {
+            "text": "Travel"
+          }
         },
         "_row_num": 25
       },
@@ -277,7 +337,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don’t know"
+          }
         },
         "_row_num": 26
       },
@@ -285,7 +347,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "pna",
         "display": {
-          "title": "pna"
+          "title": {
+            "text": "Prefer not to answer"
+          }
         },
         "_row_num": 27
       },
@@ -293,7 +357,9 @@
         "choice_list_name": "absence_reason",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 28
       },
@@ -301,7 +367,9 @@
         "choice_list_name": "approx",
         "data_value": "approx",
         "display": {
-          "title": "approx"
+          "title": {
+            "text": "Tick this box if approximate"
+          }
         },
         "_row_num": 29
       },
@@ -309,7 +377,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "Cook",
         "display": {
-          "title": "Cook"
+          "title": {
+            "text": "Cook"
+          }
         },
         "_row_num": 30
       },
@@ -317,7 +387,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "Eat",
         "display": {
-          "title": "Eat"
+          "title": {
+            "text": "Eat"
+          }
         },
         "_row_num": 31
       },
@@ -325,7 +397,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "stories",
         "display": {
-          "title": "stories"
+          "title": {
+            "text": "Explain stories"
+          }
         },
         "_row_num": 32
       },
@@ -333,7 +407,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "friends_relatives",
         "display": {
-          "title": "friends_relatives"
+          "title": {
+            "text": "Spend time with friends or relatives"
+          }
         },
         "_row_num": 33
       },
@@ -341,7 +417,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "Clean",
         "display": {
-          "title": "Clean"
+          "title": {
+            "text": "Clean"
+          }
         },
         "_row_num": 34
       },
@@ -349,7 +427,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "Work",
         "display": {
-          "title": "Work"
+          "title": {
+            "text": "Work"
+          }
         },
         "_row_num": 35
       },
@@ -357,7 +437,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "Study",
         "display": {
-          "title": "Study"
+          "title": {
+            "text": "Study"
+          }
         },
         "_row_num": 36
       },
@@ -365,7 +447,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "tv",
         "display": {
-          "title": "tv"
+          "title": {
+            "text": "Watch TV"
+          }
         },
         "_row_num": 37
       },
@@ -373,7 +457,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "radio",
         "display": {
-          "title": "radio"
+          "title": {
+            "text": "Listen to the radio"
+          }
         },
         "_row_num": 38
       },
@@ -381,7 +467,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "news",
         "display": {
-          "title": "news"
+          "title": {
+            "text": "Read the news"
+          }
         },
         "_row_num": 39
       },
@@ -389,7 +477,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "Pray",
         "display": {
-          "title": "Pray"
+          "title": {
+            "text": "Pray"
+          }
         },
         "_row_num": 40
       },
@@ -397,7 +487,9 @@
         "choice_list_name": "before_bed_activity",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 41
       },
@@ -405,7 +497,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "water",
         "display": {
-          "title": "water"
+          "title": {
+            "text": "Fetching water"
+          }
         },
         "_row_num": 42
       },
@@ -413,7 +507,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "wood",
         "display": {
-          "title": "wood"
+          "title": {
+            "text": "Fetching wood"
+          }
         },
         "_row_num": 43
       },
@@ -421,7 +517,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "Cook",
         "display": {
-          "title": "Cook"
+          "title": {
+            "text": "Cook"
+          }
         },
         "_row_num": 44
       },
@@ -429,7 +527,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "Eat",
         "display": {
-          "title": "Eat"
+          "title": {
+            "text": "Eat"
+          }
         },
         "_row_num": 45
       },
@@ -437,7 +537,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "Clean",
         "display": {
-          "title": "Clean"
+          "title": {
+            "text": "Clean"
+          }
         },
         "_row_num": 46
       },
@@ -445,7 +547,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "Work",
         "display": {
-          "title": "Work"
+          "title": {
+            "text": "Work"
+          }
         },
         "_row_num": 47
       },
@@ -453,7 +557,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "Study",
         "display": {
-          "title": "Study"
+          "title": {
+            "text": "Study"
+          }
         },
         "_row_num": 48
       },
@@ -461,7 +567,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "tv",
         "display": {
-          "title": "tv"
+          "title": {
+            "text": "Watch TV"
+          }
         },
         "_row_num": 49
       },
@@ -469,7 +577,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "radio",
         "display": {
-          "title": "radio"
+          "title": {
+            "text": "Listen to the radio"
+          }
         },
         "_row_num": 50
       },
@@ -477,7 +587,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "friends_relatives",
         "display": {
-          "title": "friends_relatives"
+          "title": {
+            "text": "Hang out with friends or relatives"
+          }
         },
         "_row_num": 51
       },
@@ -485,7 +597,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "Pray",
         "display": {
-          "title": "Pray"
+          "title": {
+            "text": "Pray"
+          }
         },
         "_row_num": 52
       },
@@ -493,7 +607,9 @@
         "choice_list_name": "before_sunrise_activity",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 53
       },
@@ -501,7 +617,9 @@
         "choice_list_name": "bite_occur",
         "data_value": "home",
         "display": {
-          "title": "home"
+          "title": {
+            "text": "Inside the home"
+          }
         },
         "_row_num": 54
       },
@@ -509,7 +627,9 @@
         "choice_list_name": "bite_occur",
         "data_value": "compound",
         "display": {
-          "title": "compound"
+          "title": {
+            "text": "Inside the compound"
+          }
         },
         "_row_num": 55
       },
@@ -517,7 +637,9 @@
         "choice_list_name": "bite_occur",
         "data_value": "field",
         "display": {
-          "title": "field"
+          "title": {
+            "text": "Field"
+          }
         },
         "_row_num": 56
       },
@@ -525,7 +647,9 @@
         "choice_list_name": "bite_occur",
         "data_value": "road",
         "display": {
-          "title": "road"
+          "title": {
+            "text": "Road"
+          }
         },
         "_row_num": 57
       },
@@ -533,7 +657,9 @@
         "choice_list_name": "bite_occur",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 58
       },
@@ -541,7 +667,9 @@
         "choice_list_name": "bite_occur",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't Know"
+          }
         },
         "_row_num": 59
       },
@@ -549,7 +677,9 @@
         "choice_list_name": "bite_outcome",
         "data_value": "death",
         "display": {
-          "title": "death"
+          "title": {
+            "text": "Death"
+          }
         },
         "_row_num": 60
       },
@@ -557,7 +687,9 @@
         "choice_list_name": "bite_outcome",
         "data_value": "loss_limb",
         "display": {
-          "title": "loss_limb"
+          "title": {
+            "text": "Loss of limb"
+          }
         },
         "_row_num": 61
       },
@@ -565,7 +697,9 @@
         "choice_list_name": "bite_outcome",
         "data_value": "full_recovery",
         "display": {
-          "title": "full_recovery"
+          "title": {
+            "text": "Full recovery"
+          }
         },
         "_row_num": 62
       },
@@ -573,7 +707,9 @@
         "choice_list_name": "bite_outcome",
         "data_value": "partial_recovery",
         "display": {
-          "title": "partial_recovery"
+          "title": {
+            "text": "Partial recovery"
+          }
         },
         "_row_num": 63
       },
@@ -581,7 +717,9 @@
         "choice_list_name": "breastfeed",
         "data_value": "Own_child",
         "display": {
-          "title": "Own_child"
+          "title": {
+            "text": "Own child"
+          }
         },
         "_row_num": 64
       },
@@ -589,7 +727,9 @@
         "choice_list_name": "breastfeed",
         "data_value": "other_child",
         "display": {
-          "title": "other_child"
+          "title": {
+            "text": "Someone else’s child/children"
+          }
         },
         "_row_num": 65
       },
@@ -597,7 +737,9 @@
         "choice_list_name": "breastfeed",
         "data_value": "No",
         "display": {
-          "title": "no"
+          "title": {
+            "text": "No"
+          }
         },
         "_row_num": 66
       },
@@ -605,7 +747,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Respiratory_disease",
         "display": {
-          "title": "Respiratory_disease"
+          "title": {
+            "text": "Respiratory disease"
+          }
         },
         "_row_num": 67
       },
@@ -613,7 +757,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Diarrhoea",
         "display": {
-          "title": "Diarrhoea"
+          "title": {
+            "text": "Diarrhoea"
+          }
         },
         "_row_num": 68
       },
@@ -621,7 +767,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Injuries_from_an_accident",
         "display": {
-          "title": "Injuries_from_an_accident"
+          "title": {
+            "text": "Injuries from an accident"
+          }
         },
         "_row_num": 69
       },
@@ -629,7 +777,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Skin_disease",
         "display": {
-          "title": "Skin_disease"
+          "title": {
+            "text": "Skin disease"
+          }
         },
         "_row_num": 70
       },
@@ -637,7 +787,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Mental_health_disorder",
         "display": {
-          "title": "Mental_health_disorder"
+          "title": {
+            "text": "Mental health disorder"
+          }
         },
         "_row_num": 71
       },
@@ -645,7 +797,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Worms",
         "display": {
-          "title": "Worms"
+          "title": {
+            "text": "Worms"
+          }
         },
         "_row_num": 72
       },
@@ -653,7 +807,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "HIV",
         "display": {
-          "title": "HIV"
+          "title": {
+            "text": "HIV"
+          }
         },
         "_row_num": 73
       },
@@ -661,7 +817,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "TB",
         "display": {
-          "title": "TB"
+          "title": {
+            "text": "TB"
+          }
         },
         "_row_num": 74
       },
@@ -669,7 +827,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Hepatitis",
         "display": {
-          "title": "Hepatitis"
+          "title": {
+            "text": "Hepatitis"
+          }
         },
         "_row_num": 75
       },
@@ -677,7 +837,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Epilepsy_(convulsions)",
         "display": {
-          "title": "Epilepsy_(convulsions)"
+          "title": {
+            "text": "Epilepsy (convulsions)"
+          }
         },
         "_row_num": 76
       },
@@ -685,7 +847,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Heart_problems",
         "display": {
-          "title": "Heart_problems"
+          "title": {
+            "text": "Heart problems"
+          }
         },
         "_row_num": 77
       },
@@ -693,7 +857,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Diabetes",
         "display": {
-          "title": "Diabetes"
+          "title": {
+            "text": "Diabetes"
+          }
         },
         "_row_num": 78
       },
@@ -701,7 +867,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "Cancer",
         "display": {
-          "title": "Cancer"
+          "title": {
+            "text": "Cancer"
+          }
         },
         "_row_num": 79
       },
@@ -709,7 +877,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "pna",
         "display": {
-          "title": "pna"
+          "title": {
+            "text": "Prefer not to answer"
+          }
         },
         "_row_num": 80
       },
@@ -717,7 +887,9 @@
         "choice_list_name": "chronic_disease",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 81
       },
@@ -725,7 +897,9 @@
         "choice_list_name": "disability",
         "data_value": "Blind",
         "display": {
-          "title": "Blind"
+          "title": {
+            "text": "Blind"
+          }
         },
         "_row_num": 82
       },
@@ -733,7 +907,9 @@
         "choice_list_name": "disability",
         "data_value": "Deaf",
         "display": {
-          "title": "Deaf"
+          "title": {
+            "text": "Deaf"
+          }
         },
         "_row_num": 83
       },
@@ -741,7 +917,9 @@
         "choice_list_name": "disability",
         "data_value": "Amputated/atrophied_arm",
         "display": {
-          "title": "Amputated/atrophied_arm"
+          "title": {
+            "text": "Amputated/atrophied arm"
+          }
         },
         "_row_num": 84
       },
@@ -749,7 +927,9 @@
         "choice_list_name": "disability",
         "data_value": "Amputated/atrophied_leg",
         "display": {
-          "title": "Amputated/atrophied_leg"
+          "title": {
+            "text": "Amputated/atrophied leg"
+          }
         },
         "_row_num": 85
       },
@@ -757,7 +937,9 @@
         "choice_list_name": "disability",
         "data_value": "Paralysis",
         "display": {
-          "title": "Paralysis"
+          "title": {
+            "text": "Paralysis"
+          }
         },
         "_row_num": 86
       },
@@ -765,7 +947,9 @@
         "choice_list_name": "disability",
         "data_value": "Mental",
         "display": {
-          "title": "Mental"
+          "title": {
+            "text": "Mental"
+          }
         },
         "_row_num": 87
       },
@@ -773,7 +957,9 @@
         "choice_list_name": "disability",
         "data_value": "none",
         "display": {
-          "title": "none"
+          "title": {
+            "text": "None"
+          }
         },
         "_row_num": 88
       },
@@ -781,7 +967,9 @@
         "choice_list_name": "disability",
         "data_value": "pna",
         "display": {
-          "title": "pna"
+          "title": {
+            "text": "Prefer not to answer"
+          }
         },
         "_row_num": 89
       },
@@ -789,7 +977,9 @@
         "choice_list_name": "disability",
         "data_value": "other",
         "display": {
-          "title": "pther"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 90
       },
@@ -797,7 +987,9 @@
         "choice_list_name": "dmy_ago_dk",
         "data_value": "days_ago",
         "display": {
-          "title": "days_ago"
+          "title": {
+            "text": "Day(s) ago"
+          }
         },
         "_row_num": 91
       },
@@ -805,7 +997,9 @@
         "choice_list_name": "dmy_ago_dk",
         "data_value": "weeks_ago",
         "display": {
-          "title": "weeks_ago"
+          "title": {
+            "text": "Week(s) ago"
+          }
         },
         "_row_num": 92
       },
@@ -813,7 +1007,9 @@
         "choice_list_name": "dmy_ago_dk",
         "data_value": "months_ago",
         "display": {
-          "title": "months_ago"
+          "title": {
+            "text": "Month(s) ago"
+          }
         },
         "_row_num": 93
       },
@@ -821,7 +1017,9 @@
         "choice_list_name": "dmy_ago_dk",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't Know"
+          }
         },
         "_row_num": 94
       },
@@ -829,7 +1027,9 @@
         "choice_list_name": "dwmy",
         "data_value": "days",
         "display": {
-          "title": "days"
+          "title": {
+            "text": "Day(s)"
+          }
         },
         "_row_num": 95
       },
@@ -837,7 +1037,9 @@
         "choice_list_name": "dwmy",
         "data_value": "weeks",
         "display": {
-          "title": "weeks"
+          "title": {
+            "text": "Week(s)"
+          }
         },
         "_row_num": 96
       },
@@ -845,7 +1047,9 @@
         "choice_list_name": "dwmy",
         "data_value": "months",
         "display": {
-          "title": "months"
+          "title": {
+            "text": "Month(s)"
+          }
         },
         "_row_num": 97
       },
@@ -853,7 +1057,9 @@
         "choice_list_name": "dwmy",
         "data_value": "years",
         "display": {
-          "title": "years"
+          "title": {
+            "text": "Year(s)"
+          }
         },
         "_row_num": 98
       },
@@ -861,7 +1067,9 @@
         "choice_list_name": "form_of_care",
         "data_value": "Health_facility",
         "display": {
-          "title": "Health_facility"
+          "title": {
+            "text": "Health facility"
+          }
         },
         "_row_num": 99
       },
@@ -869,7 +1077,9 @@
         "choice_list_name": "form_of_care",
         "data_value": "CHW",
         "display": {
-          "title": "CHW"
+          "title": {
+            "text": "CHW"
+          }
         },
         "_row_num": 100
       },
@@ -877,7 +1087,9 @@
         "choice_list_name": "form_of_care",
         "data_value": "Family_or_friends",
         "display": {
-          "title": "Family_or_friends"
+          "title": {
+            "text": "Family or friends"
+          }
         },
         "_row_num": 101
       },
@@ -885,7 +1097,9 @@
         "choice_list_name": "form_of_care",
         "data_value": "Informal_drug_vendor",
         "display": {
-          "title": "Informal_drug_vendor"
+          "title": {
+            "text": "Informal drug vendor"
+          }
         },
         "_row_num": 102
       },
@@ -893,7 +1107,9 @@
         "choice_list_name": "form_of_care",
         "data_value": "Pharmacy",
         "display": {
-          "title": "Pharmacy"
+          "title": {
+            "text": "Pharmacy"
+          }
         },
         "_row_num": 103
       },
@@ -901,7 +1117,9 @@
         "choice_list_name": "form_of_care",
         "data_value": "Traditional_healer",
         "display": {
-          "title": "Traditional_healer"
+          "title": {
+            "text": "Traditional healer"
+          }
         },
         "_row_num": 104
       },
@@ -909,7 +1127,9 @@
         "choice_list_name": "form_of_care",
         "data_value": "Community_leader",
         "display": {
-          "title": "Community_leader"
+          "title": {
+            "text": "Community leader"
+          }
         },
         "_row_num": 105
       },
@@ -917,7 +1137,9 @@
         "choice_list_name": "form_of_care",
         "data_value": "Trusted_elderly",
         "display": {
-          "title": "Trusted_elderly"
+          "title": {
+            "text": "Trusted elderly"
+          }
         },
         "_row_num": 106
       },
@@ -925,7 +1147,9 @@
         "choice_list_name": "form_of_care",
         "data_value": "Traditional_midwife",
         "display": {
-          "title": "Traditional_midwife"
+          "title": {
+            "text": "Traditional midwife"
+          }
         },
         "_row_num": 107
       },
@@ -933,7 +1157,9 @@
         "choice_list_name": "gender",
         "data_value": "male",
         "display": {
-          "title": "male"
+          "title": {
+            "text": "Male"
+          }
         },
         "_row_num": 108
       },
@@ -941,7 +1167,9 @@
         "choice_list_name": "gender",
         "data_value": "female",
         "display": {
-          "title": "female"
+          "title": {
+            "text": "Female"
+          }
         },
         "_row_num": 109
       },
@@ -949,7 +1177,9 @@
         "choice_list_name": "in_outside_district",
         "data_value": "in_district",
         "display": {
-          "title": "in_district"
+          "title": {
+            "text": "Within this district"
+          }
         },
         "_row_num": 110
       },
@@ -957,7 +1187,9 @@
         "choice_list_name": "in_outside_district",
         "data_value": "outside_district",
         "display": {
-          "title": "outside_district"
+          "title": {
+            "text": "Outside this district"
+          }
         },
         "_row_num": 111
       },
@@ -965,7 +1197,9 @@
         "choice_list_name": "in_outside_district",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't Know"
+          }
         },
         "_row_num": 112
       },
@@ -973,7 +1207,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Catholic",
         "display": {
-          "title": "Catholic"
+          "title": {
+            "text": "Catholic"
+          }
         },
         "_row_num": 113
       },
@@ -981,7 +1217,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Protestant",
         "display": {
-          "title": "Protestant"
+          "title": {
+            "text": "Protestant"
+          }
         },
         "_row_num": 114
       },
@@ -989,7 +1227,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Anglican",
         "display": {
-          "title": "Anglican"
+          "title": {
+            "text": "Anglican"
+          }
         },
         "_row_num": 115
       },
@@ -997,7 +1237,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Christian undetermined",
         "display": {
-          "title": "Christian undetermined"
+          "title": {
+            "text": "Christian undetermined"
+          }
         },
         "_row_num": 116
       },
@@ -1005,7 +1247,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Islamic",
         "display": {
-          "title": "Islamic"
+          "title": {
+            "text": "Islamic"
+          }
         },
         "_row_num": 117
       },
@@ -1013,7 +1257,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Hindu",
         "display": {
-          "title": "Hindu"
+          "title": {
+            "text": "Hindu"
+          }
         },
         "_row_num": 118
       },
@@ -1021,7 +1267,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Zionist",
         "display": {
-          "title": "Zionist"
+          "title": {
+            "text": "Zionist"
+          }
         },
         "_row_num": 119
       },
@@ -1029,7 +1277,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Animist",
         "display": {
-          "title": "Animist"
+          "title": {
+            "text": "Animist"
+          }
         },
         "_row_num": 120
       },
@@ -1037,7 +1287,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Evangelical",
         "display": {
-          "title": "Evangelical"
+          "title": {
+            "text": "Evangelical"
+          }
         },
         "_row_num": 121
       },
@@ -1045,7 +1297,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "Atheist",
         "display": {
-          "title": "Atheist"
+          "title": {
+            "text": "Atheist"
+          }
         },
         "_row_num": 122
       },
@@ -1053,7 +1307,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't know"
+          }
         },
         "_row_num": 123
       },
@@ -1061,7 +1317,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "pna",
         "display": {
-          "title": "pna"
+          "title": {
+            "text": "Prefer not to answer"
+          }
         },
         "_row_num": 124
       },
@@ -1069,7 +1327,9 @@
         "choice_list_name": "ind_religion",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 125
       },
@@ -1077,7 +1337,9 @@
         "choice_list_name": "iptp_current",
         "data_value": "Yes, already took 1 dose",
         "display": {
-          "title": "Yes, already took 1 dose"
+          "title": {
+            "text": "Yes, already took 1 dose"
+          }
         },
         "_row_num": 126
       },
@@ -1085,7 +1347,9 @@
         "choice_list_name": "iptp_current",
         "data_value": "Yes, already took 2 doses",
         "display": {
-          "title": "Yes, already took 2 doses"
+          "title": {
+            "text": "Yes, already took 2 doses"
+          }
         },
         "_row_num": 127
       },
@@ -1093,7 +1357,9 @@
         "choice_list_name": "iptp_current",
         "data_value": "Yes, already took 3 doses",
         "display": {
-          "title": "Yes, already took 3 doses"
+          "title": {
+            "text": "Yes, already took 3 doses"
+          }
         },
         "_row_num": 128
       },
@@ -1101,7 +1367,9 @@
         "choice_list_name": "iptp_current",
         "data_value": "Yes, already took more than 3 doses",
         "display": {
-          "title": "Yes, already took more than 3 doses"
+          "title": {
+            "text": "Yes, already took more than 3 doses"
+          }
         },
         "_row_num": 129
       },
@@ -1109,7 +1377,9 @@
         "choice_list_name": "iptp_current",
         "data_value": "No",
         "display": {
-          "title": "no"
+          "title": {
+            "text": "No"
+          }
         },
         "_row_num": 130
       },
@@ -1117,7 +1387,9 @@
         "choice_list_name": "iptp_current",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't Know"
+          }
         },
         "_row_num": 131
       },
@@ -1125,7 +1397,9 @@
         "choice_list_name": "itchy",
         "data_value": "body",
         "display": {
-          "title": "body"
+          "title": {
+            "text": "Yes, on the body"
+          }
         },
         "_row_num": 132
       },
@@ -1133,7 +1407,9 @@
         "choice_list_name": "itchy",
         "data_value": "head",
         "display": {
-          "title": "head"
+          "title": {
+            "text": "Yes, on the head"
+          }
         },
         "_row_num": 133
       },
@@ -1141,7 +1417,9 @@
         "choice_list_name": "itchy",
         "data_value": "no",
         "display": {
-          "title": "no"
+          "title": {
+            "text": "No"
+          }
         },
         "_row_num": 134
       },
@@ -1149,7 +1427,9 @@
         "choice_list_name": "itchy",
         "data_value": "pna",
         "display": {
-          "title": "pna"
+          "title": {
+            "text": "Prefer not to answer"
+          }
         },
         "_row_num": 135
       },
@@ -1157,7 +1437,9 @@
         "choice_list_name": "lmp",
         "data_value": "Less_than_two_weeks_ago",
         "display": {
-          "title": "Less_than_two_weeks_ago"
+          "title": {
+            "text": "Less than two weeks ago"
+          }
         },
         "_row_num": 136
       },
@@ -1165,7 +1447,9 @@
         "choice_list_name": "lmp",
         "data_value": "More_than_two_weeks_ago",
         "display": {
-          "title": "More_than_two_weeks_ago"
+          "title": {
+            "text": "More than two weeks ago"
+          }
         },
         "_row_num": 137
       },
@@ -1173,7 +1457,9 @@
         "choice_list_name": "lmp",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't know"
+          }
         },
         "_row_num": 138
       },
@@ -1181,7 +1467,9 @@
         "choice_list_name": "lmp",
         "data_value": "never",
         "display": {
-          "title": "never"
+          "title": {
+            "text": "Never"
+          }
         },
         "_row_num": 139
       },
@@ -1189,7 +1477,9 @@
         "choice_list_name": "lmp",
         "data_value": "pna",
         "display": {
-          "title": "pna"
+          "title": {
+            "text": "Prefer not to answer"
+          }
         },
         "_row_num": 140
       },
@@ -1197,7 +1487,9 @@
         "choice_list_name": "malaria_no_treatment",
         "data_value": "Participant didn’t have malaria",
         "display": {
-          "title": "Participant didn’t have malaria"
+          "title": {
+            "text": "Participant didn’t have malaria"
+          }
         },
         "_row_num": 141
       },
@@ -1205,7 +1497,9 @@
         "choice_list_name": "malaria_no_treatment",
         "data_value": "Treatment was not available",
         "display": {
-          "title": "Treatment was not available"
+          "title": {
+            "text": "Treatment was not available"
+          }
         },
         "_row_num": 142
       },
@@ -1213,7 +1507,9 @@
         "choice_list_name": "malaria_no_treatment",
         "data_value": "Treatment was not affordable",
         "display": {
-          "title": "Treatment was not affordable"
+          "title": {
+            "text": "Treatment was not affordable"
+          }
         },
         "_row_num": 143
       },
@@ -1221,7 +1517,9 @@
         "choice_list_name": "malaria_no_treatment",
         "data_value": "Treatment was not deemed necessary",
         "display": {
-          "title": "Treatment was not deemed necessary"
+          "title": {
+            "text": "Treatment was not deemed necessary"
+          }
         },
         "_row_num": 144
       },
@@ -1229,7 +1527,9 @@
         "choice_list_name": "malaria_no_treatment",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don’t know"
+          }
         },
         "_row_num": 145
       },
@@ -1237,7 +1537,9 @@
         "choice_list_name": "malaria_test_result",
         "data_value": "Positive",
         "display": {
-          "title": "Positive"
+          "title": {
+            "text": "Positive"
+          }
         },
         "_row_num": 146
       },
@@ -1245,7 +1547,9 @@
         "choice_list_name": "malaria_test_result",
         "data_value": "Negative",
         "display": {
-          "title": "Negative"
+          "title": {
+            "text": "Negative"
+          }
         },
         "_row_num": 147
       },
@@ -1253,7 +1557,9 @@
         "choice_list_name": "malaria_test_result",
         "data_value": "Invalid",
         "display": {
-          "title": "Invalid"
+          "title": {
+            "text": "Invalid"
+          }
         },
         "_row_num": 148
       },
@@ -1261,7 +1567,9 @@
         "choice_list_name": "malaria_test_result",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don’t Know"
+          }
         },
         "_row_num": 149
       },
@@ -1269,7 +1577,9 @@
         "choice_list_name": "member_where_now",
         "data_value": "died",
         "display": {
-          "title": "died"
+          "title": {
+            "text": "He/she died"
+          }
         },
         "_row_num": 150
       },
@@ -1277,7 +1587,9 @@
         "choice_list_name": "member_where_now",
         "data_value": "emigrated",
         "display": {
-          "title": "emigrated"
+          "title": {
+            "text": "He/she emigrated"
+          }
         },
         "_row_num": 151
       },
@@ -1285,7 +1597,9 @@
         "choice_list_name": "month",
         "data_value": "january",
         "display": {
-          "title": "january"
+          "title": {
+            "text": "January"
+          }
         },
         "_row_num": 152
       },
@@ -1293,7 +1607,9 @@
         "choice_list_name": "month",
         "data_value": "february",
         "display": {
-          "title": "february"
+          "title": {
+            "text": "February"
+          }
         },
         "_row_num": 153
       },
@@ -1301,7 +1617,9 @@
         "choice_list_name": "month",
         "data_value": "march",
         "display": {
-          "title": "march"
+          "title": {
+            "text": "March"
+          }
         },
         "_row_num": 154
       },
@@ -1309,7 +1627,9 @@
         "choice_list_name": "month",
         "data_value": "april",
         "display": {
-          "title": "april"
+          "title": {
+            "text": "April"
+          }
         },
         "_row_num": 155
       },
@@ -1317,7 +1637,9 @@
         "choice_list_name": "month",
         "data_value": "may",
         "display": {
-          "title": "may"
+          "title": {
+            "text": "May"
+          }
         },
         "_row_num": 156
       },
@@ -1325,7 +1647,9 @@
         "choice_list_name": "month",
         "data_value": "june",
         "display": {
-          "title": "june"
+          "title": {
+            "text": "June"
+          }
         },
         "_row_num": 157
       },
@@ -1333,7 +1657,9 @@
         "choice_list_name": "month",
         "data_value": "july",
         "display": {
-          "title": "july"
+          "title": {
+            "text": "July"
+          }
         },
         "_row_num": 158
       },
@@ -1341,7 +1667,9 @@
         "choice_list_name": "month",
         "data_value": "august",
         "display": {
-          "title": "august"
+          "title": {
+            "text": "August"
+          }
         },
         "_row_num": 159
       },
@@ -1349,7 +1677,9 @@
         "choice_list_name": "month",
         "data_value": "september",
         "display": {
-          "title": "september"
+          "title": {
+            "text": "September"
+          }
         },
         "_row_num": 160
       },
@@ -1357,7 +1687,9 @@
         "choice_list_name": "month",
         "data_value": "october",
         "display": {
-          "title": "october"
+          "title": {
+            "text": "October"
+          }
         },
         "_row_num": 161
       },
@@ -1365,7 +1697,9 @@
         "choice_list_name": "month",
         "data_value": "november",
         "display": {
-          "title": "november"
+          "title": {
+            "text": "November"
+          }
         },
         "_row_num": 162
       },
@@ -1373,7 +1707,9 @@
         "choice_list_name": "month",
         "data_value": "december",
         "display": {
-          "title": "december"
+          "title": {
+            "text": "December"
+          }
         },
         "_row_num": 163
       },
@@ -1381,7 +1717,9 @@
         "choice_list_name": "month",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don't Know"
+          }
         },
         "_row_num": 164
       },
@@ -1389,7 +1727,9 @@
         "choice_list_name": "new_member",
         "data_value": "newborn",
         "display": {
-          "title": "newborn"
+          "title": {
+            "text": "Newborn"
+          }
         },
         "_row_num": 165
       },
@@ -1397,7 +1737,9 @@
         "choice_list_name": "new_member",
         "data_value": "someone_new_in_the_household",
         "display": {
-          "title": "someone_new_in_the_household"
+          "title": {
+            "text": "Someone new in the household"
+          }
         },
         "_row_num": 166
       },
@@ -1405,7 +1747,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "Malaria",
         "display": {
-          "title": "Malaria"
+          "title": {
+            "text": "Malaria"
+          }
         },
         "_row_num": 167
       },
@@ -1413,7 +1757,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "Respiratory_disease",
         "display": {
-          "title": "Respiratory_disease"
+          "title": {
+            "text": "Respiratory disease"
+          }
         },
         "_row_num": 168
       },
@@ -1421,7 +1767,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "Constipation",
         "display": {
-          "title": "Constipation"
+          "title": {
+            "text": "Constipation"
+          }
         },
         "_row_num": 169
       },
@@ -1429,7 +1777,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "Diarrhoea",
         "display": {
-          "title": "Diarrhoea"
+          "title": {
+            "text": "Diarrhoea"
+          }
         },
         "_row_num": 170
       },
@@ -1437,7 +1787,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "Fever",
         "display": {
-          "title": "Fever"
+          "title": {
+            "text": "Fever"
+          }
         },
         "_row_num": 171
       },
@@ -1445,7 +1797,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "Injuries_from_an_accident",
         "display": {
-          "title": "Injuries_from_an_accident"
+          "title": {
+            "text": "Injuries from an accident"
+          }
         },
         "_row_num": 172
       },
@@ -1453,7 +1807,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "Delivery_of_a_baby",
         "display": {
-          "title": "Delivery_of_a_baby"
+          "title": {
+            "text": "Delivery of a baby"
+          }
         },
         "_row_num": 173
       },
@@ -1461,7 +1817,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "Skin_disease",
         "display": {
-          "title": "Skin_disease"
+          "title": {
+            "text": "Skin disease"
+          }
         },
         "_row_num": 174
       },
@@ -1469,7 +1827,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "Worms",
         "display": {
-          "title": "Worms"
+          "title": {
+            "text": "Worms"
+          }
         },
         "_row_num": 175
       },
@@ -1477,7 +1837,9 @@
         "choice_list_name": "other_recent_disease",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 176
       },
@@ -1485,7 +1847,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "Fever",
         "display": {
-          "title": "Fever"
+          "title": {
+            "text": "Fever"
+          }
         },
         "_row_num": 177
       },
@@ -1493,7 +1857,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "Vomiting",
         "display": {
-          "title": "Vomiting"
+          "title": {
+            "text": "Vomiting"
+          }
         },
         "_row_num": 178
       },
@@ -1501,7 +1867,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "Nausea",
         "display": {
-          "title": "Nausea"
+          "title": {
+            "text": "Nausea"
+          }
         },
         "_row_num": 179
       },
@@ -1509,7 +1877,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "Joints_pain",
         "display": {
-          "title": "Joints_pain"
+          "title": {
+            "text": "Joints pain"
+          }
         },
         "_row_num": 180
       },
@@ -1517,7 +1887,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "Dizziness",
         "display": {
-          "title": "Dizziness"
+          "title": {
+            "text": "Dizziness"
+          }
         },
         "_row_num": 181
       },
@@ -1525,7 +1897,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "Chills-shivers",
         "display": {
-          "title": "Chills-shivers"
+          "title": {
+            "text": "Chills-shivers"
+          }
         },
         "_row_num": 182
       },
@@ -1533,7 +1907,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "Diarrhoea",
         "display": {
-          "title": "Diarrhoea"
+          "title": {
+            "text": "Diarrhoea"
+          }
         },
         "_row_num": 183
       },
@@ -1541,7 +1917,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "Loss_smell",
         "display": {
-          "title": "Loss_smell"
+          "title": {
+            "text": "Loss of smell and/or taste"
+          }
         },
         "_row_num": 184
       },
@@ -1549,7 +1927,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "No_symptoms",
         "display": {
-          "title": "No_symptoms"
+          "title": {
+            "text": "No symptoms"
+          }
         },
         "_row_num": 185
       },
@@ -1557,7 +1937,9 @@
         "choice_list_name": "other_symptoms",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 186
       },
@@ -1565,7 +1947,9 @@
         "choice_list_name": "parents_alive",
         "data_value": "both_alive",
         "display": {
-          "title": "both_alive"
+          "title": {
+            "text": "Both alive"
+          }
         },
         "_row_num": 187
       },
@@ -1573,7 +1957,9 @@
         "choice_list_name": "parents_alive",
         "data_value": "mother_alive",
         "display": {
-          "title": "mother_alive"
+          "title": {
+            "text": "Only living mother"
+          }
         },
         "_row_num": 188
       },
@@ -1581,7 +1967,9 @@
         "choice_list_name": "parents_alive",
         "data_value": "father_alive",
         "display": {
-          "title": "father_alive"
+          "title": {
+            "text": "Only living father"
+          }
         },
         "_row_num": 189
       },
@@ -1589,7 +1977,9 @@
         "choice_list_name": "parents_alive",
         "data_value": "neither_alive",
         "display": {
-          "title": "neither_alive"
+          "title": {
+            "text": "Neither are alive"
+          }
         },
         "_row_num": 190
       },
@@ -1597,7 +1987,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "husband_wife",
         "display": {
-          "title": "husband_wife"
+          "title": {
+            "text": "Husband/wife of household head"
+          }
         },
         "_row_num": 191
       },
@@ -1605,7 +1997,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "son_daughter",
         "display": {
-          "title": "son_daughter"
+          "title": {
+            "text": "Son/daughter of household head"
+          }
         },
         "_row_num": 192
       },
@@ -1613,7 +2007,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "brother_sister",
         "display": {
-          "title": "brother_sister"
+          "title": {
+            "text": "Brother/sister of household head"
+          }
         },
         "_row_num": 193
       },
@@ -1621,7 +2017,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "father_mother",
         "display": {
-          "title": "father_mother"
+          "title": {
+            "text": "Father/mother of household head"
+          }
         },
         "_row_num": 194
       },
@@ -1629,7 +2027,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "son_daughterinlaw",
         "display": {
-          "title": "son_daughterinlaw"
+          "title": {
+            "text": "Son/daughter in law of household head"
+          }
         },
         "_row_num": 195
       },
@@ -1637,7 +2037,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "brother_sisterinlaw",
         "display": {
-          "title": "brother_sisterinlaw"
+          "title": {
+            "text": "Brother/sister in law of household head"
+          }
         },
         "_row_num": 196
       },
@@ -1645,7 +2047,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "uncle_aunt",
         "display": {
-          "title": "uncle_aunt"
+          "title": {
+            "text": "Uncle/aunt of household head"
+          }
         },
         "_row_num": 197
       },
@@ -1653,7 +2057,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "grandson_granddaughter",
         "display": {
-          "title": "grandson_granddaughter"
+          "title": {
+            "text": "Grandson /granddaughter of household head"
+          }
         },
         "_row_num": 198
       },
@@ -1661,7 +2067,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "stepchild",
         "display": {
-          "title": "stepchild"
+          "title": {
+            "text": "Stepchild of household head"
+          }
         },
         "_row_num": 199
       },
@@ -1669,7 +2077,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "adopted_son_daughter",
         "display": {
-          "title": "adopted_son_daughter"
+          "title": {
+            "text": "Adopted son/daughter of household head"
+          }
         },
         "_row_num": 200
       },
@@ -1677,7 +2087,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "cousin",
         "display": {
-          "title": "cousin"
+          "title": {
+            "text": "Cousin of household head"
+          }
         },
         "_row_num": 201
       },
@@ -1685,7 +2097,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "nephew_niece",
         "display": {
-          "title": "nephew_niece"
+          "title": {
+            "text": "Nephew/Niece of household head"
+          }
         },
         "_row_num": 202
       },
@@ -1693,7 +2107,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "unrelated",
         "display": {
-          "title": "unrelated"
+          "title": {
+            "text": "Unrelated"
+          }
         },
         "_row_num": 203
       },
@@ -1701,7 +2117,9 @@
         "choice_list_name": "relation_to_hh_head",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 204
       },
@@ -1709,7 +2127,9 @@
         "choice_list_name": "resident_status",
         "data_value": "resident",
         "display": {
-          "title": "resident"
+          "title": {
+            "text": "Resident member"
+          }
         },
         "_row_num": 205
       },
@@ -1717,7 +2137,9 @@
         "choice_list_name": "resident_status",
         "data_value": "non_resident",
         "display": {
-          "title": "non_resident"
+          "title": {
+            "text": "Non-Resident member"
+          }
         },
         "_row_num": 206
       },
@@ -1725,7 +2147,9 @@
         "choice_list_name": "return_time",
         "data_value": "today",
         "display": {
-          "title": "today"
+          "title": {
+            "text": "Today"
+          }
         },
         "_row_num": 207
       },
@@ -1733,7 +2157,9 @@
         "choice_list_name": "return_time",
         "data_value": "tomorrow",
         "display": {
-          "title": "tomorrow"
+          "title": {
+            "text": "Tomorrow"
+          }
         },
         "_row_num": 208
       },
@@ -1741,7 +2167,9 @@
         "choice_list_name": "time_awake",
         "data_value": ">4h before sunrise",
         "display": {
-          "title": ">4h before sunrise"
+          "title": {
+            "text": ">4h before sunrise"
+          }
         },
         "_row_num": 209
       },
@@ -1749,7 +2177,9 @@
         "choice_list_name": "time_awake",
         "data_value": "2-4h before sunrise",
         "display": {
-          "title": "2-4h before sunrise"
+          "title": {
+            "text": "2-4h before sunrise"
+          }
         },
         "_row_num": 210
       },
@@ -1757,7 +2187,9 @@
         "choice_list_name": "time_awake",
         "data_value": "1-2h before sunrise",
         "display": {
-          "title": "1-2h before sunrise"
+          "title": {
+            "text": "1-2h before sunrise"
+          }
         },
         "_row_num": 211
       },
@@ -1765,7 +2197,9 @@
         "choice_list_name": "time_awake",
         "data_value": "At sunrise",
         "display": {
-          "title": "At sunrise"
+          "title": {
+            "text": "At sunrise"
+          }
         },
         "_row_num": 212
       },
@@ -1773,7 +2207,9 @@
         "choice_list_name": "time_bed",
         "data_value": "Before sunset",
         "display": {
-          "title": "Before sunset"
+          "title": {
+            "text": "Before sunset"
+          }
         },
         "_row_num": 213
       },
@@ -1781,7 +2217,9 @@
         "choice_list_name": "time_bed",
         "data_value": "At sunset",
         "display": {
-          "title": "At sunset"
+          "title": {
+            "text": "At sunset"
+          }
         },
         "_row_num": 214
       },
@@ -1789,7 +2227,9 @@
         "choice_list_name": "time_bed",
         "data_value": "1-2h after sunset",
         "display": {
-          "title": "1-2h after sunset"
+          "title": {
+            "text": "1-2h after sunset"
+          }
         },
         "_row_num": 215
       },
@@ -1797,7 +2237,9 @@
         "choice_list_name": "time_bed",
         "data_value": "2-4h after sunset",
         "display": {
-          "title": "2-4h after sunset"
+          "title": {
+            "text": "2-4h after sunset"
+          }
         },
         "_row_num": 216
       },
@@ -1805,7 +2247,9 @@
         "choice_list_name": "time_bed",
         "data_value": ">4h after sunset",
         "display": {
-          "title": ">4h after sunset"
+          "title": {
+            "text": ">4h after sunset"
+          }
         },
         "_row_num": 217
       },
@@ -1813,7 +2257,9 @@
         "choice_list_name": "time_indoors",
         "data_value": "Before sunset",
         "display": {
-          "title": "Before sunset"
+          "title": {
+            "text": "Before sunset"
+          }
         },
         "_row_num": 218
       },
@@ -1821,7 +2267,9 @@
         "choice_list_name": "time_indoors",
         "data_value": "At sunset",
         "display": {
-          "title": "At sunset"
+          "title": {
+            "text": "At sunset"
+          }
         },
         "_row_num": 219
       },
@@ -1829,7 +2277,9 @@
         "choice_list_name": "time_indoors",
         "data_value": "1-2h after sunset",
         "display": {
-          "title": "1-2h after sunset"
+          "title": {
+            "text": "1-2h after sunset"
+          }
         },
         "_row_num": 220
       },
@@ -1837,7 +2287,9 @@
         "choice_list_name": "time_indoors",
         "data_value": "2-4h after sunset",
         "display": {
-          "title": "2-4h after sunset"
+          "title": {
+            "text": "2-4h after sunset"
+          }
         },
         "_row_num": 221
       },
@@ -1845,7 +2297,9 @@
         "choice_list_name": "time_indoors",
         "data_value": ">4h after sunset",
         "display": {
-          "title": ">4h after sunset"
+          "title": {
+            "text": ">4h after sunset"
+          }
         },
         "_row_num": 222
       },
@@ -1853,7 +2307,9 @@
         "choice_list_name": "time_outdoors",
         "data_value": ">4h before sunrise",
         "display": {
-          "title": ">4h before sunrise"
+          "title": {
+            "text": ">4h before sunrise"
+          }
         },
         "_row_num": 223
       },
@@ -1861,7 +2317,9 @@
         "choice_list_name": "time_outdoors",
         "data_value": "2-4h before sunrise",
         "display": {
-          "title": "2-4h before sunrise"
+          "title": {
+            "text": "2-4h before sunrise"
+          }
         },
         "_row_num": 224
       },
@@ -1869,7 +2327,9 @@
         "choice_list_name": "time_outdoors",
         "data_value": "1-2h before sunrise",
         "display": {
-          "title": "1-2h before sunrise"
+          "title": {
+            "text": "1-2h before sunrise"
+          }
         },
         "_row_num": 225
       },
@@ -1877,7 +2337,9 @@
         "choice_list_name": "time_outdoors",
         "data_value": "At sunrise",
         "display": {
-          "title": "At sunrise"
+          "title": {
+            "text": "At sunrise"
+          }
         },
         "_row_num": 226
       },
@@ -1885,7 +2347,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "Angola",
         "display": {
-          "title": "Angola"
+          "title": {
+            "text": "Angola"
+          }
         },
         "_row_num": 227
       },
@@ -1893,7 +2357,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "Cameroon",
         "display": {
-          "title": "Cameroon"
+          "title": {
+            "text": "Cameroon"
+          }
         },
         "_row_num": 228
       },
@@ -1901,7 +2367,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "Chad",
         "display": {
-          "title": "Chad"
+          "title": {
+            "text": "Chad"
+          }
         },
         "_row_num": 229
       },
@@ -1909,7 +2377,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "CAR",
         "display": {
-          "title": "CAR"
+          "title": {
+            "text": "Central African Republic"
+          }
         },
         "_row_num": 230
       },
@@ -1917,7 +2387,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "Congo",
         "display": {
-          "title": "Congo"
+          "title": {
+            "text": "Congo"
+          }
         },
         "_row_num": 231
       },
@@ -1925,7 +2397,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "EG",
         "display": {
-          "title": "EG"
+          "title": {
+            "text": "Equatorial Guinea"
+          }
         },
         "_row_num": 232
       },
@@ -1933,7 +2407,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "Ethiopia",
         "display": {
-          "title": "Ethiopia"
+          "title": {
+            "text": "Ethiopia"
+          }
         },
         "_row_num": 233
       },
@@ -1941,7 +2417,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "Gabon",
         "display": {
-          "title": "Gabon"
+          "title": {
+            "text": "Gabon"
+          }
         },
         "_row_num": 234
       },
@@ -1949,7 +2427,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "Nigeria",
         "display": {
-          "title": "Nigeria"
+          "title": {
+            "text": "Nigeria"
+          }
         },
         "_row_num": 235
       },
@@ -1957,7 +2437,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "Sudan",
         "display": {
-          "title": "Sudan"
+          "title": {
+            "text": "Sudan"
+          }
         },
         "_row_num": 236
       },
@@ -1965,7 +2447,9 @@
         "choice_list_name": "travel_countries",
         "data_value": "none",
         "display": {
-          "title": "none"
+          "title": {
+            "text": "None"
+          }
         },
         "_row_num": 237
       },
@@ -1973,7 +2457,9 @@
         "choice_list_name": "treatment",
         "data_value": "Treatment_for_pain",
         "display": {
-          "title": "Treatment_for_pain"
+          "title": {
+            "text": "Treatment for pain"
+          }
         },
         "_row_num": 238
       },
@@ -1981,7 +2467,9 @@
         "choice_list_name": "treatment",
         "data_value": "Contraceptive",
         "display": {
-          "title": "Contraceptive"
+          "title": {
+            "text": "Contraceptive"
+          }
         },
         "_row_num": 239
       },
@@ -1989,7 +2477,9 @@
         "choice_list_name": "treatment",
         "data_value": "Treatment_for_malaria",
         "display": {
-          "title": "Treatment_for_malaria"
+          "title": {
+            "text": "Treatment for malaria"
+          }
         },
         "_row_num": 240
       },
@@ -1997,7 +2487,9 @@
         "choice_list_name": "treatment",
         "data_value": "Antihistamine",
         "display": {
-          "title": "Antihistamine"
+          "title": {
+            "text": "Antihistamine"
+          }
         },
         "_row_num": 241
       },
@@ -2005,7 +2497,9 @@
         "choice_list_name": "treatment",
         "data_value": "Antiretrovirals",
         "display": {
-          "title": "Antiretrovirals"
+          "title": {
+            "text": "Antiretrovirals"
+          }
         },
         "_row_num": 242
       },
@@ -2013,7 +2507,9 @@
         "choice_list_name": "treatment",
         "data_value": "Treatment_for_tuberculosis",
         "display": {
-          "title": "Treatment_for_tuberculosis"
+          "title": {
+            "text": "Treatment for tuberculosis"
+          }
         },
         "_row_num": 243
       },
@@ -2021,7 +2517,9 @@
         "choice_list_name": "treatment",
         "data_value": "Antibiotic",
         "display": {
-          "title": "Antibiotic"
+          "title": {
+            "text": "Antibiotic"
+          }
         },
         "_row_num": 244
       },
@@ -2029,7 +2527,9 @@
         "choice_list_name": "treatment",
         "data_value": "Treatment_for_stress",
         "display": {
-          "title": "Treatment_for_stress"
+          "title": {
+            "text": "Treatment for stress"
+          }
         },
         "_row_num": 245
       },
@@ -2037,7 +2537,9 @@
         "choice_list_name": "treatment",
         "data_value": "Treatment_for_mental_illness",
         "display": {
-          "title": "Treatment_for_mental_illness"
+          "title": {
+            "text": "Treatment for mental illness"
+          }
         },
         "_row_num": 246
       },
@@ -2045,7 +2547,9 @@
         "choice_list_name": "treatment",
         "data_value": "Anti-fungal_treatment",
         "display": {
-          "title": "Anti-fungal_treatment"
+          "title": {
+            "text": "Anti-fungal treatment"
+          }
         },
         "_row_num": 247
       },
@@ -2053,7 +2557,9 @@
         "choice_list_name": "treatment",
         "data_value": "Treatment_for_epilepsy",
         "display": {
-          "title": "Treatment_for_epilepsy"
+          "title": {
+            "text": "Treatment for epilepsy"
+          }
         },
         "_row_num": 248
       },
@@ -2061,7 +2567,9 @@
         "choice_list_name": "treatment",
         "data_value": "Treatment_for_diarrhoea",
         "display": {
-          "title": "Treatment_for_diarrhoea"
+          "title": {
+            "text": "Treatment for diarrhoea"
+          }
         },
         "_row_num": 249
       },
@@ -2069,7 +2577,9 @@
         "choice_list_name": "treatment",
         "data_value": "Treatment_for_blood_pressure",
         "display": {
-          "title": "Treatment_for_blood_pressure"
+          "title": {
+            "text": "Treatment for blood pressure"
+          }
         },
         "_row_num": 250
       },
@@ -2077,7 +2587,9 @@
         "choice_list_name": "treatment",
         "data_value": "Traditional_medicine",
         "display": {
-          "title": "Traditional_medicine"
+          "title": {
+            "text": "Traditional medicine"
+          }
         },
         "_row_num": 251
       },
@@ -2085,7 +2597,9 @@
         "choice_list_name": "treatment",
         "data_value": "dk",
         "display": {
-          "title": "dk"
+          "title": {
+            "text": "Don’t know"
+          }
         },
         "_row_num": 252
       },
@@ -2093,7 +2607,9 @@
         "choice_list_name": "treatment",
         "data_value": "pna",
         "display": {
-          "title": "pna"
+          "title": {
+            "text": "Prefer not to say"
+          }
         },
         "_row_num": 253
       },
@@ -2101,7 +2617,9 @@
         "choice_list_name": "treatment",
         "data_value": "other",
         "display": {
-          "title": "other"
+          "title": {
+            "text": "Other"
+          }
         },
         "_row_num": 254
       },
@@ -2109,7 +2627,9 @@
         "choice_list_name": "treatment",
         "data_value": "no",
         "display": {
-          "title": "no"
+          "title": {
+            "text": "No"
+          }
         },
         "_row_num": 255
       }
@@ -2673,7 +3193,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210204001,
+        "value": 20210124001,
         "_row_num": 3
       },
       {
@@ -2764,7 +3284,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210204001,
+        "value": 20210124001,
         "_row_num": 3
       },
       "table_id": {
@@ -2899,7 +3419,9 @@
           "choice_list_name": "dk",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't Know"
+            }
           },
           "_row_num": 2
         }
@@ -2909,7 +3431,9 @@
           "choice_list_name": "not_possible",
           "data_value": "not_possible",
           "display": {
-            "title": "not_possible"
+            "title": {
+              "text": "Not possible to retrieve"
+            }
           },
           "_row_num": 3
         }
@@ -2919,7 +3443,9 @@
           "choice_list_name": "yn",
           "data_value": "yes",
           "display": {
-            "title": "yes"
+            "title": {
+              "text": "Yes"
+            }
           },
           "_row_num": 4
         },
@@ -2927,7 +3453,9 @@
           "choice_list_name": "yn",
           "data_value": "no",
           "display": {
-            "title": "no"
+            "title": {
+              "text": "No"
+            }
           },
           "_row_num": 5
         }
@@ -2937,7 +3465,9 @@
           "choice_list_name": "yndk",
           "data_value": "yes",
           "display": {
-            "title": "yes"
+            "title": {
+              "text": "Yes"
+            }
           },
           "_row_num": 6
         },
@@ -2945,7 +3475,9 @@
           "choice_list_name": "yndk",
           "data_value": "no",
           "display": {
-            "title": "no"
+            "title": {
+              "text": "No"
+            }
           },
           "_row_num": 7
         },
@@ -2953,7 +3485,9 @@
           "choice_list_name": "yndk",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't Know"
+            }
           },
           "_row_num": 8
         }
@@ -2963,7 +3497,9 @@
           "choice_list_name": "yndkpna",
           "data_value": "yes",
           "display": {
-            "title": "yes"
+            "title": {
+              "text": "Yes"
+            }
           },
           "_row_num": 9
         },
@@ -2971,7 +3507,9 @@
           "choice_list_name": "yndkpna",
           "data_value": "no",
           "display": {
-            "title": "no"
+            "title": {
+              "text": "No"
+            }
           },
           "_row_num": 10
         },
@@ -2979,7 +3517,9 @@
           "choice_list_name": "yndkpna",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't Know"
+            }
           },
           "_row_num": 11
         },
@@ -2987,7 +3527,9 @@
           "choice_list_name": "yndkpna",
           "data_value": "pna",
           "display": {
-            "title": "pna"
+            "title": {
+              "text": "Prefer not to answer"
+            }
           },
           "_row_num": 12
         }
@@ -2997,7 +3539,9 @@
           "choice_list_name": "ynpna",
           "data_value": "yes",
           "display": {
-            "title": "yes"
+            "title": {
+              "text": "Yes"
+            }
           },
           "_row_num": 13
         },
@@ -3005,7 +3549,9 @@
           "choice_list_name": "ynpna",
           "data_value": "no",
           "display": {
-            "title": "no"
+            "title": {
+              "text": "No"
+            }
           },
           "_row_num": 14
         },
@@ -3013,7 +3559,9 @@
           "choice_list_name": "ynpna",
           "data_value": "pna",
           "display": {
-            "title": "pna"
+            "title": {
+              "text": "Prefer not to answer"
+            }
           },
           "_row_num": 15
         }
@@ -3023,7 +3571,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "work",
           "display": {
-            "title": "work"
+            "title": {
+              "text": "Work"
+            }
           },
           "_row_num": 16
         },
@@ -3031,7 +3581,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "farm",
           "display": {
-            "title": "farm"
+            "title": {
+              "text": "Farm"
+            }
           },
           "_row_num": 17
         },
@@ -3039,7 +3591,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "taking_a_walk",
           "display": {
-            "title": "taking_a_walk"
+            "title": {
+              "text": "Taking a walk"
+            }
           },
           "_row_num": 18
         },
@@ -3047,7 +3601,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "church_mosque",
           "display": {
-            "title": "church_mosque"
+            "title": {
+              "text": "Church/mosque"
+            }
           },
           "_row_num": 19
         },
@@ -3055,7 +3611,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "school",
           "display": {
-            "title": "school"
+            "title": {
+              "text": "School"
+            }
           },
           "_row_num": 20
         },
@@ -3063,7 +3621,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "market",
           "display": {
-            "title": "market"
+            "title": {
+              "text": "Market"
+            }
           },
           "_row_num": 21
         },
@@ -3071,7 +3631,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "searching_for_a_job",
           "display": {
-            "title": "searching_for_a_job"
+            "title": {
+              "text": "Searching for a job"
+            }
           },
           "_row_num": 22
         },
@@ -3079,7 +3641,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "out_with_friends_family",
           "display": {
-            "title": "out_with_friends_family"
+            "title": {
+              "text": "Out with friends/family"
+            }
           },
           "_row_num": 23
         },
@@ -3087,7 +3651,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "sick",
           "display": {
-            "title": "sick"
+            "title": {
+              "text": "Sick"
+            }
           },
           "_row_num": 24
         },
@@ -3095,7 +3661,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "travel",
           "display": {
-            "title": "travel"
+            "title": {
+              "text": "Travel"
+            }
           },
           "_row_num": 25
         },
@@ -3103,7 +3671,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don’t know"
+            }
           },
           "_row_num": 26
         },
@@ -3111,7 +3681,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "pna",
           "display": {
-            "title": "pna"
+            "title": {
+              "text": "Prefer not to answer"
+            }
           },
           "_row_num": 27
         },
@@ -3119,7 +3691,9 @@
           "choice_list_name": "absence_reason",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 28
         }
@@ -3129,7 +3703,9 @@
           "choice_list_name": "approx",
           "data_value": "approx",
           "display": {
-            "title": "approx"
+            "title": {
+              "text": "Tick this box if approximate"
+            }
           },
           "_row_num": 29
         }
@@ -3139,7 +3715,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "Cook",
           "display": {
-            "title": "Cook"
+            "title": {
+              "text": "Cook"
+            }
           },
           "_row_num": 30
         },
@@ -3147,7 +3725,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "Eat",
           "display": {
-            "title": "Eat"
+            "title": {
+              "text": "Eat"
+            }
           },
           "_row_num": 31
         },
@@ -3155,7 +3735,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "stories",
           "display": {
-            "title": "stories"
+            "title": {
+              "text": "Explain stories"
+            }
           },
           "_row_num": 32
         },
@@ -3163,7 +3745,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "friends_relatives",
           "display": {
-            "title": "friends_relatives"
+            "title": {
+              "text": "Spend time with friends or relatives"
+            }
           },
           "_row_num": 33
         },
@@ -3171,7 +3755,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "Clean",
           "display": {
-            "title": "Clean"
+            "title": {
+              "text": "Clean"
+            }
           },
           "_row_num": 34
         },
@@ -3179,7 +3765,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "Work",
           "display": {
-            "title": "Work"
+            "title": {
+              "text": "Work"
+            }
           },
           "_row_num": 35
         },
@@ -3187,7 +3775,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "Study",
           "display": {
-            "title": "Study"
+            "title": {
+              "text": "Study"
+            }
           },
           "_row_num": 36
         },
@@ -3195,7 +3785,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "tv",
           "display": {
-            "title": "tv"
+            "title": {
+              "text": "Watch TV"
+            }
           },
           "_row_num": 37
         },
@@ -3203,7 +3795,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "radio",
           "display": {
-            "title": "radio"
+            "title": {
+              "text": "Listen to the radio"
+            }
           },
           "_row_num": 38
         },
@@ -3211,7 +3805,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "news",
           "display": {
-            "title": "news"
+            "title": {
+              "text": "Read the news"
+            }
           },
           "_row_num": 39
         },
@@ -3219,7 +3815,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "Pray",
           "display": {
-            "title": "Pray"
+            "title": {
+              "text": "Pray"
+            }
           },
           "_row_num": 40
         },
@@ -3227,7 +3825,9 @@
           "choice_list_name": "before_bed_activity",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 41
         }
@@ -3237,7 +3837,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "water",
           "display": {
-            "title": "water"
+            "title": {
+              "text": "Fetching water"
+            }
           },
           "_row_num": 42
         },
@@ -3245,7 +3847,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "wood",
           "display": {
-            "title": "wood"
+            "title": {
+              "text": "Fetching wood"
+            }
           },
           "_row_num": 43
         },
@@ -3253,7 +3857,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "Cook",
           "display": {
-            "title": "Cook"
+            "title": {
+              "text": "Cook"
+            }
           },
           "_row_num": 44
         },
@@ -3261,7 +3867,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "Eat",
           "display": {
-            "title": "Eat"
+            "title": {
+              "text": "Eat"
+            }
           },
           "_row_num": 45
         },
@@ -3269,7 +3877,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "Clean",
           "display": {
-            "title": "Clean"
+            "title": {
+              "text": "Clean"
+            }
           },
           "_row_num": 46
         },
@@ -3277,7 +3887,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "Work",
           "display": {
-            "title": "Work"
+            "title": {
+              "text": "Work"
+            }
           },
           "_row_num": 47
         },
@@ -3285,7 +3897,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "Study",
           "display": {
-            "title": "Study"
+            "title": {
+              "text": "Study"
+            }
           },
           "_row_num": 48
         },
@@ -3293,7 +3907,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "tv",
           "display": {
-            "title": "tv"
+            "title": {
+              "text": "Watch TV"
+            }
           },
           "_row_num": 49
         },
@@ -3301,7 +3917,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "radio",
           "display": {
-            "title": "radio"
+            "title": {
+              "text": "Listen to the radio"
+            }
           },
           "_row_num": 50
         },
@@ -3309,7 +3927,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "friends_relatives",
           "display": {
-            "title": "friends_relatives"
+            "title": {
+              "text": "Hang out with friends or relatives"
+            }
           },
           "_row_num": 51
         },
@@ -3317,7 +3937,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "Pray",
           "display": {
-            "title": "Pray"
+            "title": {
+              "text": "Pray"
+            }
           },
           "_row_num": 52
         },
@@ -3325,7 +3947,9 @@
           "choice_list_name": "before_sunrise_activity",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 53
         }
@@ -3335,7 +3959,9 @@
           "choice_list_name": "bite_occur",
           "data_value": "home",
           "display": {
-            "title": "home"
+            "title": {
+              "text": "Inside the home"
+            }
           },
           "_row_num": 54
         },
@@ -3343,7 +3969,9 @@
           "choice_list_name": "bite_occur",
           "data_value": "compound",
           "display": {
-            "title": "compound"
+            "title": {
+              "text": "Inside the compound"
+            }
           },
           "_row_num": 55
         },
@@ -3351,7 +3979,9 @@
           "choice_list_name": "bite_occur",
           "data_value": "field",
           "display": {
-            "title": "field"
+            "title": {
+              "text": "Field"
+            }
           },
           "_row_num": 56
         },
@@ -3359,7 +3989,9 @@
           "choice_list_name": "bite_occur",
           "data_value": "road",
           "display": {
-            "title": "road"
+            "title": {
+              "text": "Road"
+            }
           },
           "_row_num": 57
         },
@@ -3367,7 +3999,9 @@
           "choice_list_name": "bite_occur",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 58
         },
@@ -3375,7 +4009,9 @@
           "choice_list_name": "bite_occur",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't Know"
+            }
           },
           "_row_num": 59
         }
@@ -3385,7 +4021,9 @@
           "choice_list_name": "bite_outcome",
           "data_value": "death",
           "display": {
-            "title": "death"
+            "title": {
+              "text": "Death"
+            }
           },
           "_row_num": 60
         },
@@ -3393,7 +4031,9 @@
           "choice_list_name": "bite_outcome",
           "data_value": "loss_limb",
           "display": {
-            "title": "loss_limb"
+            "title": {
+              "text": "Loss of limb"
+            }
           },
           "_row_num": 61
         },
@@ -3401,7 +4041,9 @@
           "choice_list_name": "bite_outcome",
           "data_value": "full_recovery",
           "display": {
-            "title": "full_recovery"
+            "title": {
+              "text": "Full recovery"
+            }
           },
           "_row_num": 62
         },
@@ -3409,7 +4051,9 @@
           "choice_list_name": "bite_outcome",
           "data_value": "partial_recovery",
           "display": {
-            "title": "partial_recovery"
+            "title": {
+              "text": "Partial recovery"
+            }
           },
           "_row_num": 63
         }
@@ -3419,7 +4063,9 @@
           "choice_list_name": "breastfeed",
           "data_value": "Own_child",
           "display": {
-            "title": "Own_child"
+            "title": {
+              "text": "Own child"
+            }
           },
           "_row_num": 64
         },
@@ -3427,7 +4073,9 @@
           "choice_list_name": "breastfeed",
           "data_value": "other_child",
           "display": {
-            "title": "other_child"
+            "title": {
+              "text": "Someone else’s child/children"
+            }
           },
           "_row_num": 65
         },
@@ -3435,7 +4083,9 @@
           "choice_list_name": "breastfeed",
           "data_value": "No",
           "display": {
-            "title": "no"
+            "title": {
+              "text": "No"
+            }
           },
           "_row_num": 66
         }
@@ -3445,7 +4095,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Respiratory_disease",
           "display": {
-            "title": "Respiratory_disease"
+            "title": {
+              "text": "Respiratory disease"
+            }
           },
           "_row_num": 67
         },
@@ -3453,7 +4105,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Diarrhoea",
           "display": {
-            "title": "Diarrhoea"
+            "title": {
+              "text": "Diarrhoea"
+            }
           },
           "_row_num": 68
         },
@@ -3461,7 +4115,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Injuries_from_an_accident",
           "display": {
-            "title": "Injuries_from_an_accident"
+            "title": {
+              "text": "Injuries from an accident"
+            }
           },
           "_row_num": 69
         },
@@ -3469,7 +4125,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Skin_disease",
           "display": {
-            "title": "Skin_disease"
+            "title": {
+              "text": "Skin disease"
+            }
           },
           "_row_num": 70
         },
@@ -3477,7 +4135,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Mental_health_disorder",
           "display": {
-            "title": "Mental_health_disorder"
+            "title": {
+              "text": "Mental health disorder"
+            }
           },
           "_row_num": 71
         },
@@ -3485,7 +4145,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Worms",
           "display": {
-            "title": "Worms"
+            "title": {
+              "text": "Worms"
+            }
           },
           "_row_num": 72
         },
@@ -3493,7 +4155,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "HIV",
           "display": {
-            "title": "HIV"
+            "title": {
+              "text": "HIV"
+            }
           },
           "_row_num": 73
         },
@@ -3501,7 +4165,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "TB",
           "display": {
-            "title": "TB"
+            "title": {
+              "text": "TB"
+            }
           },
           "_row_num": 74
         },
@@ -3509,7 +4175,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Hepatitis",
           "display": {
-            "title": "Hepatitis"
+            "title": {
+              "text": "Hepatitis"
+            }
           },
           "_row_num": 75
         },
@@ -3517,7 +4185,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Epilepsy_(convulsions)",
           "display": {
-            "title": "Epilepsy_(convulsions)"
+            "title": {
+              "text": "Epilepsy (convulsions)"
+            }
           },
           "_row_num": 76
         },
@@ -3525,7 +4195,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Heart_problems",
           "display": {
-            "title": "Heart_problems"
+            "title": {
+              "text": "Heart problems"
+            }
           },
           "_row_num": 77
         },
@@ -3533,7 +4205,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Diabetes",
           "display": {
-            "title": "Diabetes"
+            "title": {
+              "text": "Diabetes"
+            }
           },
           "_row_num": 78
         },
@@ -3541,7 +4215,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "Cancer",
           "display": {
-            "title": "Cancer"
+            "title": {
+              "text": "Cancer"
+            }
           },
           "_row_num": 79
         },
@@ -3549,7 +4225,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "pna",
           "display": {
-            "title": "pna"
+            "title": {
+              "text": "Prefer not to answer"
+            }
           },
           "_row_num": 80
         },
@@ -3557,7 +4235,9 @@
           "choice_list_name": "chronic_disease",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 81
         }
@@ -3567,7 +4247,9 @@
           "choice_list_name": "disability",
           "data_value": "Blind",
           "display": {
-            "title": "Blind"
+            "title": {
+              "text": "Blind"
+            }
           },
           "_row_num": 82
         },
@@ -3575,7 +4257,9 @@
           "choice_list_name": "disability",
           "data_value": "Deaf",
           "display": {
-            "title": "Deaf"
+            "title": {
+              "text": "Deaf"
+            }
           },
           "_row_num": 83
         },
@@ -3583,7 +4267,9 @@
           "choice_list_name": "disability",
           "data_value": "Amputated/atrophied_arm",
           "display": {
-            "title": "Amputated/atrophied_arm"
+            "title": {
+              "text": "Amputated/atrophied arm"
+            }
           },
           "_row_num": 84
         },
@@ -3591,7 +4277,9 @@
           "choice_list_name": "disability",
           "data_value": "Amputated/atrophied_leg",
           "display": {
-            "title": "Amputated/atrophied_leg"
+            "title": {
+              "text": "Amputated/atrophied leg"
+            }
           },
           "_row_num": 85
         },
@@ -3599,7 +4287,9 @@
           "choice_list_name": "disability",
           "data_value": "Paralysis",
           "display": {
-            "title": "Paralysis"
+            "title": {
+              "text": "Paralysis"
+            }
           },
           "_row_num": 86
         },
@@ -3607,7 +4297,9 @@
           "choice_list_name": "disability",
           "data_value": "Mental",
           "display": {
-            "title": "Mental"
+            "title": {
+              "text": "Mental"
+            }
           },
           "_row_num": 87
         },
@@ -3615,7 +4307,9 @@
           "choice_list_name": "disability",
           "data_value": "none",
           "display": {
-            "title": "none"
+            "title": {
+              "text": "None"
+            }
           },
           "_row_num": 88
         },
@@ -3623,7 +4317,9 @@
           "choice_list_name": "disability",
           "data_value": "pna",
           "display": {
-            "title": "pna"
+            "title": {
+              "text": "Prefer not to answer"
+            }
           },
           "_row_num": 89
         },
@@ -3631,7 +4327,9 @@
           "choice_list_name": "disability",
           "data_value": "other",
           "display": {
-            "title": "pther"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 90
         }
@@ -3641,7 +4339,9 @@
           "choice_list_name": "dmy_ago_dk",
           "data_value": "days_ago",
           "display": {
-            "title": "days_ago"
+            "title": {
+              "text": "Day(s) ago"
+            }
           },
           "_row_num": 91
         },
@@ -3649,7 +4349,9 @@
           "choice_list_name": "dmy_ago_dk",
           "data_value": "weeks_ago",
           "display": {
-            "title": "weeks_ago"
+            "title": {
+              "text": "Week(s) ago"
+            }
           },
           "_row_num": 92
         },
@@ -3657,7 +4359,9 @@
           "choice_list_name": "dmy_ago_dk",
           "data_value": "months_ago",
           "display": {
-            "title": "months_ago"
+            "title": {
+              "text": "Month(s) ago"
+            }
           },
           "_row_num": 93
         },
@@ -3665,7 +4369,9 @@
           "choice_list_name": "dmy_ago_dk",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't Know"
+            }
           },
           "_row_num": 94
         }
@@ -3675,7 +4381,9 @@
           "choice_list_name": "dwmy",
           "data_value": "days",
           "display": {
-            "title": "days"
+            "title": {
+              "text": "Day(s)"
+            }
           },
           "_row_num": 95
         },
@@ -3683,7 +4391,9 @@
           "choice_list_name": "dwmy",
           "data_value": "weeks",
           "display": {
-            "title": "weeks"
+            "title": {
+              "text": "Week(s)"
+            }
           },
           "_row_num": 96
         },
@@ -3691,7 +4401,9 @@
           "choice_list_name": "dwmy",
           "data_value": "months",
           "display": {
-            "title": "months"
+            "title": {
+              "text": "Month(s)"
+            }
           },
           "_row_num": 97
         },
@@ -3699,7 +4411,9 @@
           "choice_list_name": "dwmy",
           "data_value": "years",
           "display": {
-            "title": "years"
+            "title": {
+              "text": "Year(s)"
+            }
           },
           "_row_num": 98
         }
@@ -3709,7 +4423,9 @@
           "choice_list_name": "form_of_care",
           "data_value": "Health_facility",
           "display": {
-            "title": "Health_facility"
+            "title": {
+              "text": "Health facility"
+            }
           },
           "_row_num": 99
         },
@@ -3717,7 +4433,9 @@
           "choice_list_name": "form_of_care",
           "data_value": "CHW",
           "display": {
-            "title": "CHW"
+            "title": {
+              "text": "CHW"
+            }
           },
           "_row_num": 100
         },
@@ -3725,7 +4443,9 @@
           "choice_list_name": "form_of_care",
           "data_value": "Family_or_friends",
           "display": {
-            "title": "Family_or_friends"
+            "title": {
+              "text": "Family or friends"
+            }
           },
           "_row_num": 101
         },
@@ -3733,7 +4453,9 @@
           "choice_list_name": "form_of_care",
           "data_value": "Informal_drug_vendor",
           "display": {
-            "title": "Informal_drug_vendor"
+            "title": {
+              "text": "Informal drug vendor"
+            }
           },
           "_row_num": 102
         },
@@ -3741,7 +4463,9 @@
           "choice_list_name": "form_of_care",
           "data_value": "Pharmacy",
           "display": {
-            "title": "Pharmacy"
+            "title": {
+              "text": "Pharmacy"
+            }
           },
           "_row_num": 103
         },
@@ -3749,7 +4473,9 @@
           "choice_list_name": "form_of_care",
           "data_value": "Traditional_healer",
           "display": {
-            "title": "Traditional_healer"
+            "title": {
+              "text": "Traditional healer"
+            }
           },
           "_row_num": 104
         },
@@ -3757,7 +4483,9 @@
           "choice_list_name": "form_of_care",
           "data_value": "Community_leader",
           "display": {
-            "title": "Community_leader"
+            "title": {
+              "text": "Community leader"
+            }
           },
           "_row_num": 105
         },
@@ -3765,7 +4493,9 @@
           "choice_list_name": "form_of_care",
           "data_value": "Trusted_elderly",
           "display": {
-            "title": "Trusted_elderly"
+            "title": {
+              "text": "Trusted elderly"
+            }
           },
           "_row_num": 106
         },
@@ -3773,7 +4503,9 @@
           "choice_list_name": "form_of_care",
           "data_value": "Traditional_midwife",
           "display": {
-            "title": "Traditional_midwife"
+            "title": {
+              "text": "Traditional midwife"
+            }
           },
           "_row_num": 107
         }
@@ -3783,7 +4515,9 @@
           "choice_list_name": "gender",
           "data_value": "male",
           "display": {
-            "title": "male"
+            "title": {
+              "text": "Male"
+            }
           },
           "_row_num": 108
         },
@@ -3791,7 +4525,9 @@
           "choice_list_name": "gender",
           "data_value": "female",
           "display": {
-            "title": "female"
+            "title": {
+              "text": "Female"
+            }
           },
           "_row_num": 109
         }
@@ -3801,7 +4537,9 @@
           "choice_list_name": "in_outside_district",
           "data_value": "in_district",
           "display": {
-            "title": "in_district"
+            "title": {
+              "text": "Within this district"
+            }
           },
           "_row_num": 110
         },
@@ -3809,7 +4547,9 @@
           "choice_list_name": "in_outside_district",
           "data_value": "outside_district",
           "display": {
-            "title": "outside_district"
+            "title": {
+              "text": "Outside this district"
+            }
           },
           "_row_num": 111
         },
@@ -3817,7 +4557,9 @@
           "choice_list_name": "in_outside_district",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't Know"
+            }
           },
           "_row_num": 112
         }
@@ -3827,7 +4569,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Catholic",
           "display": {
-            "title": "Catholic"
+            "title": {
+              "text": "Catholic"
+            }
           },
           "_row_num": 113
         },
@@ -3835,7 +4579,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Protestant",
           "display": {
-            "title": "Protestant"
+            "title": {
+              "text": "Protestant"
+            }
           },
           "_row_num": 114
         },
@@ -3843,7 +4589,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Anglican",
           "display": {
-            "title": "Anglican"
+            "title": {
+              "text": "Anglican"
+            }
           },
           "_row_num": 115
         },
@@ -3851,7 +4599,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Christian undetermined",
           "display": {
-            "title": "Christian undetermined"
+            "title": {
+              "text": "Christian undetermined"
+            }
           },
           "_row_num": 116
         },
@@ -3859,7 +4609,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Islamic",
           "display": {
-            "title": "Islamic"
+            "title": {
+              "text": "Islamic"
+            }
           },
           "_row_num": 117
         },
@@ -3867,7 +4619,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Hindu",
           "display": {
-            "title": "Hindu"
+            "title": {
+              "text": "Hindu"
+            }
           },
           "_row_num": 118
         },
@@ -3875,7 +4629,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Zionist",
           "display": {
-            "title": "Zionist"
+            "title": {
+              "text": "Zionist"
+            }
           },
           "_row_num": 119
         },
@@ -3883,7 +4639,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Animist",
           "display": {
-            "title": "Animist"
+            "title": {
+              "text": "Animist"
+            }
           },
           "_row_num": 120
         },
@@ -3891,7 +4649,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Evangelical",
           "display": {
-            "title": "Evangelical"
+            "title": {
+              "text": "Evangelical"
+            }
           },
           "_row_num": 121
         },
@@ -3899,7 +4659,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "Atheist",
           "display": {
-            "title": "Atheist"
+            "title": {
+              "text": "Atheist"
+            }
           },
           "_row_num": 122
         },
@@ -3907,7 +4669,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't know"
+            }
           },
           "_row_num": 123
         },
@@ -3915,7 +4679,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "pna",
           "display": {
-            "title": "pna"
+            "title": {
+              "text": "Prefer not to answer"
+            }
           },
           "_row_num": 124
         },
@@ -3923,7 +4689,9 @@
           "choice_list_name": "ind_religion",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 125
         }
@@ -3933,7 +4701,9 @@
           "choice_list_name": "iptp_current",
           "data_value": "Yes, already took 1 dose",
           "display": {
-            "title": "Yes, already took 1 dose"
+            "title": {
+              "text": "Yes, already took 1 dose"
+            }
           },
           "_row_num": 126
         },
@@ -3941,7 +4711,9 @@
           "choice_list_name": "iptp_current",
           "data_value": "Yes, already took 2 doses",
           "display": {
-            "title": "Yes, already took 2 doses"
+            "title": {
+              "text": "Yes, already took 2 doses"
+            }
           },
           "_row_num": 127
         },
@@ -3949,7 +4721,9 @@
           "choice_list_name": "iptp_current",
           "data_value": "Yes, already took 3 doses",
           "display": {
-            "title": "Yes, already took 3 doses"
+            "title": {
+              "text": "Yes, already took 3 doses"
+            }
           },
           "_row_num": 128
         },
@@ -3957,7 +4731,9 @@
           "choice_list_name": "iptp_current",
           "data_value": "Yes, already took more than 3 doses",
           "display": {
-            "title": "Yes, already took more than 3 doses"
+            "title": {
+              "text": "Yes, already took more than 3 doses"
+            }
           },
           "_row_num": 129
         },
@@ -3965,7 +4741,9 @@
           "choice_list_name": "iptp_current",
           "data_value": "No",
           "display": {
-            "title": "no"
+            "title": {
+              "text": "No"
+            }
           },
           "_row_num": 130
         },
@@ -3973,7 +4751,9 @@
           "choice_list_name": "iptp_current",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't Know"
+            }
           },
           "_row_num": 131
         }
@@ -3983,7 +4763,9 @@
           "choice_list_name": "itchy",
           "data_value": "body",
           "display": {
-            "title": "body"
+            "title": {
+              "text": "Yes, on the body"
+            }
           },
           "_row_num": 132
         },
@@ -3991,7 +4773,9 @@
           "choice_list_name": "itchy",
           "data_value": "head",
           "display": {
-            "title": "head"
+            "title": {
+              "text": "Yes, on the head"
+            }
           },
           "_row_num": 133
         },
@@ -3999,7 +4783,9 @@
           "choice_list_name": "itchy",
           "data_value": "no",
           "display": {
-            "title": "no"
+            "title": {
+              "text": "No"
+            }
           },
           "_row_num": 134
         },
@@ -4007,7 +4793,9 @@
           "choice_list_name": "itchy",
           "data_value": "pna",
           "display": {
-            "title": "pna"
+            "title": {
+              "text": "Prefer not to answer"
+            }
           },
           "_row_num": 135
         }
@@ -4017,7 +4805,9 @@
           "choice_list_name": "lmp",
           "data_value": "Less_than_two_weeks_ago",
           "display": {
-            "title": "Less_than_two_weeks_ago"
+            "title": {
+              "text": "Less than two weeks ago"
+            }
           },
           "_row_num": 136
         },
@@ -4025,7 +4815,9 @@
           "choice_list_name": "lmp",
           "data_value": "More_than_two_weeks_ago",
           "display": {
-            "title": "More_than_two_weeks_ago"
+            "title": {
+              "text": "More than two weeks ago"
+            }
           },
           "_row_num": 137
         },
@@ -4033,7 +4825,9 @@
           "choice_list_name": "lmp",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't know"
+            }
           },
           "_row_num": 138
         },
@@ -4041,7 +4835,9 @@
           "choice_list_name": "lmp",
           "data_value": "never",
           "display": {
-            "title": "never"
+            "title": {
+              "text": "Never"
+            }
           },
           "_row_num": 139
         },
@@ -4049,7 +4845,9 @@
           "choice_list_name": "lmp",
           "data_value": "pna",
           "display": {
-            "title": "pna"
+            "title": {
+              "text": "Prefer not to answer"
+            }
           },
           "_row_num": 140
         }
@@ -4059,7 +4857,9 @@
           "choice_list_name": "malaria_no_treatment",
           "data_value": "Participant didn’t have malaria",
           "display": {
-            "title": "Participant didn’t have malaria"
+            "title": {
+              "text": "Participant didn’t have malaria"
+            }
           },
           "_row_num": 141
         },
@@ -4067,7 +4867,9 @@
           "choice_list_name": "malaria_no_treatment",
           "data_value": "Treatment was not available",
           "display": {
-            "title": "Treatment was not available"
+            "title": {
+              "text": "Treatment was not available"
+            }
           },
           "_row_num": 142
         },
@@ -4075,7 +4877,9 @@
           "choice_list_name": "malaria_no_treatment",
           "data_value": "Treatment was not affordable",
           "display": {
-            "title": "Treatment was not affordable"
+            "title": {
+              "text": "Treatment was not affordable"
+            }
           },
           "_row_num": 143
         },
@@ -4083,7 +4887,9 @@
           "choice_list_name": "malaria_no_treatment",
           "data_value": "Treatment was not deemed necessary",
           "display": {
-            "title": "Treatment was not deemed necessary"
+            "title": {
+              "text": "Treatment was not deemed necessary"
+            }
           },
           "_row_num": 144
         },
@@ -4091,7 +4897,9 @@
           "choice_list_name": "malaria_no_treatment",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don’t know"
+            }
           },
           "_row_num": 145
         }
@@ -4101,7 +4909,9 @@
           "choice_list_name": "malaria_test_result",
           "data_value": "Positive",
           "display": {
-            "title": "Positive"
+            "title": {
+              "text": "Positive"
+            }
           },
           "_row_num": 146
         },
@@ -4109,7 +4919,9 @@
           "choice_list_name": "malaria_test_result",
           "data_value": "Negative",
           "display": {
-            "title": "Negative"
+            "title": {
+              "text": "Negative"
+            }
           },
           "_row_num": 147
         },
@@ -4117,7 +4929,9 @@
           "choice_list_name": "malaria_test_result",
           "data_value": "Invalid",
           "display": {
-            "title": "Invalid"
+            "title": {
+              "text": "Invalid"
+            }
           },
           "_row_num": 148
         },
@@ -4125,7 +4939,9 @@
           "choice_list_name": "malaria_test_result",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don’t Know"
+            }
           },
           "_row_num": 149
         }
@@ -4135,7 +4951,9 @@
           "choice_list_name": "member_where_now",
           "data_value": "died",
           "display": {
-            "title": "died"
+            "title": {
+              "text": "He/she died"
+            }
           },
           "_row_num": 150
         },
@@ -4143,7 +4961,9 @@
           "choice_list_name": "member_where_now",
           "data_value": "emigrated",
           "display": {
-            "title": "emigrated"
+            "title": {
+              "text": "He/she emigrated"
+            }
           },
           "_row_num": 151
         }
@@ -4153,7 +4973,9 @@
           "choice_list_name": "month",
           "data_value": "january",
           "display": {
-            "title": "january"
+            "title": {
+              "text": "January"
+            }
           },
           "_row_num": 152
         },
@@ -4161,7 +4983,9 @@
           "choice_list_name": "month",
           "data_value": "february",
           "display": {
-            "title": "february"
+            "title": {
+              "text": "February"
+            }
           },
           "_row_num": 153
         },
@@ -4169,7 +4993,9 @@
           "choice_list_name": "month",
           "data_value": "march",
           "display": {
-            "title": "march"
+            "title": {
+              "text": "March"
+            }
           },
           "_row_num": 154
         },
@@ -4177,7 +5003,9 @@
           "choice_list_name": "month",
           "data_value": "april",
           "display": {
-            "title": "april"
+            "title": {
+              "text": "April"
+            }
           },
           "_row_num": 155
         },
@@ -4185,7 +5013,9 @@
           "choice_list_name": "month",
           "data_value": "may",
           "display": {
-            "title": "may"
+            "title": {
+              "text": "May"
+            }
           },
           "_row_num": 156
         },
@@ -4193,7 +5023,9 @@
           "choice_list_name": "month",
           "data_value": "june",
           "display": {
-            "title": "june"
+            "title": {
+              "text": "June"
+            }
           },
           "_row_num": 157
         },
@@ -4201,7 +5033,9 @@
           "choice_list_name": "month",
           "data_value": "july",
           "display": {
-            "title": "july"
+            "title": {
+              "text": "July"
+            }
           },
           "_row_num": 158
         },
@@ -4209,7 +5043,9 @@
           "choice_list_name": "month",
           "data_value": "august",
           "display": {
-            "title": "august"
+            "title": {
+              "text": "August"
+            }
           },
           "_row_num": 159
         },
@@ -4217,7 +5053,9 @@
           "choice_list_name": "month",
           "data_value": "september",
           "display": {
-            "title": "september"
+            "title": {
+              "text": "September"
+            }
           },
           "_row_num": 160
         },
@@ -4225,7 +5063,9 @@
           "choice_list_name": "month",
           "data_value": "october",
           "display": {
-            "title": "october"
+            "title": {
+              "text": "October"
+            }
           },
           "_row_num": 161
         },
@@ -4233,7 +5073,9 @@
           "choice_list_name": "month",
           "data_value": "november",
           "display": {
-            "title": "november"
+            "title": {
+              "text": "November"
+            }
           },
           "_row_num": 162
         },
@@ -4241,7 +5083,9 @@
           "choice_list_name": "month",
           "data_value": "december",
           "display": {
-            "title": "december"
+            "title": {
+              "text": "December"
+            }
           },
           "_row_num": 163
         },
@@ -4249,7 +5093,9 @@
           "choice_list_name": "month",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don't Know"
+            }
           },
           "_row_num": 164
         }
@@ -4259,7 +5105,9 @@
           "choice_list_name": "new_member",
           "data_value": "newborn",
           "display": {
-            "title": "newborn"
+            "title": {
+              "text": "Newborn"
+            }
           },
           "_row_num": 165
         },
@@ -4267,7 +5115,9 @@
           "choice_list_name": "new_member",
           "data_value": "someone_new_in_the_household",
           "display": {
-            "title": "someone_new_in_the_household"
+            "title": {
+              "text": "Someone new in the household"
+            }
           },
           "_row_num": 166
         }
@@ -4277,7 +5127,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "Malaria",
           "display": {
-            "title": "Malaria"
+            "title": {
+              "text": "Malaria"
+            }
           },
           "_row_num": 167
         },
@@ -4285,7 +5137,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "Respiratory_disease",
           "display": {
-            "title": "Respiratory_disease"
+            "title": {
+              "text": "Respiratory disease"
+            }
           },
           "_row_num": 168
         },
@@ -4293,7 +5147,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "Constipation",
           "display": {
-            "title": "Constipation"
+            "title": {
+              "text": "Constipation"
+            }
           },
           "_row_num": 169
         },
@@ -4301,7 +5157,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "Diarrhoea",
           "display": {
-            "title": "Diarrhoea"
+            "title": {
+              "text": "Diarrhoea"
+            }
           },
           "_row_num": 170
         },
@@ -4309,7 +5167,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "Fever",
           "display": {
-            "title": "Fever"
+            "title": {
+              "text": "Fever"
+            }
           },
           "_row_num": 171
         },
@@ -4317,7 +5177,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "Injuries_from_an_accident",
           "display": {
-            "title": "Injuries_from_an_accident"
+            "title": {
+              "text": "Injuries from an accident"
+            }
           },
           "_row_num": 172
         },
@@ -4325,7 +5187,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "Delivery_of_a_baby",
           "display": {
-            "title": "Delivery_of_a_baby"
+            "title": {
+              "text": "Delivery of a baby"
+            }
           },
           "_row_num": 173
         },
@@ -4333,7 +5197,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "Skin_disease",
           "display": {
-            "title": "Skin_disease"
+            "title": {
+              "text": "Skin disease"
+            }
           },
           "_row_num": 174
         },
@@ -4341,7 +5207,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "Worms",
           "display": {
-            "title": "Worms"
+            "title": {
+              "text": "Worms"
+            }
           },
           "_row_num": 175
         },
@@ -4349,7 +5217,9 @@
           "choice_list_name": "other_recent_disease",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 176
         }
@@ -4359,7 +5229,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "Fever",
           "display": {
-            "title": "Fever"
+            "title": {
+              "text": "Fever"
+            }
           },
           "_row_num": 177
         },
@@ -4367,7 +5239,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "Vomiting",
           "display": {
-            "title": "Vomiting"
+            "title": {
+              "text": "Vomiting"
+            }
           },
           "_row_num": 178
         },
@@ -4375,7 +5249,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "Nausea",
           "display": {
-            "title": "Nausea"
+            "title": {
+              "text": "Nausea"
+            }
           },
           "_row_num": 179
         },
@@ -4383,7 +5259,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "Joints_pain",
           "display": {
-            "title": "Joints_pain"
+            "title": {
+              "text": "Joints pain"
+            }
           },
           "_row_num": 180
         },
@@ -4391,7 +5269,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "Dizziness",
           "display": {
-            "title": "Dizziness"
+            "title": {
+              "text": "Dizziness"
+            }
           },
           "_row_num": 181
         },
@@ -4399,7 +5279,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "Chills-shivers",
           "display": {
-            "title": "Chills-shivers"
+            "title": {
+              "text": "Chills-shivers"
+            }
           },
           "_row_num": 182
         },
@@ -4407,7 +5289,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "Diarrhoea",
           "display": {
-            "title": "Diarrhoea"
+            "title": {
+              "text": "Diarrhoea"
+            }
           },
           "_row_num": 183
         },
@@ -4415,7 +5299,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "Loss_smell",
           "display": {
-            "title": "Loss_smell"
+            "title": {
+              "text": "Loss of smell and/or taste"
+            }
           },
           "_row_num": 184
         },
@@ -4423,7 +5309,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "No_symptoms",
           "display": {
-            "title": "No_symptoms"
+            "title": {
+              "text": "No symptoms"
+            }
           },
           "_row_num": 185
         },
@@ -4431,7 +5319,9 @@
           "choice_list_name": "other_symptoms",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 186
         }
@@ -4441,7 +5331,9 @@
           "choice_list_name": "parents_alive",
           "data_value": "both_alive",
           "display": {
-            "title": "both_alive"
+            "title": {
+              "text": "Both alive"
+            }
           },
           "_row_num": 187
         },
@@ -4449,7 +5341,9 @@
           "choice_list_name": "parents_alive",
           "data_value": "mother_alive",
           "display": {
-            "title": "mother_alive"
+            "title": {
+              "text": "Only living mother"
+            }
           },
           "_row_num": 188
         },
@@ -4457,7 +5351,9 @@
           "choice_list_name": "parents_alive",
           "data_value": "father_alive",
           "display": {
-            "title": "father_alive"
+            "title": {
+              "text": "Only living father"
+            }
           },
           "_row_num": 189
         },
@@ -4465,7 +5361,9 @@
           "choice_list_name": "parents_alive",
           "data_value": "neither_alive",
           "display": {
-            "title": "neither_alive"
+            "title": {
+              "text": "Neither are alive"
+            }
           },
           "_row_num": 190
         }
@@ -4475,7 +5373,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "husband_wife",
           "display": {
-            "title": "husband_wife"
+            "title": {
+              "text": "Husband/wife of household head"
+            }
           },
           "_row_num": 191
         },
@@ -4483,7 +5383,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "son_daughter",
           "display": {
-            "title": "son_daughter"
+            "title": {
+              "text": "Son/daughter of household head"
+            }
           },
           "_row_num": 192
         },
@@ -4491,7 +5393,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "brother_sister",
           "display": {
-            "title": "brother_sister"
+            "title": {
+              "text": "Brother/sister of household head"
+            }
           },
           "_row_num": 193
         },
@@ -4499,7 +5403,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "father_mother",
           "display": {
-            "title": "father_mother"
+            "title": {
+              "text": "Father/mother of household head"
+            }
           },
           "_row_num": 194
         },
@@ -4507,7 +5413,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "son_daughterinlaw",
           "display": {
-            "title": "son_daughterinlaw"
+            "title": {
+              "text": "Son/daughter in law of household head"
+            }
           },
           "_row_num": 195
         },
@@ -4515,7 +5423,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "brother_sisterinlaw",
           "display": {
-            "title": "brother_sisterinlaw"
+            "title": {
+              "text": "Brother/sister in law of household head"
+            }
           },
           "_row_num": 196
         },
@@ -4523,7 +5433,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "uncle_aunt",
           "display": {
-            "title": "uncle_aunt"
+            "title": {
+              "text": "Uncle/aunt of household head"
+            }
           },
           "_row_num": 197
         },
@@ -4531,7 +5443,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "grandson_granddaughter",
           "display": {
-            "title": "grandson_granddaughter"
+            "title": {
+              "text": "Grandson /granddaughter of household head"
+            }
           },
           "_row_num": 198
         },
@@ -4539,7 +5453,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "stepchild",
           "display": {
-            "title": "stepchild"
+            "title": {
+              "text": "Stepchild of household head"
+            }
           },
           "_row_num": 199
         },
@@ -4547,7 +5463,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "adopted_son_daughter",
           "display": {
-            "title": "adopted_son_daughter"
+            "title": {
+              "text": "Adopted son/daughter of household head"
+            }
           },
           "_row_num": 200
         },
@@ -4555,7 +5473,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "cousin",
           "display": {
-            "title": "cousin"
+            "title": {
+              "text": "Cousin of household head"
+            }
           },
           "_row_num": 201
         },
@@ -4563,7 +5483,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "nephew_niece",
           "display": {
-            "title": "nephew_niece"
+            "title": {
+              "text": "Nephew/Niece of household head"
+            }
           },
           "_row_num": 202
         },
@@ -4571,7 +5493,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "unrelated",
           "display": {
-            "title": "unrelated"
+            "title": {
+              "text": "Unrelated"
+            }
           },
           "_row_num": 203
         },
@@ -4579,7 +5503,9 @@
           "choice_list_name": "relation_to_hh_head",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 204
         }
@@ -4589,7 +5515,9 @@
           "choice_list_name": "resident_status",
           "data_value": "resident",
           "display": {
-            "title": "resident"
+            "title": {
+              "text": "Resident member"
+            }
           },
           "_row_num": 205
         },
@@ -4597,7 +5525,9 @@
           "choice_list_name": "resident_status",
           "data_value": "non_resident",
           "display": {
-            "title": "non_resident"
+            "title": {
+              "text": "Non-Resident member"
+            }
           },
           "_row_num": 206
         }
@@ -4607,7 +5537,9 @@
           "choice_list_name": "return_time",
           "data_value": "today",
           "display": {
-            "title": "today"
+            "title": {
+              "text": "Today"
+            }
           },
           "_row_num": 207
         },
@@ -4615,7 +5547,9 @@
           "choice_list_name": "return_time",
           "data_value": "tomorrow",
           "display": {
-            "title": "tomorrow"
+            "title": {
+              "text": "Tomorrow"
+            }
           },
           "_row_num": 208
         }
@@ -4625,7 +5559,9 @@
           "choice_list_name": "time_awake",
           "data_value": ">4h before sunrise",
           "display": {
-            "title": ">4h before sunrise"
+            "title": {
+              "text": ">4h before sunrise"
+            }
           },
           "_row_num": 209
         },
@@ -4633,7 +5569,9 @@
           "choice_list_name": "time_awake",
           "data_value": "2-4h before sunrise",
           "display": {
-            "title": "2-4h before sunrise"
+            "title": {
+              "text": "2-4h before sunrise"
+            }
           },
           "_row_num": 210
         },
@@ -4641,7 +5579,9 @@
           "choice_list_name": "time_awake",
           "data_value": "1-2h before sunrise",
           "display": {
-            "title": "1-2h before sunrise"
+            "title": {
+              "text": "1-2h before sunrise"
+            }
           },
           "_row_num": 211
         },
@@ -4649,7 +5589,9 @@
           "choice_list_name": "time_awake",
           "data_value": "At sunrise",
           "display": {
-            "title": "At sunrise"
+            "title": {
+              "text": "At sunrise"
+            }
           },
           "_row_num": 212
         }
@@ -4659,7 +5601,9 @@
           "choice_list_name": "time_bed",
           "data_value": "Before sunset",
           "display": {
-            "title": "Before sunset"
+            "title": {
+              "text": "Before sunset"
+            }
           },
           "_row_num": 213
         },
@@ -4667,7 +5611,9 @@
           "choice_list_name": "time_bed",
           "data_value": "At sunset",
           "display": {
-            "title": "At sunset"
+            "title": {
+              "text": "At sunset"
+            }
           },
           "_row_num": 214
         },
@@ -4675,7 +5621,9 @@
           "choice_list_name": "time_bed",
           "data_value": "1-2h after sunset",
           "display": {
-            "title": "1-2h after sunset"
+            "title": {
+              "text": "1-2h after sunset"
+            }
           },
           "_row_num": 215
         },
@@ -4683,7 +5631,9 @@
           "choice_list_name": "time_bed",
           "data_value": "2-4h after sunset",
           "display": {
-            "title": "2-4h after sunset"
+            "title": {
+              "text": "2-4h after sunset"
+            }
           },
           "_row_num": 216
         },
@@ -4691,7 +5641,9 @@
           "choice_list_name": "time_bed",
           "data_value": ">4h after sunset",
           "display": {
-            "title": ">4h after sunset"
+            "title": {
+              "text": ">4h after sunset"
+            }
           },
           "_row_num": 217
         }
@@ -4701,7 +5653,9 @@
           "choice_list_name": "time_indoors",
           "data_value": "Before sunset",
           "display": {
-            "title": "Before sunset"
+            "title": {
+              "text": "Before sunset"
+            }
           },
           "_row_num": 218
         },
@@ -4709,7 +5663,9 @@
           "choice_list_name": "time_indoors",
           "data_value": "At sunset",
           "display": {
-            "title": "At sunset"
+            "title": {
+              "text": "At sunset"
+            }
           },
           "_row_num": 219
         },
@@ -4717,7 +5673,9 @@
           "choice_list_name": "time_indoors",
           "data_value": "1-2h after sunset",
           "display": {
-            "title": "1-2h after sunset"
+            "title": {
+              "text": "1-2h after sunset"
+            }
           },
           "_row_num": 220
         },
@@ -4725,7 +5683,9 @@
           "choice_list_name": "time_indoors",
           "data_value": "2-4h after sunset",
           "display": {
-            "title": "2-4h after sunset"
+            "title": {
+              "text": "2-4h after sunset"
+            }
           },
           "_row_num": 221
         },
@@ -4733,7 +5693,9 @@
           "choice_list_name": "time_indoors",
           "data_value": ">4h after sunset",
           "display": {
-            "title": ">4h after sunset"
+            "title": {
+              "text": ">4h after sunset"
+            }
           },
           "_row_num": 222
         }
@@ -4743,7 +5705,9 @@
           "choice_list_name": "time_outdoors",
           "data_value": ">4h before sunrise",
           "display": {
-            "title": ">4h before sunrise"
+            "title": {
+              "text": ">4h before sunrise"
+            }
           },
           "_row_num": 223
         },
@@ -4751,7 +5715,9 @@
           "choice_list_name": "time_outdoors",
           "data_value": "2-4h before sunrise",
           "display": {
-            "title": "2-4h before sunrise"
+            "title": {
+              "text": "2-4h before sunrise"
+            }
           },
           "_row_num": 224
         },
@@ -4759,7 +5725,9 @@
           "choice_list_name": "time_outdoors",
           "data_value": "1-2h before sunrise",
           "display": {
-            "title": "1-2h before sunrise"
+            "title": {
+              "text": "1-2h before sunrise"
+            }
           },
           "_row_num": 225
         },
@@ -4767,7 +5735,9 @@
           "choice_list_name": "time_outdoors",
           "data_value": "At sunrise",
           "display": {
-            "title": "At sunrise"
+            "title": {
+              "text": "At sunrise"
+            }
           },
           "_row_num": 226
         }
@@ -4777,7 +5747,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "Angola",
           "display": {
-            "title": "Angola"
+            "title": {
+              "text": "Angola"
+            }
           },
           "_row_num": 227
         },
@@ -4785,7 +5757,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "Cameroon",
           "display": {
-            "title": "Cameroon"
+            "title": {
+              "text": "Cameroon"
+            }
           },
           "_row_num": 228
         },
@@ -4793,7 +5767,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "Chad",
           "display": {
-            "title": "Chad"
+            "title": {
+              "text": "Chad"
+            }
           },
           "_row_num": 229
         },
@@ -4801,7 +5777,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "CAR",
           "display": {
-            "title": "CAR"
+            "title": {
+              "text": "Central African Republic"
+            }
           },
           "_row_num": 230
         },
@@ -4809,7 +5787,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "Congo",
           "display": {
-            "title": "Congo"
+            "title": {
+              "text": "Congo"
+            }
           },
           "_row_num": 231
         },
@@ -4817,7 +5797,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "EG",
           "display": {
-            "title": "EG"
+            "title": {
+              "text": "Equatorial Guinea"
+            }
           },
           "_row_num": 232
         },
@@ -4825,7 +5807,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "Ethiopia",
           "display": {
-            "title": "Ethiopia"
+            "title": {
+              "text": "Ethiopia"
+            }
           },
           "_row_num": 233
         },
@@ -4833,7 +5817,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "Gabon",
           "display": {
-            "title": "Gabon"
+            "title": {
+              "text": "Gabon"
+            }
           },
           "_row_num": 234
         },
@@ -4841,7 +5827,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "Nigeria",
           "display": {
-            "title": "Nigeria"
+            "title": {
+              "text": "Nigeria"
+            }
           },
           "_row_num": 235
         },
@@ -4849,7 +5837,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "Sudan",
           "display": {
-            "title": "Sudan"
+            "title": {
+              "text": "Sudan"
+            }
           },
           "_row_num": 236
         },
@@ -4857,7 +5847,9 @@
           "choice_list_name": "travel_countries",
           "data_value": "none",
           "display": {
-            "title": "none"
+            "title": {
+              "text": "None"
+            }
           },
           "_row_num": 237
         }
@@ -4867,7 +5859,9 @@
           "choice_list_name": "treatment",
           "data_value": "Treatment_for_pain",
           "display": {
-            "title": "Treatment_for_pain"
+            "title": {
+              "text": "Treatment for pain"
+            }
           },
           "_row_num": 238
         },
@@ -4875,7 +5869,9 @@
           "choice_list_name": "treatment",
           "data_value": "Contraceptive",
           "display": {
-            "title": "Contraceptive"
+            "title": {
+              "text": "Contraceptive"
+            }
           },
           "_row_num": 239
         },
@@ -4883,7 +5879,9 @@
           "choice_list_name": "treatment",
           "data_value": "Treatment_for_malaria",
           "display": {
-            "title": "Treatment_for_malaria"
+            "title": {
+              "text": "Treatment for malaria"
+            }
           },
           "_row_num": 240
         },
@@ -4891,7 +5889,9 @@
           "choice_list_name": "treatment",
           "data_value": "Antihistamine",
           "display": {
-            "title": "Antihistamine"
+            "title": {
+              "text": "Antihistamine"
+            }
           },
           "_row_num": 241
         },
@@ -4899,7 +5899,9 @@
           "choice_list_name": "treatment",
           "data_value": "Antiretrovirals",
           "display": {
-            "title": "Antiretrovirals"
+            "title": {
+              "text": "Antiretrovirals"
+            }
           },
           "_row_num": 242
         },
@@ -4907,7 +5909,9 @@
           "choice_list_name": "treatment",
           "data_value": "Treatment_for_tuberculosis",
           "display": {
-            "title": "Treatment_for_tuberculosis"
+            "title": {
+              "text": "Treatment for tuberculosis"
+            }
           },
           "_row_num": 243
         },
@@ -4915,7 +5919,9 @@
           "choice_list_name": "treatment",
           "data_value": "Antibiotic",
           "display": {
-            "title": "Antibiotic"
+            "title": {
+              "text": "Antibiotic"
+            }
           },
           "_row_num": 244
         },
@@ -4923,7 +5929,9 @@
           "choice_list_name": "treatment",
           "data_value": "Treatment_for_stress",
           "display": {
-            "title": "Treatment_for_stress"
+            "title": {
+              "text": "Treatment for stress"
+            }
           },
           "_row_num": 245
         },
@@ -4931,7 +5939,9 @@
           "choice_list_name": "treatment",
           "data_value": "Treatment_for_mental_illness",
           "display": {
-            "title": "Treatment_for_mental_illness"
+            "title": {
+              "text": "Treatment for mental illness"
+            }
           },
           "_row_num": 246
         },
@@ -4939,7 +5949,9 @@
           "choice_list_name": "treatment",
           "data_value": "Anti-fungal_treatment",
           "display": {
-            "title": "Anti-fungal_treatment"
+            "title": {
+              "text": "Anti-fungal treatment"
+            }
           },
           "_row_num": 247
         },
@@ -4947,7 +5959,9 @@
           "choice_list_name": "treatment",
           "data_value": "Treatment_for_epilepsy",
           "display": {
-            "title": "Treatment_for_epilepsy"
+            "title": {
+              "text": "Treatment for epilepsy"
+            }
           },
           "_row_num": 248
         },
@@ -4955,7 +5969,9 @@
           "choice_list_name": "treatment",
           "data_value": "Treatment_for_diarrhoea",
           "display": {
-            "title": "Treatment_for_diarrhoea"
+            "title": {
+              "text": "Treatment for diarrhoea"
+            }
           },
           "_row_num": 249
         },
@@ -4963,7 +5979,9 @@
           "choice_list_name": "treatment",
           "data_value": "Treatment_for_blood_pressure",
           "display": {
-            "title": "Treatment_for_blood_pressure"
+            "title": {
+              "text": "Treatment for blood pressure"
+            }
           },
           "_row_num": 250
         },
@@ -4971,7 +5989,9 @@
           "choice_list_name": "treatment",
           "data_value": "Traditional_medicine",
           "display": {
-            "title": "Traditional_medicine"
+            "title": {
+              "text": "Traditional medicine"
+            }
           },
           "_row_num": 251
         },
@@ -4979,7 +5999,9 @@
           "choice_list_name": "treatment",
           "data_value": "dk",
           "display": {
-            "title": "dk"
+            "title": {
+              "text": "Don’t know"
+            }
           },
           "_row_num": 252
         },
@@ -4987,7 +6009,9 @@
           "choice_list_name": "treatment",
           "data_value": "pna",
           "display": {
-            "title": "pna"
+            "title": {
+              "text": "Prefer not to say"
+            }
           },
           "_row_num": 253
         },
@@ -4995,7 +6019,9 @@
           "choice_list_name": "treatment",
           "data_value": "other",
           "display": {
-            "title": "other"
+            "title": {
+              "text": "Other"
+            }
           },
           "_row_num": 254
         },
@@ -5003,7 +6029,9 @@
           "choice_list_name": "treatment",
           "data_value": "no",
           "display": {
-            "title": "no"
+            "title": {
+              "text": "No"
+            }
           },
           "_row_num": 255
         }
@@ -6273,7 +7301,9 @@
           {
             "type": "note",
             "display": {
-              "prompt": "hh_id_note"
+              "prompt": {
+                "text": "Household ID: {{data.hh_id}}"
+              }
             },
             "_row_num": 3,
             "__rowNum__": 2,
@@ -6287,7 +7317,9 @@
             "values_list": "return_time",
             "name": "absent_return",
             "display": {
-              "prompt": "q24"
+              "prompt": {
+                "text": "24. When will the person be back?"
+              }
             },
             "_row_num": 4,
             "__rowNum__": 3,
@@ -6300,7 +7332,9 @@
             "type": "date",
             "name": "absent_return_date",
             "display": {
-              "prompt": "date"
+              "prompt": {
+                "text": "Date"
+              }
             },
             "_row_num": 5,
             "__rowNum__": 4,
@@ -6313,7 +7347,9 @@
             "type": "integer",
             "name": "absent_return_integer",
             "display": {
-              "prompt": "or_enter_num"
+              "prompt": {
+                "text": "or enter number"
+              }
             },
             "inputAttributes": {
               "min": 1,
@@ -6331,7 +7367,9 @@
             "values_list": "dwmy",
             "name": "absent_return_dwmy",
             "display": {
-              "prompt": "days_weeks_months_years"
+              "prompt": {
+                "text": "Days/Weeks/Months/Years"
+              }
             },
             "_row_num": 7,
             "__rowNum__": 6,
@@ -6356,7 +7394,9 @@
             "values_list": "absence_reason",
             "name": "absence_reason",
             "display": {
-              "prompt": "q25"
+              "prompt": {
+                "text": "25. What is the reason for the absence?"
+              }
             },
             "_row_num": 9,
             "__rowNum__": 8,
