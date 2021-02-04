@@ -113,7 +113,7 @@
       },
       {
         "name": "timestamp",
-        "type": "integer",
+        "type": "string",
         "_row_num": 5
       }
     ]
@@ -327,7 +327,7 @@
         "elementKey": "fw_location"
       },
       "timestamp": {
-        "type": "integer",
+        "type": "string",
         "_defn": [
           {
             "_row_num": 5,
@@ -610,7 +610,7 @@
         "notUnitOfRetention": true
       },
       "timestamp": {
-        "type": "integer",
+        "type": "string",
         "_defn": [
           {
             "_row_num": 5,
