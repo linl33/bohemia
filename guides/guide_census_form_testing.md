@@ -48,7 +48,8 @@ If you would like to change the language of the survey form, once you enter into
 
 ### Saving a form and sending data to the server
 - To save an incomplete form and exit the survey, click the button at the top left of the screen. A pop up menu will appear. Click `Save changes + Exit`
-- Once you have saved and exited the survey form, you can upload your data to the server but navigating back to the ODK-X Tables app, clicking the `Send Data` button, then clicking the `Sync Now` button
+- To "finalize" a survey form, once you have completed the entire survey (including the individual member questionnaire), there will be two buttons that appear:`Finalize` and `Incomplete`. Click `Finalize`
+- Once you have saved and exited the survey form or finalized the form, you can upload your data to the server but navigating back to the ODK-X Tables app, clicking the `Send Data` button, then clicking the `Sync Now` button
 
 ## Handling Navigation from Content Pages view
 When filling out a survey, there are some sections that are populated via the `Create New Instance` button. 
