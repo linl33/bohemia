@@ -18,6 +18,6 @@ What follow are steps to carry out the testing:
 - ~~Set up forms on the ODK-X Server per [THIS GUIDE](https://github.com/databrew/bohemia/blob/master/guides/guide_odkx_client.md)~~  (Not applicable for this round of testing; Databrew is doing this internally).  
 - ~~Set up utilities for pulling and pushing data to the server per [THIS GUIDE](https://github.com/databrew/bohemia/blob/master/guides/guide_odkx_suitcase.md)~~  (Not applicable for this round of testing; Databrew is doing this internally).  
 - Fetch an android device.  
-- Follow [THESE INSTRUCTIONS](https://github.com/databrew/bohemia/blob/master/guides/guide_odkx_add_surveys.md) to download and install the necessary software.
+- Follow [THESE INSTRUCTIONS](https://github.com/databrew/bohemia/blob/master/guides/guide_odkx_client.md) to download and install the necessary software.
 - Follow [THESE INSTRUCTIONS](https://github.com/databrew/bohemia/blob/master/guides/guide_census_form_testing.md) for testing the census form.  
 - Write your detailed comments and change requests on [THIS SPREADSHEET](https://docs.google.com/spreadsheets/d/1qNuL6I6drMlZvOCfkKG5DDH7P4dd2mAwtqc6kwkfnqo/edit?urp=gmail_link&gxids=7628#gid=0).  
