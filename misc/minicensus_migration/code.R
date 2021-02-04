@@ -30,6 +30,31 @@ for(i in 1:length(tables)){
   system(the_command)
 }
 
+# Delete everything
+delete_everything <- function(){
+  for(i in 1:length(tables)){
+    the_table <- tables[i]
+    this_dir <- paste0('Download/default/', the_table)
+    message('Going to delete all data for', the_table)
+    file_name <- paste0(the_table, '.csv')
+    this_data <- read_csv(paste0(this_dir, '/data_unformatted.csv'))
+    if(nrow(this_data) > 0){
+      left <- tibble(operation = 'DELETE')
+      this_data <- bind_cols(left, this_data)
+      write_csv(this_data,
+                file_name, na = '')
+      the_command <- 
+        paste0('java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "', the_table, '" -username "data" -password "data" -path "Download"
+')
+      system(the_command)
+      file.remove(file_name)
+    } else {
+      message('...Skipping.')
+    }
+  }
+}
+delete_everything()
+
 # having retrieved data, let's use that as the base code with which to modify stuff
 forms_dir <- paste0(suitcase_dir, 'Download/default/')
 forms_list <- dir(forms_dir)
