@@ -1,26 +1,48 @@
 'use strict';
 
-define(['promptTypes', 'jquery', 'prompts'], function(promptTypes, $) {
+define(['promptTypes', 'opendatakit', 'database', 'jquery', 'prompts'], function(promptTypes, opendatakit, database, $) {
+  var countInstances = function (instanceList) {
+    var instanceCount = 0;
+
+    for (var i = 0; i < instanceList.length; i++) {
+      if (instanceList[i].savepoint_type === opendatakit.savepoint_type_complete) {
+        instanceCount++;
+      }
+    }
+
+    return instanceCount;
+  }
+
   return {
     linked_table_counting: promptTypes.linked_table.extend({
       configureRenderContext: function (ctxt) {
         var that = this;
+        var queryDefn = opendatakit.getQueriesDefinition(this.values_list);
 
         var modifiedCtxt = $.extend({}, ctxt, {
           success: function () {
-            var instances = that.renderContext.instances;
-            var instanceCount = 0;
+            var subFormStatusCol = queryDefn.subFormStatusCol;
 
-            for (var i = 0; i < instances.length; i++) {
-              // check for form_id match to make sure that
-              // the desired segment of this instance exists
-              if (instances[i].form_id === that.getLinkedFormId()) {
-                instanceCount++;
+            if (subFormStatusCol === undefined || subFormStatusCol === null || subFormStatusCol === '') {
+              that.setValueDeferredChange(countInstances(that.renderContext.instances));
+              ctxt.success();
+            } else {
+              var modifiedSel = that._cachedSelection || '';
+              if (modifiedSel !== '') {
+                modifiedSel += ' AND ';
               }
-            }
+              modifiedSel += '"' + queryDefn.subFormStatusCol + '" = ?';
 
-            that.setValueDeferredChange(instanceCount);
-            ctxt.success();
+              var modifiedSelArgs = queryDefn.selectionArgs() || [];
+              modifiedSelArgs.push('1');
+
+              database.get_linked_instances($.extend({}, ctxt, {
+                success: function (instanceList) {
+                  that.setValueDeferredChange(countInstances(instanceList));
+                  ctxt.success();
+                }
+              }), that.getLinkedTableId(), modifiedSel, modifiedSelArgs);
+            }
           }
         });
 

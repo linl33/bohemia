@@ -18536,7 +18536,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210203001,
+        "value": 20210205001,
         "_row_num": 3
       },
       {
@@ -18796,37 +18796,16 @@
         "_row_num": 10
       },
       {
-        "query_name": "hh_head_info",
-        "query_type": "linked_table",
-        "linked_form_id": "hh_head_info",
-        "linked_table_id": "hh_member",
-        "selection": "hh_id = ?",
-        "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 11
-      },
-      {
         "query_name": "hh_members_roster",
         "query_type": "linked_table",
         "linked_form_id": "hh_member",
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 12
-      },
-      {
-        "query_name": "linked_hh_member",
-        "query_type": "linked_table",
-        "linked_form_id": "hh_member",
-        "linked_table_id": "hh_member",
-        "selection": "hh_id = ?",
-        "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 13
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ form_status_hh_member: 1 }",
+        "subFormStatusCol": "form_status_hh_member",
+        "_row_num": 11
       },
       {
         "query_name": "linked_members_absent",
@@ -18835,9 +18814,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ? AND resident_status = ?",
         "selectionArgs": "[ data('hh_id'), 'resident' ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 14
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member_absent: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ form_status_hh_member_absent: 1 }",
+        "subFormStatusCol": "form_status_hh_member_absent",
+        "_row_num": 12
       },
       {
         "query_name": "linked_members_exit",
@@ -18846,9 +18826,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 15
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member_exit: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ form_status_hh_member_exit: 1 }",
+        "subFormStatusCol": "form_status_hh_member_exit",
+        "_row_num": 13
       },
       {
         "query_name": "linked_members_new",
@@ -18857,9 +18838,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_country: data('hh_country'), id_candidate: data('id_candidate') }",
-        "openRowInitialElementKeyToValueMap": "{ id_candidate: data('id_candidate') }",
-        "_row_num": 16
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_country: data('hh_country'), id_candidate: data('id_candidate'), form_status_hh_member_new: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ id_candidate: data('id_candidate'), form_status_hh_member_new: 1 }",
+        "subFormStatusCol": "form_status_hh_member_new",
+        "_row_num": 14
       },
       {
         "query_name": "member_questionnaire",
@@ -18868,9 +18850,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ? AND resident_status = ?",
         "selectionArgs": "[ data('hh_id'), 'resident' ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{ hh_head: data('hh_head_new_select') }",
-        "_row_num": 17
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member_questions: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ hh_head: data('hh_head_new_select'), form_status_hh_member_questions: 1 }",
+        "subFormStatusCol": "form_status_hh_member_questions",
+        "_row_num": 15
       },
       {
         "query_name": "linked_new_hh_info",
@@ -18879,9 +18862,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_country: data('hh_country'), id_candidate: data('id_candidate') }",
-        "openRowInitialElementKeyToValueMap": "{ id_candidate: data('id_candidate') }",
-        "_row_num": 18
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_country: data('hh_country'), id_candidate: data('id_candidate'), form_status_hh_new_member_new: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ id_candidate: data('id_candidate'), form_status_hh_new_member_new: 1 }",
+        "subFormStatusCol": "form_status_hh_new_member_new",
+        "_row_num": 16
       },
       {
         "query_name": "linked_member_snake_bit",
@@ -18890,9 +18874,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 19
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member_snake: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ form_status_hh_member_snake: 1 }",
+        "subFormStatusCol": "form_status_hh_member_snake",
+        "_row_num": 17
       },
       {
         "query_name": "linked_mosquito_net",
@@ -18903,7 +18888,7 @@
         "selectionArgs": "[ data('hh_id') ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 20
+        "_row_num": 18
       },
       {
         "query_name": "linked_water_body",
@@ -18914,7 +18899,7 @@
         "selectionArgs": "[ data('hh_id') ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 21
+        "_row_num": 19
       },
       {
         "query_name": "linked_fw_location",
@@ -18926,7 +18911,7 @@
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_row_id: opendatakit.getCurrentInstanceId(), timestamp: '' + new Date().getTime() }",
         "openRowInitialElementKeyToValueMap": "{}",
         "comment": "This queries the fw_location for rows with a matching hh_id and timestamp within +- 12 hrs.",
-        "_row_num": 22
+        "_row_num": 20
       }
     ],
     "prompt_types": [
@@ -18966,7 +18951,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210203001,
+        "value": 20210205001,
         "_row_num": 3
       },
       "table_id": {
@@ -35315,17 +35300,6 @@
         "openRowInitialElementKeyToValueMap": "{}",
         "_row_num": 10
       },
-      "hh_head_info": {
-        "query_name": "hh_head_info",
-        "query_type": "linked_table",
-        "linked_form_id": "hh_head_info",
-        "linked_table_id": "hh_member",
-        "selection": "hh_id = ?",
-        "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 11
-      },
       "hh_members_roster": {
         "query_name": "hh_members_roster",
         "query_type": "linked_table",
@@ -35333,20 +35307,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 12
-      },
-      "linked_hh_member": {
-        "query_name": "linked_hh_member",
-        "query_type": "linked_table",
-        "linked_form_id": "hh_member",
-        "linked_table_id": "hh_member",
-        "selection": "hh_id = ?",
-        "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 13
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ form_status_hh_member: 1 }",
+        "subFormStatusCol": "form_status_hh_member",
+        "_row_num": 11
       },
       "linked_members_absent": {
         "query_name": "linked_members_absent",
@@ -35355,9 +35319,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ? AND resident_status = ?",
         "selectionArgs": "[ data('hh_id'), 'resident' ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 14
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member_absent: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ form_status_hh_member_absent: 1 }",
+        "subFormStatusCol": "form_status_hh_member_absent",
+        "_row_num": 12
       },
       "linked_members_exit": {
         "query_name": "linked_members_exit",
@@ -35366,9 +35331,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 15
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member_exit: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ form_status_hh_member_exit: 1 }",
+        "subFormStatusCol": "form_status_hh_member_exit",
+        "_row_num": 13
       },
       "linked_members_new": {
         "query_name": "linked_members_new",
@@ -35377,9 +35343,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_country: data('hh_country'), id_candidate: data('id_candidate') }",
-        "openRowInitialElementKeyToValueMap": "{ id_candidate: data('id_candidate') }",
-        "_row_num": 16
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_country: data('hh_country'), id_candidate: data('id_candidate'), form_status_hh_member_new: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ id_candidate: data('id_candidate'), form_status_hh_member_new: 1 }",
+        "subFormStatusCol": "form_status_hh_member_new",
+        "_row_num": 14
       },
       "member_questionnaire": {
         "query_name": "member_questionnaire",
@@ -35388,9 +35355,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ? AND resident_status = ?",
         "selectionArgs": "[ data('hh_id'), 'resident' ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{ hh_head: data('hh_head_new_select') }",
-        "_row_num": 17
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member_questions: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ hh_head: data('hh_head_new_select'), form_status_hh_member_questions: 1 }",
+        "subFormStatusCol": "form_status_hh_member_questions",
+        "_row_num": 15
       },
       "linked_new_hh_info": {
         "query_name": "linked_new_hh_info",
@@ -35399,9 +35367,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_country: data('hh_country'), id_candidate: data('id_candidate') }",
-        "openRowInitialElementKeyToValueMap": "{ id_candidate: data('id_candidate') }",
-        "_row_num": 18
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_country: data('hh_country'), id_candidate: data('id_candidate'), form_status_hh_new_member_new: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ id_candidate: data('id_candidate'), form_status_hh_new_member_new: 1 }",
+        "subFormStatusCol": "form_status_hh_new_member_new",
+        "_row_num": 16
       },
       "linked_member_snake_bit": {
         "query_name": "linked_member_snake_bit",
@@ -35410,9 +35379,10 @@
         "linked_table_id": "hh_member",
         "selection": "hh_id = ?",
         "selectionArgs": "[ data('hh_id') ]",
-        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
-        "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 19
+        "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), form_status_hh_member_snake: 1 }",
+        "openRowInitialElementKeyToValueMap": "{ form_status_hh_member_snake: 1 }",
+        "subFormStatusCol": "form_status_hh_member_snake",
+        "_row_num": 17
       },
       "linked_mosquito_net": {
         "query_name": "linked_mosquito_net",
@@ -35423,7 +35393,7 @@
         "selectionArgs": "[ data('hh_id') ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 20
+        "_row_num": 18
       },
       "linked_water_body": {
         "query_name": "linked_water_body",
@@ -35434,7 +35404,7 @@
         "selectionArgs": "[ data('hh_id') ]",
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id') }",
         "openRowInitialElementKeyToValueMap": "{}",
-        "_row_num": 21
+        "_row_num": 19
       },
       "linked_fw_location": {
         "query_name": "linked_fw_location",
@@ -35446,7 +35416,7 @@
         "newRowInitialElementKeyToValueMap": "{ hh_id: data('hh_id'), hh_row_id: opendatakit.getCurrentInstanceId(), timestamp: '' + new Date().getTime() }",
         "openRowInitialElementKeyToValueMap": "{}",
         "comment": "This queries the fw_location for rows with a matching hh_id and timestamp within +- 12 hrs.",
-        "_row_num": 22
+        "_row_num": 20
       }
     },
     "calculates": {
