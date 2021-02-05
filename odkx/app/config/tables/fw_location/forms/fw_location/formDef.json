@@ -13,15 +13,11 @@
     "survey": [
       {
         "type": "geopoint",
-        "name": "fw_location",
+        "name": "hh_geo_location",
         "required": 1,
         "display": {
-          "prompt": {
-            "text": "Stand just outside the front door of the house and geocode the location."
-          },
-          "hint": {
-            "text": "The household id is {{data.hh_id}}"
-          }
+          "prompt": "stand_outside",
+          "hint": "stand_outside.hint"
         },
         "_row_num": 2
       }
@@ -34,7 +30,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210203001,
+        "value": 20210204001,
         "_row_num": 3
       },
       {
@@ -116,6 +112,18 @@
         "type": "string",
         "_row_num": 5
       }
+    ],
+    "table_specific_translations": [
+      {
+        "string_token": "stand_outside",
+        "text": "Stand just outside the front door of the house and geocode the location.",
+        "_row_num": 2
+      },
+      {
+        "string_token": "stand_outside.hint",
+        "text": "The household id is {{data.hh_id}}",
+        "_row_num": 3
+      }
     ]
   },
   "specification": {
@@ -142,7 +150,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210203001,
+        "value": 20210204001,
         "_row_num": 3
       },
       "table_id": {
@@ -268,7 +276,18 @@
     },
     "choices": {},
     "table_specific_definitions": {
-      "_tokens": {}
+      "_tokens": {
+        "stand_outside": {
+          "string_token": "stand_outside",
+          "text": "Stand just outside the front door of the house and geocode the location.",
+          "_row_num": 2
+        },
+        "stand_outside.hint": {
+          "string_token": "stand_outside.hint",
+          "text": "The household id is {{data.hh_id}}",
+          "_row_num": 3
+        }
+      }
     },
     "queries": {},
     "calculates": {},
@@ -316,10 +335,6 @@
         },
         "_defn": [
           {
-            "_row_num": 2,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 4,
             "section_name": "model"
           }
@@ -335,6 +350,35 @@
           }
         ],
         "elementKey": "timestamp"
+      },
+      "hh_geo_location": {
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "survey"
+          }
+        ],
+        "type": "object",
+        "elementType": "geopoint",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "elementKey": "hh_geo_location_latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "elementKey": "hh_geo_location_longitude"
+          },
+          "altitude": {
+            "type": "number",
+            "elementKey": "hh_geo_location_altitude"
+          },
+          "accuracy": {
+            "type": "number",
+            "elementKey": "hh_geo_location_accuracy"
+          }
+        },
+        "elementKey": "hh_geo_location"
       }
     },
     "section_names": [
@@ -460,15 +504,11 @@
         "prompts": [
           {
             "type": "geopoint",
-            "name": "fw_location",
+            "name": "hh_geo_location",
             "required": 1,
             "display": {
-              "prompt": {
-                "text": "Stand just outside the front door of the house and geocode the location."
-              },
-              "hint": {
-                "text": "The household id is {{data.hh_id}}"
-              }
+              "prompt": "stand_outside",
+              "hint": "stand_outside.hint"
             },
             "_row_num": 2,
             "__rowNum__": 1,
@@ -589,10 +629,6 @@
         },
         "_defn": [
           {
-            "_row_num": 2,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 4,
             "section_name": "model"
           }
@@ -622,6 +658,57 @@
         "elementSet": "data",
         "elementPath": "timestamp"
       },
+      "hh_geo_location": {
+        "_defn": [
+          {
+            "_row_num": 2,
+            "section_name": "survey"
+          }
+        ],
+        "type": "object",
+        "elementType": "geopoint",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "elementKey": "hh_geo_location_latitude",
+            "elementName": "latitude",
+            "elementSet": "data",
+            "elementPath": "hh_geo_location.latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "elementKey": "hh_geo_location_longitude",
+            "elementName": "longitude",
+            "elementSet": "data",
+            "elementPath": "hh_geo_location.longitude"
+          },
+          "altitude": {
+            "type": "number",
+            "elementKey": "hh_geo_location_altitude",
+            "elementName": "altitude",
+            "elementSet": "data",
+            "elementPath": "hh_geo_location.altitude"
+          },
+          "accuracy": {
+            "type": "number",
+            "elementKey": "hh_geo_location_accuracy",
+            "elementName": "accuracy",
+            "elementSet": "data",
+            "elementPath": "hh_geo_location.accuracy"
+          }
+        },
+        "elementKey": "hh_geo_location",
+        "elementName": "hh_geo_location",
+        "elementSet": "data",
+        "elementPath": "hh_geo_location",
+        "listChildElementKeys": [
+          "hh_geo_location_accuracy",
+          "hh_geo_location_altitude",
+          "hh_geo_location_latitude",
+          "hh_geo_location_longitude"
+        ],
+        "notUnitOfRetention": true
+      },
       "fw_location_latitude": {
         "type": "number",
         "elementKey": "fw_location_latitude",
@@ -649,6 +736,34 @@
         "elementName": "accuracy",
         "elementSet": "data",
         "elementPath": "fw_location.accuracy"
+      },
+      "hh_geo_location_latitude": {
+        "type": "number",
+        "elementKey": "hh_geo_location_latitude",
+        "elementName": "latitude",
+        "elementSet": "data",
+        "elementPath": "hh_geo_location.latitude"
+      },
+      "hh_geo_location_longitude": {
+        "type": "number",
+        "elementKey": "hh_geo_location_longitude",
+        "elementName": "longitude",
+        "elementSet": "data",
+        "elementPath": "hh_geo_location.longitude"
+      },
+      "hh_geo_location_altitude": {
+        "type": "number",
+        "elementKey": "hh_geo_location_altitude",
+        "elementName": "altitude",
+        "elementSet": "data",
+        "elementPath": "hh_geo_location.altitude"
+      },
+      "hh_geo_location_accuracy": {
+        "type": "number",
+        "elementKey": "hh_geo_location_accuracy",
+        "elementName": "accuracy",
+        "elementSet": "data",
+        "elementPath": "hh_geo_location.accuracy"
       },
       "_id": {
         "type": "string",
