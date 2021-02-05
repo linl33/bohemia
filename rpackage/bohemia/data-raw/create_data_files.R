@@ -375,10 +375,16 @@ mopeia_villages <- SpatialPolygonsDataFrame(Sr = mopeia_villages,
                                             match.ID = FALSE)
 usethis::use_data(mopeia_villages, overwrite = TRUE)
 
-# Also make TZA wards (#Decided not to - not more granular than what we already had)
-tza_wards <- readOGR('tza_wards/2012 Wards Shapefiles/', 'TZwards')
+# # Also make TZA wards (#Decided not to - not more granular than what we already had)
+# tza_wards <- readOGR('tza_wards/2012 Wards Shapefiles/', 'TZwards')
+# tza_wards <- spTransform(tza_wards,  CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
+# keep <- tza_wards[tza_wards@data$District_N %in% c('Kibiti', 'Rufiji'),]
+
+tza_wards <- readOGR('tza_wards2021/', 'Rufiji_district_villages2')
 tza_wards <- spTransform(tza_wards,  CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"))
 keep <- tza_wards[tza_wards@data$District_N %in% c('Kibiti', 'Rufiji'),]
+
+
 # Keep only those in Rufiji/Kibiti
 # cols <- rainbow(nrow(mopeia_hamlets))
 # cols <- sample(cols, length(cols))
