@@ -4,9 +4,31 @@ library(tidyr)
 
 # Define the suitcase directory
 suitcase_dir <- '~/Documents/suitcase/'
+# Define the designer directory
+designer_dir <- '~/Documents/ODK-X_ApplicationDesigner_v2.1.7/'
+# Define the Bohemia dir
+bohemia_dir <- '~/Documents/bohemia/'
+# Define bohemia repo
 # Get current directory 
 owd <- getwd()
 setwd(suitcase_dir)
+
+# Reset the server
+the_command <- 
+  paste0('java -jar ODK-X_Suitcase_v2.1.7.jar -reset  -cloudEndpointUrl "https://databrew.app" -appId "default" -username "dbrew" -password "admin" -dataVersion 2')
+system(the_command)
+
+# Push the new forms
+the_command <- 
+  paste0('java -jar ODK-X_Suitcase_v2.1.7.jar -cloudEndpointUrl "https://databrew.app" -dataVersion 2 -appId "default" -username "dbrew" -password "admin" -upload -uploadOp RESET_APP -path ', bohemia_dir, 'odkx/app/config')
+system(the_command)
+
+# # Push the new forms
+# setwd(designer_dir)
+# # Delete the app dir
+# dir.exists('app')
+# unlink('app', recursive = TRUE)
+# # Copy over from the git repo
 
 # Define the tables
 tables <- 
@@ -40,12 +62,11 @@ delete_everything <- function(){
     this_data <- read_csv(paste0(this_dir, '/data_unformatted.csv'))
     if(nrow(this_data) > 0){
       left <- tibble(operation = 'DELETE')
-      this_data <- bind_cols(left, this_data)
+      this_data <- bind_cols(left, this_data) 
       write_csv(this_data,
-                file_name, na = '')
+                file_name)
       the_command <- 
-        paste0('java -jar ODK-X_Suitcase_v2.1.7.jar -download -a -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "', the_table, '" -username "data" -password "data" -path "Download"
-')
+        paste0('java -jar ODK-X_Suitcase_v2.1.7.jar -update -dataVersion 2 -cloudEndpointUrl "https://databrew.app" -appId "default" -tableId "', the_table, '" -username "data" -password "data" -path ', file_name)
       system(the_command)
       file.remove(file_name)
     } else {
@@ -63,26 +84,32 @@ forms_list <- dir(forms_dir)
 this_form <- 'census'
 this_dir <- paste0(forms_dir, this_form)
 this_data <- read_csv(paste0(this_dir, '/data_unformatted.csv'))
-format_data_census <- this_data <- this_data[1,]
+format_data_census <- this_data <- this_data[nrow(this_data),]
 
 # HH member form
 this_form <- 'hh_member'
 this_dir <- paste0(forms_dir, this_form)
 this_data <- read_csv(paste0(this_dir, '/data_unformatted.csv'))
-format_data_hh_member <- this_data <- this_data[1,]
+format_data_hh_member <- this_data <- this_data[nrow(this_data),]
+
+# geolocation
+this_form <- 'hh_geo_location'
+this_dir <- paste0(forms_dir, this_form)
+this_data <- read_csv(paste0(this_dir, '/data_unformatted.csv'))
+format_data_hh_geo_location <- this_data <- this_data[nrow(this_data),]
 
 # Define a function for making fake data
 make_fake <- function(format_data_census,
                       format_data_hh_member,
+                      format_data_hh_geo_location,
                       hh_number = NULL,
                       n_people = NULL){
   
   if(is.null(hh_number)){
     hh_number <- paste0(paste0(sample(LETTERS, 3), collapse = ''), '-', paste0(sample(0:9, 3), collapse = ''))
-    
-    if(is.null(n_people)){
-      n_people <- sample(1:9, 1)
-    }
+  }
+  if(is.null(n_people)){
+    n_people <- sample(2:9, 1)
   }
   
   # Define some uids
@@ -92,9 +119,10 @@ make_fake <- function(format_data_census,
                    'hh_consent_who_signed', 'hh_head_new_select',
                    'hh_head_sub_new_select', '_row_etag'),
            value = c(uids[1:3], 
-                     paste0('["',
-                            uids[3],
-                            '"]'),
+                     uids[3],
+                     # paste0('["',
+                     #        uids[3],
+                     #        '"]'),
                      uids[4:5]))
   
   # Modify the ids of the census form
@@ -107,33 +135,48 @@ make_fake <- function(format_data_census,
   
   # Modify the ids of the hh member form
   hh_member <- 
-    tibble(`_id` = uids[6:(6+(n-1))],
-           `_row_etag` = uids[100:(100-n+1)],
-           `_data_etag_at_modification` = uids[(100-n):(100-n-n+1)])
+    tibble(`_id` = uids[6:(6+(n_people-1))],
+           `_row_etag` = uids[100:(100-n_people+1)]) %>%
+    mutate(`_data_etag_at_modification` = uids[(100-n_people)])
   hh_member$`_id`[1] <- uids[3]
-    # Join with the formatter
+  hh_member$`_id`[2] <- uids[4]
+  hh_member$hh_head <- hh_member$`_id`[1]
+  
+  # Join with the formatter
   right <- format_data_hh_member[,!names(format_data_hh_member) %in% names(hh_member)]
   joined <- bind_cols(hh_member, right)
   hh_member <- joined
   # Get names
-  hh_member$surname <- sample(c('Johson', 'Avery', 'Garcia', 'Roure'),
-                              n, replace = TRUE)
-  hh_member$name <- sample(c('John', 'Lola', 'Jaime', 'Enric', 'Eldo', 'Francesc', 'Jose'), n, replace = TRUE)
-  # Get head
-  hh_
-  
+  hh_member$surname <- sample(c('Johson', 'Avery', 'Garcia', 'Roure', 'Wood', 'Poe', 'Brew', 'Kimani'),
+                              n_people, replace = TRUE)
+  hh_member$name <- sample(c('John', 'Lola', 'Jaime', 'Enric', 'Eldo', 'Francesc', 'Jose'), n_people, replace = TRUE)
+
   # Deal with household id
   census$hh_id <- hh_number
-  hh_member$id <- paste0(hh_number, '-', bohemia::add_zero(1:n, 3))
+  hh_member$id <- paste0(hh_number, '-', bohemia::add_zero(1:n_people, 3))
+  hh_member$hh_id <- hh_number
+  
+  # Modify the location form
+  hh_geo_location <- format_data_hh_geo_location
+  hh_geo_location <- hh_geo_location %>%
+    mutate(`_id` = uids[50],
+           `_data_etag_at_modification` = uids[51],
+           `_row_etag` = uids[52]) %>%
+    mutate(hh_id = hh_number) %>%
+    mutate(hh_geo_location_accuracy = 13.26,	
+           hh_geo_location_altitude = 52,	
+           hh_geo_location_latitude = jitter(43.65),	
+           hh_geo_location_longitude = jitter(-79.394992))
   
   # Add the NEW tag
   left <- tibble(operation = 'NEW')
   census <- bind_cols(left, census)
   hh_member <- bind_cols(left, hh_member)
+  hh_geo_location <- bind_cols(left, hh_geo_location)
   
   # Return list
-  out <- list(census, hh_member)
-  names(out) <- c('census', 'hh_member')
+  out <- list(census, hh_member, hh_geo_location)
+  names(out) <- c('census', 'hh_member', 'hh_geo_location')
   return(out)
 }
 
@@ -149,8 +192,9 @@ upload_fake <- function(fake,
   # Write local csvs
   write_csv(fake$census, 'census.csv', na = '')
   write_csv(fake$hh_member, 'hh_member.csv', na = '')
+  write_csv(fake$hh_geo_location, 'hh_geo_location.csv', na = '')
   
-  for(form in c('census', 'hh_member')){
+  for(form in c('census', 'hh_member', 'hh_geo_location')){
     tf <- paste0(form, '.csv')
     # Define text for uploading
     upload_command <- paste0(
@@ -163,9 +207,19 @@ upload_fake <- function(fake,
 }
 
 fake <- make_fake(format_data_census = format_data_census,
-                  format_data_hh_member = format_data_hh_member)
+                  format_data_hh_member = format_data_hh_member,
+                  format_data_hh_geo_location = format_data_hh_geo_location)
 upload_fake(fake)
 
+ids <- paste0('ABC-', bohemia::add_zero(1:10, 3))
+for(i in 1:length(ids)){
+  this_id <- ids[i]
+  fake <- make_fake(format_data_census = format_data_census,
+                    format_data_hh_member = format_data_hh_member,
+                    format_data_hh_geo_location = format_data_hh_geo_location,
+                    hh_number = this_id)
+  upload_fake(fake)
+}
 
 # Define text for uploading
 upload_command <- paste0(
