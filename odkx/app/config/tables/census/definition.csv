@@ -5,6 +5,8 @@ cattle_disease_30_days,cattle_disease_30_days,array,"[""cattle_disease_30_days_i
 cattle_disease_30_days_items,items,string,[]
 cattle_ivermectin,cattle_ivermectin,string,[]
 cattle_ivermectin_responsible,cattle_ivermectin_responsible,string,[]
+cattle_ivermectin_responsible_dk,cattle_ivermectin_responsible_dk,array,"[""cattle_ivermectin_responsible_dk_items""]"
+cattle_ivermectin_responsible_dk_items,items,string,[]
 cattle_milk,cattle_milk,string,[]
 cattle_milk_months,cattle_milk_months,array,"[""cattle_milk_months_items""]"
 cattle_milk_months_items,items,string,[]

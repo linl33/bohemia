@@ -34,6 +34,10 @@
           }
         },
         "_row_num": 5
+      },
+      {
+        "setting_name": "framework_variant",
+        "_row_num": 6
       }
     ],
     "framework_translations": [
@@ -527,7 +531,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "table_id": {
@@ -553,6 +558,10 @@
           }
         },
         "_row_num": 5
+      },
+      "framework_variant": {
+        "setting_name": "framework_variant",
+        "_row_num": 6
       },
       "_locales": {
         "setting_name": "_locales",

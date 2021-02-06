@@ -2393,7 +2393,7 @@
       },
       {
         "name": "new_member_move_in_date",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 40
       },
       {
@@ -2773,7 +2773,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 202102040001,
+        "value": 202102060001,
         "_row_num": 3
       },
       {
@@ -2864,7 +2864,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 202102040001,
+        "value": 202102060001,
         "_row_num": 3
       },
       "table_id": {
@@ -5542,7 +5542,7 @@
       },
       "new_member_move_in_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 40,
@@ -7262,7 +7262,7 @@
       },
       "new_member_move_in_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 40,
