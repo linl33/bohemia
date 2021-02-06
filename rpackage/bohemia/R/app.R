@@ -1171,12 +1171,16 @@ app_server <- function(input, output, session) {
       pd <- pd$minicensus_main
       pd$day <- weekdays(pd$todays_date)
       
-      # get expanded all dates and days
-      all_days <- pd %>% group_by(todays_date, day) %>% summarise(counts =n())
-      all_days$counts <- NULL
+      # create a dataframe with data and day of week from beginning of minicensus to todays date
+      date_vec <- seq.Date(from = min(pd$todays_date), to = Sys.Date(), by = 'day')
+      day_vec <- weekdays(date_vec)
+      all_days <- tibble(todays_date = date_vec, day = day_vec)
       
       # get the most recent sunday
       pd <- pd %>% group_by(todays_date, day) %>% summarise(counts = n()) %>% arrange(todays_date) 
+      pd <- left_join(all_days, pd)
+      pd$counts[is.na(pd$counts)] <- 0
+      
       # get max date equal to monday
       last_sunday = max(pd$todays_date[pd$day=='Sunday'])
       pd_sub <- pd %>% filter(todays_date <= last_sunday)
@@ -1216,12 +1220,12 @@ app_server <- function(input, output, session) {
       errors$day <- weekdays(errors$date)
       errors <- errors %>% group_by(date, day) %>% summarise(counts = n()) %>% arrange(date) 
       
-      errors <- left_join(all_days,errors) 
+      errors <- left_join(all_days,errors, by=c('todays_date'= 'date', 'day') ) 
       # get max date equal to monday
       last_sunday = max(errors$todays_date[errors$day=='Sunday'])
-      errors_sub <- errors %>% filter(date <= last_sunday)
-      last_monday <- max(errors_sub$date[errors_sub$day=='Monday'])
-      errors_week <- errors %>% filter(date>= last_monday, date<=last_sunday)
+      errors_sub <- errors %>% filter(todays_date <= last_sunday)
+      last_monday <- max(errors_sub$todays_date[errors_sub$day=='Monday'])
+      errors_week <- errors %>% filter(todays_date>= last_monday, todays_date<=last_sunday)
       num_forms_since_monday <-sum(errors_week$counts, na.rm = TRUE)
       
       title_errors <- paste0('Errors resolved: ', error_corrected, ' out of ',total_errors)
@@ -1235,12 +1239,12 @@ app_server <- function(input, output, session) {
       anom$day <- weekdays(anom$date)
       anom <- anom %>% group_by(date, day) %>% summarise(counts = n()) %>% arrange(date) 
       
-      anom <- left_join(all_days,anom) 
+      anom <- left_join(all_days,anom,by=c('todays_date'= 'date', 'day')) 
       # get max date equal to monday
       last_sunday = max(anom$todays_date[anom$day=='Sunday'])
-      anom_sub <- anom %>% filter(date <= last_sunday)
-      last_monday <- max(anom_sub$date[anom_sub$day=='Monday'])
-      anom_week <- anom %>% filter(date>= last_monday, date<=last_sunday)
+      anom_sub <- anom %>% filter(todays_date <= last_sunday)
+      last_monday <- max(anom_sub$todays_date[anom_sub$day=='Monday'])
+      anom_week <- anom %>% filter(todays_date>= last_monday, todays_date<=last_sunday)
       num_forms_since_monday <-sum(anom_week$counts, na.rm = TRUE)
       sub_title_anom <- paste0(last_monday, ' - ', last_sunday, ': ', num_forms_since_monday)
       
