@@ -28,7 +28,7 @@ use_data(tza_ward_supervisors, overwrite = TRUE)
 library(gsheet)
 library(dplyr)
 # Note: the below url was created by manually copy-pasting data sent from site teams
-url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
+url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit#gid=1134589765'
 # Fetch the data
 locations <- gsheet::gsheet2tbl(url = url)
 # moz_new <- read_csv('updated_moz_location_hierarchy/mozy.csv')
