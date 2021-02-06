@@ -22,7 +22,8 @@
           "prompt": "q65a",
           "hint": {
             "text": "ABC-123-700"
-          }
+          },
+          "constraint_message": "extid_format"
         },
         "constraint": "/^[A-Z]{3}-[0-9]{3}-7[0-9]{2}$/.test(data('hh_death_id'))",
         "_row_num": 3
@@ -31,16 +32,20 @@
         "type": "text",
         "name": "hh_death_name",
         "display": {
-          "prompt": "q65b"
+          "prompt": "q65b",
+          "constraint_message": "name_number"
         },
+        "constraint": "!/\\p{N}/u.test(data('hh_death_name'))",
         "_row_num": 4
       },
       {
         "type": "text",
         "name": "hh_death_surname",
         "display": {
-          "prompt": "q65c"
+          "prompt": "q65c",
+          "constraint_message": "surname_number"
         },
+        "constraint": "!/\\p{N}/u.test(data('hh_death_surname'))",
         "_row_num": 5
       },
       {
@@ -316,6 +321,21 @@
           "sw": "Me"
         },
         "_row_num": 10
+      },
+      {
+        "string_token": "name_number",
+        "text": "The given name of the individual cannot contain numbers.",
+        "_row_num": 11
+      },
+      {
+        "string_token": "surname_number",
+        "text": "The surname of the individual cannot contain numbers.",
+        "_row_num": 12
+      },
+      {
+        "string_token": "extid_format",
+        "text": "ID must be in this format ABC-123-701 (3 capital letters, '-', 3 numbers, '-', 7##).",
+        "_row_num": 13
       }
     ]
   },
@@ -333,7 +353,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -584,6 +605,21 @@
             "sw": "Me"
           },
           "_row_num": 10
+        },
+        "name_number": {
+          "string_token": "name_number",
+          "text": "The given name of the individual cannot contain numbers.",
+          "_row_num": 11
+        },
+        "surname_number": {
+          "string_token": "surname_number",
+          "text": "The surname of the individual cannot contain numbers.",
+          "_row_num": 12
+        },
+        "extid_format": {
+          "string_token": "extid_format",
+          "text": "ID must be in this format ABC-123-701 (3 capital letters, '-', 3 numbers, '-', 7##).",
+          "_row_num": 13
         }
       }
     },
@@ -830,7 +866,8 @@
               "prompt": "q65a",
               "hint": {
                 "text": "ABC-123-700"
-              }
+              },
+              "constraint_message": "extid_format"
             },
             "constraint": "/^[A-Z]{3}-[0-9]{3}-7[0-9]{2}$/.test(data('hh_death_id'))",
             "_row_num": 3,
@@ -844,8 +881,10 @@
             "type": "text",
             "name": "hh_death_name",
             "display": {
-              "prompt": "q65b"
+              "prompt": "q65b",
+              "constraint_message": "name_number"
             },
+            "constraint": "!/\\p{N}/u.test(data('hh_death_name'))",
             "_row_num": 4,
             "__rowNum__": 3,
             "_token_type": "prompt",
@@ -857,8 +896,10 @@
             "type": "text",
             "name": "hh_death_surname",
             "display": {
-              "prompt": "q65c"
+              "prompt": "q65c",
+              "constraint_message": "surname_number"
             },
+            "constraint": "!/\\p{N}/u.test(data('hh_death_surname'))",
             "_row_num": 5,
             "__rowNum__": 4,
             "_token_type": "prompt",
@@ -932,7 +973,9 @@
         ],
         "validation_tag_map": {
           "finalize": [
-            0
+            0,
+            1,
+            2
           ]
         },
         "operations": [

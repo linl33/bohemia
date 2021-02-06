@@ -80,6 +80,21 @@ window.odkTableSpecificDefinitions = {
         "sw": "Me"
       },
       "_row_num": 10
+    },
+    "name_number": {
+      "string_token": "name_number",
+      "text": "The given name of the individual cannot contain numbers.",
+      "_row_num": 11
+    },
+    "surname_number": {
+      "string_token": "surname_number",
+      "text": "The surname of the individual cannot contain numbers.",
+      "_row_num": 12
+    },
+    "extid_format": {
+      "string_token": "extid_format",
+      "text": "ID must be in this format ABC-123-701 (3 capital letters, '-', 3 numbers, '-', 7##).",
+      "_row_num": 13
     }
   }
 }

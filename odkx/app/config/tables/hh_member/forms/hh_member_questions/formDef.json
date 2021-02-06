@@ -40,16 +40,24 @@
         "type": "text",
         "name": "name",
         "display": {
-          "prompt": "given_name"
+          "prompt": "given_name",
+          "constraint_message": {
+            "text": "name_number"
+          }
         },
+        "constraint": "!/\\p{N}/u.test(data('name'))",
         "_row_num": 6
       },
       {
         "type": "text",
         "name": "surname",
         "display": {
-          "prompt": "surname"
+          "prompt": "surname",
+          "constraint_message": {
+            "text": "surname_number"
+          }
         },
+        "constraint": "!/\\p{N}/u.test(data('surname'))",
         "_row_num": 7
       },
       {
@@ -3907,7 +3915,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -7845,8 +7854,12 @@
             "type": "text",
             "name": "name",
             "display": {
-              "prompt": "given_name"
+              "prompt": "given_name",
+              "constraint_message": {
+                "text": "name_number"
+              }
             },
+            "constraint": "!/\\p{N}/u.test(data('name'))",
             "_row_num": 6,
             "__rowNum__": 5,
             "_token_type": "prompt",
@@ -7858,8 +7871,12 @@
             "type": "text",
             "name": "surname",
             "display": {
-              "prompt": "surname"
+              "prompt": "surname",
+              "constraint_message": {
+                "text": "surname_number"
+              }
             },
+            "constraint": "!/\\p{N}/u.test(data('surname'))",
             "_row_num": 7,
             "__rowNum__": 6,
             "_token_type": "prompt",
@@ -8951,6 +8968,8 @@
         ],
         "validation_tag_map": {
           "finalize": [
+            3,
+            4,
             6,
             8,
             10,
