@@ -7,6 +7,7 @@
 #' @import leaflet
 #' @import shiny
 #' @import ggplot2
+#' @import DT
 #' @import shinyMobile
 app_ui <- function(request) {
   options(scipen = '999')
@@ -32,7 +33,11 @@ app_ui <- function(request) {
         tabItems(
           tabItem(
             tabName="main",
-            fluidRow(h3('Test'))
+            fluidPage(
+              fluidRow(
+                DT::dataTableOutput('contact_table')
+              )
+            )
           ),
           tabItem(
             tabName = 'about',
@@ -56,6 +61,35 @@ app_ui <- function(request) {
       )
     )
   )
+}
+
+
+
+##################################################
+# SERVER
+##################################################
+#' @import shiny
+#' @import leaflet
+app_server <- function(input, output, session) {
+  
+  # create reactive data frame 
+  temp_dat <- reactive({
+    temp <-forum::dat
+    temp$details <- NULL
+    return(temp)
+  })
+  
+  # put data in table 
+  output$contact_table <- DT::renderDataTable({
+    table_data <- temp_dat()
+    if(is.null(table_data)){
+      NULL
+    } else {
+      message(table_data)
+      DT::datatable(table_data, editable = TRUE)
+    }
+  })
+  
 }
 
 #' Add external Resources to the Application
@@ -111,15 +145,6 @@ mobile_golem_add_external_resources <- function(){
     tags$link(rel="stylesheet", type="text/css", href="www/custom.css")
     # tags$link(rel="stylesheet", type="text/css", href="www/custom.css")
   )
-}
-
-##################################################
-# SERVER
-##################################################
-#' @import shiny
-#' @import leaflet
-app_server <- function(input, output, session) {
-  
 }
 
 app <- function(){
