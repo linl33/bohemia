@@ -402,7 +402,7 @@
         "_row_num": 53
       },
       {
-        "type": "date",
+        "type": "birth_date",
         "name": "new_member_move_in_date",
         "display": {
           "prompt": "q22"
@@ -2770,7 +2770,7 @@
       },
       {
         "name": "new_member_move_in_date",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 40
       },
       {
@@ -3150,7 +3150,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210204001,
+        "value": 20210206001,
         "_row_num": 3
       },
       {
@@ -3241,7 +3241,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210204001,
+        "value": 20210206001,
         "_row_num": 3
       },
       "table_id": {
@@ -6023,7 +6023,7 @@
       },
       "new_member_move_in_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 54,
@@ -7354,7 +7354,7 @@
             "promptIdx": 29
           },
           {
-            "type": "date",
+            "type": "birth_date",
             "name": "new_member_move_in_date",
             "display": {
               "prompt": "q22"
@@ -7362,7 +7362,7 @@
             "_row_num": 54,
             "__rowNum__": 53,
             "_token_type": "prompt",
-            "_type": "date",
+            "_type": "birth_date",
             "_branch_label_enclosing_screen": "survey/_screen3",
             "promptIdx": 30
           },
@@ -8234,7 +8234,7 @@
       },
       "new_member_move_in_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 54,

@@ -2103,8 +2103,8 @@ window.odkTableSpecificDefinitions = {
       },
       "_row_num": 263
     },
-    "45ci": {
-      "string_token": "45ci",
+    "q45ci": {
+      "string_token": "q45ci",
       "text": {
         "default": "45c(i). During the rainy season",
         "pt": "45c(i). Durante a estação das chuvas",
@@ -2112,8 +2112,8 @@ window.odkTableSpecificDefinitions = {
       },
       "_row_num": 264
     },
-    "45cii": {
-      "string_token": "45cii",
+    "q45cii": {
+      "string_token": "q45cii",
       "text": {
         "default": "45c (ii). During the dry season",
         "pt": "45c (ii). Durante a estação seca",
@@ -2121,8 +2121,8 @@ window.odkTableSpecificDefinitions = {
       },
       "_row_num": 265
     },
-    "46.cattle": {
-      "string_token": "46.cattle",
+    "q46.cattle": {
+      "string_token": "q46.cattle",
       "text": {
         "default": "46. Where do most weaned (no longer drinking milk from their mother) cattle spend the day during the wet season?",
         "pt": "46. Onde é que a maioria dos animais desmamados (que já não bebem leite da progenitora) bovino passa o dia durante a estação das chuvas?",
@@ -2130,8 +2130,8 @@ window.odkTableSpecificDefinitions = {
       },
       "_row_num": 266
     },
-    "46.pig": {
-      "string_token": "46.pig",
+    "q46.pig": {
+      "string_token": "q46.pig",
       "text": {
         "default": "46. Where do most weaned (no longer drinking milk from their mother) pigs spend the day during the wet season?",
         "pt": "46. Onde é que a maioria dos animais desmamados (que já não bebem leite da progenitora) porcos passa o dia durante a estação das chuvas?",
@@ -2238,8 +2238,8 @@ window.odkTableSpecificDefinitions = {
       },
       "_row_num": 278
     },
-    "q50.pigs": {
-      "string_token": "q50.pigs",
+    "q50.pig": {
+      "string_token": "q50.pig",
       "text": {
         "default": "50. Who is responsible and makes the decisions about drug treatment of [pigs]",
         "pt": "50. Quem é o responsável e toma as decisões sobre o tratamento do [porcos] com medicamentos?",

@@ -76,7 +76,7 @@ name,name,string,[]
 new_hh_member_censed,new_hh_member_censed,string,[]
 new_hh_member_censed_extid_not_possible,new_hh_member_censed_extid_not_possible,array,"[""new_hh_member_censed_extid_not_possible_items""]"
 new_hh_member_censed_extid_not_possible_items,items,string,[]
-new_member_move_in_date,new_member_move_in_date,date,[]
+new_member_move_in_date,new_member_move_in_date,date_no_time,[]
 new_member_move_in_enter,new_member_move_in_enter,integer,[]
 new_member_move_in_select,new_member_move_in_select,string,[]
 new_member_newborn_or_moved_in,new_member_newborn_or_moved_in,string,[]

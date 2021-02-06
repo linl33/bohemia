@@ -19,18 +19,14 @@
       {
         "type": "note",
         "display": {
-          "prompt": {
-            "text": "Household ID: {{data.hh_id}}"
-          }
+          "prompt": "hh_id_note"
         },
         "_row_num": 3
       },
       {
         "type": "note",
         "display": {
-          "prompt": {
-            "text": "Section to be filled out for households that were not part of the minicensus"
-          }
+          "prompt": "new_hh_only"
         },
         "_row_num": 4
       },
@@ -38,9 +34,7 @@
         "type": "text",
         "name": "name",
         "display": {
-          "prompt": {
-            "text": "1. Given name"
-          }
+          "prompt": "q1"
         },
         "required": 1,
         "_row_num": 5
@@ -49,9 +43,7 @@
         "type": "text",
         "name": "surname",
         "display": {
-          "prompt": {
-            "text": "2. Surname"
-          }
+          "prompt": "q2"
         },
         "required": 1,
         "_row_num": 6
@@ -59,9 +51,7 @@
       {
         "type": "note",
         "display": {
-          "prompt": {
-            "text": "3. Date of birth"
-          }
+          "prompt": "q3"
         },
         "_row_num": 7
       },
@@ -69,9 +59,7 @@
         "type": "integer",
         "name": "dob_day",
         "display": {
-          "prompt": {
-            "text": "Day"
-          }
+          "prompt": "day"
         },
         "required": "not(selected(data('dob_day_dk'), 'dk'))",
         "inputAttributes": {
@@ -91,9 +79,7 @@
         "type": "integer",
         "name": "dob_month",
         "display": {
-          "prompt": {
-            "text": "Month"
-          }
+          "prompt": "month"
         },
         "required": "not(selected(data('dob_month_dk'), 'dk'))",
         "inputAttributes": {
@@ -113,9 +99,7 @@
         "type": "integer",
         "name": "dob_year",
         "display": {
-          "prompt": {
-            "text": "Year"
-          }
+          "prompt": "year"
         },
         "required": "not(selected(data('dob_year_dk'), 'dk'))",
         "inputAttributes": {
@@ -146,9 +130,7 @@
         "type": "integer",
         "name": "dob_enter_age",
         "display": {
-          "prompt": {
-            "text": "3a. If year is not known please add age"
-          }
+          "prompt": "q3a"
         },
         "required": "selected(data('dob_year_dk'), 'dk')",
         "inputAttributes": {
@@ -202,9 +184,7 @@
         "values_list": "gender",
         "name": "gender",
         "display": {
-          "prompt": {
-            "text": "4. Gender"
-          }
+          "prompt": "q4"
         },
         "_row_num": 25
       },
@@ -213,12 +193,8 @@
         "values_list": "resident_status",
         "name": "resident_status",
         "display": {
-          "prompt": {
-            "text": "5. Is this participant a resident of the household?"
-          },
-          "hint": {
-            "text": "(A resident member is a person who intends to live in the household during the following 3 months at least)"
-          }
+          "prompt": "q5",
+          "hint": "q5.hint"
         },
         "_row_num": 26
       },
@@ -227,9 +203,7 @@
         "values_list": "yndk",
         "name": "new_hh_member_censed",
         "display": {
-          "prompt": {
-            "text": "6. Was this participant registered in the district census a few months ago?"
-          }
+          "prompt": "q6"
         },
         "_row_num": 27
       },
@@ -242,9 +216,7 @@
         "type": "text",
         "name": "id",
         "display": {
-          "prompt": {
-            "text": "6a. Retrieve Ext_ID of participant"
-          },
+          "prompt": "q6a",
           "hint": {
             "text": "ABC-123-123"
           }
@@ -258,9 +230,7 @@
         "values_list": "not_possible",
         "name": "new_hh_member_censed_extid_not_possible",
         "display": {
-          "prompt": {
-            "text": "Not possible to retrieve"
-          }
+          "prompt": "not_possible"
         },
         "_row_num": 30
       },
@@ -291,9 +261,7 @@
       {
         "type": "note",
         "display": {
-          "prompt": {
-            "text": "Assigned ExtID {{data.id}}"
-          }
+          "prompt": "assigned_extid"
         },
         "_row_num": 36
       },
@@ -2554,7 +2522,7 @@
       },
       {
         "name": "new_member_move_in_date",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 40
       },
       {
@@ -2934,7 +2902,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210202001,
+        "value": 20210206001,
         "_row_num": 3
       },
       {
@@ -3025,7 +2993,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210202001,
+        "value": 20210206001,
         "_row_num": 3
       },
       "table_id": {
@@ -5755,7 +5723,7 @@
       },
       "new_member_move_in_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 40,
@@ -6641,9 +6609,7 @@
           {
             "type": "note",
             "display": {
-              "prompt": {
-                "text": "Household ID: {{data.hh_id}}"
-              }
+              "prompt": "hh_id_note"
             },
             "_row_num": 3,
             "__rowNum__": 2,
@@ -6655,9 +6621,7 @@
           {
             "type": "note",
             "display": {
-              "prompt": {
-                "text": "Section to be filled out for households that were not part of the minicensus"
-              }
+              "prompt": "new_hh_only"
             },
             "_row_num": 4,
             "__rowNum__": 3,
@@ -6670,9 +6634,7 @@
             "type": "text",
             "name": "name",
             "display": {
-              "prompt": {
-                "text": "1. Given name"
-              }
+              "prompt": "q1"
             },
             "required": 1,
             "_row_num": 5,
@@ -6686,9 +6648,7 @@
             "type": "text",
             "name": "surname",
             "display": {
-              "prompt": {
-                "text": "2. Surname"
-              }
+              "prompt": "q2"
             },
             "required": 1,
             "_row_num": 6,
@@ -6701,9 +6661,7 @@
           {
             "type": "note",
             "display": {
-              "prompt": {
-                "text": "3. Date of birth"
-              }
+              "prompt": "q3"
             },
             "_row_num": 7,
             "__rowNum__": 6,
@@ -6716,9 +6674,7 @@
             "type": "integer",
             "name": "dob_day",
             "display": {
-              "prompt": {
-                "text": "Day"
-              }
+              "prompt": "day"
             },
             "required": "not(selected(data('dob_day_dk'), 'dk'))",
             "inputAttributes": {
@@ -6748,9 +6704,7 @@
             "type": "integer",
             "name": "dob_month",
             "display": {
-              "prompt": {
-                "text": "Month"
-              }
+              "prompt": "month"
             },
             "required": "not(selected(data('dob_month_dk'), 'dk'))",
             "inputAttributes": {
@@ -6780,9 +6734,7 @@
             "type": "integer",
             "name": "dob_year",
             "display": {
-              "prompt": {
-                "text": "Year"
-              }
+              "prompt": "year"
             },
             "required": "not(selected(data('dob_year_dk'), 'dk'))",
             "inputAttributes": {
@@ -6812,9 +6764,7 @@
             "type": "integer",
             "name": "dob_enter_age",
             "display": {
-              "prompt": {
-                "text": "3a. If year is not known please add age"
-              }
+              "prompt": "q3a"
             },
             "required": "selected(data('dob_year_dk'), 'dk')",
             "inputAttributes": {
@@ -6844,9 +6794,7 @@
             "values_list": "gender",
             "name": "gender",
             "display": {
-              "prompt": {
-                "text": "4. Gender"
-              }
+              "prompt": "q4"
             },
             "_row_num": 25,
             "__rowNum__": 24,
@@ -6860,12 +6808,8 @@
             "values_list": "resident_status",
             "name": "resident_status",
             "display": {
-              "prompt": {
-                "text": "5. Is this participant a resident of the household?"
-              },
-              "hint": {
-                "text": "(A resident member is a person who intends to live in the household during the following 3 months at least)"
-              }
+              "prompt": "q5",
+              "hint": "q5.hint"
             },
             "_row_num": 26,
             "__rowNum__": 25,
@@ -6879,9 +6823,7 @@
             "values_list": "yndk",
             "name": "new_hh_member_censed",
             "display": {
-              "prompt": {
-                "text": "6. Was this participant registered in the district census a few months ago?"
-              }
+              "prompt": "q6"
             },
             "_row_num": 27,
             "__rowNum__": 26,
@@ -6894,9 +6836,7 @@
             "type": "text",
             "name": "id",
             "display": {
-              "prompt": {
-                "text": "6a. Retrieve Ext_ID of participant"
-              },
+              "prompt": "q6a",
               "hint": {
                 "text": "ABC-123-123"
               }
@@ -6915,9 +6855,7 @@
             "values_list": "not_possible",
             "name": "new_hh_member_censed_extid_not_possible",
             "display": {
-              "prompt": {
-                "text": "Not possible to retrieve"
-              }
+              "prompt": "not_possible"
             },
             "_row_num": 30,
             "__rowNum__": 29,
@@ -6929,9 +6867,7 @@
           {
             "type": "note",
             "display": {
-              "prompt": {
-                "text": "Assigned ExtID {{data.id}}"
-              }
+              "prompt": "assigned_extid"
             },
             "_row_num": 36,
             "__rowNum__": 35,
@@ -7643,7 +7579,7 @@
       },
       "new_member_move_in_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 40,
