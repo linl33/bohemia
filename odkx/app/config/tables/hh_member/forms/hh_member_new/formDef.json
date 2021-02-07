@@ -76,7 +76,8 @@
       {
         "type": "note",
         "display": {
-          "prompt": "day"
+          "prompt": "day",
+          "hint": "dob_hint"
         },
         "_row_num": 10
       },
@@ -93,6 +94,10 @@
           "min": 1,
           "max": 31,
           "step": 1
+        },
+        "constraint": "data('dob_day') < 32",
+        "display": {
+          "constraint_message": "date_cons"
         },
         "hideInContents": 1,
         "_row_num": 12
@@ -111,7 +116,8 @@
       {
         "type": "note",
         "display": {
-          "prompt": "month"
+          "prompt": "month",
+          "hint": "month_hint"
         },
         "_row_num": 15
       },
@@ -128,6 +134,10 @@
           "min": 1,
           "max": 12,
           "step": 1
+        },
+        "constraint": "data('dob_month') < 13",
+        "display": {
+          "constraint_message": "month_cons"
         },
         "hideInContents": 1,
         "_row_num": 17
@@ -146,7 +156,8 @@
       {
         "type": "note",
         "display": {
-          "prompt": "year"
+          "prompt": "year",
+          "hint": "year_hint"
         },
         "_row_num": 20
       },
@@ -163,6 +174,10 @@
           "min": 1920,
           "max": 2021,
           "step": 1
+        },
+        "constraint": "data('dob_year') > 1919 && data('dob_year') < 2021",
+        "display": {
+          "constraint_message": "year_cons"
         },
         "hideInContents": 1,
         "_row_num": 22
@@ -7107,7 +7122,8 @@
           {
             "type": "note",
             "display": {
-              "prompt": "day"
+              "prompt": "day",
+              "hint": "dob_hint"
             },
             "_row_num": 10,
             "__rowNum__": 9,
@@ -7124,6 +7140,10 @@
               "min": 1,
               "max": 31,
               "step": 1
+            },
+            "constraint": "data('dob_day') < 32",
+            "display": {
+              "constraint_message": "date_cons"
             },
             "hideInContents": 1,
             "_row_num": 12,
@@ -7148,7 +7168,8 @@
           {
             "type": "note",
             "display": {
-              "prompt": "month"
+              "prompt": "month",
+              "hint": "month_hint"
             },
             "_row_num": 15,
             "__rowNum__": 14,
@@ -7165,6 +7186,10 @@
               "min": 1,
               "max": 12,
               "step": 1
+            },
+            "constraint": "data('dob_month') < 13",
+            "display": {
+              "constraint_message": "month_cons"
             },
             "hideInContents": 1,
             "_row_num": 17,
@@ -7189,7 +7214,8 @@
           {
             "type": "note",
             "display": {
-              "prompt": "year"
+              "prompt": "year",
+              "hint": "year_hint"
             },
             "_row_num": 20,
             "__rowNum__": 19,
@@ -7206,6 +7232,10 @@
               "min": 1920,
               "max": 2021,
               "step": 1
+            },
+            "constraint": "data('dob_year') > 1919 && data('dob_year') < 2021",
+            "display": {
+              "constraint_message": "year_cons"
             },
             "hideInContents": 1,
             "_row_num": 22,

@@ -23,13 +23,39 @@
         "_row_num": 3
       },
       {
+        "type": "note",
+        "display": {
+          "prompt": "name_id"
+        },
+        "_row_num": 4
+      },
+      {
+        "type": "note",
+        "display": {
+          "prompt": "q24",
+          "hint": "select_date_dk"
+        },
+        "_row_num": 5
+      },
+      {
+        "clause": "if",
+        "condition": "not(selected(data('absent_return_dk'), 'dk'))",
+        "_row_num": 6
+      },
+      {
         "type": "select_one",
         "values_list": "return_time",
         "name": "absent_return",
-        "display": {
-          "prompt": "q24"
-        },
-        "_row_num": 4
+        "_row_num": 7
+      },
+      {
+        "clause": "end if",
+        "_row_num": 8
+      },
+      {
+        "clause": "if",
+        "condition": "not(selected(data('absent_return_dk'), 'dk'))",
+        "_row_num": 9
       },
       {
         "type": "date",
@@ -37,34 +63,17 @@
         "display": {
           "prompt": "date"
         },
-        "_row_num": 5
+        "_row_num": 10
       },
       {
-        "type": "integer",
-        "name": "absent_return_integer",
-        "display": {
-          "prompt": "or_enter_num"
-        },
-        "inputAttributes": {
-          "min": 1,
-          "step": 1
-        },
-        "_row_num": 6
-      },
-      {
-        "type": "select_one",
-        "values_list": "dwmy",
-        "name": "absent_return_dwmy",
-        "display": {
-          "prompt": "days_weeks_months_years"
-        },
-        "_row_num": 7
+        "clause": "end if",
+        "_row_num": 11
       },
       {
         "type": "select_multiple",
         "values_list": "dk",
         "name": "absent_return_dk",
-        "_row_num": 8
+        "_row_num": 12
       },
       {
         "type": "select_one",
@@ -73,11 +82,11 @@
         "display": {
           "prompt": "q25"
         },
-        "_row_num": 9
+        "_row_num": 13
       },
       {
         "clause": "end screen",
-        "_row_num": 10
+        "_row_num": 14
       }
     ],
     "choices": [
@@ -5317,7 +5326,7 @@
         "valuesList": "return_time",
         "_defn": [
           {
-            "_row_num": 4,
+            "_row_num": 7,
             "section_name": "survey"
           },
           {
@@ -5333,7 +5342,7 @@
         "elementType": "date",
         "_defn": [
           {
-            "_row_num": 5,
+            "_row_num": 10,
             "section_name": "survey"
           },
           {
@@ -5347,10 +5356,6 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 6,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 28,
             "section_name": "model"
           }
@@ -5359,17 +5364,13 @@
       },
       "absent_return_dwmy": {
         "type": "string",
-        "valuesList": "dwmy",
         "_defn": [
-          {
-            "_row_num": 7,
-            "section_name": "survey"
-          },
           {
             "_row_num": 29,
             "section_name": "model"
           }
         ],
+        "valuesList": "dwmy",
         "elementKey": "absent_return_dwmy"
       },
       "absent_return_dk": {
@@ -5381,7 +5382,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 8,
+            "_row_num": 12,
             "section_name": "survey"
           },
           {
@@ -5396,7 +5397,7 @@
         "valuesList": "absence_reason",
         "_defn": [
           {
-            "_row_num": 9,
+            "_row_num": 13,
             "section_name": "survey"
           },
           {
@@ -6388,18 +6389,40 @@
             "promptIdx": 0
           },
           {
-            "type": "select_one",
-            "values_list": "return_time",
-            "name": "absent_return",
+            "type": "note",
             "display": {
-              "prompt": "q24"
+              "prompt": "name_id"
             },
             "_row_num": 4,
             "__rowNum__": 3,
             "_token_type": "prompt",
-            "_type": "select_one",
+            "_type": "note",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 1
+          },
+          {
+            "type": "note",
+            "display": {
+              "prompt": "q24",
+              "hint": "select_date_dk"
+            },
+            "_row_num": 5,
+            "__rowNum__": 4,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 2
+          },
+          {
+            "type": "select_one",
+            "values_list": "return_time",
+            "name": "absent_return",
+            "_row_num": 7,
+            "__rowNum__": 6,
+            "_token_type": "prompt",
+            "_type": "select_one",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 3
           },
           {
             "type": "date",
@@ -6407,41 +6430,10 @@
             "display": {
               "prompt": "date"
             },
-            "_row_num": 5,
-            "__rowNum__": 4,
+            "_row_num": 10,
+            "__rowNum__": 9,
             "_token_type": "prompt",
             "_type": "date",
-            "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 2
-          },
-          {
-            "type": "integer",
-            "name": "absent_return_integer",
-            "display": {
-              "prompt": "or_enter_num"
-            },
-            "inputAttributes": {
-              "min": 1,
-              "step": 1
-            },
-            "_row_num": 6,
-            "__rowNum__": 5,
-            "_token_type": "prompt",
-            "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 3
-          },
-          {
-            "type": "select_one",
-            "values_list": "dwmy",
-            "name": "absent_return_dwmy",
-            "display": {
-              "prompt": "days_weeks_months_years"
-            },
-            "_row_num": 7,
-            "__rowNum__": 6,
-            "_token_type": "prompt",
-            "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 4
           },
@@ -6449,8 +6441,8 @@
             "type": "select_multiple",
             "values_list": "dk",
             "name": "absent_return_dk",
-            "_row_num": 8,
-            "__rowNum__": 7,
+            "_row_num": 12,
+            "__rowNum__": 11,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -6463,8 +6455,8 @@
             "display": {
               "prompt": "q25"
             },
-            "_row_num": 9,
-            "__rowNum__": 8,
+            "_row_num": 13,
+            "__rowNum__": 12,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen2",
@@ -6474,8 +6466,8 @@
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 11,
-            "_branch_label_enclosing_screen": "survey/_screen11",
+            "_row_num": 15,
+            "_branch_label_enclosing_screen": "survey/_screen15",
             "promptIdx": 7
           }
         ],
@@ -6490,21 +6482,21 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 10,
-              "__rowNum__": 9,
+              "_row_num": 14,
+              "__rowNum__": 13,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nif (not(selected(data('absent_return_dk'), 'dk'))) {\nactivePromptIndicies.push(3);\n}\nif (not(selected(data('absent_return_dk'), 'dk'))) {\nactivePromptIndicies.push(4);\n}\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 11,
+            "_row_num": 15,
             "operationIdx": 1
           },
           {
-            "_row_num": 11,
+            "_row_num": 15,
             "_token_type": "begin_screen",
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
@@ -6515,14 +6507,14 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 11,
+            "_row_num": 15,
             "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
           "_contents": 2,
-          "_screen11": 2
+          "_screen15": 2
         }
       }
     },
@@ -6897,7 +6889,7 @@
         "valuesList": "return_time",
         "_defn": [
           {
-            "_row_num": 4,
+            "_row_num": 7,
             "section_name": "survey"
           },
           {
@@ -6916,7 +6908,7 @@
         "elementType": "date",
         "_defn": [
           {
-            "_row_num": 5,
+            "_row_num": 10,
             "section_name": "survey"
           },
           {
@@ -6933,10 +6925,6 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 6,
-            "section_name": "survey"
-          },
-          {
             "_row_num": 28,
             "section_name": "model"
           }
@@ -6948,17 +6936,13 @@
       },
       "absent_return_dwmy": {
         "type": "string",
-        "valuesList": "dwmy",
         "_defn": [
-          {
-            "_row_num": 7,
-            "section_name": "survey"
-          },
           {
             "_row_num": 29,
             "section_name": "model"
           }
         ],
+        "valuesList": "dwmy",
         "elementKey": "absent_return_dwmy",
         "elementName": "absent_return_dwmy",
         "elementSet": "data",
@@ -6977,7 +6961,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 8,
+            "_row_num": 12,
             "section_name": "survey"
           },
           {
@@ -6998,7 +6982,7 @@
         "valuesList": "absence_reason",
         "_defn": [
           {
-            "_row_num": 9,
+            "_row_num": 13,
             "section_name": "survey"
           },
           {
