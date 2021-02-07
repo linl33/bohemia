@@ -68,10 +68,6 @@
           "max": 31,
           "step": 1
         },
-        "constraint": "data('dob_day') < 32 || data('dob_day') == ''",
-        "display": {
-          "constraint_message": "date_cons"
-        },
         "hideInContents": 1,
         "_row_num": 8
       },
@@ -108,10 +104,6 @@
           "max": 12,
           "step": 1
         },
-        "constraint": "data('dob_month') < 13",
-        "display": {
-          "constraint_message": "month_cons"
-        },
         "hideInContents": 1,
         "_row_num": 13
       },
@@ -146,10 +138,6 @@
         "inputAttributes": {
           "min": 1920,
           "max": 2021
-        },
-        "constraint": "data('dob_year') > 1919 && data('dob_year') < 2021",
-        "display": {
-          "constraint_message": "year_cons"
         },
         "hideInContents": 1,
         "_row_num": 18
@@ -12272,10 +12260,6 @@
               "max": 31,
               "step": 1
             },
-            "constraint": "data('dob_day') < 32 || data('dob_day') == ''",
-            "display": {
-              "constraint_message": "date_cons"
-            },
             "hideInContents": 1,
             "_row_num": 8,
             "__rowNum__": 7,
@@ -12318,10 +12302,6 @@
               "max": 12,
               "step": 1
             },
-            "constraint": "data('dob_month') < 13",
-            "display": {
-              "constraint_message": "month_cons"
-            },
             "hideInContents": 1,
             "_row_num": 13,
             "__rowNum__": 12,
@@ -12362,10 +12342,6 @@
             "inputAttributes": {
               "min": 1920,
               "max": 2021
-            },
-            "constraint": "data('dob_year') > 1919 && data('dob_year') < 2021",
-            "display": {
-              "constraint_message": "year_cons"
             },
             "hideInContents": 1,
             "_row_num": 18,

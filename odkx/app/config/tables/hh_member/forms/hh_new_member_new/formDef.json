@@ -62,7 +62,8 @@
       {
         "type": "note",
         "display": {
-          "prompt": "day"
+          "prompt": "day",
+          "hint": "dob_hint"
         },
         "_row_num": 8
       },
@@ -97,7 +98,8 @@
       {
         "type": "note",
         "display": {
-          "prompt": "month"
+          "prompt": "month",
+          "hint": "month_hint"
         },
         "_row_num": 13
       },
@@ -132,7 +134,8 @@
       {
         "type": "note",
         "display": {
-          "prompt": "year"
+          "prompt": "year",
+          "hint": "year_hint"
         },
         "_row_num": 18
       },
@@ -6727,7 +6730,8 @@
           {
             "type": "note",
             "display": {
-              "prompt": "day"
+              "prompt": "day",
+              "hint": "dob_hint"
             },
             "_row_num": 8,
             "__rowNum__": 7,
@@ -6768,7 +6772,8 @@
           {
             "type": "note",
             "display": {
-              "prompt": "month"
+              "prompt": "month",
+              "hint": "month_hint"
             },
             "_row_num": 13,
             "__rowNum__": 12,
@@ -6809,7 +6814,8 @@
           {
             "type": "note",
             "display": {
-              "prompt": "year"
+              "prompt": "year",
+              "hint": "year_hint"
             },
             "_row_num": 18,
             "__rowNum__": 17,
