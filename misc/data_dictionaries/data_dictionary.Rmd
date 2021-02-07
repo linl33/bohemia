@@ -1,13 +1,15 @@
 ---
-title: "Mini-census"
+title: "VA refusals form"
+params:
+  choice_names_too: no
+  include_variable_names: no
+  language: English
+  relevant: no
 output:
+  html_document:
+    df_print: paged
   pdf_document:
     latex_engine: xelatex
-params:
-    language: 'English'
-    relevant: FALSE
-    include_variable_names: FALSE
-    choice_names_too: FALSE
 ---
 
 
@@ -30,7 +32,7 @@ library(bohemia)
 ```
 
 
-2020-10-23
+2020-02-07
 
 (... = list of options continues)
 
@@ -45,7 +47,7 @@ lang <- params$language
 rel <- params$relevant
 var <- params$include_variable_names
 cn <- params$choice_names_too
-data_dict <- generate_data_dictionary(path = '../../forms/smallcensusa/smallcensusa.xlsx',
+data_dict <- generate_data_dictionary(path = '../../forms/varefusals/varefusals.xlsx',
                                       language = lang, 
                                       include_variable_names = var, 
                                       include_relevant = rel, 
