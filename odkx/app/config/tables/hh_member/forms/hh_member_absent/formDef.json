@@ -2297,7 +2297,7 @@
       },
       {
         "name": "member_died_when",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 33
       },
       {
@@ -2308,7 +2308,7 @@
       },
       {
         "name": "member_emigrated_when_date",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 35
       },
       {
@@ -2717,7 +2717,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210206001,
+        "value": 20210207001,
         "_row_num": 3
       },
       {
@@ -2798,7 +2798,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -2808,7 +2809,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210206001,
+        "value": 20210207001,
         "_row_num": 3
       },
       "table_id": {
@@ -5421,7 +5422,7 @@
       },
       "member_died_when": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 33,
@@ -5447,7 +5448,7 @@
       },
       "member_emigrated_when_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 35,
@@ -7012,7 +7013,7 @@
       },
       "member_died_when": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 33,
@@ -7051,7 +7052,7 @@
       },
       "member_emigrated_when_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 35,

@@ -95,6 +95,11 @@ window.odkTableSpecificDefinitions = {
       "string_token": "extid_format",
       "text": "ID must be in this format ABC-123-701 (3 capital letters, '-', 3 numbers, '-', 7##).",
       "_row_num": 13
+    },
+    "invalid_death_date": {
+      "string_token": "invalid_death_date",
+      "text": "Date cannot be in the future<br>Date should be in the past 12 months",
+      "_row_num": 14
     }
   }
 }

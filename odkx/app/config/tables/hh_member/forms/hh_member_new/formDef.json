@@ -508,8 +508,10 @@
         "type": "birth_date",
         "name": "new_member_move_in_date",
         "display": {
-          "prompt": "q22"
+          "prompt": "q22",
+          "constraint_message": "err_future_date"
         },
+        "constraint": "!data('new_member_move_in_date') || !data('new_member_move_in_date').isAfter()",
         "_row_num": 72
       },
       {
@@ -559,26 +561,28 @@
         "_row_num": 78
       },
       {
+        "type": "note",
+        "display": {
+          "prompt": "q23ai"
+        },
+        "_row_num": 79
+      },
+      {
+        "clause": "if",
+        "condition": "not(selected(data('move_from_census_extid_not_possible'), 'not_possible'))",
+        "_row_num": 80
+      },
+      {
         "type": "text",
         "name": "id",
         "display": {
-          "prompt": "q23ai",
           "hint": {
             "text": "ABC-123-123"
           }
         },
         "required": "selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household')",
         "constraint": "selected(data('new_member_newborn_or_moved_in'), 'newborn') || /^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
-        "_row_num": 79
-      },
-      {
-        "type": "select_multiple",
-        "values_list": "not_possible",
-        "name": "move_from_census_extid_not_possible",
-        "_row_num": 80
-      },
-      {
-        "clause": "end if",
+        "hideInContents": 1,
         "_row_num": 81
       },
       {
@@ -586,15 +590,14 @@
         "_row_num": 82
       },
       {
-        "clause": "if",
-        "condition": "selected(data('move_from'),  'outside_district') || selected(data('move_from'),  'dk') || selected(data('move_from_census_extid_not_possible'), 'not_possible') || selected(data('move_from_district_census'), 'no') || selected(data('move_from_district_census'), 'dk')",
+        "type": "select_multiple",
+        "values_list": "not_possible",
+        "name": "move_from_census_extid_not_possible",
+        "hideInContents": 1,
         "_row_num": 83
       },
       {
-        "type": "note",
-        "display": {
-          "prompt": "assign_extid"
-        },
+        "clause": "end if",
         "_row_num": 84
       },
       {
@@ -602,18 +605,19 @@
         "_row_num": 85
       },
       {
-        "clause": "end if",
+        "clause": "if",
+        "condition": "selected(data('move_from'),  'outside_district') || selected(data('move_from'),  'dk') || selected(data('move_from_census_extid_not_possible'), 'not_possible') || selected(data('move_from_district_census'), 'no') || selected(data('move_from_district_census'), 'dk')",
         "_row_num": 86
       },
       {
-        "clause": "if",
-        "condition": "(data('id') || '').trim() === '' && (selected(data('new_member_newborn_or_moved_in'), 'newborn') || selected(data('move_from'),  'outside_district') || selected(data('move_from'),  'dk') || selected(data('move_from_census_extid_not_possible'), 'not_possible') || selected(data('move_from_district_census'), 'no') || selected(data('move_from_district_census'), 'dk'))",
+        "type": "note",
+        "display": {
+          "prompt": "assign_extid"
+        },
         "_row_num": 87
       },
       {
-        "type": "assign",
-        "name": "id",
-        "calculation": "data('id_candidate')",
+        "clause": "end if",
         "_row_num": 88
       },
       {
@@ -621,8 +625,23 @@
         "_row_num": 89
       },
       {
-        "clause": "end screen",
+        "clause": "if",
+        "condition": "(data('id') || '').trim() === '' && (selected(data('new_member_newborn_or_moved_in'), 'newborn') || selected(data('move_from'),  'outside_district') || selected(data('move_from'),  'dk') || selected(data('move_from_census_extid_not_possible'), 'not_possible') || selected(data('move_from_district_census'), 'no') || selected(data('move_from_district_census'), 'dk'))",
         "_row_num": 90
+      },
+      {
+        "type": "assign",
+        "name": "id",
+        "calculation": "data('id_candidate')",
+        "_row_num": 91
+      },
+      {
+        "clause": "end if",
+        "_row_num": 92
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 93
       }
     ],
     "choices": [
@@ -2833,7 +2852,7 @@
       },
       {
         "name": "member_died_when",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 33
       },
       {
@@ -2844,7 +2863,7 @@
       },
       {
         "name": "member_emigrated_when_date",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 35
       },
       {
@@ -3253,7 +3272,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210206001,
+        "value": 20210207001,
         "_row_num": 3
       },
       {
@@ -3334,7 +3353,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -3344,7 +3364,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210206001,
+        "value": 20210207001,
         "_row_num": 3
       },
       "table_id": {
@@ -5947,7 +5967,7 @@
             "section_name": "survey"
           },
           {
-            "_row_num": 79,
+            "_row_num": 81,
             "section_name": "survey"
           },
           {
@@ -6041,7 +6061,7 @@
       },
       "member_died_when": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 33,
@@ -6067,7 +6087,7 @@
       },
       "member_emigrated_when_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 35,
@@ -6207,7 +6227,7 @@
         "valuesList": "not_possible",
         "_defn": [
           {
-            "_row_num": 80,
+            "_row_num": 83,
             "section_name": "survey"
           },
           {
@@ -7539,8 +7559,10 @@
             "type": "birth_date",
             "name": "new_member_move_in_date",
             "display": {
-              "prompt": "q22"
+              "prompt": "q22",
+              "constraint_message": "err_future_date"
             },
+            "constraint": "!data('new_member_move_in_date') || !data('new_member_move_in_date').isAfter()",
             "_row_num": 72,
             "__rowNum__": 71,
             "_token_type": "prompt",
@@ -7605,53 +7627,66 @@
             "promptIdx": 40
           },
           {
+            "type": "note",
+            "display": {
+              "prompt": "q23ai"
+            },
+            "_row_num": 79,
+            "__rowNum__": 78,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen3",
+            "promptIdx": 41
+          },
+          {
             "type": "text",
             "name": "id",
             "display": {
-              "prompt": "q23ai",
               "hint": {
                 "text": "ABC-123-123"
               }
             },
             "required": "selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household')",
             "constraint": "selected(data('new_member_newborn_or_moved_in'), 'newborn') || /^[A-Z]{3}-[0-9]{3}-[0-9]{3}$/.test(data('id'))",
-            "_row_num": 79,
-            "__rowNum__": 78,
+            "hideInContents": 1,
+            "_row_num": 81,
+            "__rowNum__": 80,
             "_token_type": "prompt",
             "_type": "text",
             "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 41
+            "promptIdx": 42
           },
           {
             "type": "select_multiple",
             "values_list": "not_possible",
             "name": "move_from_census_extid_not_possible",
-            "_row_num": 80,
-            "__rowNum__": 79,
+            "hideInContents": 1,
+            "_row_num": 83,
+            "__rowNum__": 82,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 42
+            "promptIdx": 43
           },
           {
             "type": "note",
             "display": {
               "prompt": "assign_extid"
             },
-            "_row_num": 84,
-            "__rowNum__": 83,
+            "_row_num": 87,
+            "__rowNum__": 86,
             "_token_type": "prompt",
             "_type": "note",
             "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 43
+            "promptIdx": 44
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 91,
-            "_branch_label_enclosing_screen": "survey/_screen91",
-            "promptIdx": 44
+            "_row_num": 94,
+            "_branch_label_enclosing_screen": "survey/_screen94",
+            "promptIdx": 45
           }
         ],
         "validation_tag_map": {
@@ -7671,7 +7706,8 @@
             27,
             30,
             32,
-            41
+            36,
+            42
           ]
         },
         "operations": [
@@ -7688,23 +7724,23 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 90,
-              "__rowNum__": 89,
+              "_row_num": 93,
+              "__rowNum__": 92,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\nif (selected(data('new_member_newborn_or_moved_in'), 'newborn')) {\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nif (not(selected(data('dob_day_dk'), 'dk'))) {\nactivePromptIndicies.push(7);\n}\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\nif (not(selected(data('dob_month_dk'), 'dk'))) {\nactivePromptIndicies.push(10);\n}\nactivePromptIndicies.push(11);\nactivePromptIndicies.push(12);\nif (not(selected(data('dob_year_dk'), 'dk'))) {\nactivePromptIndicies.push(13);\n}\nactivePromptIndicies.push(14);\nif (selected(data('dob_year_dk'), 'dk')) {\nassign('dob_year', null);\nactivePromptIndicies.push(15);\nactivePromptIndicies.push(16);\n}\nif (selected(data('dob_day_dk'), 'dk')) {\nassign('dob_day', null);\n}\nif (selected(data('dob_month_dk'), 'dk')) {\nassign('dob_month', null);\n}\nactivePromptIndicies.push(17);\nactivePromptIndicies.push(18);\n}\nif (selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household')) {\nactivePromptIndicies.push(19);\nactivePromptIndicies.push(20);\nactivePromptIndicies.push(21);\nactivePromptIndicies.push(22);\nactivePromptIndicies.push(23);\nif (not(selected(data('dob_day_dk'), 'dk'))) {\nactivePromptIndicies.push(24);\n}\nactivePromptIndicies.push(25);\nactivePromptIndicies.push(26);\nif (not(selected(data('dob_month_dk'), 'dk'))) {\nactivePromptIndicies.push(27);\n}\nactivePromptIndicies.push(28);\nactivePromptIndicies.push(29);\nif (not(selected(data('dob_year_dk'), 'dk'))) {\nactivePromptIndicies.push(30);\n}\nactivePromptIndicies.push(31);\nif (selected(data('dob_year_dk'), 'dk')) {\nassign('dob_year', null);\nactivePromptIndicies.push(32);\nactivePromptIndicies.push(33);\n}\nif (selected(data('dob_day_dk'), 'dk')) {\nassign('dob_day', null);\n}\nif (selected(data('dob_month_dk'), 'dk')) {\nassign('dob_month', null);\n}\nactivePromptIndicies.push(34);\nactivePromptIndicies.push(35);\nactivePromptIndicies.push(36);\nactivePromptIndicies.push(37);\nactivePromptIndicies.push(38);\nactivePromptIndicies.push(39);\nif (selected(data('move_from'),  'in_district')) {\nactivePromptIndicies.push(40);\nif (selected(data('move_from_district_census'), 'yes')) {\nactivePromptIndicies.push(41);\nactivePromptIndicies.push(42);\n}\n}\nif (selected(data('move_from'),  'outside_district') || selected(data('move_from'),  'dk') || selected(data('move_from_census_extid_not_possible'), 'not_possible') || selected(data('move_from_district_census'), 'no') || selected(data('move_from_district_census'), 'dk')) {\nactivePromptIndicies.push(43);\n}\n}\nif ((data('id') || '').trim() === '' && (selected(data('new_member_newborn_or_moved_in'), 'newborn') || selected(data('move_from'),  'outside_district') || selected(data('move_from'),  'dk') || selected(data('move_from_census_extid_not_possible'), 'not_possible') || selected(data('move_from_district_census'), 'no') || selected(data('move_from_district_census'), 'dk'))) {\nassign('id', data('id_candidate'));\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\nif (selected(data('new_member_newborn_or_moved_in'), 'newborn')) {\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nif (not(selected(data('dob_day_dk'), 'dk'))) {\nactivePromptIndicies.push(7);\n}\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\nif (not(selected(data('dob_month_dk'), 'dk'))) {\nactivePromptIndicies.push(10);\n}\nactivePromptIndicies.push(11);\nactivePromptIndicies.push(12);\nif (not(selected(data('dob_year_dk'), 'dk'))) {\nactivePromptIndicies.push(13);\n}\nactivePromptIndicies.push(14);\nif (selected(data('dob_year_dk'), 'dk')) {\nassign('dob_year', null);\nactivePromptIndicies.push(15);\nactivePromptIndicies.push(16);\n}\nif (selected(data('dob_day_dk'), 'dk')) {\nassign('dob_day', null);\n}\nif (selected(data('dob_month_dk'), 'dk')) {\nassign('dob_month', null);\n}\nactivePromptIndicies.push(17);\nactivePromptIndicies.push(18);\n}\nif (selected(data('new_member_newborn_or_moved_in'),'someone_new_in_the_household')) {\nactivePromptIndicies.push(19);\nactivePromptIndicies.push(20);\nactivePromptIndicies.push(21);\nactivePromptIndicies.push(22);\nactivePromptIndicies.push(23);\nif (not(selected(data('dob_day_dk'), 'dk'))) {\nactivePromptIndicies.push(24);\n}\nactivePromptIndicies.push(25);\nactivePromptIndicies.push(26);\nif (not(selected(data('dob_month_dk'), 'dk'))) {\nactivePromptIndicies.push(27);\n}\nactivePromptIndicies.push(28);\nactivePromptIndicies.push(29);\nif (not(selected(data('dob_year_dk'), 'dk'))) {\nactivePromptIndicies.push(30);\n}\nactivePromptIndicies.push(31);\nif (selected(data('dob_year_dk'), 'dk')) {\nassign('dob_year', null);\nactivePromptIndicies.push(32);\nactivePromptIndicies.push(33);\n}\nif (selected(data('dob_day_dk'), 'dk')) {\nassign('dob_day', null);\n}\nif (selected(data('dob_month_dk'), 'dk')) {\nassign('dob_month', null);\n}\nactivePromptIndicies.push(34);\nactivePromptIndicies.push(35);\nactivePromptIndicies.push(36);\nactivePromptIndicies.push(37);\nactivePromptIndicies.push(38);\nactivePromptIndicies.push(39);\nif (selected(data('move_from'),  'in_district')) {\nactivePromptIndicies.push(40);\nif (selected(data('move_from_district_census'), 'yes')) {\nactivePromptIndicies.push(41);\nif (not(selected(data('move_from_census_extid_not_possible'), 'not_possible'))) {\nactivePromptIndicies.push(42);\n}\nactivePromptIndicies.push(43);\n}\n}\nif (selected(data('move_from'),  'outside_district') || selected(data('move_from'),  'dk') || selected(data('move_from_census_extid_not_possible'), 'not_possible') || selected(data('move_from_district_census'), 'no') || selected(data('move_from_district_census'), 'dk')) {\nactivePromptIndicies.push(44);\n}\n}\nif ((data('id') || '').trim() === '' && (selected(data('new_member_newborn_or_moved_in'), 'newborn') || selected(data('move_from'),  'outside_district') || selected(data('move_from'),  'dk') || selected(data('move_from_census_extid_not_possible'), 'not_possible') || selected(data('move_from_district_census'), 'no') || selected(data('move_from_district_census'), 'dk'))) {\nassign('id', data('id_candidate'));\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 1
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 91,
+            "_row_num": 94,
             "operationIdx": 2
           },
           {
-            "_row_num": 91,
+            "_row_num": 94,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(44);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(45);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -7713,7 +7749,7 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 91,
+            "_row_num": 94,
             "operationIdx": 4
           }
         ],
@@ -7721,7 +7757,7 @@
           "_screen2": 0,
           "_screen3": 1,
           "_contents": 3,
-          "_screen91": 3
+          "_screen94": 3
         }
       }
     },
@@ -8178,7 +8214,7 @@
             "section_name": "survey"
           },
           {
-            "_row_num": 79,
+            "_row_num": 81,
             "section_name": "survey"
           },
           {
@@ -8303,7 +8339,7 @@
       },
       "member_died_when": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 33,
@@ -8342,7 +8378,7 @@
       },
       "member_emigrated_when_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 35,
@@ -8516,7 +8552,7 @@
         "valuesList": "not_possible",
         "_defn": [
           {
-            "_row_num": 80,
+            "_row_num": 83,
             "section_name": "survey"
           },
           {

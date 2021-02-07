@@ -45,42 +45,94 @@
         "_row_num": 8
       },
       {
-        "type": "date",
-        "name": "member_died_when",
+        "type": "note",
         "display": {
           "prompt": "q8"
         },
         "_row_num": 9
       },
       {
-        "type": "select_multiple",
-        "values_list": "dk",
-        "name": "member_died_when_dk",
+        "clause": "if",
+        "condition": "not(selected(data('member_died_when_dk'), 'dk'))",
         "_row_num": 10
       },
       {
-        "clause": "end if",
+        "type": "birth_date",
+        "name": "member_died_when",
+        "constraint": "selected(data('member_died_when_dk'), 'dk') || !data('member_died_when') || (!data('member_died_when').isBefore('2020-10-01') && !data('member_died_when').isAfter())",
+        "display": {
+          "constraint_message": "err_death_date"
+        },
+        "hideInContents": 1,
         "_row_num": 11
+      },
+      {
+        "clause": "end if",
+        "_row_num": 12
+      },
+      {
+        "type": "select_multiple",
+        "values_list": "dk",
+        "name": "member_died_when_dk",
+        "hideInContents": 1,
+        "_row_num": 13
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('member_died_when_dk'), 'dk')",
+        "_row_num": 14
+      },
+      {
+        "type": "assign",
+        "name": "member_died_when",
+        "calculation": "null",
+        "_row_num": 15
+      },
+      {
+        "clause": "end if",
+        "_row_num": 16
+      },
+      {
+        "clause": "end if",
+        "_row_num": 17
       },
       {
         "clause": "if",
         "condition": "selected(data('member_where_now'), 'emigrated')",
-        "_row_num": 12
+        "_row_num": 18
       },
       {
         "type": "note",
         "display": {
           "prompt": "if_person_migrated"
         },
-        "_row_num": 13
+        "_row_num": 19
       },
       {
-        "type": "date",
-        "name": "member_emigrated_when_date",
+        "type": "note",
         "display": {
           "prompt": "q9"
         },
-        "_row_num": 14
+        "_row_num": 20
+      },
+      {
+        "clause": "if",
+        "condition": "not(selected(data('member_emigrated_when_dmy_ago'), 'dk'))",
+        "_row_num": 21
+      },
+      {
+        "type": "birth_date",
+        "name": "member_emigrated_when_date",
+        "constraint": "selected(data('member_emigrated_when_dk'), 'dk') || !data('member_emigrated_when') || (!data('member_emigrated_when').isBefore('2020-10-01') && !data('member_emigrated_when').isAfter())",
+        "display": {
+          "constraint_message": "err_emigrate_date"
+        },
+        "hideInContents": 1,
+        "_row_num": 22
+      },
+      {
+        "clause": "end if",
+        "_row_num": 23
       },
       {
         "type": "integer",
@@ -92,7 +144,7 @@
           "min": 0,
           "step": 1
         },
-        "_row_num": 15
+        "_row_num": 24
       },
       {
         "type": "select_one",
@@ -101,7 +153,23 @@
         "display": {
           "prompt": "days_weeks_months_dk"
         },
-        "_row_num": 16
+        "hideInContents": 1,
+        "_row_num": 25
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('member_emigrated_when_dmy_ago'), 'dk')",
+        "_row_num": 26
+      },
+      {
+        "type": "assign",
+        "name": "member_emigrated_when_num",
+        "calculation": "null",
+        "_row_num": 27
+      },
+      {
+        "clause": "end if",
+        "_row_num": 28
       },
       {
         "type": "select_one",
@@ -110,15 +178,15 @@
         "display": {
           "prompt": "q10"
         },
-        "_row_num": 17
+        "_row_num": 29
       },
       {
         "clause": "end if",
-        "_row_num": 18
+        "_row_num": 30
       },
       {
         "clause": "end screen",
-        "_row_num": 19
+        "_row_num": 31
       }
     ],
     "choices": [
@@ -2329,7 +2397,7 @@
       },
       {
         "name": "member_died_when",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 33
       },
       {
@@ -2340,7 +2408,7 @@
       },
       {
         "name": "member_emigrated_when_date",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 35
       },
       {
@@ -2749,7 +2817,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 20210206001,
+        "value": 20210207001,
         "_row_num": 3
       },
       {
@@ -2830,7 +2898,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -2840,7 +2909,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 20210206001,
+        "value": 20210207001,
         "_row_num": 3
       },
       "table_id": {
@@ -5441,10 +5510,10 @@
       },
       "member_died_when": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
-            "_row_num": 9,
+            "_row_num": 11,
             "section_name": "survey"
           },
           {
@@ -5463,7 +5532,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 10,
+            "_row_num": 13,
             "section_name": "survey"
           },
           {
@@ -5475,10 +5544,10 @@
       },
       "member_emigrated_when_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
-            "_row_num": 14,
+            "_row_num": 22,
             "section_name": "survey"
           },
           {
@@ -5492,7 +5561,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 15,
+            "_row_num": 24,
             "section_name": "survey"
           },
           {
@@ -5507,7 +5576,7 @@
         "valuesList": "dmy_ago_dk",
         "_defn": [
           {
-            "_row_num": 16,
+            "_row_num": 25,
             "section_name": "survey"
           },
           {
@@ -5522,7 +5591,7 @@
         "valuesList": "in_outside_district",
         "_defn": [
           {
-            "_row_num": 17,
+            "_row_num": 29,
             "section_name": "survey"
           },
           {
@@ -6460,53 +6529,82 @@
             "promptIdx": 2
           },
           {
-            "type": "date",
-            "name": "member_died_when",
+            "type": "note",
             "display": {
               "prompt": "q8"
             },
             "_row_num": 9,
             "__rowNum__": 8,
             "_token_type": "prompt",
-            "_type": "date",
+            "_type": "note",
             "_branch_label_enclosing_screen": "survey/_screen3",
             "promptIdx": 3
+          },
+          {
+            "type": "birth_date",
+            "name": "member_died_when",
+            "constraint": "selected(data('member_died_when_dk'), 'dk') || !data('member_died_when') || (!data('member_died_when').isBefore('2020-10-01') && !data('member_died_when').isAfter())",
+            "display": {
+              "constraint_message": "err_death_date"
+            },
+            "hideInContents": 1,
+            "_row_num": 11,
+            "__rowNum__": 10,
+            "_token_type": "prompt",
+            "_type": "birth_date",
+            "_branch_label_enclosing_screen": "survey/_screen3",
+            "promptIdx": 4
           },
           {
             "type": "select_multiple",
             "values_list": "dk",
             "name": "member_died_when_dk",
-            "_row_num": 10,
-            "__rowNum__": 9,
+            "hideInContents": 1,
+            "_row_num": 13,
+            "__rowNum__": 12,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 4
+            "promptIdx": 5
           },
           {
             "type": "note",
             "display": {
               "prompt": "if_person_migrated"
             },
-            "_row_num": 13,
-            "__rowNum__": 12,
+            "_row_num": 19,
+            "__rowNum__": 18,
             "_token_type": "prompt",
             "_type": "note",
             "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 5
+            "promptIdx": 6
           },
           {
-            "type": "date",
-            "name": "member_emigrated_when_date",
+            "type": "note",
             "display": {
               "prompt": "q9"
             },
-            "_row_num": 14,
-            "__rowNum__": 13,
+            "_row_num": 20,
+            "__rowNum__": 19,
             "_token_type": "prompt",
-            "_type": "date",
+            "_type": "note",
             "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 6
+            "promptIdx": 7
+          },
+          {
+            "type": "birth_date",
+            "name": "member_emigrated_when_date",
+            "constraint": "selected(data('member_emigrated_when_dk'), 'dk') || !data('member_emigrated_when') || (!data('member_emigrated_when').isBefore('2020-10-01') && !data('member_emigrated_when').isAfter())",
+            "display": {
+              "constraint_message": "err_emigrate_date"
+            },
+            "hideInContents": 1,
+            "_row_num": 22,
+            "__rowNum__": 21,
+            "_token_type": "prompt",
+            "_type": "birth_date",
+            "_branch_label_enclosing_screen": "survey/_screen3",
+            "promptIdx": 8
           },
           {
             "type": "integer",
@@ -6518,12 +6616,12 @@
               "min": 0,
               "step": 1
             },
-            "_row_num": 15,
-            "__rowNum__": 14,
+            "_row_num": 24,
+            "__rowNum__": 23,
             "_token_type": "prompt",
             "_type": "integer",
             "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 7
+            "promptIdx": 9
           },
           {
             "type": "select_one",
@@ -6532,12 +6630,13 @@
             "display": {
               "prompt": "days_weeks_months_dk"
             },
-            "_row_num": 16,
-            "__rowNum__": 15,
+            "hideInContents": 1,
+            "_row_num": 25,
+            "__rowNum__": 24,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 8
+            "promptIdx": 10
           },
           {
             "type": "select_one",
@@ -6546,24 +6645,27 @@
             "display": {
               "prompt": "q10"
             },
-            "_row_num": 17,
-            "__rowNum__": 16,
+            "_row_num": 29,
+            "__rowNum__": 28,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen3",
-            "promptIdx": 9
+            "promptIdx": 11
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 20,
-            "_branch_label_enclosing_screen": "survey/_screen20",
-            "promptIdx": 10
+            "_row_num": 32,
+            "_branch_label_enclosing_screen": "survey/_screen32",
+            "promptIdx": 12
           }
         ],
         "validation_tag_map": {
-          "finalize": []
+          "finalize": [
+            4,
+            8
+          ]
         },
         "operations": [
           {
@@ -6579,23 +6681,23 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 19,
-              "__rowNum__": 18,
+              "_row_num": 31,
+              "__rowNum__": 30,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\nif (selected(data('member_where_now'), 'died')) {\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\n}\nif (selected(data('member_where_now'), 'emigrated')) {\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\nif (selected(data('member_where_now'), 'died')) {\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nif (not(selected(data('member_died_when_dk'), 'dk'))) {\nactivePromptIndicies.push(4);\n}\nactivePromptIndicies.push(5);\nif (selected(data('member_died_when_dk'), 'dk')) {\nassign('member_died_when', null);\n}\n}\nif (selected(data('member_where_now'), 'emigrated')) {\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nif (not(selected(data('member_emigrated_when_dmy_ago'), 'dk'))) {\nactivePromptIndicies.push(8);\n}\nactivePromptIndicies.push(9);\nactivePromptIndicies.push(10);\nif (selected(data('member_emigrated_when_dmy_ago'), 'dk')) {\nassign('member_emigrated_when_num', null);\n}\nactivePromptIndicies.push(11);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 1
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 20,
+            "_row_num": 32,
             "operationIdx": 2
           },
           {
-            "_row_num": 20,
+            "_row_num": 32,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(10);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(12);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -6604,7 +6706,7 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 20,
+            "_row_num": 32,
             "operationIdx": 4
           }
         ],
@@ -6612,7 +6714,7 @@
           "_screen2": 0,
           "_screen3": 1,
           "_contents": 3,
-          "_screen20": 3
+          "_screen32": 3
         }
       }
     },
@@ -7098,10 +7200,10 @@
       },
       "member_died_when": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
-            "_row_num": 9,
+            "_row_num": 11,
             "section_name": "survey"
           },
           {
@@ -7127,7 +7229,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 10,
+            "_row_num": 13,
             "section_name": "survey"
           },
           {
@@ -7145,10 +7247,10 @@
       },
       "member_emigrated_when_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
-            "_row_num": 14,
+            "_row_num": 22,
             "section_name": "survey"
           },
           {
@@ -7165,7 +7267,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 15,
+            "_row_num": 24,
             "section_name": "survey"
           },
           {
@@ -7183,7 +7285,7 @@
         "valuesList": "dmy_ago_dk",
         "_defn": [
           {
-            "_row_num": 16,
+            "_row_num": 25,
             "section_name": "survey"
           },
           {
@@ -7201,7 +7303,7 @@
         "valuesList": "in_outside_district",
         "_defn": [
           {
-            "_row_num": 17,
+            "_row_num": 29,
             "section_name": "survey"
           },
           {

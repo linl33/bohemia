@@ -1321,10 +1321,7 @@ window.odkTableSpecificDefinitions = {
     },
     "technical_h2": {
       "string_token": "technical_h2",
-      "text": {
-        "default": "<h2>Technical Details - TBD</h2>",
-        "pt": "TEST"
-      },
+      "text": "<h2>Technical Details - TBD</h2>",
       "_row_num": 151
     },
     "hh_h2": {
