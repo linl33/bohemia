@@ -91,6 +91,7 @@ no_hh_head_sub_items,items,string,[]
 num_houses,num_houses,integer,[]
 num_houses_sleep,num_houses_sleep,integer,[]
 num_rooms_sleep,num_rooms_sleep,integer,[]
+pigs_constraint,pigs_constraint,integer,[]
 pigs_disease_30_days,pigs_disease_30_days,array,"[""pigs_disease_30_days_items""]"
 pigs_disease_30_days_items,items,string,[]
 pigs_ivermectin,pigs_ivermectin,string,[]
