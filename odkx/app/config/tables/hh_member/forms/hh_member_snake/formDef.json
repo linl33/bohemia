@@ -47,6 +47,7 @@
           "min": 1,
           "step": 1
         },
+        "validation_tags": "finalize",
         "_row_num": 6
       },
       {
@@ -61,6 +62,7 @@
         "disaply": {
           "constraint_message": "bite_too_many_months"
         },
+        "validation_tags": "finalize",
         "_row_num": 7
       },
       {
@@ -71,6 +73,7 @@
           "prompt": "q59d"
         },
         "required": 1,
+        "validation_tags": "finalize",
         "_row_num": 8
       },
       {
@@ -104,6 +107,7 @@
         "type": "integer",
         "name": "snake_bite_miss_work_school_days",
         "required": "not(selected(data('snake_bite_miss_work_school_days_unknown'), 'dk')) && selected(data('snake_bite_miss_work_school'), 'yes')",
+        "validation_tags": "finalize",
         "_row_num": 14
       },
       {
@@ -132,6 +136,7 @@
         "disaply": {
           "constraint_message": "bite_too_many_months"
         },
+        "validation_tags": "finalize",
         "_row_num": 18
       },
       {
@@ -146,6 +151,7 @@
           "prompt": "specify"
         },
         "required": "selected(data('snake_bite_occur'), 'other')",
+        "validation_tags": "finalize",
         "_row_num": 20
       },
       {
@@ -170,7 +176,7 @@
         "model": {
           "isSessionVariable": 1
         },
-        "validation_tags": "bite _finalize",
+        "validation_tags": "bite finalize",
         "_row_num": 23
       },
       {
@@ -185,6 +191,7 @@
           "prompt": "q59f"
         },
         "required": 1,
+        "validation_tags": "finalize",
         "_row_num": 25
       },
       {
@@ -6556,6 +6563,7 @@
               "min": 1,
               "step": 1
             },
+            "validation_tags": "finalize",
             "_row_num": 6,
             "__rowNum__": 5,
             "_token_type": "prompt",
@@ -6575,6 +6583,7 @@
             "disaply": {
               "constraint_message": "bite_too_many_months"
             },
+            "validation_tags": "finalize",
             "_row_num": 7,
             "__rowNum__": 6,
             "_token_type": "prompt",
@@ -6590,6 +6599,7 @@
               "prompt": "q59d"
             },
             "required": 1,
+            "validation_tags": "finalize",
             "_row_num": 8,
             "__rowNum__": 7,
             "_token_type": "prompt",
@@ -6613,6 +6623,7 @@
             "type": "integer",
             "name": "snake_bite_miss_work_school_days",
             "required": "not(selected(data('snake_bite_miss_work_school_days_unknown'), 'dk')) && selected(data('snake_bite_miss_work_school'), 'yes')",
+            "validation_tags": "finalize",
             "_row_num": 14,
             "__rowNum__": 13,
             "_token_type": "prompt",
@@ -6643,6 +6654,7 @@
             "disaply": {
               "constraint_message": "bite_too_many_months"
             },
+            "validation_tags": "finalize",
             "_row_num": 18,
             "__rowNum__": 17,
             "_token_type": "prompt",
@@ -6657,6 +6669,7 @@
               "prompt": "specify"
             },
             "required": "selected(data('snake_bite_occur'), 'other')",
+            "validation_tags": "finalize",
             "_row_num": 20,
             "__rowNum__": 19,
             "_token_type": "prompt",
@@ -6677,7 +6690,7 @@
             "model": {
               "isSessionVariable": 1
             },
-            "validation_tags": "bite _finalize",
+            "validation_tags": "bite finalize",
             "_row_num": 23,
             "__rowNum__": 22,
             "_token_type": "prompt",
@@ -6693,6 +6706,7 @@
               "prompt": "q59f"
             },
             "required": 1,
+            "validation_tags": "finalize",
             "_row_num": 25,
             "__rowNum__": 24,
             "_token_type": "prompt",
@@ -6710,6 +6724,16 @@
           }
         ],
         "validation_tag_map": {
+          "finalize": [
+            3,
+            4,
+            5,
+            7,
+            9,
+            10,
+            11,
+            12
+          ],
           "bite": [
             11
           ]
