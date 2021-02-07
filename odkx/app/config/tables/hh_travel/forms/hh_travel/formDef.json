@@ -38,8 +38,10 @@
         "values_list": "month_first",
         "name": "travel_months",
         "display": {
-          "prompt": "q36"
+          "prompt": "q36",
+          "constraint_message": "w_all"
         },
+        "constraint": "not(selected(data('travel_months'), 'all')) || (selected(data('travel_months'), 'all') && countSelected(data('travel_months')) === 1)",
         "_row_num": 5
       },
       {
@@ -508,6 +510,15 @@
           "sw": "Kutembelea mwenza mwingine wa ndoa au mpenzi au rafiki"
         },
         "_row_num": 22
+      },
+      {
+        "string_token": "w_all",
+        "text": {
+          "default": "You cannot select ‘All’ along with other options.",
+          "pt": "You cannot select ‘All’ along with other options.",
+          "sw": "You cannot select ‘All’ along with other options."
+        },
+        "_row_num": 24
       }
     ]
   },
@@ -1024,6 +1035,15 @@
             "sw": "Kutembelea mwenza mwingine wa ndoa au mpenzi au rafiki"
           },
           "_row_num": 22
+        },
+        "w_all": {
+          "string_token": "w_all",
+          "text": {
+            "default": "You cannot select ‘All’ along with other options.",
+            "pt": "You cannot select ‘All’ along with other options.",
+            "sw": "You cannot select ‘All’ along with other options."
+          },
+          "_row_num": 24
         }
       }
     },
@@ -1259,8 +1279,10 @@
             "values_list": "month_first",
             "name": "travel_months",
             "display": {
-              "prompt": "q36"
+              "prompt": "q36",
+              "constraint_message": "w_all"
             },
+            "constraint": "not(selected(data('travel_months'), 'all')) || (selected(data('travel_months'), 'all') && countSelected(data('travel_months')) === 1)",
             "_row_num": 5,
             "__rowNum__": 4,
             "_token_type": "prompt",
@@ -1292,7 +1314,9 @@
           }
         ],
         "validation_tag_map": {
-          "finalize": []
+          "finalize": [
+            2
+          ]
         },
         "operations": [
           {

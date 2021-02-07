@@ -102,6 +102,7 @@ pigs_past_12_months,pigs_past_12_months,string,[]
 pigs_slaughter,pigs_slaughter,string,[]
 pigs_slaughter_month,pigs_slaughter_month,array,"[""pigs_slaughter_month_items""]"
 pigs_slaughter_month_items,items,string,[]
+scan_qr,scan_qr,string,[]
 snake_bite_who,snake_bite_who,array,"[""snake_bite_who_items""]"
 snake_bite_who_items,items,string,[]
 water_bodies,water_bodies,string,[]

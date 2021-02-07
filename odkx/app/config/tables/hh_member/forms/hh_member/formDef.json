@@ -68,6 +68,9 @@
           "max": 31,
           "step": 1
         },
+        "display": {
+          "invalid_value_message": "invalid_date"
+        },
         "hideInContents": 1,
         "_row_num": 8
       },
@@ -104,6 +107,9 @@
           "max": 12,
           "step": 1
         },
+        "display": {
+          "invalid_value_message": "invalid_month"
+        },
         "hideInContents": 1,
         "_row_num": 13
       },
@@ -138,6 +144,9 @@
         "inputAttributes": {
           "min": 1920,
           "max": 2021
+        },
+        "display": {
+          "invalid_value_message": "invalid_year"
         },
         "hideInContents": 1,
         "_row_num": 18
@@ -3512,7 +3521,11 @@
       },
       {
         "string_token": "weeks_ago",
-        "text": "Week(s) ago",
+        "text": {
+          "default": "Week(s) ago",
+          "pt": "Week(s) ago",
+          "sw": "Week(s) ago"
+        },
         "_row_num": 65
       },
       {
@@ -3535,7 +3548,11 @@
       },
       {
         "string_token": "weeks",
-        "text": "Week(s)",
+        "text": {
+          "default": "Week(s)",
+          "pt": "Week(s)",
+          "sw": "Week(s)"
+        },
         "_row_num": 68
       },
       {
@@ -4773,12 +4790,20 @@
       },
       {
         "string_token": "member_extid",
-        "text": "Member ExtID",
+        "text": {
+          "default": "Member ExtID",
+          "pt": "Member ExtID",
+          "sw": "Member ExtID"
+        },
         "_row_num": 209
       },
       {
         "string_token": "hh_id_note",
-        "text": "Household ID: {{data.hh_id}}",
+        "text": {
+          "default": "Household ID: {{data.hh_id}}",
+          "pt": "Household ID: {{data.hh_id}}",
+          "sw": "Household ID: {{data.hh_id}}"
+        },
         "_row_num": 210
       },
       {
@@ -4792,27 +4817,47 @@
       },
       {
         "string_token": "or_enter_num",
-        "text": "or enter number",
+        "text": {
+          "default": "or enter number",
+          "pt": "or enter number",
+          "sw": "or enter number"
+        },
         "_row_num": 212
       },
       {
         "string_token": "days_weeks_months_years",
-        "text": "Days/Weeks/Months/Years",
+        "text": {
+          "default": "Days/Weeks/Months/Years",
+          "pt": "Days/Weeks/Months/Years",
+          "sw": "Days/Weeks/Months/Years"
+        },
         "_row_num": 213
       },
       {
         "string_token": "days_weeks_months_dk",
-        "text": "Days/Weeks/Months Ago or Don't Know",
+        "text": {
+          "default": "Days/Weeks/Months Ago or Don't Know",
+          "pt": "Days/Weeks/Months Ago or Don't Know",
+          "sw": "Days/Weeks/Months Ago or Don't Know"
+        },
         "_row_num": 214
       },
       {
         "string_token": "err_death_date",
-        "text": "Date of death cannot be in the future<br>Date of death cannot be before October 2020",
+        "text": {
+          "default": "Date of death cannot be in the future<br>Date of death cannot be before October 2020",
+          "pt": "Tarehe ya kifo haiwezi kuwa ya mbeleni<br>Tarehe ya kifo haiwezi kuwa kabla ya Mwezi wa 10, Mwaka 2020",
+          "sw": "Data da morte não pode ser no futuro. <br> Date da morte não pode ser antes de Outubro de 2020"
+        },
         "_row_num": 215
       },
       {
         "string_token": "err_emigrate_date",
-        "text": "Date emigrated cannot be in the future<br>Date of migration cannot be before October 2020",
+        "text": {
+          "default": "Date emigrated cannot be in the future<br>Date of migration cannot be before October 2020",
+          "pt": "Tarehe ya kuhama haiwezi kuwa ya mbeleni<br>Tarehe ya kuhama haiwezi kuwa kabla ya Mwezi wa 10, Mwaka 2020",
+          "sw": "Data da emigracão não pode ser no futuro <br> Data da emigracao não pode ser antes de Outubro de 2020"
+        },
         "_row_num": 216
       },
       {
@@ -4853,12 +4898,20 @@
       },
       {
         "string_token": "assigned_extid",
-        "text": "Assigned ExtID {{data.id}}",
+        "text": {
+          "default": "Assigned ExtID {{data.id}}",
+          "pt": "Assigned ExtID {{data.id}}",
+          "sw": "Assigned ExtID {{data.id}}"
+        },
         "_row_num": 221
       },
       {
         "string_token": "snake_bite_detail",
-        "text": "Snake Bite details",
+        "text": {
+          "default": "Snake Bite details",
+          "pt": "Snake Bite details",
+          "sw": "Snake Bite details"
+        },
         "_row_num": 222
       },
       {
@@ -4872,12 +4925,20 @@
       },
       {
         "string_token": "bite_too_many_months",
-        "text": "You cannot select more months than times bitten.",
+        "text": {
+          "default": "You cannot select more months than times bitten.",
+          "pt": "Você não pode selecionar mais meses que o tempo selecionado na P.59b",
+          "sw": "Hauwezi kuchagua miezi mingi zaidi kuliko mara za kuumwa katika Q59b."
+        },
         "_row_num": 224
       },
       {
         "string_token": "bite_occur_conflict",
-        "text": "You cannot select 'Don't know' along with other options",
+        "text": {
+          "default": "You cannot select 'Don't know' along with other options",
+          "pt": "Você não pode selecionar \"Não sabe\"junto com as outras respostas.",
+          "sw": "Huwezi kuchagua 'Sijui' pamoja na majibu mengine."
+        },
         "_row_num": 225
       },
       {
@@ -4905,87 +4966,155 @@
       },
       {
         "string_token": "err_no_consent",
-        "text": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>",
+        "text": {
+          "default": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>",
+          "pt": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>",
+          "sw": "<span style=\"color:red\">Huwezi kusonga mbele hadi fomu ya idhini iwe imesainiwa.</span>"
+        },
         "_row_num": 229
       },
       {
         "string_token": "err_no_assent",
-        "text": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>",
+        "text": {
+          "default": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>",
+          "pt": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>",
+          "sw": "<span style=\"color:red\">Huwezi kusonga mbele hadi fomu ya idhini (assent) iwe imesainiwa.</span>"
+        },
         "_row_num": 230
       },
       {
         "string_token": "w_father_alive",
-        "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>",
+        "text": {
+          "default": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>",
+          "pt": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>",
+          "sw": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>"
+        },
         "_row_num": 231
       },
       {
         "string_token": "w_mother_alive",
-        "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>",
+        "text": {
+          "default": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>",
+          "pt": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>",
+          "sw": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>"
+        },
         "_row_num": 232
       },
       {
         "string_token": "w_father_mother_alive",
-        "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>",
+        "text": {
+          "default": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>",
+          "pt": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>",
+          "sw": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>"
+        },
         "_row_num": 233
       },
       {
         "string_token": "travel_prompt",
-        "text": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>",
+        "text": {
+          "default": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>",
+          "pt": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>",
+          "sw": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>"
+        },
         "_row_num": 234
       },
       {
         "string_token": "err_future_date",
-        "text": "Date cannot be in the future",
+        "text": {
+          "default": "Date cannot be in the future",
+          "pt": "A data não pode ser no futuro",
+          "sw": "Tarehe haiwezi kuwa ya mbeleni"
+        },
         "_row_num": 235
       },
       {
         "string_token": "w_lmp",
-        "text": "There is a discrepancy between the participant's last menstrual period and pregnancy status. Please verify.",
+        "text": {
+          "default": "There is a discrepancy between the participant's last menstrual period and pregnancy status. Please verify.",
+          "pt": "Esta eh uma discrepancia entre o ultimo periodo mesntrual da participante e o estado da gravidezz. Por favor verifique.",
+          "sw": "Kuna utata kati ya hedhi ya mwisho ya mshiriki na hali ya ujauzito. Tafadhali thibitisha."
+        },
         "_row_num": 236
       },
       {
         "string_token": "name_number",
-        "text": "The given name of the individual cannot contain numbers.",
+        "text": {
+          "default": "The given name of the individual cannot contain numbers.",
+          "pt": "O nome do indivíduo não pode conter números",
+          "sw": "Jina la mtu binasfi haliwezi kuwa na namba."
+        },
         "_row_num": 238
       },
       {
         "string_token": "surname_number",
-        "text": "The surname of the individual cannot contain numbers.",
+        "text": {
+          "default": "The surname of the individual cannot contain numbers.",
+          "pt": "O apelido do indivíduo não pode conter números.",
+          "sw": "Jina la ukoo la mtu binafsi haliwezi kuwa na namba."
+        },
         "_row_num": 239
       },
       {
         "string_token": "dob_hint",
-        "text": "Enter a date between 1 and 31.",
+        "text": {
+          "default": "Enter a date between 1 and 31.",
+          "pt": "Enter a date between 1 and 31.",
+          "sw": "Enter a date between 1 and 31."
+        },
         "_row_num": 240
       },
       {
         "string_token": "month_hint",
-        "text": "Enter a month between 1 and 12.",
+        "text": {
+          "default": "Enter a month between 1 and 12.",
+          "pt": "Enter a month between 1 and 12.",
+          "sw": "Enter a month between 1 and 12."
+        },
         "_row_num": 241
       },
       {
         "string_token": "year_hint",
-        "text": "Enter a year between 1920 and 2021.",
+        "text": {
+          "default": "Enter a year between 1920 and 2021.",
+          "pt": "Enter a year between 1920 and 2021.",
+          "sw": "Enter a year between 1920 and 2021."
+        },
         "_row_num": 242
       },
       {
         "string_token": "date_cons",
-        "text": "Date entered must be 1-31.",
+        "text": {
+          "default": "Date entered must be 1-31.",
+          "pt": "Date entered must be 1-31.",
+          "sw": "Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31"
+        },
         "_row_num": 243
       },
       {
         "string_token": "month_cons",
-        "text": "Month entered must be 1-12.",
+        "text": {
+          "default": "Month entered must be 1-12.",
+          "pt": "Month entered must be 1-12.",
+          "sw": "Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12"
+        },
         "_row_num": 244
       },
       {
         "string_token": "year_cons",
-        "text": "Year entered must be 1920-2021.",
+        "text": {
+          "default": "Year entered must be 1920-2021.",
+          "pt": "Year entered must be 1920-2021.",
+          "sw": "Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021"
+        },
         "_row_num": 245
       },
       {
         "string_token": "select_date_dk",
-        "text": "Select from today/tomorrow, enter a date, or ‘Don’t Know’",
+        "text": {
+          "default": "Select from today/tomorrow, enter a date, or ‘Don’t Know’",
+          "pt": "Select from today/tomorrow, enter a date, or ‘Don’t Know’",
+          "sw": "Select from today/tomorrow, enter a date, or ‘Don’t Know’"
+        },
         "_row_num": 246
       },
       {
@@ -5779,6 +5908,123 @@
           "sw": "33a. Ikiwa ndiyo, ni safari ngapi tofauti ambazo mshiriki huyu anazo wakati wa sehemu ya kwanza ya mwaka?"
         },
         "_row_num": 337
+      },
+      {
+        "string_token": "w_none",
+        "text": {
+          "default": "You cannot select 'None' along with other options.",
+          "pt": "Você não pode selecionar \"Nenhum\" junto com as outras respostas.",
+          "sw": "Huwezi kuchagua \"Hakuna\" pamoja na majibu mengine"
+        },
+        "_row_num": 339
+      },
+      {
+        "string_token": "w_all_dk",
+        "text": {
+          "default": "You cannot select 'All' or 'Don't know' along with other options.",
+          "pt": "Você não pode selecionar 'Todos' ou \"Não sabe\" junto com as outras respostas.",
+          "sw": "Huwezi kuchagua \"Yote\" au \"Sijui\" pamoja na majibu mengine"
+        },
+        "_row_num": 340
+      },
+      {
+        "string_token": "w_no_dk",
+        "text": {
+          "default": "You cannot select 'No' or 'Don't know' along with other options.",
+          "pt": "Você não pode selecionar \"Não\" ou\"Não sabe\" junto com as outras respostas.",
+          "sw": "Huwezi kuchagua \"Hapana\" au \"Sijui\" pamoja na majibu mengine"
+        },
+        "_row_num": 341
+      },
+      {
+        "string_token": "w_dk_pna",
+        "text": {
+          "default": "You cannot select ‘Don’t know’ or ‘Prefer not to answer’ along with other options.",
+          "pt": "Você não pode selecionar \"Não sabe\" ou \"Prefere não responder\" junto com as outras respostas.",
+          "sw": "Huwezi kuchagua \"Sijui\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
+        },
+        "_row_num": 342
+      },
+      {
+        "string_token": "w_no_pna",
+        "text": {
+          "default": "You cannot select ‘No’ or ‘Prefer not to answer’ along with other options.",
+          "pt": "Você não pode selecionar \"Não\" ou \"Prefere não responder\" junto com as outras respostas.",
+          "sw": "Huwezi kuchagua \"Hapana\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
+        },
+        "_row_num": 343
+      },
+      {
+        "string_token": "w_no_symptoms",
+        "text": {
+          "default": "You cannot select ‘No symptoms’ along with other options.",
+          "pt": "Você não pode selecionar \"Sem sintomas\"junto com as outras respostas.",
+          "sw": "Huwezi kuchagua \"Hakuna dalili\" pamoja na majibu mengine"
+        },
+        "_row_num": 344
+      },
+      {
+        "string_token": "w_none_pna",
+        "text": {
+          "default": "You cannot select ‘None’ or ‘Prefer not to answer’ along with other options.",
+          "pt": "Você não pode selecionar \"Nenhum\" ou \"Prefere não responder\" junto com as outras respostas.",
+          "sw": "Huwezi kuchagua \"Hakuna\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
+        },
+        "_row_num": 345
+      },
+      {
+        "string_token": "w_fever_di",
+        "text": {
+          "default": "<span style=\"color:red\">You selected \"fever\" and/or \"diarrhoea\" in the previous question but you did not mark \"fever\" and/or \"diarrhoea\" as a main symptom. Please verify. </span>",
+          "pt": "Você selecionou \"febres\" e/ou \"diarreia\" na pergunta anterior mas não marcou \"febres\" e/ou \"diarreia\" como o sintoma principal. Por favor verifque.",
+          "sw": "Ulichagua \"homa\" na / au \"kuhara\" katika swali lililopita lakini haujachagua \"homa\" na / au \"kuhara\" kama dalili kuu. Tafadhali thibitisha."
+        },
+        "_row_num": 346
+      },
+      {
+        "string_token": "n_nets",
+        "text": {
+          "default": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)",
+          "pt": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)",
+          "sw": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)"
+        },
+        "_row_num": 347
+      },
+      {
+        "string_token": "not_one",
+        "text": {
+          "default": "Cannot enter 1.",
+          "pt": "Cannot enter 1.",
+          "sw": "Cannot enter 1."
+        },
+        "_row_num": 348
+      },
+      {
+        "string_token": "invalid_date",
+        "text": {
+          "default": "Date entered must be a number from 1 and 31.",
+          "pt": "Date entered must be a number from 1 and 31.",
+          "sw": "Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31"
+        },
+        "_row_num": 349
+      },
+      {
+        "string_token": "invalid_month",
+        "text": {
+          "default": "Month entered must be a number from 1 to 12.",
+          "pt": "Month entered must be a number from 1 to 12.",
+          "sw": "Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12"
+        },
+        "_row_num": 350
+      },
+      {
+        "string_token": "invalid_year",
+        "text": {
+          "default": "Year entered must be a number from 1920 to 2021.",
+          "pt": "Year entered must be a number from 1920 to 2021.",
+          "sw": "Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021"
+        },
+        "_row_num": 351
       }
     ]
   },
@@ -5796,8 +6042,7 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path",
-      "hideInContents": "formula"
+      "templatePath": "requirejs_path"
     },
     "settings": {
       "form_id": {
@@ -8614,7 +8859,11 @@
         },
         "weeks_ago": {
           "string_token": "weeks_ago",
-          "text": "Week(s) ago",
+          "text": {
+            "default": "Week(s) ago",
+            "pt": "Week(s) ago",
+            "sw": "Week(s) ago"
+          },
           "_row_num": 65
         },
         "months_ago": {
@@ -8637,7 +8886,11 @@
         },
         "weeks": {
           "string_token": "weeks",
-          "text": "Week(s)",
+          "text": {
+            "default": "Week(s)",
+            "pt": "Week(s)",
+            "sw": "Week(s)"
+          },
           "_row_num": 68
         },
         "months": {
@@ -9875,12 +10128,20 @@
         },
         "member_extid": {
           "string_token": "member_extid",
-          "text": "Member ExtID",
+          "text": {
+            "default": "Member ExtID",
+            "pt": "Member ExtID",
+            "sw": "Member ExtID"
+          },
           "_row_num": 209
         },
         "hh_id_note": {
           "string_token": "hh_id_note",
-          "text": "Household ID: {{data.hh_id}}",
+          "text": {
+            "default": "Household ID: {{data.hh_id}}",
+            "pt": "Household ID: {{data.hh_id}}",
+            "sw": "Household ID: {{data.hh_id}}"
+          },
           "_row_num": 210
         },
         "date": {
@@ -9894,27 +10155,47 @@
         },
         "or_enter_num": {
           "string_token": "or_enter_num",
-          "text": "or enter number",
+          "text": {
+            "default": "or enter number",
+            "pt": "or enter number",
+            "sw": "or enter number"
+          },
           "_row_num": 212
         },
         "days_weeks_months_years": {
           "string_token": "days_weeks_months_years",
-          "text": "Days/Weeks/Months/Years",
+          "text": {
+            "default": "Days/Weeks/Months/Years",
+            "pt": "Days/Weeks/Months/Years",
+            "sw": "Days/Weeks/Months/Years"
+          },
           "_row_num": 213
         },
         "days_weeks_months_dk": {
           "string_token": "days_weeks_months_dk",
-          "text": "Days/Weeks/Months Ago or Don't Know",
+          "text": {
+            "default": "Days/Weeks/Months Ago or Don't Know",
+            "pt": "Days/Weeks/Months Ago or Don't Know",
+            "sw": "Days/Weeks/Months Ago or Don't Know"
+          },
           "_row_num": 214
         },
         "err_death_date": {
           "string_token": "err_death_date",
-          "text": "Date of death cannot be in the future<br>Date of death cannot be before October 2020",
+          "text": {
+            "default": "Date of death cannot be in the future<br>Date of death cannot be before October 2020",
+            "pt": "Tarehe ya kifo haiwezi kuwa ya mbeleni<br>Tarehe ya kifo haiwezi kuwa kabla ya Mwezi wa 10, Mwaka 2020",
+            "sw": "Data da morte não pode ser no futuro. <br> Date da morte não pode ser antes de Outubro de 2020"
+          },
           "_row_num": 215
         },
         "err_emigrate_date": {
           "string_token": "err_emigrate_date",
-          "text": "Date emigrated cannot be in the future<br>Date of migration cannot be before October 2020",
+          "text": {
+            "default": "Date emigrated cannot be in the future<br>Date of migration cannot be before October 2020",
+            "pt": "Tarehe ya kuhama haiwezi kuwa ya mbeleni<br>Tarehe ya kuhama haiwezi kuwa kabla ya Mwezi wa 10, Mwaka 2020",
+            "sw": "Data da emigracão não pode ser no futuro <br> Data da emigracao não pode ser antes de Outubro de 2020"
+          },
           "_row_num": 216
         },
         "death_va_note": {
@@ -9955,12 +10236,20 @@
         },
         "assigned_extid": {
           "string_token": "assigned_extid",
-          "text": "Assigned ExtID {{data.id}}",
+          "text": {
+            "default": "Assigned ExtID {{data.id}}",
+            "pt": "Assigned ExtID {{data.id}}",
+            "sw": "Assigned ExtID {{data.id}}"
+          },
           "_row_num": 221
         },
         "snake_bite_detail": {
           "string_token": "snake_bite_detail",
-          "text": "Snake Bite details",
+          "text": {
+            "default": "Snake Bite details",
+            "pt": "Snake Bite details",
+            "sw": "Snake Bite details"
+          },
           "_row_num": 222
         },
         "name_id": {
@@ -9974,12 +10263,20 @@
         },
         "bite_too_many_months": {
           "string_token": "bite_too_many_months",
-          "text": "You cannot select more months than times bitten.",
+          "text": {
+            "default": "You cannot select more months than times bitten.",
+            "pt": "Você não pode selecionar mais meses que o tempo selecionado na P.59b",
+            "sw": "Hauwezi kuchagua miezi mingi zaidi kuliko mara za kuumwa katika Q59b."
+          },
           "_row_num": 224
         },
         "bite_occur_conflict": {
           "string_token": "bite_occur_conflict",
-          "text": "You cannot select 'Don't know' along with other options",
+          "text": {
+            "default": "You cannot select 'Don't know' along with other options",
+            "pt": "Você não pode selecionar \"Não sabe\"junto com as outras respostas.",
+            "sw": "Huwezi kuchagua 'Sijui' pamoja na majibu mengine."
+          },
           "_row_num": 225
         },
         "given_name": {
@@ -10007,87 +10304,155 @@
         },
         "err_no_consent": {
           "string_token": "err_no_consent",
-          "text": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>",
+          "text": {
+            "default": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>",
+            "pt": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>",
+            "sw": "<span style=\"color:red\">Huwezi kusonga mbele hadi fomu ya idhini iwe imesainiwa.</span>"
+          },
           "_row_num": 229
         },
         "err_no_assent": {
           "string_token": "err_no_assent",
-          "text": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>",
+          "text": {
+            "default": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>",
+            "pt": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>",
+            "sw": "<span style=\"color:red\">Huwezi kusonga mbele hadi fomu ya idhini (assent) iwe imesainiwa.</span>"
+          },
           "_row_num": 230
         },
         "w_father_alive": {
           "string_token": "w_father_alive",
-          "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>",
+          "text": {
+            "default": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>",
+            "pt": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>",
+            "sw": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>"
+          },
           "_row_num": 231
         },
         "w_mother_alive": {
           "string_token": "w_mother_alive",
-          "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>",
+          "text": {
+            "default": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>",
+            "pt": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>",
+            "sw": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>"
+          },
           "_row_num": 232
         },
         "w_father_mother_alive": {
           "string_token": "w_father_mother_alive",
-          "text": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>",
+          "text": {
+            "default": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>",
+            "pt": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>",
+            "sw": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>"
+          },
           "_row_num": 233
         },
         "travel_prompt": {
           "string_token": "travel_prompt",
-          "text": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>",
+          "text": {
+            "default": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>",
+            "pt": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>",
+            "sw": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>"
+          },
           "_row_num": 234
         },
         "err_future_date": {
           "string_token": "err_future_date",
-          "text": "Date cannot be in the future",
+          "text": {
+            "default": "Date cannot be in the future",
+            "pt": "A data não pode ser no futuro",
+            "sw": "Tarehe haiwezi kuwa ya mbeleni"
+          },
           "_row_num": 235
         },
         "w_lmp": {
           "string_token": "w_lmp",
-          "text": "There is a discrepancy between the participant's last menstrual period and pregnancy status. Please verify.",
+          "text": {
+            "default": "There is a discrepancy between the participant's last menstrual period and pregnancy status. Please verify.",
+            "pt": "Esta eh uma discrepancia entre o ultimo periodo mesntrual da participante e o estado da gravidezz. Por favor verifique.",
+            "sw": "Kuna utata kati ya hedhi ya mwisho ya mshiriki na hali ya ujauzito. Tafadhali thibitisha."
+          },
           "_row_num": 236
         },
         "name_number": {
           "string_token": "name_number",
-          "text": "The given name of the individual cannot contain numbers.",
+          "text": {
+            "default": "The given name of the individual cannot contain numbers.",
+            "pt": "O nome do indivíduo não pode conter números",
+            "sw": "Jina la mtu binasfi haliwezi kuwa na namba."
+          },
           "_row_num": 238
         },
         "surname_number": {
           "string_token": "surname_number",
-          "text": "The surname of the individual cannot contain numbers.",
+          "text": {
+            "default": "The surname of the individual cannot contain numbers.",
+            "pt": "O apelido do indivíduo não pode conter números.",
+            "sw": "Jina la ukoo la mtu binafsi haliwezi kuwa na namba."
+          },
           "_row_num": 239
         },
         "dob_hint": {
           "string_token": "dob_hint",
-          "text": "Enter a date between 1 and 31.",
+          "text": {
+            "default": "Enter a date between 1 and 31.",
+            "pt": "Enter a date between 1 and 31.",
+            "sw": "Enter a date between 1 and 31."
+          },
           "_row_num": 240
         },
         "month_hint": {
           "string_token": "month_hint",
-          "text": "Enter a month between 1 and 12.",
+          "text": {
+            "default": "Enter a month between 1 and 12.",
+            "pt": "Enter a month between 1 and 12.",
+            "sw": "Enter a month between 1 and 12."
+          },
           "_row_num": 241
         },
         "year_hint": {
           "string_token": "year_hint",
-          "text": "Enter a year between 1920 and 2021.",
+          "text": {
+            "default": "Enter a year between 1920 and 2021.",
+            "pt": "Enter a year between 1920 and 2021.",
+            "sw": "Enter a year between 1920 and 2021."
+          },
           "_row_num": 242
         },
         "date_cons": {
           "string_token": "date_cons",
-          "text": "Date entered must be 1-31.",
+          "text": {
+            "default": "Date entered must be 1-31.",
+            "pt": "Date entered must be 1-31.",
+            "sw": "Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31"
+          },
           "_row_num": 243
         },
         "month_cons": {
           "string_token": "month_cons",
-          "text": "Month entered must be 1-12.",
+          "text": {
+            "default": "Month entered must be 1-12.",
+            "pt": "Month entered must be 1-12.",
+            "sw": "Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12"
+          },
           "_row_num": 244
         },
         "year_cons": {
           "string_token": "year_cons",
-          "text": "Year entered must be 1920-2021.",
+          "text": {
+            "default": "Year entered must be 1920-2021.",
+            "pt": "Year entered must be 1920-2021.",
+            "sw": "Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021"
+          },
           "_row_num": 245
         },
         "select_date_dk": {
           "string_token": "select_date_dk",
-          "text": "Select from today/tomorrow, enter a date, or ‘Don’t Know’",
+          "text": {
+            "default": "Select from today/tomorrow, enter a date, or ‘Don’t Know’",
+            "pt": "Select from today/tomorrow, enter a date, or ‘Don’t Know’",
+            "sw": "Select from today/tomorrow, enter a date, or ‘Don’t Know’"
+          },
           "_row_num": 246
         },
         "q1": {
@@ -10881,6 +11246,123 @@
             "sw": "33a. Ikiwa ndiyo, ni safari ngapi tofauti ambazo mshiriki huyu anazo wakati wa sehemu ya kwanza ya mwaka?"
           },
           "_row_num": 337
+        },
+        "w_none": {
+          "string_token": "w_none",
+          "text": {
+            "default": "You cannot select 'None' along with other options.",
+            "pt": "Você não pode selecionar \"Nenhum\" junto com as outras respostas.",
+            "sw": "Huwezi kuchagua \"Hakuna\" pamoja na majibu mengine"
+          },
+          "_row_num": 339
+        },
+        "w_all_dk": {
+          "string_token": "w_all_dk",
+          "text": {
+            "default": "You cannot select 'All' or 'Don't know' along with other options.",
+            "pt": "Você não pode selecionar 'Todos' ou \"Não sabe\" junto com as outras respostas.",
+            "sw": "Huwezi kuchagua \"Yote\" au \"Sijui\" pamoja na majibu mengine"
+          },
+          "_row_num": 340
+        },
+        "w_no_dk": {
+          "string_token": "w_no_dk",
+          "text": {
+            "default": "You cannot select 'No' or 'Don't know' along with other options.",
+            "pt": "Você não pode selecionar \"Não\" ou\"Não sabe\" junto com as outras respostas.",
+            "sw": "Huwezi kuchagua \"Hapana\" au \"Sijui\" pamoja na majibu mengine"
+          },
+          "_row_num": 341
+        },
+        "w_dk_pna": {
+          "string_token": "w_dk_pna",
+          "text": {
+            "default": "You cannot select ‘Don’t know’ or ‘Prefer not to answer’ along with other options.",
+            "pt": "Você não pode selecionar \"Não sabe\" ou \"Prefere não responder\" junto com as outras respostas.",
+            "sw": "Huwezi kuchagua \"Sijui\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
+          },
+          "_row_num": 342
+        },
+        "w_no_pna": {
+          "string_token": "w_no_pna",
+          "text": {
+            "default": "You cannot select ‘No’ or ‘Prefer not to answer’ along with other options.",
+            "pt": "Você não pode selecionar \"Não\" ou \"Prefere não responder\" junto com as outras respostas.",
+            "sw": "Huwezi kuchagua \"Hapana\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
+          },
+          "_row_num": 343
+        },
+        "w_no_symptoms": {
+          "string_token": "w_no_symptoms",
+          "text": {
+            "default": "You cannot select ‘No symptoms’ along with other options.",
+            "pt": "Você não pode selecionar \"Sem sintomas\"junto com as outras respostas.",
+            "sw": "Huwezi kuchagua \"Hakuna dalili\" pamoja na majibu mengine"
+          },
+          "_row_num": 344
+        },
+        "w_none_pna": {
+          "string_token": "w_none_pna",
+          "text": {
+            "default": "You cannot select ‘None’ or ‘Prefer not to answer’ along with other options.",
+            "pt": "Você não pode selecionar \"Nenhum\" ou \"Prefere não responder\" junto com as outras respostas.",
+            "sw": "Huwezi kuchagua \"Hakuna\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
+          },
+          "_row_num": 345
+        },
+        "w_fever_di": {
+          "string_token": "w_fever_di",
+          "text": {
+            "default": "<span style=\"color:red\">You selected \"fever\" and/or \"diarrhoea\" in the previous question but you did not mark \"fever\" and/or \"diarrhoea\" as a main symptom. Please verify. </span>",
+            "pt": "Você selecionou \"febres\" e/ou \"diarreia\" na pergunta anterior mas não marcou \"febres\" e/ou \"diarreia\" como o sintoma principal. Por favor verifque.",
+            "sw": "Ulichagua \"homa\" na / au \"kuhara\" katika swali lililopita lakini haujachagua \"homa\" na / au \"kuhara\" kama dalili kuu. Tafadhali thibitisha."
+          },
+          "_row_num": 346
+        },
+        "n_nets": {
+          "string_token": "n_nets",
+          "text": {
+            "default": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)",
+            "pt": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)",
+            "sw": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)"
+          },
+          "_row_num": 347
+        },
+        "not_one": {
+          "string_token": "not_one",
+          "text": {
+            "default": "Cannot enter 1.",
+            "pt": "Cannot enter 1.",
+            "sw": "Cannot enter 1."
+          },
+          "_row_num": 348
+        },
+        "invalid_date": {
+          "string_token": "invalid_date",
+          "text": {
+            "default": "Date entered must be a number from 1 and 31.",
+            "pt": "Date entered must be a number from 1 and 31.",
+            "sw": "Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31"
+          },
+          "_row_num": 349
+        },
+        "invalid_month": {
+          "string_token": "invalid_month",
+          "text": {
+            "default": "Month entered must be a number from 1 to 12.",
+            "pt": "Month entered must be a number from 1 to 12.",
+            "sw": "Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12"
+          },
+          "_row_num": 350
+        },
+        "invalid_year": {
+          "string_token": "invalid_year",
+          "text": {
+            "default": "Year entered must be a number from 1920 to 2021.",
+            "pt": "Year entered must be a number from 1920 to 2021.",
+            "sw": "Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021"
+          },
+          "_row_num": 351
         }
       }
     },
@@ -12311,6 +12793,9 @@
               "max": 31,
               "step": 1
             },
+            "display": {
+              "invalid_value_message": "invalid_date"
+            },
             "hideInContents": 1,
             "_row_num": 8,
             "__rowNum__": 7,
@@ -12353,6 +12838,9 @@
               "max": 12,
               "step": 1
             },
+            "display": {
+              "invalid_value_message": "invalid_month"
+            },
             "hideInContents": 1,
             "_row_num": 13,
             "__rowNum__": 12,
@@ -12393,6 +12881,9 @@
             "inputAttributes": {
               "min": 1920,
               "max": 2021
+            },
+            "display": {
+              "invalid_value_message": "invalid_year"
             },
             "hideInContents": 1,
             "_row_num": 18,

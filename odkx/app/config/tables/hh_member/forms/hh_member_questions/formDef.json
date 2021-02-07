@@ -517,8 +517,10 @@
         "values_list": "treatment",
         "name": "ind_treatment",
         "display": {
-          "prompt": "ind_q12"
+          "prompt": "ind_q12",
+          "constraint_message": "w_dk_pna"
         },
+        "constraint": "(not(selected(data('ind_treatment'), 'pna')) || (selected(data('ind_treatment'), 'pna') && countSelected(data('ind_treatment')) === 1)) && (not(selected(data('ind_treatment'), 'dk')) || (selected(data('ind_treatment'), 'dk') && countSelected(data('ind_treatment')) === 1))",
         "_row_num": 84
       },
       {
@@ -541,8 +543,10 @@
         "values_list": "chronic_disease",
         "name": "ind_chronic_disease",
         "display": {
-          "prompt": "ind_q13"
+          "prompt": "ind_q13",
+          "constraint_message": "w_no_pna"
         },
+        "constraint": "(not(selected(data('ind_chronic_disease'), 'pna')) || (selected(data('ind_chronic_disease'), 'pna') && countSelected(data('ind_chronic_disease')) === 1)) && (not(selected(data('ind_chronic_disease'), 'no')) || (selected(data('ind_chronic_disease'), 'no') && countSelected(data('ind_chronic_disease')) === 1))",
         "_row_num": 88
       },
       {
@@ -622,8 +626,10 @@
         "values_list": "other_symptoms",
         "name": "recent_disease_symptoms",
         "display": {
-          "prompt": "ind_q16"
+          "prompt": "ind_q16",
+          "constraint_message": "w_no_symptoms"
         },
+        "constraint": "not(selected(data('recent_disease_symptoms'), 'No_symptoms')) || (selected(data('recent_disease_symptoms'), 'No_symptoms') && countSelected(data('recent_disease_symptoms')) === 1)",
         "_row_num": 101
       },
       {
@@ -644,18 +650,35 @@
         "_row_num": 104
       },
       {
+        "clause": "if",
+        "condition": "(selected(data('recent_disease_yes'), 'Diarrhoea') && not(selected(data('recent_disease_symptoms'), 'Diarrhoea'))) || (selected(data('recent_disease_yes'), 'Fever') && not(selected(data('recent_disease_symptoms'), 'Fever')))",
+        "_row_num": 105
+      },
+      {
+        "type": "note",
+        "name": "recent_disease_warning",
+        "display": {
+          "prompt": "w_fever_di"
+        },
+        "_row_num": 106
+      },
+      {
+        "clause": "end if",
+        "_row_num": 107
+      },
+      {
         "type": "select_one",
         "values_list": "yn",
         "name": "recent_disease_seek_care",
         "display": {
           "prompt": "ind_q17"
         },
-        "_row_num": 105
+        "_row_num": 108
       },
       {
         "clause": "if",
         "condition": "selected(data('recent_disease_seek_care'), 'yes')",
-        "_row_num": 106
+        "_row_num": 109
       },
       {
         "type": "select_multiple",
@@ -664,12 +687,12 @@
         "display": {
           "prompt": "ind_q17a"
         },
-        "_row_num": 107
+        "_row_num": 110
       },
       {
         "clause": "if",
         "condition": "selected(data('recent_disease_care_type'), 'other')",
-        "_row_num": 108
+        "_row_num": 111
       },
       {
         "type": "text",
@@ -677,11 +700,11 @@
         "display": {
           "prompt": "specify"
         },
-        "_row_num": 109
+        "_row_num": 112
       },
       {
         "clause": "end if",
-        "_row_num": 110
+        "_row_num": 113
       },
       {
         "type": "select_one",
@@ -690,12 +713,12 @@
         "display": {
           "prompt": "ind_q17b"
         },
-        "_row_num": 111
+        "_row_num": 114
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_malaria_test'), 'yes')",
-        "_row_num": 112
+        "_row_num": 115
       },
       {
         "type": "select_one",
@@ -704,11 +727,11 @@
         "display": {
           "prompt": "ind_q17bi"
         },
-        "_row_num": 113
+        "_row_num": 116
       },
       {
         "clause": "end if",
-        "_row_num": 114
+        "_row_num": 117
       },
       {
         "type": "select_one",
@@ -717,12 +740,12 @@
         "display": {
           "prompt": "ind_q17c"
         },
-        "_row_num": 115
+        "_row_num": 118
       },
       {
         "clause": "if",
         "condition": "selected(data('ind_malaria_treatment'), 'no')",
-        "_row_num": 116
+        "_row_num": 119
       },
       {
         "type": "select_one",
@@ -731,27 +754,27 @@
         "display": {
           "prompt": "ind_q17ci"
         },
-        "_row_num": 117
-      },
-      {
-        "clause": "end if",
-        "_row_num": 118
-      },
-      {
-        "clause": "end if",
-        "_row_num": 119
-      },
-      {
-        "clause": "end if",
         "_row_num": 120
       },
       {
-        "clause": "end screen",
+        "clause": "end if",
         "_row_num": 121
       },
       {
-        "clause": "begin screen",
+        "clause": "end if",
         "_row_num": 122
+      },
+      {
+        "clause": "end if",
+        "_row_num": 123
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 124
+      },
+      {
+        "clause": "begin screen",
+        "_row_num": 125
       },
       {
         "type": "select_multiple",
@@ -759,18 +782,17 @@
         "name": "ind_deficiency",
         "display": {
           "prompt": "ind_q18",
-          "constraint_message": {
-            "text": "You selected \"None\" or \"Prefer not to answer\", so you cannot select other options."
-          }
+          "constraint_message": "w_none_pna"
         },
-        "_row_num": 123
+        "constraint": "(not(selected(data('ind_deficiency'), 'pna')) || (selected(data('ind_deficiency'), 'pna') && countSelected(data('ind_deficiency')) === 1)) && (not(selected(data('ind_deficiency'), 'none')) || (selected(data('ind_deficiency'), 'none') && countSelected(data('ind_deficiency')) === 1))",
+        "_row_num": 126
       },
       {
         "type": "note",
         "display": {
           "prompt": "ntd_h3"
         },
-        "_row_num": 124
+        "_row_num": 127
       },
       {
         "type": "select_multiple",
@@ -778,11 +800,10 @@
         "name": "ind_itchy",
         "display": {
           "prompt": "ind_q19",
-          "constraint_message": {
-            "text": "You selected \"No\" or \"Prefer not to answer\", so you cannot select other options."
-          }
+          "constraint_message": "w_no_pna"
         },
-        "_row_num": 125
+        "constraint": "(not(selected(data('ind_itchy'), 'pna')) || (selected(data('ind_itchy'), 'pna') && countSelected(data('ind_itchy')) === 1)) && (not(selected(data('ind_itchy'), 'no')) || (selected(data('ind_itchy'), 'no') && countSelected(data('ind_itchy')) === 1))",
+        "_row_num": 128
       },
       {
         "type": "select_one",
@@ -791,7 +812,7 @@
         "display": {
           "prompt": "ind_q20"
         },
-        "_row_num": 126
+        "_row_num": 129
       },
       {
         "type": "select_one",
@@ -800,7 +821,7 @@
         "display": {
           "prompt": "ind_q21"
         },
-        "_row_num": 127
+        "_row_num": 130
       },
       {
         "type": "select_one",
@@ -809,27 +830,27 @@
         "display": {
           "prompt": "ind_q22"
         },
-        "_row_num": 128
+        "_row_num": 131
       },
       {
         "clause": "end screen",
-        "_row_num": 129
+        "_row_num": 132
       },
       {
         "clause": "begin screen",
-        "_row_num": 130
+        "_row_num": 133
       },
       {
         "clause": "if",
         "condition": "selected(data('gender'), 'female') && calculates.check_female_reproductive_age()",
-        "_row_num": 131
+        "_row_num": 134
       },
       {
         "type": "note",
         "display": {
           "prompt": "wra_h3"
         },
-        "_row_num": 132
+        "_row_num": 135
       },
       {
         "type": "select_one",
@@ -838,7 +859,7 @@
         "display": {
           "prompt": "ind_q23"
         },
-        "_row_num": 133
+        "_row_num": 136
       },
       {
         "type": "select_one",
@@ -847,7 +868,7 @@
         "display": {
           "prompt": "ind_q24"
         },
-        "_row_num": 134
+        "_row_num": 137
       },
       {
         "type": "select_one",
@@ -856,28 +877,28 @@
         "display": {
           "prompt": "ind_q25"
         },
-        "_row_num": 135
+        "_row_num": 138
       },
       {
         "clause": "if",
         "condition": "selected(data('wra_pregnant'), 'yes')",
-        "_row_num": 136
+        "_row_num": 139
       },
       {
         "clause": "if",
         "condition": "selected(data('wra_period'), 'Less_than_two_weeks_ago')",
-        "_row_num": 137
+        "_row_num": 140
       },
       {
         "type": "note",
         "display": {
           "prompt": "w_lmp"
         },
-        "_row_num": 138
+        "_row_num": 141
       },
       {
         "clause": "end if",
-        "_row_num": 139
+        "_row_num": 142
       },
       {
         "type": "select_one",
@@ -886,22 +907,22 @@
         "display": {
           "prompt": "ind_q25a"
         },
-        "_row_num": 140
+        "_row_num": 143
       },
       {
         "clause": "end if",
-        "_row_num": 141
+        "_row_num": 144
       },
       {
         "clause": "end if",
-        "_row_num": 142
+        "_row_num": 145
       },
       {
         "type": "note",
         "display": {
           "prompt": "malaria_h2"
         },
-        "_row_num": 143
+        "_row_num": 146
       },
       {
         "type": "select_one",
@@ -910,49 +931,65 @@
         "display": {
           "prompt": "ind_q26"
         },
-        "_row_num": 144
+        "_row_num": 147
       },
       {
         "clause": "if",
         "condition": "selected(data('sleep_net_last_night'), 'yes')",
-        "_row_num": 145
+        "_row_num": 148
+      },
+      {
+        "type": "note",
+        "name": "sleep_net_last_night_num",
+        "display": {
+          "prompt": "ind_q26a"
+        },
+        "_row_num": 149
+      },
+      {
+        "clause": "if",
+        "condition": "not(selected(data('sleep_net_last_night_num_dk'), 'dk'))",
+        "_row_num": 150
       },
       {
         "type": "integer",
-        "name": "sleep_net_last_night_num",
+        "name": "sleep_net_last_night_num_enter",
         "display": {
-          "prompt": "ind_q26a",
-          "constraint_message": {
-            "text": "(0= alone, 2= two under the net, 3= three under the net, etc. 1 not allowed)"
-          }
+          "prompt": "n_nets",
+          "constraint_message": "not_one"
         },
+        "required": "not(selected(data('sleep_net_last_night_num_dk'), 'dk'))",
         "constraint": "data('sleep_net_last_night_num') !== 1",
-        "_row_num": 146
+        "_row_num": 151
+      },
+      {
+        "clause": "end if",
+        "_row_num": 152
       },
       {
         "type": "select_multiple",
         "values_list": "dk",
         "name": "sleep_net_last_night_num_dk",
-        "_row_num": 147
+        "_row_num": 153
       },
       {
         "clause": "end if",
-        "_row_num": 148
+        "_row_num": 154
       },
       {
         "clause": "end screen",
-        "_row_num": 149
+        "_row_num": 155
       },
       {
         "clause": "begin screen",
-        "_row_num": 150
+        "_row_num": 156
       },
       {
         "type": "note",
         "display": {
           "prompt": "residual_h2"
         },
-        "_row_num": 151
+        "_row_num": 157
       },
       {
         "type": "select_one",
@@ -961,7 +998,7 @@
         "display": {
           "prompt": "ind_q27"
         },
-        "_row_num": 152
+        "_row_num": 158
       },
       {
         "type": "select_one",
@@ -970,7 +1007,7 @@
         "display": {
           "prompt": "ind_q28"
         },
-        "_row_num": 153
+        "_row_num": 159
       },
       {
         "type": "select_multiple",
@@ -979,7 +1016,7 @@
         "display": {
           "prompt": "ind_q29"
         },
-        "_row_num": 154
+        "_row_num": 160
       },
       {
         "type": "select_one",
@@ -988,7 +1025,7 @@
         "display": {
           "prompt": "ind_q30"
         },
-        "_row_num": 155
+        "_row_num": 161
       },
       {
         "type": "select_one",
@@ -997,12 +1034,12 @@
         "display": {
           "prompt": "ind_q31"
         },
-        "_row_num": 156
+        "_row_num": 162
       },
       {
         "clause": "if",
         "condition": "selected(data('time_go_outside'), '>4h before sunrise') || selected(data('time_go_outside'), '2-4h before sunrise') || selected(data('time_go_outside'), '1-2h before sunrise')",
-        "_row_num": 157
+        "_row_num": 163
       },
       {
         "type": "select_multiple",
@@ -1011,19 +1048,19 @@
         "display": {
           "prompt": "ind_q31a"
         },
-        "_row_num": 158
+        "_row_num": 164
       },
       {
         "clause": "end if",
-        "_row_num": 159
+        "_row_num": 165
       },
       {
         "clause": "end screen",
-        "_row_num": 160
+        "_row_num": 166
       },
       {
         "clause": "begin screen",
-        "_row_num": 161
+        "_row_num": 167
       },
       {
         "type": "assign",
@@ -1032,21 +1069,21 @@
           "isSessionVariable": 1
         },
         "calculation": "null",
-        "_row_num": 162
+        "_row_num": 168
       },
       {
         "type": "note",
         "display": {
           "prompt": "travel_h2"
         },
-        "_row_num": 163
+        "_row_num": 169
       },
       {
         "type": "note",
         "display": {
           "prompt": "travel_loa_h3"
         },
-        "_row_num": 164
+        "_row_num": 170
       },
       {
         "type": "select_one",
@@ -1055,12 +1092,12 @@
         "display": {
           "prompt": "ind_q32"
         },
-        "_row_num": 165
+        "_row_num": 171
       },
       {
         "clause": "if",
         "condition": "selected(data('travel_abroad'), 'yes')",
-        "_row_num": 166
+        "_row_num": 172
       },
       {
         "type": "select_multiple",
@@ -1068,22 +1105,21 @@
         "name": "travel_countries",
         "display": {
           "prompt": "ind_q32a",
-          "constraint_message": {
-            "text": "You selected \"None\", so you cannot select other options."
-          }
+          "constraint_message": "w_none"
         },
-        "_row_num": 167
+        "constraint": "not(selected(data('travel_countries'), 'none')) || (selected(data('travel_countries'), 'none') && countSelected(data('travel_countries')) === 1)",
+        "_row_num": 173
       },
       {
         "clause": "end if",
-        "_row_num": 168
+        "_row_num": 174
       },
       {
         "type": "note",
         "display": {
           "prompt": "travel_regular_h3"
         },
-        "_row_num": 169
+        "_row_num": 175
       },
       {
         "type": "select_one",
@@ -1092,13 +1128,12 @@
         "display": {
           "prompt": "ind_q33"
         },
-        "required": 1,
-        "_row_num": 170
+        "_row_num": 176
       },
       {
         "clause": "if",
         "condition": "selected(data('travel_regularly'), 'yes')",
-        "_row_num": 171
+        "_row_num": 177
       },
       {
         "type": "integer",
@@ -1107,14 +1142,14 @@
           "prompt": "ind_q33a"
         },
         "required": "selected(data('travel_regularly'), 'yes')",
-        "_row_num": 172
+        "_row_num": 178
       },
       {
         "type": "note",
         "display": {
           "prompt": "travel_prompt"
         },
-        "_row_num": 173
+        "_row_num": 179
       },
       {
         "type": "linked_table_counting",
@@ -1130,15 +1165,15 @@
           "isSessionVariable": 1,
           "valuesList": "hh_member_travel"
         },
-        "_row_num": 174
+        "_row_num": 180
       },
       {
         "clause": "end if",
-        "_row_num": 175
+        "_row_num": 181
       },
       {
         "clause": "end screen",
-        "_row_num": 176
+        "_row_num": 182
       }
     ],
     "queries": [
@@ -3940,8 +3975,7 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path",
-      "hideInContents": "formula"
+      "templatePath": "requirejs_path"
     },
     "settings": {
       "form_id": {
@@ -7250,7 +7284,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 105,
+            "_row_num": 108,
             "section_name": "survey"
           },
           {
@@ -7269,7 +7303,7 @@
         "valuesList": "form_of_care",
         "_defn": [
           {
-            "_row_num": 107,
+            "_row_num": 110,
             "section_name": "survey"
           },
           {
@@ -7283,7 +7317,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 109,
+            "_row_num": 112,
             "section_name": "survey"
           },
           {
@@ -7298,7 +7332,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 111,
+            "_row_num": 114,
             "section_name": "survey"
           },
           {
@@ -7313,7 +7347,7 @@
         "valuesList": "malaria_test_result",
         "_defn": [
           {
-            "_row_num": 113,
+            "_row_num": 116,
             "section_name": "survey"
           },
           {
@@ -7328,7 +7362,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 115,
+            "_row_num": 118,
             "section_name": "survey"
           },
           {
@@ -7343,7 +7377,7 @@
         "valuesList": "malaria_no_treatment",
         "_defn": [
           {
-            "_row_num": 117,
+            "_row_num": 120,
             "section_name": "survey"
           },
           {
@@ -7362,7 +7396,7 @@
         "valuesList": "disability",
         "_defn": [
           {
-            "_row_num": 123,
+            "_row_num": 126,
             "section_name": "survey"
           },
           {
@@ -7381,7 +7415,7 @@
         "valuesList": "itchy",
         "_defn": [
           {
-            "_row_num": 125,
+            "_row_num": 128,
             "section_name": "survey"
           },
           {
@@ -7396,7 +7430,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 126,
+            "_row_num": 129,
             "section_name": "survey"
           },
           {
@@ -7411,7 +7445,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 127,
+            "_row_num": 130,
             "section_name": "survey"
           },
           {
@@ -7426,7 +7460,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 128,
+            "_row_num": 131,
             "section_name": "survey"
           },
           {
@@ -7441,7 +7475,7 @@
         "valuesList": "lmp",
         "_defn": [
           {
-            "_row_num": 133,
+            "_row_num": 136,
             "section_name": "survey"
           },
           {
@@ -7456,7 +7490,7 @@
         "valuesList": "breastfeed",
         "_defn": [
           {
-            "_row_num": 134,
+            "_row_num": 137,
             "section_name": "survey"
           },
           {
@@ -7471,7 +7505,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 135,
+            "_row_num": 138,
             "section_name": "survey"
           },
           {
@@ -7486,7 +7520,7 @@
         "valuesList": "iptp_current",
         "_defn": [
           {
-            "_row_num": 140,
+            "_row_num": 143,
             "section_name": "survey"
           },
           {
@@ -7501,7 +7535,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 144,
+            "_row_num": 147,
             "section_name": "survey"
           },
           {
@@ -7514,10 +7548,6 @@
       "sleep_net_last_night_num": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 146,
-            "section_name": "survey"
-          },
           {
             "_row_num": 92,
             "section_name": "model"
@@ -7533,7 +7563,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 147,
+            "_row_num": 153,
             "section_name": "survey"
           },
           {
@@ -7548,7 +7578,7 @@
         "valuesList": "time_indoors",
         "_defn": [
           {
-            "_row_num": 152,
+            "_row_num": 158,
             "section_name": "survey"
           },
           {
@@ -7563,7 +7593,7 @@
         "valuesList": "time_bed",
         "_defn": [
           {
-            "_row_num": 153,
+            "_row_num": 159,
             "section_name": "survey"
           },
           {
@@ -7582,7 +7612,7 @@
         "valuesList": "before_bed_activity",
         "_defn": [
           {
-            "_row_num": 154,
+            "_row_num": 160,
             "section_name": "survey"
           },
           {
@@ -7597,7 +7627,7 @@
         "valuesList": "time_awake",
         "_defn": [
           {
-            "_row_num": 155,
+            "_row_num": 161,
             "section_name": "survey"
           },
           {
@@ -7612,7 +7642,7 @@
         "valuesList": "time_outdoors",
         "_defn": [
           {
-            "_row_num": 156,
+            "_row_num": 162,
             "section_name": "survey"
           },
           {
@@ -7631,7 +7661,7 @@
         "valuesList": "before_sunrise_activity",
         "_defn": [
           {
-            "_row_num": 158,
+            "_row_num": 164,
             "section_name": "survey"
           },
           {
@@ -7646,7 +7676,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 165,
+            "_row_num": 171,
             "section_name": "survey"
           },
           {
@@ -7665,7 +7695,7 @@
         "valuesList": "travel_countries",
         "_defn": [
           {
-            "_row_num": 167,
+            "_row_num": 173,
             "section_name": "survey"
           },
           {
@@ -7680,7 +7710,7 @@
         "valuesList": "ynpna",
         "_defn": [
           {
-            "_row_num": 170,
+            "_row_num": 176,
             "section_name": "survey"
           },
           {
@@ -7694,7 +7724,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 172,
+            "_row_num": 178,
             "section_name": "survey"
           },
           {
@@ -7704,10 +7734,20 @@
         ],
         "elementKey": "travel_regularly_trips"
       },
+      "sleep_net_last_night_num_enter": {
+        "_defn": [
+          {
+            "_row_num": 151,
+            "section_name": "survey"
+          }
+        ],
+        "type": "integer",
+        "elementKey": "sleep_net_last_night_num_enter"
+      },
       "trip_count": {
         "_defn": [
           {
-            "_row_num": 174,
+            "_row_num": 180,
             "section_name": "survey"
           }
         ],
@@ -8322,8 +8362,10 @@
             "values_list": "treatment",
             "name": "ind_treatment",
             "display": {
-              "prompt": "ind_q12"
+              "prompt": "ind_q12",
+              "constraint_message": "w_dk_pna"
             },
+            "constraint": "(not(selected(data('ind_treatment'), 'pna')) || (selected(data('ind_treatment'), 'pna') && countSelected(data('ind_treatment')) === 1)) && (not(selected(data('ind_treatment'), 'dk')) || (selected(data('ind_treatment'), 'dk') && countSelected(data('ind_treatment')) === 1))",
             "_row_num": 84,
             "__rowNum__": 83,
             "_token_type": "prompt",
@@ -8348,8 +8390,10 @@
             "values_list": "chronic_disease",
             "name": "ind_chronic_disease",
             "display": {
-              "prompt": "ind_q13"
+              "prompt": "ind_q13",
+              "constraint_message": "w_no_pna"
             },
+            "constraint": "(not(selected(data('ind_chronic_disease'), 'pna')) || (selected(data('ind_chronic_disease'), 'pna') && countSelected(data('ind_chronic_disease')) === 1)) && (not(selected(data('ind_chronic_disease'), 'no')) || (selected(data('ind_chronic_disease'), 'no') && countSelected(data('ind_chronic_disease')) === 1))",
             "_row_num": 88,
             "__rowNum__": 87,
             "_token_type": "prompt",
@@ -8428,8 +8472,10 @@
             "values_list": "other_symptoms",
             "name": "recent_disease_symptoms",
             "display": {
-              "prompt": "ind_q16"
+              "prompt": "ind_q16",
+              "constraint_message": "w_no_symptoms"
             },
+            "constraint": "not(selected(data('recent_disease_symptoms'), 'No_symptoms')) || (selected(data('recent_disease_symptoms'), 'No_symptoms') && countSelected(data('recent_disease_symptoms')) === 1)",
             "_row_num": 101,
             "__rowNum__": 100,
             "_token_type": "prompt",
@@ -8451,18 +8497,31 @@
             "promptIdx": 44
           },
           {
+            "type": "note",
+            "name": "recent_disease_warning",
+            "display": {
+              "prompt": "w_fever_di"
+            },
+            "_row_num": 106,
+            "__rowNum__": 105,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen93",
+            "promptIdx": 45
+          },
+          {
             "type": "select_one",
             "values_list": "yn",
             "name": "recent_disease_seek_care",
             "display": {
               "prompt": "ind_q17"
             },
-            "_row_num": 105,
-            "__rowNum__": 104,
+            "_row_num": 108,
+            "__rowNum__": 107,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen93",
-            "promptIdx": 45
+            "promptIdx": 46
           },
           {
             "type": "select_multiple",
@@ -8471,12 +8530,12 @@
             "display": {
               "prompt": "ind_q17a"
             },
-            "_row_num": 107,
-            "__rowNum__": 106,
+            "_row_num": 110,
+            "__rowNum__": 109,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen93",
-            "promptIdx": 46
+            "promptIdx": 47
           },
           {
             "type": "text",
@@ -8484,12 +8543,12 @@
             "display": {
               "prompt": "specify"
             },
-            "_row_num": 109,
-            "__rowNum__": 108,
+            "_row_num": 112,
+            "__rowNum__": 111,
             "_token_type": "prompt",
             "_type": "text",
             "_branch_label_enclosing_screen": "survey/_screen93",
-            "promptIdx": 47
+            "promptIdx": 48
           },
           {
             "type": "select_one",
@@ -8498,12 +8557,12 @@
             "display": {
               "prompt": "ind_q17b"
             },
-            "_row_num": 111,
-            "__rowNum__": 110,
+            "_row_num": 114,
+            "__rowNum__": 113,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen93",
-            "promptIdx": 48
+            "promptIdx": 49
           },
           {
             "type": "select_one",
@@ -8512,12 +8571,12 @@
             "display": {
               "prompt": "ind_q17bi"
             },
-            "_row_num": 113,
-            "__rowNum__": 112,
+            "_row_num": 116,
+            "__rowNum__": 115,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen93",
-            "promptIdx": 49
+            "promptIdx": 50
           },
           {
             "type": "select_one",
@@ -8526,12 +8585,12 @@
             "display": {
               "prompt": "ind_q17c"
             },
-            "_row_num": 115,
-            "__rowNum__": 114,
+            "_row_num": 118,
+            "__rowNum__": 117,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen93",
-            "promptIdx": 50
+            "promptIdx": 51
           },
           {
             "type": "select_one",
@@ -8540,12 +8599,12 @@
             "display": {
               "prompt": "ind_q17ci"
             },
-            "_row_num": 117,
-            "__rowNum__": 116,
+            "_row_num": 120,
+            "__rowNum__": 119,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen93",
-            "promptIdx": 51
+            "promptIdx": 52
           },
           {
             "type": "select_multiple",
@@ -8553,28 +8612,27 @@
             "name": "ind_deficiency",
             "display": {
               "prompt": "ind_q18",
-              "constraint_message": {
-                "text": "You selected \"None\" or \"Prefer not to answer\", so you cannot select other options."
-              }
+              "constraint_message": "w_none_pna"
             },
-            "_row_num": 123,
-            "__rowNum__": 122,
+            "constraint": "(not(selected(data('ind_deficiency'), 'pna')) || (selected(data('ind_deficiency'), 'pna') && countSelected(data('ind_deficiency')) === 1)) && (not(selected(data('ind_deficiency'), 'none')) || (selected(data('ind_deficiency'), 'none') && countSelected(data('ind_deficiency')) === 1))",
+            "_row_num": 126,
+            "__rowNum__": 125,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen122",
-            "promptIdx": 52
+            "_branch_label_enclosing_screen": "survey/_screen125",
+            "promptIdx": 53
           },
           {
             "type": "note",
             "display": {
               "prompt": "ntd_h3"
             },
-            "_row_num": 124,
-            "__rowNum__": 123,
+            "_row_num": 127,
+            "__rowNum__": 126,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen122",
-            "promptIdx": 53
+            "_branch_label_enclosing_screen": "survey/_screen125",
+            "promptIdx": 54
           },
           {
             "type": "select_multiple",
@@ -8582,16 +8640,15 @@
             "name": "ind_itchy",
             "display": {
               "prompt": "ind_q19",
-              "constraint_message": {
-                "text": "You selected \"No\" or \"Prefer not to answer\", so you cannot select other options."
-              }
+              "constraint_message": "w_no_pna"
             },
-            "_row_num": 125,
-            "__rowNum__": 124,
+            "constraint": "(not(selected(data('ind_itchy'), 'pna')) || (selected(data('ind_itchy'), 'pna') && countSelected(data('ind_itchy')) === 1)) && (not(selected(data('ind_itchy'), 'no')) || (selected(data('ind_itchy'), 'no') && countSelected(data('ind_itchy')) === 1))",
+            "_row_num": 128,
+            "__rowNum__": 127,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen122",
-            "promptIdx": 54
+            "_branch_label_enclosing_screen": "survey/_screen125",
+            "promptIdx": 55
           },
           {
             "type": "select_one",
@@ -8600,12 +8657,12 @@
             "display": {
               "prompt": "ind_q20"
             },
-            "_row_num": 126,
-            "__rowNum__": 125,
+            "_row_num": 129,
+            "__rowNum__": 128,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen122",
-            "promptIdx": 55
+            "_branch_label_enclosing_screen": "survey/_screen125",
+            "promptIdx": 56
           },
           {
             "type": "select_one",
@@ -8614,12 +8671,12 @@
             "display": {
               "prompt": "ind_q21"
             },
-            "_row_num": 127,
-            "__rowNum__": 126,
+            "_row_num": 130,
+            "__rowNum__": 129,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen122",
-            "promptIdx": 56
+            "_branch_label_enclosing_screen": "survey/_screen125",
+            "promptIdx": 57
           },
           {
             "type": "select_one",
@@ -8628,24 +8685,24 @@
             "display": {
               "prompt": "ind_q22"
             },
-            "_row_num": 128,
-            "__rowNum__": 127,
+            "_row_num": 131,
+            "__rowNum__": 130,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen122",
-            "promptIdx": 57
+            "_branch_label_enclosing_screen": "survey/_screen125",
+            "promptIdx": 58
           },
           {
             "type": "note",
             "display": {
               "prompt": "wra_h3"
             },
-            "_row_num": 132,
-            "__rowNum__": 131,
+            "_row_num": 135,
+            "__rowNum__": 134,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 58
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 59
           },
           {
             "type": "select_one",
@@ -8654,12 +8711,12 @@
             "display": {
               "prompt": "ind_q23"
             },
-            "_row_num": 133,
-            "__rowNum__": 132,
+            "_row_num": 136,
+            "__rowNum__": 135,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 59
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 60
           },
           {
             "type": "select_one",
@@ -8668,12 +8725,12 @@
             "display": {
               "prompt": "ind_q24"
             },
-            "_row_num": 134,
-            "__rowNum__": 133,
+            "_row_num": 137,
+            "__rowNum__": 136,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 60
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 61
           },
           {
             "type": "select_one",
@@ -8682,24 +8739,24 @@
             "display": {
               "prompt": "ind_q25"
             },
-            "_row_num": 135,
-            "__rowNum__": 134,
+            "_row_num": 138,
+            "__rowNum__": 137,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 61
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 62
           },
           {
             "type": "note",
             "display": {
               "prompt": "w_lmp"
             },
-            "_row_num": 138,
-            "__rowNum__": 137,
+            "_row_num": 141,
+            "__rowNum__": 140,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 62
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 63
           },
           {
             "type": "select_one",
@@ -8708,24 +8765,24 @@
             "display": {
               "prompt": "ind_q25a"
             },
-            "_row_num": 140,
-            "__rowNum__": 139,
+            "_row_num": 143,
+            "__rowNum__": 142,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 63
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 64
           },
           {
             "type": "note",
             "display": {
               "prompt": "malaria_h2"
             },
-            "_row_num": 143,
-            "__rowNum__": 142,
+            "_row_num": 146,
+            "__rowNum__": 145,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 64
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 65
           },
           {
             "type": "select_one",
@@ -8734,52 +8791,64 @@
             "display": {
               "prompt": "ind_q26"
             },
-            "_row_num": 144,
-            "__rowNum__": 143,
+            "_row_num": 147,
+            "__rowNum__": 146,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 65
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 66
+          },
+          {
+            "type": "note",
+            "name": "sleep_net_last_night_num",
+            "display": {
+              "prompt": "ind_q26a"
+            },
+            "_row_num": 149,
+            "__rowNum__": 148,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 67
           },
           {
             "type": "integer",
-            "name": "sleep_net_last_night_num",
+            "name": "sleep_net_last_night_num_enter",
             "display": {
-              "prompt": "ind_q26a",
-              "constraint_message": {
-                "text": "(0= alone, 2= two under the net, 3= three under the net, etc. 1 not allowed)"
-              }
+              "prompt": "n_nets",
+              "constraint_message": "not_one"
             },
+            "required": "not(selected(data('sleep_net_last_night_num_dk'), 'dk'))",
             "constraint": "data('sleep_net_last_night_num') !== 1",
-            "_row_num": 146,
-            "__rowNum__": 145,
+            "_row_num": 151,
+            "__rowNum__": 150,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 66
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 68
           },
           {
             "type": "select_multiple",
             "values_list": "dk",
             "name": "sleep_net_last_night_num_dk",
-            "_row_num": 147,
-            "__rowNum__": 146,
+            "_row_num": 153,
+            "__rowNum__": 152,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen130",
-            "promptIdx": 67
+            "_branch_label_enclosing_screen": "survey/_screen133",
+            "promptIdx": 69
           },
           {
             "type": "note",
             "display": {
               "prompt": "residual_h2"
             },
-            "_row_num": 151,
-            "__rowNum__": 150,
+            "_row_num": 157,
+            "__rowNum__": 156,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen150",
-            "promptIdx": 68
+            "_branch_label_enclosing_screen": "survey/_screen156",
+            "promptIdx": 70
           },
           {
             "type": "select_one",
@@ -8788,12 +8857,12 @@
             "display": {
               "prompt": "ind_q27"
             },
-            "_row_num": 152,
-            "__rowNum__": 151,
+            "_row_num": 158,
+            "__rowNum__": 157,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen150",
-            "promptIdx": 69
+            "_branch_label_enclosing_screen": "survey/_screen156",
+            "promptIdx": 71
           },
           {
             "type": "select_one",
@@ -8802,12 +8871,12 @@
             "display": {
               "prompt": "ind_q28"
             },
-            "_row_num": 153,
-            "__rowNum__": 152,
+            "_row_num": 159,
+            "__rowNum__": 158,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen150",
-            "promptIdx": 70
+            "_branch_label_enclosing_screen": "survey/_screen156",
+            "promptIdx": 72
           },
           {
             "type": "select_multiple",
@@ -8816,12 +8885,12 @@
             "display": {
               "prompt": "ind_q29"
             },
-            "_row_num": 154,
-            "__rowNum__": 153,
+            "_row_num": 160,
+            "__rowNum__": 159,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen150",
-            "promptIdx": 71
+            "_branch_label_enclosing_screen": "survey/_screen156",
+            "promptIdx": 73
           },
           {
             "type": "select_one",
@@ -8830,12 +8899,12 @@
             "display": {
               "prompt": "ind_q30"
             },
-            "_row_num": 155,
-            "__rowNum__": 154,
+            "_row_num": 161,
+            "__rowNum__": 160,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen150",
-            "promptIdx": 72
+            "_branch_label_enclosing_screen": "survey/_screen156",
+            "promptIdx": 74
           },
           {
             "type": "select_one",
@@ -8844,12 +8913,12 @@
             "display": {
               "prompt": "ind_q31"
             },
-            "_row_num": 156,
-            "__rowNum__": 155,
+            "_row_num": 162,
+            "__rowNum__": 161,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen150",
-            "promptIdx": 73
+            "_branch_label_enclosing_screen": "survey/_screen156",
+            "promptIdx": 75
           },
           {
             "type": "select_multiple",
@@ -8858,36 +8927,36 @@
             "display": {
               "prompt": "ind_q31a"
             },
-            "_row_num": 158,
-            "__rowNum__": 157,
+            "_row_num": 164,
+            "__rowNum__": 163,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen150",
-            "promptIdx": 74
+            "_branch_label_enclosing_screen": "survey/_screen156",
+            "promptIdx": 76
           },
           {
             "type": "note",
             "display": {
               "prompt": "travel_h2"
             },
-            "_row_num": 163,
-            "__rowNum__": 162,
+            "_row_num": 169,
+            "__rowNum__": 168,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen161",
-            "promptIdx": 75
+            "_branch_label_enclosing_screen": "survey/_screen167",
+            "promptIdx": 77
           },
           {
             "type": "note",
             "display": {
               "prompt": "travel_loa_h3"
             },
-            "_row_num": 164,
-            "__rowNum__": 163,
+            "_row_num": 170,
+            "__rowNum__": 169,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen161",
-            "promptIdx": 76
+            "_branch_label_enclosing_screen": "survey/_screen167",
+            "promptIdx": 78
           },
           {
             "type": "select_one",
@@ -8896,12 +8965,12 @@
             "display": {
               "prompt": "ind_q32"
             },
-            "_row_num": 165,
-            "__rowNum__": 164,
+            "_row_num": 171,
+            "__rowNum__": 170,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen161",
-            "promptIdx": 77
+            "_branch_label_enclosing_screen": "survey/_screen167",
+            "promptIdx": 79
           },
           {
             "type": "select_multiple",
@@ -8909,28 +8978,27 @@
             "name": "travel_countries",
             "display": {
               "prompt": "ind_q32a",
-              "constraint_message": {
-                "text": "You selected \"None\", so you cannot select other options."
-              }
+              "constraint_message": "w_none"
             },
-            "_row_num": 167,
-            "__rowNum__": 166,
+            "constraint": "not(selected(data('travel_countries'), 'none')) || (selected(data('travel_countries'), 'none') && countSelected(data('travel_countries')) === 1)",
+            "_row_num": 173,
+            "__rowNum__": 172,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen161",
-            "promptIdx": 78
+            "_branch_label_enclosing_screen": "survey/_screen167",
+            "promptIdx": 80
           },
           {
             "type": "note",
             "display": {
               "prompt": "travel_regular_h3"
             },
-            "_row_num": 169,
-            "__rowNum__": 168,
+            "_row_num": 175,
+            "__rowNum__": 174,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen161",
-            "promptIdx": 79
+            "_branch_label_enclosing_screen": "survey/_screen167",
+            "promptIdx": 81
           },
           {
             "type": "select_one",
@@ -8939,13 +9007,12 @@
             "display": {
               "prompt": "ind_q33"
             },
-            "required": 1,
-            "_row_num": 170,
-            "__rowNum__": 169,
+            "_row_num": 176,
+            "__rowNum__": 175,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen161",
-            "promptIdx": 80
+            "_branch_label_enclosing_screen": "survey/_screen167",
+            "promptIdx": 82
           },
           {
             "type": "integer",
@@ -8954,24 +9021,24 @@
               "prompt": "ind_q33a"
             },
             "required": "selected(data('travel_regularly'), 'yes')",
-            "_row_num": 172,
-            "__rowNum__": 171,
+            "_row_num": 178,
+            "__rowNum__": 177,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen161",
-            "promptIdx": 81
+            "_branch_label_enclosing_screen": "survey/_screen167",
+            "promptIdx": 83
           },
           {
             "type": "note",
             "display": {
               "prompt": "travel_prompt"
             },
-            "_row_num": 173,
-            "__rowNum__": 172,
+            "_row_num": 179,
+            "__rowNum__": 178,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen161",
-            "promptIdx": 82
+            "_branch_label_enclosing_screen": "survey/_screen167",
+            "promptIdx": 84
           },
           {
             "type": "linked_table_counting",
@@ -8987,20 +9054,20 @@
               "isSessionVariable": 1,
               "valuesList": "hh_member_travel"
             },
-            "_row_num": 174,
-            "__rowNum__": 173,
+            "_row_num": 180,
+            "__rowNum__": 179,
             "_token_type": "prompt",
             "_type": "linked_table_counting",
-            "_branch_label_enclosing_screen": "survey/_screen161",
-            "promptIdx": 83
+            "_branch_label_enclosing_screen": "survey/_screen167",
+            "promptIdx": 85
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 177,
-            "_branch_label_enclosing_screen": "survey/_screen177",
-            "promptIdx": 84
+            "_row_num": 183,
+            "_branch_label_enclosing_screen": "survey/_screen183",
+            "promptIdx": 86
           }
         ],
         "validation_tag_map": {
@@ -9011,10 +9078,15 @@
             8,
             10,
             12,
-            66,
+            35,
+            37,
+            43,
+            53,
+            55,
+            68,
             80,
-            81,
-            83
+            83,
+            85
           ]
         },
         "operations": [
@@ -9095,79 +9167,79 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 121,
-              "__rowNum__": 120,
+              "_row_num": 124,
+              "__rowNum__": 123,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(39);\nactivePromptIndicies.push(40);\nif (selected(data('ind_recent_disease'), 'yes')) {\nactivePromptIndicies.push(41);\nif (selected(data('recent_disease_yes'), 'other')) {\nactivePromptIndicies.push(42);\n}\nactivePromptIndicies.push(43);\nif (selected(data('recent_disease_symptoms'), 'other')) {\nactivePromptIndicies.push(44);\n}\nactivePromptIndicies.push(45);\nif (selected(data('recent_disease_seek_care'), 'yes')) {\nactivePromptIndicies.push(46);\nif (selected(data('recent_disease_care_type'), 'other')) {\nactivePromptIndicies.push(47);\n}\nactivePromptIndicies.push(48);\nif (selected(data('ind_malaria_test'), 'yes')) {\nactivePromptIndicies.push(49);\n}\nactivePromptIndicies.push(50);\nif (selected(data('ind_malaria_treatment'), 'no')) {\nactivePromptIndicies.push(51);\n}\n}\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(39);\nactivePromptIndicies.push(40);\nif (selected(data('ind_recent_disease'), 'yes')) {\nactivePromptIndicies.push(41);\nif (selected(data('recent_disease_yes'), 'other')) {\nactivePromptIndicies.push(42);\n}\nactivePromptIndicies.push(43);\nif (selected(data('recent_disease_symptoms'), 'other')) {\nactivePromptIndicies.push(44);\n}\nif ((selected(data('recent_disease_yes'), 'Diarrhoea') && not(selected(data('recent_disease_symptoms'), 'Diarrhoea'))) || (selected(data('recent_disease_yes'), 'Fever') && not(selected(data('recent_disease_symptoms'), 'Fever')))) {\nactivePromptIndicies.push(45);\n}\nactivePromptIndicies.push(46);\nif (selected(data('recent_disease_seek_care'), 'yes')) {\nactivePromptIndicies.push(47);\nif (selected(data('recent_disease_care_type'), 'other')) {\nactivePromptIndicies.push(48);\n}\nactivePromptIndicies.push(49);\nif (selected(data('ind_malaria_test'), 'yes')) {\nactivePromptIndicies.push(50);\n}\nactivePromptIndicies.push(51);\nif (selected(data('ind_malaria_treatment'), 'no')) {\nactivePromptIndicies.push(52);\n}\n}\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 5
           },
           {
             "clause": "begin screen",
-            "_row_num": 122,
-            "__rowNum__": 121,
+            "_row_num": 125,
+            "__rowNum__": 124,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 129,
-              "__rowNum__": 128,
+              "_row_num": 132,
+              "__rowNum__": 131,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(52);\nactivePromptIndicies.push(53);\nactivePromptIndicies.push(54);\nactivePromptIndicies.push(55);\nactivePromptIndicies.push(56);\nactivePromptIndicies.push(57);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(53);\nactivePromptIndicies.push(54);\nactivePromptIndicies.push(55);\nactivePromptIndicies.push(56);\nactivePromptIndicies.push(57);\nactivePromptIndicies.push(58);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 6
           },
           {
             "clause": "begin screen",
-            "_row_num": 130,
-            "__rowNum__": 129,
+            "_row_num": 133,
+            "__rowNum__": 132,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 149,
-              "__rowNum__": 148,
+              "_row_num": 155,
+              "__rowNum__": 154,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nif (selected(data('gender'), 'female') && calculates.check_female_reproductive_age()) {\nactivePromptIndicies.push(58);\nactivePromptIndicies.push(59);\nactivePromptIndicies.push(60);\nactivePromptIndicies.push(61);\nif (selected(data('wra_pregnant'), 'yes')) {\nif (selected(data('wra_period'), 'Less_than_two_weeks_ago')) {\nactivePromptIndicies.push(62);\n}\nactivePromptIndicies.push(63);\n}\n}\nactivePromptIndicies.push(64);\nactivePromptIndicies.push(65);\nif (selected(data('sleep_net_last_night'), 'yes')) {\nactivePromptIndicies.push(66);\nactivePromptIndicies.push(67);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nif (selected(data('gender'), 'female') && calculates.check_female_reproductive_age()) {\nactivePromptIndicies.push(59);\nactivePromptIndicies.push(60);\nactivePromptIndicies.push(61);\nactivePromptIndicies.push(62);\nif (selected(data('wra_pregnant'), 'yes')) {\nif (selected(data('wra_period'), 'Less_than_two_weeks_ago')) {\nactivePromptIndicies.push(63);\n}\nactivePromptIndicies.push(64);\n}\n}\nactivePromptIndicies.push(65);\nactivePromptIndicies.push(66);\nif (selected(data('sleep_net_last_night'), 'yes')) {\nactivePromptIndicies.push(67);\nif (not(selected(data('sleep_net_last_night_num_dk'), 'dk'))) {\nactivePromptIndicies.push(68);\n}\nactivePromptIndicies.push(69);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 7
           },
           {
             "clause": "begin screen",
-            "_row_num": 150,
-            "__rowNum__": 149,
+            "_row_num": 156,
+            "__rowNum__": 155,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 160,
-              "__rowNum__": 159,
+              "_row_num": 166,
+              "__rowNum__": 165,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(68);\nactivePromptIndicies.push(69);\nactivePromptIndicies.push(70);\nactivePromptIndicies.push(71);\nactivePromptIndicies.push(72);\nactivePromptIndicies.push(73);\nif (selected(data('time_go_outside'), '>4h before sunrise') || selected(data('time_go_outside'), '2-4h before sunrise') || selected(data('time_go_outside'), '1-2h before sunrise')) {\nactivePromptIndicies.push(74);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(70);\nactivePromptIndicies.push(71);\nactivePromptIndicies.push(72);\nactivePromptIndicies.push(73);\nactivePromptIndicies.push(74);\nactivePromptIndicies.push(75);\nif (selected(data('time_go_outside'), '>4h before sunrise') || selected(data('time_go_outside'), '2-4h before sunrise') || selected(data('time_go_outside'), '1-2h before sunrise')) {\nactivePromptIndicies.push(76);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 8
           },
           {
             "clause": "begin screen",
-            "_row_num": 161,
-            "__rowNum__": 160,
+            "_row_num": 167,
+            "__rowNum__": 166,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 176,
-              "__rowNum__": 175,
+              "_row_num": 182,
+              "__rowNum__": 181,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(75);\nactivePromptIndicies.push(76);\nactivePromptIndicies.push(77);\nif (selected(data('travel_abroad'), 'yes')) {\nactivePromptIndicies.push(78);\n}\nactivePromptIndicies.push(79);\nactivePromptIndicies.push(80);\nif (selected(data('travel_regularly'), 'yes')) {\nactivePromptIndicies.push(81);\nactivePromptIndicies.push(82);\nactivePromptIndicies.push(83);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(77);\nactivePromptIndicies.push(78);\nactivePromptIndicies.push(79);\nif (selected(data('travel_abroad'), 'yes')) {\nactivePromptIndicies.push(80);\n}\nactivePromptIndicies.push(81);\nactivePromptIndicies.push(82);\nif (selected(data('travel_regularly'), 'yes')) {\nactivePromptIndicies.push(83);\nactivePromptIndicies.push(84);\nactivePromptIndicies.push(85);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 9
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 177,
+            "_row_num": 183,
             "operationIdx": 10
           },
           {
-            "_row_num": 177,
+            "_row_num": 183,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(84);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(86);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -9176,7 +9248,7 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 177,
+            "_row_num": 183,
             "operationIdx": 12
           }
         ],
@@ -9187,12 +9259,12 @@
           "_screen81": 3,
           "_screen86": 4,
           "_screen93": 5,
-          "_screen122": 6,
-          "_screen130": 7,
-          "_screen150": 8,
-          "_screen161": 9,
+          "_screen125": 6,
+          "_screen133": 7,
+          "_screen156": 8,
+          "_screen167": 9,
           "_contents": 11,
-          "_screen177": 11
+          "_screen183": 11
         }
       }
     },
@@ -10491,7 +10563,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 105,
+            "_row_num": 108,
             "section_name": "survey"
           },
           {
@@ -10517,7 +10589,7 @@
         "valuesList": "form_of_care",
         "_defn": [
           {
-            "_row_num": 107,
+            "_row_num": 110,
             "section_name": "survey"
           },
           {
@@ -10537,7 +10609,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 109,
+            "_row_num": 112,
             "section_name": "survey"
           },
           {
@@ -10555,7 +10627,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 111,
+            "_row_num": 114,
             "section_name": "survey"
           },
           {
@@ -10573,7 +10645,7 @@
         "valuesList": "malaria_test_result",
         "_defn": [
           {
-            "_row_num": 113,
+            "_row_num": 116,
             "section_name": "survey"
           },
           {
@@ -10591,7 +10663,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 115,
+            "_row_num": 118,
             "section_name": "survey"
           },
           {
@@ -10609,7 +10681,7 @@
         "valuesList": "malaria_no_treatment",
         "_defn": [
           {
-            "_row_num": 117,
+            "_row_num": 120,
             "section_name": "survey"
           },
           {
@@ -10635,7 +10707,7 @@
         "valuesList": "disability",
         "_defn": [
           {
-            "_row_num": 123,
+            "_row_num": 126,
             "section_name": "survey"
           },
           {
@@ -10664,7 +10736,7 @@
         "valuesList": "itchy",
         "_defn": [
           {
-            "_row_num": 125,
+            "_row_num": 128,
             "section_name": "survey"
           },
           {
@@ -10685,7 +10757,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 126,
+            "_row_num": 129,
             "section_name": "survey"
           },
           {
@@ -10703,7 +10775,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 127,
+            "_row_num": 130,
             "section_name": "survey"
           },
           {
@@ -10721,7 +10793,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 128,
+            "_row_num": 131,
             "section_name": "survey"
           },
           {
@@ -10739,7 +10811,7 @@
         "valuesList": "lmp",
         "_defn": [
           {
-            "_row_num": 133,
+            "_row_num": 136,
             "section_name": "survey"
           },
           {
@@ -10757,7 +10829,7 @@
         "valuesList": "breastfeed",
         "_defn": [
           {
-            "_row_num": 134,
+            "_row_num": 137,
             "section_name": "survey"
           },
           {
@@ -10775,7 +10847,7 @@
         "valuesList": "yndkpna",
         "_defn": [
           {
-            "_row_num": 135,
+            "_row_num": 138,
             "section_name": "survey"
           },
           {
@@ -10793,7 +10865,7 @@
         "valuesList": "iptp_current",
         "_defn": [
           {
-            "_row_num": 140,
+            "_row_num": 143,
             "section_name": "survey"
           },
           {
@@ -10811,7 +10883,7 @@
         "valuesList": "yndk",
         "_defn": [
           {
-            "_row_num": 144,
+            "_row_num": 147,
             "section_name": "survey"
           },
           {
@@ -10827,10 +10899,6 @@
       "sleep_net_last_night_num": {
         "type": "integer",
         "_defn": [
-          {
-            "_row_num": 146,
-            "section_name": "survey"
-          },
           {
             "_row_num": 92,
             "section_name": "model"
@@ -10849,7 +10917,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 147,
+            "_row_num": 153,
             "section_name": "survey"
           },
           {
@@ -10867,7 +10935,7 @@
         "valuesList": "time_indoors",
         "_defn": [
           {
-            "_row_num": 152,
+            "_row_num": 158,
             "section_name": "survey"
           },
           {
@@ -10885,7 +10953,7 @@
         "valuesList": "time_bed",
         "_defn": [
           {
-            "_row_num": 153,
+            "_row_num": 159,
             "section_name": "survey"
           },
           {
@@ -10911,7 +10979,7 @@
         "valuesList": "before_bed_activity",
         "_defn": [
           {
-            "_row_num": 154,
+            "_row_num": 160,
             "section_name": "survey"
           },
           {
@@ -10932,7 +11000,7 @@
         "valuesList": "time_awake",
         "_defn": [
           {
-            "_row_num": 155,
+            "_row_num": 161,
             "section_name": "survey"
           },
           {
@@ -10950,7 +11018,7 @@
         "valuesList": "time_outdoors",
         "_defn": [
           {
-            "_row_num": 156,
+            "_row_num": 162,
             "section_name": "survey"
           },
           {
@@ -10976,7 +11044,7 @@
         "valuesList": "before_sunrise_activity",
         "_defn": [
           {
-            "_row_num": 158,
+            "_row_num": 164,
             "section_name": "survey"
           },
           {
@@ -10997,7 +11065,7 @@
         "valuesList": "yn",
         "_defn": [
           {
-            "_row_num": 165,
+            "_row_num": 171,
             "section_name": "survey"
           },
           {
@@ -11023,7 +11091,7 @@
         "valuesList": "travel_countries",
         "_defn": [
           {
-            "_row_num": 167,
+            "_row_num": 173,
             "section_name": "survey"
           },
           {
@@ -11044,7 +11112,7 @@
         "valuesList": "ynpna",
         "_defn": [
           {
-            "_row_num": 170,
+            "_row_num": 176,
             "section_name": "survey"
           },
           {
@@ -11061,7 +11129,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 172,
+            "_row_num": 178,
             "section_name": "survey"
           },
           {
@@ -11074,10 +11142,23 @@
         "elementSet": "data",
         "elementPath": "travel_regularly_trips"
       },
+      "sleep_net_last_night_num_enter": {
+        "_defn": [
+          {
+            "_row_num": 151,
+            "section_name": "survey"
+          }
+        ],
+        "type": "integer",
+        "elementKey": "sleep_net_last_night_num_enter",
+        "elementName": "sleep_net_last_night_num_enter",
+        "elementSet": "data",
+        "elementPath": "sleep_net_last_night_num_enter"
+      },
       "trip_count": {
         "_defn": [
           {
-            "_row_num": 174,
+            "_row_num": 180,
             "section_name": "survey"
           }
         ],

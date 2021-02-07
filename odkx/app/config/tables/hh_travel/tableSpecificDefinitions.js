@@ -188,6 +188,15 @@ window.odkTableSpecificDefinitions = {
         "sw": "Kutembelea mwenza mwingine wa ndoa au mpenzi au rafiki"
       },
       "_row_num": 22
+    },
+    "w_all": {
+      "string_token": "w_all",
+      "text": {
+        "default": "You cannot select ‘All’ along with other options.",
+        "pt": "You cannot select ‘All’ along with other options.",
+        "sw": "You cannot select ‘All’ along with other options."
+      },
+      "_row_num": 24
     }
   }
 }

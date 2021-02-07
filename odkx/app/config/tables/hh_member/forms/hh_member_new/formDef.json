@@ -95,6 +95,9 @@
           "max": 31,
           "step": 1
         },
+        "display": {
+          "invalid_value_message": "invalid_date"
+        },
         "hideInContents": 1,
         "_row_num": 12
       },
@@ -131,6 +134,9 @@
           "max": 12,
           "step": 1
         },
+        "display": {
+          "invalid_value_message": "invalid_month"
+        },
         "hideInContents": 1,
         "_row_num": 17
       },
@@ -166,6 +172,9 @@
           "min": 1920,
           "max": 2021,
           "step": 1
+        },
+        "display": {
+          "invalid_value_message": "invalid_year"
         },
         "hideInContents": 1,
         "_row_num": 22
@@ -3353,8 +3362,7 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path",
-      "hideInContents": "formula"
+      "templatePath": "requirejs_path"
     },
     "settings": {
       "form_id": {
@@ -7149,6 +7157,9 @@
               "max": 31,
               "step": 1
             },
+            "display": {
+              "invalid_value_message": "invalid_date"
+            },
             "hideInContents": 1,
             "_row_num": 12,
             "__rowNum__": 11,
@@ -7191,6 +7202,9 @@
               "max": 12,
               "step": 1
             },
+            "display": {
+              "invalid_value_message": "invalid_month"
+            },
             "hideInContents": 1,
             "_row_num": 17,
             "__rowNum__": 16,
@@ -7232,6 +7246,9 @@
               "min": 1920,
               "max": 2021,
               "step": 1
+            },
+            "display": {
+              "invalid_value_message": "invalid_year"
             },
             "hideInContents": 1,
             "_row_num": 22,

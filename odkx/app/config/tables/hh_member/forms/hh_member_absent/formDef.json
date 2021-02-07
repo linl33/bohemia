@@ -39,7 +39,7 @@
       },
       {
         "clause": "if",
-        "condition": "not(selected(data('absent_return_dk'), 'dk'))",
+        "condition": "not(selected(data('absent_return_dk'), 'dk')) && data('absent_return_date') === null",
         "_row_num": 6
       },
       {
@@ -2798,8 +2798,7 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path",
-      "hideInContents": "formula"
+      "templatePath": "requirejs_path"
     },
     "settings": {
       "form_id": {
@@ -6487,7 +6486,7 @@
               "__rowNum__": 13,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nif (not(selected(data('absent_return_dk'), 'dk'))) {\nactivePromptIndicies.push(3);\n}\nif (not(selected(data('absent_return_dk'), 'dk'))) {\nactivePromptIndicies.push(4);\n}\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nif (not(selected(data('absent_return_dk'), 'dk')) && data('absent_return_date') === null) {\nactivePromptIndicies.push(3);\n}\nif (not(selected(data('absent_return_dk'), 'dk'))) {\nactivePromptIndicies.push(4);\n}\nactivePromptIndicies.push(5);\nactivePromptIndicies.push(6);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
