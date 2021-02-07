@@ -28,7 +28,7 @@ odk_create_location_choices <- function(country = NULL,
   # require(gsheet)
   # require(tidyr)
   # Define the url of the location hierachy spreadsheet (contains all locations for both sites)
-  url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit?usp=sharing'
+  url <- 'https://docs.google.com/spreadsheets/d/1hQWeHHmDMfojs5gjnCnPqhBhiOeqKWG32xzLQgj5iBY/edit#gid=1134589765'
   # Fetch the data
   locations <- locations_original <-  gsheet::gsheet2tbl(url = url) %>% dplyr::select(-new_hamlet)
   locations$clinical_trial <- NULL
