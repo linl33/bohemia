@@ -69,7 +69,7 @@
           "step": 1
         },
         "display": {
-          "invalid_value_message": "invalid_date"
+          "invalid_value_message": "Date entered must be a number between 1 and 31. / Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31 / A data introduzida deve ser um numero entre 1 a 31."
         },
         "hideInContents": 1,
         "_row_num": 8
@@ -108,7 +108,7 @@
           "step": 1
         },
         "display": {
-          "invalid_value_message": "invalid_month"
+          "invalid_value_message": "Month entered must be a number between 1 and 12. / Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12 / O mes introduzido deve ser um numero entre 1 e 12."
         },
         "hideInContents": 1,
         "_row_num": 13
@@ -146,7 +146,7 @@
           "max": 2021
         },
         "display": {
-          "invalid_value_message": "invalid_year"
+          "invalid_value_message": "Year entered must be a number between 1920 and 2021. / Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021 / O ano introduido deve ser um numero entre 1920 e 2021"
         },
         "hideInContents": 1,
         "_row_num": 18
@@ -975,7 +975,7 @@
         "choice_list_name": "disability",
         "data_value": "other",
         "display": {
-          "title": "pther"
+          "title": "other"
         },
         "_row_num": 90
       },
@@ -5085,7 +5085,7 @@
         "string_token": "date_cons",
         "text": {
           "default": "Date entered must be 1-31.",
-          "pt": "Date entered must be 1-31.",
+          "pt": "A data introduzida deve ser um numero entre 1 a 31.",
           "sw": "Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31"
         },
         "_row_num": 243
@@ -5094,7 +5094,7 @@
         "string_token": "month_cons",
         "text": {
           "default": "Month entered must be 1-12.",
-          "pt": "Month entered must be 1-12.",
+          "pt": "O mes introduzido deve ser um numero entre 1 e 12.",
           "sw": "Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12"
         },
         "_row_num": 244
@@ -5103,7 +5103,7 @@
         "string_token": "year_cons",
         "text": {
           "default": "Year entered must be 1920-2021.",
-          "pt": "Year entered must be 1920-2021.",
+          "pt": "O ano introduido deve ser um numero entre 1920 e 2021",
           "sw": "Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021"
         },
         "_row_num": 245
@@ -6919,7 +6919,7 @@
           "choice_list_name": "disability",
           "data_value": "other",
           "display": {
-            "title": "pther"
+            "title": "other"
           },
           "_row_num": 90
         }
@@ -10423,7 +10423,7 @@
           "string_token": "date_cons",
           "text": {
             "default": "Date entered must be 1-31.",
-            "pt": "Date entered must be 1-31.",
+            "pt": "A data introduzida deve ser um numero entre 1 a 31.",
             "sw": "Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31"
           },
           "_row_num": 243
@@ -10432,7 +10432,7 @@
           "string_token": "month_cons",
           "text": {
             "default": "Month entered must be 1-12.",
-            "pt": "Month entered must be 1-12.",
+            "pt": "O mes introduzido deve ser um numero entre 1 e 12.",
             "sw": "Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12"
           },
           "_row_num": 244
@@ -10441,7 +10441,7 @@
           "string_token": "year_cons",
           "text": {
             "default": "Year entered must be 1920-2021.",
-            "pt": "Year entered must be 1920-2021.",
+            "pt": "O ano introduido deve ser um numero entre 1920 e 2021",
             "sw": "Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021"
           },
           "_row_num": 245
@@ -12794,7 +12794,7 @@
               "step": 1
             },
             "display": {
-              "invalid_value_message": "invalid_date"
+              "invalid_value_message": "Date entered must be a number between 1 and 31. / Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31 / A data introduzida deve ser um numero entre 1 a 31."
             },
             "hideInContents": 1,
             "_row_num": 8,
@@ -12839,7 +12839,7 @@
               "step": 1
             },
             "display": {
-              "invalid_value_message": "invalid_month"
+              "invalid_value_message": "Month entered must be a number between 1 and 12. / Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12 / O mes introduzido deve ser um numero entre 1 e 12."
             },
             "hideInContents": 1,
             "_row_num": 13,
@@ -12883,7 +12883,7 @@
               "max": 2021
             },
             "display": {
-              "invalid_value_message": "invalid_year"
+              "invalid_value_message": "Year entered must be a number between 1920 and 2021. / Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021 / O ano introduido deve ser um numero entre 1920 e 2021"
             },
             "hideInContents": 1,
             "_row_num": 18,
@@ -15117,7 +15117,7 @@
         "_aspect": "ind_deficiency",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"disability\",\"data_value\":\"Blind\",\"display\":{\"title\":\"Blind\"},\"_row_num\":82},{\"choice_list_name\":\"disability\",\"data_value\":\"Deaf\",\"display\":{\"title\":\"Deaf\"},\"_row_num\":83},{\"choice_list_name\":\"disability\",\"data_value\":\"Amputated/atrophied_arm\",\"display\":{\"title\":\"Amputated/atrophied_arm\"},\"_row_num\":84},{\"choice_list_name\":\"disability\",\"data_value\":\"Amputated/atrophied_leg\",\"display\":{\"title\":\"Amputated/atrophied_leg\"},\"_row_num\":85},{\"choice_list_name\":\"disability\",\"data_value\":\"Paralysis\",\"display\":{\"title\":\"Paralysis\"},\"_row_num\":86},{\"choice_list_name\":\"disability\",\"data_value\":\"Mental\",\"display\":{\"title\":\"Mental\"},\"_row_num\":87},{\"choice_list_name\":\"disability\",\"data_value\":\"none\",\"display\":{\"title\":\"none\"},\"_row_num\":88},{\"choice_list_name\":\"disability\",\"data_value\":\"pna\",\"display\":{\"title\":\"pna\"},\"_row_num\":89},{\"choice_list_name\":\"disability\",\"data_value\":\"other\",\"display\":{\"title\":\"pther\"},\"_row_num\":90}]"
+        "_value": "[{\"choice_list_name\":\"disability\",\"data_value\":\"Blind\",\"display\":{\"title\":\"Blind\"},\"_row_num\":82},{\"choice_list_name\":\"disability\",\"data_value\":\"Deaf\",\"display\":{\"title\":\"Deaf\"},\"_row_num\":83},{\"choice_list_name\":\"disability\",\"data_value\":\"Amputated/atrophied_arm\",\"display\":{\"title\":\"Amputated/atrophied_arm\"},\"_row_num\":84},{\"choice_list_name\":\"disability\",\"data_value\":\"Amputated/atrophied_leg\",\"display\":{\"title\":\"Amputated/atrophied_leg\"},\"_row_num\":85},{\"choice_list_name\":\"disability\",\"data_value\":\"Paralysis\",\"display\":{\"title\":\"Paralysis\"},\"_row_num\":86},{\"choice_list_name\":\"disability\",\"data_value\":\"Mental\",\"display\":{\"title\":\"Mental\"},\"_row_num\":87},{\"choice_list_name\":\"disability\",\"data_value\":\"none\",\"display\":{\"title\":\"none\"},\"_row_num\":88},{\"choice_list_name\":\"disability\",\"data_value\":\"pna\",\"display\":{\"title\":\"pna\"},\"_row_num\":89},{\"choice_list_name\":\"disability\",\"data_value\":\"other\",\"display\":{\"title\":\"other\"},\"_row_num\":90}]"
       },
       {
         "_partition": "Column",

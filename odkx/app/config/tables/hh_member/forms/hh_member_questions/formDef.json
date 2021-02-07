@@ -940,7 +940,7 @@
       },
       {
         "type": "note",
-        "name": "sleep_net_last_night_num",
+        "name": "sleep_net_last_night_num_note",
         "display": {
           "prompt": "ind_q26a"
         },
@@ -953,7 +953,7 @@
       },
       {
         "type": "integer",
-        "name": "sleep_net_last_night_num_enter",
+        "name": "sleep_net_last_night_num",
         "display": {
           "prompt": "n_nets",
           "constraint_message": "not_one"
@@ -7549,6 +7549,10 @@
         "type": "integer",
         "_defn": [
           {
+            "_row_num": 151,
+            "section_name": "survey"
+          },
+          {
             "_row_num": 92,
             "section_name": "model"
           }
@@ -7733,16 +7737,6 @@
           }
         ],
         "elementKey": "travel_regularly_trips"
-      },
-      "sleep_net_last_night_num_enter": {
-        "_defn": [
-          {
-            "_row_num": 151,
-            "section_name": "survey"
-          }
-        ],
-        "type": "integer",
-        "elementKey": "sleep_net_last_night_num_enter"
       },
       "trip_count": {
         "_defn": [
@@ -8800,7 +8794,7 @@
           },
           {
             "type": "note",
-            "name": "sleep_net_last_night_num",
+            "name": "sleep_net_last_night_num_note",
             "display": {
               "prompt": "ind_q26a"
             },
@@ -8813,7 +8807,7 @@
           },
           {
             "type": "integer",
-            "name": "sleep_net_last_night_num_enter",
+            "name": "sleep_net_last_night_num",
             "display": {
               "prompt": "n_nets",
               "constraint_message": "not_one"
@@ -10900,6 +10894,10 @@
         "type": "integer",
         "_defn": [
           {
+            "_row_num": 151,
+            "section_name": "survey"
+          },
+          {
             "_row_num": 92,
             "section_name": "model"
           }
@@ -11141,19 +11139,6 @@
         "elementName": "travel_regularly_trips",
         "elementSet": "data",
         "elementPath": "travel_regularly_trips"
-      },
-      "sleep_net_last_night_num_enter": {
-        "_defn": [
-          {
-            "_row_num": 151,
-            "section_name": "survey"
-          }
-        ],
-        "type": "integer",
-        "elementKey": "sleep_net_last_night_num_enter",
-        "elementName": "sleep_net_last_night_num_enter",
-        "elementSet": "data",
-        "elementPath": "sleep_net_last_night_num_enter"
       },
       "trip_count": {
         "_defn": [

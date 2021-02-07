@@ -2124,7 +2124,7 @@ window.odkTableSpecificDefinitions = {
       "string_token": "date_cons",
       "text": {
         "default": "Date entered must be 1-31.",
-        "pt": "Date entered must be 1-31.",
+        "pt": "A data introduzida deve ser um numero entre 1 a 31.",
         "sw": "Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31"
       },
       "_row_num": 243
@@ -2133,7 +2133,7 @@ window.odkTableSpecificDefinitions = {
       "string_token": "month_cons",
       "text": {
         "default": "Month entered must be 1-12.",
-        "pt": "Month entered must be 1-12.",
+        "pt": "O mes introduzido deve ser um numero entre 1 e 12.",
         "sw": "Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12"
       },
       "_row_num": 244
@@ -2142,7 +2142,7 @@ window.odkTableSpecificDefinitions = {
       "string_token": "year_cons",
       "text": {
         "default": "Year entered must be 1920-2021.",
-        "pt": "Year entered must be 1920-2021.",
+        "pt": "O ano introduido deve ser um numero entre 1920 e 2021",
         "sw": "Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021"
       },
       "_row_num": 245

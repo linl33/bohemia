@@ -2529,18 +2529,18 @@ window.odkTableSpecificDefinitions = {
     "q50.cattle": {
       "string_token": "q50.cattle",
       "text": {
-        "default": "50. Who is responsible and makes the decisions about drug treatment of [cattle]",
-        "pt": "50. Quem é o responsável e toma as decisões sobre o tratamento do [bovino] com medicamentos?",
-        "sw": "50. Ni nani anayewajibika na anayefanya uamuzi kuhusu matibabu ya dawa ya [ng’ombe]"
+        "default": "50. Who is responsible and makes the decisions about drug treatment of cattle?",
+        "pt": "50. Quem é o responsável e toma as decisões sobre o tratamento do bovino com medicamentos?",
+        "sw": "50. Ni nani anayewajibika na anayefanya uamuzi kuhusu matibabu ya dawa ya ng’ombe?"
       },
       "_row_num": 292
     },
     "q50.pig": {
       "string_token": "q50.pig",
       "text": {
-        "default": "50. Who is responsible and makes the decisions about drug treatment of [pigs]",
-        "pt": "50. Quem é o responsável e toma as decisões sobre o tratamento do [porcos] com medicamentos?",
-        "sw": "50. Ni nani anayewajibika na anayefanya uamuzi kuhusu matibabu ya dawa ya [nguruwe]"
+        "default": "50. Who is responsible and makes the decisions about drug treatment of pigs?",
+        "pt": "50. Quem é o responsável e toma as decisões sobre o tratamento do porcos com medicamentos?",
+        "sw": "50. Ni nani anayewajibika na anayefanya uamuzi kuhusu matibabu ya dawa ya nguruwe?"
       },
       "_row_num": 293
     },

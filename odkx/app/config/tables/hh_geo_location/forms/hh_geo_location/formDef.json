@@ -14,7 +14,6 @@
       {
         "type": "geopoint",
         "name": "hh_geo_location",
-        "required": 1,
         "display": {
           "prompt": "stand_outside",
           "hint": "stand_outside.hint"
@@ -492,7 +491,6 @@
           {
             "type": "geopoint",
             "name": "hh_geo_location",
-            "required": 1,
             "display": {
               "prompt": "stand_outside",
               "hint": "stand_outside.hint"
@@ -514,9 +512,7 @@
           }
         ],
         "validation_tag_map": {
-          "finalize": [
-            0
-          ]
+          "finalize": []
         },
         "operations": [
           {

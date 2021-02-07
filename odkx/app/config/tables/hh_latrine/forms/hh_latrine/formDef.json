@@ -262,11 +262,11 @@
         "_row_num": 3
       },
       {
-        "string_token": "4aciii",
+        "string_token": "4ciii",
         "text": {
-          "default": "41c (iii). [If yes] With how many households? (not including this household",
-          "pt": "41c (iii). [Se sim] Com quantos agregados familiares? (Não incluindo este agregado familiar",
-          "sw": "41c (iii). [Ikiwa ndiyo] Na kaya ngapi? (bila kujumuisha kaya hii"
+          "default": "41c (iii). With how many households? (not including this household",
+          "pt": "41c (iii). Com quantos agregados familiares? (Não incluindo este agregado familiar",
+          "sw": "41c (iii). Na kaya ngapi? (bila kujumuisha kaya hii"
         },
         "_row_num": 4
       },
@@ -609,12 +609,12 @@
           },
           "_row_num": 3
         },
-        "4aciii": {
-          "string_token": "4aciii",
+        "4ciii": {
+          "string_token": "4ciii",
           "text": {
-            "default": "41c (iii). [If yes] With how many households? (not including this household",
-            "pt": "41c (iii). [Se sim] Com quantos agregados familiares? (Não incluindo este agregado familiar",
-            "sw": "41c (iii). [Ikiwa ndiyo] Na kaya ngapi? (bila kujumuisha kaya hii"
+            "default": "41c (iii). With how many households? (not including this household",
+            "pt": "41c (iii). Com quantos agregados familiares? (Não incluindo este agregado familiar",
+            "sw": "41c (iii). Na kaya ngapi? (bila kujumuisha kaya hii"
           },
           "_row_num": 4
         },
