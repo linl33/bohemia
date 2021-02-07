@@ -85,8 +85,8 @@ app_server <- function(input, output, session) {
     if(is.null(table_data)){
       NULL
     } else {
-      message(table_data)
-      DT::datatable(table_data, editable = TRUE)
+      # message(table_data)
+      DT::datatable(table_data, editable = TRUE, filter = 'top')
     }
   })
   
