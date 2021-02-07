@@ -1141,7 +1141,8 @@ app_server <- function(input, output, session) {
       plot_data <- an %>% group_by(date) %>% summarise(sum_error = sum(type == 'error', na.rm = TRUE),
                                                        sum_anomaly = sum(type == 'anomaly', na.rm = TRUE)) %>%
         gather(key = key, value=value, -date)
-      ggplot(plot_data, aes(date, value, fill = key)) +
+      ggplot(plot_data %>% filter(date >= '2020-08-01'), 
+             aes(date, value, fill = key)) +
         geom_bar(position='dodge', stat='identity', alpha = 0.75) +
         scale_fill_manual(name = '',
                           label = c('# of Anomalies', '# of Errors'),

@@ -47,6 +47,7 @@
           "min": 1,
           "step": 1
         },
+        "validation_tags": "finalize",
         "_row_num": 6
       },
       {
@@ -61,6 +62,7 @@
         "disaply": {
           "constraint_message": "bite_too_many_months"
         },
+        "validation_tags": "finalize",
         "_row_num": 7
       },
       {
@@ -71,6 +73,7 @@
           "prompt": "q59d"
         },
         "required": 1,
+        "validation_tags": "finalize",
         "_row_num": 8
       },
       {
@@ -79,24 +82,47 @@
         "_row_num": 9
       },
       {
-        "type": "integer",
-        "name": "snake_bite_miss_work_school_days",
+        "type": "note",
         "display": {
           "prompt": "q59di"
         },
-        "required": "selected(data('snake_bite_miss_work_school'), 'yes')",
         "_row_num": 10
+      },
+      {
+        "clause": "if",
+        "condition": "selected(data('snake_bite_miss_work_school_days_unknown'), 'dk')",
+        "_row_num": 11
+      },
+      {
+        "type": "assign",
+        "name": "snake_bite_miss_work_school_days",
+        "calculation": "null",
+        "_row_num": 12
+      },
+      {
+        "clause": "else",
+        "_row_num": 13
+      },
+      {
+        "type": "integer",
+        "name": "snake_bite_miss_work_school_days",
+        "required": "not(selected(data('snake_bite_miss_work_school_days_unknown'), 'dk')) && selected(data('snake_bite_miss_work_school'), 'yes')",
+        "validation_tags": "finalize",
+        "_row_num": 14
+      },
+      {
+        "clause": "end if",
+        "_row_num": 15
       },
       {
         "type": "select_multiple",
         "values_list": "dk",
         "name": "snake_bite_miss_work_school_days_unknown",
-        "required": "selected(data('snake_bite_miss_work_school'), 'yes')",
-        "_row_num": 11
+        "_row_num": 16
       },
       {
         "clause": "end if",
-        "_row_num": 12
+        "_row_num": 17
       },
       {
         "type": "select_multiple",
@@ -110,12 +136,13 @@
         "disaply": {
           "constraint_message": "bite_too_many_months"
         },
-        "_row_num": 13
+        "validation_tags": "finalize",
+        "_row_num": 18
       },
       {
         "clause": "if",
         "condition": "selected(data('snake_bite_occur'), 'other')",
-        "_row_num": 14
+        "_row_num": 19
       },
       {
         "type": "text",
@@ -124,11 +151,37 @@
           "prompt": "specify"
         },
         "required": "selected(data('snake_bite_occur'), 'other')",
-        "_row_num": 15
+        "validation_tags": "finalize",
+        "_row_num": 20
       },
       {
         "clause": "end if",
-        "_row_num": 16
+        "_row_num": 21
+      },
+      {
+        "clause": "if",
+        "condition": 0,
+        "_row_num": 22
+      },
+      {
+        "type": "integer",
+        "name": "snake_bite_dk_constraint",
+        "display": {
+          "prompt": "q59e"
+        },
+        "constraint": "not(selected(data('snake_bite_occur'), 'dk')) || (selected(data('snake_bite_occur'), 'dk') && countSelected(data('snake_bite_occur')) == 1)",
+        "disaply": {
+          "constraint_message": "bite_occur_conflict"
+        },
+        "model": {
+          "isSessionVariable": 1
+        },
+        "validation_tags": "bite finalize",
+        "_row_num": 23
+      },
+      {
+        "clause": "end if",
+        "_row_num": 24
       },
       {
         "type": "select_one",
@@ -138,11 +191,16 @@
           "prompt": "q59f"
         },
         "required": 1,
-        "_row_num": 17
+        "validation_tags": "finalize",
+        "_row_num": 25
       },
       {
         "clause": "end screen",
-        "_row_num": 18
+        "_row_num": 26
+      },
+      {
+        "clause": "validate bite",
+        "_row_num": 27
       }
     ],
     "choices": [
@@ -2353,7 +2411,7 @@
       },
       {
         "name": "member_died_when",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 33
       },
       {
@@ -2364,7 +2422,7 @@
       },
       {
         "name": "member_emigrated_when_date",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 35
       },
       {
@@ -2773,7 +2831,7 @@
       },
       {
         "setting_name": "form_version",
-        "value": 202102060001,
+        "value": 202102070001,
         "_row_num": 3
       },
       {
@@ -2854,7 +2912,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -2864,7 +2923,7 @@
       },
       "form_version": {
         "setting_name": "form_version",
-        "value": 202102060001,
+        "value": 202102070001,
         "_row_num": 3
       },
       "table_id": {
@@ -5461,7 +5520,7 @@
       },
       "member_died_when": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 33,
@@ -5487,7 +5546,7 @@
       },
       "member_emigrated_when_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 35,
@@ -5689,7 +5748,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 10,
+            "_row_num": 14,
             "section_name": "survey"
           },
           {
@@ -5708,7 +5767,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 11,
+            "_row_num": 16,
             "section_name": "survey"
           },
           {
@@ -5727,7 +5786,7 @@
         "valuesList": "bite_occur",
         "_defn": [
           {
-            "_row_num": 13,
+            "_row_num": 18,
             "section_name": "survey"
           },
           {
@@ -5741,7 +5800,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 15,
+            "_row_num": 20,
             "section_name": "survey"
           },
           {
@@ -5756,7 +5815,7 @@
         "valuesList": "bite_outcome",
         "_defn": [
           {
-            "_row_num": 17,
+            "_row_num": 25,
             "section_name": "survey"
           },
           {
@@ -6325,6 +6384,17 @@
           }
         ],
         "elementKey": "travel_regularly_trips"
+      },
+      "snake_bite_dk_constraint": {
+        "_defn": [
+          {
+            "_row_num": 23,
+            "section_name": "survey"
+          }
+        ],
+        "type": "integer",
+        "isSessionVariable": 1,
+        "elementKey": "snake_bite_dk_constraint"
       }
     },
     "section_names": [
@@ -6369,9 +6439,7 @@
             "promptIdx": 1
           }
         ],
-        "validation_tag_map": {
-          "finalize": []
-        },
+        "validation_tag_map": {},
         "operations": [
           {
             "clause": "do section survey",
@@ -6495,6 +6563,7 @@
               "min": 1,
               "step": 1
             },
+            "validation_tags": "finalize",
             "_row_num": 6,
             "__rowNum__": 5,
             "_token_type": "prompt",
@@ -6514,6 +6583,7 @@
             "disaply": {
               "constraint_message": "bite_too_many_months"
             },
+            "validation_tags": "finalize",
             "_row_num": 7,
             "__rowNum__": 6,
             "_token_type": "prompt",
@@ -6529,6 +6599,7 @@
               "prompt": "q59d"
             },
             "required": 1,
+            "validation_tags": "finalize",
             "_row_num": 8,
             "__rowNum__": 7,
             "_token_type": "prompt",
@@ -6537,30 +6608,39 @@
             "promptIdx": 5
           },
           {
-            "type": "integer",
-            "name": "snake_bite_miss_work_school_days",
+            "type": "note",
             "display": {
               "prompt": "q59di"
             },
-            "required": "selected(data('snake_bite_miss_work_school'), 'yes')",
             "_row_num": 10,
             "__rowNum__": 9,
             "_token_type": "prompt",
-            "_type": "integer",
+            "_type": "note",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 6
+          },
+          {
+            "type": "integer",
+            "name": "snake_bite_miss_work_school_days",
+            "required": "not(selected(data('snake_bite_miss_work_school_days_unknown'), 'dk')) && selected(data('snake_bite_miss_work_school'), 'yes')",
+            "validation_tags": "finalize",
+            "_row_num": 14,
+            "__rowNum__": 13,
+            "_token_type": "prompt",
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 7
           },
           {
             "type": "select_multiple",
             "values_list": "dk",
             "name": "snake_bite_miss_work_school_days_unknown",
-            "required": "selected(data('snake_bite_miss_work_school'), 'yes')",
-            "_row_num": 11,
-            "__rowNum__": 10,
+            "_row_num": 16,
+            "__rowNum__": 15,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 7
+            "promptIdx": 8
           },
           {
             "type": "select_multiple",
@@ -6574,12 +6654,13 @@
             "disaply": {
               "constraint_message": "bite_too_many_months"
             },
-            "_row_num": 13,
-            "__rowNum__": 12,
+            "validation_tags": "finalize",
+            "_row_num": 18,
+            "__rowNum__": 17,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 8
+            "promptIdx": 9
           },
           {
             "type": "text",
@@ -6588,12 +6669,34 @@
               "prompt": "specify"
             },
             "required": "selected(data('snake_bite_occur'), 'other')",
-            "_row_num": 15,
-            "__rowNum__": 14,
+            "validation_tags": "finalize",
+            "_row_num": 20,
+            "__rowNum__": 19,
             "_token_type": "prompt",
             "_type": "text",
             "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 9
+            "promptIdx": 10
+          },
+          {
+            "type": "integer",
+            "name": "snake_bite_dk_constraint",
+            "display": {
+              "prompt": "q59e"
+            },
+            "constraint": "not(selected(data('snake_bite_occur'), 'dk')) || (selected(data('snake_bite_occur'), 'dk') && countSelected(data('snake_bite_occur')) == 1)",
+            "disaply": {
+              "constraint_message": "bite_occur_conflict"
+            },
+            "model": {
+              "isSessionVariable": 1
+            },
+            "validation_tags": "bite finalize",
+            "_row_num": 23,
+            "__rowNum__": 22,
+            "_token_type": "prompt",
+            "_type": "integer",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 11
           },
           {
             "type": "select_one",
@@ -6603,20 +6706,21 @@
               "prompt": "q59f"
             },
             "required": 1,
-            "_row_num": 17,
-            "__rowNum__": 16,
+            "validation_tags": "finalize",
+            "_row_num": 25,
+            "__rowNum__": 24,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 10
+            "promptIdx": 12
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 19,
-            "_branch_label_enclosing_screen": "survey/_screen19",
-            "promptIdx": 11
+            "_row_num": 28,
+            "_branch_label_enclosing_screen": "survey/_screen28",
+            "promptIdx": 13
           }
         ],
         "validation_tag_map": {
@@ -6624,11 +6728,14 @@
             3,
             4,
             5,
-            6,
             7,
-            8,
             9,
-            10
+            10,
+            11,
+            12
+          ],
+          "bite": [
+            11
           ]
         },
         "operations": [
@@ -6639,39 +6746,47 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 18,
-              "__rowNum__": 17,
+              "_row_num": 26,
+              "__rowNum__": 25,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nif (selected(data('snake_bite_miss_work_school'), 'yes')) {\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\n}\nactivePromptIndicies.push(8);\nif (selected(data('snake_bite_occur'), 'other')) {\nactivePromptIndicies.push(9);\n}\nactivePromptIndicies.push(10);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nif (selected(data('snake_bite_miss_work_school'), 'yes')) {\nactivePromptIndicies.push(6);\nif (selected(data('snake_bite_miss_work_school_days_unknown'), 'dk')) {\nassign('snake_bite_miss_work_school_days', null);\n}\nelse {\nactivePromptIndicies.push(7);\n}\nactivePromptIndicies.push(8);\n}\nactivePromptIndicies.push(9);\nif (selected(data('snake_bite_occur'), 'other')) {\nactivePromptIndicies.push(10);\n}\nif (0) {\nactivePromptIndicies.push(11);\n}\nactivePromptIndicies.push(12);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
+          },
+          {
+            "clause": "validate bite",
+            "_row_num": 27,
+            "__rowNum__": 26,
+            "_token_type": "validate",
+            "_sweep_name": "bite",
+            "operationIdx": 1
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 19,
-            "operationIdx": 1
+            "_row_num": 28,
+            "operationIdx": 2
           },
           {
-            "_row_num": 19,
+            "_row_num": 28,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(11);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(13);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
-            "operationIdx": 2
+            "operationIdx": 3
           },
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 19,
-            "operationIdx": 3
+            "_row_num": 28,
+            "operationIdx": 4
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
-          "_contents": 2,
-          "_screen19": 2
+          "_contents": 3,
+          "_screen28": 3
         }
       }
     },
@@ -7153,7 +7268,7 @@
       },
       "member_died_when": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 33,
@@ -7192,7 +7307,7 @@
       },
       "member_emigrated_when_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
             "_row_num": 35,
@@ -7463,7 +7578,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 10,
+            "_row_num": 14,
             "section_name": "survey"
           },
           {
@@ -7489,7 +7604,7 @@
         "valuesList": "dk",
         "_defn": [
           {
-            "_row_num": 11,
+            "_row_num": 16,
             "section_name": "survey"
           },
           {
@@ -7518,7 +7633,7 @@
         "valuesList": "bite_occur",
         "_defn": [
           {
-            "_row_num": 13,
+            "_row_num": 18,
             "section_name": "survey"
           },
           {
@@ -7538,7 +7653,7 @@
         "type": "string",
         "_defn": [
           {
-            "_row_num": 15,
+            "_row_num": 20,
             "section_name": "survey"
           },
           {
@@ -7556,7 +7671,7 @@
         "valuesList": "bite_outcome",
         "_defn": [
           {
-            "_row_num": 17,
+            "_row_num": 25,
             "section_name": "survey"
           },
           {
@@ -8342,6 +8457,20 @@
         "elementName": "travel_regularly_trips",
         "elementSet": "data",
         "elementPath": "travel_regularly_trips"
+      },
+      "snake_bite_dk_constraint": {
+        "_defn": [
+          {
+            "_row_num": 23,
+            "section_name": "survey"
+          }
+        ],
+        "type": "integer",
+        "isSessionVariable": 1,
+        "elementKey": "snake_bite_dk_constraint",
+        "elementName": "snake_bite_dk_constraint",
+        "elementSet": "data",
+        "elementPath": "snake_bite_dk_constraint"
       },
       "dob_day_dk_items": {
         "type": "string",

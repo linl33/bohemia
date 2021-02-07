@@ -58,33 +58,52 @@
         "_row_num": 6
       },
       {
-        "type": "date",
-        "name": "hh_death_date",
+        "type": "note",
         "display": {
           "prompt": "q65e"
         },
         "_row_num": 7
       },
       {
+        "clause": "if",
+        "condition": "not(selected(data('hh_death_date_dk'), 'dk'))",
+        "_row_num": 8
+      },
+      {
+        "type": "birth_date",
+        "name": "hh_death_date",
+        "constraint": "selected(data('hh_death_date_dk'), 'dk') || !data('hh_death_date') || (!data('hh_death_date').isBefore('2020-03-01') && !data('hh_death_date').isAfter())",
+        "display": {
+          "constraint_message": "invalid_death_date"
+        },
+        "hideInContents": 1,
+        "_row_num": 9
+      },
+      {
+        "clause": "end if",
+        "_row_num": 10
+      },
+      {
         "type": "select_multiple",
         "values_list": "dk",
         "name": "hh_death_date_dk",
-        "_row_num": 8
+        "hideInContents": 1,
+        "_row_num": 11
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_death_date_dk'), 'dk')",
-        "_row_num": 9
+        "_row_num": 12
       },
       {
         "type": "assign",
         "name": "hh_death_date",
         "calculation": "null",
-        "_row_num": 10
+        "_row_num": 13
       },
       {
         "clause": "end if",
-        "_row_num": 11
+        "_row_num": 14
       },
       {
         "type": "integer",
@@ -96,11 +115,11 @@
           "min": 0,
           "step": 1
         },
-        "_row_num": 12
+        "_row_num": 15
       },
       {
         "clause": "end screen",
-        "_row_num": 13
+        "_row_num": 16
       }
     ],
     "choices": [
@@ -157,7 +176,7 @@
       },
       {
         "name": "hh_death_date",
-        "type": "date",
+        "type": "birth_date",
         "_row_num": 7
       },
       {
@@ -197,7 +216,7 @@
       },
       {
         "setting_name": "instance_name",
-        "value": "hh_id",
+        "value": "hh_death_id",
         "_row_num": 6
       },
       {
@@ -336,6 +355,11 @@
         "string_token": "extid_format",
         "text": "ID must be in this format ABC-123-701 (3 capital letters, '-', 3 numbers, '-', 7##).",
         "_row_num": 13
+      },
+      {
+        "string_token": "invalid_death_date",
+        "text": "Date cannot be in the future<br>Date should be in the past 12 months",
+        "_row_num": 14
       }
     ]
   },
@@ -353,7 +377,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -386,7 +411,7 @@
       },
       "instance_name": {
         "setting_name": "instance_name",
-        "value": "hh_id",
+        "value": "hh_death_id",
         "_row_num": 6
       },
       "default": {
@@ -619,6 +644,11 @@
           "string_token": "extid_format",
           "text": "ID must be in this format ABC-123-701 (3 capital letters, '-', 3 numbers, '-', 7##).",
           "_row_num": 13
+        },
+        "invalid_death_date": {
+          "string_token": "invalid_death_date",
+          "text": "Date cannot be in the future<br>Date should be in the past 12 months",
+          "_row_num": 14
         }
       }
     },
@@ -694,10 +724,10 @@
       },
       "hh_death_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
-            "_row_num": 7,
+            "_row_num": 9,
             "section_name": "survey"
           },
           {
@@ -711,7 +741,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 12,
+            "_row_num": 15,
             "section_name": "survey"
           },
           {
@@ -724,7 +754,7 @@
       "hh_death_date_dk": {
         "_defn": [
           {
-            "_row_num": 8,
+            "_row_num": 11,
             "section_name": "survey"
           }
         ],
@@ -921,28 +951,43 @@
             "promptIdx": 3
           },
           {
-            "type": "date",
-            "name": "hh_death_date",
+            "type": "note",
             "display": {
               "prompt": "q65e"
             },
             "_row_num": 7,
             "__rowNum__": 6,
             "_token_type": "prompt",
-            "_type": "date",
+            "_type": "note",
             "_branch_label_enclosing_screen": "survey/_screen2",
             "promptIdx": 4
+          },
+          {
+            "type": "birth_date",
+            "name": "hh_death_date",
+            "constraint": "selected(data('hh_death_date_dk'), 'dk') || !data('hh_death_date') || (!data('hh_death_date').isBefore('2020-03-01') && !data('hh_death_date').isAfter())",
+            "display": {
+              "constraint_message": "invalid_death_date"
+            },
+            "hideInContents": 1,
+            "_row_num": 9,
+            "__rowNum__": 8,
+            "_token_type": "prompt",
+            "_type": "birth_date",
+            "_branch_label_enclosing_screen": "survey/_screen2",
+            "promptIdx": 5
           },
           {
             "type": "select_multiple",
             "values_list": "dk",
             "name": "hh_death_date_dk",
-            "_row_num": 8,
-            "__rowNum__": 7,
+            "hideInContents": 1,
+            "_row_num": 11,
+            "__rowNum__": 10,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 5
+            "promptIdx": 6
           },
           {
             "type": "integer",
@@ -954,27 +999,28 @@
               "min": 0,
               "step": 1
             },
-            "_row_num": 12,
-            "__rowNum__": 11,
+            "_row_num": 15,
+            "__rowNum__": 14,
             "_token_type": "prompt",
             "_type": "integer",
             "_branch_label_enclosing_screen": "survey/_screen2",
-            "promptIdx": 6
+            "promptIdx": 7
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 14,
-            "_branch_label_enclosing_screen": "survey/_screen14",
-            "promptIdx": 7
+            "_row_num": 17,
+            "_branch_label_enclosing_screen": "survey/_screen17",
+            "promptIdx": 8
           }
         ],
         "validation_tag_map": {
           "finalize": [
             0,
             1,
-            2
+            2,
+            5
           ]
         },
         "operations": [
@@ -985,23 +1031,23 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 13,
-              "__rowNum__": 12,
+              "_row_num": 16,
+              "__rowNum__": 15,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nactivePromptIndicies.push(5);\nif (selected(data('hh_death_date_dk'), 'dk')) {\nassign('hh_death_date', null);\n}\nactivePromptIndicies.push(6);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(0);\nactivePromptIndicies.push(1);\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nactivePromptIndicies.push(4);\nif (not(selected(data('hh_death_date_dk'), 'dk'))) {\nactivePromptIndicies.push(5);\n}\nactivePromptIndicies.push(6);\nif (selected(data('hh_death_date_dk'), 'dk')) {\nassign('hh_death_date', null);\n}\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 0
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 14,
+            "_row_num": 17,
             "operationIdx": 1
           },
           {
-            "_row_num": 14,
+            "_row_num": 17,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(7);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(8);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -1010,14 +1056,14 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 14,
+            "_row_num": 17,
             "operationIdx": 3
           }
         ],
         "branch_label_map": {
           "_screen2": 0,
           "_contents": 2,
-          "_screen14": 2
+          "_screen17": 2
         }
       }
     },
@@ -1106,10 +1152,10 @@
       },
       "hh_death_date": {
         "type": "string",
-        "elementType": "date",
+        "elementType": "date_no_time",
         "_defn": [
           {
-            "_row_num": 7,
+            "_row_num": 9,
             "section_name": "survey"
           },
           {
@@ -1126,7 +1172,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 12,
+            "_row_num": 15,
             "section_name": "survey"
           },
           {
@@ -1142,7 +1188,7 @@
       "hh_death_date_dk": {
         "_defn": [
           {
-            "_row_num": 8,
+            "_row_num": 11,
             "section_name": "survey"
           }
         ],

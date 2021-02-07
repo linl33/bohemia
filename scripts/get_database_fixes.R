@@ -12,22 +12,62 @@ odk_data <- odk_data_moz <- load_odk_data(credentials_path = '../credentials/cre
                               the_country = 'Mozambique',
                           users_path = '../credentials/users.yaml',
                           local = is_local, efficient = FALSE)
-# odk_data_tza <- load_odk_data(credentials_path = '../credentials/credentials.yaml',
-#                               the_country = 'Tanzania',
-#                               users_path = '../credentials/users.yaml',
-#                               local = is_local, efficient = FALSE)
+odk_data_tza <- load_odk_data(credentials_path = '../credentials/credentials.yaml',
+                              the_country = 'Tanzania',
+                              users_path = '../credentials/users.yaml',
+                              local = is_local, efficient = FALSE)
 
+is_local <- FALSE
+drv <- RPostgres::Postgres()
+if(is_local){
+  con <- dbConnect(drv, dbname='bohemia')
+} else {
+  psql_end_point = creds$endpoint
+  psql_user = creds$psql_master_username
+  psql_pass = creds$psql_master_password
+  con <- dbConnect(drv, dbname='bohemia', host=psql_end_point, 
+                   port=5432,
+                   user=psql_user, password=psql_pass)
+}
 
 # get corrections and fixes.
-corrections <- odk_data$corrections
-fixes <- odk_data$fixes 
+corrections <- odk_data_moz$corrections %>% bind_rows(odk_data_tza$corrections)
+# Remove duplicates
+corrections <- corrections %>% dplyr::distinct(id, instance_id, response_details, .keep_all = TRUE)
+# Overwrite corrections without duplicates (optional)
+dbWriteTable(conn = con, name = 'corrections', value = corrections, overwrite = TRUE)
+
+fixes <- odk_data_moz$fixes %>% bind_rows(odk_data_tza$fixes)
+
+
+anomalies <- dbGetQuery(conn = con, 'SELECT * FROM anomalies;')
+x = dbDisconnect(con)
 
 #get ids from fixes 
 fixes_ids <- fixes$id
 
 # keep only response_details, id, and instance_id
-corrections <- corrections %>% filter(!id %in% fixes_ids) %>% select(id, instance_id, response_details)
+corrections <- corrections %>% filter(!id %in% fixes_ids) %>% 
+  filter(id %in% anomalies$id) %>%
+  dplyr::distinct(id, instance_id, response_details)
+
 write.csv(corrections, '~/Desktop/temporary_corrections.csv')
+
+# Write loop to visualize
+for(i in 301:nrow(corrections)){
+  out <- paste0('# ', i, '. instance_id: ',
+                corrections$instance_id[i], '\n# id: ',
+                corrections$id[i], '\n# response details: ',
+                corrections$response_details[i],
+                '\n',
+                "implement(id = '",
+                corrections$id[i],
+                '\', query = "xxxxx where instance_id=\'',
+                corrections$instance_id[i],
+                '\'", who = "Joe Brew")\n\n')
+  cat(out)
+}
+
 
 minicensus_main <- odk_data$minicensus_main
 people <- odk_data$minicensus_people

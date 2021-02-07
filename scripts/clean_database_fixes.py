@@ -2752,6 +2752,912 @@ implement(id = None, query = "DELETE FROM clean_minicensus_repeat_death_info WHE
 implement(id = None, query = "DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id ='cb6a69bc-1fe7-4e2f-b007-de99c94af23a'", who = 'Joe Brew')
 implement(id = None, query = "DELETE FROM clean_minicensus_repeat_death_info WHERE instance_id ='f88cc207-acc1-464c-88c0-28a0c8336c75'", who = 'Joe Brew')
 
+# Feb 7 2021
+
+
+# 1. instance_id: 2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc
+# id: hh_head_too_young_old_2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc
+# response details: The correct HH birthdate is: 02/02/1980
+implement(id = 'hh_head_too_young_old_2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc', query = "UPDATE clean_minicensus_main SET hh_head_dob='1980-02-12' WHERE instance_id='2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc'; UPDATE clean_minicensus_people SET dob='1980-02-12' WHERE instance_id='2d9a7ce2-05f3-41b2-aab4-657f8abb3bdc' and num='1';", who = "Joe Brew")
+
+# 2. instance_id: 7a9d44be-04c3-412e-9285-3e2e3ed15094
+# id: hh_sub_age_mismatch_old_7a9d44be-04c3-412e-9285-3e2e3ed15094
+# response details: The correct birthdate of the hh head is: 26/11/1981
+implement(id = 'hh_sub_age_mismatch_old_7a9d44be-04c3-412e-9285-3e2e3ed15094', query = "UPDATE clean_minicensus_main SET hh_head_dob='1981-11-26' WHERE instance_id='7a9d44be-04c3-412e-9285-3e2e3ed15094'; UPDATE clean_minicensus_people SET dob='1981-11-26' WHERE instance_id='7a9d44be-04c3-412e-9285-3e2e3ed15094' and num='1';", who = "Joe Brew")
+
+# 3. instance_id: e95001e7-7e2b-4ac6-aa71-0f6d971aa39f
+# id: all_females_e95001e7-7e2b-4ac6-aa71-0f6d971aa39f
+# response details: Confirmed. All the HH members are female.
+implement(id = 'all_females_e95001e7-7e2b-4ac6-aa71-0f6d971aa39f', is_ok=True, who = "Joe Brew")
+
+# 4. instance_id: 8241c1b7-47fe-4d14-bc92-2ca9c096b6d6
+# id: energy_ownership_mismatch_8241c1b7-47fe-4d14-bc92-2ca9c096b6d6
+# response details: The HH owns TV and don<92>t have electricity.
+implement(id = 'energy_ownership_mismatch_8241c1b7-47fe-4d14-bc92-2ca9c096b6d6', is_ok=True, who = "Joe Brew")
+
+# 5. instance_id: 8930767f-ecc6-4fe2-842a-ae268c7804e4
+# id: energy_ownership_mismatch_8930767f-ecc6-4fe2-842a-ae268c7804e4
+# response details: The HH owns TV and don<92>t have electricity.
+implement(id = 'energy_ownership_mismatch_8930767f-ecc6-4fe2-842a-ae268c7804e4', is_ok=True, who = "Joe Brew")
+
+# 6. instance_id: 1b24ba97-840e-4fa8-b459-52aacf5c7b0a
+# id: energy_ownership_mismatch_1b24ba97-840e-4fa8-b459-52aacf5c7b0a
+# response details: The HH owns TV and don<92>t have electricity.
+implement(id = 'energy_ownership_mismatch_1b24ba97-840e-4fa8-b459-52aacf5c7b0a', is_ok=True, who = "Joe Brew")
+
+# 7. instance_id: 447e37d3-c6e1-4d61-b57f-ec956a5a0f18
+# id: energy_ownership_mismatch_447e37d3-c6e1-4d61-b57f-ec956a5a0f18
+# response details: The HH owns TV and don<92>t have electricity.
+implement(id = 'energy_ownership_mismatch_447e37d3-c6e1-4d61-b57f-ec956a5a0f18', is_ok=True, who = "Joe Brew")
+
+# 8. instance_id: b34803e1-8c7b-4e9f-89ee-d398fe345574
+# id: energy_ownership_mismatch_b34803e1-8c7b-4e9f-89ee-d398fe345574
+# response details: The HH owns TV and don<92>t have electricity.
+implement(id = 'energy_ownership_mismatch_b34803e1-8c7b-4e9f-89ee-d398fe345574', is_ok=True, who = "Joe Brew")
+
+# 9. instance_id: f16cb409-1353-41b0-b97a-a0c98b62037e,053c1c6f-d5bc-4677-910e-d14e03939e2d
+# id: repeat_hh_id_enumerations_f16cb409-1353-41b0-b97a-a0c98b62037e,053c1c6f-d5bc-4677-910e-d14e03939e2d
+# response details: Replace HH_ID of Instance:053c1c6f-d5bc-4677-910e-d14e03939e2d, to VVJ-077
+implement(id = 'repeat_hh_id_enumerations_f16cb409-1353-41b0-b97a-a0c98b62037e,053c1c6f-d5bc-4677-910e-d14e03939e2d', query = "UPDATE clean_enumerations SET agregado='VVJ-077' where instance_id='053c1c6f-d5bc-4677-910e-d14e03939e2d'", who = "Joe Brew")
+
+# 10. Invalidated
+
+# 11. instance_id: 252767d7-8601-469b-be57-e334eb9c9f21
+# id: missing_wid_252767d7-8601-469b-be57-e334eb9c9f21
+# response details: 25
+implement(id = 'missing_wid_252767d7-8601-469b-be57-e334eb9c9f21', query = "UPDATE clean_minicensus_main SET wid='25' where instance_id='252767d7-8601-469b-be57-e334eb9c9f21'", who = "Joe Brew")
+
+# 12. instance_id: c177bbd6-b5c3-4ea0-9537-4a01eb08c15f
+# id: missing_wid_c177bbd6-b5c3-4ea0-9537-4a01eb08c15f
+# response details: 73
+implement(id = 'missing_wid_c177bbd6-b5c3-4ea0-9537-4a01eb08c15f', query = "UPDATE clean_minicensus_main SET wid='73' where instance_id='c177bbd6-b5c3-4ea0-9537-4a01eb08c15f'", who = "Joe Brew")
+
+# 13. instance_id: 9c1861c8-1200-49c8-90aa-cb33eadd33d2
+# id: missing_wid_9c1861c8-1200-49c8-90aa-cb33eadd33d2
+# response details: 56
+implement(id = 'missing_wid_9c1861c8-1200-49c8-90aa-cb33eadd33d2', query = "UPDATE clean_minicensus_main SET wid='56' where instance_id='9c1861c8-1200-49c8-90aa-cb33eadd33d2'", who = "Joe Brew")
+
+# 14. instance_id: e4b663c3-77f9-4ac7-bbfb-9a3fa020c3e8
+# id: missing_wid_e4b663c3-77f9-4ac7-bbfb-9a3fa020c3e8
+# response details: 49
+implement(id = 'missing_wid_e4b663c3-77f9-4ac7-bbfb-9a3fa020c3e8', query = "UPDATE clean_minicensus_main SET wid='49' where instance_id='e4b663c3-77f9-4ac7-bbfb-9a3fa020c3e8'", who = "Joe Brew")
+
+# 15. instance_id: fa3fec3c-e9fe-447a-b6dd-7aa9d911a157
+# id: missing_wid_fa3fec3c-e9fe-447a-b6dd-7aa9d911a157
+# response details: 3
+implement(id = 'missing_wid_fa3fec3c-e9fe-447a-b6dd-7aa9d911a157', query = "UPDATE clean_minicensus_main SET wid='3' where instance_id='fa3fec3c-e9fe-447a-b6dd-7aa9d911a157'", who = "Joe Brew")
+
+# 16. instance_id: c2c8d5ff-cabe-43d0-ae8b-985558117b4c
+# id: all_males_c2c8d5ff-cabe-43d0-ae8b-985558117b4c
+# response details: The household member CIM-209-002 is female
+implement(id = 'all_males_c2c8d5ff-cabe-43d0-ae8b-985558117b4c', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='c2c8d5ff-cabe-43d0-ae8b-985558117b4c' and pid='CIM-209-002'", who = "Joe Brew")
+
+# 17. instance_id: 6f643891-b052-4a2e-88ce-ad0d6794b1c9
+# id: all_males_6f643891-b052-4a2e-88ce-ad0d6794b1c9
+# response details: The household member CMX-043-002 is female
+implement(id = 'all_males_6f643891-b052-4a2e-88ce-ad0d6794b1c9', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='6f643891-b052-4a2e-88ce-ad0d6794b1c9' and pid='CMX-043-002'", who = "Joe Brew")
+
+# 18. instance_id: 840b1bbb-9b67-4b4d-ba04-72da1452b57d
+# id: all_males_840b1bbb-9b67-4b4d-ba04-72da1452b57d
+# response details: The household member CUD-183-001 is female
+implement(id = 'all_males_840b1bbb-9b67-4b4d-ba04-72da1452b57d', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='840b1bbb-9b67-4b4d-ba04-72da1452b57d' and pid='CUD-183-001'", who = "Joe Brew")
+
+# 19. instance_id: 2b30839b-6ebe-43fe-b613-353d6c7cbcb5
+# id: too_many_houses_2b30839b-6ebe-43fe-b613-353d6c7cbcb5
+# response details: The household has 1 construction
+implement(id = 'too_many_houses_2b30839b-6ebe-43fe-b613-353d6c7cbcb5', query = "UPDATE clean_minicensus_main SET hh_n_constructions='1' where instance_id='2b30839b-6ebe-43fe-b613-353d6c7cbcb5'", who = "Joe Brew")
+
+# 20. instance_id: d5f4a229-6b95-4c22-aede-0475698915f6
+# id: all_females_d5f4a229-6b95-4c22-aede-0475698915f6
+# response details: All the Household members are female
+implement(id = 'all_females_d5f4a229-6b95-4c22-aede-0475698915f6', is_ok=True, who = "Joe Brew")
+
+# 21. instance_id: 331cff5f-3534-4a95-9f53-4a58051be29b
+# id: hh_head_too_young_old_331cff5f-3534-4a95-9f53-4a58051be29b
+# response details: The household head indeed has age bellow 18, he was born on 04/04/2002
+implement(id = 'hh_head_too_young_old_331cff5f-3534-4a95-9f53-4a58051be29b', query = "UPDATE clean_minicensus_main SET hh_head_dob='2002-04-04' where instance_id='331cff5f-3534-4a95-9f53-4a58051be29b'; UPDATE clean_minicensus_people SET dob='2002-04-04' WHERE num='1' and instance_id = '331cff5f-3534-4a95-9f53-4a58051be29b'", who = "Joe Brew")
+
+# 22. instance_id: 425f18cd-e4a0-42e6-b496-8093b69fe69a
+# id: hh_head_too_young_old_425f18cd-e4a0-42e6-b496-8093b69fe69a
+# response details: The household head was born on 04/01/1994
+implement(id = 'hh_head_too_young_old_425f18cd-e4a0-42e6-b496-8093b69fe69a', query = "UPDATE clean_minicensus_main SET hh_head_dob='1994-04-01' where instance_id='425f18cd-e4a0-42e6-b496-8093b69fe69a'; UPDATE clean_minicensus_people SET dob='1994-04-01' WHERE num='1' and instance_id = '425f18cd-e4a0-42e6-b496-8093b69fe69a'", who = "Joe Brew")
+
+# 23. instance_id: c9574c12-3065-4141-8f78-da06c2c0c469
+# id: missing_wid_c9574c12-3065-4141-8f78-da06c2c0c469
+# response details: 3
+implement(id = 'missing_wid_c9574c12-3065-4141-8f78-da06c2c0c469', query = "UPDATE clean_minicensus_main SET wid='3' where instance_id='c9574c12-3065-4141-8f78-da06c2c0c469'", who = "Joe Brew")
+
+# 24. instance_id: 37afae5d-ee46-492d-aaae-e431b552da0f
+# id: missing_wid_37afae5d-ee46-492d-aaae-e431b552da0f
+# response details: 3
+implement(id = 'missing_wid_37afae5d-ee46-492d-aaae-e431b552da0f', query = "UPDATE clean_minicensus_main SET wid='3' where instance_id='37afae5d-ee46-492d-aaae-e431b552da0f'", who = "Joe Brew")
+
+# 25-28 invalidated
+
+# 29. instance_id: 83719057-d8f8-46c9-b9b7-84d0730ed586
+# id: all_males_83719057-d8f8-46c9-b9b7-84d0730ed586
+# response details: The household member CAB-053-001 is female
+implement(id = 'all_males_83719057-d8f8-46c9-b9b7-84d0730ed586', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='83719057-d8f8-46c9-b9b7-84d0730ed586' and pid='CAB-053-001'", who = "Joe Brew")
+
+# 30. instance_id: 56045e2a-058d-47bf-891a-4f84316ba0b6
+# id: all_males_56045e2a-058d-47bf-891a-4f84316ba0b6
+# response details: The household member CAD-155-002 is female
+implement(id = 'all_males_56045e2a-058d-47bf-891a-4f84316ba0b6', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='56045e2a-058d-47bf-891a-4f84316ba0b6' and pid='CAD-155-002'", who = "Joe Brew")
+
+# 31. instance_id: e3038836-d38e-4a39-8fdd-d847c0c044ee
+# id: all_males_e3038836-d38e-4a39-8fdd-d847c0c044ee
+# response details: The following household members are female: JSC-009-002, JSC-009-003, JSC-009-005
+implement(id = 'all_males_e3038836-d38e-4a39-8fdd-d847c0c044ee', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='e3038836-d38e-4a39-8fdd-d847c0c044ee' and pid='JSC-009-002'; UPDATE clean_minicensus_people SET gender='female' where instance_id='e3038836-d38e-4a39-8fdd-d847c0c044ee' and pid='JSC-009-003'; UPDATE clean_minicensus_people SET gender='female' where instance_id='e3038836-d38e-4a39-8fdd-d847c0c044ee' and pid='JSC-009-005'", who = "Joe Brew")
+
+# 32. instance_id: 6b05d14f-91c9-4fa2-9465-988257949ac2
+# id: all_males_6b05d14f-91c9-4fa2-9465-988257949ac2
+# response details: The following household members are female: LGZ-069-002, LGZ-069-005, LGZ-069-006
+implement(id = 'all_males_6b05d14f-91c9-4fa2-9465-988257949ac2', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='6b05d14f-91c9-4fa2-9465-988257949ac2' and pid='LGZ-069-002'; UPDATE clean_minicensus_people SET gender='female' where instance_id='6b05d14f-91c9-4fa2-9465-988257949ac2' and pid='LGZ-069-005'; UPDATE clean_minicensus_people SET gender='female' where instance_id='6b05d14f-91c9-4fa2-9465-988257949ac2' and pid='LGZ-069-006';", who = "Joe Brew")
+
+# 33. instance_id: 6da21816-21a5-4c83-936c-606190729f6d
+# id: all_males_6da21816-21a5-4c83-936c-606190729f6d
+# response details: The Following HH members are female: LUT-133-002, LUT-133-003,LUT-133-006
+implement(id = 'all_males_6da21816-21a5-4c83-936c-606190729f6d', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='6da21816-21a5-4c83-936c-606190729f6d' and pid='LUT-133-002'; UPDATE clean_minicensus_people SET gender='female' where instance_id='6da21816-21a5-4c83-936c-606190729f6d' and pid='LUT-133-003'; UPDATE clean_minicensus_people SET gender='female' where instance_id='6da21816-21a5-4c83-936c-606190729f6d' and pid='LUT-133-006'", who = "Joe Brew")
+
+# 34. instance_id: 7980274e-b33d-4444-870f-295940c2f12e
+# id: all_males_7980274e-b33d-4444-870f-295940c2f12e
+# response details: The household member MIF-180-002 is female
+implement(id = 'all_males_7980274e-b33d-4444-870f-295940c2f12e', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='7980274e-b33d-4444-870f-295940c2f12e' and pid='MIF-180-002';", who = "Joe Brew")
+
+# 35. instance_id: e7b701cb-06ec-4621-9b1e-51e4364a4cd3
+# id: all_males_e7b701cb-06ec-4621-9b1e-51e4364a4cd3
+# response details: The following household members are female: MUA-062-004, MUA-062-005
+implement(id = 'all_males_e7b701cb-06ec-4621-9b1e-51e4364a4cd3', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='e7b701cb-06ec-4621-9b1e-51e4364a4cd3' and pid='MUA-062-004'; UPDATE clean_minicensus_people SET gender='female' where instance_id='e7b701cb-06ec-4621-9b1e-51e4364a4cd3' and pid='MUA-062-005';", who = "Joe Brew")
+
+# 36. instance_id: aca2b1bb-7556-44f7-b6d4-4701a575a9a4
+# id: all_males_aca2b1bb-7556-44f7-b6d4-4701a575a9a4
+# response details: The following household members are female: NHB-073-002, NHB-073-005, NHB-073-006
+implement(id = 'all_males_aca2b1bb-7556-44f7-b6d4-4701a575a9a4', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='aca2b1bb-7556-44f7-b6d4-4701a575a9a4' and pid='NHB-073-002'; UPDATE clean_minicensus_people SET gender='female' where instance_id='aca2b1bb-7556-44f7-b6d4-4701a575a9a4' and pid='NHB-073-005'; UPDATE clean_minicensus_people SET gender='female' where instance_id='aca2b1bb-7556-44f7-b6d4-4701a575a9a4' and pid='NHB-073-006';", who = "Joe Brew")
+
+# 37. instance_id: 568405f0-b75f-4eb0-b97f-a780c3d78d44
+# id: all_males_568405f0-b75f-4eb0-b97f-a780c3d78d44
+# response details: The following household members are female: NHZ-036-002, NHB-036-004
+implement(id = 'all_males_568405f0-b75f-4eb0-b97f-a780c3d78d44', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='568405f0-b75f-4eb0-b97f-a780c3d78d44' and pid='NHZ-036-002'; UPDATE clean_minicensus_people SET gender='female' where instance_id='568405f0-b75f-4eb0-b97f-a780c3d78d44' and pid='NHZ-036-004';", who = "Joe Brew")
+
+# 38. instance_id: 2af78ab7-a470-48ba-aa0e-d1e7f4c94a3d
+# id: all_males_2af78ab7-a470-48ba-aa0e-d1e7f4c94a3d
+# response details: The following household members are female: NOR-035-002, NOR-035-005, NOR-035-006,NOR-035-008
+implement(id = 'all_males_2af78ab7-a470-48ba-aa0e-d1e7f4c94a3d', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='2af78ab7-a470-48ba-aa0e-d1e7f4c94a3d' and pid='NOR-035-002'; UPDATE clean_minicensus_people SET gender='female' where instance_id='2af78ab7-a470-48ba-aa0e-d1e7f4c94a3d' and pid='NOR-035-005'; UPDATE clean_minicensus_people SET gender='female' where instance_id='2af78ab7-a470-48ba-aa0e-d1e7f4c94a3d' and pid='NOR-035-006'; UPDATE clean_minicensus_people SET gender='female' where instance_id='2af78ab7-a470-48ba-aa0e-d1e7f4c94a3d' and pid='NOR-035-008';", who = "Joe Brew")
+
+# 39. instance_id: 5b66c07f-0f75-4285-a444-8801c55ab081
+# id: all_males_5b66c07f-0f75-4285-a444-8801c55ab081
+# response details: The household member SNG-008-002 is female
+implement(id = 'all_males_5b66c07f-0f75-4285-a444-8801c55ab081', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='5b66c07f-0f75-4285-a444-8801c55ab081' and pid='SNG-008-002';", who = "Joe Brew")
+
+# 40. instance_id: 6e162fd3-d521-483e-abe5-93b64a76c837
+# id: all_males_6e162fd3-d521-483e-abe5-93b64a76c837
+# response details: The household member with ID - ZVA-311-002 is Female
+implement(id = 'all_males_6e162fd3-d521-483e-abe5-93b64a76c837', query = "UPDATE clean_minicensus_people SET gender='female' where instance_id='6e162fd3-d521-483e-abe5-93b64a76c837' and pid='ZVA-311-002';", who = "Joe Brew")
+
+# 41. instance_id: 22e502f6-f5b8-440f-8b23-0da492ce0cd3
+# id: all_females_22e502f6-f5b8-440f-8b23-0da492ce0cd3
+# response details: All the household members are female
+implement(id = 'all_females_22e502f6-f5b8-440f-8b23-0da492ce0cd3', is_ok=True, who = "Joe Brew")
+
+# 42. instance_id: 3f0c960f-53e4-4e7b-a2b4-3b944c4125f7
+# id: all_females_3f0c960f-53e4-4e7b-a2b4-3b944c4125f7
+# response details: Household member AEX-022-002 is male
+implement(id = 'all_females_3f0c960f-53e4-4e7b-a2b4-3b944c4125f7', query = "UPDATE clean_minicensus_people SET gender='male' where instance_id='3f0c960f-53e4-4e7b-a2b4-3b944c4125f7' and pid='AEX-022-002';", who = "Joe Brew")
+
+# 43. instance_id: 9ce5aaae-c66c-4846-a67e-ffd797d97082
+# id: all_females_9ce5aaae-c66c-4846-a67e-ffd797d97082
+# response details: The household member with ID AGO-200-004 is male
+implement(id = 'all_females_9ce5aaae-c66c-4846-a67e-ffd797d97082', query = "UPDATE clean_minicensus_people SET gender='male' where instance_id='9ce5aaae-c66c-4846-a67e-ffd797d97082' and pid='AGO-200-004';", who = "Joe Brew")
+
+# 44. instance_id: 65dbe1fa-16c5-49f0-8004-0ac889a006d3
+# id: all_females_65dbe1fa-16c5-49f0-8004-0ac889a006d3
+# response details: All the Household members are female
+implement(id = 'all_females_65dbe1fa-16c5-49f0-8004-0ac889a006d3', is_ok=True, who = "Joe Brew")
+
+
+# 49. instance_id: 7ebff849-26fe-4c6e-9dca-f4c9a37a43fc
+# id: all_females_7ebff849-26fe-4c6e-9dca-f4c9a37a43fc
+# response details: All the Household members are female
+implement(id = 'all_females_7ebff849-26fe-4c6e-9dca-f4c9a37a43fc', is_ok=True, who = "Joe Brew")
+
+# 50. instance_id: bd558af9-afa5-4582-b492-09f39fcc125e
+# id: all_females_bd558af9-afa5-4582-b492-09f39fcc125e
+# response details: All the Household members are female
+implement(id = 'all_females_bd558af9-afa5-4582-b492-09f39fcc125e', is_ok=True, who = "Joe Brew")
+
+# 51. instance_id: c9060cd3-f6b9-4d58-8ed3-15f1c1ceccee
+# id: all_females_c9060cd3-f6b9-4d58-8ed3-15f1c1ceccee
+# response details: All the Household members are female
+implement(id = 'all_females_c9060cd3-f6b9-4d58-8ed3-15f1c1ceccee', is_ok=True, who = "Joe Brew")
+
+# 52. instance_id: 6facfe55-3a9d-42d9-9965-436b3b0b98e9
+# id: all_females_6facfe55-3a9d-42d9-9965-436b3b0b98e9
+# response details: All the Household members are female
+implement(id = 'all_females_6facfe55-3a9d-42d9-9965-436b3b0b98e9', is_ok=True, who = "Joe Brew")
+
+# 53. instance_id: 79bd49a9-49e2-45f2-903e-2cdcf1c3bb63
+# id: all_females_79bd49a9-49e2-45f2-903e-2cdcf1c3bb63
+# response details: All the Household members are female
+implement(id = 'all_females_79bd49a9-49e2-45f2-903e-2cdcf1c3bb63', is_ok = True, who = "Joe Brew")
+
+# 57. instance_id: 331cff5f-3534-4a95-9f53-4a58051be29b
+# id: hh_all_non_adults_331cff5f-3534-4a95-9f53-4a58051be29b
+# response details: Confirmed.
+implement(id = 'hh_all_non_adults_331cff5f-3534-4a95-9f53-4a58051be29b', is_ok=True, who = "Joe Brew")
+
+# 228. instance_id: 0c7e6b03-7eee-404c-b090-0f695b535cdc
+# id: strange_hh_code_enumerations_0c7e6b03-7eee-404c-b090-0f695b535cdc
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_0c7e6b03-7eee-404c-b090-0f695b535cdc', query = "DELETE FROM clean_enumerations where instance_id='0c7e6b03-7eee-404c-b090-0f695b535cdc'", who = "Joe Brew")
+
+# 229. instance_id: 15e0094d-47e4-4c8a-9242-9f2d94f69465
+# id: strange_hh_code_enumerations_15e0094d-47e4-4c8a-9242-9f2d94f69465
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_15e0094d-47e4-4c8a-9242-9f2d94f69465', query = "DELETE FROM clean_enumerations where instance_id='15e0094d-47e4-4c8a-9242-9f2d94f69465'", who = "Joe Brew")
+
+# 230. instance_id: 1d2cdbf2-86a5-4616-bdd8-0d960928aa06
+# id: strange_hh_code_enumerations_1d2cdbf2-86a5-4616-bdd8-0d960928aa06
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_1d2cdbf2-86a5-4616-bdd8-0d960928aa06', query = "DELETE FROM clean_enumerations where instance_id='1d2cdbf2-86a5-4616-bdd8-0d960928aa06'", who = "Joe Brew")
+
+# 231. instance_id: 259c5c52-011b-4401-91fb-e66759f7af9b
+# id: strange_hh_code_enumerations_259c5c52-011b-4401-91fb-e66759f7af9b
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_259c5c52-011b-4401-91fb-e66759f7af9b', query = "DELETE FROM clean_enumerations where instance_id='259c5c52-011b-4401-91fb-e66759f7af9b'", who = "Joe Brew")
+
+# 232. instance_id: 291e836c-cdd3-4db2-be5b-e52f9ed3ccde
+# id: strange_hh_code_enumerations_291e836c-cdd3-4db2-be5b-e52f9ed3ccde
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_291e836c-cdd3-4db2-be5b-e52f9ed3ccde', query = "DELETE FROM clean_enumerations where instance_id='291e836c-cdd3-4db2-be5b-e52f9ed3ccde'", who = "Joe Brew")
+
+# 233. instance_id: 2935e774-e2d3-4d27-a877-de25a67d5ca9
+# id: strange_hh_code_enumerations_2935e774-e2d3-4d27-a877-de25a67d5ca9
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_2935e774-e2d3-4d27-a877-de25a67d5ca9', query = "DELETE FROM clean_enumerations where instance_id='2935e774-e2d3-4d27-a877-de25a67d5ca9'", who = "Joe Brew")
+
+# 234. instance_id: 3eca379c-f57e-4cca-9d5a-14eadf3deec0
+# id: strange_hh_code_enumerations_3eca379c-f57e-4cca-9d5a-14eadf3deec0
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_3eca379c-f57e-4cca-9d5a-14eadf3deec0', query = "DELETE FROM clean_enumerations where instance_id='3eca379c-f57e-4cca-9d5a-14eadf3deec0'", who = "Joe Brew")
+
+# 235. instance_id: 3fe7cc85-d5b3-4878-9848-27ed59f13c1a
+# id: strange_hh_code_enumerations_3fe7cc85-d5b3-4878-9848-27ed59f13c1a
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_3fe7cc85-d5b3-4878-9848-27ed59f13c1a', query = "DELETE FROM clean_enumerations where instance_id='3fe7cc85-d5b3-4878-9848-27ed59f13c1a'", who = "Joe Brew")
+
+# 236. instance_id: 43a4c06c-6eae-4679-82b3-0d5f884f570d
+# id: strange_hh_code_enumerations_43a4c06c-6eae-4679-82b3-0d5f884f570d
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_43a4c06c-6eae-4679-82b3-0d5f884f570d', query = "DELETE FROM clean_enumerations where instance_id='43a4c06c-6eae-4679-82b3-0d5f884f570d'", who = "Joe Brew")
+
+# 237. instance_id: 4aa3b56c-f792-4a5f-a18c-5a2ba41b81f5
+# id: strange_hh_code_enumerations_4aa3b56c-f792-4a5f-a18c-5a2ba41b81f5
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_4aa3b56c-f792-4a5f-a18c-5a2ba41b81f5', query = "DELETE FROM clean_enumerations where instance_id='4aa3b56c-f792-4a5f-a18c-5a2ba41b81f5'", who = "Joe Brew")
+
+# 238. instance_id: 4ab8ae36-5cfe-4da7-9726-cc8e5116804d
+# id: strange_hh_code_enumerations_4ab8ae36-5cfe-4da7-9726-cc8e5116804d
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_4ab8ae36-5cfe-4da7-9726-cc8e5116804d', query = "DELETE FROM clean_enumerations where instance_id='4ab8ae36-5cfe-4da7-9726-cc8e5116804d'", who = "Joe Brew")
+
+# 239. instance_id: 64d6ea6b-f35c-4455-ab3f-ab5e06b93d8e
+# id: strange_hh_code_enumerations_64d6ea6b-f35c-4455-ab3f-ab5e06b93d8e
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_64d6ea6b-f35c-4455-ab3f-ab5e06b93d8e', query = "DELETE FROM clean_enumerations where instance_id='64d6ea6b-f35c-4455-ab3f-ab5e06b93d8e'", who = "Joe Brew")
+
+# 240. instance_id: 6c762978-ae8f-40b7-b600-f25deb413681
+# id: strange_hh_code_enumerations_6c762978-ae8f-40b7-b600-f25deb413681
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_6c762978-ae8f-40b7-b600-f25deb413681', query = "DELETE FROM clean_enumerations where instance_id='6c762978-ae8f-40b7-b600-f25deb413681'", who = "Joe Brew")
+
+# 241. instance_id: 79f483b8-5abf-43c9-b5f9-7a81ea65f1ce
+# id: strange_hh_code_enumerations_79f483b8-5abf-43c9-b5f9-7a81ea65f1ce
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_79f483b8-5abf-43c9-b5f9-7a81ea65f1ce', query = "DELETE FROM clean_enumerations where instance_id='79f483b8-5abf-43c9-b5f9-7a81ea65f1ce'", who = "Joe Brew")
+
+# 242. instance_id: 8f8ed970-7637-4264-9d29-8355a39a4a14
+# id: strange_hh_code_enumerations_8f8ed970-7637-4264-9d29-8355a39a4a14
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_8f8ed970-7637-4264-9d29-8355a39a4a14', query = "DELETE FROM clean_enumerations where instance_id='8f8ed970-7637-4264-9d29-8355a39a4a14'", who = "Joe Brew")
+
+# 243. instance_id: 96d57c65-f702-4c5a-a781-43564d6ddc2c
+# id: strange_hh_code_enumerations_96d57c65-f702-4c5a-a781-43564d6ddc2c
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_96d57c65-f702-4c5a-a781-43564d6ddc2c', query = "DELETE FROM clean_enumerations where instance_id='96d57c65-f702-4c5a-a781-43564d6ddc2c'", who = "Joe Brew")
+
+# 244. instance_id: ac65c977-a6f6-47c4-a4d5-2d4691a2e0cb
+# id: strange_hh_code_enumerations_ac65c977-a6f6-47c4-a4d5-2d4691a2e0cb
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_ac65c977-a6f6-47c4-a4d5-2d4691a2e0cb', query = "DELETE FROM clean_enumerations where instance_id='ac65c977-a6f6-47c4-a4d5-2d4691a2e0cb'", who = "Joe Brew")
+
+# 245. instance_id: b0c82e4a-fb9d-48ac-92a8-da8922556a6e
+# id: strange_hh_code_enumerations_b0c82e4a-fb9d-48ac-92a8-da8922556a6e
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_b0c82e4a-fb9d-48ac-92a8-da8922556a6e', query = "DELETE FROM clean_enumerations where instance_id='b0c82e4a-fb9d-48ac-92a8-da8922556a6e'", who = "Joe Brew")
+
+# 246. instance_id: b7f36744-db67-4fcf-a4b5-c5d20ad9e823
+# id: strange_hh_code_enumerations_b7f36744-db67-4fcf-a4b5-c5d20ad9e823
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_b7f36744-db67-4fcf-a4b5-c5d20ad9e823', query = "DELETE FROM clean_enumerations where instance_id='b7f36744-db67-4fcf-a4b5-c5d20ad9e823'", who = "Joe Brew")
+
+# 247. instance_id: e901fb20-6296-4db8-953c-35cbf2122815
+# id: strange_hh_code_enumerations_e901fb20-6296-4db8-953c-35cbf2122815
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_e901fb20-6296-4db8-953c-35cbf2122815', query = "DELETE FROM clean_enumerations where instance_id='e901fb20-6296-4db8-953c-35cbf2122815'", who = "Joe Brew")
+
+# 248. instance_id: ec2f556f-c485-40ed-ad30-6eb673b1d7ca
+# id: strange_hh_code_enumerations_ec2f556f-c485-40ed-ad30-6eb673b1d7ca
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_ec2f556f-c485-40ed-ad30-6eb673b1d7ca', query = "DELETE FROM clean_enumerations where instance_id='ec2f556f-c485-40ed-ad30-6eb673b1d7ca'", who = "Joe Brew")
+
+# 249. instance_id: 0e1bb8bc-396b-4c4b-839b-f4e170c3ada4
+# id: strange_hh_code_enumerations_0e1bb8bc-396b-4c4b-839b-f4e170c3ada4
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_0e1bb8bc-396b-4c4b-839b-f4e170c3ada4', query = "DELETE FROM clean_enumerations where instance_id='0e1bb8bc-396b-4c4b-839b-f4e170c3ada4'", who = "Joe Brew")
+
+# 250. instance_id: 3613f05a-306e-4901-af64-a8b3a0cfe2df
+# id: strange_hh_code_enumerations_3613f05a-306e-4901-af64-a8b3a0cfe2df
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_3613f05a-306e-4901-af64-a8b3a0cfe2df', query = "DELETE FROM clean_enumerations where instance_id='3613f05a-306e-4901-af64-a8b3a0cfe2df'", who = "Joe Brew")
+
+# 251. instance_id: 585fb243-102c-4c60-aa97-481e975f81ad
+# id: strange_hh_code_enumerations_585fb243-102c-4c60-aa97-481e975f81ad
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_585fb243-102c-4c60-aa97-481e975f81ad', query = "DELETE FROM clean_enumerations where instance_id='585fb243-102c-4c60-aa97-481e975f81ad'", who = "Joe Brew")
+
+# 252. instance_id: 6f3a75bb-95a7-4ff3-9a4e-3603ea7b4e4d
+# id: strange_hh_code_enumerations_6f3a75bb-95a7-4ff3-9a4e-3603ea7b4e4d
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_6f3a75bb-95a7-4ff3-9a4e-3603ea7b4e4d', query = "DELETE FROM clean_enumerations where instance_id='6f3a75bb-95a7-4ff3-9a4e-3603ea7b4e4d'", who = "Joe Brew")
+
+# 253. instance_id: 837969ba-2bec-4970-881d-765f9e0f9c33
+# id: strange_hh_code_enumerations_837969ba-2bec-4970-881d-765f9e0f9c33
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_837969ba-2bec-4970-881d-765f9e0f9c33', query = "DELETE FROM clean_enumerations where instance_id='837969ba-2bec-4970-881d-765f9e0f9c33'", who = "Joe Brew")
+
+# 254. instance_id: 8cf1311d-2f4d-46a3-9a3e-178b0265d36f
+# id: strange_hh_code_enumerations_8cf1311d-2f4d-46a3-9a3e-178b0265d36f
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_8cf1311d-2f4d-46a3-9a3e-178b0265d36f', query = "DELETE FROM clean_enumerations where instance_id='8cf1311d-2f4d-46a3-9a3e-178b0265d36f'", who = "Joe Brew")
+
+# 255. instance_id: 95654412-a145-44ef-8796-8eb473130a44
+# id: strange_hh_code_enumerations_95654412-a145-44ef-8796-8eb473130a44
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_95654412-a145-44ef-8796-8eb473130a44', query = "DELETE FROM clean_enumerations where instance_id='95654412-a145-44ef-8796-8eb473130a44'", who = "Joe Brew")
+
+# 256. instance_id: 98868192-3544-4929-9cf1-ed008f384987
+# id: strange_hh_code_enumerations_98868192-3544-4929-9cf1-ed008f384987
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_98868192-3544-4929-9cf1-ed008f384987', query = "DELETE FROM clean_enumerations where instance_id='98868192-3544-4929-9cf1-ed008f384987'", who = "Joe Brew")
+
+# 257. instance_id: 9a093c8e-a4ac-4e20-b637-ba0c5556669c
+# id: strange_hh_code_enumerations_9a093c8e-a4ac-4e20-b637-ba0c5556669c
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_9a093c8e-a4ac-4e20-b637-ba0c5556669c', query = "DELETE FROM clean_enumerations where instance_id='9a093c8e-a4ac-4e20-b637-ba0c5556669c'", who = "Joe Brew")
+
+# 258. instance_id: a82302d4-346a-41fe-8735-bfc41830d7f9
+# id: strange_hh_code_enumerations_a82302d4-346a-41fe-8735-bfc41830d7f9
+# response details: Delete record this will be enumerated again using the assigned HH ID for this village
+implement(id = 'strange_hh_code_enumerations_a82302d4-346a-41fe-8735-bfc41830d7f9', query = "DELETE FROM clean_enumerations where instance_id='a82302d4-346a-41fe-8735-bfc41830d7f9'", who = "Joe Brew")
+
+# 259. instance_id: 92b0aae0-e1ac-4296-9d66-95b577956c99
+# id: strange_hh_code_enumerations_92b0aae0-e1ac-4296-9d66-95b577956c99
+# response details: Delete record
+implement(id = 'strange_hh_code_enumerations_92b0aae0-e1ac-4296-9d66-95b577956c99', query = "DELETE FROM clean_enumerations where instance_id='92b0aae0-e1ac-4296-9d66-95b577956c99'", who = "Joe Brew")
+
+# 260. instance_id: b4216796-edbf-4a64-9b3b-f90f6aec6cae,04ff47f7-f33c-493e-9ecf-440ca0417fe7
+# id: repeat_hh_id_b4216796-edbf-4a64-9b3b-f90f6aec6cae,04ff47f7-f33c-493e-9ecf-440ca0417fe7
+# response details: Delete record with instance ID: 04ff47f7-f33c-493e-9ecf-440ca0417fe7
+implement(id = 'repeat_hh_id_b4216796-edbf-4a64-9b3b-f90f6aec6cae,04ff47f7-f33c-493e-9ecf-440ca0417fe7', query = "DELETE FROM clean_minicensus_main where instance_id='04ff47f7-f33c-493e-9ecf-440ca0417fe7'", who = "Joe Brew")
+
+# 262. instance_id: 0a425d1e-84ce-4985-92d3-b449907b67e8,1569ea9a-b4e2-4e03-af8a-9540cc870b68,160ffdd1-25f5-4175-ac34-9b8e42caf0ed,6ba30420-baf5-4c89-a24f-f12300200409,d4fbc456-7f0c-46cb-bc34-93432addb32d,f113aac4-a08d-4f7b-a6c4-26bcb5731970,f518ecab-e848-4bbd-9be5-d544966eef21,080ad32e-873c-481a-9a71-dedee12b7875,5980b1f8-3783-4708-a5a0-bc4eaa707f19,8a9d9d23-85ef-4b83-aa1b-6f729ea822d2,f9e3177f-0681-48b7-990b-96a3defb7598
+# id: repeat_hh_id_enumerations_0a425d1e-84ce-4985-92d3-b449907b67e8,1569ea9a-b4e2-4e03-af8a-9540cc870b68,160ffdd1-25f5-4175-ac34-9b8e42caf0ed,6ba30420-baf5-4c89-a24f-f12300200409,d4fbc456-7f0c-46cb-bc34-93432addb32d,f113aac4-a08d-4f7b-a6c4-26bcb5731970,f518ecab-e848-4bbd-9be5-d544966eef21,080ad32e-873c-481a-9a71-dedee12b7875,5980b1f8-3783-4708-a5a0-bc4eaa707f19,8a9d9d23-85ef-4b83-aa1b-6f729ea822d2,f9e3177f-0681-48b7-990b-96a3defb7598
+# response details: Delete every record with HH_ID=000
+implement(id = 'repeat_hh_id_enumerations_0a425d1e-84ce-4985-92d3-b449907b67e8,1569ea9a-b4e2-4e03-af8a-9540cc870b68,160ffdd1-25f5-4175-ac34-9b8e42caf0ed,6ba30420-baf5-4c89-a24f-f12300200409,d4fbc456-7f0c-46cb-bc34-93432addb32d,f113aac4-a08d-4f7b-a6c4-26bcb5731970,f518ecab-e848-4bbd-9be5-d544966eef21,080ad32e-873c-481a-9a71-dedee12b7875,5980b1f8-3783-4708-a5a0-bc4eaa707f19,8a9d9d23-85ef-4b83-aa1b-6f729ea822d2,f9e3177f-0681-48b7-990b-96a3defb7598', query = "DELETE FROM clean_enumerations where agregado ='000'", who = "Joe Brew")
+
+# 263. instance_id: 93ea0ddc-2ab7-4d1f-a07d-0f636244bbb3,bb379b5b-171f-4f90-8273-323a21fabd43
+# id: repeat_hh_id_enumerations_93ea0ddc-2ab7-4d1f-a07d-0f636244bbb3,bb379b5b-171f-4f90-8273-323a21fabd43
+# response details: Replace HH_ID of instance ID: 93ea0ddc-2ab7-4d1f-a07d-0f636244bbb3, to AGO-147
+implement(id = 'repeat_hh_id_enumerations_93ea0ddc-2ab7-4d1f-a07d-0f636244bbb3,bb379b5b-171f-4f90-8273-323a21fabd43', query = "UPDATE clean_enumerations SET agregado ='AGO-147' where instance_id='93ea0ddc-2ab7-4d1f-a07d-0f636244bbb3'", who = "Joe Brew")
+
+# 264. instance_id: 769518ee-b1ab-426e-adfd-62480e37dd78,e96bfedf-52bb-40fe-89a4-6e586a08e7ed
+# id: repeat_hh_id_enumerations_769518ee-b1ab-426e-adfd-62480e37dd78,e96bfedf-52bb-40fe-89a4-6e586a08e7ed
+# response details: Replace HH_ID of instance ID: e96bfedf-52bb-40fe-89a4-6e586a08e7ed, to AGO-185
+implement(id = 'repeat_hh_id_enumerations_769518ee-b1ab-426e-adfd-62480e37dd78,e96bfedf-52bb-40fe-89a4-6e586a08e7ed', query = "UPDATE clean_enumerations SET agregado ='AGO-185' where instance_id='e96bfedf-52bb-40fe-89a4-6e586a08e7ed'", who = "Joe Brew")
+
+# 265. instance_id: 9359bcb9-747f-4e17-93cf-b1244fca409d,3abcac01-38e4-462c-9de2-6d220b321182
+# id: repeat_hh_id_enumerations_9359bcb9-747f-4e17-93cf-b1244fca409d,3abcac01-38e4-462c-9de2-6d220b321182
+# response details: Delete record with instance ID: 3abcac01-38e4-462c-9de2-6d220b321182
+implement(id = 'repeat_hh_id_enumerations_9359bcb9-747f-4e17-93cf-b1244fca409d,3abcac01-38e4-462c-9de2-6d220b321182', query = "DELETE FROM clean_enumerations where instance_id='3abcac01-38e4-462c-9de2-6d220b321182'", who = "Joe Brew")
+
+# 266. instance_id: 8af2a7cd-6fc3-4e5b-b7d4-6c5999931c11,ba0a3934-9cc8-4990-8647-fb61a7d89afd
+# id: repeat_hh_id_enumerations_8af2a7cd-6fc3-4e5b-b7d4-6c5999931c11,ba0a3934-9cc8-4990-8647-fb61a7d89afd
+# response details: Replace HH_ID of instance ID: 8af2a7cd-6fc3-4e5b-b7d4-6c5999931c11, to AGZ-064
+implement(id = 'repeat_hh_id_enumerations_8af2a7cd-6fc3-4e5b-b7d4-6c5999931c11,ba0a3934-9cc8-4990-8647-fb61a7d89afd', query = "UPDATE clean_enumerations SET agregado='AGZ-064' where instance_id='8af2a7cd-6fc3-4e5b-b7d4-6c5999931c11'", who = "Joe Brew")
+
+# 267. instance_id: 9ce5080b-f057-41b1-b585-a4c30a3b526a,a587889f-ef95-4a54-879c-1e68c1f20741
+# id: repeat_hh_id_enumerations_9ce5080b-f057-41b1-b585-a4c30a3b526a,a587889f-ef95-4a54-879c-1e68c1f20741
+# response details: Delete record with instance ID: 9ce5080b-f057-41b1-b585-a4c30a3b526a
+implement(id = 'repeat_hh_id_enumerations_9ce5080b-f057-41b1-b585-a4c30a3b526a,a587889f-ef95-4a54-879c-1e68c1f20741', query = "DELETE FROM clean_enumerations where instance_id='9ce5080b-f057-41b1-b585-a4c30a3b526a'", who = "Joe Brew")
+
+# 268. instance_id: 19b34b13-90cb-4040-87b5-d1d405af4e59,705ae700-ff05-4aeb-8a82-3a2ad82b1e7a
+# id: repeat_hh_id_enumerations_19b34b13-90cb-4040-87b5-d1d405af4e59,705ae700-ff05-4aeb-8a82-3a2ad82b1e7a
+# response details: Replace HH_ID of instance ID: 705ae700-ff05-4aeb-8a82-3a2ad82b1e7a, to BBB-161
+implement(id = 'repeat_hh_id_enumerations_19b34b13-90cb-4040-87b5-d1d405af4e59,705ae700-ff05-4aeb-8a82-3a2ad82b1e7a', query = "UPDATE clean_enumerations SET agregado='BBB-161' where instance_id='705ae700-ff05-4aeb-8a82-3a2ad82b1e7a'", who = "Joe Brew")
+
+# 269. instance_id: 30859b49-fcbb-4719-9bf9-bc5c22ec5c67,cbb2c056-7f1a-41e5-9de0-834257becdcb
+# id: repeat_hh_id_enumerations_30859b49-fcbb-4719-9bf9-bc5c22ec5c67,cbb2c056-7f1a-41e5-9de0-834257becdcb
+# response details: Replace HH_ID of instance ID: cbb2c056-7f1a-41e5-9de0-834257becdcb, to BBB-142
+implement(id = 'repeat_hh_id_enumerations_30859b49-fcbb-4719-9bf9-bc5c22ec5c67,cbb2c056-7f1a-41e5-9de0-834257becdcb', query = "UPDATE clean_enumerations SET agregado='BBB-142' where instance_id='cbb2c056-7f1a-41e5-9de0-834257becdcb'", who = "Joe Brew")
+
+# 270. instance_id: 51f0b9ed-c6ba-4ce9-90bd-9f6b18cbf9b0,e71bf73c-aed8-400b-8f4b-4ec7015717f0
+# id: repeat_hh_id_enumerations_51f0b9ed-c6ba-4ce9-90bd-9f6b18cbf9b0,e71bf73c-aed8-400b-8f4b-4ec7015717f0
+# response details: Replace HH_ID of instance ID: 51f0b9ed-c6ba-4ce9-90bd-9f6b18cbf9b0, to CHR-056
+implement(id = 'repeat_hh_id_enumerations_51f0b9ed-c6ba-4ce9-90bd-9f6b18cbf9b0,e71bf73c-aed8-400b-8f4b-4ec7015717f0', query = "UPDATE clean_enumerations SET agregado='CHR-056' where instance_id='51f0b9ed-c6ba-4ce9-90bd-9f6b18cbf9b0'", who = "Joe Brew")
+
+# 271. instance_id: 7849de13-a778-436b-8cd3-444892b4708d,97c53fdd-3318-4ec5-b2d7-6413966c2256
+# id: repeat_hh_id_enumerations_7849de13-a778-436b-8cd3-444892b4708d,97c53fdd-3318-4ec5-b2d7-6413966c2256
+# response details: Replace HH_ID of instance ID: 7849de13-a778-436b-8cd3-444892b4708d, to CMX-038
+implement(id = 'repeat_hh_id_enumerations_7849de13-a778-436b-8cd3-444892b4708d,97c53fdd-3318-4ec5-b2d7-6413966c2256', query = "UPDATE clean_enumerations SET agregado='CMX-038' where instance_id='7849de13-a778-436b-8cd3-444892b4708d'", who = "Joe Brew")
+
+# 272. instance_id: 116d4adf-c96a-4b99-9260-ac7a3cc7907c,318c29c4-592b-4ff3-b882-2af266a50d9a
+# id: repeat_hh_id_enumerations_116d4adf-c96a-4b99-9260-ac7a3cc7907c,318c29c4-592b-4ff3-b882-2af266a50d9a
+# response details: Replace HH_ID of instance ID: 318c29c4-592b-4ff3-b882-2af266a50d9a, to CMX-086
+implement(id = 'repeat_hh_id_enumerations_116d4adf-c96a-4b99-9260-ac7a3cc7907c,318c29c4-592b-4ff3-b882-2af266a50d9a', query = "UPDATE clean_enumerations SET agregado='CMX-086' where instance_id='318c29c4-592b-4ff3-b882-2af266a50d9a'", who = "Joe Brew")
+
+# 273. instance_id: ec6caf00-9778-41bd-bd14-8c22bcb25969,e0b8ba86-d446-486d-8920-99db5e8bf1cd
+# id: repeat_hh_id_enumerations_ec6caf00-9778-41bd-bd14-8c22bcb25969,e0b8ba86-d446-486d-8920-99db5e8bf1cd
+# response details: Delete record with instance ID: e0b8ba86-d446-486d-8920-99db5e8bf1cd
+implement(id = 'repeat_hh_id_enumerations_ec6caf00-9778-41bd-bd14-8c22bcb25969,e0b8ba86-d446-486d-8920-99db5e8bf1cd', query = "DELETE FROM clean_enumerations where instance_id='e0b8ba86-d446-486d-8920-99db5e8bf1cd'", who = "Joe Brew")
+
+# 274. instance_id: 88ffd64f-8bcd-41f8-a386-50532d651568,956b5240-65d1-41e7-a5e5-04ddbbf7fe12
+# id: repeat_hh_id_enumerations_88ffd64f-8bcd-41f8-a386-50532d651568,956b5240-65d1-41e7-a5e5-04ddbbf7fe12
+# response details: Replace HH_ID of instance ID: 88ffd64f-8bcd-41f8-a386-50532d651568, to DES-024
+implement(id = 'repeat_hh_id_enumerations_88ffd64f-8bcd-41f8-a386-50532d651568,956b5240-65d1-41e7-a5e5-04ddbbf7fe12', query = "UPDATE clean_enumerations SET agregado = 'DES-024' where instance_id='88ffd64f-8bcd-41f8-a386-50532d651568'", who = "Joe Brew")
+
+# 275. instance_id: cc2c2f42-9e8f-4086-8785-f25a6fca3d78,e66e0b8c-7def-4acc-adc7-4cbfb2172408
+# id: repeat_hh_id_enumerations_cc2c2f42-9e8f-4086-8785-f25a6fca3d78,e66e0b8c-7def-4acc-adc7-4cbfb2172408
+# response details: Replace HH_ID of instance ID: cc2c2f42-9e8f-4086-8785-f25a6fca3d78, to GUI-036
+implement(id = 'repeat_hh_id_enumerations_cc2c2f42-9e8f-4086-8785-f25a6fca3d78,e66e0b8c-7def-4acc-adc7-4cbfb2172408', query = "UPDATE clean_enumerations SET agregado ='GUI-036' where instance_id='cc2c2f42-9e8f-4086-8785-f25a6fca3d78'", who = "Joe Brew")
+
+# 276. instance_id: a70e8fb7-42b7-4a83-8ff3-223f7f0cc0e9,d375741f-174a-4e06-81fb-d1d992325cd7
+# id: repeat_hh_id_enumerations_a70e8fb7-42b7-4a83-8ff3-223f7f0cc0e9,d375741f-174a-4e06-81fb-d1d992325cd7
+# response details: Replace HH_ID of instance ID: a70e8fb7-42b7-4a83-8ff3-223f7f0cc0e9, to JON-014
+implement(id = 'repeat_hh_id_enumerations_a70e8fb7-42b7-4a83-8ff3-223f7f0cc0e9,d375741f-174a-4e06-81fb-d1d992325cd7', query = "UPDATE clean_enumerations SET agregado ='JON-014' where instance_id='a70e8fb7-42b7-4a83-8ff3-223f7f0cc0e9'", who = "Joe Brew")
+
+# 277. instance_id: 117a13d0-bad3-4f55-8009-97593f4cd186,2bbb1832-b57e-4af8-ba2b-d868e03a4967
+# id: repeat_hh_id_enumerations_117a13d0-bad3-4f55-8009-97593f4cd186,2bbb1832-b57e-4af8-ba2b-d868e03a4967
+# response details: Delete record with instance ID: 117a13d0-bad3-4f55-8009-97593f4cd186
+implement(id = 'repeat_hh_id_enumerations_117a13d0-bad3-4f55-8009-97593f4cd186,2bbb1832-b57e-4af8-ba2b-d868e03a4967', query = "DELETE FROM clean_enumerations where instance_id='117a13d0-bad3-4f55-8009-97593f4cd186'", who = "Joe Brew")
+
+# 278. instance_id: 239fa061-b0b7-48c1-b801-7816fc76b307
+# id: all_females_239fa061-b0b7-48c1-b801-7816fc76b307
+# response details: All the household members are female
+implement(id = 'all_females_239fa061-b0b7-48c1-b801-7816fc76b307', is_ok=True, who = "Joe Brew")
+
+# 296. instance_id: 3e9bf0c4-5c6c-43a8-9740-9bdf8bdfa4f4
+# id: incorrect_date_3e9bf0c4-5c6c-43a8-9740-9bdf8bdfa4f4
+# response details: The correct date for when the house was censused was 18/01/2021
+implement(id = 'incorrect_date_3e9bf0c4-5c6c-43a8-9740-9bdf8bdfa4f4', query = "UPDATE clean_minicensus_main SET todays_date = '2021-01-18' where instance_id='3e9bf0c4-5c6c-43a8-9740-9bdf8bdfa4f4'", who = "Joe Brew")
+
+# 297. instance_id: 89fabecb-9a4b-4895-95d5-843c30fd341f
+# id: incorrect_date_89fabecb-9a4b-4895-95d5-843c30fd341f
+# response details: The correct date for when the house was censused was 18/01/2021
+implement(id = 'incorrect_date_89fabecb-9a4b-4895-95d5-843c30fd341f', query = "UPDATE clean_minicensus_main SET todays_date = '2021-01-18' where instance_id='89fabecb-9a4b-4895-95d5-843c30fd341f'", who = "Joe Brew")
+
+# 298. instance_id: c4e5a8df-4881-447b-851b-dd8efe42aaab
+# id: incorrect_date_c4e5a8df-4881-447b-851b-dd8efe42aaab
+# response details: The correct date for when the house was censused was 18/01/2021
+implement(id = 'incorrect_date_c4e5a8df-4881-447b-851b-dd8efe42aaab', query = "UPDATE clean_minicensus_main SET todays_date = '2021-01-18' where instance_id='c4e5a8df-4881-447b-851b-dd8efe42aaab'", who = "Joe Brew")
+
+# 299. instance_id: c94d7fc9-1eff-495d-876f-23a9ee72ed01
+# id: incorrect_date_c94d7fc9-1eff-495d-876f-23a9ee72ed01
+# response details: The correct date for when the house was censused was 18/01/2021
+implement(id = 'incorrect_date_c94d7fc9-1eff-495d-876f-23a9ee72ed01', query = "UPDATE clean_minicensus_main SET todays_date = '2021-01-18' where instance_id='c94d7fc9-1eff-495d-876f-23a9ee72ed01'", who = "Joe Brew")
+
+
+# 302. instance_id: 71cc70d3-7983-458a-a1bc-7d5de17f4024,a113a9a2-49cc-4d5c-a7a9-3225c2c2a6ca
+# id: repeat_hh_id_71cc70d3-7983-458a-a1bc-7d5de17f4024,a113a9a2-49cc-4d5c-a7a9-3225c2c2a6ca
+# response details: Drop HH with instanceid: 71cc70d3-7983-458a-a1bc-7d5de17f4024. The supervisor has been notified and the correct HHID has been assigned to the HH.
+implement(id = 'repeat_hh_id_71cc70d3-7983-458a-a1bc-7d5de17f4024,a113a9a2-49cc-4d5c-a7a9-3225c2c2a6ca', query = "DELETE FROM clean_minicensus_main where instance_id='71cc70d3-7983-458a-a1bc-7d5de17f4024'", who = "Joe Brew")
+
+# 303. instance_id: bff21e09-d067-479b-9485-a4b4af9f186e,41cbd0eb-df30-4dc8-b5f7-d327783f9680
+# id: repeat_hh_id_bff21e09-d067-479b-9485-a4b4af9f186e,41cbd0eb-df30-4dc8-b5f7-d327783f9680
+# response details: Drop HH with instanceid:41cbd0eb-df30-4dc8-b5f7-d327783f9680. The supervisor has been notified and the correct HHID has been assigned to the HH.
+implement(id = 'repeat_hh_id_bff21e09-d067-479b-9485-a4b4af9f186e,41cbd0eb-df30-4dc8-b5f7-d327783f9680', query = "DELETE FROM clean_minicensus_main where instance_id='41cbd0eb-df30-4dc8-b5f7-d327783f9680'", who = "Joe Brew")
+
+# 304. instance_id: c39ed9a6-8524-415f-b7cd-9e35c654463c,ebce6eed-07a9-4885-9ff0-26daaddd77d6
+# id: repeat_hh_id_c39ed9a6-8524-415f-b7cd-9e35c654463c,ebce6eed-07a9-4885-9ff0-26daaddd77d6
+# response details: Drop HH with instanceid:ebce6eed-07a9-4885-9ff0-26daaddd77d6. The supervisor has been notified and the correct HHID has been assigned to the HH.
+implement(id = 'repeat_hh_id_c39ed9a6-8524-415f-b7cd-9e35c654463c,ebce6eed-07a9-4885-9ff0-26daaddd77d6', query = "DELETE FROM clean_minicensus_main where instance_id='ebce6eed-07a9-4885-9ff0-26daaddd77d6'", who = "Joe Brew")
+
+# 305. instance_id: d26ca6ea-0135-466e-bb92-3da789c23c54,81a3ac07-d797-4f5e-8c5a-a083bfb14d9c
+# id: repeat_hh_id_d26ca6ea-0135-466e-bb92-3da789c23c54,81a3ac07-d797-4f5e-8c5a-a083bfb14d9c
+# response details: Drop HH with instanceid:81a3ac07-d797-4f5e-8c5a-a083bfb14d9c. The supervisor has been notified and the correct HHID has been assigned to the HH.
+
+implement(id = 'repeat_hh_id_d26ca6ea-0135-466e-bb92-3da789c23c54,81a3ac07-d797-4f5e-8c5a-a083bfb14d9c', query = "DELETE FROM clean_minicensus_main where instance_id='81a3ac07-d797-4f5e-8c5a-a083bfb14d9c'", who = "Joe Brew")
+
+# 306. instance_id: 5634060f-efdf-4e6e-aa40-dcec6f295fcc,f1e665ce-c51a-4b93-ba08-2fa399b063c4
+# id: repeat_hh_id_5634060f-efdf-4e6e-aa40-dcec6f295fcc,f1e665ce-c51a-4b93-ba08-2fa399b063c4
+# response details: Drop HH with instanceid:f1e665ce-c51a-4b93-ba08-2fa399b063c4. The supervisor has been notified and the correct HHID has been assigned to the HH.
+
+implement(id = 'repeat_hh_id_5634060f-efdf-4e6e-aa40-dcec6f295fcc,f1e665ce-c51a-4b93-ba08-2fa399b063c4', query = "DELETE FROM clean_minicensus_main where instance_id='f1e665ce-c51a-4b93-ba08-2fa399b063c4'", who = "Joe Brew")
+
+# 307. instance_id: 7659e4ca-6656-43cf-bfe5-0eec86b8f09b,493346d2-6622-4af7-9c89-126dfe79d1c6
+# id: repeat_hh_id_7659e4ca-6656-43cf-bfe5-0eec86b8f09b,493346d2-6622-4af7-9c89-126dfe79d1c6
+# response details: Drop HH with instanceid:7659e4ca-6656-43cf-bfe5-0eec86b8f09b. The supervisor has been notified and the correct HHID has been assigned to the HH.
+
+implement(id = 'repeat_hh_id_7659e4ca-6656-43cf-bfe5-0eec86b8f09b,493346d2-6622-4af7-9c89-126dfe79d1c6', query = "DELETE FROM clean_minicensus_main where instance_id='7659e4ca-6656-43cf-bfe5-0eec86b8f09b'", who = "Joe Brew")
+
+# 308. instance_id: ecf63df5-a7d3-4b74-9bab-aac13b8d25e6
+# id: hh_head_too_young_old_ecf63df5-a7d3-4b74-9bab-aac13b8d25e6
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_ecf63df5-a7d3-4b74-9bab-aac13b8d25e6', is_ok=True, who = "Joe Brew")
+
+# 309. instance_id: ecf63df5-a7d3-4b74-9bab-aac13b8d25e6
+# id: hh_all_non_adults_ecf63df5-a7d3-4b74-9bab-aac13b8d25e6
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_all_non_adults_ecf63df5-a7d3-4b74-9bab-aac13b8d25e6', is_ok=True, who = "Joe Brew")
+
+# 310. instance_id: 021dc014-eaa6-49fe-9823-0cea0a4f3a85
+# id: hh_head_too_young_old_021dc014-eaa6-49fe-9823-0cea0a4f3a85
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_021dc014-eaa6-49fe-9823-0cea0a4f3a85', is_ok=True, who = "Joe Brew")
+
+# 311. instance_id: 2e2613f7-6fdf-4205-94fa-d20c1f53a383
+# id: too_many_consult_2e2613f7-6fdf-4205-94fa-d20c1f53a383
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_2e2613f7-6fdf-4205-94fa-d20c1f53a383', is_ok=True, who = "Joe Brew")
+
+# 312. instance_id: 50d874c3-8979-49e6-b9e4-4afb837cc5c2
+# id: too_many_consult_50d874c3-8979-49e6-b9e4-4afb837cc5c2
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_50d874c3-8979-49e6-b9e4-4afb837cc5c2', is_ok=True, who = "Joe Brew")
+
+# 313. instance_id: 18e59f4b-a359-48d4-b93b-9e6665f34da5
+# id: too_many_consult_18e59f4b-a359-48d4-b93b-9e6665f34da5
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_18e59f4b-a359-48d4-b93b-9e6665f34da5', is_ok=True, who = "Joe Brew")
+
+# 314. instance_id: c22d7a38-68b1-40b4-80f1-500bc65e6b01
+# id: all_females_c22d7a38-68b1-40b4-80f1-500bc65e6b01
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'all_females_c22d7a38-68b1-40b4-80f1-500bc65e6b01', is_ok=True, who = "Joe Brew")
+
+# 315. instance_id: 6e335da3-f6b7-4481-8179-4f8324559c8f
+# id: hh_head_too_young_old_6e335da3-f6b7-4481-8179-4f8324559c8f
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_6e335da3-f6b7-4481-8179-4f8324559c8f', is_ok=True, who = "Joe Brew")
+
+# 316. instance_id: a53f1fc5-f080-4d32-95ce-520c96bb380a
+# id: hh_head_too_young_old_a53f1fc5-f080-4d32-95ce-520c96bb380a
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_a53f1fc5-f080-4d32-95ce-520c96bb380a', is_ok=True, who = "Joe Brew")
+
+# 317. instance_id: 61aea868-404d-4e95-bde4-34010e9296a4
+# id: hh_head_too_young_old_61aea868-404d-4e95-bde4-34010e9296a4
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_61aea868-404d-4e95-bde4-34010e9296a4', is_ok=True, who = "Joe Brew")
+
+# 318. instance_id: 59b7bf7a-a1e4-4297-9e7d-8d35c389234d
+# id: hh_head_too_young_old_59b7bf7a-a1e4-4297-9e7d-8d35c389234d
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_59b7bf7a-a1e4-4297-9e7d-8d35c389234d', is_ok=True, who = "Joe Brew")
+
+# 319. instance_id: 6447e529-2855-488a-94ee-9d1f5e655ee6
+# id: hh_head_too_young_old_6447e529-2855-488a-94ee-9d1f5e655ee6
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_6447e529-2855-488a-94ee-9d1f5e655ee6', is_ok=True, who = "Joe Brew")
+
+# 320. instance_id: eecf6c85-cd7b-4085-89fa-21fc6fe3e3d4
+# id: hh_head_too_young_old_eecf6c85-cd7b-4085-89fa-21fc6fe3e3d4
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_eecf6c85-cd7b-4085-89fa-21fc6fe3e3d4', is_ok=True, who = "Joe Brew")
+
+# 321. instance_id: 498f21a3-59b8-40eb-bf62-8ba56afe6bb9
+# id: fw_too_few_hh_members_498f21a3-59b8-40eb-bf62-8ba56afe6bb9
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'fw_too_few_hh_members_498f21a3-59b8-40eb-bf62-8ba56afe6bb9', is_ok=True, who = "Joe Brew")
+
+# 322. instance_id: 5b9639bb-2ec0-4547-98c0-7531fc4b34fd
+# id: hh_head_too_young_old_5b9639bb-2ec0-4547-98c0-7531fc4b34fd
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_5b9639bb-2ec0-4547-98c0-7531fc4b34fd', is_ok=True, who = "Joe Brew")
+
+# 323. instance_id: 808bad34-d9df-4c61-b6b9-5b2521c47f43
+# id: hh_head_too_young_old_808bad34-d9df-4c61-b6b9-5b2521c47f43
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_808bad34-d9df-4c61-b6b9-5b2521c47f43', is_ok=True, who = "Joe Brew")
+
+# 324. instance_id: b09dc5e8-31f3-45cf-a776-9635a62fec86
+# id: hh_head_too_young_old_b09dc5e8-31f3-45cf-a776-9635a62fec86
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_b09dc5e8-31f3-45cf-a776-9635a62fec86', is_ok=True, who = "Joe Brew")
+
+# 325. instance_id: 2dab58b3-6d5a-4987-921f-cb4c4feabd7c
+# id: all_females_2dab58b3-6d5a-4987-921f-cb4c4feabd7c
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'all_females_2dab58b3-6d5a-4987-921f-cb4c4feabd7c', is_ok=True, who = "Joe Brew")
+
+# 326. instance_id: 5ff2c376-cc47-4660-9156-66ad784338cc
+# id: hh_head_too_young_old_5ff2c376-cc47-4660-9156-66ad784338cc
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_5ff2c376-cc47-4660-9156-66ad784338cc', is_ok=True, who = "Joe Brew")
+
+# 327. instance_id: 26f24146-6156-43a4-a8b3-4a3c442e4bca
+# id: note_too_many_cattle_warning_26f24146-6156-43a4-a8b3-4a3c442e4bca
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'note_too_many_cattle_warning_26f24146-6156-43a4-a8b3-4a3c442e4bca', is_ok=True, who = "Joe Brew")
+
+# 328. instance_id: b561b0c1-2b5d-483b-91b5-ce76895cbeab
+# id: hh_head_too_young_old_b561b0c1-2b5d-483b-91b5-ce76895cbeab
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_b561b0c1-2b5d-483b-91b5-ce76895cbeab', is_ok=True, who = "Joe Brew")
+
+# 329. instance_id: 10f21ae5-cb19-47c3-a5c0-a62374598d95
+# id: hh_head_too_young_old_10f21ae5-cb19-47c3-a5c0-a62374598d95
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_10f21ae5-cb19-47c3-a5c0-a62374598d95', is_ok=True, who = "Joe Brew")
+
+# 330. instance_id: 8d403991-d312-4dd1-a7ba-159e5ac220b7
+# id: too_many_consult_8d403991-d312-4dd1-a7ba-159e5ac220b7
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_8d403991-d312-4dd1-a7ba-159e5ac220b7', is_ok=True, who = "Joe Brew")
+
+# 331. instance_id: 63016d45-d7a3-4783-bac7-644b5b253ab7
+# id: too_many_consult_63016d45-d7a3-4783-bac7-644b5b253ab7
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_63016d45-d7a3-4783-bac7-644b5b253ab7', is_ok=True, who = "Joe Brew")
+
+# 334. instance_id: 35fe6830-82b9-4592-aebe-2d58da317452
+# id: too_many_consult_35fe6830-82b9-4592-aebe-2d58da317452
+# response details: As per the FW and Field-manager this response is Correct.
+
+implement(id = 'too_many_consult_35fe6830-82b9-4592-aebe-2d58da317452', is_ok=True, who = "Joe Brew")
+
+# 335. instance_id: 98c6e2c8-1f87-4c0d-b84f-62e121079681
+# id: too_many_consult_98c6e2c8-1f87-4c0d-b84f-62e121079681
+# response details: As per the FW and Field-manager this response is Correct.
+
+implement(id = 'too_many_consult_98c6e2c8-1f87-4c0d-b84f-62e121079681', is_ok=True, who = "Joe Brew")
+
+# 336. instance_id: 769b2f50-d66c-4141-b590-4166cb88301d
+# id: fw_too_few_hh_members_769b2f50-d66c-4141-b590-4166cb88301d
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'fw_too_few_hh_members_769b2f50-d66c-4141-b590-4166cb88301d', is_ok=True, who = "Joe Brew")
+
+# 337. instance_id: b255e3be-843d-481e-9ff8-e71f23fe5c51
+# id: fw_too_few_hh_members_b255e3be-843d-481e-9ff8-e71f23fe5c51
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'fw_too_few_hh_members_b255e3be-843d-481e-9ff8-e71f23fe5c51', is_ok=True, who = "Joe Brew")
+
+# 338. instance_id: 3566957c-036c-40c5-b52e-7e7cd1cc0fd9
+# id: hh_head_too_young_old_3566957c-036c-40c5-b52e-7e7cd1cc0fd9
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'hh_head_too_young_old_3566957c-036c-40c5-b52e-7e7cd1cc0fd9', is_ok=True, who = "Joe Brew")
+
+# 339. instance_id: c0ea3850-683f-4bd4-884d-4bee08e3df1f
+# id: too_many_houses_c0ea3850-683f-4bd4-884d-4bee08e3df1f
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_houses_c0ea3850-683f-4bd4-884d-4bee08e3df1f', is_ok=True, who = "Joe Brew")
+
+# 340. instance_id: a87fd0e0-5d29-4ad9-acc0-0910326a060f
+# id: too_many_houses_a87fd0e0-5d29-4ad9-acc0-0910326a060f
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_houses_a87fd0e0-5d29-4ad9-acc0-0910326a060f', is_ok=True, who = "Joe Brew")
+
+# 341. instance_id: c4ab64d8-abb2-4598-b141-11c238ec67e7
+# id: note_too_many_cattle_warning_c4ab64d8-abb2-4598-b141-11c238ec67e7
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'note_too_many_cattle_warning_c4ab64d8-abb2-4598-b141-11c238ec67e7', is_ok=True, who = "Joe Brew")
+
+# 342. instance_id: fafd0547-30ea-4a75-aebd-25060118f3f3
+# id: note_too_many_cattle_warning_fafd0547-30ea-4a75-aebd-25060118f3f3
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'note_too_many_cattle_warning_fafd0547-30ea-4a75-aebd-25060118f3f3', is_ok=True, who = "Joe Brew")
+
+# 343. instance_id: a87fd0e0-5d29-4ad9-acc0-0910326a060f
+# id: note_too_many_cattle_warning_a87fd0e0-5d29-4ad9-acc0-0910326a060f
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'note_too_many_cattle_warning_a87fd0e0-5d29-4ad9-acc0-0910326a060f', is_ok=True, who = "Joe Brew")
+
+
+# 345. instance_id: 243bcaaa-eced-41f9-ac28-f17da22a2a06
+# id: note_too_many_cattle_warning_243bcaaa-eced-41f9-ac28-f17da22a2a06
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'note_too_many_cattle_warning_243bcaaa-eced-41f9-ac28-f17da22a2a06', is_ok=True, who = "Joe Brew")
+
+# 346. instance_id: ac87510b-63eb-40e0-a5db-6821683b53bd
+# id: note_too_many_cattle_warning_ac87510b-63eb-40e0-a5db-6821683b53bd
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'note_too_many_cattle_warning_ac87510b-63eb-40e0-a5db-6821683b53bd', is_ok=True, who = "Joe Brew")
+
+# 347. instance_id: 35fe6830-82b9-4592-aebe-2d58da317452
+# id: too_many_consult_35fe6830-82b9-4592-aebe-2d58da317452
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_35fe6830-82b9-4592-aebe-2d58da317452', is_ok=True, who = "Joe Brew")
+
+# 348. instance_id: 98c6e2c8-1f87-4c0d-b84f-62e121079681
+# id: too_many_consult_98c6e2c8-1f87-4c0d-b84f-62e121079681
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_98c6e2c8-1f87-4c0d-b84f-62e121079681', is_ok=True, who = "Joe Brew")
+
+# 349. instance_id: 151a63d7-236a-405e-bc9d-e57ef51e1793
+# id: too_many_consult_151a63d7-236a-405e-bc9d-e57ef51e1793
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_151a63d7-236a-405e-bc9d-e57ef51e1793', is_ok=True, who = "Joe Brew")
+
+# 350. instance_id: c3a7384d-f5fe-4094-a3cf-7ff410f1ce3d
+# id: too_many_consult_c3a7384d-f5fe-4094-a3cf-7ff410f1ce3d
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_c3a7384d-f5fe-4094-a3cf-7ff410f1ce3d', is_ok=True, who = "Joe Brew")
+
+# 351. instance_id: 1167c345-13f1-4050-b376-e7924e0552fd
+# id: too_many_consult_1167c345-13f1-4050-b376-e7924e0552fd
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_1167c345-13f1-4050-b376-e7924e0552fd', is_ok=True, who = "Joe Brew")
+
+# 352. instance_id: 24549b67-0a10-4c07-8d47-1c06c4e2e4d0
+# id: too_many_consult_24549b67-0a10-4c07-8d47-1c06c4e2e4d0
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_24549b67-0a10-4c07-8d47-1c06c4e2e4d0', is_ok=True, who = "Joe Brew")
+
+# 353. instance_id: 3cbf6f46-7fa5-4811-aa63-c73cde24ebfe
+# id: too_many_consult_3cbf6f46-7fa5-4811-aa63-c73cde24ebfe
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_3cbf6f46-7fa5-4811-aa63-c73cde24ebfe', is_ok=True, who = "Joe Brew")
+
+# 354. instance_id: 62034c01-1dcd-4b5b-a2cb-db8064947a54
+# id: too_many_consult_62034c01-1dcd-4b5b-a2cb-db8064947a54
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_62034c01-1dcd-4b5b-a2cb-db8064947a54', is_ok=True, who = "Joe Brew")
+
+# 355. instance_id: 7b5a2f1d-4f8f-4a29-888e-c440c47835ee
+# id: too_many_consult_7b5a2f1d-4f8f-4a29-888e-c440c47835ee
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_7b5a2f1d-4f8f-4a29-888e-c440c47835ee', is_ok=True, who = "Joe Brew")
+
+# 356. instance_id: 8340d71c-6460-4b7b-aaf0-028dac9adba0
+# id: too_many_consult_8340d71c-6460-4b7b-aaf0-028dac9adba0
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_8340d71c-6460-4b7b-aaf0-028dac9adba0', is_ok=True, who = "Joe Brew")
+
+# 357. instance_id: 9241ee2e-c2d0-49fa-9a05-c298d4f29d50
+# id: too_many_consult_9241ee2e-c2d0-49fa-9a05-c298d4f29d50
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_9241ee2e-c2d0-49fa-9a05-c298d4f29d50', is_ok=True, who = "Joe Brew")
+
+# 358. instance_id: c24fa994-21ca-40dc-adc7-f0c76d6e09eb
+# id: too_many_consult_c24fa994-21ca-40dc-adc7-f0c76d6e09eb
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_c24fa994-21ca-40dc-adc7-f0c76d6e09eb', is_ok=True, who = "Joe Brew")
+
+# 359. instance_id: f40b0539-ed5b-42ce-9b56-d0117c06078c
+# id: too_many_consult_f40b0539-ed5b-42ce-9b56-d0117c06078c
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_f40b0539-ed5b-42ce-9b56-d0117c06078c', is_ok=True, who = "Joe Brew")
+
+# 360. instance_id: 6e2657c2-02e4-48a5-ab99-30ec6987cd42
+# id: too_many_consult_6e2657c2-02e4-48a5-ab99-30ec6987cd42
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_6e2657c2-02e4-48a5-ab99-30ec6987cd42', is_ok=True, who = "Joe Brew")
+
+# 361. instance_id: 7d25c209-5768-41dc-83d2-88a1229f9919
+# id: too_many_consult_7d25c209-5768-41dc-83d2-88a1229f9919
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_7d25c209-5768-41dc-83d2-88a1229f9919', is_ok=True, who = "Joe Brew")
+
+# 362. instance_id: 80d211e7-204d-44f9-aa70-55ab4e009281
+# id: too_many_consult_80d211e7-204d-44f9-aa70-55ab4e009281
+# response details: As per the FW and Field-manager this response is Correct.
+implement(id = 'too_many_consult_80d211e7-204d-44f9-aa70-55ab4e009281', is_ok=True, who = "Joe Brew")
+
+# 363. instance_id: 71cc70d3-7983-458a-a1bc-7d5de17f4024,a113a9a2-49cc-4d5c-a7a9-3225c2c2a6ca
+# id: repeat_hh_id_71cc70d3-7983-458a-a1bc-7d5de17f4024,a113a9a2-49cc-4d5c-a7a9-3225c2c2a6ca
+# response details: Drop HH with instanceid:71cc70d3-7983-458a-a1bc-7d5de17f4024. The supervisor has been notified and the correct HHID has been assigned to the HH.
+implement(id = 'repeat_hh_id_71cc70d3-7983-458a-a1bc-7d5de17f4024,a113a9a2-49cc-4d5c-a7a9-3225c2c2a6ca', query = "DELETE FROM clean_minicensus_main where instance_id='71cc70d3-7983-458a-a1bc-7d5de17f4024'", who = "Joe Brew")
+
+# 364. instance_id: d26ca6ea-0135-466e-bb92-3da789c23c54,81a3ac07-d797-4f5e-8c5a-a083bfb14d9c
+# id: repeat_hh_id_d26ca6ea-0135-466e-bb92-3da789c23c54,81a3ac07-d797-4f5e-8c5a-a083bfb14d9c
+# response details: Drop HH with instanceid:81a3ac07-d797-4f5e-8c5a-a083bfb14d9c. The supervisor has been notified and the correct HHID has been assigned to the HH.
+implement(id = 'repeat_hh_id_d26ca6ea-0135-466e-bb92-3da789c23c54,81a3ac07-d797-4f5e-8c5a-a083bfb14d9c', query = "DELETE FROM clean_minicensus_main where instance_id='81a3ac07-d797-4f5e-8c5a-a083bfb14d9c'", who = "Joe Brew")
+
+# 365. instance_id: 5634060f-efdf-4e6e-aa40-dcec6f295fcc,f1e665ce-c51a-4b93-ba08-2fa399b063c4
+# id: repeat_hh_id_5634060f-efdf-4e6e-aa40-dcec6f295fcc,f1e665ce-c51a-4b93-ba08-2fa399b063c4
+# response details: Drop HH with instanceid:f1e665ce-c51a-4b93-ba08-2fa399b063c4. The supervisor has been notified and the correct HHID has been assigned to the HH.
+implement(id = 'repeat_hh_id_5634060f-efdf-4e6e-aa40-dcec6f295fcc,f1e665ce-c51a-4b93-ba08-2fa399b063c4', query = "DELETE FROM clean_minicensus_main where instance_id='5634060f-efdf-4e6e-aa40-dcec6f295fcc'", who = "Joe Brew")
+
+# 366. instance_id: 7659e4ca-6656-43cf-bfe5-0eec86b8f09b,493346d2-6622-4af7-9c89-126dfe79d1c6
+# id: repeat_hh_id_7659e4ca-6656-43cf-bfe5-0eec86b8f09b,493346d2-6622-4af7-9c89-126dfe79d1c6
+# response details: Drop HH with instanceid:7659e4ca-6656-43cf-bfe5-0eec86b8f09b. The supervisor has been notified and the correct HHID has been assigned to the HH.
+implement(id = 'repeat_hh_id_7659e4ca-6656-43cf-bfe5-0eec86b8f09b,493346d2-6622-4af7-9c89-126dfe79d1c6', query = "DELETE FROM clean_minicensus_main where instance_id='7659e4ca-6656-43cf-bfe5-0eec86b8f09b'", who = "Joe Brew")
+
+# 367. instance_id: 3e9bf0c4-5c6c-43a8-9740-9bdf8bdfa4f4
+# id: incorrect_date_3e9bf0c4-5c6c-43a8-9740-9bdf8bdfa4f4
+# response details: As per the FW and Field-manager the correct date is 18/1/2021
+implement(id = 'incorrect_date_3e9bf0c4-5c6c-43a8-9740-9bdf8bdfa4f4', query = "UPDATE clean_minicensus_main SET todays_date='2021-01-18' where instance_id='3e9bf0c4-5c6c-43a8-9740-9bdf8bdfa4f4'", who = "Joe Brew")
+
+# 368. instance_id: c94d7fc9-1eff-495d-876f-23a9ee72ed01
+# id: incorrect_date_c94d7fc9-1eff-495d-876f-23a9ee72ed01
+# response details: As per the FW and Field-manager the correct date is 18/1/2021
+implement(id = 'incorrect_date_c94d7fc9-1eff-495d-876f-23a9ee72ed01', query = "UPDATE clean_minicensus_main SET todays_date='2021-01-18' where instance_id='c94d7fc9-1eff-495d-876f-23a9ee72ed01'", who = "Joe Brew")
+
+# 369. instance_id: c4e5a8df-4881-447b-851b-dd8efe42aaab
+# id: incorrect_date_c4e5a8df-4881-447b-851b-dd8efe42aaab
+# response details: As per the FW and Field-manager the correct date is 18/1/2021
+implement(id = 'incorrect_date_c4e5a8df-4881-447b-851b-dd8efe42aaab', query = "UPDATE clean_minicensus_main SET todays_date='2021-01-18' where instance_id='c4e5a8df-4881-447b-851b-dd8efe42aaab'", who = "Joe Brew")
+
+# 370. instance_id: 89fabecb-9a4b-4895-95d5-843c30fd341f
+# id: incorrect_date_89fabecb-9a4b-4895-95d5-843c30fd341f
+# response details: As per the FW and Field-manager the correct date is 18/1/2021
+implement(id = 'incorrect_date_89fabecb-9a4b-4895-95d5-843c30fd341f', query = "UPDATE clean_minicensus_main SET todays_date='2021-01-18' where instance_id='89fabecb-9a4b-4895-95d5-843c30fd341f'", who = "Joe Brew")
+
+# 371. instance_id: 8df5061b-10a7-415a-8a9a-92210051c8bb
+# id: missing_wid_8df5061b-10a7-415a-8a9a-92210051c8bb
+# response details: correct ID is 81
+implement(id = 'missing_wid_8df5061b-10a7-415a-8a9a-92210051c8bb', query = "UPDATE clean_minicensus_main SET wid='81' where instance_id='8df5061b-10a7-415a-8a9a-92210051c8bb'", who = "Joe Brew")
+
+# 372. instance_id: 6f879847-891c-4b14-94dd-3f22264347f2
+# id: missing_wid_6f879847-891c-4b14-94dd-3f22264347f2
+# response details: Correct ID is 25
+implement(id = 'missing_wid_6f879847-891c-4b14-94dd-3f22264347f2', query = "UPDATE clean_minicensus_main SET wid='25' where instance_id='6f879847-891c-4b14-94dd-3f22264347f2'", who = "Joe Brew")
+
+# 373. instance_id: 254078a5-0e6f-448a-a3d9-cc551a68fbd1
+# id: strange_hh_code_254078a5-0e6f-448a-a3d9-cc551a68fbd1
+# response details: Delete record
+implement(id = 'strange_hh_code_254078a5-0e6f-448a-a3d9-cc551a68fbd1', query = "DELETE FROM clean_minicensus_main where instance_id='254078a5-0e6f-448a-a3d9-cc551a68fbd1'", who = "Joe Brew")
+
+# 374. instance_id: 4fe9bb8b-283c-4d3f-9ef2-9ea03db978d0
+# id: strange_hh_code_4fe9bb8b-283c-4d3f-9ef2-9ea03db978d0
+# response details: Delete record
+implement(id = 'strange_hh_code_4fe9bb8b-283c-4d3f-9ef2-9ea03db978d0', query = "DELETE FROM clean_minicensus_main where instance_id='4fe9bb8b-283c-4d3f-9ef2-9ea03db978d0'", who = "Joe Brew")
+
+# 375. instance_id: 64ea7d2c-0a1e-4109-b893-8d6489cebb64
+# id: strange_hh_code_64ea7d2c-0a1e-4109-b893-8d6489cebb64
+# response details: Delete record
+implement(id = 'strange_hh_code_64ea7d2c-0a1e-4109-b893-8d6489cebb64', query = "DELETE FROM clean_minicensus_main where instance_id='64ea7d2c-0a1e-4109-b893-8d6489cebb64'", who = "Joe Brew")
+
+# 376. instance_id: 6e95fb26-b69a-4a06-9c5b-d82931600216
+# id: strange_hh_code_6e95fb26-b69a-4a06-9c5b-d82931600216
+# response details: Delete record
+implement(id = 'strange_hh_code_6e95fb26-b69a-4a06-9c5b-d82931600216', query = "DELETE FROM clean_minicensus_main where instance_id='6e95fb26-b69a-4a06-9c5b-d82931600216'", who = "Joe Brew")
+
+# 377. instance_id: 7a9abb7e-730c-4af9-b4ae-eb23511e073d
+# id: strange_hh_code_7a9abb7e-730c-4af9-b4ae-eb23511e073d
+# response details: Delete record
+implement(id = 'strange_hh_code_7a9abb7e-730c-4af9-b4ae-eb23511e073d', query = "DELETE FROM clean_minicensus_main where instance_id='7a9abb7e-730c-4af9-b4ae-eb23511e073d'", who = "Joe Brew")
+
+# 378. instance_id: 99156f22-3f15-4aeb-a594-02bb8f7964f8
+# id: strange_hh_code_99156f22-3f15-4aeb-a594-02bb8f7964f8
+# response details: Delete record
+implement(id = 'strange_hh_code_99156f22-3f15-4aeb-a594-02bb8f7964f8', query = "DELETE FROM clean_minicensus_main where instance_id='99156f22-3f15-4aeb-a594-02bb8f7964f8'", who = "Joe Brew")
+
+# 379. instance_id: a78b8173-bf0b-4acc-a283-5c7b63e1d2ce
+# id: strange_hh_code_a78b8173-bf0b-4acc-a283-5c7b63e1d2ce
+# response details: Delete record
+implement(id = 'strange_hh_code_a78b8173-bf0b-4acc-a283-5c7b63e1d2ce', query = "DELETE FROM clean_minicensus_main where instance_id='a78b8173-bf0b-4acc-a283-5c7b63e1d2ce'", who = "Joe Brew")
+
+# 380. instance_id: e64f4841-6be6-486c-b0a7-52a6ca6a2d7e
+# id: strange_hh_code_e64f4841-6be6-486c-b0a7-52a6ca6a2d7e
+# response details: Delete record
+implement(id = 'strange_hh_code_e64f4841-6be6-486c-b0a7-52a6ca6a2d7e', query = "DELETE FROM clean_minicensus_main where instance_id='e64f4841-6be6-486c-b0a7-52a6ca6a2d7e'", who = "Joe Brew")
+
+# 381. instance_id: e7a1d54e-6092-438e-95ef-da430b48d892
+# id: strange_hh_code_e7a1d54e-6092-438e-95ef-da430b48d892
+# response details: Delete record
+implement(id = 'strange_hh_code_e7a1d54e-6092-438e-95ef-da430b48d892', query = "DELETE FROM clean_minicensus_main where instance_id='e7a1d54e-6092-438e-95ef-da430b48d892'", who = "Joe Brew")
+
+
+# 386. instance_id: 2fe690a0-1858-4b49-adcd-3902b021fbc9,fc7c440c-db44-4670-a06f-af8458fb047d
+# id: repeat_hh_id_enumerations_2fe690a0-1858-4b49-adcd-3902b021fbc9,fc7c440c-db44-4670-a06f-af8458fb047d
+# response details: DELETE Both records
+implement(id = 'repeat_hh_id_enumerations_2fe690a0-1858-4b49-adcd-3902b021fbc9,fc7c440c-db44-4670-a06f-af8458fb047d', query = "DELETE FROM clean_enumerations where instance_id='fc7c440c-db44-4670-a06f-af8458fb047d'; DELETE FROM clean_enumerations where instance_id='2fe690a0-1858-4b49-adcd-3902b021fbc9'", who = "Joe Brew")
+
+# 390. instance_id: 969990aa-89b5-4c59-b972-42b1c3da49b5,622deef1-66b9-4ca9-977f-ce3f80e03543
+# id: repeat_hh_id_enumerations_969990aa-89b5-4c59-b972-42b1c3da49b5,622deef1-66b9-4ca9-977f-ce3f80e03543
+# response details: DELETE Both records
+implement(id = 'repeat_hh_id_enumerations_969990aa-89b5-4c59-b972-42b1c3da49b5,622deef1-66b9-4ca9-977f-ce3f80e03543', query = "DELETE FROM clean_enumerations where instance_id='622deef1-66b9-4ca9-977f-ce3f80e03543'; DELETE FROM clean_enumerations where instance_id='969990aa-89b5-4c59-b972-42b1c3da49b5'", who = "Joe Brew")
+
 
 
 dbconn.commit()
