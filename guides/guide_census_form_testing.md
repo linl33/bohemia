@@ -52,6 +52,9 @@ If you would like to change the language of the survey form, once you enter into
 - Once you have saved and exited the survey form or finalized the form, you can upload your data to the server but navigating back to the ODK-X Tables app, clicking the `Send Data` button, then clicking the `Sync Now` button
 
 ## Handling Navigation from Content Pages view
+
+_Click here for a [detailed ODKX census form navigation guide](https://github.com/databrew/bohemia/blob/feature/odkx_server_reset_guide/guides/guide_odkx_app_navigation.md)._
+
 When filling out a survey, there are some sections that are populated via the `Create New Instance` button. 
 When such a section is entered, clicking the `Back` button will _not_ take you back to the census question you were at.
 If you should realize that the section was entered in error, please click the `Next` button and that will take you to the census section.
