@@ -11,12 +11,13 @@ This section contains information, not instructions. Feel free to skip.
 
 #### Overview
 
-The ODK-X suite of applications needed for the project are:
+The suite of applications needed for the project are:
 
 - [OI File Manager](https://github.com/openintents/filemanager/releases)
 - [ODK-X Services](https://github.com/odk-x/services/releases/latest)
 - [ODK-X Survey](https://github.com/odk-x/survey/releases/latest)
 - [ODK-X Tables](https://github.com/odk-x/tables/releases/latest)
+- [Barcode scanner](https://play.google.com/store/apps/details?id=com.google.zxing.client.android&hl=en&gl=US)
 
 
 #### Background on how these interact:
@@ -28,6 +29,8 @@ The ODK-X Services app is the orchestrator, it is used to keep the data in the p
 The ODK-X Survey app is the ODK Collect alternative, used for form based data collection workflows that can be seamlessly integrated with Tables to create and modify records. It is what you use to view the survey forms and record the responses.
 
 The ODK-X Tables app offers a way to visualize, process, and modify data collected by Survey, all on the device. On this app, you review the data collected from the Survey in spreadsheet format and if applicable, html tables format, maps format and navigation (where you show a compass to guide the user to a set of location co-ordinates)
+
+Barcode scanner allows for QR codes to be scanned.
 
 # Instructions
 
@@ -42,6 +45,8 @@ You'll start by downloading and installing 4 applications on the android device.
 - **Install ODK-X Survey**: Go to https://github.com/odk-x/survey/releases/tag/2.1.7 and download the [APK file](https://github.com/odk-x/survey/releases/download/2.1.7/ODK-X_Survey_v2.1.7.apk). Then install.
 
 - **Install ODK-X Tables**: Go to https://github.com/odk-x/tables/releases/tag/2.1.7 and download the [APK file](https://github.com/odk-x/tables/releases/download/2.1.7/ODK-X_Tables_v2.1.7.apk). Then install.
+
+- **Barcode scanner**: Go to https://play.google.com/store/apps/details?id=com.google.zxing.client.android&hl=en&gl=US and install the app.
 
 ## Set up server connection
 
