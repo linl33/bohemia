@@ -12,13 +12,13 @@ In the case you are adding a new household (i.e., one not minicensed), under _De
 
 ![](img/nav1.jpg)
 
-Once you click the `Create new instance` button, you are now filling out a subform for one household member. When you are done entering details about the member, click the ‘NEXT’ button to return to the previous screen.  
+Once you click the `Create new instance` button, you are now filling out a subform for one household member. When you are done entering details about the member, click the `NEXT` button to return to the previous screen.  
 
 ![](img/nav2.jpg)
 
 You will now see the member’s name listed under the `Create new instance` button with a check mark icon, a pencil button, and an ‘X’ button next to the name. The check mark icon indicates that you have finalized details in the subform for that member. You can edit details about the member by clicking the pencil icon. You can delete a member you have created by clicking the X icon. 
 
-![](img/nav2.jpg)
+![](img/nav3.jpg)
 
 If you click `BACK` instead of `NEXT` in the subform while trying to return to the main census form screen, you will be taken to an empty ‘Contents’ page. Click `NEXT` to return to the subform page, then `NEXT` again to return to the main census form screen. 
 
