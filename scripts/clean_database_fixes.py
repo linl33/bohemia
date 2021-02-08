@@ -3658,6 +3658,12 @@ implement(id = 'repeat_hh_id_enumerations_2fe690a0-1858-4b49-adcd-3902b021fbc9,f
 # response details: DELETE Both records
 implement(id = 'repeat_hh_id_enumerations_969990aa-89b5-4c59-b972-42b1c3da49b5,622deef1-66b9-4ca9-977f-ce3f80e03543', query = "DELETE FROM clean_enumerations where instance_id='622deef1-66b9-4ca9-977f-ce3f80e03543'; DELETE FROM clean_enumerations where instance_id='969990aa-89b5-4c59-b972-42b1c3da49b5'", who = "Joe Brew")
 
+# Manual corrections from Eldo, sent Feb 8, indicating incorrect IDs for VA
+implement(id = None, query = "UPDATE clean_va SET death_id='IGM-018-701', hh_id='IGM-018', id_manual='IGM-018', id_10018_id='ZVA-018-701' WHERE instance_id ='c8f36e54-873e-4903-9107-6b611df1c0ba'", who = 'Joe Brew')
+implement(id = None, query = "UPDATE clean_va SET death_id='ULU-016-701', hh_id='ULU-016', id_manual='ULU-016', id_10018_id='ULU-016-701' WHERE instance_id ='94e30177-4e2e-459b-8675-f60349bff1aa'", who = 'Joe Brew')
+implement(id = None, query = "UPDATE clean_va SET death_id='ENE-026-701', hh_id='ENE-026', id_manual='ENE-026', id_10018_id='ENE-026-701' WHERE instance_id ='9f8e5ef5-c178-406d-be2a-85632923f5db'", who = 'Joe Brew')
+implement(id = None, query = "UPDATE clean_va SET death_id='ULU-046-701', hh_id='ULU-046', id_manual='ULU-046', id_10018_id='ULU-046-701' WHERE instance_id ='5a16c629-5aab-4629-841b-db15cf0fbf29'", who = 'Joe Brew')
+
 
 
 dbconn.commit()

@@ -34,14 +34,19 @@ if(is_local){
 corrections <- odk_data_moz$corrections %>% bind_rows(odk_data_tza$corrections)
 # Remove duplicates
 corrections <- corrections %>% dplyr::distinct(id, instance_id, response_details, .keep_all = TRUE)
-# Overwrite corrections without duplicates (optional)
-dbWriteTable(conn = con, name = 'corrections', value = corrections, overwrite = TRUE)
+# # Overwrite corrections without duplicates (optional)
+# dbWriteTable(conn = con, name = 'corrections', value = corrections, overwrite = TRUE)
 
 fixes <- odk_data_moz$fixes %>% bind_rows(odk_data_tza$fixes)
 
 
 anomalies <- dbGetQuery(conn = con, 'SELECT * FROM anomalies;')
-x = dbDisconnect(con)
+
+va <- dbGetQuery(conn = con, 'SELECT * FROM va;')
+x <- va %>% filter(hh_id == 'ZVA-018')
+
+
+# x = dbDisconnect(con)
 
 #get ids from fixes 
 fixes_ids <- fixes$id
