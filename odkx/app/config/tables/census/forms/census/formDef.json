@@ -2151,7 +2151,6 @@
           "prompt": "q54bi",
           "constraint_message": "spray_date"
         },
-        "required": "selected(data('hh_spray_label_seen'), 'yes')",
         "constraint": "not(selected(data('hh_spray_label_seen'), 'yes')) || !data('hh_spray_label_date').isAfter()",
         "validation_tags": "finalize",
         "_row_num": 319
@@ -16148,7 +16147,6 @@
               "prompt": "q54bi",
               "constraint_message": "spray_date"
             },
-            "required": "selected(data('hh_spray_label_seen'), 'yes')",
             "constraint": "not(selected(data('hh_spray_label_seen'), 'yes')) || !data('hh_spray_label_date').isAfter()",
             "validation_tags": "finalize",
             "_row_num": 319,

@@ -962,7 +962,6 @@
           "prompt": "n_nets",
           "constraint_message": "not_one"
         },
-        "required": "not(selected(data('sleep_net_last_night_num_dk'), 'dk'))",
         "constraint": "data('sleep_net_last_night_num') !== 1",
         "_row_num": 151
       },
@@ -8820,7 +8819,6 @@
               "prompt": "n_nets",
               "constraint_message": "not_one"
             },
-            "required": "not(selected(data('sleep_net_last_night_num_dk'), 'dk'))",
             "constraint": "data('sleep_net_last_night_num') !== 1",
             "_row_num": 151,
             "__rowNum__": 150,
