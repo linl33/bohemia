@@ -2984,6 +2984,15 @@ window.odkTableSpecificDefinitions = {
       },
       "_row_num": 342
     },
+    "w_dk_pna_no": {
+      "string_token": "w_dk_pna_no",
+      "text": {
+        "default": "You cannot select ‘Don’t know’, ‘No’, or ‘Prefer not to answer’ along with other options.",
+        "pt": "Você não pode selecionar \"Não sabe\", \"Não” ou \"Prefere não responder\" junto com as outras respostas.",
+        "sw": "Huwezi kuchagua \"Sijui\", “Hapana” au \"Amependa kutokujibu\" pamoja na majibu mengine"
+      },
+      "_row_num": 343
+    },
     "w_no_pna": {
       "string_token": "w_no_pna",
       "text": {
@@ -2991,7 +3000,16 @@ window.odkTableSpecificDefinitions = {
         "pt": "Você não pode selecionar \"Não\" ou \"Prefere não responder\" junto com as outras respostas.",
         "sw": "Huwezi kuchagua \"Hapana\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
       },
-      "_row_num": 343
+      "_row_num": 344
+    },
+    "w_pna": {
+      "string_token": "w_pna",
+      "text": {
+        "default": "You cannot select ‘Prefer not to answer’ along with other options.",
+        "pt": "Você não pode selecionar \"Prefere não responder\" junto com as outras respostas.",
+        "sw": "Huwezi kuchagua \"Amependa kutokujibu\" pamoja na majibu mengine"
+      },
+      "_row_num": 345
     },
     "w_no_symptoms": {
       "string_token": "w_no_symptoms",
@@ -3000,7 +3018,7 @@ window.odkTableSpecificDefinitions = {
         "pt": "Você não pode selecionar \"Sem sintomas\"junto com as outras respostas.",
         "sw": "Huwezi kuchagua \"Hakuna dalili\" pamoja na majibu mengine"
       },
-      "_row_num": 344
+      "_row_num": 346
     },
     "w_none_pna": {
       "string_token": "w_none_pna",
@@ -3009,7 +3027,7 @@ window.odkTableSpecificDefinitions = {
         "pt": "Você não pode selecionar \"Nenhum\" ou \"Prefere não responder\" junto com as outras respostas.",
         "sw": "Huwezi kuchagua \"Hakuna\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
       },
-      "_row_num": 345
+      "_row_num": 347
     },
     "w_fever_di": {
       "string_token": "w_fever_di",
@@ -3018,7 +3036,7 @@ window.odkTableSpecificDefinitions = {
         "pt": "Você selecionou \"febres\" e/ou \"diarreia\" na pergunta anterior mas não marcou \"febres\" e/ou \"diarreia\" como o sintoma principal. Por favor verifque.",
         "sw": "Ulichagua \"homa\" na / au \"kuhara\" katika swali lililopita lakini haujachagua \"homa\" na / au \"kuhara\" kama dalili kuu. Tafadhali thibitisha."
       },
-      "_row_num": 346
+      "_row_num": 348
     },
     "n_nets": {
       "string_token": "n_nets",
@@ -3027,7 +3045,7 @@ window.odkTableSpecificDefinitions = {
         "pt": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)",
         "sw": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)"
       },
-      "_row_num": 347
+      "_row_num": 349
     },
     "not_one": {
       "string_token": "not_one",
@@ -3036,7 +3054,7 @@ window.odkTableSpecificDefinitions = {
         "pt": "Cannot enter 1.",
         "sw": "Cannot enter 1."
       },
-      "_row_num": 348
+      "_row_num": 350
     },
     "invalid_date": {
       "string_token": "invalid_date",
@@ -3045,7 +3063,7 @@ window.odkTableSpecificDefinitions = {
         "pt": "Date entered must be a number from 1 and 31.",
         "sw": "Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31"
       },
-      "_row_num": 349
+      "_row_num": 351
     },
     "invalid_month": {
       "string_token": "invalid_month",
@@ -3054,7 +3072,7 @@ window.odkTableSpecificDefinitions = {
         "pt": "Month entered must be a number from 1 to 12.",
         "sw": "Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12"
       },
-      "_row_num": 350
+      "_row_num": 352
     },
     "invalid_year": {
       "string_token": "invalid_year",
@@ -3063,7 +3081,7 @@ window.odkTableSpecificDefinitions = {
         "pt": "Year entered must be a number from 1920 to 2021.",
         "sw": "Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021"
       },
-      "_row_num": 351
+      "_row_num": 353
     }
   }
 }

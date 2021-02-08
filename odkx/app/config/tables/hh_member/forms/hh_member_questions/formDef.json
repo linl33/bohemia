@@ -232,6 +232,7 @@
         "display": {
           "prompt": "err_no_consent"
         },
+        "required": 1,
         "_row_num": 32
       },
       {
@@ -266,6 +267,7 @@
         "display": {
           "prompt": "err_no_assent"
         },
+        "required": 1,
         "_row_num": 39
       },
       {
@@ -291,6 +293,7 @@
         "display": {
           "prompt": "err_no_consent"
         },
+        "required": 1,
         "_row_num": 43
       },
       {
@@ -351,6 +354,7 @@
         "display": {
           "prompt": "err_no_consent"
         },
+        "required": 1,
         "_row_num": 54
       },
       {
@@ -518,9 +522,9 @@
         "name": "ind_treatment",
         "display": {
           "prompt": "ind_q12",
-          "constraint_message": "w_dk_pna"
+          "constraint_message": "w_dk_pna_no"
         },
-        "constraint": "(not(selected(data('ind_treatment'), 'pna')) || (selected(data('ind_treatment'), 'pna') && countSelected(data('ind_treatment')) === 1)) && (not(selected(data('ind_treatment'), 'dk')) || (selected(data('ind_treatment'), 'dk') && countSelected(data('ind_treatment')) === 1))",
+        "constraint": "(not(selected(data('ind_treatment'), 'pna')) || (selected(data('ind_treatment'), 'pna') && countSelected(data('ind_treatment')) === 1)) && (not(selected(data('ind_treatment'), 'dk')) || (selected(data('ind_treatment'), 'dk') && countSelected(data('ind_treatment')) === 1))  && (not(selected(data('ind_treatment'), 'no')) || (selected(data('ind_treatment'), 'no') && countSelected(data('ind_treatment')) === 1))",
         "_row_num": 84
       },
       {
@@ -544,9 +548,9 @@
         "name": "ind_chronic_disease",
         "display": {
           "prompt": "ind_q13",
-          "constraint_message": "w_no_pna"
+          "constraint_message": "w_pna"
         },
-        "constraint": "(not(selected(data('ind_chronic_disease'), 'pna')) || (selected(data('ind_chronic_disease'), 'pna') && countSelected(data('ind_chronic_disease')) === 1)) && (not(selected(data('ind_chronic_disease'), 'no')) || (selected(data('ind_chronic_disease'), 'no') && countSelected(data('ind_chronic_disease')) === 1))",
+        "constraint": "(not(selected(data('ind_chronic_disease'), 'pna')) || (selected(data('ind_chronic_disease'), 'pna') && countSelected(data('ind_chronic_disease')) === 1))",
         "_row_num": 88
       },
       {
@@ -8107,6 +8111,7 @@
             "display": {
               "prompt": "err_no_consent"
             },
+            "required": 1,
             "_row_num": 32,
             "__rowNum__": 31,
             "_token_type": "prompt",
@@ -8133,6 +8138,7 @@
             "display": {
               "prompt": "err_no_assent"
             },
+            "required": 1,
             "_row_num": 39,
             "__rowNum__": 38,
             "_token_type": "prompt",
@@ -8159,6 +8165,7 @@
             "display": {
               "prompt": "err_no_consent"
             },
+            "required": 1,
             "_row_num": 43,
             "__rowNum__": 42,
             "_token_type": "prompt",
@@ -8213,6 +8220,7 @@
             "display": {
               "prompt": "err_no_consent"
             },
+            "required": 1,
             "_row_num": 54,
             "__rowNum__": 53,
             "_token_type": "prompt",
@@ -8357,9 +8365,9 @@
             "name": "ind_treatment",
             "display": {
               "prompt": "ind_q12",
-              "constraint_message": "w_dk_pna"
+              "constraint_message": "w_dk_pna_no"
             },
-            "constraint": "(not(selected(data('ind_treatment'), 'pna')) || (selected(data('ind_treatment'), 'pna') && countSelected(data('ind_treatment')) === 1)) && (not(selected(data('ind_treatment'), 'dk')) || (selected(data('ind_treatment'), 'dk') && countSelected(data('ind_treatment')) === 1))",
+            "constraint": "(not(selected(data('ind_treatment'), 'pna')) || (selected(data('ind_treatment'), 'pna') && countSelected(data('ind_treatment')) === 1)) && (not(selected(data('ind_treatment'), 'dk')) || (selected(data('ind_treatment'), 'dk') && countSelected(data('ind_treatment')) === 1))  && (not(selected(data('ind_treatment'), 'no')) || (selected(data('ind_treatment'), 'no') && countSelected(data('ind_treatment')) === 1))",
             "_row_num": 84,
             "__rowNum__": 83,
             "_token_type": "prompt",
@@ -8385,9 +8393,9 @@
             "name": "ind_chronic_disease",
             "display": {
               "prompt": "ind_q13",
-              "constraint_message": "w_no_pna"
+              "constraint_message": "w_pna"
             },
-            "constraint": "(not(selected(data('ind_chronic_disease'), 'pna')) || (selected(data('ind_chronic_disease'), 'pna') && countSelected(data('ind_chronic_disease')) === 1)) && (not(selected(data('ind_chronic_disease'), 'no')) || (selected(data('ind_chronic_disease'), 'no') && countSelected(data('ind_chronic_disease')) === 1))",
+            "constraint": "(not(selected(data('ind_chronic_disease'), 'pna')) || (selected(data('ind_chronic_disease'), 'pna') && countSelected(data('ind_chronic_disease')) === 1))",
             "_row_num": 88,
             "__rowNum__": 87,
             "_token_type": "prompt",
@@ -9072,6 +9080,10 @@
             8,
             10,
             12,
+            16,
+            18,
+            20,
+            24,
             35,
             37,
             43,

@@ -2173,9 +2173,7 @@
         "name": "hh_num_nets",
         "display": {
           "prompt": "q55",
-          "constraint_message": {
-            "text": "Cannot exceed 50."
-          }
+          "constraint_message": "w_less_50"
         },
         "constraint": "data('hh_num_nets') < 51",
         "validation_tags": "finalize",
@@ -2267,21 +2265,28 @@
         "_row_num": 334
       },
       {
-        "type": "select_one_with_other",
+        "type": "select_multiple",
         "values_list": "primary_care",
         "name": "health_facility_formal_type",
+        "constraint": "countSelected(data('health_facility_formal_type')) <= 1",
+        "display": {
+          "constraint_message": "select_one"
+        },
         "hideInContents": 1,
+        "validation_tags": "finalize",
         "_row_num": 335
       },
       {
         "clause": "if",
-        "condition": "!!data('health_facility_formal_type')",
+        "condition": "selected(data('health_facility_formal_type'), 'other')",
         "_row_num": 336
       },
       {
-        "type": "assign",
-        "name": "health_facility_formal_sick",
-        "calculation": "null",
+        "type": "text",
+        "name": "health_facility_formal_type_specify",
+        "display": {
+          "prompt": "specify"
+        },
         "_row_num": 337
       },
       {
@@ -2289,12 +2294,27 @@
         "_row_num": 338
       },
       {
-        "clause": "end screen",
+        "clause": "if",
+        "condition": "!!data('health_facility_formal_type')",
         "_row_num": 339
       },
       {
-        "clause": "begin screen",
+        "type": "assign",
+        "name": "health_facility_formal_sick",
+        "calculation": "null",
         "_row_num": 340
+      },
+      {
+        "clause": "end if",
+        "_row_num": 341
+      },
+      {
+        "clause": "end screen",
+        "_row_num": 342
+      },
+      {
+        "clause": "begin screen",
+        "_row_num": 343
       },
       {
         "type": "assign",
@@ -2303,28 +2323,28 @@
         "model": {
           "isSessionVariable": 1
         },
-        "_row_num": 341
+        "_row_num": 344
       },
       {
         "type": "note",
         "display": {
           "prompt": "snake_h3"
         },
-        "_row_num": 342
+        "_row_num": 345
       },
       {
         "type": "select_one",
         "values_list": "yndkpna",
         "name": "any_snake_bite",
         "display": {
-          "prompt": "q58a"
+          "prompt": "q58"
         },
-        "_row_num": 343
+        "_row_num": 346
       },
       {
         "clause": "if",
         "condition": "selected(data('any_snake_bite'), 'yes')",
-        "_row_num": 344
+        "_row_num": 347
       },
       {
         "type": "integer",
@@ -2334,21 +2354,21 @@
         },
         "required": "selected(data('any_snake_bite'), 'yes')",
         "validation_tags": "finalize",
-        "_row_num": 345
+        "_row_num": 348
       },
       {
         "type": "note",
         "display": {
           "prompt": "snake_prompt"
         },
-        "_row_num": 346
+        "_row_num": 349
       },
       {
         "type": "note",
         "display": {
           "prompt": "snake_detail"
         },
-        "_row_num": 347
+        "_row_num": 350
       },
       {
         "type": "select_multiple",
@@ -2357,7 +2377,7 @@
         "display": {
           "prompt": "q59a"
         },
-        "_row_num": 348
+        "_row_num": 351
       },
       {
         "type": "linked_table_counting",
@@ -2378,48 +2398,48 @@
           "valuesList": "linked_member_snake_bit"
         },
         "validation_tags": "finalize",
-        "_row_num": 349
+        "_row_num": 352
       },
       {
         "clause": "end if",
-        "_row_num": 350
+        "_row_num": 353
       },
       {
         "clause": "end screen",
-        "_row_num": 351
+        "_row_num": 354
       },
       {
         "clause": "begin screen",
-        "_row_num": 352
+        "_row_num": 355
       },
       {
         "type": "note",
         "display": {
           "prompt": "contact_h2"
         },
-        "_row_num": 353
+        "_row_num": 356
       },
       {
         "type": "note",
         "display": {
           "prompt": "q60"
         },
-        "_row_num": 354
+        "_row_num": 357
       },
       {
         "clause": "if",
         "condition": "selected(data('no_contact_num'), 'no_contact_num')",
-        "_row_num": 355
+        "_row_num": 358
       },
       {
         "type": "assign",
         "name": "hh_contact",
         "calculation": "null",
-        "_row_num": 356
+        "_row_num": 359
       },
       {
         "clause": "else",
-        "_row_num": 357
+        "_row_num": 360
       },
       {
         "type": "text",
@@ -2428,11 +2448,11 @@
           "type": "tel"
         },
         "hideInContents": 1,
-        "_row_num": 358
+        "_row_num": 361
       },
       {
         "clause": "end if",
-        "_row_num": 359
+        "_row_num": 362
       },
       {
         "type": "select_multiple",
@@ -2442,29 +2462,29 @@
           "prompt": "or_capital"
         },
         "hideInContents": 1,
-        "_row_num": 360
+        "_row_num": 363
       },
       {
         "type": "note",
         "display": {
           "prompt": "q61"
         },
-        "_row_num": 361
+        "_row_num": 364
       },
       {
         "clause": "if",
         "condition": "selected(data('no_alt_contact_num'), 'no_alt_contact_num')",
-        "_row_num": 362
+        "_row_num": 365
       },
       {
         "type": "assign",
         "name": "hh_contact_alt",
         "calculation": "null",
-        "_row_num": 363
+        "_row_num": 366
       },
       {
         "clause": "else",
-        "_row_num": 364
+        "_row_num": 367
       },
       {
         "type": "text",
@@ -2473,11 +2493,11 @@
           "type": "tel"
         },
         "hideInContents": 1,
-        "_row_num": 365
+        "_row_num": 368
       },
       {
         "clause": "end if",
-        "_row_num": 366
+        "_row_num": 369
       },
       {
         "type": "select_multiple",
@@ -2487,12 +2507,12 @@
           "prompt": "or_capital"
         },
         "hideInContents": 1,
-        "_row_num": 367
+        "_row_num": 370
       },
       {
         "clause": "if",
         "condition": "!!data('hh_contact_alt')",
-        "_row_num": 368
+        "_row_num": 371
       },
       {
         "type": "select_one",
@@ -2501,29 +2521,29 @@
         "display": {
           "prompt": "q62"
         },
-        "_row_num": 369
+        "_row_num": 372
       },
       {
         "type": "note",
         "display": {
           "prompt": "q62a"
         },
-        "_row_num": 370
+        "_row_num": 373
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_contact_alt_2'), 'yes')",
-        "_row_num": 371
+        "_row_num": 374
       },
       {
         "type": "assign",
         "name": "hh_contact_alt_2_num",
         "calculation": "null",
-        "_row_num": 372
+        "_row_num": 375
       },
       {
         "clause": "else",
-        "_row_num": 373
+        "_row_num": 376
       },
       {
         "type": "text",
@@ -2532,15 +2552,15 @@
           "type": "tel"
         },
         "hideInContents": 1,
-        "_row_num": 374
+        "_row_num": 377
       },
       {
         "clause": "end if",
-        "_row_num": 375
+        "_row_num": 378
       },
       {
         "clause": "end if",
-        "_row_num": 376
+        "_row_num": 379
       },
       {
         "type": "select_one",
@@ -2549,20 +2569,20 @@
         "display": {
           "prompt": "q63"
         },
-        "_row_num": 377
+        "_row_num": 380
       },
       {
         "clause": "end screen",
-        "_row_num": 378
+        "_row_num": 381
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_minicenced'), 'no')",
-        "_row_num": 380
+        "_row_num": 383
       },
       {
         "clause": "begin screen",
-        "_row_num": 381
+        "_row_num": 384
       },
       {
         "type": "assign",
@@ -2571,12 +2591,12 @@
         "model": {
           "isSessionVariable": 1
         },
-        "_row_num": 382
+        "_row_num": 385
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_minicenced'), 'no')",
-        "_row_num": 383
+        "_row_num": 386
       },
       {
         "type": "note",
@@ -2584,7 +2604,7 @@
           "prompt": "death_h2"
         },
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-        "_row_num": 384
+        "_row_num": 387
       },
       {
         "type": "note",
@@ -2592,7 +2612,7 @@
           "prompt": "death_new_only"
         },
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-        "_row_num": 385
+        "_row_num": 388
       },
       {
         "type": "select_one",
@@ -2604,12 +2624,12 @@
         "required": "selected(data('hh_minicenced'), 'no')",
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
         "validation_tags": "finalize",
-        "_row_num": 386
+        "_row_num": 389
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_death'), 'yes')",
-        "_row_num": 387
+        "_row_num": 390
       },
       {
         "type": "integer",
@@ -2622,7 +2642,7 @@
           "step": 1
         },
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-        "_row_num": 388
+        "_row_num": 391
       },
       {
         "type": "linked_table_counting",
@@ -2642,18 +2662,6 @@
         },
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
         "validation_tags": "finalize",
-        "_row_num": 389
-      },
-      {
-        "clause": "end if",
-        "_row_num": 390
-      },
-      {
-        "clause": "end if",
-        "_row_num": 391
-      },
-      {
-        "clause": "end screen",
         "_row_num": 392
       },
       {
@@ -2661,15 +2669,27 @@
         "_row_num": 393
       },
       {
-        "clause": "begin screen",
+        "clause": "end if",
+        "_row_num": 394
+      },
+      {
+        "clause": "end screen",
         "_row_num": 395
+      },
+      {
+        "clause": "end if",
+        "_row_num": 396
+      },
+      {
+        "clause": "begin screen",
+        "_row_num": 398
       },
       {
         "type": "note",
         "display": {
           "prompt": "ind_h2"
         },
-        "_row_num": 396
+        "_row_num": 399
       },
       {
         "type": "linked_table",
@@ -2679,11 +2699,11 @@
           "hide_delete_button": 1,
           "hide_add_instance": 1
         },
-        "_row_num": 397
+        "_row_num": 400
       },
       {
         "clause": "end screen",
-        "_row_num": 398
+        "_row_num": 401
       }
     ],
     "choices": [
@@ -4358,6 +4378,14 @@
           "title": "dk"
         },
         "_row_num": 210
+      },
+      {
+        "choice_list_name": "primary_care",
+        "data_value": "other",
+        "display": {
+          "title": "other"
+        },
+        "_row_num": 211
       }
     ],
     "calculates": [
@@ -6434,6 +6462,15 @@
         "_row_num": 186
       },
       {
+        "string_token": "select_one",
+        "text": {
+          "default": "You can only select one option.",
+          "pt": "You can only select one option.",
+          "sw": "You can only select one option."
+        },
+        "_row_num": 187
+      },
+      {
         "string_token": "housing_h3",
         "text": {
           "default": "<h3>Housing</h3>",
@@ -6728,6 +6765,15 @@
           "sw": "<span style=\"color:red\">You indicated a location within 15m of the house, but selected a distance over 50m. Please verify selections. </span>"
         },
         "_row_num": 221
+      },
+      {
+        "string_token": "w_less_50",
+        "text": {
+          "default": "Cannot exceed 50.",
+          "pt": "Nao pode exceder 50.",
+          "sw": "Haiwezi kuzidi 50."
+        },
+        "_row_num": 222
       },
       {
         "string_token": "water_prompt",
@@ -7479,9 +7525,9 @@
       {
         "string_token": "q57.hint",
         "text": {
-          "default": "(Formal care: health facility, community health worker (CHW), pharmacy, hospital)",
-          "pt": "(Cuidados formais: unidade de saúde, Agente Polivalente Elementar (APE), farmácia, hospital)",
-          "sw": "(Tiba rasmi: kituo cha afya, Mhudumu wa afya wa jamii (CHW), duka la dawa, hospitali)"
+          "default": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
+          "pt": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
+          "sw": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)"
         },
         "_row_num": 309
       },
@@ -7497,9 +7543,9 @@
       {
         "string_token": "q58a",
         "text": {
-          "default": "58a. [If yes] How many household members were bitten in the past 12 months?",
-          "pt": "58a. [Se sim] Quantos membros do agregado familiar foram mordidos nos últimos 12 meses?",
-          "sw": "58a. [Ikiwa ndiyo] Ni wanakaya wangapi waliyogongwa na nyoka katika miezi 12 iliyopita?"
+          "default": "58a. How many household members were bitten in the past 12 months?",
+          "pt": "58a. Quantos membros do agregado familiar foram mordidos nos últimos 12 meses?",
+          "sw": "58a. Ni wanakaya wangapi waliyogongwa na nyoka katika miezi 12 iliyopita?"
         },
         "_row_num": 311
       },
@@ -9590,6 +9636,14 @@
             "title": "dk"
           },
           "_row_num": 210
+        },
+        {
+          "choice_list_name": "primary_care",
+          "data_value": "other",
+          "display": {
+            "title": "other"
+          },
+          "_row_num": 211
         }
       ]
     },
@@ -11231,6 +11285,15 @@
           },
           "_row_num": 186
         },
+        "select_one": {
+          "string_token": "select_one",
+          "text": {
+            "default": "You can only select one option.",
+            "pt": "You can only select one option.",
+            "sw": "You can only select one option."
+          },
+          "_row_num": 187
+        },
         "housing_h3": {
           "string_token": "housing_h3",
           "text": {
@@ -11526,6 +11589,15 @@
             "sw": "<span style=\"color:red\">You indicated a location within 15m of the house, but selected a distance over 50m. Please verify selections. </span>"
           },
           "_row_num": 221
+        },
+        "w_less_50": {
+          "string_token": "w_less_50",
+          "text": {
+            "default": "Cannot exceed 50.",
+            "pt": "Nao pode exceder 50.",
+            "sw": "Haiwezi kuzidi 50."
+          },
+          "_row_num": 222
         },
         "water_prompt": {
           "string_token": "water_prompt",
@@ -12277,9 +12349,9 @@
         "q57.hint": {
           "string_token": "q57.hint",
           "text": {
-            "default": "(Formal care: health facility, community health worker (CHW), pharmacy, hospital)",
-            "pt": "(Cuidados formais: unidade de saúde, Agente Polivalente Elementar (APE), farmácia, hospital)",
-            "sw": "(Tiba rasmi: kituo cha afya, Mhudumu wa afya wa jamii (CHW), duka la dawa, hospitali)"
+            "default": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
+            "pt": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
+            "sw": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)"
           },
           "_row_num": 309
         },
@@ -12295,9 +12367,9 @@
         "q58a": {
           "string_token": "q58a",
           "text": {
-            "default": "58a. [If yes] How many household members were bitten in the past 12 months?",
-            "pt": "58a. [Se sim] Quantos membros do agregado familiar foram mordidos nos últimos 12 meses?",
-            "sw": "58a. [Ikiwa ndiyo] Ni wanakaya wangapi waliyogongwa na nyoka katika miezi 12 iliyopita?"
+            "default": "58a. How many household members were bitten in the past 12 months?",
+            "pt": "58a. Quantos membros do agregado familiar foram mordidos nos últimos 12 meses?",
+            "sw": "58a. Ni wanakaya wangapi waliyogongwa na nyoka katika miezi 12 iliyopita?"
           },
           "_row_num": 311
         },
@@ -13758,14 +13830,28 @@
             "section_name": "survey"
           }
         ],
-        "type": "string",
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "health_facility_formal_type_items"
+        },
         "valuesList": "primary_care",
         "elementKey": "health_facility_formal_type"
+      },
+      "health_facility_formal_type_specify": {
+        "_defn": [
+          {
+            "_row_num": 337,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "elementKey": "health_facility_formal_type_specify"
       },
       "any_snake_bite": {
         "_defn": [
           {
-            "_row_num": 343,
+            "_row_num": 346,
             "section_name": "survey"
           }
         ],
@@ -13776,7 +13862,7 @@
       "any_snake_bite_num": {
         "_defn": [
           {
-            "_row_num": 345,
+            "_row_num": 348,
             "section_name": "survey"
           }
         ],
@@ -13786,7 +13872,7 @@
       "snake_bite_who": {
         "_defn": [
           {
-            "_row_num": 348,
+            "_row_num": 351,
             "section_name": "survey"
           }
         ],
@@ -13801,7 +13887,7 @@
       "snake_count": {
         "_defn": [
           {
-            "_row_num": 349,
+            "_row_num": 352,
             "section_name": "survey"
           }
         ],
@@ -13814,7 +13900,7 @@
       "hh_contact": {
         "_defn": [
           {
-            "_row_num": 358,
+            "_row_num": 361,
             "section_name": "survey"
           }
         ],
@@ -13824,7 +13910,7 @@
       "hh_contact_no": {
         "_defn": [
           {
-            "_row_num": 360,
+            "_row_num": 363,
             "section_name": "survey"
           }
         ],
@@ -13839,7 +13925,7 @@
       "hh_contact_alt": {
         "_defn": [
           {
-            "_row_num": 365,
+            "_row_num": 368,
             "section_name": "survey"
           }
         ],
@@ -13849,7 +13935,7 @@
       "hh_contact_alt_no": {
         "_defn": [
           {
-            "_row_num": 367,
+            "_row_num": 370,
             "section_name": "survey"
           }
         ],
@@ -13864,7 +13950,7 @@
       "hh_contact_alt_2": {
         "_defn": [
           {
-            "_row_num": 369,
+            "_row_num": 372,
             "section_name": "survey"
           }
         ],
@@ -13875,7 +13961,7 @@
       "hh_contact_alt_2_num": {
         "_defn": [
           {
-            "_row_num": 374,
+            "_row_num": 377,
             "section_name": "survey"
           }
         ],
@@ -13885,7 +13971,7 @@
       "contact_for_project": {
         "_defn": [
           {
-            "_row_num": 377,
+            "_row_num": 380,
             "section_name": "survey"
           }
         ],
@@ -13896,7 +13982,7 @@
       "hh_death": {
         "_defn": [
           {
-            "_row_num": 386,
+            "_row_num": 389,
             "section_name": "survey"
           }
         ],
@@ -13907,7 +13993,7 @@
       "hh_death_count": {
         "_defn": [
           {
-            "_row_num": 388,
+            "_row_num": 391,
             "section_name": "survey"
           }
         ],
@@ -13917,7 +14003,7 @@
       "death_count": {
         "_defn": [
           {
-            "_row_num": 389,
+            "_row_num": 392,
             "section_name": "survey"
           }
         ],
@@ -16077,9 +16163,7 @@
             "name": "hh_num_nets",
             "display": {
               "prompt": "q55",
-              "constraint_message": {
-                "text": "Cannot exceed 50."
-              }
+              "constraint_message": "w_less_50"
             },
             "constraint": "data('hh_num_nets') < 51",
             "validation_tags": "finalize",
@@ -16176,42 +16260,60 @@
             "promptIdx": 149
           },
           {
-            "type": "select_one_with_other",
+            "type": "select_multiple",
             "values_list": "primary_care",
             "name": "health_facility_formal_type",
+            "constraint": "countSelected(data('health_facility_formal_type')) <= 1",
+            "display": {
+              "constraint_message": "select_one"
+            },
             "hideInContents": 1,
+            "validation_tags": "finalize",
             "_row_num": 335,
             "__rowNum__": 334,
             "_token_type": "prompt",
-            "_type": "select_one_with_other",
+            "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen332",
             "promptIdx": 150
+          },
+          {
+            "type": "text",
+            "name": "health_facility_formal_type_specify",
+            "display": {
+              "prompt": "specify"
+            },
+            "_row_num": 337,
+            "__rowNum__": 336,
+            "_token_type": "prompt",
+            "_type": "text",
+            "_branch_label_enclosing_screen": "survey/_screen332",
+            "promptIdx": 151
           },
           {
             "type": "note",
             "display": {
               "prompt": "snake_h3"
             },
-            "_row_num": 342,
-            "__rowNum__": 341,
+            "_row_num": 345,
+            "__rowNum__": 344,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen340",
-            "promptIdx": 151
+            "_branch_label_enclosing_screen": "survey/_screen343",
+            "promptIdx": 152
           },
           {
             "type": "select_one",
             "values_list": "yndkpna",
             "name": "any_snake_bite",
             "display": {
-              "prompt": "q58a"
+              "prompt": "q58"
             },
-            "_row_num": 343,
-            "__rowNum__": 342,
+            "_row_num": 346,
+            "__rowNum__": 345,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen340",
-            "promptIdx": 152
+            "_branch_label_enclosing_screen": "survey/_screen343",
+            "promptIdx": 153
           },
           {
             "type": "integer",
@@ -16221,36 +16323,36 @@
             },
             "required": "selected(data('any_snake_bite'), 'yes')",
             "validation_tags": "finalize",
-            "_row_num": 345,
-            "__rowNum__": 344,
+            "_row_num": 348,
+            "__rowNum__": 347,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen340",
-            "promptIdx": 153
+            "_branch_label_enclosing_screen": "survey/_screen343",
+            "promptIdx": 154
           },
           {
             "type": "note",
             "display": {
               "prompt": "snake_prompt"
             },
-            "_row_num": 346,
-            "__rowNum__": 345,
+            "_row_num": 349,
+            "__rowNum__": 348,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen340",
-            "promptIdx": 154
+            "_branch_label_enclosing_screen": "survey/_screen343",
+            "promptIdx": 155
           },
           {
             "type": "note",
             "display": {
               "prompt": "snake_detail"
             },
-            "_row_num": 347,
-            "__rowNum__": 346,
+            "_row_num": 350,
+            "__rowNum__": 349,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen340",
-            "promptIdx": 155
+            "_branch_label_enclosing_screen": "survey/_screen343",
+            "promptIdx": 156
           },
           {
             "type": "select_multiple",
@@ -16259,12 +16361,12 @@
             "display": {
               "prompt": "q59a"
             },
-            "_row_num": 348,
-            "__rowNum__": 347,
+            "_row_num": 351,
+            "__rowNum__": 350,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen340",
-            "promptIdx": 156
+            "_branch_label_enclosing_screen": "survey/_screen343",
+            "promptIdx": 157
           },
           {
             "type": "linked_table_counting",
@@ -16285,36 +16387,36 @@
               "valuesList": "linked_member_snake_bit"
             },
             "validation_tags": "finalize",
-            "_row_num": 349,
-            "__rowNum__": 348,
+            "_row_num": 352,
+            "__rowNum__": 351,
             "_token_type": "prompt",
             "_type": "linked_table_counting",
-            "_branch_label_enclosing_screen": "survey/_screen340",
-            "promptIdx": 157
+            "_branch_label_enclosing_screen": "survey/_screen343",
+            "promptIdx": 158
           },
           {
             "type": "note",
             "display": {
               "prompt": "contact_h2"
             },
-            "_row_num": 353,
-            "__rowNum__": 352,
+            "_row_num": 356,
+            "__rowNum__": 355,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 158
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 159
           },
           {
             "type": "note",
             "display": {
               "prompt": "q60"
             },
-            "_row_num": 354,
-            "__rowNum__": 353,
+            "_row_num": 357,
+            "__rowNum__": 356,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 159
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 160
           },
           {
             "type": "text",
@@ -16323,12 +16425,12 @@
               "type": "tel"
             },
             "hideInContents": 1,
-            "_row_num": 358,
-            "__rowNum__": 357,
+            "_row_num": 361,
+            "__rowNum__": 360,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 160
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 161
           },
           {
             "type": "select_multiple",
@@ -16338,24 +16440,24 @@
               "prompt": "or_capital"
             },
             "hideInContents": 1,
-            "_row_num": 360,
-            "__rowNum__": 359,
+            "_row_num": 363,
+            "__rowNum__": 362,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 161
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 162
           },
           {
             "type": "note",
             "display": {
               "prompt": "q61"
             },
-            "_row_num": 361,
-            "__rowNum__": 360,
+            "_row_num": 364,
+            "__rowNum__": 363,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 162
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 163
           },
           {
             "type": "text",
@@ -16364,12 +16466,12 @@
               "type": "tel"
             },
             "hideInContents": 1,
-            "_row_num": 365,
-            "__rowNum__": 364,
+            "_row_num": 368,
+            "__rowNum__": 367,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 163
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 164
           },
           {
             "type": "select_multiple",
@@ -16379,12 +16481,12 @@
               "prompt": "or_capital"
             },
             "hideInContents": 1,
-            "_row_num": 367,
-            "__rowNum__": 366,
+            "_row_num": 370,
+            "__rowNum__": 369,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 164
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 165
           },
           {
             "type": "select_one",
@@ -16393,24 +16495,24 @@
             "display": {
               "prompt": "q62"
             },
-            "_row_num": 369,
-            "__rowNum__": 368,
+            "_row_num": 372,
+            "__rowNum__": 371,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 165
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 166
           },
           {
             "type": "note",
             "display": {
               "prompt": "q62a"
             },
-            "_row_num": 370,
-            "__rowNum__": 369,
+            "_row_num": 373,
+            "__rowNum__": 372,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 166
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 167
           },
           {
             "type": "text",
@@ -16419,12 +16521,12 @@
               "type": "tel"
             },
             "hideInContents": 1,
-            "_row_num": 374,
-            "__rowNum__": 373,
+            "_row_num": 377,
+            "__rowNum__": 376,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 167
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 168
           },
           {
             "type": "select_one",
@@ -16433,12 +16535,12 @@
             "display": {
               "prompt": "q63"
             },
-            "_row_num": 377,
-            "__rowNum__": 376,
+            "_row_num": 380,
+            "__rowNum__": 379,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen352",
-            "promptIdx": 168
+            "_branch_label_enclosing_screen": "survey/_screen355",
+            "promptIdx": 169
           },
           {
             "type": "note",
@@ -16446,12 +16548,12 @@
               "prompt": "death_h2"
             },
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-            "_row_num": 384,
-            "__rowNum__": 383,
+            "_row_num": 387,
+            "__rowNum__": 386,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen381",
-            "promptIdx": 169
+            "_branch_label_enclosing_screen": "survey/_screen384",
+            "promptIdx": 170
           },
           {
             "type": "note",
@@ -16459,12 +16561,12 @@
               "prompt": "death_new_only"
             },
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-            "_row_num": 385,
-            "__rowNum__": 384,
+            "_row_num": 388,
+            "__rowNum__": 387,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen381",
-            "promptIdx": 170
+            "_branch_label_enclosing_screen": "survey/_screen384",
+            "promptIdx": 171
           },
           {
             "type": "select_one",
@@ -16476,12 +16578,12 @@
             "required": "selected(data('hh_minicenced'), 'no')",
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
             "validation_tags": "finalize",
-            "_row_num": 386,
-            "__rowNum__": 385,
+            "_row_num": 389,
+            "__rowNum__": 388,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen381",
-            "promptIdx": 171
+            "_branch_label_enclosing_screen": "survey/_screen384",
+            "promptIdx": 172
           },
           {
             "type": "integer",
@@ -16494,12 +16596,12 @@
               "step": 1
             },
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-            "_row_num": 388,
-            "__rowNum__": 387,
+            "_row_num": 391,
+            "__rowNum__": 390,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen381",
-            "promptIdx": 172
+            "_branch_label_enclosing_screen": "survey/_screen384",
+            "promptIdx": 173
           },
           {
             "type": "linked_table_counting",
@@ -16519,24 +16621,24 @@
             },
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
             "validation_tags": "finalize",
-            "_row_num": 389,
-            "__rowNum__": 388,
+            "_row_num": 392,
+            "__rowNum__": 391,
             "_token_type": "prompt",
             "_type": "linked_table_counting",
-            "_branch_label_enclosing_screen": "survey/_screen381",
-            "promptIdx": 173
+            "_branch_label_enclosing_screen": "survey/_screen384",
+            "promptIdx": 174
           },
           {
             "type": "note",
             "display": {
               "prompt": "ind_h2"
             },
-            "_row_num": 396,
-            "__rowNum__": 395,
+            "_row_num": 399,
+            "__rowNum__": 398,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen395",
-            "promptIdx": 174
+            "_branch_label_enclosing_screen": "survey/_screen398",
+            "promptIdx": 175
           },
           {
             "type": "linked_table",
@@ -16546,20 +16648,20 @@
               "hide_delete_button": 1,
               "hide_add_instance": 1
             },
-            "_row_num": 397,
-            "__rowNum__": 396,
+            "_row_num": 400,
+            "__rowNum__": 399,
             "_token_type": "prompt",
             "_type": "linked_table",
-            "_branch_label_enclosing_screen": "survey/_screen395",
-            "promptIdx": 175
+            "_branch_label_enclosing_screen": "survey/_screen398",
+            "promptIdx": 176
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 399,
-            "_branch_label_enclosing_screen": "survey/_screen399",
-            "promptIdx": 176
+            "_row_num": 402,
+            "_branch_label_enclosing_screen": "survey/_screen402",
+            "promptIdx": 177
           }
         ],
         "validation_tag_map": {
@@ -16599,10 +16701,11 @@
             146,
             147,
             149,
-            153,
-            157,
-            171,
-            173
+            150,
+            154,
+            158,
+            172,
+            174
           ],
           "cattle": [
             81
@@ -17135,102 +17238,102 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 339,
-              "__rowNum__": 338,
+              "_row_num": 342,
+              "__rowNum__": 341,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(148);\nactivePromptIndicies.push(149);\nactivePromptIndicies.push(150);\nif (!!data('health_facility_formal_type')) {\nassign('health_facility_formal_sick', null);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(148);\nactivePromptIndicies.push(149);\nactivePromptIndicies.push(150);\nif (selected(data('health_facility_formal_type'), 'other')) {\nactivePromptIndicies.push(151);\n}\nif (!!data('health_facility_formal_type')) {\nassign('health_facility_formal_sick', null);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 47
           },
           {
             "clause": "begin screen",
-            "_row_num": 340,
-            "__rowNum__": 339,
+            "_row_num": 343,
+            "__rowNum__": 342,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 351,
-              "__rowNum__": 350,
+              "_row_num": 354,
+              "__rowNum__": 353,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(151);\nactivePromptIndicies.push(152);\nif (selected(data('any_snake_bite'), 'yes')) {\nactivePromptIndicies.push(153);\nactivePromptIndicies.push(154);\nactivePromptIndicies.push(155);\nactivePromptIndicies.push(156);\nactivePromptIndicies.push(157);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(152);\nactivePromptIndicies.push(153);\nif (selected(data('any_snake_bite'), 'yes')) {\nactivePromptIndicies.push(154);\nactivePromptIndicies.push(155);\nactivePromptIndicies.push(156);\nactivePromptIndicies.push(157);\nactivePromptIndicies.push(158);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 48
           },
           {
             "clause": "begin screen",
-            "_row_num": 352,
-            "__rowNum__": 351,
+            "_row_num": 355,
+            "__rowNum__": 354,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 378,
-              "__rowNum__": 377,
+              "_row_num": 381,
+              "__rowNum__": 380,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(158);\nactivePromptIndicies.push(159);\nif (selected(data('no_contact_num'), 'no_contact_num')) {\nassign('hh_contact', null);\n}\nelse {\nactivePromptIndicies.push(160);\n}\nactivePromptIndicies.push(161);\nactivePromptIndicies.push(162);\nif (selected(data('no_alt_contact_num'), 'no_alt_contact_num')) {\nassign('hh_contact_alt', null);\n}\nelse {\nactivePromptIndicies.push(163);\n}\nactivePromptIndicies.push(164);\nif (!!data('hh_contact_alt')) {\nactivePromptIndicies.push(165);\nactivePromptIndicies.push(166);\nif (selected(data('hh_contact_alt_2'), 'yes')) {\nassign('hh_contact_alt_2_num', null);\n}\nelse {\nactivePromptIndicies.push(167);\n}\n}\nactivePromptIndicies.push(168);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(159);\nactivePromptIndicies.push(160);\nif (selected(data('no_contact_num'), 'no_contact_num')) {\nassign('hh_contact', null);\n}\nelse {\nactivePromptIndicies.push(161);\n}\nactivePromptIndicies.push(162);\nactivePromptIndicies.push(163);\nif (selected(data('no_alt_contact_num'), 'no_alt_contact_num')) {\nassign('hh_contact_alt', null);\n}\nelse {\nactivePromptIndicies.push(164);\n}\nactivePromptIndicies.push(165);\nif (!!data('hh_contact_alt')) {\nactivePromptIndicies.push(166);\nactivePromptIndicies.push(167);\nif (selected(data('hh_contact_alt_2'), 'yes')) {\nassign('hh_contact_alt_2_num', null);\n}\nelse {\nactivePromptIndicies.push(168);\n}\n}\nactivePromptIndicies.push(169);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 49
           },
           {
             "clause": "if",
             "condition": "selected(data('hh_minicenced'), 'no')",
-            "_row_num": 380,
-            "__rowNum__": 379,
+            "_row_num": 383,
+            "__rowNum__": 382,
             "_token_type": "goto_label",
-            "_branch_label": "_then380",
+            "_branch_label": "_then383",
             "operationIdx": 50
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
-            "_branch_label": "_else393",
-            "_row_num": 393,
+            "_branch_label": "_else396",
+            "_row_num": 396,
             "operationIdx": 51
           },
           {
             "clause": "begin screen",
-            "_row_num": 381,
-            "__rowNum__": 380,
+            "_row_num": 384,
+            "__rowNum__": 383,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 392,
-              "__rowNum__": 391,
+              "_row_num": 395,
+              "__rowNum__": 394,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nif (selected(data('hh_minicenced'), 'no')) {\nactivePromptIndicies.push(169);\nactivePromptIndicies.push(170);\nactivePromptIndicies.push(171);\nif (selected(data('hh_death'), 'yes')) {\nactivePromptIndicies.push(172);\nactivePromptIndicies.push(173);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nif (selected(data('hh_minicenced'), 'no')) {\nactivePromptIndicies.push(170);\nactivePromptIndicies.push(171);\nactivePromptIndicies.push(172);\nif (selected(data('hh_death'), 'yes')) {\nactivePromptIndicies.push(173);\nactivePromptIndicies.push(174);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 52
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
-            "_branch_label": "_endif393",
-            "_row_num": 393,
+            "_branch_label": "_endif396",
+            "_row_num": 396,
             "operationIdx": 53
           },
           {
             "clause": "begin screen",
-            "_row_num": 395,
-            "__rowNum__": 394,
+            "_row_num": 398,
+            "__rowNum__": 397,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 398,
-              "__rowNum__": 397,
+              "_row_num": 401,
+              "__rowNum__": 400,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(174);\nactivePromptIndicies.push(175);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(175);\nactivePromptIndicies.push(176);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 54
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 399,
+            "_row_num": 402,
             "operationIdx": 55
           },
           {
-            "_row_num": 399,
+            "_row_num": 402,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(176);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(177);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -17239,7 +17342,7 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 399,
+            "_row_num": 402,
             "operationIdx": 57
           }
         ],
@@ -17290,15 +17393,15 @@
           "_screen308": 45,
           "_screen329": 46,
           "_screen332": 47,
-          "_screen340": 48,
-          "_screen352": 49,
-          "_then380": 52,
-          "_screen381": 52,
-          "_else393": 54,
-          "_endif393": 54,
-          "_screen395": 54,
+          "_screen343": 48,
+          "_screen355": 49,
+          "_then383": 52,
+          "_screen384": 52,
+          "_else396": 54,
+          "_endif396": 54,
+          "_screen398": 54,
           "_contents": 56,
-          "_screen399": 56
+          "_screen402": 56
         }
       },
       "initial": {
@@ -19069,17 +19172,41 @@
             "section_name": "survey"
           }
         ],
-        "type": "string",
+        "type": "array",
+        "items": {
+          "type": "string",
+          "elementKey": "health_facility_formal_type_items",
+          "elementName": "items",
+          "elementSet": "data",
+          "elementPath": "health_facility_formal_type.items",
+          "notUnitOfRetention": true
+        },
         "valuesList": "primary_care",
         "elementKey": "health_facility_formal_type",
         "elementName": "health_facility_formal_type",
         "elementSet": "data",
-        "elementPath": "health_facility_formal_type"
+        "elementPath": "health_facility_formal_type",
+        "listChildElementKeys": [
+          "health_facility_formal_type_items"
+        ]
+      },
+      "health_facility_formal_type_specify": {
+        "_defn": [
+          {
+            "_row_num": 337,
+            "section_name": "survey"
+          }
+        ],
+        "type": "string",
+        "elementKey": "health_facility_formal_type_specify",
+        "elementName": "health_facility_formal_type_specify",
+        "elementSet": "data",
+        "elementPath": "health_facility_formal_type_specify"
       },
       "any_snake_bite": {
         "_defn": [
           {
-            "_row_num": 343,
+            "_row_num": 346,
             "section_name": "survey"
           }
         ],
@@ -19093,7 +19220,7 @@
       "any_snake_bite_num": {
         "_defn": [
           {
-            "_row_num": 345,
+            "_row_num": 348,
             "section_name": "survey"
           }
         ],
@@ -19106,7 +19233,7 @@
       "snake_bite_who": {
         "_defn": [
           {
-            "_row_num": 348,
+            "_row_num": 351,
             "section_name": "survey"
           }
         ],
@@ -19131,7 +19258,7 @@
       "snake_count": {
         "_defn": [
           {
-            "_row_num": 349,
+            "_row_num": 352,
             "section_name": "survey"
           }
         ],
@@ -19147,7 +19274,7 @@
       "hh_contact": {
         "_defn": [
           {
-            "_row_num": 358,
+            "_row_num": 361,
             "section_name": "survey"
           }
         ],
@@ -19160,7 +19287,7 @@
       "hh_contact_no": {
         "_defn": [
           {
-            "_row_num": 360,
+            "_row_num": 363,
             "section_name": "survey"
           }
         ],
@@ -19185,7 +19312,7 @@
       "hh_contact_alt": {
         "_defn": [
           {
-            "_row_num": 365,
+            "_row_num": 368,
             "section_name": "survey"
           }
         ],
@@ -19198,7 +19325,7 @@
       "hh_contact_alt_no": {
         "_defn": [
           {
-            "_row_num": 367,
+            "_row_num": 370,
             "section_name": "survey"
           }
         ],
@@ -19223,7 +19350,7 @@
       "hh_contact_alt_2": {
         "_defn": [
           {
-            "_row_num": 369,
+            "_row_num": 372,
             "section_name": "survey"
           }
         ],
@@ -19237,7 +19364,7 @@
       "hh_contact_alt_2_num": {
         "_defn": [
           {
-            "_row_num": 374,
+            "_row_num": 377,
             "section_name": "survey"
           }
         ],
@@ -19250,7 +19377,7 @@
       "contact_for_project": {
         "_defn": [
           {
-            "_row_num": 377,
+            "_row_num": 380,
             "section_name": "survey"
           }
         ],
@@ -19264,7 +19391,7 @@
       "hh_death": {
         "_defn": [
           {
-            "_row_num": 386,
+            "_row_num": 389,
             "section_name": "survey"
           }
         ],
@@ -19278,7 +19405,7 @@
       "hh_death_count": {
         "_defn": [
           {
-            "_row_num": 388,
+            "_row_num": 391,
             "section_name": "survey"
           }
         ],
@@ -19291,7 +19418,7 @@
       "death_count": {
         "_defn": [
           {
-            "_row_num": 389,
+            "_row_num": 392,
             "section_name": "survey"
           }
         ],
@@ -19430,6 +19557,14 @@
         "elementName": "items",
         "elementSet": "data",
         "elementPath": "malaria_prevention_method.items",
+        "notUnitOfRetention": true
+      },
+      "health_facility_formal_type_items": {
+        "type": "string",
+        "elementKey": "health_facility_formal_type_items",
+        "elementName": "items",
+        "elementSet": "data",
+        "elementPath": "health_facility_formal_type.items",
         "notUnitOfRetention": true
       },
       "snake_bite_who_items": {
@@ -19701,7 +19836,7 @@
         "_aspect": "health_facility_formal_type",
         "_key": "displayChoicesList",
         "_type": "object",
-        "_value": "[{\"choice_list_name\":\"primary_care\",\"data_value\":\"CHW_go\",\"display\":{\"title\":\"CHW_go\"},\"_row_num\":206},{\"choice_list_name\":\"primary_care\",\"data_value\":\"CHW_come\",\"display\":{\"title\":\"CHW_come\"},\"_row_num\":207},{\"choice_list_name\":\"primary_care\",\"data_value\":\"Hospital\",\"display\":{\"title\":\"Hospital\"},\"_row_num\":208},{\"choice_list_name\":\"primary_care\",\"data_value\":\"Pharmacy\",\"display\":{\"title\":\"Pharmacy\"},\"_row_num\":209},{\"choice_list_name\":\"primary_care\",\"data_value\":\"dk\",\"display\":{\"title\":\"dk\"},\"_row_num\":210}]"
+        "_value": "[{\"choice_list_name\":\"primary_care\",\"data_value\":\"CHW_go\",\"display\":{\"title\":\"CHW_go\"},\"_row_num\":206},{\"choice_list_name\":\"primary_care\",\"data_value\":\"CHW_come\",\"display\":{\"title\":\"CHW_come\"},\"_row_num\":207},{\"choice_list_name\":\"primary_care\",\"data_value\":\"Hospital\",\"display\":{\"title\":\"Hospital\"},\"_row_num\":208},{\"choice_list_name\":\"primary_care\",\"data_value\":\"Pharmacy\",\"display\":{\"title\":\"Pharmacy\"},\"_row_num\":209},{\"choice_list_name\":\"primary_care\",\"data_value\":\"dk\",\"display\":{\"title\":\"dk\"},\"_row_num\":210},{\"choice_list_name\":\"primary_care\",\"data_value\":\"other\",\"display\":{\"title\":\"other\"},\"_row_num\":211}]"
       },
       {
         "_partition": "Column",

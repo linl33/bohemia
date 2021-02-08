@@ -18,8 +18,8 @@ window.odkTableSpecificDefinitions = {
       },
       "_row_num": 3
     },
-    "4ciii": {
-      "string_token": "4ciii",
+    "41ciii": {
+      "string_token": "41ciii",
       "text": {
         "default": "41c (iii). With how many households? (not including this household",
         "pt": "41c (iii). Com quantos agregados familiares? (Não incluindo este agregado familiar",
@@ -29,7 +29,11 @@ window.odkTableSpecificDefinitions = {
     },
     "hh_id_note": {
       "string_token": "hh_id_note",
-      "text": "Household ID: {{data.hh_id}}",
+      "text": {
+        "default": "Household ID: {{data.hh_id}}",
+        "pt": "Household ID: {{data.hh_id}}",
+        "sw": "Household ID: {{data.hh_id}}"
+      },
       "_row_num": 5
     },
     "toilet_septic": {

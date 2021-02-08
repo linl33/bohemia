@@ -1636,6 +1636,15 @@ window.odkTableSpecificDefinitions = {
       },
       "_row_num": 186
     },
+    "select_one": {
+      "string_token": "select_one",
+      "text": {
+        "default": "You can only select one option.",
+        "pt": "You can only select one option.",
+        "sw": "You can only select one option."
+      },
+      "_row_num": 187
+    },
     "housing_h3": {
       "string_token": "housing_h3",
       "text": {
@@ -1931,6 +1940,15 @@ window.odkTableSpecificDefinitions = {
         "sw": "<span style=\"color:red\">You indicated a location within 15m of the house, but selected a distance over 50m. Please verify selections. </span>"
       },
       "_row_num": 221
+    },
+    "w_less_50": {
+      "string_token": "w_less_50",
+      "text": {
+        "default": "Cannot exceed 50.",
+        "pt": "Nao pode exceder 50.",
+        "sw": "Haiwezi kuzidi 50."
+      },
+      "_row_num": 222
     },
     "water_prompt": {
       "string_token": "water_prompt",
@@ -2682,9 +2700,9 @@ window.odkTableSpecificDefinitions = {
     "q57.hint": {
       "string_token": "q57.hint",
       "text": {
-        "default": "(Formal care: health facility, community health worker (CHW), pharmacy, hospital)",
-        "pt": "(Cuidados formais: unidade de saúde, Agente Polivalente Elementar (APE), farmácia, hospital)",
-        "sw": "(Tiba rasmi: kituo cha afya, Mhudumu wa afya wa jamii (CHW), duka la dawa, hospitali)"
+        "default": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
+        "pt": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
+        "sw": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)"
       },
       "_row_num": 309
     },
@@ -2700,9 +2718,9 @@ window.odkTableSpecificDefinitions = {
     "q58a": {
       "string_token": "q58a",
       "text": {
-        "default": "58a. [If yes] How many household members were bitten in the past 12 months?",
-        "pt": "58a. [Se sim] Quantos membros do agregado familiar foram mordidos nos últimos 12 meses?",
-        "sw": "58a. [Ikiwa ndiyo] Ni wanakaya wangapi waliyogongwa na nyoka katika miezi 12 iliyopita?"
+        "default": "58a. How many household members were bitten in the past 12 months?",
+        "pt": "58a. Quantos membros do agregado familiar foram mordidos nos últimos 12 meses?",
+        "sw": "58a. Ni wanakaya wangapi waliyogongwa na nyoka katika miezi 12 iliyopita?"
       },
       "_row_num": 311
     },

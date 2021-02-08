@@ -82,7 +82,7 @@
           "step": 1
         },
         "display": {
-          "invalid_value_message": "invalid_date"
+          "invalid_value_message": "Date entered must be a number between 1 and 31. / Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31 / A data introduzida deve ser um numero entre 1 a 31."
         },
         "hideInContents": 1,
         "_row_num": 10
@@ -121,7 +121,7 @@
           "step": 1
         },
         "display": {
-          "invalid_value_message": "invalid_month"
+          "invalid_value_message": "Month entered must be a number between 1 and 12. / Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12 / O mes introduzido deve ser um numero entre 1 e 12."
         },
         "hideInContents": 1,
         "_row_num": 15
@@ -160,7 +160,7 @@
           "step": 1
         },
         "display": {
-          "invalid_value_message": "invalid_year"
+          "invalid_value_message": "Year entered must be a number between 1920 and 2021. / Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021 / O ano introduido deve ser um numero entre 1920 e 2021"
         },
         "hideInContents": 1,
         "_row_num": 20
@@ -6759,7 +6759,7 @@
               "step": 1
             },
             "display": {
-              "invalid_value_message": "invalid_date"
+              "invalid_value_message": "Date entered must be a number between 1 and 31. / Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31 / A data introduzida deve ser um numero entre 1 a 31."
             },
             "hideInContents": 1,
             "_row_num": 10,
@@ -6804,7 +6804,7 @@
               "step": 1
             },
             "display": {
-              "invalid_value_message": "invalid_month"
+              "invalid_value_message": "Month entered must be a number between 1 and 12. / Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12 / O mes introduzido deve ser um numero entre 1 e 12."
             },
             "hideInContents": 1,
             "_row_num": 15,
@@ -6849,7 +6849,7 @@
               "step": 1
             },
             "display": {
-              "invalid_value_message": "invalid_year"
+              "invalid_value_message": "Year entered must be a number between 1920 and 2021. / Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021 / O ano introduido deve ser um numero entre 1920 e 2021"
             },
             "hideInContents": 1,
             "_row_num": 20,
