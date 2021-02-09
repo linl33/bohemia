@@ -7,6 +7,7 @@
 #' @import leaflet
 #' @import shiny
 #' @import ggplot2
+#' @import googlesheets4
 #' @import DT
 #' @import shinyMobile
 app_ui <- function(request) {
@@ -72,23 +73,29 @@ app_ui <- function(request) {
 #' @import leaflet
 app_server <- function(input, output, session) {
   
-  # create reactive data frame 
-  temp_dat <- reactive({
-    temp <-forum::dat
-    temp$details <- NULL
-    return(temp)
+  # create a reactive dataframe to store data
+  x = reactiveValues(df=NULL)
+  observe({
+    df <- googlesheets4::read_sheet('https://docs.google.com/spreadsheets/d/1qDxynnod4YZYzGP1G9562auOXzAq1nVn89EjeJYgL8k/edit#gid=0') 
+    # removing details for now
+    df$details <- NULL
+    df <- df[, c("country", "first_name", "last_name", "institution", "position", "email", "phone")]
+    x$df <- df
   })
   
-  # put data in table 
+  # put data in table with options for saving a csv 
   output$contact_table <- DT::renderDataTable({
-    table_data <- temp_dat()
-    if(is.null(table_data)){
-      NULL
-    } else {
-      # message(table_data)
-      DT::datatable(table_data, editable = TRUE, filter = 'top')
-    }
+    # message(table_data)
+    DT::datatable(x$df, editable = 'cell',extensions = 'Buttons', filter = 'top', 
+                  options = list(pageLength = nrow(x$df), info = FALSE, dom='Bfrtip', buttons = list('csv')))
   })
+  
+  # edit table
+  observeEvent(input[["contact_table_cell_edit"]], {
+    cellinfo <- input[["contact_table_cell_edit"]]
+    x$df <- editData(x$df, input[["contact_table_cell_edit"]], "contact_table")
+  })
+  
   
 }
 
