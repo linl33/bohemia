@@ -2564,54 +2564,54 @@ window.odkTableSpecificDefinitions = {
     "ind_q4": {
       "string_token": "ind_q4",
       "text": {
-        "default": "4. [If 18 or over 18 years old] Has this participant sign the informed consent?",
-        "pt": "4. [Se 18 ou idade superior a 18 anos] Este participante assinou o consentimento informado?",
-        "sw": "4. [Ikiwa ana umri wa miaka 18 au zaidi ya 18] Je, mshiriki huyu ametia saini fomu ya ridhaa?"
+        "default": "4. Has this participant sign the informed consent?",
+        "pt": "4. Este participante assinou o consentimento informado?",
+        "sw": "4. Je, mshiriki huyu ametia saini fomu ya ridhaa?"
       },
       "_row_num": 295
     },
     "ind_q5": {
       "string_token": "ind_q5",
       "text": {
-        "default": "5. [If between 12 and below 18] Has this participant sign the assent form?",
-        "pt": "5. [Se tiver entre 12 e menos de 18] O participante assinou o assentimento informado?",
-        "sw": "5. [Ikiwa kati ya miaka 12 na chini ya 18] Je, mshiriki huyu ametia saini fomu ya ridhaa?"
+        "default": "5. Has this participant sign the assent form?",
+        "pt": "5.  O participante assinou o assentimento informado?",
+        "sw": "5. Je, mshiriki huyu ametia saini fomu ya ridhaa?"
       },
       "_row_num": 296
     },
     "ind_q5a": {
       "string_token": "ind_q5a",
       "text": {
-        "default": "5a. [If between 12 and below 18] Has the legal guardian/parent signed the consent form?",
-        "pt": "5a. [Se tiver entre 12 e menos de 18] O pai/mãe/tutor assinou o consentimento informado?",
-        "sw": "5a. [Ikiwa kati ya miaka 12 na chini ya 18] Mlezi wa kisheria/mzazi ametia saini fomu ya ridhaa?"
+        "default": "5a. Has the legal guardian/parent signed the consent form?",
+        "pt": "5a. O pai/mãe/tutor assinou o consentimento informado?",
+        "sw": "5a. Mlezi wa kisheria/mzazi ametia saini fomu ya ridhaa?"
       },
       "_row_num": 297
     },
     "ind_q5ai": {
       "string_token": "ind_q5ai",
       "text": {
-        "default": "5a(i). [If yes] Who signed?",
-        "pt": "5a(i). [Se sim] Quem assinou?",
-        "sw": "5a (i). [Ikiwa ndiyo] Ni nani aliyetia saini?"
+        "default": "5a(i). Who signed?",
+        "pt": "5a(i). Quem assinou?",
+        "sw": "5a (i). Ni nani aliyetia saini?"
       },
       "_row_num": 298
     },
     "ind_q6": {
       "string_token": "ind_q6",
       "text": {
-        "default": "6. [If below 12] Has the legal guardian/parent signed the consent form?",
-        "pt": "6. [Se tiver menos de 12] O pai/mãe/tutor assinou o consentimento informado?",
-        "sw": "6. [Ikiwa chini ya miaka 12] Mlezi wa kisheria/mzazi ametia saini fomu ya ridhaa?"
+        "default": "6. Has the legal guardian/parent signed the consent form?",
+        "pt": "6. O pai/mãe/tutor assinou o consentimento informado?",
+        "sw": "6. Mlezi wa kisheria/mzazi ametia saini fomu ya ridhaa?"
       },
       "_row_num": 299
     },
     "ind_q6a": {
       "string_token": "ind_q6a",
       "text": {
-        "default": "6a. [If yes] Who signed?",
-        "pt": "6a. [Se sim] Quem assinou?",
-        "sw": "6a. [Ikiwa ndiyo] Ni nani aliyetia saini?"
+        "default": "6a. Who signed?",
+        "pt": "6a. Quem assinou?",
+        "sw": "6a. Ni nani aliyetia saini?"
       },
       "_row_num": 300
     },
@@ -2627,18 +2627,18 @@ window.odkTableSpecificDefinitions = {
     "ind_q8": {
       "string_token": "ind_q8",
       "text": {
-        "default": "8. [If the participant is below 18] Are his/her biological parents alive?",
-        "pt": "8. [Se o participante tiver menos de 18] Os seus pais biológicos estão vivos?",
-        "sw": "8. [Ikiwa mshiriki ana umri wa chini ya miaka 18] wazazi wake waliomzaa wako hai?"
+        "default": "8. Are his/her biological parents alive?",
+        "pt": "8. Os seus pais biológicos estão vivos?",
+        "sw": "8. Wazazi wake waliomzaa wako hai?"
       },
       "_row_num": 302
     },
     "ind_q9": {
       "string_token": "ind_q9",
       "text": {
-        "default": "9. [If not household head/household head substitute] Participant’s relationship with the head of household",
-        "pt": "9. [Se não for chefe do agregado familiar/chefe substituto do agregado familiar] Parentesco do participante com o chefe do agregado familiar",
-        "sw": "9. [Ikiwa siyo Mkuu wa kaya/Mbadala wa mkuu wa kaya] Uhusiano wa mshiriki na Mkuu wa kaya"
+        "default": "9. Participant’s relationship with the head of household",
+        "pt": "9. Parentesco do participante com o chefe do agregado familiar",
+        "sw": "9. Uhusiano wa mshiriki na Mkuu wa kaya"
       },
       "_row_num": 303
     },
@@ -3041,9 +3041,9 @@ window.odkTableSpecificDefinitions = {
     "n_nets": {
       "string_token": "n_nets",
       "text": {
-        "default": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)",
-        "pt": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)",
-        "sw": "Number of people (0=alone, 2=two under the net, 3=three under the net, etc. 1 not allowed)"
+        "default": "0=alone, 2=two under the net, 3=three under the net, etc.",
+        "pt": "0= 1 pessoa debaixo do mosquiteiro, 2= duas pessoas debaixo do mosquiteiro, 3= três pessoas debaixo do mosquiteiro, etc.",
+        "sw": "0= Pekeyako, 2= wawili kwenye chandarua, 3=  3 kwenye chandarua nk."
       },
       "_row_num": 349
     },
@@ -3051,8 +3051,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "not_one",
       "text": {
         "default": "Cannot enter 1.",
-        "pt": "Cannot enter 1.",
-        "sw": "Cannot enter 1."
+        "pt": "1 não é uma resposta permitida",
+        "sw": "1 hakuruhusiwi"
       },
       "_row_num": 350
     },
@@ -3060,7 +3060,7 @@ window.odkTableSpecificDefinitions = {
       "string_token": "invalid_date",
       "text": {
         "default": "Date entered must be a number from 1 and 31.",
-        "pt": "Date entered must be a number from 1 and 31.",
+        "pt": "A data introduzida deve ser um numero entre 1 a 31.",
         "sw": "Tarehe(siku) iliyoingizwa inatakiwa kuwa namba kati ya 1 na 31"
       },
       "_row_num": 351
@@ -3069,7 +3069,7 @@ window.odkTableSpecificDefinitions = {
       "string_token": "invalid_month",
       "text": {
         "default": "Month entered must be a number from 1 to 12.",
-        "pt": "Month entered must be a number from 1 to 12.",
+        "pt": "O mes introduzido deve ser um numero entre 1 e 12.",
         "sw": "Mwezi uliyoingizwa unatakiwa kuwa namba kati ya 1 na12"
       },
       "_row_num": 352
@@ -3078,7 +3078,7 @@ window.odkTableSpecificDefinitions = {
       "string_token": "invalid_year",
       "text": {
         "default": "Year entered must be a number from 1920 to 2021.",
-        "pt": "Year entered must be a number from 1920 to 2021.",
+        "pt": "O ano introduido deve ser um numero entre 1920 e 2021",
         "sw": "Mwaka uliyoingizwa unatakiwa kuwa namba kati ya 1920 na 2021"
       },
       "_row_num": 353
