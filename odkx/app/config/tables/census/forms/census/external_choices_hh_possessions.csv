@@ -1,34 +1,34 @@
-name,label,country
-vending_stall_for_business,Vending stall for business,Tanzania
-bicycle,Bicycle,Tanzania
-motorcycle,Motorcycle,Tanzania
-tricycle_(bajaji),Tricycle (Bajaji),Tanzania
-car,Car,Tanzania
-truck,Truck,Tanzania
-animal_drawn_cart,Animal drawn cart,Tanzania
-boat_with_motor,Boat with motor,Tanzania
-radio,Radio,Tanzania
-tv,TV,Tanzania
-cell_phone,Cell phone,Tanzania
-video-dvd,Video-DVD,Tanzania
-fridge,Fridge,Tanzania
-freezer,Freezer,Tanzania
-iron,Iron,Tanzania
-computer,Computer,Tanzania
-mobile_money_account,Mobile money account,Tanzania
-none,None of the above,Tanzania
-vending_stall_for_business,Vending stall for business,Mozambique
-bicycle,Bicycle,Mozambique
-motorcycle,Motorcycle,Mozambique
-car,Car,Mozambique
-truck,Truck,Mozambique
-animal_drawn_cart,Animal drawn cart,Mozambique
-boat_with_motor,Boat with motor,Mozambique
-radio,Radio,Mozambique
-tv,TV,Mozambique
-cell_phone,Cell phone,Mozambique
-video-dvd,Video-DVD,Mozambique
-fridge,Fridge,Mozambique
-freezer,Freezer,Mozambique
-bank_account,Bank account,Mozambique
-none,None of the above,Mozambique
+name,label,country,sw,pt
+vending_stall_for_business,Vending stall for business,Tanzania,Stoo ya uchuuzi ya biashara,Banca de venda
+bicycle,Bicycle,Tanzania,Baiskeli,Bicicleta
+motorcycle,Motorcycle,Tanzania,Pikipiki ,Motocicleta
+tricycle_(bajaji),Tricycle (Bajaji),Tanzania,Tuktuk (Bajaji),Tchopela
+car,Car,Tanzania,Gari,Carro
+truck,Truck,Tanzania,Lori,Camião
+animal_drawn_cart,Animal drawn cart,Tanzania,Mkokoteni unaokokotwa na wanyama,Carroça de tração animal
+boat_with_motor,Boat with motor,Tanzania,Mashua yenye mota,Barco a motor
+radio,Radio,Tanzania,Redio,Rádio
+tv,TV,Tanzania,Runinga,TV
+cell_phone,Cell phone,Tanzania,Simu ya mkononi,Telemóvel 
+video-dvd,Video-DVD,Tanzania,DVD ya video (Deki),Vídeo-DVD
+fridge,Fridge,Tanzania,Friji,Frigorífico
+freezer,Freezer,Tanzania,Friza,Congelador
+iron,Iron,Tanzania,Pasi,Iron
+computer,Computer,Tanzania,Kompyuta ,Computador
+mobile_money_account,Mobile money account,Tanzania,Akaunti ya pesa ya rununu,Conta bancári
+none,None of the above,Tanzania,Hakuna kati ya vilivyo hapo juu,Nenhuma das anteriores
+vending_stall_for_business,Vending stall for business,Mozambique,Stoo ya uchuuzi ya biashara,Banca de venda
+bicycle,Bicycle,Mozambique,Baiskeli,Bicicleta
+motorcycle,Motorcycle,Mozambique,Pikipiki ,Motocicleta
+car,Car,Mozambique,Gari,Carro
+truck,Truck,Mozambique,Lori,Camião
+animal_drawn_cart,Animal drawn cart,Mozambique,Mkokoteni unaokokotwa na wanyama,Carroça de tração animal
+boat_with_motor,Boat with motor,Mozambique,Mashua yenye mota,Barco a motor
+radio,Radio,Mozambique,Redio,Rádio
+tv,TV,Mozambique,Runinga,TV
+cell_phone,Cell phone,Mozambique,Simu ya kiganjani,Telemóvel 
+video-dvd,Video-DVD,Mozambique,DVD ya video (Deki),Vídeo-DVD
+fridge,Fridge,Mozambique,Friji,Frigorífico
+freezer,Freezer,Mozambique,Jokofu,Congelador
+bank_account,Bank account,Mozambique,Bank Account,Conta bancári
+none,None of the above,Mozambique,Hakuna,Nenhuma das anteriores

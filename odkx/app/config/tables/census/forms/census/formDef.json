@@ -4621,42 +4621,42 @@
         "query_name": "malaria_prevention",
         "query_type": "csv",
         "uri": "\"external_choices_malaria_prevention.csv\"",
-        "callback": "_.map(context, function(prevention){prevention.data_value = prevention.name;\nprevention.display = {title: {text:prevention.label} };\nreturn prevention;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 2
       },
       {
         "query_name": "housing_wall_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_wall.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 3
       },
       {
         "query_name": "housing_ceiling_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_ceiling.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 4
       },
       {
         "query_name": "housing_floor_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_floor.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 5
       },
       {
         "query_name": "hh_possessions",
         "query_type": "csv",
         "uri": "\"external_choices_hh_possessions.csv\"",
-        "callback": "_.map(context, function(possession){possession.data_value = possession.name;\npossession.display = {title: {text:possession.label} };\nreturn possession;\n})",
+        "callback": "_.map(context, function(possession){possession.data_value = possession.name;\npossession.display = {title: {text: {default: possession.label, sw: possession.sw, pt: possession.pt} } };\nreturn possession;\n})",
         "_row_num": 6
       },
       {
         "query_name": "choices_hf",
         "query_type": "csv",
         "uri": "\"external_choices_hf.csv\"",
-        "callback": "_.map(context, function(place){place.data_value = place.name;\nplace.display = {title: {text:place.label} };\nreturn place;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 7
       },
       {
@@ -7637,7 +7637,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -12453,42 +12454,42 @@
         "query_name": "malaria_prevention",
         "query_type": "csv",
         "uri": "\"external_choices_malaria_prevention.csv\"",
-        "callback": "_.map(context, function(prevention){prevention.data_value = prevention.name;\nprevention.display = {title: {text:prevention.label} };\nreturn prevention;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 2
       },
       "housing_wall_material": {
         "query_name": "housing_wall_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_wall.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 3
       },
       "housing_ceiling_material": {
         "query_name": "housing_ceiling_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_ceiling.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 4
       },
       "housing_floor_material": {
         "query_name": "housing_floor_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_floor.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 5
       },
       "hh_possessions": {
         "query_name": "hh_possessions",
         "query_type": "csv",
         "uri": "\"external_choices_hh_possessions.csv\"",
-        "callback": "_.map(context, function(possession){possession.data_value = possession.name;\npossession.display = {title: {text:possession.label} };\nreturn possession;\n})",
+        "callback": "_.map(context, function(possession){possession.data_value = possession.name;\npossession.display = {title: {text: {default: possession.label, sw: possession.sw, pt: possession.pt} } };\nreturn possession;\n})",
         "_row_num": 6
       },
       "choices_hf": {
         "query_name": "choices_hf",
         "query_type": "csv",
         "uri": "\"external_choices_hf.csv\"",
-        "callback": "_.map(context, function(place){place.data_value = place.name;\nplace.display = {title: {text:place.label} };\nreturn place;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 7
       },
       "linked_hh_death": {
