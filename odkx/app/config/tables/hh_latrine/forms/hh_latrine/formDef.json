@@ -274,8 +274,8 @@
         "string_token": "hh_id_note",
         "text": {
           "default": "Household ID: {{data.hh_id}}",
-          "pt": "Identificação do agregado{{data.hh_id}}",
-          "sw": "Utambulisho wa Kaya {{data.hh_id}}"
+          "pt": "Identificação do agregado: {{data.hh_id}}",
+          "sw": "Utambulisho wa Kaya: {{data.hh_id}}"
         },
         "_row_num": 5
       },
@@ -376,8 +376,7 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path",
-      "hideInContents": "formula"
+      "templatePath": "requirejs_path"
     },
     "settings": {
       "form_id": {
@@ -627,8 +626,8 @@
           "string_token": "hh_id_note",
           "text": {
             "default": "Household ID: {{data.hh_id}}",
-            "pt": "Identificação do agregado{{data.hh_id}}",
-            "sw": "Utambulisho wa Kaya {{data.hh_id}}"
+            "pt": "Identificação do agregado: {{data.hh_id}}",
+            "sw": "Utambulisho wa Kaya: {{data.hh_id}}"
           },
           "_row_num": 5
         },

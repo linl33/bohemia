@@ -22,8 +22,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_id_note",
       "text": {
         "default": "Household Identification {{data.hh_id}}",
-        "pt": "Utambulisho wa Kaya {{data.hh_id}}",
-        "sw": "Identificação do agregado{{data.hh_id}}"
+        "pt": "Identificação do agregado: {{data.hh_id}}",
+        "sw": "Utambulisho wa Kaya: {{data.hh_id}}"
       },
       "_row_num": 4
     },
@@ -31,8 +31,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "water_detail",
       "text": {
         "default": "Water Body Details",
-        "pt": "Maelezo kuhusu maeneo ya maji",
-        "sw": "Detalhes do corpo de agua"
+        "pt": "Detalhes do corpo de agua",
+        "sw": "Maelezo kuhusu maeneo ya maji"
       },
       "_row_num": 5
     },

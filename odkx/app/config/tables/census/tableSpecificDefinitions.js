@@ -661,7 +661,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "flat",
       "text": {
         "default": "Flat",
-        "pt": "Apartamento"
+        "pt": "Prédio",
+        "sw": "Ghorofa"
       },
       "_row_num": 75
     },
@@ -669,8 +670,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "apartment",
       "text": {
         "default": "Apartment",
-        "pt": "Prédio",
-        "sw": "Ghorofa"
+        "pt": "Apartamento",
+        "sw": "Nyumba ya kupangisha"
       },
       "_row_num": 76
     },
@@ -1425,8 +1426,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "fw_id",
       "text": {
         "default": "If QR code is unavailable, manually enter 3 digit Fieldworker ID",
-        "pt": "If QR code is unavailable, manually enter 3 digit Fieldworker ID",
-        "sw": "If QR code is unavailable, manually enter 3 digit Fieldworker ID"
+        "pt": "Se o código QR não estiver disponível, insira manualmente a ID do trabalhador de 3 dígitos",
+        "sw": "Kama alama zako za QR hazipatikani, andika namba yako ya utambulisho yenye herufi tatu hapa"
       },
       "_row_num": 161
     },
@@ -1641,8 +1642,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "select_one",
       "text": {
         "default": "You can only select one option.",
-        "pt": "You can only select one option.",
-        "sw": "You can only select one option."
+        "pt": "Você pode escolher somente uma opcão",
+        "sw": "Unaweza kuchagua jibu moja tu"
       },
       "_row_num": 186
     },
@@ -1803,6 +1804,7 @@ window.odkTableSpecificDefinitions = {
       "string_token": "w_pna",
       "text": {
         "default": "You cannot select ‘No’ or ‘Prefer not to answer’ along with other options.",
+        "pt": "Você não pode selecionar \"Não\" ou \"Prefere não responder\" junto com as outras respostas.",
         "sw": "Huwezi kuchagua \"Hapana\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
       },
       "_row_num": 204
@@ -1910,8 +1912,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "cattle_h5",
       "text": {
         "default": "<h5>You will now be asked questions regarding your cattle.</h5>",
-        "pt": "<h5>Sasa utaulizwa maswali kuhusu ng'ombe wako.</h5>",
-        "sw": "<h5>Agora você será questionado sobre o seu gado.</h5>"
+        "pt": "<h5>Agora você será questionado sobre o seu gado.</h5>",
+        "sw": "<h5>Sasa utaulizwa maswali kuhusu ng'ombe wako.</h5>"
       },
       "_row_num": 216
     },
@@ -1919,8 +1921,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "pig_h5",
       "text": {
         "default": "<h5>You will now be asked questions regarding your pigs.</h5>",
-        "pt": "<h5>Sasa utaulizwa maswali kuhusu nguruwe.</h5>",
-        "sw": "<h5>Agora você será questionado sobre os seus porcos.</h5>"
+        "pt": "<h5>Agora você será questionado sobre os seus porcos.</h5>",
+        "sw": "<h5>Sasa utaulizwa maswali kuhusu nguruwe.</h5>"
       },
       "_row_num": 217
     },
@@ -2242,9 +2244,9 @@ window.odkTableSpecificDefinitions = {
     "q38a": {
       "string_token": "q38a",
       "text": {
-        "default": "38a. [If answer to Q18 is other than “Food is not cooked at home”] Main energy source used for cooking:",
-        "pt": "38a. [Se a resposta à Q18 for diferente de «Em casa não se cozinham alimentos»] Energia principal utilizada para cozinhar:",
-        "sw": "38a. [Ikiwa jibu la Q18 ni lingine kando na \"Chakula hakipikwi nyumbani”] Chanzo kikuu cha nishati kinachotumika kupika:"
+        "default": "38a. Main energy source used for cooking:",
+        "pt": "38a. Energia principal utilizada para cozinhar:",
+        "sw": "38a. Chanzo kikuu cha nishati kinachotumika kupika:"
       },
       "_row_num": 254
     },

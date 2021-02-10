@@ -13,8 +13,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "stand_outside.hint",
       "text": {
         "default": "The household id is {{data.hh_id}}",
-        "pt": "HHID: {{data.hh_id}}",
-        "sw": "HHID: {{data.hh_id}}"
+        "pt": "Identificação do agregado{{data.hh_id}}",
+        "sw": "Utambulisho wa Kaya {{data.hh_id}}"
       },
       "_row_num": 3
     }

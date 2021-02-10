@@ -1831,8 +1831,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "member_extid",
       "text": {
         "default": "Member ExtID",
-        "pt": "Member ExtID",
-        "sw": "Member ExtID"
+        "pt": "ExtID do membro",
+        "sw": "ExtID ya Mshiriki"
       },
       "_row_num": 209
     },
@@ -1840,8 +1840,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_id_note",
       "text": {
         "default": "Household ID: {{data.hh_id}}",
-        "pt": "Household ID: {{data.hh_id}}",
-        "sw": "Household ID: {{data.hh_id}}"
+        "pt": "Identificação do agregado: {{data.hh_id}}",
+        "sw": "Utambulisho wa Kaya: {{data.hh_id}}"
       },
       "_row_num": 210
     },
@@ -1939,8 +1939,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "assigned_extid",
       "text": {
         "default": "Assigned ExtID {{data.id}}",
-        "pt": "Assigned ExtID {{data.id}}",
-        "sw": "Assigned ExtID {{data.id}}"
+        "pt": "ExtID atribuido: {{data.id}}",
+        "sw": "ExtID {{data.id}} aliyopewa"
       },
       "_row_num": 221
     },
