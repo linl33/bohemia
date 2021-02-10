@@ -1452,8 +1452,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "geo_info",
       "text": {
         "default": "Geographical Information",
-        "pt": "Geographical Information",
-        "sw": "Geographical Information"
+        "pt": "Taarifa za Kijiografia",
+        "sw": "Informação Geográfica"
       },
       "_row_num": 164
     },
@@ -1461,8 +1461,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "rec_loc",
       "text": {
         "default": "Record Location",
-        "pt": "Record Location",
-        "sw": "Record Location"
+        "pt": "Nakili alama (GPS)  za Eneo",
+        "sw": "Gravar localização"
       },
       "_row_num": 165
     },
@@ -1470,8 +1470,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "rec_survey_loc",
       "text": {
         "default": "Record where this survey took place",
-        "pt": "Record where this survey took place",
-        "sw": "Record where this survey took place"
+        "pt": "Nakili alama (GPS)  za eneo ulilofanyia mahojiano haya",
+        "sw": "Gravar o local onde a recolha ocorre"
       },
       "_row_num": 166
     },
@@ -1479,8 +1479,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_identification",
       "text": {
         "default": "Household Identification {{data.hh_id}}",
-        "pt": "Household Identification {{data.hh_id}}",
-        "sw": "Household Identification {{data.hh_id}}"
+        "pt": "Utambulisho wa Kaya {{data.hh_id}}",
+        "sw": "Identificação do agregado{{data.hh_id}}"
       },
       "_row_num": 168
     },
@@ -1488,8 +1488,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_minicensed",
       "text": {
         "default": "Was this household part of the minicensus?",
-        "pt": "Was this household part of the minicensus?",
-        "sw": "Was this household part of the minicensus?"
+        "pt": "Je, kaya hii ilikuwa sehemu ya Minicensus?",
+        "sw": "Esta agregado fez parte do Minicenso?"
       },
       "_row_num": 169
     },
@@ -1497,8 +1497,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "minicensed_h3",
       "text": {
         "default": "<h3>Minicenced Households</h3>",
-        "pt": "<h3>Minicenced Households</h3>",
-        "sw": "<h3>Minicenced Households</h3>"
+        "pt": "<h3>Kaya zilizofanyiwa Minicensus</h3>",
+        "sw": "<h3>Agregado com Minicenso realizado</h3>"
       },
       "_row_num": 170
     },
@@ -1533,8 +1533,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_roster",
       "text": {
         "default": "Current Household Members Roster",
-        "pt": "Current Household Members Roster",
-        "sw": "Current Household Members Roster"
+        "pt": "Orodha ya sasa ya wanakaya",
+        "sw": "Rosto dos membros actuais do agregado"
       },
       "_row_num": 174
     },
@@ -1542,8 +1542,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_roster.hint",
       "text": {
         "default": "To change resident status, click on 'edit' icon beside the member's name",
-        "pt": "To change resident status, click on 'edit' icon beside the member's name",
-        "sw": "To change resident status, click on 'edit' icon beside the member's name"
+        "pt": "Kubadilisha hali ya mkazi, bonyeza alama ya 'edit/hariri' kando ya jina la mwanakaya",
+        "sw": "Para mudar o estado de residencia, clique no icone 'editar' a loado do nome do membro."
       },
       "_row_num": 175
     },
@@ -1560,8 +1560,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "member_left_select",
       "text": {
         "default": "Which member(s) is/are no longer present in the household?",
-        "pt": "Which member(s) is/are no longer present in the household?",
-        "sw": "Which member(s) is/are no longer present in the household?"
+        "pt": "Je, ni mwanakaya gani hayupo tena katika kaya?",
+        "sw": "Qual membro não esta presente no agregado?"
       },
       "_row_num": 177
     },
@@ -1569,8 +1569,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "member_left_prompt",
       "text": {
         "default": "<h4>You will be prompted to answer questions for the member(s) no longer in this household. </h4>",
-        "pt": "<h4>You will be prompted to answer questions for the member(s) no longer in this household. </h4>",
-        "sw": "<h4>You will be prompted to answer questions for the member(s) no longer in this household. </h4>"
+        "pt": "<h4> Utaombwa kujibu maswali ya washiriki ambao hawako tena katika kaya hii. </ h4>",
+        "sw": "<h4>Você será solicitado a responder perguntas sobre o (s) membro (s) que não estão mais neste agregado.</h4>"
       },
       "_row_num": 178
     },
@@ -1578,8 +1578,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "member_left_detail",
       "text": {
         "default": "<h3>Details about member no longer part of the household</h3>",
-        "pt": "<h3>Details about member no longer part of the household</h3>",
-        "sw": "<h3>Details about member no longer part of the household</h3>"
+        "pt": "<h3> Maelezo kuhusu washiriki ambao sio sehemu ya kaya </h3>",
+        "sw": "<h3>Detalhes sobre o (s) membro (s) que não estão mais neste agregado.</h3>"
       },
       "_row_num": 179
     },
@@ -1587,8 +1587,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "member_detail",
       "text": {
         "default": "Details about household member",
-        "pt": "Details about household member",
-        "sw": "Details about household member"
+        "pt": "Taarifa kuhusu Wanakaya",
+        "sw": "Detalhes sobre o membro do agregado"
       },
       "_row_num": 180
     },
@@ -1605,7 +1605,7 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_absent",
       "text": {
         "default": "If a member is absent at the time of this interview, click on the \"edit\" icon to add details about their absence.",
-        "pt": "If a member is absent at the time of this interview, click on the \"edit\" icon to add details about their absence.",
+        "pt": "Ikiwa mwanakaya hayupo wakati wa mahojiano haya, bonyeza alama ya Edit/hariri\" ili kuongeza maelezo juu ya kutokuwepo kwao.\tSe um membro estiver ausente no momento desta entrevista, clique no ícone \"editar\" para adicionar detalhes sobre sua ausência.",
         "sw": "If a member is absent at the time of this interview, click on the \"edit\" icon to add details about their absence."
       },
       "_row_num": 182
@@ -1623,8 +1623,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_head_modify",
       "text": {
         "default": "Select from the list below:",
-        "pt": "Select from the list below:",
-        "sw": "Select from the list below:"
+        "pt": "Chagua kutoka kwenye orodha hapa chini:",
+        "sw": "Selecione da lista abaixo:"
       },
       "_row_num": 184
     },
@@ -1632,8 +1632,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_head_sub_modify",
       "text": {
         "default": "Select from the list below:",
-        "pt": "Select from the list below:",
-        "sw": "Select from the list below:"
+        "pt": "Chagua kutoka kwenye orodha hapa chini:",
+        "sw": "Selecione da lista abaixo:"
       },
       "_row_num": 185
     },
@@ -1955,8 +1955,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "water_prompt",
       "text": {
         "default": "You will be asked to provide details about the {{data.water_bodies_num}} bodies of water.",
-        "pt": "You will be asked to provide details about the {{data.water_bodies_num}} bodies of water.",
-        "sw": "You will be asked to provide details about the {{data.water_bodies_num}} bodies of water."
+        "pt": "Utaulizwa utoe maelezo juu ya maeneo {{data.water_bodies_num}} ya maji.",
+        "sw": "Você será solicitado a fornecer detalhes sobre os corpos de água de {{data.water_bodies_num}}."
       },
       "_row_num": 221
     },
@@ -1964,8 +1964,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "water_detail",
       "text": {
         "default": "Water Body Details",
-        "pt": "Water Body Details",
-        "sw": "Water Body Details"
+        "pt": "Maelezo kuhusu maeneo ya maji",
+        "sw": "Detalhes do corpo de agua"
       },
       "_row_num": 222
     },
@@ -1973,8 +1973,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "net_prompt",
       "text": {
         "default": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_num_nets}} nets.</h5>",
-        "pt": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_num_nets}} nets.</h5>",
-        "sw": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_num_nets}} nets.</h5>"
+        "pt": "<h5> Utaombwa kujibu maswali ya nyongeza kwa kila moja ya nyavu {{data.hh_num_nets}}. </h5>",
+        "sw": "<h5> Você será solicitado a responder perguntas adicionais para cada uma das redes {{data.hh_num_nets}}. </h5>"
       },
       "_row_num": 223
     },
@@ -1982,8 +1982,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "net_detail",
       "text": {
         "default": "Mosquito Net Details",
-        "pt": "Mosquito Net Details",
-        "sw": "Mosquito Net Details"
+        "pt": "Maelezo kuhusu vyandarua vya mbu",
+        "sw": "Detalhes das redes mosquiteiras"
       },
       "_row_num": 224
     },
@@ -2009,8 +2009,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "health_facility_only_one",
       "text": {
         "default": "You cannot select Select from drop-down list of selected health facilities along with other option",
-        "pt": "You cannot select Select from drop-down list of selected health facilities along with other option",
-        "sw": "You cannot select Select from drop-down list of selected health facilities along with other option"
+        "pt": "Huwezi kuchagua kutoka orodha ya vituo vya afya vilivyochaguliwa pamoja na kuchagua nyingine",
+        "sw": "Você não pode selecionar na da lista das unidades de sanitarias junto com as outras opçoes"
       },
       "_row_num": 227
     },
@@ -2027,8 +2027,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "snake_prompt",
       "text": {
         "default": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>",
-        "pt": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>",
-        "sw": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>"
+        "pt": "<h5> Utaombwa kujibu maswali ya nyongeza kwa  mtu/watu {{data.any_snake_bite_num}}  ambao wamepata kuumwa na nyoka. </h5>",
+        "sw": "<h5> Será solicitado que você responda a perguntas adicionais para {{data.any_snake_bite_num}} indivíduo (s) que foi picado por uma cobra. </h5>"
       },
       "_row_num": 229
     },
@@ -2036,8 +2036,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "snake_detail",
       "text": {
         "default": "Snake Bite details",
-        "pt": "Snake Bite details",
-        "sw": "Snake Bite details"
+        "pt": "Maelezo kuhusu kuumwa na nyoka",
+        "sw": "Detalhes da mordida de cobra"
       },
       "_row_num": 230
     },
@@ -2045,8 +2045,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "snake_linked_table",
       "text": {
         "default": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>",
-        "pt": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>",
-        "sw": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>"
+        "pt": "<h5> Jibu maswali ya ziada kwa mtu/watu ambao wamepata kuumwa na nyoka. </h5>",
+        "sw": "<h5>Responda perguntas adicionais para os indivíduos que foram picados por cobra.</h5>"
       },
       "_row_num": 231
     },
@@ -2063,8 +2063,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "death_prompt",
       "text": {
         "default": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_death_count }} death(s).</h5>",
-        "pt": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_death_count }} death(s).</h5>",
-        "sw": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_death_count }} death(s).</h5>"
+        "pt": "<h5> Utaombwa kujibu maswali ya ziada kwa kila kifo kati ya vifo {{data.hh_death_count}}. </h5>",
+        "sw": "<h5> Será solicitado a responder perguntas adicionais para cada um dos {{data.hh_death_count}} morte (s). </h5>"
       },
       "_row_num": 233
     },
@@ -2072,8 +2072,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "ind_prompt",
       "text": {
         "default": "You are about to begin the individual questionnaire. For each RESIDENT member in the household, a separate form will be filled out.",
-        "pt": "You are about to begin the individual questionnaire. For each RESIDENT member in the household, a separate form will be filled out.",
-        "sw": "You are about to begin the individual questionnaire. For each RESIDENT member in the household, a separate form will be filled out."
+        "pt": "Unatarajia kuanza dodoso la Mtu Binafsi. Kwa kila mwanakaya MKAZI katika kaya, dodoso tofauti litajazwa",
+        "sw": "Você está prestes a iniciar o questionário individual. Para cada membro RESIDENTE da família, um formulário separado será preenchido."
       },
       "_row_num": 234
     },
@@ -2702,8 +2702,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "q57.hint",
       "text": {
         "default": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
-        "pt": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
-        "sw": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)"
+        "pt": "(Chagua kutoka kwenye orodha ya vituo vya afya  AU moja (1) ya chaguzi hapa chini. Ili kuchagua kituo cha afya, hakuna chaguzi nyingine yoyote inayoweza kuchaguliwa)",
+        "sw": "(Selecione uma unidade de saniotaria na lista apresentada OU uma (1) das opções abaixo. Para selecionar uma unidade de sanitaria, nenhuma das outras opções pode ser selecionada)"
       },
       "_row_num": 305
     },

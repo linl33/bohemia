@@ -562,8 +562,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "weeks_ago",
       "text": {
         "default": "Week(s) ago",
-        "pt": "Week(s) ago",
-        "sw": "Week(s) ago"
+        "pt": "Wiki zilizopita",
+        "sw": "Semana(s) atrás"
       },
       "_row_num": 65
     },
@@ -589,8 +589,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "weeks",
       "text": {
         "default": "Week(s)",
-        "pt": "Week(s)",
-        "sw": "Week(s)"
+        "pt": "Wiki",
+        "sw": "Semana (s)"
       },
       "_row_num": 68
     },
@@ -1839,9 +1839,9 @@ window.odkTableSpecificDefinitions = {
     "hh_id_note": {
       "string_token": "hh_id_note",
       "text": {
-        "default": "Household ID: {{data.hh_id}}",
-        "pt": "Household ID: {{data.hh_id}}",
-        "sw": "Household ID: {{data.hh_id}}"
+        "default": "Household Identification {{data.hh_id}}",
+        "pt": "Utambulisho wa Kaya {{data.hh_id}}",
+        "sw": "Identificação do agregado{{data.hh_id}}"
       },
       "_row_num": 210
     },
@@ -1858,8 +1858,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "or_enter_num",
       "text": {
         "default": "or enter number",
-        "pt": "or enter number",
-        "sw": "or enter number"
+        "pt": "au ingiza namba",
+        "sw": "ou digite um número"
       },
       "_row_num": 212
     },
@@ -1867,8 +1867,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "days_weeks_months_years",
       "text": {
         "default": "Days/Weeks/Months/Years",
-        "pt": "Days/Weeks/Months/Years",
-        "sw": "Days/Weeks/Months/Years"
+        "pt": "Siku/Wiki/Mwezi/Mwaka",
+        "sw": "Dias / semanas / meses / anos"
       },
       "_row_num": 213
     },
@@ -1876,8 +1876,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "days_weeks_months_dk",
       "text": {
         "default": "Days/Weeks/Months Ago or Don't Know",
-        "pt": "Days/Weeks/Months Ago or Don't Know",
-        "sw": "Days/Weeks/Months Ago or Don't Know"
+        "pt": "Siku/Wiki/Mwezi/Mwaka zilizopita au Sijui",
+        "sw": "Dias / semanas / meses atrás ou não sei"
       },
       "_row_num": 214
     },
@@ -1948,8 +1948,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "snake_bite_detail",
       "text": {
         "default": "Snake Bite details",
-        "pt": "Snake Bite details",
-        "sw": "Snake Bite details"
+        "pt": "Maelezo kuhusu kuumwa na nyoka",
+        "sw": "Detalhes da mordida de cobra"
       },
       "_row_num": 222
     },
@@ -2000,15 +2000,19 @@ window.odkTableSpecificDefinitions = {
     },
     "new_hh_only": {
       "string_token": "new_hh_only",
-      "text": "Section to be filled out for households that were not part of the minicensus",
+      "text": {
+        "default": "Section to be filled out for households that were not part of the minicensus",
+        "pt": "Sehemu inayojazwa kwa kaya ambazo hazikuwa sehemu ya Minicensus",
+        "sw": "Secção a ser preenchida para famílias que não faziam parte do minicenso."
+      },
       "_row_num": 228
     },
     "err_no_consent": {
       "string_token": "err_no_consent",
       "text": {
         "default": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>",
-        "pt": "<span style=\"color:red\">You can't continue the survey if the informed consent has not been signed</span>",
-        "sw": "<span style=\"color:red\">Huwezi kusonga mbele hadi fomu ya idhini iwe imesainiwa.</span>"
+        "pt": "<span style=\"color:red\">Huwezi kusonga mbele hadi fomu ya idhini iwe imesainiwa.</span>",
+        "sw": "<span style = \"color: red\"> Você não pode continuar a pesquisa se o consentimento informado não foi assinado </span>"
       },
       "_row_num": 229
     },
@@ -2016,8 +2020,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "err_no_assent",
       "text": {
         "default": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>",
-        "pt": "<span style=\"color:red\">You can't continue the survey if the assent has not been signed</span>",
-        "sw": "<span style=\"color:red\">Huwezi kusonga mbele hadi fomu ya idhini (assent) iwe imesainiwa.</span>"
+        "pt": "<span style=\"color:red\">Huwezi kusonga mbele hadi fomu ya idhini (assent) iwe imesainiwa.</span>",
+        "sw": "<span style = \"color: red\"> Você não pode continuar a pesquisa se o consentimento não foi assinado </span>"
       },
       "_row_num": 230
     },
@@ -2025,8 +2029,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "w_father_alive",
       "text": {
         "default": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>",
-        "pt": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>",
-        "sw": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is male, but that the participant's father is no longer alive or neither parent is alive. Please verify.</span>"
+        "pt": "<span style = \"color: red\"> Umeonyesha kwamba mshiriki ni mtoto wa kiume/binti wa mkuu wa kaya, ambaye ni wa kiume, lakini baba wa mshiriki hayupo hai tena au hakuna mzazi yoyote wa mshiriki yupo hai. Tafadhali thibitisha. </span>",
+        "sw": "<span style = \"color: red\"> Você indicou que o participante é filho / filha do chefe da família, que é do sexo masculino, mas que o pai do participante não está mais vivo ou nenhum dos pais está vivo. Verifique. </span>"
       },
       "_row_num": 231
     },
@@ -2034,8 +2038,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "w_mother_alive",
       "text": {
         "default": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>",
-        "pt": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>",
-        "sw": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head, who is female, but that the participant's mother is no longer alive or that neither parent is alive. Please verify.</span>"
+        "pt": "<span style = \"color: red\"> Umeonyesha kwamba mshiriki ni mtoto wa kiume/binti wa mkuu wa kaya, ambaye ni wa kike, lakini mama wa mshiriki hayupo hai tena au hakuna mzazi yoyote wa mshiriki yupo hai. Tafadhali thibitisha. </span>",
+        "sw": "<span style = \"color: red\"> Você indicou que o participante é filho / filha do chefe da família, que é mulher, mas que a mãe do participante não está mais viva ou que nenhum dos pais está vivo. Verifique. </span>"
       },
       "_row_num": 232
     },
@@ -2043,8 +2047,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "w_father_mother_alive",
       "text": {
         "default": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>",
-        "pt": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>",
-        "sw": "<span style=\"color:red\">You indicated that the participant is the son/daughter of the household head but that neither of his/her parents are alive. Please verify responses.</span>"
+        "pt": "<span style = \"color: red\"> Umeonyesha kwamba mshiriki ni mtoto wa kiume/binti wa mkuu wa kaya lakini hakuna mzazi yoyote wa mshiriki yupo hai. Tafadhali thibitisha. </span>",
+        "sw": "<span style = \"color: red\"> Você indicou que o participante é filho / filha do chefe da família, mas nenhum de seus pais está vivo. Verifique as respostas. </span>"
       },
       "_row_num": 233
     },
@@ -2052,8 +2056,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "travel_prompt",
       "text": {
         "default": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>",
-        "pt": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>",
-        "sw": "<h4>You will be prompted to answer questions about the {{data.travel_regularly_trips}} regular trips.</h4>"
+        "pt": "<h4> Utaombwa kujibu maswali kuhusu safari za kawaida za {{data.travel_regularly_trips}}. </h4>",
+        "sw": "<h4> Você deverá responder a perguntas sobre as {{data.travel_regularly_trips}} viagens regulares. </h4>"
       },
       "_row_num": 234
     },
@@ -2097,8 +2101,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "dob_hint",
       "text": {
         "default": "Enter a date between 1 and 31.",
-        "pt": "Enter a date between 1 and 31.",
-        "sw": "Enter a date between 1 and 31."
+        "pt": "Ingiza tahere (siku) kati ya 1 na 31",
+        "sw": "Insira uma data entre 1 e 31."
       },
       "_row_num": 240
     },
@@ -2106,8 +2110,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "month_hint",
       "text": {
         "default": "Enter a month between 1 and 12.",
-        "pt": "Enter a month between 1 and 12.",
-        "sw": "Enter a month between 1 and 12."
+        "pt": "Ingiza mwezi kati ya 1 na 12",
+        "sw": "Insira um mes entre 1 e 12"
       },
       "_row_num": 241
     },
@@ -2115,8 +2119,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "year_hint",
       "text": {
         "default": "Enter a year between 1920 and 2021.",
-        "pt": "Enter a year between 1920 and 2021.",
-        "sw": "Enter a year between 1920 and 2021."
+        "pt": "Ingiza mwaka kati ya 1920 na 2021",
+        "sw": "Insira um ano entre 1920 e 2021."
       },
       "_row_num": 242
     },
@@ -2151,8 +2155,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "select_date_dk",
       "text": {
         "default": "Select from today/tomorrow, enter a date, or ‘Don’t Know’",
-        "pt": "Select from today/tomorrow, enter a date, or ‘Don’t Know’",
-        "sw": "Select from today/tomorrow, enter a date, or ‘Don’t Know’"
+        "pt": "Chagua kuanzia leo / kesho, ingiza tarehe, au 'Sijui'",
+        "sw": "Selecione hoje / amanhã, insira uma data ou ‘Não sei’"
       },
       "_row_num": 246
     },

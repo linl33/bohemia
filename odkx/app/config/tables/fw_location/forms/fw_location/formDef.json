@@ -115,12 +115,20 @@
     "table_specific_translations": [
       {
         "string_token": "stand_outside",
-        "text": "Stand just outside the front door of the house and geocode the location.",
+        "text": {
+          "default": "Stand just outside the front door of the house and geocode the location.",
+          "pt": "Pare fora da porta principal  da casa e tire as coordenadas geograficas do local.",
+          "sw": "Simama mbele tu ya mlango wa kuingia kwenye nyumba na ukusanye vipimo vya GPS vya eneo hilo"
+        },
         "_row_num": 2
       },
       {
         "string_token": "stand_outside.hint",
-        "text": "The household id is {{data.hh_id}}",
+        "text": {
+          "default": "The household id is {{data.hh_id}}",
+          "pt": "HHID: {{data.hh_id}}",
+          "sw": "HHID: {{data.hh_id}}"
+        },
         "_row_num": 3
       }
     ]
@@ -139,7 +147,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -278,12 +287,20 @@
       "_tokens": {
         "stand_outside": {
           "string_token": "stand_outside",
-          "text": "Stand just outside the front door of the house and geocode the location.",
+          "text": {
+            "default": "Stand just outside the front door of the house and geocode the location.",
+            "pt": "Pare fora da porta principal  da casa e tire as coordenadas geograficas do local.",
+            "sw": "Simama mbele tu ya mlango wa kuingia kwenye nyumba na ukusanye vipimo vya GPS vya eneo hilo"
+          },
           "_row_num": 2
         },
         "stand_outside.hint": {
           "string_token": "stand_outside.hint",
-          "text": "The household id is {{data.hh_id}}",
+          "text": {
+            "default": "The household id is {{data.hh_id}}",
+            "pt": "HHID: {{data.hh_id}}",
+            "sw": "HHID: {{data.hh_id}}"
+          },
           "_row_num": 3
         }
       }

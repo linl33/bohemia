@@ -20,12 +20,20 @@ window.odkTableSpecificDefinitions = {
     },
     "hh_id_note": {
       "string_token": "hh_id_note",
-      "text": "Household ID: {{data.hh_id}}",
+      "text": {
+        "default": "Household Identification {{data.hh_id}}",
+        "pt": "Utambulisho wa Kaya {{data.hh_id}}",
+        "sw": "Identificação do agregado{{data.hh_id}}"
+      },
       "_row_num": 4
     },
     "water_detail": {
       "string_token": "water_detail",
-      "text": "Water Body Details",
+      "text": {
+        "default": "Water Body Details",
+        "pt": "Maelezo kuhusu maeneo ya maji",
+        "sw": "Detalhes do corpo de agua"
+      },
       "_row_num": 5
     },
     "permanent": {
