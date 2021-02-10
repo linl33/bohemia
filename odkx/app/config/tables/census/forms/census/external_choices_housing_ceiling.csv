@@ -1,16 +1,16 @@
-name,label,country
-concrete_slab,Concrete slab,Tanzania
-asbestos,Asbestos,Tanzania
-mud,Mud,Tanzania
-zinc_iron_sheet,Zinc/Iron sheet,Tanzania
-thatch,Thatch,Tanzania
-tent,Tent,Tanzania
-grass,Grass,Tanzania
-other,Other,Tanzania
-concrete_slab,Concrete slab,Mozambique
-tile,Tile,Mozambique
-lusalite,Lusalite sheet,Mozambique
-zinc,Zinc sheet,Mozambique
-grass,Grass,Mozambique
-palm,Palm tree,Mozambique
-other,Other,Mozambique
+name,label,country,sw,pt
+concrete_slab,Concrete slab,Tanzania,Saruji ya zege,Laje de betão 
+asbestos,Asbestos,Tanzania,Asbestosi ,Asbestos
+mud,Mud,Tanzania,Matope ,Tope
+zinc_iron_sheet,Zinc/Iron sheet,Tanzania,Zinki/mabati ,Zinco/Cha[a de ferro
+thatch,Thatch,Tanzania,Makuti ,Palha
+tent,Tent,Tanzania,Hema,Tenda
+grass,Grass,Tanzania,Nyasi,Erva 
+other,Other,Tanzania,Nyingine,Outro
+concrete_slab,Concrete slab,Mozambique,Zege,Laje de cimento
+tile,Tile,Mozambique,Vigae,Cerâmico
+lusalite,Lusalite sheet,Mozambique,Lusalite sheet,Placas Lusalite
+zinc,Zinc sheet,Mozambique,Zinc sheet,Placa de zinco
+grass,Grass,Mozambique,Nyasi,Erva 
+palm,Palm tree,Mozambique,Palm tree,Palmeira
+other,Other,Mozambique,Nyingine,Outros

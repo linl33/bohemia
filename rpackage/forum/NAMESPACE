@@ -3,6 +3,7 @@
 export(run_app)
 import(DT)
 import(ggplot2)
+import(googlesheets4)
 import(leaflet)
 import(shiny)
 import(shinyMobile)

@@ -1086,11 +1086,6 @@
       },
       {
         "clause": "if",
-        "condition": "selected(data('hh_country'), 'Tanzania')",
-        "_row_num": 163
-      },
-      {
-        "clause": "if",
         "condition": "selected(data('hh_owns_livestock'), 'cattle')",
         "_row_num": 164
       },
@@ -1572,10 +1567,6 @@
       {
         "clause": "end screen",
         "_row_num": 231
-      },
-      {
-        "clause": "end if",
-        "_row_num": 232
       },
       {
         "clause": "if",
@@ -4621,42 +4612,42 @@
         "query_name": "malaria_prevention",
         "query_type": "csv",
         "uri": "\"external_choices_malaria_prevention.csv\"",
-        "callback": "_.map(context, function(prevention){prevention.data_value = prevention.name;\nprevention.display = {title: {text:prevention.label} };\nreturn prevention;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 2
       },
       {
         "query_name": "housing_wall_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_wall.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 3
       },
       {
         "query_name": "housing_ceiling_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_ceiling.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 4
       },
       {
         "query_name": "housing_floor_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_floor.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 5
       },
       {
         "query_name": "hh_possessions",
         "query_type": "csv",
         "uri": "\"external_choices_hh_possessions.csv\"",
-        "callback": "_.map(context, function(possession){possession.data_value = possession.name;\npossession.display = {title: {text:possession.label} };\nreturn possession;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 6
       },
       {
         "query_name": "choices_hf",
         "query_type": "csv",
         "uri": "\"external_choices_hf.csv\"",
-        "callback": "_.map(context, function(place){place.data_value = place.name;\nplace.display = {title: {text:place.label} };\nreturn place;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 7
       },
       {
@@ -5485,7 +5476,8 @@
         "string_token": "flat",
         "text": {
           "default": "Flat",
-          "pt": "Apartamento"
+          "pt": "Prédio",
+          "sw": "Ghorofa"
         },
         "_row_num": 75
       },
@@ -5493,8 +5485,8 @@
         "string_token": "apartment",
         "text": {
           "default": "Apartment",
-          "pt": "Prédio",
-          "sw": "Ghorofa"
+          "pt": "Apartamento",
+          "sw": "Nyumba ya kupangisha"
         },
         "_row_num": 76
       },
@@ -6159,8 +6151,8 @@
         "string_token": "technical_h2",
         "text": {
           "default": "<h2>Technical Details</h2>",
-          "pt": "<h2>Technical Details</h2>",
-          "sw": "<h2>Technical Details</h2>"
+          "pt": "<h2>Detalhes Técnicos</h2>",
+          "sw": "<h2>Taarifa za kiufundi</h2>"
         },
         "_row_num": 151
       },
@@ -6231,6 +6223,7 @@
         "string_token": "ind_h2",
         "text": {
           "default": "<h2>INDIVIDUAL QUESTIONNAIRE</h2>",
+          "pt": "<h2>QUESTIONÁRIO INDIVIDUAL</h2>",
           "sw": "<h2>DODOSO LA BINAFSI</h2>"
         },
         "_row_num": 159
@@ -6239,100 +6232,100 @@
         "string_token": "qr_code",
         "text": {
           "default": "Scan Fieldworker QR Code",
-          "pt": "Scan Fieldworker QR Code",
-          "sw": "Scan Fieldworker QR Code"
+          "pt": "Rastreie o seu código QR",
+          "sw": "Scan QR code yako yenye namba ya utambulisho"
         },
-        "_row_num": 161
+        "_row_num": 160
       },
       {
         "string_token": "fw_id",
         "text": {
           "default": "If QR code is unavailable, manually enter 3 digit Fieldworker ID",
-          "pt": "If QR code is unavailable, manually enter 3 digit Fieldworker ID",
-          "sw": "If QR code is unavailable, manually enter 3 digit Fieldworker ID"
+          "pt": "Se o código QR não estiver disponível, insira manualmente a ID do trabalhador de 3 dígitos",
+          "sw": "Kama alama zako za QR hazipatikani, andika namba yako ya utambulisho yenye herufi tatu hapa"
         },
-        "_row_num": 162
+        "_row_num": 161
       },
       {
         "string_token": "country",
         "text": {
           "default": "Country",
-          "pt": "Country",
-          "sw": "Country"
+          "pt": "País",
+          "sw": "Nchi"
         },
-        "_row_num": 163
+        "_row_num": 162
       },
       {
         "string_token": "hh_id",
         "text": {
-          "default": "Household ID",
-          "pt": "Household ID",
-          "sw": "Household ID"
+          "default": "Write the 6-character household ID here",
+          "pt": "Escreva o código de agregado de 6 digitos aqui:",
+          "sw": "Andika tarakimu 6 za nambari ya utambulisho wa kaya hapa."
         },
-        "_row_num": 164
+        "_row_num": 163
       },
       {
         "string_token": "geo_info",
         "text": {
           "default": "Geographical Information",
-          "pt": "Geographical Information",
-          "sw": "Geographical Information"
+          "pt": "Informação Geográfica",
+          "sw": "Taarifa za Kijiografia"
         },
-        "_row_num": 165
+        "_row_num": 164
       },
       {
         "string_token": "rec_loc",
         "text": {
           "default": "Record Location",
-          "pt": "Record Location",
-          "sw": "Record Location"
+          "pt": "Gravar localização",
+          "sw": "Nakili alama (GPS)  za Eneo"
         },
-        "_row_num": 166
+        "_row_num": 165
       },
       {
         "string_token": "rec_survey_loc",
         "text": {
           "default": "Record where this survey took place",
-          "pt": "Record where this survey took place",
-          "sw": "Record where this survey took place"
+          "pt": "Gravar o local onde a recolha ocorre",
+          "sw": "Nakili alama (GPS)  za eneo ulilofanyia mahojiano haya"
         },
-        "_row_num": 167
+        "_row_num": 166
       },
       {
         "string_token": "hh_identification",
         "text": {
           "default": "Household Identification {{data.hh_id}}",
-          "pt": "Household Identification {{data.hh_id}}",
-          "sw": "Household Identification {{data.hh_id}}"
+          "pt": "Identificação do agregado{{data.hh_id}}",
+          "sw": "Utambulisho wa Kaya {{data.hh_id}}"
         },
-        "_row_num": 169
+        "_row_num": 168
       },
       {
         "string_token": "hh_minicensed",
         "text": {
           "default": "Was this household part of the minicensus?",
-          "pt": "Was this household part of the minicensus?",
-          "sw": "Was this household part of the minicensus?"
+          "pt": "Esta agregado fez parte do Minicenso?",
+          "sw": "Je, kaya hii ilikuwa sehemu ya Minicensus?"
         },
-        "_row_num": 170
+        "_row_num": 169
       },
       {
         "string_token": "minicensed_h3",
         "text": {
           "default": "<h3>Minicenced Households</h3>",
-          "pt": "<h3>Minicenced Households</h3>",
-          "sw": "<h3>Minicenced Households</h3>"
+          "pt": "<h3>Agregado com Minicenso realizado</h3>",
+          "sw": "<h3>Kaya zilizofanyiwa Minicensus</h3>"
         },
-        "_row_num": 171
+        "_row_num": 170
       },
       {
         "string_token": "meta_info",
         "text": {
           "default": "Meta-Information:",
           "pt": "Meta-informação:",
-          "sw": "Maelezo ya habari:"
+          "sw": "Taarifa za awali:"
         },
-        "_row_num": 172
+        "_row_num": 171
       },
       {
         "string_token": "how_many",
@@ -6341,7 +6334,7 @@
           "pt": "Quantos membros compõem este agregado familiar (residentes e não residentes)?",
           "sw": "Je, kaya hii ina watu wangapi? (wakazi na wasio wakazi)?"
         },
-        "_row_num": 173
+        "_row_num": 172
       },
       {
         "string_token": "how_many.hint",
@@ -6350,25 +6343,25 @@
           "pt": "Os membros do agregado familiar designam o número total de pessoas que pertencem ao agregado familiar, incluindo os residentes (membros com intenção de dormir no agregado familiar nos 3 meses seguintes) e não residentes (membros com vinculo ao agregado que não pretendem dormir no agregado familiar nos 3 meses seguintes)",
           "sw": "Wanakaya hurejelea jumla ya idadi ya watu ambao ni wa kaya hiyo, ikijumuisha wakazi (watu walio na nia ya kulala katika kaya hiyo katika miezi 3 inayofuata) na wasio wakazi (watu wasio na nia ya kulala katika kaya hiyo katika miezi 3 inayofuata)"
         },
-        "_row_num": 174
+        "_row_num": 173
       },
       {
         "string_token": "hh_roster",
         "text": {
           "default": "Current Household Members Roster",
-          "pt": "Current Household Members Roster",
-          "sw": "Current Household Members Roster"
+          "pt": "Rosto dos membros actuais do agregado",
+          "sw": "Orodha ya sasa ya wanakaya"
         },
-        "_row_num": 175
+        "_row_num": 174
       },
       {
         "string_token": "hh_roster.hint",
         "text": {
           "default": "To change resident status, click on 'edit' icon beside the member's name",
-          "pt": "To change resident status, click on 'edit' icon beside the member's name",
-          "sw": "To change resident status, click on 'edit' icon beside the member's name"
+          "pt": "Para mudar o estado de residencia, clique no icone 'editar' a loado do nome do membro.",
+          "sw": "Kubadilisha hali ya mkazi, bonyeza alama ya 'edit/hariri' kando ya jina la mwanakaya"
         },
-        "_row_num": 176
+        "_row_num": 175
       },
       {
         "string_token": "members_left",
@@ -6377,43 +6370,43 @@
           "pt": "Membros que já não fazem parte do agregado familiar",
           "sw": "Wanakaya wasio sehemu ya kaya tena"
         },
-        "_row_num": 177
+        "_row_num": 176
       },
       {
         "string_token": "member_left_select",
         "text": {
           "default": "Which member(s) is/are no longer present in the household?",
-          "pt": "Which member(s) is/are no longer present in the household?",
-          "sw": "Which member(s) is/are no longer present in the household?"
+          "pt": "Qual membro não esta presente no agregado?",
+          "sw": "Je, ni mwanakaya gani hayupo tena katika kaya?"
         },
-        "_row_num": 178
+        "_row_num": 177
       },
       {
         "string_token": "member_left_prompt",
         "text": {
           "default": "<h4>You will be prompted to answer questions for the member(s) no longer in this household. </h4>",
-          "pt": "<h4>You will be prompted to answer questions for the member(s) no longer in this household. </h4>",
-          "sw": "<h4>You will be prompted to answer questions for the member(s) no longer in this household. </h4>"
+          "pt": "<h4>Você será solicitado a responder perguntas sobre o (s) membro (s) que não estão mais neste agregado.</h4>",
+          "sw": "<h4> Utaombwa kujibu maswali ya washiriki ambao hawako tena katika kaya hii. </ h4>"
         },
-        "_row_num": 179
+        "_row_num": 178
       },
       {
         "string_token": "member_left_detail",
         "text": {
           "default": "<h3>Details about member no longer part of the household</h3>",
-          "pt": "<h3>Details about member no longer part of the household</h3>",
-          "sw": "<h3>Details about member no longer part of the household</h3>"
+          "pt": "<h3>Detalhes sobre o (s) membro (s) que não estão mais neste agregado.</h3>",
+          "sw": "<h3> Maelezo kuhusu washiriki ambao sio sehemu ya kaya </h3>"
         },
-        "_row_num": 180
+        "_row_num": 179
       },
       {
         "string_token": "member_detail",
         "text": {
           "default": "Details about household member",
-          "pt": "Details about household member",
-          "sw": "Details about household member"
+          "pt": "Detalhes sobre o membro do agregado",
+          "sw": "Taarifa kuhusu Wanakaya"
         },
-        "_row_num": 181
+        "_row_num": 180
       },
       {
         "string_token": "hh_present",
@@ -6422,16 +6415,16 @@
           "pt": "<h4>Membros do agregado familiar presentes no momento da visita</h4>",
           "sw": "<h4>Wanakaya waliopo wakati wa ziara</h4>"
         },
-        "_row_num": 182
+        "_row_num": 181
       },
       {
         "string_token": "hh_absent",
         "text": {
           "default": "If a member is absent at the time of this interview, click on the \"edit\" icon to add details about their absence.",
-          "pt": "If a member is absent at the time of this interview, click on the \"edit\" icon to add details about their absence.",
-          "sw": "If a member is absent at the time of this interview, click on the \"edit\" icon to add details about their absence."
+          "pt": "Se um membro estiver ausente no momento desta entrevista, clique no ícone \"editar\" para adicionar detalhes sobre sua ausência.",
+          "sw": "Ikiwa mwanakaya hayupo wakati wa mahojiano haya, bonyeza alama ya \"Edit/hariri\" ili kuongeza maelezo juu ya kutokuwepo kwao."
         },
-        "_row_num": 183
+        "_row_num": 182
       },
       {
         "string_token": "hh_head",
@@ -6440,34 +6433,34 @@
           "pt": "Chefe do agregado familiar:",
           "sw": "Mkuu wa kaya:"
         },
-        "_row_num": 184
+        "_row_num": 183
       },
       {
         "string_token": "hh_head_modify",
         "text": {
           "default": "Select from the list below:",
-          "pt": "Select from the list below:",
-          "sw": "Select from the list below:"
+          "pt": "Selecione da lista abaixo:",
+          "sw": "Chagua kutoka kwenye orodha hapa chini:"
         },
-        "_row_num": 185
+        "_row_num": 184
       },
       {
         "string_token": "hh_head_sub_modify",
         "text": {
           "default": "Select from the list below:",
-          "pt": "Select from the list below:",
-          "sw": "Select from the list below:"
+          "pt": "Selecione da lista abaixo:",
+          "sw": "Chagua kutoka kwenye orodha hapa chini:"
         },
-        "_row_num": 186
+        "_row_num": 185
       },
       {
         "string_token": "select_one",
         "text": {
           "default": "You can only select one option.",
-          "pt": "You can only select one option.",
-          "sw": "You can only select one option."
+          "pt": "Você pode escolher somente uma opcão",
+          "sw": "Unaweza kuchagua jibu moja tu"
         },
-        "_row_num": 187
+        "_row_num": 186
       },
       {
         "string_token": "housing_h3",
@@ -6476,7 +6469,7 @@
           "pt": "<h3>Habitação</h3>",
           "sw": "<h3>Makazi</h3>"
         },
-        "_row_num": 188
+        "_row_num": 187
       },
       {
         "string_token": "kitchen_h4",
@@ -6485,7 +6478,7 @@
           "pt": "<h4>Características da cozinha</h4>",
           "sw": "<h4>Sifa za jikoni</h4>"
         },
-        "_row_num": 189
+        "_row_num": 188
       },
       {
         "string_token": "water_h4",
@@ -6494,7 +6487,7 @@
           "pt": "<h4>Água</h4>",
           "sw": "<h4>Maji</h4>"
         },
-        "_row_num": 190
+        "_row_num": 189
       },
       {
         "string_token": "sanitation_h3",
@@ -6503,16 +6496,16 @@
           "pt": "<h3>Saneamento</h3>",
           "sw": "<h3>Usafi wa mazingira</h3>"
         },
-        "_row_num": 191
+        "_row_num": 190
       },
       {
         "string_token": "latrine_h4",
         "text": {
           "default": "<h4>Latrine details</h4>",
-          "pt": "<h4>Latrine details</h4>",
-          "sw": "<h4>Latrine details</h4>"
+          "pt": "<h4>Detalhes da latrina</h4>",
+          "sw": "<h4>Taarifa za Choo</h4>"
         },
-        "_row_num": 192
+        "_row_num": 191
       },
       {
         "string_token": "goods_h3",
@@ -6521,7 +6514,7 @@
           "pt": "<h3>Propriedade de bens</h3>",
           "sw": "<h3>Umiliki wa bidhaa</h3>"
         },
-        "_row_num": 193
+        "_row_num": 192
       },
       {
         "string_token": "w_10houses",
@@ -6530,7 +6523,7 @@
           "pt": "<span style=\"color:red\">Você inseriu mais de 10 casas. Por favor verifique esta informacão.</span>",
           "sw": "<span style=\"color:red\">Umeingia zaidi ya nyumba 10. Tafadhali thibitisha taafira hii.</span>"
         },
-        "_row_num": 194
+        "_row_num": 193
       },
       {
         "string_token": "w_houses_toomany",
@@ -6539,7 +6532,7 @@
           "pt": "<span style=\"color:red\">Isto deve ser menor ou igual que o numero total de casas (construcoes).</span>",
           "sw": "<span style=\"color:red\">Idadi hii lazima iwe pungufu au sawa na jumla ya idadi ya nyumba (majengo).</span>"
         },
-        "_row_num": 195
+        "_row_num": 194
       },
       {
         "string_token": "w_5wall",
@@ -6548,7 +6541,7 @@
           "pt": "<span style=\"color:red\">Você selecionou mais de 5 mateiriais de construcão da parede. Por favor verique que isto esta correcto.</span>",
           "sw": "<span style=\"color:red\">Umechagua zaidi ya malighafi 5 za kuta. Tafadhali thibitisha kuwa hii na sahihi.</span>"
         },
-        "_row_num": 196
+        "_row_num": 195
       },
       {
         "string_token": "w_bricks",
@@ -6557,7 +6550,7 @@
           "pt": "<span style=\"color:red\">O material usado para construcao da casa principal indicado foi \"Casa convencional feita de tijolos e cimento\" mas nem \"blocos de cimento\" ou \"blocos de adobe\"  estao selecionados como material de parede. Por favor verifique.</span>",
           "sw": "<span style=\"color:red\">Aina kuu ya jengo la nyumba imeonyeshwa kuwa \"Nyumba ya kawaida iliyotengenezwa kwa matofali na saruji\" lakini \"Tofali za saruji\" wala \"Tofali\" hazijachaguliwa kama malighafi ya ukuta. Tafadhali thibitisha</span>"
         },
-        "_row_num": 197
+        "_row_num": 196
       },
       {
         "string_token": "w_water",
@@ -6566,7 +6559,7 @@
           "pt": "<span style=\"color:red\">Existe uma discrepancia entre o local de abastecimento de agua e o tempo levado para ir e voltar deste local. Por favor verifique selecoes.</span>",
           "sw": "<span style=\"color:red\">Kuna utata kati ya eneo la chanzo cha maji na muda unaotumika kufikia chanzo kikuu cha maji na kurudi. Tafadhali thibitisha chaguzi zako.</span>"
         },
-        "_row_num": 198
+        "_row_num": 197
       },
       {
         "string_token": "w_tv",
@@ -6575,7 +6568,7 @@
           "pt": "<span style=\"color:red\">Na P.42 Nem \"Electricidade\",  \"Gerador\" ou \"Painel solar\" foi selecionado, mas na P.43 \"TV\" foi selecionado. Por favor verifique que isto esta correcto</span>",
           "sw": "<span style=\"color:red\">Katika swali la Q42 Umeme\", \"Jenereta\", wala \"Nguvu ya jua\" havikuchaguliwa, lakini katika swali la Q43 \"TV\" imechaguliwa. Tafadhali thibitisha hii ni sahihi..</span>"
         },
-        "_row_num": 199
+        "_row_num": 198
       },
       {
         "string_token": "w_4ceiling",
@@ -6584,7 +6577,7 @@
           "pt": "<span style=\"color:red\">Você selecionou mais de 4 materiais de cobertura. Por favor verique se isto esta correcto.</span>",
           "sw": "<span style=\"color:red\">Umechagua zaidi ya malighafi 4 za dari. Tafadhali thibitisha kuwa hii na sahihi</span>"
         },
-        "_row_num": 200
+        "_row_num": 199
       },
       {
         "string_token": "w_4floor",
@@ -6593,7 +6586,7 @@
           "pt": "<span style=\"color:red\">Você selecionou mais de 4 materiais de construcao do chao. Por favor verifique se isto esta correcto.</span>",
           "sw": "<span style=\"color:red\">Umechagua zaidi ya malighafi 4 za sakafu. Tafadhali thibitisha kuwa hii na sahihi</span>"
         },
-        "_row_num": 201
+        "_row_num": 200
       },
       {
         "string_token": "w_none",
@@ -6602,7 +6595,7 @@
           "pt": "Você não pode selecionar 'Nenhum' junto com as outras respostas.",
           "sw": "Huwezi kuchagua \"Hakuna\" pamoja na majibu mengine"
         },
-        "_row_num": 203
+        "_row_num": 201
       },
       {
         "string_token": "w_all_dk",
@@ -6611,7 +6604,7 @@
           "pt": "Você não pode selecionar 'Todos' ou \"Não sabe\" junto com as outras respostas.",
           "sw": "Huwezi kuchagua \"Yote\" au \"Sijui\" pamoja na majibu mengine"
         },
-        "_row_num": 204
+        "_row_num": 202
       },
       {
         "string_token": "w_no_dk",
@@ -6620,15 +6613,16 @@
           "pt": "Você não pode selecionar \"Não\" ou\"Não sabe\" junto com as outras respostas.",
           "sw": "Huwezi kuchagua \"Hapana\" au \"Sijui\" pamoja na majibu mengine"
         },
-        "_row_num": 205
+        "_row_num": 203
       },
       {
         "string_token": "w_pna",
         "text": {
           "default": "You cannot select ‘No’ or ‘Prefer not to answer’ along with other options.",
+          "pt": "Você não pode selecionar \"Não\" ou \"Prefere não responder\" junto com as outras respostas.",
           "sw": "Huwezi kuchagua \"Hapana\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
         },
-        "_row_num": 206
+        "_row_num": 204
       },
       {
         "string_token": "w_no_dk_no_animals",
@@ -6637,7 +6631,7 @@
           "pt": "Você não pode selecionar \"Não\", \"Não sabe\", ou \"Não teve [gado/porcos] nos ultimos 30 dias\" junto com as outras respostas.",
           "sw": "Huwezi kuchagua \"Hapana\", \"Sijui\", au \"Hakuwa na [ng'ombe / nguruwe] katika siku 30 zilizopita\" pamoja na majibu mengine"
         },
-        "_row_num": 207
+        "_row_num": 205
       },
       {
         "string_token": "w_none_dk",
@@ -6646,7 +6640,7 @@
           "pt": "Você não pode selecionar 'Nenhum' ou \"Não sabe\" junto com as outras respostas.",
           "sw": "Huwezi kuchagua \"Hakuna\" au \"Sijui\" pamoja na majibu mengine"
         },
-        "_row_num": 208
+        "_row_num": 206
       },
       {
         "string_token": "too_many_animals",
@@ -6655,7 +6649,7 @@
           "pt": "Haiwezi kuzidi 100.",
           "sw": "Nao pode exceder 100."
         },
-        "_row_num": 209
+        "_row_num": 207
       },
       {
         "string_token": "animals_h3",
@@ -6664,7 +6658,7 @@
           "pt": "<h3>Animais</h3>",
           "sw": "<h3>Wanyama</h3>"
         },
-        "_row_num": 210
+        "_row_num": 208
       },
       {
         "string_token": "cattle_f",
@@ -6673,7 +6667,7 @@
           "pt": "Bovino fêmea adulta > 1 ano de idade",
           "sw": "Jike mkubwa Umri zaidi ya mwaka 1"
         },
-        "_row_num": 211
+        "_row_num": 209
       },
       {
         "string_token": "cattle_m",
@@ -6682,7 +6676,7 @@
           "pt": "Bovino macho adulto > 1 ano de idade",
           "sw": "Ndume mkubwa umri zaidi ya mwaka 1"
         },
-        "_row_num": 212
+        "_row_num": 210
       },
       {
         "string_token": "cattle_1",
@@ -6691,7 +6685,7 @@
           "pt": "Bovino macho/fêmea < 1 ano de idade",
           "sw": "Ng’ombe jike/dume umri chini ya mwaka 1"
         },
-        "_row_num": 213
+        "_row_num": 211
       },
       {
         "string_token": "cattle_not_found",
@@ -6700,7 +6694,7 @@
           "pt": "Você indicou que a o agregado actualmente possui gado, mas nenhum deles foi inserido abaixo. Por favor verifique.",
           "sw": "Umeonyesha kuwa kaya inamiliki ng'ombe kwasasa lakini hakuna taarifa iliyojazwa hapo juu. Tafadhali thibitisha."
         },
-        "_row_num": 214
+        "_row_num": 212
       },
       {
         "string_token": "pig_>6",
@@ -6709,7 +6703,7 @@
           "pt": "Porcos > 6 semanas",
           "sw": "Nguruwe zaid ya wiki 6"
         },
-        "_row_num": 215
+        "_row_num": 213
       },
       {
         "string_token": "pig_<6",
@@ -6718,7 +6712,7 @@
           "pt": "Porcos < 6 semanas",
           "sw": "Nguruwe chini ya wiki 6"
         },
-        "_row_num": 216
+        "_row_num": 214
       },
       {
         "string_token": "pigs_not_found",
@@ -6727,25 +6721,25 @@
           "pt": "Você indicou que a o agregado actualmente possui porcos, mas nenhum deles foi inserido abaixo. Por favor verifique.",
           "sw": "Umeonyesha kuwa kaya inamiliki nguruwe kwasasa lakini hakuna taarifa iliyojazwa hapo juu. Tafadhali thibitisha."
         },
-        "_row_num": 217
+        "_row_num": 215
       },
       {
         "string_token": "cattle_h5",
         "text": {
           "default": "<h5>You will now be asked questions regarding your cattle.</h5>",
-          "pt": "<h5>You will now be asked questions regarding your cattle.</h5>",
-          "sw": "<h5>You will now be asked questions regarding your cattle.</h5>"
+          "pt": "<h5>Agora você será questionado sobre o seu gado.</h5>",
+          "sw": "<h5>Sasa utaulizwa maswali kuhusu ng'ombe wako.</h5>"
         },
-        "_row_num": 218
+        "_row_num": 216
       },
       {
         "string_token": "pig_h5",
         "text": {
           "default": "<h5>You will now be asked questions regarding your pigs.</h5>",
-          "pt": "<h5>You will now be asked questions regarding your pigs.</h5>",
-          "sw": "<h5>You will now be asked questions regarding your pigs.</h5>"
+          "pt": "<h5>Agora você será questionado sobre os seus porcos.</h5>",
+          "sw": "<h5>Sasa utaulizwa maswali kuhusu nguruwe.</h5>"
         },
-        "_row_num": 219
+        "_row_num": 217
       },
       {
         "string_token": "intervention_implication",
@@ -6754,16 +6748,16 @@
           "pt": "Implicações para a implementação da intervenção:",
           "sw": "Mapendekezo kwa ajili ya kutumika kwa afua:"
         },
-        "_row_num": 220
+        "_row_num": 218
       },
       {
         "string_token": "distance_inconsistent",
         "text": {
           "default": "<span style=\"color:red\">You indicated a location within 15m of the house, but selected a distance over 50m. Please verify selections. </span>",
-          "pt": "<span style=\"color:red\">You indicated a location within 15m of the house, but selected a distance over 50m. Please verify selections. </span>",
-          "sw": "<span style=\"color:red\">You indicated a location within 15m of the house, but selected a distance over 50m. Please verify selections. </span>"
+          "pt": "<span style=\"color:red\">Você indicou uma distancia dentro de 15 metros da casa na mas selecionou a distancia  >50m. </span>",
+          "sw": "<span style=\"color:red\">Umeonyesha umbali ni ndani ya mita 15 kutoka nyumba katika 45a/b lakini umechagua umbali > 50m katika 45c.</span>"
         },
-        "_row_num": 221
+        "_row_num": 219
       },
       {
         "string_token": "w_less_50",
@@ -6772,43 +6766,43 @@
           "pt": "Nao pode exceder 50.",
           "sw": "Haiwezi kuzidi 50."
         },
-        "_row_num": 222
+        "_row_num": 220
       },
       {
         "string_token": "water_prompt",
         "text": {
           "default": "You will be asked to provide details about the {{data.water_bodies_num}} bodies of water.",
-          "pt": "You will be asked to provide details about the {{data.water_bodies_num}} bodies of water.",
-          "sw": "You will be asked to provide details about the {{data.water_bodies_num}} bodies of water."
+          "pt": "Você será solicitado a fornecer detalhes sobre os corpos de água de {{data.water_bodies_num}}.",
+          "sw": "Utaulizwa utoe maelezo juu ya maeneo {{data.water_bodies_num}} ya maji."
         },
-        "_row_num": 223
+        "_row_num": 221
       },
       {
         "string_token": "water_detail",
         "text": {
           "default": "Water Body Details",
-          "pt": "Water Body Details",
-          "sw": "Water Body Details"
+          "pt": "Detalhes do corpo de agua",
+          "sw": "Maelezo kuhusu maeneo ya maji"
         },
-        "_row_num": 224
+        "_row_num": 222
       },
       {
         "string_token": "net_prompt",
         "text": {
           "default": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_num_nets}} nets.</h5>",
-          "pt": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_num_nets}} nets.</h5>",
-          "sw": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_num_nets}} nets.</h5>"
+          "pt": "<h5> Você será solicitado a responder perguntas adicionais para cada uma das redes {{data.hh_num_nets}}. </h5>",
+          "sw": "<h5> Utaombwa kujibu maswali ya nyongeza kwa kila moja ya nyavu {{data.hh_num_nets}}. </h5>"
         },
-        "_row_num": 225
+        "_row_num": 223
       },
       {
         "string_token": "net_detail",
         "text": {
           "default": "Mosquito Net Details",
-          "pt": "Mosquito Net Details",
-          "sw": "Mosquito Net Details"
+          "pt": "Detalhes das redes mosquiteiras",
+          "sw": "Maelezo kuhusu vyandarua vya mbu"
         },
-        "_row_num": 226
+        "_row_num": 224
       },
       {
         "string_token": "malaria_h3",
@@ -6817,7 +6811,7 @@
           "pt": "<h3>Informações sobre ferramentas de prevenção da malária</h3>",
           "sw": "<h3>Maelezo kuhusu vifaa vya kudhibiti malaria</h3>"
         },
-        "_row_num": 227
+        "_row_num": 225
       },
       {
         "string_token": "spray_date",
@@ -6826,52 +6820,52 @@
           "pt": "Data Não pode ser no futuro",
           "sw": "Tarehe haiwezi kuwa ya mbeleni"
         },
-        "_row_num": 228
+        "_row_num": 226
       },
       {
         "string_token": "health_facility_only_one",
         "text": {
           "default": "You cannot select Select from drop-down list of selected health facilities along with other option",
-          "pt": "You cannot select Select from drop-down list of selected health facilities along with other option",
-          "sw": "You cannot select Select from drop-down list of selected health facilities along with other option"
+          "pt": "Você não pode selecionar na da lista das unidades de sanitarias junto com as outras opçoes",
+          "sw": "Huwezi kuchagua kutoka orodha ya vituo vya afya vilivyochaguliwa pamoja na kuchagua nyingine"
         },
-        "_row_num": 229
+        "_row_num": 227
       },
       {
         "string_token": "snake_h3",
         "text": {
           "default": "<h3>Snake bites</h3>",
-          "pt": "<h3>Snake bites</h3>",
-          "sw": "<h3>Snake bites</h3>"
+          "pt": "<h3>Mordida de cobra</h3>",
+          "sw": "<h3>Kugongwa na Nyoka</h3>"
         },
-        "_row_num": 230
+        "_row_num": 228
       },
       {
         "string_token": "snake_prompt",
         "text": {
           "default": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>",
-          "pt": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>",
-          "sw": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>"
+          "pt": "<h5> Será solicitado que você responda a perguntas adicionais para {{data.any_snake_bite_num}} indivíduo (s) que foi picado por uma cobra. </h5>",
+          "sw": "<h5> Utaombwa kujibu maswali ya nyongeza kwa  mtu/watu {{data.any_snake_bite_num}}  ambao wamepata kuumwa na nyoka. </h5>"
         },
-        "_row_num": 231
+        "_row_num": 229
       },
       {
         "string_token": "snake_detail",
         "text": {
           "default": "Snake Bite details",
-          "pt": "Snake Bite details",
-          "sw": "Snake Bite details"
+          "pt": "Detalhes da mordida de cobra",
+          "sw": "Maelezo kuhusu kuumwa na nyoka"
         },
-        "_row_num": 232
+        "_row_num": 230
       },
       {
         "string_token": "snake_linked_table",
         "text": {
           "default": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>",
-          "pt": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>",
-          "sw": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>"
+          "pt": "<h5>Responda perguntas adicionais para os indivíduos que foram picados por cobra.</h5>",
+          "sw": "<h5> Jibu maswali ya ziada kwa mtu/watu ambao wamepata kuumwa na nyoka. </h5>"
         },
-        "_row_num": 233
+        "_row_num": 231
       },
       {
         "string_token": "death_new_only",
@@ -6880,25 +6874,25 @@
           "pt": "Apenas para os novos agregados familiares (agregados que não fizeram parte do minicenso)",
           "sw": "Kwa kaya mpya tu (kaya ambazo hazikuwa sehemu ya sensa ndogo)"
         },
-        "_row_num": 235
+        "_row_num": 232
       },
       {
         "string_token": "death_prompt",
         "text": {
           "default": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_death_count }} death(s).</h5>",
-          "pt": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_death_count }} death(s).</h5>",
-          "sw": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_death_count }} death(s).</h5>"
+          "pt": "<h5> Será solicitado a responder perguntas adicionais para cada um dos {{data.hh_death_count}} morte (s). </h5>",
+          "sw": "<h5> Utaombwa kujibu maswali ya ziada kwa kila kifo kati ya vifo {{data.hh_death_count}}. </h5>"
         },
-        "_row_num": 236
+        "_row_num": 233
       },
       {
         "string_token": "ind_prompt",
         "text": {
           "default": "You are about to begin the individual questionnaire. For each RESIDENT member in the household, a separate form will be filled out.",
-          "pt": "You are about to begin the individual questionnaire. For each RESIDENT member in the household, a separate form will be filled out.",
-          "sw": "You are about to begin the individual questionnaire. For each RESIDENT member in the household, a separate form will be filled out."
+          "pt": "Você está prestes a iniciar o questionário individual. Para cada membro RESIDENTE da família, um formulário separado será preenchido.",
+          "sw": "Unatarajia kuanza dodoso la Mtu Binafsi. Kwa kila mwanakaya MKAZI katika kaya, dodoso tofauti litajazwa"
         },
-        "_row_num": 238
+        "_row_num": 234
       },
       {
         "string_token": "q11",
@@ -6907,7 +6901,7 @@
           "pt": "11. Há membros novos no agregado familiar? (Para além dos que já constam da lista)",
           "sw": "11. Kuna watu wapya katika kaya? (Tofauti na wale tayari walio katika orodha?)"
         },
-        "_row_num": 240
+        "_row_num": 236
       },
       {
         "string_token": "q11a",
@@ -6916,7 +6910,7 @@
           "pt": "11a. Quantos membros novos estão no agregado familiar?",
           "sw": "11a. Ni wanakaya wangapi wapya walio katika kaya?"
         },
-        "_row_num": 241
+        "_row_num": 237
       },
       {
         "string_token": "q12",
@@ -6925,7 +6919,7 @@
           "pt": "12. Esta pessoa é um recém-nascido ou alguém que se tenha mudado para a casa?",
           "sw": "12. Je, mtu huyu ni mtoto mchanga au ni mtu aliyehamia katika nyumba hii?"
         },
-        "_row_num": 242
+        "_row_num": 238
       },
       {
         "string_token": "q26",
@@ -6934,7 +6928,7 @@
           "pt": "26. Chefe do agregado familiar",
           "sw": "26. Mkuu wa kaya"
         },
-        "_row_num": 243
+        "_row_num": 239
       },
       {
         "string_token": "q27",
@@ -6943,7 +6937,7 @@
           "pt": "27. Chefe de agregado substituto",
           "sw": "27. Mbadala wa Mkuu wa kaya:"
         },
-        "_row_num": 244
+        "_row_num": 240
       },
       {
         "string_token": "q28",
@@ -6952,7 +6946,7 @@
           "pt": "28. Parentesco do chefe de agregado substituto com o chefe do agregado familiar",
           "sw": "28. Uhusiano wa Mbadala wa Mkuu wa Kaya na Mkuu wa Kaya"
         },
-        "_row_num": 245
+        "_row_num": 241
       },
       {
         "string_token": "q29",
@@ -6961,7 +6955,7 @@
           "pt": "29. Quem assinou o consentimento informado?",
           "sw": "29. Ni nani aliyeweka saini fomu ya ridhaa?"
         },
-        "_row_num": 246
+        "_row_num": 242
       },
       {
         "string_token": "q29.hint",
@@ -6970,7 +6964,7 @@
           "pt": "(As caixas de Participação do agregado familiar e Chefe/chefe substituto do agregado familiar têm de ser assinadas)",
           "sw": "(Lazima visanduku vya Ushiriki wa kaya na Mkuu wa kaya/Mbadala wa Mkuu wa kaya viwekwe saini)"
         },
-        "_row_num": 247
+        "_row_num": 243
       },
       {
         "string_token": "q30",
@@ -6979,7 +6973,7 @@
           "pt": "30. Quem responde às perguntas?",
           "sw": "30. Ni nani anayejibu maswali?"
         },
-        "_row_num": 248
+        "_row_num": 244
       },
       {
         "string_token": "q31",
@@ -6988,7 +6982,7 @@
           "pt": "31. Número total de edificações (construções)",
           "sw": "31. Jumla ya idadi ya nyumba (majengo)"
         },
-        "_row_num": 249
+        "_row_num": 245
       },
       {
         "string_token": "q31a",
@@ -6997,7 +6991,7 @@
           "pt": "31a. Número total de edificações (construções) usados para dormir",
           "sw": "31a. Jumla ya idadi ya nyumba (majengo) zinazotumika kulala"
         },
-        "_row_num": 250
+        "_row_num": 246
       },
       {
         "string_token": "q32",
@@ -7006,7 +7000,7 @@
           "pt": "32. Número total de quartos (compartimentos) usados para dormir",
           "sw": "32. Jumla ya idadi ya vyumba (vyumba vidogo) vinavyotumika kulala"
         },
-        "_row_num": 251
+        "_row_num": 247
       },
       {
         "string_token": "q33",
@@ -7015,7 +7009,7 @@
           "pt": "33. Tipologia da edificação principal (edifício)",
           "sw": "33. Aina ya makazi makuu (jengo)"
         },
-        "_row_num": 252
+        "_row_num": 248
       },
       {
         "string_token": "q34",
@@ -7024,7 +7018,7 @@
           "pt": "34. Material da parede da edificação principal",
           "sw": "34. Malighafi iliyojengea kuta za nyumba kuu"
         },
-        "_row_num": 253
+        "_row_num": 249
       },
       {
         "string_token": "q35",
@@ -7033,7 +7027,7 @@
           "pt": "35. Material do teto da edificação principal",
           "sw": "35. Malighafi iliyojengea paa la nyumba kuu"
         },
-        "_row_num": 254
+        "_row_num": 250
       },
       {
         "string_token": "q36",
@@ -7042,7 +7036,7 @@
           "pt": "36. Material do chão da edificação principal",
           "sw": "36. Malighafi iliyojengea sakafu ya nyumba kuu"
         },
-        "_row_num": 255
+        "_row_num": 251
       },
       {
         "string_token": "q37",
@@ -7051,7 +7045,7 @@
           "pt": "37. Redes mosquiteiras de casa",
           "sw": "37. Nyavu za nyumba"
         },
-        "_row_num": 256
+        "_row_num": 252
       },
       {
         "string_token": "q38",
@@ -7060,16 +7054,16 @@
           "pt": "38. Onde é que a família cozinha?",
           "sw": "38. Je, familia hupikia wapi?"
         },
-        "_row_num": 257
+        "_row_num": 253
       },
       {
         "string_token": "q38a",
         "text": {
-          "default": "38a. [If answer to Q18 is other than “Food is not cooked at home”] Main energy source used for cooking:",
-          "pt": "38a. [Se a resposta à Q18 for diferente de «Em casa não se cozinham alimentos»] Energia principal utilizada para cozinhar:",
-          "sw": "38a. [Ikiwa jibu la Q18 ni lingine kando na \"Chakula hakipikwi nyumbani”] Chanzo kikuu cha nishati kinachotumika kupika:"
+          "default": "38a. Main energy source used for cooking:",
+          "pt": "38a. Energia principal utilizada para cozinhar:",
+          "sw": "38a. Chanzo kikuu cha nishati kinachotumika kupika:"
         },
-        "_row_num": 258
+        "_row_num": 254
       },
       {
         "string_token": "q39",
@@ -7078,7 +7072,7 @@
           "pt": "39. Qual é a principal fonte de água utilizada para consumo (cozinhar e higiene)?",
           "sw": "39. Ni kipi chanzo kikuu cha maji yanayotumika kwa matumizi (kupika na usafi)?"
         },
-        "_row_num": 259
+        "_row_num": 255
       },
       {
         "string_token": "q40",
@@ -7087,7 +7081,7 @@
           "pt": "40.Quanto tempo demora, no total, a alcançar a principal fonte de água, para ir buscar água, e voltar?",
           "sw": "40. Je, huchukua muda gani, kwa jumla, kufikia chanzo kikuu cha maji, kuchota maji na kurudi?"
         },
-        "_row_num": 260
+        "_row_num": 256
       },
       {
         "string_token": "q41",
@@ -7096,7 +7090,7 @@
           "pt": "41. Existe uma latrina no agregado familiar?",
           "sw": "41. Je, kaya ina choo?"
         },
-        "_row_num": 261
+        "_row_num": 257
       },
       {
         "string_token": "q41a",
@@ -7105,7 +7099,7 @@
           "pt": "41a. Se não existir uma latrina neste agregado familiar, onde é que os habitantes deste agregado familiar defecam?",
           "sw": "41a. Ikiwa hakuna choo katika kaya hii, wakazi wa kaya hii hujisaidia wapi?"
         },
-        "_row_num": 262
+        "_row_num": 258
       },
       {
         "string_token": "q41b",
@@ -7114,7 +7108,7 @@
           "pt": "41b. O lugar onde os habitantes deste agregado familiar defecam situa-se perto (<10 m) de uma massa de água?",
           "sw": "41b. Je, mahali ambapo wakazi huenda kujisaidi ni karibu (<mita10) na maji?"
         },
-        "_row_num": 263
+        "_row_num": 259
       },
       {
         "string_token": "q41c",
@@ -7123,16 +7117,16 @@
           "pt": "41c. [Se sim] Quantas latrinas?",
           "sw": "41c. [Ikiwa ndiyo] Vyoo vingapi?"
         },
-        "_row_num": 264
+        "_row_num": 260
       },
       {
         "string_token": "q41c.hint",
         "text": {
           "default": "<h5>You will be prompted to answer questions for the {{data.hh_how_many_latrines}} latrine(s)</h5>",
-          "pt": "<h5>You will be prompted to answer questions for the {{data.hh_how_many_latrines}} latrine(s)</h5>",
-          "sw": "<h5>You will be prompted to answer questions for the {{data.hh_how_many_latrines}} latrine(s)</h5>"
+          "pt": "<h5> Voce sera questionado a responder as questoes para {{data.hh_how_many_latrines}} latrina(s)</h5>",
+          "sw": "<h5>Utaombwa kujibu maswali kwa idadi ya vyoo {{data.hh_how_many_latrines}})</h5>"
         },
-        "_row_num": 265
+        "_row_num": 261
       },
       {
         "string_token": "q42",
@@ -7141,7 +7135,7 @@
           "pt": "42. Principal fonte de energia utilizada na iluminação no agregado familiar",
           "sw": "42. Chanzo kikuu cha nishati cha mwangaza wa kaya"
         },
-        "_row_num": 266
+        "_row_num": 262
       },
       {
         "string_token": "q43",
@@ -7150,7 +7144,7 @@
           "pt": "43. O agregado familiar possuir qualquer um dos seguintes (assinalar todos os que se aplicam):",
           "sw": "43. Je, kaya inamiliki chochote kati ya vitu vifuatavyo (weka alama kwa vyote vinavyo husika):"
         },
-        "_row_num": 267
+        "_row_num": 263
       },
       {
         "string_token": "q44",
@@ -7159,7 +7153,7 @@
           "pt": "44. O agregado familiar possui atualmente? (Assinalar tudo o que se aplica):",
           "sw": "44. Je, kaya yako kwa sasa inamiliki? (weka alama kwa vyote vinavyohusika):"
         },
-        "_row_num": 268
+        "_row_num": 264
       },
       {
         "string_token": "q44a",
@@ -7168,7 +7162,7 @@
           "pt": "44a. Quantos dos seguintes animais possui o agregado familiar?",
           "sw": "44a. Je, kaya inamiliki wanyama wangapi kati ya wafuatao??"
         },
-        "_row_num": 269
+        "_row_num": 265
       },
       {
         "string_token": "q44b.cattle",
@@ -7177,7 +7171,7 @@
           "pt": "44b. O agregado familiar tenciona possuir bovino no próximo ano?",
           "sw": "44b. Je, kaya ina mpango wa kumiliki ng’ombe yoyote mwaka unaokuja?"
         },
-        "_row_num": 270
+        "_row_num": 266
       },
       {
         "string_token": "q44b.pig",
@@ -7186,7 +7180,7 @@
           "pt": "44b. O agregado familiar tenciona possuir porcos no próximo ano?",
           "sw": "44b. Je, kaya ina mpango wa kumiliki nguruwe yoyote mwaka unaokuja?"
         },
-        "_row_num": 271
+        "_row_num": 267
       },
       {
         "string_token": "q45.cattle",
@@ -7195,7 +7189,7 @@
           "pt": "45. Onde fica guardado os bovino durante a noite?",
           "sw": "45. Je, ng’ombe hukaa wapi usiku?"
         },
-        "_row_num": 272
+        "_row_num": 268
       },
       {
         "string_token": "q45.pig",
@@ -7204,7 +7198,7 @@
           "pt": "45. Onde fica guardado os porcos durante a noite?",
           "sw": "45. Je, nguruwe hukaa wapi usiku?"
         },
-        "_row_num": 273
+        "_row_num": 269
       },
       {
         "string_token": "q45a",
@@ -7213,7 +7207,7 @@
           "pt": "45a. Durante a estação das chuvas",
           "sw": "45a. Wakati wa msimu wa mvua"
         },
-        "_row_num": 274
+        "_row_num": 270
       },
       {
         "string_token": "q45b",
@@ -7222,7 +7216,7 @@
           "pt": "45b. Durante a estação seca",
           "sw": "45b. Wakati wa msimu wa kiangazi"
         },
-        "_row_num": 275
+        "_row_num": 271
       },
       {
         "string_token": "q45c.cattle",
@@ -7231,7 +7225,7 @@
           "pt": "45c. Se os bovino forem guardados à noite num sítio diferente de «dentro da casa onde dormem os seres humanos», a que distância da estrutura mais próxima onde dormem as pessoas dormem esses animais?",
           "sw": "45c. Ikiwa ng’ombe huifadhiwa nyakati za usiku mahali fulani tofauti na \"ndani ambapo watu hulala\", wao hulala umbali gani kutoka kwenye nyumba ambapo watu hulala?"
         },
-        "_row_num": 276
+        "_row_num": 272
       },
       {
         "string_token": "q45c.pig",
@@ -7240,7 +7234,7 @@
           "pt": "45c. Se os porcos forem guardados à noite num sítio diferente de «dentro da casa onde dormem os seres humanos», a que distância da estrutura mais próxima onde dormem as pessoas dormem esses animais?",
           "sw": "45c. Ikiwa nguruwe huifadhiwa nyakati za usiku mahali fulani tofauti na \"ndani ambapo watu hulala\", wao hulala umbali gani kutoka kwenye nyumba ambapo watu hulala?"
         },
-        "_row_num": 277
+        "_row_num": 273
       },
       {
         "string_token": "q45ci",
@@ -7249,7 +7243,7 @@
           "pt": "45c(i). Durante a estação das chuvas",
           "sw": "45c (i). Wakati wa msimu wa mvua"
         },
-        "_row_num": 278
+        "_row_num": 274
       },
       {
         "string_token": "q45cii",
@@ -7258,7 +7252,7 @@
           "pt": "45c (ii). Durante a estação seca",
           "sw": "45c (ii). Wakati wa msimu wa kiangazi"
         },
-        "_row_num": 279
+        "_row_num": 275
       },
       {
         "string_token": "q46.cattle",
@@ -7267,7 +7261,7 @@
           "pt": "46. Onde é que a maioria dos animais desmamados (que já não bebem leite da progenitora) bovino passa o dia durante a estação das chuvas?",
           "sw": "46. Ni wapi mara nyingi ndama ng’ombe (ambao hawanyonyi kutoka kwa mama yao) hukaa wakati wa msimu wa mvua?"
         },
-        "_row_num": 280
+        "_row_num": 276
       },
       {
         "string_token": "q46.pig",
@@ -7276,7 +7270,7 @@
           "pt": "46. Onde é que a maioria dos animais desmamados (que já não bebem leite da progenitora) porcos passa o dia durante a estação das chuvas?",
           "sw": "46. Ni wapi mara nyingi ndama nguruwe (ambao hawanyonyi kutoka kwa mama yao) hukaa wakati wa msimu wa mvua?"
         },
-        "_row_num": 281
+        "_row_num": 277
       },
       {
         "string_token": "q46a",
@@ -7285,7 +7279,7 @@
           "pt": "46a. [Se confinados] A que distância do agregado familiar se encontra a estrutura?",
           "sw": "46a. [Ikiwa hufungiwa] Zizi hilo la mifugo lipo umbali gani kutoka kwenye kaya?"
         },
-        "_row_num": 282
+        "_row_num": 278
       },
       {
         "string_token": "q46b",
@@ -7294,7 +7288,7 @@
           "pt": "46b. A que distância do agregado familiar pastam normalmente os animais?",
           "sw": "46b. Kwa kawaida mifugo huenda malishoni umbali gani kutoka kwenye kaya?"
         },
-        "_row_num": 283
+        "_row_num": 279
       },
       {
         "string_token": "q46c",
@@ -7303,7 +7297,7 @@
           "pt": "46c. Existe algum tipo de água estagnada ou água corrente na zona de pasto do animal durante a estação das chuvas?",
           "sw": "46c. Kuna aina yoyote ya maji yaliyotuama au yanayotiririka katika eneo wanapolishwa wanyama msimu wa mvua?"
         },
-        "_row_num": 284
+        "_row_num": 280
       },
       {
         "string_token": "q46ci",
@@ -7312,7 +7306,7 @@
           "pt": "46c(i). [Se sim] Qual é o tipo de água?",
           "sw": "46c (i). [Ikiwa ndiyo] Maji haya ni ya aina gani?"
         },
-        "_row_num": 285
+        "_row_num": 281
       },
       {
         "string_token": "q47.cattle",
@@ -7321,7 +7315,7 @@
           "pt": "47. Os seus animais bovino tiveram alguma doença nos últimos 30 dias? (Assinalar todas as opções que se apliquem)",
           "sw": "47. Je, yeyote wa mifugo wako alikuwa na ugonjwa wowote katika siku 30 zilizopita? (weka alama kwa yote inayohusika)"
         },
-        "_row_num": 286
+        "_row_num": 282
       },
       {
         "string_token": "q47.pig",
@@ -7330,7 +7324,7 @@
           "pt": "47. Os seus animais porcos tiveram alguma doença nos últimos 30 dias? (Assinalar todas as opções que se apliquem)",
           "sw": "47. Je, yeyote wa nguruwe wako alikuwa na ugonjwa wowote katika siku 30 zilizopita? (weka alama kwa yote inayohusika)"
         },
-        "_row_num": 287
+        "_row_num": 283
       },
       {
         "string_token": "q48.cattle",
@@ -7339,7 +7333,7 @@
           "pt": "48. Se de momento não possui bovino, teve bovino nos últimos 12 meses",
           "sw": "48. Ikiwa kwa sasa humiliki ng’ombe, je, ulikuwa unamiliki ng’ombe katika miezi 12 iliyopita"
         },
-        "_row_num": 288
+        "_row_num": 284
       },
       {
         "string_token": "q48.pig",
@@ -7348,7 +7342,7 @@
           "pt": "48. Se de momento não possui porcos, teve porcos nos últimos 12 meses",
           "sw": "48. Ikiwa kwa sasa humiliki nguruwe, je, ulikuwa unamiliki nguruwe katika miezi 12 iliyopita"
         },
-        "_row_num": 289
+        "_row_num": 285
       },
       {
         "string_token": "q49.cattle",
@@ -7357,7 +7351,7 @@
           "pt": "49. Nos últimos 12 meses, foi administrada ivermectina a algum dos seus animais bovino?",
           "sw": "49. Katika miezi 12 iliyopita, yoyote kati ya, ng’ombe wako alipokea ivamektini?"
         },
-        "_row_num": 290
+        "_row_num": 286
       },
       {
         "string_token": "q49.pig",
@@ -7366,7 +7360,7 @@
           "pt": "49. Nos últimos 12 meses, foi administrada ivermectina a algum dos seus animais porcos?",
           "sw": "49. Katika miezi 12 iliyopita, yoyote kati ya, nguruwe wako alipokea ivamektini?"
         },
-        "_row_num": 291
+        "_row_num": 287
       },
       {
         "string_token": "q50.cattle",
@@ -7375,7 +7369,7 @@
           "pt": "50. Quem é o responsável e toma as decisões sobre o tratamento do bovino com medicamentos?",
           "sw": "50. Ni nani anayewajibika na anayefanya uamuzi kuhusu matibabu ya dawa ya ng’ombe?"
         },
-        "_row_num": 292
+        "_row_num": 288
       },
       {
         "string_token": "q50.pig",
@@ -7384,7 +7378,7 @@
           "pt": "50. Quem é o responsável e toma as decisões sobre o tratamento do porcos com medicamentos?",
           "sw": "50. Ni nani anayewajibika na anayefanya uamuzi kuhusu matibabu ya dawa ya nguruwe?"
         },
-        "_row_num": 293
+        "_row_num": 289
       },
       {
         "string_token": "q51.cattle",
@@ -7393,7 +7387,7 @@
           "pt": "51. Nos últimos 12 meses, mandou bovino para abate?",
           "sw": "51. Katika miezi 12 iliyopita, uliwapeleka ngombe kwenye machinjio?"
         },
-        "_row_num": 294
+        "_row_num": 290
       },
       {
         "string_token": "q51.pig",
@@ -7402,7 +7396,7 @@
           "pt": "51. Nos últimos 12 meses, mandou porcos para abate?",
           "sw": "51. Katika miezi 12 iliyopita, uliwapeleka nguruwe kwenye machinjio?"
         },
-        "_row_num": 295
+        "_row_num": 291
       },
       {
         "string_token": "q51a.cattle",
@@ -7411,7 +7405,7 @@
           "pt": "51a. Em que meses abateu o bovino nos últimos 12 meses? (assinalar todas as opções que se apliquem)",
           "sw": "51a. Ni katika mwezi upi ambapo uliwapeleka ng’ombe wako kwenye machinjio katika miezi 12 iliyopita? (weka alama kwa yote inayohusika)"
         },
-        "_row_num": 296
+        "_row_num": 292
       },
       {
         "string_token": "q51a.pig",
@@ -7420,7 +7414,7 @@
           "pt": "51a. Em que meses abateu o porcos nos últimos 12 meses? (assinalar todas as opções que se apliquem)",
           "sw": "51a. Ni katika mwezi upi ambapo uliwapeleka nguruwe wako kwenye machinjio katika miezi 12 iliyopita? (weka alama kwa yote inayohusika)"
         },
-        "_row_num": 297
+        "_row_num": 293
       },
       {
         "string_token": "q52",
@@ -7429,7 +7423,7 @@
           "pt": "52. Nos últimos 12 meses, ordenhou as suas vacas?",
           "sw": "52. Katika miezi 12 iliyopita, uliwakamua maziwa ng'ombe wako?"
         },
-        "_row_num": 298
+        "_row_num": 294
       },
       {
         "string_token": "q52a",
@@ -7438,7 +7432,7 @@
           "pt": "52a. [Se sim] Em que meses normalmente ordenha as suas vacas? (Assinalar todas as opções que se apliquem)",
           "sw": "52a. [Ikiwa ndiyo] Ni katika miezi ipi ambapo kwa kawaida huwa unakamua maziwa ng'ombe wako? (Chagua yote inayohusika)"
         },
-        "_row_num": 299
+        "_row_num": 295
       },
       {
         "string_token": "q53",
@@ -7447,7 +7441,7 @@
           "pt": "53. Há corpos de água num raio de 50 m à volta das edificações do agregado familiar?",
           "sw": "53. Je, kuna eneo la maji yoyote umbali ndani ya mita 50 yanayozunguka majengo ya kaya?"
         },
-        "_row_num": 300
+        "_row_num": 296
       },
       {
         "string_token": "q53a",
@@ -7456,7 +7450,7 @@
           "pt": "53a. [Se sim] Quantas?",
           "sw": "53a. [Ikiwa ndiyo] mangapi?"
         },
-        "_row_num": 301
+        "_row_num": 297
       },
       {
         "string_token": "q54",
@@ -7465,7 +7459,7 @@
           "pt": "54. Foi feita pulverização residual no agregado familiar contra a malária nos últimos 12 meses?",
           "sw": "54. Je, kaya ilipata kunyunyuziwa ndani viuatilifu ukoko kuzuia malaria katika miezi 12 iliyopita?"
         },
-        "_row_num": 302
+        "_row_num": 298
       },
       {
         "string_token": "q54a",
@@ -7474,7 +7468,7 @@
           "pt": "54a. [Se não] Porque não?",
           "sw": "54a. [Ikiwa Hapana] Kwa nini?"
         },
-        "_row_num": 303
+        "_row_num": 299
       },
       {
         "string_token": "q54b",
@@ -7483,7 +7477,7 @@
           "pt": "54b. [Se sim, pedir para ver a etiqueta Viu a etiqueta de registo da pulverização?",
           "sw": "54b. [Ikiwa ndiyo, omba kuona kibandiko] Je, kibandiko cha usajili wa kunyunyuzia dawa inaonekana?"
         },
-        "_row_num": 304
+        "_row_num": 300
       },
       {
         "string_token": "q54bi",
@@ -7492,7 +7486,7 @@
           "pt": "54b (i). [Se viu a etiqueta Data da pulverização (verificar data na etiqueta do registo de fumigação na porta)",
           "sw": "54b (i). [Ikiwa kibandiko kinaonekana] Tarehe yakunyunyizia (Thibitisha tarehe kwenye kibandiko cha usajili wa unyunyiziaji kwenye mlango)"
         },
-        "_row_num": 305
+        "_row_num": 301
       },
       {
         "string_token": "q55",
@@ -7501,7 +7495,7 @@
           "pt": "55. Quantas redes mosquiteiras existem no agregado familiar?",
           "sw": "55. Je, kuna vyandarua vingapi vya mbu katika kaya hii?"
         },
-        "_row_num": 306
+        "_row_num": 302
       },
       {
         "string_token": "q56",
@@ -7510,7 +7504,7 @@
           "pt": "56. São usados outros métodos de prevenção da malária? (Assinalar todas as opções que se apliquem)",
           "sw": "56. Kuna njia nyingine za kuzuia malaria zinazotumika? (chagua zote zinazotumika)"
         },
-        "_row_num": 307
+        "_row_num": 303
       },
       {
         "string_token": "q57",
@@ -7519,16 +7513,16 @@
           "pt": "57. Qual é o primeiro ponto de cuidados de saúde formais usado pela família quando alguém está doente?",
           "sw": "57. Ni kituo kipi cha kwanza rasmi cha tiba ya afya kinachotumiwa na familia hii mtu anapokuwa mgonjwa?"
         },
-        "_row_num": 308
+        "_row_num": 304
       },
       {
         "string_token": "q57.hint",
         "text": {
           "default": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
-          "pt": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
-          "sw": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)"
+          "pt": "(Selecione uma unidade de saniotaria na lista apresentada OU uma (1) das opções abaixo. Para selecionar uma unidade de sanitaria, nenhuma das outras opções pode ser selecionada)",
+          "sw": "(Chagua kutoka kwenye orodha ya vituo vya afya  AU moja (1) ya chaguzi hapa chini. Ili kuchagua kituo cha afya, hakuna chaguzi nyingine yoyote inayoweza kuchaguliwa)"
         },
-        "_row_num": 309
+        "_row_num": 305
       },
       {
         "string_token": "q58",
@@ -7537,7 +7531,7 @@
           "pt": "58. Algum membro do agregado familiar foi mordido por uma cobra nos últimos 12 meses?",
           "sw": "58. Kuna mwanakaya yeyote aliyegongwa na nyoka katika miezi 12 iliyopita?"
         },
-        "_row_num": 310
+        "_row_num": 306
       },
       {
         "string_token": "q58a",
@@ -7546,7 +7540,7 @@
           "pt": "58a. Quantos membros do agregado familiar foram mordidos nos últimos 12 meses?",
           "sw": "58a. Ni wanakaya wangapi waliyogongwa na nyoka katika miezi 12 iliyopita?"
         },
-        "_row_num": 311
+        "_row_num": 307
       },
       {
         "string_token": "q59a",
@@ -7555,7 +7549,7 @@
           "pt": "59a. Quem foi mordido?",
           "sw": "59a. Ni nani aliyegongwa?"
         },
-        "_row_num": 312
+        "_row_num": 308
       },
       {
         "string_token": "q60",
@@ -7564,7 +7558,7 @@
           "pt": "60. Número de contacto do agregado familiar",
           "sw": "60. Nambari ya mawasiliano ya kaya"
         },
-        "_row_num": 313
+        "_row_num": 309
       },
       {
         "string_token": "q61",
@@ -7573,7 +7567,7 @@
           "pt": "61. Número de contacto alternativo 1",
           "sw": "61. Nambari mbadala ya mawasiliano 1"
         },
-        "_row_num": 314
+        "_row_num": 310
       },
       {
         "string_token": "q62",
@@ -7582,7 +7576,7 @@
           "pt": "62. Existe um número de contacto alternativo 2",
           "sw": "62. Je, kuna nambari ya 2 mbadala ya mawasiliano"
         },
-        "_row_num": 315
+        "_row_num": 311
       },
       {
         "string_token": "q62a",
@@ -7591,7 +7585,7 @@
           "pt": "62a. [Se sim] Número de contacto alternativo 2",
           "sw": "62a. [Ikiwa ndio] Nambari mbadala ya mawasiliano 2"
         },
-        "_row_num": 316
+        "_row_num": 312
       },
       {
         "string_token": "q63",
@@ -7600,7 +7594,7 @@
           "pt": "63. Podemos ligar-lhe para qualquer um dos contactos indicados anteriormente para organizar visitas no contexto deste projeto?",
           "sw": "63. Tunaweza kukupigia kupitia nambari yoyote ya mawasiliano kati ya zilizoonyeshwa hapo juu ili kupanga na wewe katika muktadha wa mradi huu?"
         },
-        "_row_num": 317
+        "_row_num": 313
       },
       {
         "string_token": "q64",
@@ -7609,7 +7603,7 @@
           "pt": "64. Houve algum óbito no agregado familiar nos últimos 12 meses?",
           "sw": "64. Je, kumekuwa na vifo vyovyote katika kaya katika miezi 12 iliopita?"
         },
-        "_row_num": 318
+        "_row_num": 314
       },
       {
         "string_token": "q64a",
@@ -7618,7 +7612,7 @@
           "pt": "64a. [Se sim] Quantos?",
           "sw": "64a. [Ikiwa ndiyo] Vingapi?"
         },
-        "_row_num": 319
+        "_row_num": 315
       }
     ]
   },
@@ -10309,7 +10303,8 @@
           "string_token": "flat",
           "text": {
             "default": "Flat",
-            "pt": "Apartamento"
+            "pt": "Prédio",
+            "sw": "Ghorofa"
           },
           "_row_num": 75
         },
@@ -10317,8 +10312,8 @@
           "string_token": "apartment",
           "text": {
             "default": "Apartment",
-            "pt": "Prédio",
-            "sw": "Ghorofa"
+            "pt": "Apartamento",
+            "sw": "Nyumba ya kupangisha"
           },
           "_row_num": 76
         },
@@ -10983,8 +10978,8 @@
           "string_token": "technical_h2",
           "text": {
             "default": "<h2>Technical Details</h2>",
-            "pt": "<h2>Technical Details</h2>",
-            "sw": "<h2>Technical Details</h2>"
+            "pt": "<h2>Detalhes Técnicos</h2>",
+            "sw": "<h2>Taarifa za kiufundi</h2>"
           },
           "_row_num": 151
         },
@@ -11055,6 +11050,7 @@
           "string_token": "ind_h2",
           "text": {
             "default": "<h2>INDIVIDUAL QUESTIONNAIRE</h2>",
+            "pt": "<h2>QUESTIONÁRIO INDIVIDUAL</h2>",
             "sw": "<h2>DODOSO LA BINAFSI</h2>"
           },
           "_row_num": 159
@@ -11063,100 +11059,100 @@
           "string_token": "qr_code",
           "text": {
             "default": "Scan Fieldworker QR Code",
-            "pt": "Scan Fieldworker QR Code",
-            "sw": "Scan Fieldworker QR Code"
+            "pt": "Rastreie o seu código QR",
+            "sw": "Scan QR code yako yenye namba ya utambulisho"
           },
-          "_row_num": 161
+          "_row_num": 160
         },
         "fw_id": {
           "string_token": "fw_id",
           "text": {
             "default": "If QR code is unavailable, manually enter 3 digit Fieldworker ID",
-            "pt": "If QR code is unavailable, manually enter 3 digit Fieldworker ID",
-            "sw": "If QR code is unavailable, manually enter 3 digit Fieldworker ID"
+            "pt": "Se o código QR não estiver disponível, insira manualmente a ID do trabalhador de 3 dígitos",
+            "sw": "Kama alama zako za QR hazipatikani, andika namba yako ya utambulisho yenye herufi tatu hapa"
           },
-          "_row_num": 162
+          "_row_num": 161
         },
         "country": {
           "string_token": "country",
           "text": {
             "default": "Country",
-            "pt": "Country",
-            "sw": "Country"
+            "pt": "País",
+            "sw": "Nchi"
           },
-          "_row_num": 163
+          "_row_num": 162
         },
         "hh_id": {
           "string_token": "hh_id",
           "text": {
-            "default": "Household ID",
-            "pt": "Household ID",
-            "sw": "Household ID"
+            "default": "Write the 6-character household ID here",
+            "pt": "Escreva o código de agregado de 6 digitos aqui:",
+            "sw": "Andika tarakimu 6 za nambari ya utambulisho wa kaya hapa."
           },
-          "_row_num": 164
+          "_row_num": 163
         },
         "geo_info": {
           "string_token": "geo_info",
           "text": {
             "default": "Geographical Information",
-            "pt": "Geographical Information",
-            "sw": "Geographical Information"
+            "pt": "Informação Geográfica",
+            "sw": "Taarifa za Kijiografia"
           },
-          "_row_num": 165
+          "_row_num": 164
         },
         "rec_loc": {
           "string_token": "rec_loc",
           "text": {
             "default": "Record Location",
-            "pt": "Record Location",
-            "sw": "Record Location"
+            "pt": "Gravar localização",
+            "sw": "Nakili alama (GPS)  za Eneo"
           },
-          "_row_num": 166
+          "_row_num": 165
         },
         "rec_survey_loc": {
           "string_token": "rec_survey_loc",
           "text": {
             "default": "Record where this survey took place",
-            "pt": "Record where this survey took place",
-            "sw": "Record where this survey took place"
+            "pt": "Gravar o local onde a recolha ocorre",
+            "sw": "Nakili alama (GPS)  za eneo ulilofanyia mahojiano haya"
           },
-          "_row_num": 167
+          "_row_num": 166
         },
         "hh_identification": {
           "string_token": "hh_identification",
           "text": {
             "default": "Household Identification {{data.hh_id}}",
-            "pt": "Household Identification {{data.hh_id}}",
-            "sw": "Household Identification {{data.hh_id}}"
+            "pt": "Identificação do agregado{{data.hh_id}}",
+            "sw": "Utambulisho wa Kaya {{data.hh_id}}"
           },
-          "_row_num": 169
+          "_row_num": 168
         },
         "hh_minicensed": {
           "string_token": "hh_minicensed",
           "text": {
             "default": "Was this household part of the minicensus?",
-            "pt": "Was this household part of the minicensus?",
-            "sw": "Was this household part of the minicensus?"
+            "pt": "Esta agregado fez parte do Minicenso?",
+            "sw": "Je, kaya hii ilikuwa sehemu ya Minicensus?"
           },
-          "_row_num": 170
+          "_row_num": 169
         },
         "minicensed_h3": {
           "string_token": "minicensed_h3",
           "text": {
             "default": "<h3>Minicenced Households</h3>",
-            "pt": "<h3>Minicenced Households</h3>",
-            "sw": "<h3>Minicenced Households</h3>"
+            "pt": "<h3>Agregado com Minicenso realizado</h3>",
+            "sw": "<h3>Kaya zilizofanyiwa Minicensus</h3>"
           },
-          "_row_num": 171
+          "_row_num": 170
         },
         "meta_info": {
           "string_token": "meta_info",
           "text": {
             "default": "Meta-Information:",
             "pt": "Meta-informação:",
-            "sw": "Maelezo ya habari:"
+            "sw": "Taarifa za awali:"
           },
-          "_row_num": 172
+          "_row_num": 171
         },
         "how_many": {
           "string_token": "how_many",
@@ -11165,7 +11161,7 @@
             "pt": "Quantos membros compõem este agregado familiar (residentes e não residentes)?",
             "sw": "Je, kaya hii ina watu wangapi? (wakazi na wasio wakazi)?"
           },
-          "_row_num": 173
+          "_row_num": 172
         },
         "how_many.hint": {
           "string_token": "how_many.hint",
@@ -11174,25 +11170,25 @@
             "pt": "Os membros do agregado familiar designam o número total de pessoas que pertencem ao agregado familiar, incluindo os residentes (membros com intenção de dormir no agregado familiar nos 3 meses seguintes) e não residentes (membros com vinculo ao agregado que não pretendem dormir no agregado familiar nos 3 meses seguintes)",
             "sw": "Wanakaya hurejelea jumla ya idadi ya watu ambao ni wa kaya hiyo, ikijumuisha wakazi (watu walio na nia ya kulala katika kaya hiyo katika miezi 3 inayofuata) na wasio wakazi (watu wasio na nia ya kulala katika kaya hiyo katika miezi 3 inayofuata)"
           },
-          "_row_num": 174
+          "_row_num": 173
         },
         "hh_roster": {
           "string_token": "hh_roster",
           "text": {
             "default": "Current Household Members Roster",
-            "pt": "Current Household Members Roster",
-            "sw": "Current Household Members Roster"
+            "pt": "Rosto dos membros actuais do agregado",
+            "sw": "Orodha ya sasa ya wanakaya"
           },
-          "_row_num": 175
+          "_row_num": 174
         },
         "hh_roster.hint": {
           "string_token": "hh_roster.hint",
           "text": {
             "default": "To change resident status, click on 'edit' icon beside the member's name",
-            "pt": "To change resident status, click on 'edit' icon beside the member's name",
-            "sw": "To change resident status, click on 'edit' icon beside the member's name"
+            "pt": "Para mudar o estado de residencia, clique no icone 'editar' a loado do nome do membro.",
+            "sw": "Kubadilisha hali ya mkazi, bonyeza alama ya 'edit/hariri' kando ya jina la mwanakaya"
           },
-          "_row_num": 176
+          "_row_num": 175
         },
         "members_left": {
           "string_token": "members_left",
@@ -11201,43 +11197,43 @@
             "pt": "Membros que já não fazem parte do agregado familiar",
             "sw": "Wanakaya wasio sehemu ya kaya tena"
           },
-          "_row_num": 177
+          "_row_num": 176
         },
         "member_left_select": {
           "string_token": "member_left_select",
           "text": {
             "default": "Which member(s) is/are no longer present in the household?",
-            "pt": "Which member(s) is/are no longer present in the household?",
-            "sw": "Which member(s) is/are no longer present in the household?"
+            "pt": "Qual membro não esta presente no agregado?",
+            "sw": "Je, ni mwanakaya gani hayupo tena katika kaya?"
           },
-          "_row_num": 178
+          "_row_num": 177
         },
         "member_left_prompt": {
           "string_token": "member_left_prompt",
           "text": {
             "default": "<h4>You will be prompted to answer questions for the member(s) no longer in this household. </h4>",
-            "pt": "<h4>You will be prompted to answer questions for the member(s) no longer in this household. </h4>",
-            "sw": "<h4>You will be prompted to answer questions for the member(s) no longer in this household. </h4>"
+            "pt": "<h4>Você será solicitado a responder perguntas sobre o (s) membro (s) que não estão mais neste agregado.</h4>",
+            "sw": "<h4> Utaombwa kujibu maswali ya washiriki ambao hawako tena katika kaya hii. </ h4>"
           },
-          "_row_num": 179
+          "_row_num": 178
         },
         "member_left_detail": {
           "string_token": "member_left_detail",
           "text": {
             "default": "<h3>Details about member no longer part of the household</h3>",
-            "pt": "<h3>Details about member no longer part of the household</h3>",
-            "sw": "<h3>Details about member no longer part of the household</h3>"
+            "pt": "<h3>Detalhes sobre o (s) membro (s) que não estão mais neste agregado.</h3>",
+            "sw": "<h3> Maelezo kuhusu washiriki ambao sio sehemu ya kaya </h3>"
           },
-          "_row_num": 180
+          "_row_num": 179
         },
         "member_detail": {
           "string_token": "member_detail",
           "text": {
             "default": "Details about household member",
-            "pt": "Details about household member",
-            "sw": "Details about household member"
+            "pt": "Detalhes sobre o membro do agregado",
+            "sw": "Taarifa kuhusu Wanakaya"
           },
-          "_row_num": 181
+          "_row_num": 180
         },
         "hh_present": {
           "string_token": "hh_present",
@@ -11246,16 +11242,16 @@
             "pt": "<h4>Membros do agregado familiar presentes no momento da visita</h4>",
             "sw": "<h4>Wanakaya waliopo wakati wa ziara</h4>"
           },
-          "_row_num": 182
+          "_row_num": 181
         },
         "hh_absent": {
           "string_token": "hh_absent",
           "text": {
             "default": "If a member is absent at the time of this interview, click on the \"edit\" icon to add details about their absence.",
-            "pt": "If a member is absent at the time of this interview, click on the \"edit\" icon to add details about their absence.",
-            "sw": "If a member is absent at the time of this interview, click on the \"edit\" icon to add details about their absence."
+            "pt": "Se um membro estiver ausente no momento desta entrevista, clique no ícone \"editar\" para adicionar detalhes sobre sua ausência.",
+            "sw": "Ikiwa mwanakaya hayupo wakati wa mahojiano haya, bonyeza alama ya \"Edit/hariri\" ili kuongeza maelezo juu ya kutokuwepo kwao."
           },
-          "_row_num": 183
+          "_row_num": 182
         },
         "hh_head": {
           "string_token": "hh_head",
@@ -11264,34 +11260,34 @@
             "pt": "Chefe do agregado familiar:",
             "sw": "Mkuu wa kaya:"
           },
-          "_row_num": 184
+          "_row_num": 183
         },
         "hh_head_modify": {
           "string_token": "hh_head_modify",
           "text": {
             "default": "Select from the list below:",
-            "pt": "Select from the list below:",
-            "sw": "Select from the list below:"
+            "pt": "Selecione da lista abaixo:",
+            "sw": "Chagua kutoka kwenye orodha hapa chini:"
           },
-          "_row_num": 185
+          "_row_num": 184
         },
         "hh_head_sub_modify": {
           "string_token": "hh_head_sub_modify",
           "text": {
             "default": "Select from the list below:",
-            "pt": "Select from the list below:",
-            "sw": "Select from the list below:"
+            "pt": "Selecione da lista abaixo:",
+            "sw": "Chagua kutoka kwenye orodha hapa chini:"
           },
-          "_row_num": 186
+          "_row_num": 185
         },
         "select_one": {
           "string_token": "select_one",
           "text": {
             "default": "You can only select one option.",
-            "pt": "You can only select one option.",
-            "sw": "You can only select one option."
+            "pt": "Você pode escolher somente uma opcão",
+            "sw": "Unaweza kuchagua jibu moja tu"
           },
-          "_row_num": 187
+          "_row_num": 186
         },
         "housing_h3": {
           "string_token": "housing_h3",
@@ -11300,7 +11296,7 @@
             "pt": "<h3>Habitação</h3>",
             "sw": "<h3>Makazi</h3>"
           },
-          "_row_num": 188
+          "_row_num": 187
         },
         "kitchen_h4": {
           "string_token": "kitchen_h4",
@@ -11309,7 +11305,7 @@
             "pt": "<h4>Características da cozinha</h4>",
             "sw": "<h4>Sifa za jikoni</h4>"
           },
-          "_row_num": 189
+          "_row_num": 188
         },
         "water_h4": {
           "string_token": "water_h4",
@@ -11318,7 +11314,7 @@
             "pt": "<h4>Água</h4>",
             "sw": "<h4>Maji</h4>"
           },
-          "_row_num": 190
+          "_row_num": 189
         },
         "sanitation_h3": {
           "string_token": "sanitation_h3",
@@ -11327,16 +11323,16 @@
             "pt": "<h3>Saneamento</h3>",
             "sw": "<h3>Usafi wa mazingira</h3>"
           },
-          "_row_num": 191
+          "_row_num": 190
         },
         "latrine_h4": {
           "string_token": "latrine_h4",
           "text": {
             "default": "<h4>Latrine details</h4>",
-            "pt": "<h4>Latrine details</h4>",
-            "sw": "<h4>Latrine details</h4>"
+            "pt": "<h4>Detalhes da latrina</h4>",
+            "sw": "<h4>Taarifa za Choo</h4>"
           },
-          "_row_num": 192
+          "_row_num": 191
         },
         "goods_h3": {
           "string_token": "goods_h3",
@@ -11345,7 +11341,7 @@
             "pt": "<h3>Propriedade de bens</h3>",
             "sw": "<h3>Umiliki wa bidhaa</h3>"
           },
-          "_row_num": 193
+          "_row_num": 192
         },
         "w_10houses": {
           "string_token": "w_10houses",
@@ -11354,7 +11350,7 @@
             "pt": "<span style=\"color:red\">Você inseriu mais de 10 casas. Por favor verifique esta informacão.</span>",
             "sw": "<span style=\"color:red\">Umeingia zaidi ya nyumba 10. Tafadhali thibitisha taafira hii.</span>"
           },
-          "_row_num": 194
+          "_row_num": 193
         },
         "w_houses_toomany": {
           "string_token": "w_houses_toomany",
@@ -11363,7 +11359,7 @@
             "pt": "<span style=\"color:red\">Isto deve ser menor ou igual que o numero total de casas (construcoes).</span>",
             "sw": "<span style=\"color:red\">Idadi hii lazima iwe pungufu au sawa na jumla ya idadi ya nyumba (majengo).</span>"
           },
-          "_row_num": 195
+          "_row_num": 194
         },
         "w_5wall": {
           "string_token": "w_5wall",
@@ -11372,7 +11368,7 @@
             "pt": "<span style=\"color:red\">Você selecionou mais de 5 mateiriais de construcão da parede. Por favor verique que isto esta correcto.</span>",
             "sw": "<span style=\"color:red\">Umechagua zaidi ya malighafi 5 za kuta. Tafadhali thibitisha kuwa hii na sahihi.</span>"
           },
-          "_row_num": 196
+          "_row_num": 195
         },
         "w_bricks": {
           "string_token": "w_bricks",
@@ -11381,7 +11377,7 @@
             "pt": "<span style=\"color:red\">O material usado para construcao da casa principal indicado foi \"Casa convencional feita de tijolos e cimento\" mas nem \"blocos de cimento\" ou \"blocos de adobe\"  estao selecionados como material de parede. Por favor verifique.</span>",
             "sw": "<span style=\"color:red\">Aina kuu ya jengo la nyumba imeonyeshwa kuwa \"Nyumba ya kawaida iliyotengenezwa kwa matofali na saruji\" lakini \"Tofali za saruji\" wala \"Tofali\" hazijachaguliwa kama malighafi ya ukuta. Tafadhali thibitisha</span>"
           },
-          "_row_num": 197
+          "_row_num": 196
         },
         "w_water": {
           "string_token": "w_water",
@@ -11390,7 +11386,7 @@
             "pt": "<span style=\"color:red\">Existe uma discrepancia entre o local de abastecimento de agua e o tempo levado para ir e voltar deste local. Por favor verifique selecoes.</span>",
             "sw": "<span style=\"color:red\">Kuna utata kati ya eneo la chanzo cha maji na muda unaotumika kufikia chanzo kikuu cha maji na kurudi. Tafadhali thibitisha chaguzi zako.</span>"
           },
-          "_row_num": 198
+          "_row_num": 197
         },
         "w_tv": {
           "string_token": "w_tv",
@@ -11399,7 +11395,7 @@
             "pt": "<span style=\"color:red\">Na P.42 Nem \"Electricidade\",  \"Gerador\" ou \"Painel solar\" foi selecionado, mas na P.43 \"TV\" foi selecionado. Por favor verifique que isto esta correcto</span>",
             "sw": "<span style=\"color:red\">Katika swali la Q42 Umeme\", \"Jenereta\", wala \"Nguvu ya jua\" havikuchaguliwa, lakini katika swali la Q43 \"TV\" imechaguliwa. Tafadhali thibitisha hii ni sahihi..</span>"
           },
-          "_row_num": 199
+          "_row_num": 198
         },
         "w_4ceiling": {
           "string_token": "w_4ceiling",
@@ -11408,7 +11404,7 @@
             "pt": "<span style=\"color:red\">Você selecionou mais de 4 materiais de cobertura. Por favor verique se isto esta correcto.</span>",
             "sw": "<span style=\"color:red\">Umechagua zaidi ya malighafi 4 za dari. Tafadhali thibitisha kuwa hii na sahihi</span>"
           },
-          "_row_num": 200
+          "_row_num": 199
         },
         "w_4floor": {
           "string_token": "w_4floor",
@@ -11417,7 +11413,7 @@
             "pt": "<span style=\"color:red\">Você selecionou mais de 4 materiais de construcao do chao. Por favor verifique se isto esta correcto.</span>",
             "sw": "<span style=\"color:red\">Umechagua zaidi ya malighafi 4 za sakafu. Tafadhali thibitisha kuwa hii na sahihi</span>"
           },
-          "_row_num": 201
+          "_row_num": 200
         },
         "w_none": {
           "string_token": "w_none",
@@ -11426,7 +11422,7 @@
             "pt": "Você não pode selecionar 'Nenhum' junto com as outras respostas.",
             "sw": "Huwezi kuchagua \"Hakuna\" pamoja na majibu mengine"
           },
-          "_row_num": 203
+          "_row_num": 201
         },
         "w_all_dk": {
           "string_token": "w_all_dk",
@@ -11435,7 +11431,7 @@
             "pt": "Você não pode selecionar 'Todos' ou \"Não sabe\" junto com as outras respostas.",
             "sw": "Huwezi kuchagua \"Yote\" au \"Sijui\" pamoja na majibu mengine"
           },
-          "_row_num": 204
+          "_row_num": 202
         },
         "w_no_dk": {
           "string_token": "w_no_dk",
@@ -11444,15 +11440,16 @@
             "pt": "Você não pode selecionar \"Não\" ou\"Não sabe\" junto com as outras respostas.",
             "sw": "Huwezi kuchagua \"Hapana\" au \"Sijui\" pamoja na majibu mengine"
           },
-          "_row_num": 205
+          "_row_num": 203
         },
         "w_pna": {
           "string_token": "w_pna",
           "text": {
             "default": "You cannot select ‘No’ or ‘Prefer not to answer’ along with other options.",
+            "pt": "Você não pode selecionar \"Não\" ou \"Prefere não responder\" junto com as outras respostas.",
             "sw": "Huwezi kuchagua \"Hapana\" au \"Amependa kutokujibu\" pamoja na majibu mengine"
           },
-          "_row_num": 206
+          "_row_num": 204
         },
         "w_no_dk_no_animals": {
           "string_token": "w_no_dk_no_animals",
@@ -11461,7 +11458,7 @@
             "pt": "Você não pode selecionar \"Não\", \"Não sabe\", ou \"Não teve [gado/porcos] nos ultimos 30 dias\" junto com as outras respostas.",
             "sw": "Huwezi kuchagua \"Hapana\", \"Sijui\", au \"Hakuwa na [ng'ombe / nguruwe] katika siku 30 zilizopita\" pamoja na majibu mengine"
           },
-          "_row_num": 207
+          "_row_num": 205
         },
         "w_none_dk": {
           "string_token": "w_none_dk",
@@ -11470,7 +11467,7 @@
             "pt": "Você não pode selecionar 'Nenhum' ou \"Não sabe\" junto com as outras respostas.",
             "sw": "Huwezi kuchagua \"Hakuna\" au \"Sijui\" pamoja na majibu mengine"
           },
-          "_row_num": 208
+          "_row_num": 206
         },
         "too_many_animals": {
           "string_token": "too_many_animals",
@@ -11479,7 +11476,7 @@
             "pt": "Haiwezi kuzidi 100.",
             "sw": "Nao pode exceder 100."
           },
-          "_row_num": 209
+          "_row_num": 207
         },
         "animals_h3": {
           "string_token": "animals_h3",
@@ -11488,7 +11485,7 @@
             "pt": "<h3>Animais</h3>",
             "sw": "<h3>Wanyama</h3>"
           },
-          "_row_num": 210
+          "_row_num": 208
         },
         "cattle_f": {
           "string_token": "cattle_f",
@@ -11497,7 +11494,7 @@
             "pt": "Bovino fêmea adulta > 1 ano de idade",
             "sw": "Jike mkubwa Umri zaidi ya mwaka 1"
           },
-          "_row_num": 211
+          "_row_num": 209
         },
         "cattle_m": {
           "string_token": "cattle_m",
@@ -11506,7 +11503,7 @@
             "pt": "Bovino macho adulto > 1 ano de idade",
             "sw": "Ndume mkubwa umri zaidi ya mwaka 1"
           },
-          "_row_num": 212
+          "_row_num": 210
         },
         "cattle_1": {
           "string_token": "cattle_1",
@@ -11515,7 +11512,7 @@
             "pt": "Bovino macho/fêmea < 1 ano de idade",
             "sw": "Ng’ombe jike/dume umri chini ya mwaka 1"
           },
-          "_row_num": 213
+          "_row_num": 211
         },
         "cattle_not_found": {
           "string_token": "cattle_not_found",
@@ -11524,7 +11521,7 @@
             "pt": "Você indicou que a o agregado actualmente possui gado, mas nenhum deles foi inserido abaixo. Por favor verifique.",
             "sw": "Umeonyesha kuwa kaya inamiliki ng'ombe kwasasa lakini hakuna taarifa iliyojazwa hapo juu. Tafadhali thibitisha."
           },
-          "_row_num": 214
+          "_row_num": 212
         },
         "pig_>6": {
           "string_token": "pig_>6",
@@ -11533,7 +11530,7 @@
             "pt": "Porcos > 6 semanas",
             "sw": "Nguruwe zaid ya wiki 6"
           },
-          "_row_num": 215
+          "_row_num": 213
         },
         "pig_<6": {
           "string_token": "pig_<6",
@@ -11542,7 +11539,7 @@
             "pt": "Porcos < 6 semanas",
             "sw": "Nguruwe chini ya wiki 6"
           },
-          "_row_num": 216
+          "_row_num": 214
         },
         "pigs_not_found": {
           "string_token": "pigs_not_found",
@@ -11551,25 +11548,25 @@
             "pt": "Você indicou que a o agregado actualmente possui porcos, mas nenhum deles foi inserido abaixo. Por favor verifique.",
             "sw": "Umeonyesha kuwa kaya inamiliki nguruwe kwasasa lakini hakuna taarifa iliyojazwa hapo juu. Tafadhali thibitisha."
           },
-          "_row_num": 217
+          "_row_num": 215
         },
         "cattle_h5": {
           "string_token": "cattle_h5",
           "text": {
             "default": "<h5>You will now be asked questions regarding your cattle.</h5>",
-            "pt": "<h5>You will now be asked questions regarding your cattle.</h5>",
-            "sw": "<h5>You will now be asked questions regarding your cattle.</h5>"
+            "pt": "<h5>Agora você será questionado sobre o seu gado.</h5>",
+            "sw": "<h5>Sasa utaulizwa maswali kuhusu ng'ombe wako.</h5>"
           },
-          "_row_num": 218
+          "_row_num": 216
         },
         "pig_h5": {
           "string_token": "pig_h5",
           "text": {
             "default": "<h5>You will now be asked questions regarding your pigs.</h5>",
-            "pt": "<h5>You will now be asked questions regarding your pigs.</h5>",
-            "sw": "<h5>You will now be asked questions regarding your pigs.</h5>"
+            "pt": "<h5>Agora você será questionado sobre os seus porcos.</h5>",
+            "sw": "<h5>Sasa utaulizwa maswali kuhusu nguruwe.</h5>"
           },
-          "_row_num": 219
+          "_row_num": 217
         },
         "intervention_implication": {
           "string_token": "intervention_implication",
@@ -11578,16 +11575,16 @@
             "pt": "Implicações para a implementação da intervenção:",
             "sw": "Mapendekezo kwa ajili ya kutumika kwa afua:"
           },
-          "_row_num": 220
+          "_row_num": 218
         },
         "distance_inconsistent": {
           "string_token": "distance_inconsistent",
           "text": {
             "default": "<span style=\"color:red\">You indicated a location within 15m of the house, but selected a distance over 50m. Please verify selections. </span>",
-            "pt": "<span style=\"color:red\">You indicated a location within 15m of the house, but selected a distance over 50m. Please verify selections. </span>",
-            "sw": "<span style=\"color:red\">You indicated a location within 15m of the house, but selected a distance over 50m. Please verify selections. </span>"
+            "pt": "<span style=\"color:red\">Você indicou uma distancia dentro de 15 metros da casa na mas selecionou a distancia  >50m. </span>",
+            "sw": "<span style=\"color:red\">Umeonyesha umbali ni ndani ya mita 15 kutoka nyumba katika 45a/b lakini umechagua umbali > 50m katika 45c.</span>"
           },
-          "_row_num": 221
+          "_row_num": 219
         },
         "w_less_50": {
           "string_token": "w_less_50",
@@ -11596,43 +11593,43 @@
             "pt": "Nao pode exceder 50.",
             "sw": "Haiwezi kuzidi 50."
           },
-          "_row_num": 222
+          "_row_num": 220
         },
         "water_prompt": {
           "string_token": "water_prompt",
           "text": {
             "default": "You will be asked to provide details about the {{data.water_bodies_num}} bodies of water.",
-            "pt": "You will be asked to provide details about the {{data.water_bodies_num}} bodies of water.",
-            "sw": "You will be asked to provide details about the {{data.water_bodies_num}} bodies of water."
+            "pt": "Você será solicitado a fornecer detalhes sobre os corpos de água de {{data.water_bodies_num}}.",
+            "sw": "Utaulizwa utoe maelezo juu ya maeneo {{data.water_bodies_num}} ya maji."
           },
-          "_row_num": 223
+          "_row_num": 221
         },
         "water_detail": {
           "string_token": "water_detail",
           "text": {
             "default": "Water Body Details",
-            "pt": "Water Body Details",
-            "sw": "Water Body Details"
+            "pt": "Detalhes do corpo de agua",
+            "sw": "Maelezo kuhusu maeneo ya maji"
           },
-          "_row_num": 224
+          "_row_num": 222
         },
         "net_prompt": {
           "string_token": "net_prompt",
           "text": {
             "default": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_num_nets}} nets.</h5>",
-            "pt": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_num_nets}} nets.</h5>",
-            "sw": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_num_nets}} nets.</h5>"
+            "pt": "<h5> Você será solicitado a responder perguntas adicionais para cada uma das redes {{data.hh_num_nets}}. </h5>",
+            "sw": "<h5> Utaombwa kujibu maswali ya nyongeza kwa kila moja ya nyavu {{data.hh_num_nets}}. </h5>"
           },
-          "_row_num": 225
+          "_row_num": 223
         },
         "net_detail": {
           "string_token": "net_detail",
           "text": {
             "default": "Mosquito Net Details",
-            "pt": "Mosquito Net Details",
-            "sw": "Mosquito Net Details"
+            "pt": "Detalhes das redes mosquiteiras",
+            "sw": "Maelezo kuhusu vyandarua vya mbu"
           },
-          "_row_num": 226
+          "_row_num": 224
         },
         "malaria_h3": {
           "string_token": "malaria_h3",
@@ -11641,7 +11638,7 @@
             "pt": "<h3>Informações sobre ferramentas de prevenção da malária</h3>",
             "sw": "<h3>Maelezo kuhusu vifaa vya kudhibiti malaria</h3>"
           },
-          "_row_num": 227
+          "_row_num": 225
         },
         "spray_date": {
           "string_token": "spray_date",
@@ -11650,52 +11647,52 @@
             "pt": "Data Não pode ser no futuro",
             "sw": "Tarehe haiwezi kuwa ya mbeleni"
           },
-          "_row_num": 228
+          "_row_num": 226
         },
         "health_facility_only_one": {
           "string_token": "health_facility_only_one",
           "text": {
             "default": "You cannot select Select from drop-down list of selected health facilities along with other option",
-            "pt": "You cannot select Select from drop-down list of selected health facilities along with other option",
-            "sw": "You cannot select Select from drop-down list of selected health facilities along with other option"
+            "pt": "Você não pode selecionar na da lista das unidades de sanitarias junto com as outras opçoes",
+            "sw": "Huwezi kuchagua kutoka orodha ya vituo vya afya vilivyochaguliwa pamoja na kuchagua nyingine"
           },
-          "_row_num": 229
+          "_row_num": 227
         },
         "snake_h3": {
           "string_token": "snake_h3",
           "text": {
             "default": "<h3>Snake bites</h3>",
-            "pt": "<h3>Snake bites</h3>",
-            "sw": "<h3>Snake bites</h3>"
+            "pt": "<h3>Mordida de cobra</h3>",
+            "sw": "<h3>Kugongwa na Nyoka</h3>"
           },
-          "_row_num": 230
+          "_row_num": 228
         },
         "snake_prompt": {
           "string_token": "snake_prompt",
           "text": {
             "default": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>",
-            "pt": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>",
-            "sw": "<h5>You will be prompted to answer additional questions for the {{data.any_snake_bite_num}} individual(s) who have experienced a snake bite.</h5>"
+            "pt": "<h5> Será solicitado que você responda a perguntas adicionais para {{data.any_snake_bite_num}} indivíduo (s) que foi picado por uma cobra. </h5>",
+            "sw": "<h5> Utaombwa kujibu maswali ya nyongeza kwa  mtu/watu {{data.any_snake_bite_num}}  ambao wamepata kuumwa na nyoka. </h5>"
           },
-          "_row_num": 231
+          "_row_num": 229
         },
         "snake_detail": {
           "string_token": "snake_detail",
           "text": {
             "default": "Snake Bite details",
-            "pt": "Snake Bite details",
-            "sw": "Snake Bite details"
+            "pt": "Detalhes da mordida de cobra",
+            "sw": "Maelezo kuhusu kuumwa na nyoka"
           },
-          "_row_num": 232
+          "_row_num": 230
         },
         "snake_linked_table": {
           "string_token": "snake_linked_table",
           "text": {
             "default": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>",
-            "pt": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>",
-            "sw": "<h5>Answer additional questions for the individual(s) who have experienced a snake bite.</h5>"
+            "pt": "<h5>Responda perguntas adicionais para os indivíduos que foram picados por cobra.</h5>",
+            "sw": "<h5> Jibu maswali ya ziada kwa mtu/watu ambao wamepata kuumwa na nyoka. </h5>"
           },
-          "_row_num": 233
+          "_row_num": 231
         },
         "death_new_only": {
           "string_token": "death_new_only",
@@ -11704,25 +11701,25 @@
             "pt": "Apenas para os novos agregados familiares (agregados que não fizeram parte do minicenso)",
             "sw": "Kwa kaya mpya tu (kaya ambazo hazikuwa sehemu ya sensa ndogo)"
           },
-          "_row_num": 235
+          "_row_num": 232
         },
         "death_prompt": {
           "string_token": "death_prompt",
           "text": {
             "default": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_death_count }} death(s).</h5>",
-            "pt": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_death_count }} death(s).</h5>",
-            "sw": "<h5>You will be prompted to answer additional questions for each of the {{data.hh_death_count }} death(s).</h5>"
+            "pt": "<h5> Será solicitado a responder perguntas adicionais para cada um dos {{data.hh_death_count}} morte (s). </h5>",
+            "sw": "<h5> Utaombwa kujibu maswali ya ziada kwa kila kifo kati ya vifo {{data.hh_death_count}}. </h5>"
           },
-          "_row_num": 236
+          "_row_num": 233
         },
         "ind_prompt": {
           "string_token": "ind_prompt",
           "text": {
             "default": "You are about to begin the individual questionnaire. For each RESIDENT member in the household, a separate form will be filled out.",
-            "pt": "You are about to begin the individual questionnaire. For each RESIDENT member in the household, a separate form will be filled out.",
-            "sw": "You are about to begin the individual questionnaire. For each RESIDENT member in the household, a separate form will be filled out."
+            "pt": "Você está prestes a iniciar o questionário individual. Para cada membro RESIDENTE da família, um formulário separado será preenchido.",
+            "sw": "Unatarajia kuanza dodoso la Mtu Binafsi. Kwa kila mwanakaya MKAZI katika kaya, dodoso tofauti litajazwa"
           },
-          "_row_num": 238
+          "_row_num": 234
         },
         "q11": {
           "string_token": "q11",
@@ -11731,7 +11728,7 @@
             "pt": "11. Há membros novos no agregado familiar? (Para além dos que já constam da lista)",
             "sw": "11. Kuna watu wapya katika kaya? (Tofauti na wale tayari walio katika orodha?)"
           },
-          "_row_num": 240
+          "_row_num": 236
         },
         "q11a": {
           "string_token": "q11a",
@@ -11740,7 +11737,7 @@
             "pt": "11a. Quantos membros novos estão no agregado familiar?",
             "sw": "11a. Ni wanakaya wangapi wapya walio katika kaya?"
           },
-          "_row_num": 241
+          "_row_num": 237
         },
         "q12": {
           "string_token": "q12",
@@ -11749,7 +11746,7 @@
             "pt": "12. Esta pessoa é um recém-nascido ou alguém que se tenha mudado para a casa?",
             "sw": "12. Je, mtu huyu ni mtoto mchanga au ni mtu aliyehamia katika nyumba hii?"
           },
-          "_row_num": 242
+          "_row_num": 238
         },
         "q26": {
           "string_token": "q26",
@@ -11758,7 +11755,7 @@
             "pt": "26. Chefe do agregado familiar",
             "sw": "26. Mkuu wa kaya"
           },
-          "_row_num": 243
+          "_row_num": 239
         },
         "q27": {
           "string_token": "q27",
@@ -11767,7 +11764,7 @@
             "pt": "27. Chefe de agregado substituto",
             "sw": "27. Mbadala wa Mkuu wa kaya:"
           },
-          "_row_num": 244
+          "_row_num": 240
         },
         "q28": {
           "string_token": "q28",
@@ -11776,7 +11773,7 @@
             "pt": "28. Parentesco do chefe de agregado substituto com o chefe do agregado familiar",
             "sw": "28. Uhusiano wa Mbadala wa Mkuu wa Kaya na Mkuu wa Kaya"
           },
-          "_row_num": 245
+          "_row_num": 241
         },
         "q29": {
           "string_token": "q29",
@@ -11785,7 +11782,7 @@
             "pt": "29. Quem assinou o consentimento informado?",
             "sw": "29. Ni nani aliyeweka saini fomu ya ridhaa?"
           },
-          "_row_num": 246
+          "_row_num": 242
         },
         "q29.hint": {
           "string_token": "q29.hint",
@@ -11794,7 +11791,7 @@
             "pt": "(As caixas de Participação do agregado familiar e Chefe/chefe substituto do agregado familiar têm de ser assinadas)",
             "sw": "(Lazima visanduku vya Ushiriki wa kaya na Mkuu wa kaya/Mbadala wa Mkuu wa kaya viwekwe saini)"
           },
-          "_row_num": 247
+          "_row_num": 243
         },
         "q30": {
           "string_token": "q30",
@@ -11803,7 +11800,7 @@
             "pt": "30. Quem responde às perguntas?",
             "sw": "30. Ni nani anayejibu maswali?"
           },
-          "_row_num": 248
+          "_row_num": 244
         },
         "q31": {
           "string_token": "q31",
@@ -11812,7 +11809,7 @@
             "pt": "31. Número total de edificações (construções)",
             "sw": "31. Jumla ya idadi ya nyumba (majengo)"
           },
-          "_row_num": 249
+          "_row_num": 245
         },
         "q31a": {
           "string_token": "q31a",
@@ -11821,7 +11818,7 @@
             "pt": "31a. Número total de edificações (construções) usados para dormir",
             "sw": "31a. Jumla ya idadi ya nyumba (majengo) zinazotumika kulala"
           },
-          "_row_num": 250
+          "_row_num": 246
         },
         "q32": {
           "string_token": "q32",
@@ -11830,7 +11827,7 @@
             "pt": "32. Número total de quartos (compartimentos) usados para dormir",
             "sw": "32. Jumla ya idadi ya vyumba (vyumba vidogo) vinavyotumika kulala"
           },
-          "_row_num": 251
+          "_row_num": 247
         },
         "q33": {
           "string_token": "q33",
@@ -11839,7 +11836,7 @@
             "pt": "33. Tipologia da edificação principal (edifício)",
             "sw": "33. Aina ya makazi makuu (jengo)"
           },
-          "_row_num": 252
+          "_row_num": 248
         },
         "q34": {
           "string_token": "q34",
@@ -11848,7 +11845,7 @@
             "pt": "34. Material da parede da edificação principal",
             "sw": "34. Malighafi iliyojengea kuta za nyumba kuu"
           },
-          "_row_num": 253
+          "_row_num": 249
         },
         "q35": {
           "string_token": "q35",
@@ -11857,7 +11854,7 @@
             "pt": "35. Material do teto da edificação principal",
             "sw": "35. Malighafi iliyojengea paa la nyumba kuu"
           },
-          "_row_num": 254
+          "_row_num": 250
         },
         "q36": {
           "string_token": "q36",
@@ -11866,7 +11863,7 @@
             "pt": "36. Material do chão da edificação principal",
             "sw": "36. Malighafi iliyojengea sakafu ya nyumba kuu"
           },
-          "_row_num": 255
+          "_row_num": 251
         },
         "q37": {
           "string_token": "q37",
@@ -11875,7 +11872,7 @@
             "pt": "37. Redes mosquiteiras de casa",
             "sw": "37. Nyavu za nyumba"
           },
-          "_row_num": 256
+          "_row_num": 252
         },
         "q38": {
           "string_token": "q38",
@@ -11884,16 +11881,16 @@
             "pt": "38. Onde é que a família cozinha?",
             "sw": "38. Je, familia hupikia wapi?"
           },
-          "_row_num": 257
+          "_row_num": 253
         },
         "q38a": {
           "string_token": "q38a",
           "text": {
-            "default": "38a. [If answer to Q18 is other than “Food is not cooked at home”] Main energy source used for cooking:",
-            "pt": "38a. [Se a resposta à Q18 for diferente de «Em casa não se cozinham alimentos»] Energia principal utilizada para cozinhar:",
-            "sw": "38a. [Ikiwa jibu la Q18 ni lingine kando na \"Chakula hakipikwi nyumbani”] Chanzo kikuu cha nishati kinachotumika kupika:"
+            "default": "38a. Main energy source used for cooking:",
+            "pt": "38a. Energia principal utilizada para cozinhar:",
+            "sw": "38a. Chanzo kikuu cha nishati kinachotumika kupika:"
           },
-          "_row_num": 258
+          "_row_num": 254
         },
         "q39": {
           "string_token": "q39",
@@ -11902,7 +11899,7 @@
             "pt": "39. Qual é a principal fonte de água utilizada para consumo (cozinhar e higiene)?",
             "sw": "39. Ni kipi chanzo kikuu cha maji yanayotumika kwa matumizi (kupika na usafi)?"
           },
-          "_row_num": 259
+          "_row_num": 255
         },
         "q40": {
           "string_token": "q40",
@@ -11911,7 +11908,7 @@
             "pt": "40.Quanto tempo demora, no total, a alcançar a principal fonte de água, para ir buscar água, e voltar?",
             "sw": "40. Je, huchukua muda gani, kwa jumla, kufikia chanzo kikuu cha maji, kuchota maji na kurudi?"
           },
-          "_row_num": 260
+          "_row_num": 256
         },
         "q41": {
           "string_token": "q41",
@@ -11920,7 +11917,7 @@
             "pt": "41. Existe uma latrina no agregado familiar?",
             "sw": "41. Je, kaya ina choo?"
           },
-          "_row_num": 261
+          "_row_num": 257
         },
         "q41a": {
           "string_token": "q41a",
@@ -11929,7 +11926,7 @@
             "pt": "41a. Se não existir uma latrina neste agregado familiar, onde é que os habitantes deste agregado familiar defecam?",
             "sw": "41a. Ikiwa hakuna choo katika kaya hii, wakazi wa kaya hii hujisaidia wapi?"
           },
-          "_row_num": 262
+          "_row_num": 258
         },
         "q41b": {
           "string_token": "q41b",
@@ -11938,7 +11935,7 @@
             "pt": "41b. O lugar onde os habitantes deste agregado familiar defecam situa-se perto (<10 m) de uma massa de água?",
             "sw": "41b. Je, mahali ambapo wakazi huenda kujisaidi ni karibu (<mita10) na maji?"
           },
-          "_row_num": 263
+          "_row_num": 259
         },
         "q41c": {
           "string_token": "q41c",
@@ -11947,16 +11944,16 @@
             "pt": "41c. [Se sim] Quantas latrinas?",
             "sw": "41c. [Ikiwa ndiyo] Vyoo vingapi?"
           },
-          "_row_num": 264
+          "_row_num": 260
         },
         "q41c.hint": {
           "string_token": "q41c.hint",
           "text": {
             "default": "<h5>You will be prompted to answer questions for the {{data.hh_how_many_latrines}} latrine(s)</h5>",
-            "pt": "<h5>You will be prompted to answer questions for the {{data.hh_how_many_latrines}} latrine(s)</h5>",
-            "sw": "<h5>You will be prompted to answer questions for the {{data.hh_how_many_latrines}} latrine(s)</h5>"
+            "pt": "<h5> Voce sera questionado a responder as questoes para {{data.hh_how_many_latrines}} latrina(s)</h5>",
+            "sw": "<h5>Utaombwa kujibu maswali kwa idadi ya vyoo {{data.hh_how_many_latrines}})</h5>"
           },
-          "_row_num": 265
+          "_row_num": 261
         },
         "q42": {
           "string_token": "q42",
@@ -11965,7 +11962,7 @@
             "pt": "42. Principal fonte de energia utilizada na iluminação no agregado familiar",
             "sw": "42. Chanzo kikuu cha nishati cha mwangaza wa kaya"
           },
-          "_row_num": 266
+          "_row_num": 262
         },
         "q43": {
           "string_token": "q43",
@@ -11974,7 +11971,7 @@
             "pt": "43. O agregado familiar possuir qualquer um dos seguintes (assinalar todos os que se aplicam):",
             "sw": "43. Je, kaya inamiliki chochote kati ya vitu vifuatavyo (weka alama kwa vyote vinavyo husika):"
           },
-          "_row_num": 267
+          "_row_num": 263
         },
         "q44": {
           "string_token": "q44",
@@ -11983,7 +11980,7 @@
             "pt": "44. O agregado familiar possui atualmente? (Assinalar tudo o que se aplica):",
             "sw": "44. Je, kaya yako kwa sasa inamiliki? (weka alama kwa vyote vinavyohusika):"
           },
-          "_row_num": 268
+          "_row_num": 264
         },
         "q44a": {
           "string_token": "q44a",
@@ -11992,7 +11989,7 @@
             "pt": "44a. Quantos dos seguintes animais possui o agregado familiar?",
             "sw": "44a. Je, kaya inamiliki wanyama wangapi kati ya wafuatao??"
           },
-          "_row_num": 269
+          "_row_num": 265
         },
         "q44b.cattle": {
           "string_token": "q44b.cattle",
@@ -12001,7 +11998,7 @@
             "pt": "44b. O agregado familiar tenciona possuir bovino no próximo ano?",
             "sw": "44b. Je, kaya ina mpango wa kumiliki ng’ombe yoyote mwaka unaokuja?"
           },
-          "_row_num": 270
+          "_row_num": 266
         },
         "q44b.pig": {
           "string_token": "q44b.pig",
@@ -12010,7 +12007,7 @@
             "pt": "44b. O agregado familiar tenciona possuir porcos no próximo ano?",
             "sw": "44b. Je, kaya ina mpango wa kumiliki nguruwe yoyote mwaka unaokuja?"
           },
-          "_row_num": 271
+          "_row_num": 267
         },
         "q45.cattle": {
           "string_token": "q45.cattle",
@@ -12019,7 +12016,7 @@
             "pt": "45. Onde fica guardado os bovino durante a noite?",
             "sw": "45. Je, ng’ombe hukaa wapi usiku?"
           },
-          "_row_num": 272
+          "_row_num": 268
         },
         "q45.pig": {
           "string_token": "q45.pig",
@@ -12028,7 +12025,7 @@
             "pt": "45. Onde fica guardado os porcos durante a noite?",
             "sw": "45. Je, nguruwe hukaa wapi usiku?"
           },
-          "_row_num": 273
+          "_row_num": 269
         },
         "q45a": {
           "string_token": "q45a",
@@ -12037,7 +12034,7 @@
             "pt": "45a. Durante a estação das chuvas",
             "sw": "45a. Wakati wa msimu wa mvua"
           },
-          "_row_num": 274
+          "_row_num": 270
         },
         "q45b": {
           "string_token": "q45b",
@@ -12046,7 +12043,7 @@
             "pt": "45b. Durante a estação seca",
             "sw": "45b. Wakati wa msimu wa kiangazi"
           },
-          "_row_num": 275
+          "_row_num": 271
         },
         "q45c.cattle": {
           "string_token": "q45c.cattle",
@@ -12055,7 +12052,7 @@
             "pt": "45c. Se os bovino forem guardados à noite num sítio diferente de «dentro da casa onde dormem os seres humanos», a que distância da estrutura mais próxima onde dormem as pessoas dormem esses animais?",
             "sw": "45c. Ikiwa ng’ombe huifadhiwa nyakati za usiku mahali fulani tofauti na \"ndani ambapo watu hulala\", wao hulala umbali gani kutoka kwenye nyumba ambapo watu hulala?"
           },
-          "_row_num": 276
+          "_row_num": 272
         },
         "q45c.pig": {
           "string_token": "q45c.pig",
@@ -12064,7 +12061,7 @@
             "pt": "45c. Se os porcos forem guardados à noite num sítio diferente de «dentro da casa onde dormem os seres humanos», a que distância da estrutura mais próxima onde dormem as pessoas dormem esses animais?",
             "sw": "45c. Ikiwa nguruwe huifadhiwa nyakati za usiku mahali fulani tofauti na \"ndani ambapo watu hulala\", wao hulala umbali gani kutoka kwenye nyumba ambapo watu hulala?"
           },
-          "_row_num": 277
+          "_row_num": 273
         },
         "q45ci": {
           "string_token": "q45ci",
@@ -12073,7 +12070,7 @@
             "pt": "45c(i). Durante a estação das chuvas",
             "sw": "45c (i). Wakati wa msimu wa mvua"
           },
-          "_row_num": 278
+          "_row_num": 274
         },
         "q45cii": {
           "string_token": "q45cii",
@@ -12082,7 +12079,7 @@
             "pt": "45c (ii). Durante a estação seca",
             "sw": "45c (ii). Wakati wa msimu wa kiangazi"
           },
-          "_row_num": 279
+          "_row_num": 275
         },
         "q46.cattle": {
           "string_token": "q46.cattle",
@@ -12091,7 +12088,7 @@
             "pt": "46. Onde é que a maioria dos animais desmamados (que já não bebem leite da progenitora) bovino passa o dia durante a estação das chuvas?",
             "sw": "46. Ni wapi mara nyingi ndama ng’ombe (ambao hawanyonyi kutoka kwa mama yao) hukaa wakati wa msimu wa mvua?"
           },
-          "_row_num": 280
+          "_row_num": 276
         },
         "q46.pig": {
           "string_token": "q46.pig",
@@ -12100,7 +12097,7 @@
             "pt": "46. Onde é que a maioria dos animais desmamados (que já não bebem leite da progenitora) porcos passa o dia durante a estação das chuvas?",
             "sw": "46. Ni wapi mara nyingi ndama nguruwe (ambao hawanyonyi kutoka kwa mama yao) hukaa wakati wa msimu wa mvua?"
           },
-          "_row_num": 281
+          "_row_num": 277
         },
         "q46a": {
           "string_token": "q46a",
@@ -12109,7 +12106,7 @@
             "pt": "46a. [Se confinados] A que distância do agregado familiar se encontra a estrutura?",
             "sw": "46a. [Ikiwa hufungiwa] Zizi hilo la mifugo lipo umbali gani kutoka kwenye kaya?"
           },
-          "_row_num": 282
+          "_row_num": 278
         },
         "q46b": {
           "string_token": "q46b",
@@ -12118,7 +12115,7 @@
             "pt": "46b. A que distância do agregado familiar pastam normalmente os animais?",
             "sw": "46b. Kwa kawaida mifugo huenda malishoni umbali gani kutoka kwenye kaya?"
           },
-          "_row_num": 283
+          "_row_num": 279
         },
         "q46c": {
           "string_token": "q46c",
@@ -12127,7 +12124,7 @@
             "pt": "46c. Existe algum tipo de água estagnada ou água corrente na zona de pasto do animal durante a estação das chuvas?",
             "sw": "46c. Kuna aina yoyote ya maji yaliyotuama au yanayotiririka katika eneo wanapolishwa wanyama msimu wa mvua?"
           },
-          "_row_num": 284
+          "_row_num": 280
         },
         "q46ci": {
           "string_token": "q46ci",
@@ -12136,7 +12133,7 @@
             "pt": "46c(i). [Se sim] Qual é o tipo de água?",
             "sw": "46c (i). [Ikiwa ndiyo] Maji haya ni ya aina gani?"
           },
-          "_row_num": 285
+          "_row_num": 281
         },
         "q47.cattle": {
           "string_token": "q47.cattle",
@@ -12145,7 +12142,7 @@
             "pt": "47. Os seus animais bovino tiveram alguma doença nos últimos 30 dias? (Assinalar todas as opções que se apliquem)",
             "sw": "47. Je, yeyote wa mifugo wako alikuwa na ugonjwa wowote katika siku 30 zilizopita? (weka alama kwa yote inayohusika)"
           },
-          "_row_num": 286
+          "_row_num": 282
         },
         "q47.pig": {
           "string_token": "q47.pig",
@@ -12154,7 +12151,7 @@
             "pt": "47. Os seus animais porcos tiveram alguma doença nos últimos 30 dias? (Assinalar todas as opções que se apliquem)",
             "sw": "47. Je, yeyote wa nguruwe wako alikuwa na ugonjwa wowote katika siku 30 zilizopita? (weka alama kwa yote inayohusika)"
           },
-          "_row_num": 287
+          "_row_num": 283
         },
         "q48.cattle": {
           "string_token": "q48.cattle",
@@ -12163,7 +12160,7 @@
             "pt": "48. Se de momento não possui bovino, teve bovino nos últimos 12 meses",
             "sw": "48. Ikiwa kwa sasa humiliki ng’ombe, je, ulikuwa unamiliki ng’ombe katika miezi 12 iliyopita"
           },
-          "_row_num": 288
+          "_row_num": 284
         },
         "q48.pig": {
           "string_token": "q48.pig",
@@ -12172,7 +12169,7 @@
             "pt": "48. Se de momento não possui porcos, teve porcos nos últimos 12 meses",
             "sw": "48. Ikiwa kwa sasa humiliki nguruwe, je, ulikuwa unamiliki nguruwe katika miezi 12 iliyopita"
           },
-          "_row_num": 289
+          "_row_num": 285
         },
         "q49.cattle": {
           "string_token": "q49.cattle",
@@ -12181,7 +12178,7 @@
             "pt": "49. Nos últimos 12 meses, foi administrada ivermectina a algum dos seus animais bovino?",
             "sw": "49. Katika miezi 12 iliyopita, yoyote kati ya, ng’ombe wako alipokea ivamektini?"
           },
-          "_row_num": 290
+          "_row_num": 286
         },
         "q49.pig": {
           "string_token": "q49.pig",
@@ -12190,7 +12187,7 @@
             "pt": "49. Nos últimos 12 meses, foi administrada ivermectina a algum dos seus animais porcos?",
             "sw": "49. Katika miezi 12 iliyopita, yoyote kati ya, nguruwe wako alipokea ivamektini?"
           },
-          "_row_num": 291
+          "_row_num": 287
         },
         "q50.cattle": {
           "string_token": "q50.cattle",
@@ -12199,7 +12196,7 @@
             "pt": "50. Quem é o responsável e toma as decisões sobre o tratamento do bovino com medicamentos?",
             "sw": "50. Ni nani anayewajibika na anayefanya uamuzi kuhusu matibabu ya dawa ya ng’ombe?"
           },
-          "_row_num": 292
+          "_row_num": 288
         },
         "q50.pig": {
           "string_token": "q50.pig",
@@ -12208,7 +12205,7 @@
             "pt": "50. Quem é o responsável e toma as decisões sobre o tratamento do porcos com medicamentos?",
             "sw": "50. Ni nani anayewajibika na anayefanya uamuzi kuhusu matibabu ya dawa ya nguruwe?"
           },
-          "_row_num": 293
+          "_row_num": 289
         },
         "q51.cattle": {
           "string_token": "q51.cattle",
@@ -12217,7 +12214,7 @@
             "pt": "51. Nos últimos 12 meses, mandou bovino para abate?",
             "sw": "51. Katika miezi 12 iliyopita, uliwapeleka ngombe kwenye machinjio?"
           },
-          "_row_num": 294
+          "_row_num": 290
         },
         "q51.pig": {
           "string_token": "q51.pig",
@@ -12226,7 +12223,7 @@
             "pt": "51. Nos últimos 12 meses, mandou porcos para abate?",
             "sw": "51. Katika miezi 12 iliyopita, uliwapeleka nguruwe kwenye machinjio?"
           },
-          "_row_num": 295
+          "_row_num": 291
         },
         "q51a.cattle": {
           "string_token": "q51a.cattle",
@@ -12235,7 +12232,7 @@
             "pt": "51a. Em que meses abateu o bovino nos últimos 12 meses? (assinalar todas as opções que se apliquem)",
             "sw": "51a. Ni katika mwezi upi ambapo uliwapeleka ng’ombe wako kwenye machinjio katika miezi 12 iliyopita? (weka alama kwa yote inayohusika)"
           },
-          "_row_num": 296
+          "_row_num": 292
         },
         "q51a.pig": {
           "string_token": "q51a.pig",
@@ -12244,7 +12241,7 @@
             "pt": "51a. Em que meses abateu o porcos nos últimos 12 meses? (assinalar todas as opções que se apliquem)",
             "sw": "51a. Ni katika mwezi upi ambapo uliwapeleka nguruwe wako kwenye machinjio katika miezi 12 iliyopita? (weka alama kwa yote inayohusika)"
           },
-          "_row_num": 297
+          "_row_num": 293
         },
         "q52": {
           "string_token": "q52",
@@ -12253,7 +12250,7 @@
             "pt": "52. Nos últimos 12 meses, ordenhou as suas vacas?",
             "sw": "52. Katika miezi 12 iliyopita, uliwakamua maziwa ng'ombe wako?"
           },
-          "_row_num": 298
+          "_row_num": 294
         },
         "q52a": {
           "string_token": "q52a",
@@ -12262,7 +12259,7 @@
             "pt": "52a. [Se sim] Em que meses normalmente ordenha as suas vacas? (Assinalar todas as opções que se apliquem)",
             "sw": "52a. [Ikiwa ndiyo] Ni katika miezi ipi ambapo kwa kawaida huwa unakamua maziwa ng'ombe wako? (Chagua yote inayohusika)"
           },
-          "_row_num": 299
+          "_row_num": 295
         },
         "q53": {
           "string_token": "q53",
@@ -12271,7 +12268,7 @@
             "pt": "53. Há corpos de água num raio de 50 m à volta das edificações do agregado familiar?",
             "sw": "53. Je, kuna eneo la maji yoyote umbali ndani ya mita 50 yanayozunguka majengo ya kaya?"
           },
-          "_row_num": 300
+          "_row_num": 296
         },
         "q53a": {
           "string_token": "q53a",
@@ -12280,7 +12277,7 @@
             "pt": "53a. [Se sim] Quantas?",
             "sw": "53a. [Ikiwa ndiyo] mangapi?"
           },
-          "_row_num": 301
+          "_row_num": 297
         },
         "q54": {
           "string_token": "q54",
@@ -12289,7 +12286,7 @@
             "pt": "54. Foi feita pulverização residual no agregado familiar contra a malária nos últimos 12 meses?",
             "sw": "54. Je, kaya ilipata kunyunyuziwa ndani viuatilifu ukoko kuzuia malaria katika miezi 12 iliyopita?"
           },
-          "_row_num": 302
+          "_row_num": 298
         },
         "q54a": {
           "string_token": "q54a",
@@ -12298,7 +12295,7 @@
             "pt": "54a. [Se não] Porque não?",
             "sw": "54a. [Ikiwa Hapana] Kwa nini?"
           },
-          "_row_num": 303
+          "_row_num": 299
         },
         "q54b": {
           "string_token": "q54b",
@@ -12307,7 +12304,7 @@
             "pt": "54b. [Se sim, pedir para ver a etiqueta Viu a etiqueta de registo da pulverização?",
             "sw": "54b. [Ikiwa ndiyo, omba kuona kibandiko] Je, kibandiko cha usajili wa kunyunyuzia dawa inaonekana?"
           },
-          "_row_num": 304
+          "_row_num": 300
         },
         "q54bi": {
           "string_token": "q54bi",
@@ -12316,7 +12313,7 @@
             "pt": "54b (i). [Se viu a etiqueta Data da pulverização (verificar data na etiqueta do registo de fumigação na porta)",
             "sw": "54b (i). [Ikiwa kibandiko kinaonekana] Tarehe yakunyunyizia (Thibitisha tarehe kwenye kibandiko cha usajili wa unyunyiziaji kwenye mlango)"
           },
-          "_row_num": 305
+          "_row_num": 301
         },
         "q55": {
           "string_token": "q55",
@@ -12325,7 +12322,7 @@
             "pt": "55. Quantas redes mosquiteiras existem no agregado familiar?",
             "sw": "55. Je, kuna vyandarua vingapi vya mbu katika kaya hii?"
           },
-          "_row_num": 306
+          "_row_num": 302
         },
         "q56": {
           "string_token": "q56",
@@ -12334,7 +12331,7 @@
             "pt": "56. São usados outros métodos de prevenção da malária? (Assinalar todas as opções que se apliquem)",
             "sw": "56. Kuna njia nyingine za kuzuia malaria zinazotumika? (chagua zote zinazotumika)"
           },
-          "_row_num": 307
+          "_row_num": 303
         },
         "q57": {
           "string_token": "q57",
@@ -12343,16 +12340,16 @@
             "pt": "57. Qual é o primeiro ponto de cuidados de saúde formais usado pela família quando alguém está doente?",
             "sw": "57. Ni kituo kipi cha kwanza rasmi cha tiba ya afya kinachotumiwa na familia hii mtu anapokuwa mgonjwa?"
           },
-          "_row_num": 308
+          "_row_num": 304
         },
         "q57.hint": {
           "string_token": "q57.hint",
           "text": {
             "default": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
-            "pt": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)",
-            "sw": "(Select from a health facility in the dropdown OR one (1) of the options below. In order to select a health facility, none of the other options can be selected)"
+            "pt": "(Selecione uma unidade de saniotaria na lista apresentada OU uma (1) das opções abaixo. Para selecionar uma unidade de sanitaria, nenhuma das outras opções pode ser selecionada)",
+            "sw": "(Chagua kutoka kwenye orodha ya vituo vya afya  AU moja (1) ya chaguzi hapa chini. Ili kuchagua kituo cha afya, hakuna chaguzi nyingine yoyote inayoweza kuchaguliwa)"
           },
-          "_row_num": 309
+          "_row_num": 305
         },
         "q58": {
           "string_token": "q58",
@@ -12361,7 +12358,7 @@
             "pt": "58. Algum membro do agregado familiar foi mordido por uma cobra nos últimos 12 meses?",
             "sw": "58. Kuna mwanakaya yeyote aliyegongwa na nyoka katika miezi 12 iliyopita?"
           },
-          "_row_num": 310
+          "_row_num": 306
         },
         "q58a": {
           "string_token": "q58a",
@@ -12370,7 +12367,7 @@
             "pt": "58a. Quantos membros do agregado familiar foram mordidos nos últimos 12 meses?",
             "sw": "58a. Ni wanakaya wangapi waliyogongwa na nyoka katika miezi 12 iliyopita?"
           },
-          "_row_num": 311
+          "_row_num": 307
         },
         "q59a": {
           "string_token": "q59a",
@@ -12379,7 +12376,7 @@
             "pt": "59a. Quem foi mordido?",
             "sw": "59a. Ni nani aliyegongwa?"
           },
-          "_row_num": 312
+          "_row_num": 308
         },
         "q60": {
           "string_token": "q60",
@@ -12388,7 +12385,7 @@
             "pt": "60. Número de contacto do agregado familiar",
             "sw": "60. Nambari ya mawasiliano ya kaya"
           },
-          "_row_num": 313
+          "_row_num": 309
         },
         "q61": {
           "string_token": "q61",
@@ -12397,7 +12394,7 @@
             "pt": "61. Número de contacto alternativo 1",
             "sw": "61. Nambari mbadala ya mawasiliano 1"
           },
-          "_row_num": 314
+          "_row_num": 310
         },
         "q62": {
           "string_token": "q62",
@@ -12406,7 +12403,7 @@
             "pt": "62. Existe um número de contacto alternativo 2",
             "sw": "62. Je, kuna nambari ya 2 mbadala ya mawasiliano"
           },
-          "_row_num": 315
+          "_row_num": 311
         },
         "q62a": {
           "string_token": "q62a",
@@ -12415,7 +12412,7 @@
             "pt": "62a. [Se sim] Número de contacto alternativo 2",
             "sw": "62a. [Ikiwa ndio] Nambari mbadala ya mawasiliano 2"
           },
-          "_row_num": 316
+          "_row_num": 312
         },
         "q63": {
           "string_token": "q63",
@@ -12424,7 +12421,7 @@
             "pt": "63. Podemos ligar-lhe para qualquer um dos contactos indicados anteriormente para organizar visitas no contexto deste projeto?",
             "sw": "63. Tunaweza kukupigia kupitia nambari yoyote ya mawasiliano kati ya zilizoonyeshwa hapo juu ili kupanga na wewe katika muktadha wa mradi huu?"
           },
-          "_row_num": 317
+          "_row_num": 313
         },
         "q64": {
           "string_token": "q64",
@@ -12433,7 +12430,7 @@
             "pt": "64. Houve algum óbito no agregado familiar nos últimos 12 meses?",
             "sw": "64. Je, kumekuwa na vifo vyovyote katika kaya katika miezi 12 iliopita?"
           },
-          "_row_num": 318
+          "_row_num": 314
         },
         "q64a": {
           "string_token": "q64a",
@@ -12442,7 +12439,7 @@
             "pt": "64a. [Se sim] Quantos?",
             "sw": "64a. [Ikiwa ndiyo] Vingapi?"
           },
-          "_row_num": 319
+          "_row_num": 315
         }
       }
     },
@@ -12451,42 +12448,42 @@
         "query_name": "malaria_prevention",
         "query_type": "csv",
         "uri": "\"external_choices_malaria_prevention.csv\"",
-        "callback": "_.map(context, function(prevention){prevention.data_value = prevention.name;\nprevention.display = {title: {text:prevention.label} };\nreturn prevention;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 2
       },
       "housing_wall_material": {
         "query_name": "housing_wall_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_wall.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 3
       },
       "housing_ceiling_material": {
         "query_name": "housing_ceiling_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_ceiling.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 4
       },
       "housing_floor_material": {
         "query_name": "housing_floor_material",
         "query_type": "csv",
         "uri": "\"external_choices_housing_floor.csv\"",
-        "callback": "_.map(context, function(material){material.data_value = material.name;\nmaterial.display = {title: {text:material.label} };\nreturn material;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 5
       },
       "hh_possessions": {
         "query_name": "hh_possessions",
         "query_type": "csv",
         "uri": "\"external_choices_hh_possessions.csv\"",
-        "callback": "_.map(context, function(possession){possession.data_value = possession.name;\npossession.display = {title: {text:possession.label} };\nreturn possession;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 6
       },
       "choices_hf": {
         "query_name": "choices_hf",
         "query_type": "csv",
         "uri": "\"external_choices_hf.csv\"",
-        "callback": "_.map(context, function(place){place.data_value = place.name;\nplace.display = {title: {text:place.label} };\nreturn place;\n})",
+        "callback": "_.map(context, function(externalChoice){externalChoice.data_value = externalChoice.name; externalChoice.display = {title: {text: {default: externalChoice.label, sw: externalChoice.sw, pt: externalChoice.pt} } }; return externalChoice; })",
         "_row_num": 7
       },
       "linked_hh_death": {
@@ -16997,35 +16994,19 @@
           },
           {
             "clause": "if",
-            "condition": "selected(data('hh_country'), 'Tanzania')",
-            "_row_num": 163,
-            "__rowNum__": 162,
-            "_token_type": "goto_label",
-            "_branch_label": "_then163",
-            "operationIdx": 24
-          },
-          {
-            "clause": "end if",
-            "_token_type": "goto_label",
-            "_branch_label": "_else232",
-            "_row_num": 232,
-            "operationIdx": 25
-          },
-          {
-            "clause": "if",
             "condition": "selected(data('hh_owns_livestock'), 'cattle')",
             "_row_num": 164,
             "__rowNum__": 163,
             "_token_type": "goto_label",
             "_branch_label": "_then164",
-            "operationIdx": 26
+            "operationIdx": 24
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
             "_branch_label": "_else208",
             "_row_num": 208,
-            "operationIdx": 27
+            "operationIdx": 25
           },
           {
             "clause": "begin screen",
@@ -17039,7 +17020,7 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(77);\nactivePromptIndicies.push(78);\nactivePromptIndicies.push(79);\nactivePromptIndicies.push(80);\nif (0) {\nactivePromptIndicies.push(81);\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 28
+            "operationIdx": 26
           },
           {
             "clause": "validate cattle",
@@ -17047,7 +17028,7 @@
             "__rowNum__": 173,
             "_token_type": "validate",
             "_sweep_name": "cattle",
-            "operationIdx": 29
+            "operationIdx": 27
           },
           {
             "clause": "begin screen",
@@ -17061,14 +17042,14 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(82);\nactivePromptIndicies.push(83);\nactivePromptIndicies.push(84);\nactivePromptIndicies.push(85);\nif (not(selected(data('where_cattle_rainy_season'),'Inside the house where humans sleep')) || not(selected(data('where_cattle_dry_season'), 'Inside the house where humans sleep'))) {\nactivePromptIndicies.push(86);\n}\nif (selected(data('where_cattle_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Just outside the compound') || selected(data('where_cattle_rainy_season'), 'In a different household with a different household chief') || selected(data('where_cattle_rainy_season'), 'Farm') || selected(data('where_cattle_rainy_season'), 'In the field, away from the compound') || selected(data('where_cattle_rainy_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(87);\nif (selected(data('where_cattle_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the house') && selected(data('distance_cattle_rainy_season'), '50-100m') || selected(data('distance_cattle_rainy_season'), '100-500m') || selected(data('distance_cattle_rainy_season'), '500-1km') || selected(data('distance_cattle_rainy_season'), '>1km')) {\nactivePromptIndicies.push(88);\n}\n}\nif (selected(data('where_cattle_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_cattle_dry_season'), 'Just outside the compound') || selected(data('where_cattle_dry_season'), 'In a different household with a different household chief') || selected(data('where_cattle_dry_season'), 'Farm') || selected(data('where_cattle_dry_season'), 'In the field, away from the compound') || selected(data('where_cattle_dry_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(89);\nif (selected(data('where_cattle_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the house') && selected(data('distance_cattle_dry_season'), '50-100m') || selected(data('distance_cattle_dry_season'), '100-500m') || selected(data('distance_cattle_dry_season'), '500-1km') || selected(data('distance_cattle_dry_season'), '>1km')) {\nactivePromptIndicies.push(90);\n}\n}\nactivePromptIndicies.push(91);\nif (selected(data('weaned_cattle_wet_season'), 'confined')) {\nactivePromptIndicies.push(92);\n}\nif (selected(data('weaned_cattle_wet_season'), 'grazing')) {\nactivePromptIndicies.push(93);\nactivePromptIndicies.push(94);\nif (selected(data('weaned_cattle_grazing_water'), 'yes')) {\nactivePromptIndicies.push(95);\n}\n}\nactivePromptIndicies.push(96);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 30
+            "operationIdx": 28
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
             "_branch_label": "_endif208",
             "_row_num": 208,
-            "operationIdx": 31
+            "operationIdx": 29
           },
           {
             "clause": "begin screen",
@@ -17082,14 +17063,7 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(97);\nif (not(selected(data('hh_owns_livestock'), 'cattle'))) {\nactivePromptIndicies.push(98);\nactivePromptIndicies.push(99);\n}\nif (selected(data('hh_owns_livestock'), 'cattle') || selected(data('cattle_past_12_months'), 'yes')) {\nactivePromptIndicies.push(100);\nactivePromptIndicies.push(101);\nif (selected(data('cattle_ivermectin_responsible_dk'), 'dk')) {\nassign('cattle_ivermectin_responsible', null);\n}\nelse {\nactivePromptIndicies.push(102);\n}\nactivePromptIndicies.push(103);\nactivePromptIndicies.push(104);\nif (selected(data('cattle_slaughter'), 'yes')) {\nactivePromptIndicies.push(105);\n}\nactivePromptIndicies.push(106);\nactivePromptIndicies.push(107);\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 32
-          },
-          {
-            "clause": "end if",
-            "_token_type": "goto_label",
-            "_branch_label": "_endif232",
-            "_row_num": 232,
-            "operationIdx": 33
+            "operationIdx": 30
           },
           {
             "clause": "if",
@@ -17098,14 +17072,14 @@
             "__rowNum__": 233,
             "_token_type": "goto_label",
             "_branch_label": "_then234",
-            "operationIdx": 34
+            "operationIdx": 31
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
             "_branch_label": "_else295",
             "_row_num": 295,
-            "operationIdx": 35
+            "operationIdx": 32
           },
           {
             "clause": "if",
@@ -17114,14 +17088,14 @@
             "__rowNum__": 234,
             "_token_type": "goto_label",
             "_branch_label": "_then235",
-            "operationIdx": 36
+            "operationIdx": 33
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
             "_branch_label": "_else272",
             "_row_num": 272,
-            "operationIdx": 37
+            "operationIdx": 34
           },
           {
             "clause": "begin screen",
@@ -17135,7 +17109,7 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(108);\nactivePromptIndicies.push(109);\nactivePromptIndicies.push(110);\nif (0) {\nactivePromptIndicies.push(111);\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 38
+            "operationIdx": 35
           },
           {
             "clause": "validate pigs",
@@ -17143,7 +17117,7 @@
             "__rowNum__": 243,
             "_token_type": "validate",
             "_sweep_name": "pigs",
-            "operationIdx": 39
+            "operationIdx": 36
           },
           {
             "clause": "begin screen",
@@ -17157,14 +17131,14 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(112);\nactivePromptIndicies.push(113);\nactivePromptIndicies.push(114);\nactivePromptIndicies.push(115);\nif (not(selected(data('where_pigs_rainy_season'),'Inside the house where humans sleep')) || not(selected(data('where_pigs_dry_season'), 'Inside the house where humans sleep'))) {\nactivePromptIndicies.push(116);\n}\nif (selected(data('where_pigs_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_pigs_rainy_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Just outside the compound') || selected(data('where_pigs_rainy_season'), 'In a different household with a different household chief') || selected(data('where_pigs_rainy_season'), 'Farm') || selected(data('where_pigs_rainy_season'), 'In the field, away from the compound') || selected(data('where_pigs_rainy_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(117);\n}\nif (selected(data('where_pigs_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_dry_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_pigs_dry_season'),'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_pigs_dry_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_pigs_dry_season'), 'Just outside the compound') || selected(data('where_pigs_dry_season'), 'In a different household with a different household chief') || selected(data('where_pigs_dry_season'), 'Farm') || selected(data('where_pigs_dry_season'), 'In the field, away from the compound') || selected(data('where_pigs_dry_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(118);\n}\nactivePromptIndicies.push(119);\nif (selected(data('weaned_pigs_wet_season'), 'confined')) {\nactivePromptIndicies.push(120);\n}\nif (selected(data('weaned_pigs_wet_season'), 'grazing')) {\nactivePromptIndicies.push(121);\nactivePromptIndicies.push(122);\nif (selected(data('weaned_pigs_grazing_water'), 'yes')) {\nactivePromptIndicies.push(123);\n}\n}\nactivePromptIndicies.push(124);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 40
+            "operationIdx": 37
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
             "_branch_label": "_endif272",
             "_row_num": 272,
-            "operationIdx": 41
+            "operationIdx": 38
           },
           {
             "clause": "begin screen",
@@ -17178,14 +17152,14 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(125);\nif (not(selected(data('hh_owns_livestock'), 'pigs'))) {\nactivePromptIndicies.push(126);\nactivePromptIndicies.push(127);\n}\nif (selected(data('hh_owns_livestock'), 'pigs') || selected(data('pigs_past_12_months'), 'yes')) {\nactivePromptIndicies.push(128);\nactivePromptIndicies.push(129);\nif (selected(data('pigs_ivermectin_responsible_dk'), 'dk')) {\nassign('pigs_ivermectin_responsible', null);\n}\nelse {\nactivePromptIndicies.push(130);\n}\nactivePromptIndicies.push(131);\nactivePromptIndicies.push(132);\nif (selected(data('pigs_slaughter'), 'yes')) {\nactivePromptIndicies.push(133);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 42
+            "operationIdx": 39
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
             "_branch_label": "_endif295",
             "_row_num": 295,
-            "operationIdx": 43
+            "operationIdx": 40
           },
           {
             "clause": "begin screen",
@@ -17199,7 +17173,7 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(134);\nactivePromptIndicies.push(135);\nif (selected(data('water_bodies'), 'yes')) {\nactivePromptIndicies.push(136);\nactivePromptIndicies.push(137);\nactivePromptIndicies.push(138);\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 44
+            "operationIdx": 41
           },
           {
             "clause": "begin screen",
@@ -17213,7 +17187,7 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(139);\nif (selected(data('hh_country'), 'Mozambique')) {\nactivePromptIndicies.push(140);\nif (selected(data('hh_spray'), 'no')) {\nactivePromptIndicies.push(141);\n}\nif (selected(data('hh_spray'), 'yes')) {\nactivePromptIndicies.push(142);\nif (selected(data('hh_spray_label_seen'), 'yes')) {\nactivePromptIndicies.push(143);\n}\n}\n}\nactivePromptIndicies.push(144);\nif (data('hh_num_nets') > 0) {\nactivePromptIndicies.push(145);\nactivePromptIndicies.push(146);\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 45
+            "operationIdx": 42
           },
           {
             "clause": "begin screen",
@@ -17227,7 +17201,7 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(147);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 46
+            "operationIdx": 43
           },
           {
             "clause": "begin screen",
@@ -17241,7 +17215,7 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(148);\nactivePromptIndicies.push(149);\nactivePromptIndicies.push(150);\nif (selected(data('health_facility_formal_type'), 'other')) {\nactivePromptIndicies.push(151);\n}\nif (!!data('health_facility_formal_type')) {\nassign('health_facility_formal_sick', null);\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 47
+            "operationIdx": 44
           },
           {
             "clause": "begin screen",
@@ -17255,7 +17229,7 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(152);\nactivePromptIndicies.push(153);\nif (selected(data('any_snake_bite'), 'yes')) {\nactivePromptIndicies.push(154);\nactivePromptIndicies.push(155);\nactivePromptIndicies.push(156);\nactivePromptIndicies.push(157);\nactivePromptIndicies.push(158);\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 48
+            "operationIdx": 45
           },
           {
             "clause": "begin screen",
@@ -17269,7 +17243,7 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(159);\nactivePromptIndicies.push(160);\nif (selected(data('no_contact_num'), 'no_contact_num')) {\nassign('hh_contact', null);\n}\nelse {\nactivePromptIndicies.push(161);\n}\nactivePromptIndicies.push(162);\nactivePromptIndicies.push(163);\nif (selected(data('no_alt_contact_num'), 'no_alt_contact_num')) {\nassign('hh_contact_alt', null);\n}\nelse {\nactivePromptIndicies.push(164);\n}\nactivePromptIndicies.push(165);\nif (!!data('hh_contact_alt')) {\nactivePromptIndicies.push(166);\nactivePromptIndicies.push(167);\nif (selected(data('hh_contact_alt_2'), 'yes')) {\nassign('hh_contact_alt_2_num', null);\n}\nelse {\nactivePromptIndicies.push(168);\n}\n}\nactivePromptIndicies.push(169);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 49
+            "operationIdx": 46
           },
           {
             "clause": "if",
@@ -17278,14 +17252,14 @@
             "__rowNum__": 382,
             "_token_type": "goto_label",
             "_branch_label": "_then383",
-            "operationIdx": 50
+            "operationIdx": 47
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
             "_branch_label": "_else396",
             "_row_num": 396,
-            "operationIdx": 51
+            "operationIdx": 48
           },
           {
             "clause": "begin screen",
@@ -17299,14 +17273,14 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nif (selected(data('hh_minicenced'), 'no')) {\nactivePromptIndicies.push(170);\nactivePromptIndicies.push(171);\nactivePromptIndicies.push(172);\nif (selected(data('hh_death'), 'yes')) {\nactivePromptIndicies.push(173);\nactivePromptIndicies.push(174);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 52
+            "operationIdx": 49
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
             "_branch_label": "_endif396",
             "_row_num": 396,
-            "operationIdx": 53
+            "operationIdx": 50
           },
           {
             "clause": "begin screen",
@@ -17320,13 +17294,13 @@
               "_token_type": "end_screen"
             },
             "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(175);\nactivePromptIndicies.push(176);\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 54
+            "operationIdx": 51
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
             "_row_num": 402,
-            "operationIdx": 55
+            "operationIdx": 52
           },
           {
             "_row_num": 402,
@@ -17335,13 +17309,13 @@
             "screen": {
               "hideInBackHistory": true
             },
-            "operationIdx": 56
+            "operationIdx": 53
           },
           {
             "_token_type": "resume",
             "clause": "resume",
             "_row_num": 402,
-            "operationIdx": 57
+            "operationIdx": 54
           }
         ],
         "branch_label_map": {
@@ -17369,37 +17343,34 @@
           "_screen135": 21,
           "_screen148": 22,
           "_screen157": 23,
-          "_then163": 26,
-          "_then164": 28,
-          "_screen165": 28,
-          "_screen175": 30,
-          "_else208": 32,
-          "_endif208": 32,
-          "_screen209": 32,
-          "_else232": 34,
-          "_endif232": 34,
-          "_then234": 36,
-          "_then235": 38,
-          "_screen236": 38,
-          "_screen245": 40,
-          "_else272": 42,
-          "_endif272": 42,
-          "_screen274": 42,
-          "_else295": 44,
-          "_endif295": 44,
-          "_screen297": 44,
-          "_screen308": 45,
-          "_screen329": 46,
-          "_screen332": 47,
-          "_screen343": 48,
-          "_screen355": 49,
-          "_then383": 52,
-          "_screen384": 52,
-          "_else396": 54,
-          "_endif396": 54,
-          "_screen398": 54,
-          "_contents": 56,
-          "_screen402": 56
+          "_then164": 26,
+          "_screen165": 26,
+          "_screen175": 28,
+          "_else208": 30,
+          "_endif208": 30,
+          "_screen209": 30,
+          "_then234": 33,
+          "_then235": 35,
+          "_screen236": 35,
+          "_screen245": 37,
+          "_else272": 39,
+          "_endif272": 39,
+          "_screen274": 39,
+          "_else295": 41,
+          "_endif295": 41,
+          "_screen297": 41,
+          "_screen308": 42,
+          "_screen329": 43,
+          "_screen332": 44,
+          "_screen343": 45,
+          "_screen355": 46,
+          "_then383": 49,
+          "_screen384": 49,
+          "_else396": 51,
+          "_endif396": 51,
+          "_screen398": 51,
+          "_contents": 53,
+          "_screen402": 53
         }
       },
       "initial": {

@@ -193,8 +193,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "w_all",
       "text": {
         "default": "You cannot select ‘All’ along with other options.",
-        "pt": "You cannot select ‘All’ along with other options.",
-        "sw": "You cannot select ‘All’ along with other options."
+        "pt": "Você não pode selecionar 'Todos' junto com as outras respostas.",
+        "sw": "Huwezi kuchagua \"Yote\" pamoja na majibu mengine"
       },
       "_row_num": 24
     }

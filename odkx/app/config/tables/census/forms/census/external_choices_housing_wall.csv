@@ -1,24 +1,24 @@
-name,label,country
-cement_blocks,Cement blocks,Tanzania
-stones,Stones,Tanzania
-poles_mud,Poles and mud,Tanzania
-sand_bricks,Baked sand bricks,Tanzania
-timber_iron,Timber and iron sheet,Tanzania
-thatch,Thatch,Tanzania
-tent,Tent,Tanzania
-grass,Grass,Tanzania
-other,Other,Tanzania
-cement_blocks,Cement blocks,Mozambique
-brick_block,Brick block,Mozambique
-wood,Wood,Mozambique
-adobe,Adobe block,Mozambique
-reed,Reed,Mozambique
-bamboo,Bamboo,Mozambique
-palm,Palm tree,Mozambique
-tinned_wood,Tinned wood,Mozambique
-tin,Tin,Mozambique
-carboard,Cardboard,Mozambique
-paper,Paper,Mozambique
-plastic,Plastic bags,Mozambique
-bark,Bark,Mozambique
-other,Other,Mozambique
+name,label,country,sw,pt
+cement_blocks,Cement blocks,Tanzania,Tofali za saruji,Blocos de cimento 
+stones,Stones,Tanzania,Mawe,Pedras
+poles_mud,Poles and mud,Tanzania,Fito na matope,Paus e lama
+sand_bricks,Baked sand bricks,Tanzania,Matofali ya udongo yaliyochomwa,Tijolo queimado
+timber_iron,Timber and iron sheet,Tanzania,Mbao na mabati ,Madeira e chapas de ferro
+thatch,Thatch,Tanzania,Makuti,Palha
+tent,Tent,Tanzania,Hema,Tenda
+grass,Grass,Tanzania,Nyasi,Capim
+other,Other,Tanzania,Nyingine,Outro
+cement_blocks,Cement blocks,Mozambique,Tofali za saruji,Blocos de cimento 
+brick_block,Brick block,Mozambique,Tofali za mawe,Tijolo 
+wood,Wood,Mozambique,Mbao,Madeira
+adobe,Adobe block,Mozambique,Adobe block,Blocos de adobe
+reed,Reed,Mozambique,Reed,Junco
+bamboo,Bamboo,Mozambique,Bamboo,Bambu
+palm,Palm tree,Mozambique,Palm tree,Palmeira
+tinned_wood,Tinned wood,Mozambique,Tinned wood,Madeira revestida
+tin,Tin,Mozambique,Tin,Lata
+carboard,Cardboard,Mozambique,Cardboard,Papelão
+paper,Paper,Mozambique,Paper,Papel
+plastic,Plastic bags,Mozambique,Plastic bags,Sacos de plástico
+bark,Bark,Mozambique,Bark,Cascas de árvore
+other,Other,Mozambique,Nyingine,Outros

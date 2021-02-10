@@ -31,8 +31,8 @@ window.odkTableSpecificDefinitions = {
       "string_token": "hh_id_note",
       "text": {
         "default": "Household ID: {{data.hh_id}}",
-        "pt": "Household ID: {{data.hh_id}}",
-        "sw": "Household ID: {{data.hh_id}}"
+        "pt": "Identificação do agregado: {{data.hh_id}}",
+        "sw": "Utambulisho wa Kaya: {{data.hh_id}}"
       },
       "_row_num": 5
     },
