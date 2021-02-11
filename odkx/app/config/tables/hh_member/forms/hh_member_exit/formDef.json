@@ -117,34 +117,52 @@
       },
       {
         "clause": "if",
-        "condition": "not(selected(data('member_emigrated_when_dmy_ago'), 'dk'))",
+        "condition": "selected(data('member_emigrated_when_dmy_ago'), 'dk')",
         "_row_num": 21
+      },
+      {
+        "type": "assign",
+        "name": "member_emigrated_when_num",
+        "calculation": "null",
+        "_row_num": 22
+      },
+      {
+        "type": "assign",
+        "name": "member_emigrated_when_date",
+        "calculation": "null",
+        "_row_num": 23
+      },
+      {
+        "clause": "else",
+        "_row_num": 24
       },
       {
         "type": "birth_date",
         "name": "member_emigrated_when_date",
-        "constraint": "selected(data('member_emigrated_when_dk'), 'dk') || !data('member_emigrated_when') || (!data('member_emigrated_when').isBefore('2020-10-01') && !data('member_emigrated_when').isAfter())",
+        "constraint": "selected(data('member_emigrated_when_dmy_ago'), 'dk') || !data('member_emigrated_when') || (!data('member_emigrated_when').isBefore('2020-10-01') && !data('member_emigrated_when').isAfter())",
         "display": {
           "constraint_message": "err_emigrate_date"
         },
         "hideInContents": 1,
-        "_row_num": 22
-      },
-      {
-        "clause": "end if",
-        "_row_num": 23
+        "_row_num": 25
       },
       {
         "type": "integer",
         "name": "member_emigrated_when_num",
         "display": {
-          "prompt": "or_enter_num"
+          "prompt": "or_enter_num",
+          "constraint_message": "err_emigrate_date_multiple"
         },
         "inpuAttributes": {
           "min": 0,
           "step": 1
         },
-        "_row_num": 24
+        "constraint": "selected(data('member_emigrated_when_dmy_ago'), 'dk') || (not(selected(data('member_emigrated_when_dmy_ago'), 'dk')) && (!!data('member_emigrated_when_date') ^ !!data('member_emigrated_when_num')))",
+        "_row_num": 26
+      },
+      {
+        "clause": "end if",
+        "_row_num": 27
       },
       {
         "type": "select_one",
@@ -154,21 +172,6 @@
           "prompt": "days_weeks_months_dk"
         },
         "hideInContents": 1,
-        "_row_num": 25
-      },
-      {
-        "clause": "if",
-        "condition": "selected(data('member_emigrated_when_dmy_ago'), 'dk')",
-        "_row_num": 26
-      },
-      {
-        "type": "assign",
-        "name": "member_emigrated_when_num",
-        "calculation": "null",
-        "_row_num": 27
-      },
-      {
-        "clause": "end if",
         "_row_num": 28
       },
       {
@@ -2898,7 +2901,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -5546,7 +5550,7 @@
         "elementType": "date_no_time",
         "_defn": [
           {
-            "_row_num": 22,
+            "_row_num": 25,
             "section_name": "survey"
           },
           {
@@ -5560,7 +5564,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 24,
+            "_row_num": 26,
             "section_name": "survey"
           },
           {
@@ -5575,7 +5579,7 @@
         "valuesList": "dmy_ago_dk",
         "_defn": [
           {
-            "_row_num": 25,
+            "_row_num": 28,
             "section_name": "survey"
           },
           {
@@ -6593,13 +6597,13 @@
           {
             "type": "birth_date",
             "name": "member_emigrated_when_date",
-            "constraint": "selected(data('member_emigrated_when_dk'), 'dk') || !data('member_emigrated_when') || (!data('member_emigrated_when').isBefore('2020-10-01') && !data('member_emigrated_when').isAfter())",
+            "constraint": "selected(data('member_emigrated_when_dmy_ago'), 'dk') || !data('member_emigrated_when') || (!data('member_emigrated_when').isBefore('2020-10-01') && !data('member_emigrated_when').isAfter())",
             "display": {
               "constraint_message": "err_emigrate_date"
             },
             "hideInContents": 1,
-            "_row_num": 22,
-            "__rowNum__": 21,
+            "_row_num": 25,
+            "__rowNum__": 24,
             "_token_type": "prompt",
             "_type": "birth_date",
             "_branch_label_enclosing_screen": "survey/_screen3",
@@ -6609,14 +6613,16 @@
             "type": "integer",
             "name": "member_emigrated_when_num",
             "display": {
-              "prompt": "or_enter_num"
+              "prompt": "or_enter_num",
+              "constraint_message": "err_emigrate_date_multiple"
             },
             "inpuAttributes": {
               "min": 0,
               "step": 1
             },
-            "_row_num": 24,
-            "__rowNum__": 23,
+            "constraint": "selected(data('member_emigrated_when_dmy_ago'), 'dk') || (not(selected(data('member_emigrated_when_dmy_ago'), 'dk')) && (!!data('member_emigrated_when_date') ^ !!data('member_emigrated_when_num')))",
+            "_row_num": 26,
+            "__rowNum__": 25,
             "_token_type": "prompt",
             "_type": "integer",
             "_branch_label_enclosing_screen": "survey/_screen3",
@@ -6630,8 +6636,8 @@
               "prompt": "days_weeks_months_dk"
             },
             "hideInContents": 1,
-            "_row_num": 25,
-            "__rowNum__": 24,
+            "_row_num": 28,
+            "__rowNum__": 27,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen3",
@@ -6663,7 +6669,8 @@
         "validation_tag_map": {
           "finalize": [
             4,
-            8
+            8,
+            9
           ]
         },
         "operations": [
@@ -6684,7 +6691,7 @@
               "__rowNum__": 30,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\nif (selected(data('member_where_now'), 'died')) {\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nif (not(selected(data('member_died_when_dk'), 'dk'))) {\nactivePromptIndicies.push(4);\n}\nactivePromptIndicies.push(5);\nif (selected(data('member_died_when_dk'), 'dk')) {\nassign('member_died_when', null);\n}\n}\nif (selected(data('member_where_now'), 'emigrated')) {\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nif (not(selected(data('member_emigrated_when_dmy_ago'), 'dk'))) {\nactivePromptIndicies.push(8);\n}\nactivePromptIndicies.push(9);\nactivePromptIndicies.push(10);\nif (selected(data('member_emigrated_when_dmy_ago'), 'dk')) {\nassign('member_emigrated_when_num', null);\n}\nactivePromptIndicies.push(11);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(1);\nif (selected(data('member_where_now'), 'died')) {\nactivePromptIndicies.push(2);\nactivePromptIndicies.push(3);\nif (not(selected(data('member_died_when_dk'), 'dk'))) {\nactivePromptIndicies.push(4);\n}\nactivePromptIndicies.push(5);\nif (selected(data('member_died_when_dk'), 'dk')) {\nassign('member_died_when', null);\n}\n}\nif (selected(data('member_where_now'), 'emigrated')) {\nactivePromptIndicies.push(6);\nactivePromptIndicies.push(7);\nif (selected(data('member_emigrated_when_dmy_ago'), 'dk')) {\nassign('member_emigrated_when_num', null);\nassign('member_emigrated_when_date', null);\n}\nelse {\nactivePromptIndicies.push(8);\nactivePromptIndicies.push(9);\n}\nactivePromptIndicies.push(10);\nactivePromptIndicies.push(11);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 1
           },
           {
@@ -7249,7 +7256,7 @@
         "elementType": "date_no_time",
         "_defn": [
           {
-            "_row_num": 22,
+            "_row_num": 25,
             "section_name": "survey"
           },
           {
@@ -7266,7 +7273,7 @@
         "type": "integer",
         "_defn": [
           {
-            "_row_num": 24,
+            "_row_num": 26,
             "section_name": "survey"
           },
           {
@@ -7284,7 +7291,7 @@
         "valuesList": "dmy_ago_dk",
         "_defn": [
           {
-            "_row_num": 25,
+            "_row_num": 28,
             "section_name": "survey"
           },
           {
