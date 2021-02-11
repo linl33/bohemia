@@ -1098,7 +1098,7 @@
         "display": {
           "prompt": "q44a"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 166
       },
       {
@@ -1113,7 +1113,7 @@
           "min": 0,
           "step": 1
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "validation_tags": "finalize",
         "_row_num": 167
       },
@@ -1129,7 +1129,7 @@
           "min": 0,
           "step": 1
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "validation_tags": "finalize",
         "_row_num": 168
       },
@@ -1145,7 +1145,7 @@
           "min": 0,
           "step": 1
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "validation_tags": "finalize",
         "_row_num": 169
       },
@@ -1161,7 +1161,7 @@
           "prompt": "q44a",
           "constraint_message": "cattle_not_found"
         },
-        "constraint": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle')) || (data('hh_n_cows_adult_female') + data('hh_n_cows_adult_male') + data('hh_n_cows_under_1_year')) > 0",
+        "constraint": "not(selected(data('hh_owns_livestock'), 'cattle')) || (data('hh_n_cows_adult_female') + data('hh_n_cows_adult_male') + data('hh_n_cows_under_1_year')) > 0",
         "model": {
           "isSessionVariable": 1
         },
@@ -1190,7 +1190,7 @@
         "display": {
           "prompt": "cattle_h5"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 176
       },
       {
@@ -1198,7 +1198,7 @@
         "display": {
           "prompt": "q45.cattle"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 177
       },
       {
@@ -1208,7 +1208,7 @@
         "display": {
           "prompt": "q45a"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 178
       },
       {
@@ -1218,7 +1218,7 @@
         "display": {
           "prompt": "q45b"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 179
       },
       {
@@ -1231,7 +1231,7 @@
         "display": {
           "prompt": "q45c.cattle"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 181
       },
       {
@@ -1250,12 +1250,12 @@
         "display": {
           "prompt": "q45ci"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 184
       },
       {
         "clause": "if",
-        "condition": "selected(data('where_cattle_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the house') && selected(data('distance_cattle_rainy_season'), '50-100m') || selected(data('distance_cattle_rainy_season'), '100-500m') || selected(data('distance_cattle_rainy_season'), '500-1km') || selected(data('distance_cattle_rainy_season'), '>1km')",
+        "condition": "(selected(data('where_cattle_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household')) && (selected(data('distance_cattle_rainy_season'), '50-100m') || selected(data('distance_cattle_rainy_season'), '100-500m') || selected(data('distance_cattle_rainy_season'), '500-1km') || selected(data('distance_cattle_rainy_season'), '>1km'))",
         "_row_num": 185
       },
       {
@@ -1286,12 +1286,12 @@
         "display": {
           "prompt": "q45cii"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 190
       },
       {
         "clause": "if",
-        "condition": "selected(data('where_cattle_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the house') && selected(data('distance_cattle_dry_season'), '50-100m') || selected(data('distance_cattle_dry_season'), '100-500m') || selected(data('distance_cattle_dry_season'), '500-1km') || selected(data('distance_cattle_dry_season'), '>1km')",
+        "condition": "(selected(data('where_cattle_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the household')) && (selected(data('distance_cattle_dry_season'), '50-100m') || selected(data('distance_cattle_dry_season'), '100-500m') || selected(data('distance_cattle_dry_season'), '500-1km') || selected(data('distance_cattle_dry_season'), '>1km'))",
         "_row_num": 191
       },
       {
@@ -1317,7 +1317,7 @@
         "display": {
           "prompt": "q46.cattle"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 195
       },
       {
@@ -1332,7 +1332,7 @@
         "display": {
           "prompt": "q46a"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 197
       },
       {
@@ -1351,7 +1351,7 @@
         "display": {
           "prompt": "q46b"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 200
       },
       {
@@ -1361,7 +1361,7 @@
         "display": {
           "prompt": "q46c"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 201
       },
       {
@@ -1376,7 +1376,7 @@
         "display": {
           "prompt": "q46ci"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "_row_num": 203
       },
       {
@@ -1396,7 +1396,7 @@
           "constraint_message": "w_no_dk_no_animals"
         },
         "constraint": "(not(selected(data('cattle_disease_30_days'), 'no')) || (selected(data('cattle_disease_30_days'), 'no') && countSelected(data('cattle_disease_30_days')) === 1)) && (not(selected(data('cattle_disease_30_days'), 'dk')) || (selected(data('cattle_disease_30_days'), 'dk') && countSelected(data('cattle_disease_30_days')) === 1)) && (not(selected(data('cattle_disease_30_days'), 'not_30_days')) || (selected(data('cattle_disease_30_days'), 'not_30_days') && countSelected(data('cattle_disease_30_days')) === 1))",
-        "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+        "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
         "validation_tags": "finalize",
         "_row_num": 206
       },
@@ -1417,7 +1417,6 @@
         "display": {
           "prompt": "intervention_implication"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique')",
         "_row_num": 210
       },
       {
@@ -1432,7 +1431,6 @@
         "display": {
           "prompt": "q44b.cattle"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique')",
         "_row_num": 212
       },
       {
@@ -1442,7 +1440,6 @@
         "display": {
           "prompt": "q48.cattle"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique')",
         "_row_num": 213
       },
       {
@@ -1461,7 +1458,6 @@
         "display": {
           "prompt": "q49.cattle"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique')",
         "_row_num": 216
       },
       {
@@ -1469,7 +1465,6 @@
         "display": {
           "prompt": "q50.cattle"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique')",
         "_row_num": 217
       },
       {
@@ -1512,7 +1507,6 @@
         "display": {
           "prompt": "q51.cattle"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique')",
         "_row_num": 224
       },
       {
@@ -1529,7 +1523,6 @@
           "constraint_message": "w_all_dk"
         },
         "constraint": "(not(selected(data('cattle_slaughter_month'), 'all')) || (selected(data('cattle_slaughter_month'), 'all') && countSelected(data('cattle_slaughter_month')) === 1)) && (not(selected(data('cattle_slaughter_month'), 'dk')) || (selected(data('cattle_slaughter_month'), 'dk') && countSelected(data('cattle_slaughter_month')) === 1))",
-        "hideInContents": "selected(data('hh_country'), 'Mozambique')",
         "validation_tags": "finalize",
         "_row_num": 226
       },
@@ -1544,7 +1537,6 @@
         "display": {
           "prompt": "q52"
         },
-        "hideInContents": "selected(data('hh_country'), 'Mozambique')",
         "_row_num": 228
       },
       {
@@ -1556,7 +1548,6 @@
           "constraint_message": "w_all_dk"
         },
         "constraint": "(not(selected(data('cattle_milk_months'), 'all')) || (selected(data('cattle_milk_months'), 'all') && countSelected(data('cattle_milk_months')) === 1)) && (not(selected(data('cattle_milk_months'), 'dk')) || (selected(data('cattle_milk_months'), 'dk') && countSelected(data('cattle_milk_months')) === 1))",
-        "hideInContents": "selected(data('hh_country'), 'Mozambique')",
         "validation_tags": "finalize",
         "_row_num": 229
       },
@@ -1724,13 +1715,30 @@
         "_row_num": 254
       },
       {
-        "clause": "end if",
+        "clause": "if",
+        "condition": "(selected(data('where_pigs_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household')) && (selected(data('distance_pigs_rainy_season'), '50-100m') || selected(data('distance_pigs_rainy_season'), '100-500m') || selected(data('distance_pigs_rainy_season'), '500-1km') || selected(data('distance_pigs_rainy_season'), '>1km'))",
         "_row_num": 255
+      },
+      {
+        "type": "note",
+        "display": {
+          "prompt": "distance_inconsistent"
+        },
+        "hideInContents": 1,
+        "_row_num": 256
+      },
+      {
+        "clause": "end if",
+        "_row_num": 257
+      },
+      {
+        "clause": "end if",
+        "_row_num": 258
       },
       {
         "clause": "if",
         "condition": "selected(data('where_pigs_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_dry_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_pigs_dry_season'),'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_pigs_dry_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_pigs_dry_season'), 'Just outside the compound') || selected(data('where_pigs_dry_season'), 'In a different household with a different household chief') || selected(data('where_pigs_dry_season'), 'Farm') || selected(data('where_pigs_dry_season'), 'In the field, away from the compound') || selected(data('where_pigs_dry_season'), 'Unspecified location for keeping them')",
-        "_row_num": 256
+        "_row_num": 259
       },
       {
         "type": "select_one",
@@ -1740,11 +1748,27 @@
           "prompt": "q45cii"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-        "_row_num": 257
+        "_row_num": 260
+      },
+      {
+        "clause": "if",
+        "condition": "(selected(data('where_pigs_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the household')) && (selected(data('distance_pigs_dry_season'), '50-100m') || selected(data('distance_pigs_dry_season'), '100-500m') || selected(data('distance_pigs_dry_season'), '500-1km') || selected(data('distance_pigs_dry_season'), '>1km'))",
+        "_row_num": 261
+      },
+      {
+        "type": "note",
+        "display": {
+          "prompt": "distance_inconsistent"
+        },
+        "_row_num": 262
       },
       {
         "clause": "end if",
-        "_row_num": 258
+        "_row_num": 263
+      },
+      {
+        "clause": "end if",
+        "_row_num": 264
       },
       {
         "type": "select_one",
@@ -1754,12 +1778,12 @@
           "prompt": "q46.pig"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-        "_row_num": 259
+        "_row_num": 265
       },
       {
         "clause": "if",
         "condition": "selected(data('weaned_pigs_wet_season'), 'confined')",
-        "_row_num": 260
+        "_row_num": 266
       },
       {
         "type": "select_one",
@@ -1769,16 +1793,16 @@
           "prompt": "q46a"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-        "_row_num": 261
+        "_row_num": 267
       },
       {
         "clause": "end if",
-        "_row_num": 262
+        "_row_num": 268
       },
       {
         "clause": "if",
         "condition": "selected(data('weaned_pigs_wet_season'), 'grazing')",
-        "_row_num": 263
+        "_row_num": 269
       },
       {
         "type": "select_one",
@@ -1788,7 +1812,7 @@
           "prompt": "q46b"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-        "_row_num": 264
+        "_row_num": 270
       },
       {
         "type": "select_one",
@@ -1798,12 +1822,12 @@
           "prompt": "q46c"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-        "_row_num": 265
+        "_row_num": 271
       },
       {
         "clause": "if",
         "condition": "selected(data('weaned_pigs_grazing_water'), 'yes')",
-        "_row_num": 266
+        "_row_num": 272
       },
       {
         "type": "select_one",
@@ -1813,15 +1837,15 @@
           "prompt": "q46ci"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-        "_row_num": 267
+        "_row_num": 273
       },
       {
         "clause": "end if",
-        "_row_num": 268
+        "_row_num": 274
       },
       {
         "clause": "end if",
-        "_row_num": 269
+        "_row_num": 275
       },
       {
         "type": "select_multiple",
@@ -1834,19 +1858,19 @@
         "constraint": "(not(selected(data('pigs_disease_30_days'), 'no')) || (selected(data('pigs_disease_30_days'), 'no') && countSelected(data('pigs_disease_30_days')) === 1)) && (not(selected(data('pigs_disease_30_days'), 'dk')) || (selected(data('pigs_disease_30_days'), 'dk') && countSelected(data('pigs_disease_30_days')) === 1)) && (not(selected(data('pigs_disease_30_days'), 'not_30_days')) || (selected(data('pigs_disease_30_days'), 'not_30_days') && countSelected(data('pigs_disease_30_days')) === 1))",
         "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
         "validation_tags": "finalize",
-        "_row_num": 270
+        "_row_num": 276
       },
       {
         "clause": "end screen",
-        "_row_num": 271
+        "_row_num": 277
       },
       {
         "clause": "end if",
-        "_row_num": 272
+        "_row_num": 278
       },
       {
         "clause": "begin screen",
-        "_row_num": 274
+        "_row_num": 280
       },
       {
         "type": "note",
@@ -1854,12 +1878,12 @@
           "prompt": "intervention_implication"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-        "_row_num": 275
+        "_row_num": 281
       },
       {
         "clause": "if",
         "condition": "not(selected(data('hh_owns_livestock'), 'pigs'))",
-        "_row_num": 276
+        "_row_num": 282
       },
       {
         "type": "select_one",
@@ -1869,7 +1893,7 @@
           "prompt": "q44b.pig"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-        "_row_num": 277
+        "_row_num": 283
       },
       {
         "type": "select_one",
@@ -1879,16 +1903,16 @@
           "prompt": "q48.pig"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-        "_row_num": 278
+        "_row_num": 284
       },
       {
         "clause": "end if",
-        "_row_num": 279
+        "_row_num": 285
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_owns_livestock'), 'pigs') || selected(data('pigs_past_12_months'), 'yes')",
-        "_row_num": 280
+        "_row_num": 286
       },
       {
         "type": "select_one",
@@ -1898,7 +1922,7 @@
           "prompt": "q49.pig"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-        "_row_num": 281
+        "_row_num": 287
       },
       {
         "type": "note",
@@ -1906,40 +1930,40 @@
           "prompt": "q50.pig"
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-        "_row_num": 282
+        "_row_num": 288
       },
       {
         "clause": "if",
         "condition": "selected(data('pigs_ivermectin_responsible_dk'), 'dk')",
-        "_row_num": 283
+        "_row_num": 289
       },
       {
         "type": "assign",
         "name": "pigs_ivermectin_responsible",
         "calculation": "null",
-        "_row_num": 284
+        "_row_num": 290
       },
       {
         "clause": "else",
-        "_row_num": 285
+        "_row_num": 291
       },
       {
         "type": "select_one_dropdown",
         "values_list": "hh_members_roster",
         "name": "pigs_ivermectin_responsible",
         "hideInContents": 1,
-        "_row_num": 286
+        "_row_num": 292
       },
       {
         "clause": "end if",
-        "_row_num": 287
+        "_row_num": 293
       },
       {
         "type": "select_multiple",
         "values_list": "dk",
         "name": "pigs_ivermectin_responsible_dk",
         "hideInContents": 1,
-        "_row_num": 288
+        "_row_num": 294
       },
       {
         "type": "select_one",
@@ -1950,12 +1974,12 @@
         },
         "hideInContents": "selected(data('hh_country'), 'Tanzania')",
         "validation_tags": "finalize",
-        "_row_num": 289
+        "_row_num": 295
       },
       {
         "clause": "if",
         "condition": "selected(data('pigs_slaughter'), 'yes')",
-        "_row_num": 290
+        "_row_num": 296
       },
       {
         "type": "select_multiple",
@@ -1968,27 +1992,27 @@
         "constraint": "(not(selected(data('pigs_slaughter_month'), 'all')) || (selected(data('pigs_slaughter_month'), 'all') && countSelected(data('pigs_slaughter_month')) === 1)) && (not(selected(data('pigs_slaughter_month'), 'dk')) || (selected(data('pigs_slaughter_month'), 'dk') && countSelected(data('pigs_slaughter_month')) === 1))",
         "hideInContents": "selected(data('hh_country'), 'Tanzania')",
         "validation_tags": "finalize",
-        "_row_num": 291
+        "_row_num": 297
       },
       {
         "clause": "end if",
-        "_row_num": 292
+        "_row_num": 298
       },
       {
         "clause": "end if",
-        "_row_num": 293
+        "_row_num": 299
       },
       {
         "clause": "end screen",
-        "_row_num": 294
+        "_row_num": 300
       },
       {
         "clause": "end if",
-        "_row_num": 295
+        "_row_num": 301
       },
       {
         "clause": "begin screen",
-        "_row_num": 297
+        "_row_num": 303
       },
       {
         "type": "assign",
@@ -1997,14 +2021,14 @@
         "model": {
           "isSessionVariable": 1
         },
-        "_row_num": 298
+        "_row_num": 304
       },
       {
         "type": "note",
         "display": {
           "prompt": "env_h2"
         },
-        "_row_num": 299
+        "_row_num": 305
       },
       {
         "type": "select_one",
@@ -2013,12 +2037,12 @@
         "display": {
           "prompt": "q53"
         },
-        "_row_num": 300
+        "_row_num": 306
       },
       {
         "clause": "if",
         "condition": "selected(data('water_bodies'), 'yes')",
-        "_row_num": 301
+        "_row_num": 307
       },
       {
         "type": "integer",
@@ -2028,7 +2052,7 @@
         },
         "required": "selected(data('water_bodies'), 'yes')",
         "validation_tags": "finalize",
-        "_row_num": 302
+        "_row_num": 308
       },
       {
         "type": "note",
@@ -2036,7 +2060,7 @@
           "prompt": "water_prompt"
         },
         "hideInContents": 1,
-        "_row_num": 303
+        "_row_num": 309
       },
       {
         "type": "linked_table_counting",
@@ -2054,19 +2078,19 @@
           "valuesList": "linked_water_body"
         },
         "validation_tags": "finalize",
-        "_row_num": 304
+        "_row_num": 310
       },
       {
         "clause": "end if",
-        "_row_num": 305
+        "_row_num": 311
       },
       {
         "clause": "end screen",
-        "_row_num": 306
+        "_row_num": 312
       },
       {
         "clause": "begin screen",
-        "_row_num": 308
+        "_row_num": 314
       },
       {
         "type": "assign",
@@ -2075,19 +2099,19 @@
         "model": {
           "isSessionVariable": 1
         },
-        "_row_num": 309
+        "_row_num": 315
       },
       {
         "type": "note",
         "display": {
           "prompt": "malaria_h3"
         },
-        "_row_num": 310
+        "_row_num": 316
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_country'), 'Mozambique')",
-        "_row_num": 311
+        "_row_num": 317
       },
       {
         "type": "select_one",
@@ -2096,12 +2120,12 @@
         "display": {
           "prompt": "q54"
         },
-        "_row_num": 312
+        "_row_num": 318
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_spray'), 'no')",
-        "_row_num": 313
+        "_row_num": 319
       },
       {
         "type": "select_one",
@@ -2110,16 +2134,16 @@
         "display": {
           "prompt": "q54a"
         },
-        "_row_num": 314
+        "_row_num": 320
       },
       {
         "clause": "end if",
-        "_row_num": 315
+        "_row_num": 321
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_spray'), 'yes')",
-        "_row_num": 316
+        "_row_num": 322
       },
       {
         "type": "select_one_with_other",
@@ -2128,12 +2152,12 @@
         "display": {
           "prompt": "q54b"
         },
-        "_row_num": 317
+        "_row_num": 323
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_spray_label_seen'), 'yes')",
-        "_row_num": 318
+        "_row_num": 324
       },
       {
         "type": "birth_date",
@@ -2144,19 +2168,19 @@
         },
         "constraint": "not(selected(data('hh_spray_label_seen'), 'yes')) || !data('hh_spray_label_date').isAfter()",
         "validation_tags": "finalize",
-        "_row_num": 319
+        "_row_num": 325
       },
       {
         "clause": "end if",
-        "_row_num": 320
+        "_row_num": 326
       },
       {
         "clause": "end if",
-        "_row_num": 321
+        "_row_num": 327
       },
       {
         "clause": "end if",
-        "_row_num": 322
+        "_row_num": 328
       },
       {
         "type": "integer",
@@ -2167,12 +2191,12 @@
         },
         "constraint": "data('hh_num_nets') < 51",
         "validation_tags": "finalize",
-        "_row_num": 323
+        "_row_num": 329
       },
       {
         "clause": "if",
         "condition": "data('hh_num_nets') > 0",
-        "_row_num": 324
+        "_row_num": 330
       },
       {
         "type": "note",
@@ -2180,7 +2204,7 @@
           "prompt": "net_prompt"
         },
         "hideInContents": 1,
-        "_row_num": 325
+        "_row_num": 331
       },
       {
         "type": "linked_table_counting",
@@ -2198,19 +2222,19 @@
           "valuesList": "linked_mosquito_net"
         },
         "validation_tags": "finalize",
-        "_row_num": 326
+        "_row_num": 332
       },
       {
         "clause": "end if",
-        "_row_num": 327
+        "_row_num": 333
       },
       {
         "clause": "end screen",
-        "_row_num": 328
+        "_row_num": 334
       },
       {
         "clause": "begin screen",
-        "_row_num": 329
+        "_row_num": 335
       },
       {
         "type": "select_multiple",
@@ -2223,22 +2247,22 @@
         "choice_filter": "choice_item.country === data('hh_country')",
         "constraint": "(not(selected(data('malaria_prevention_method'), 'none')) || (selected(data('malaria_prevention_method'), 'none') && countSelected(data('malaria_prevention_method')) === 1)) && (not(selected(data('malaria_prevention_method'), 'dk')) || (selected(data('malaria_prevention_method'), 'dk') && countSelected(data('malaria_prevention_method')) === 1))",
         "validation_tags": "finalize",
-        "_row_num": 330
+        "_row_num": 336
       },
       {
         "clause": "end screen",
-        "_row_num": 331
+        "_row_num": 337
       },
       {
         "clause": "begin screen",
-        "_row_num": 332
+        "_row_num": 338
       },
       {
         "type": "note",
         "display": {
           "prompt": "health_h2"
         },
-        "_row_num": 333
+        "_row_num": 339
       },
       {
         "type": "select_one_dropdown",
@@ -2252,7 +2276,7 @@
         "choice_filter": "choice_item.country === data('hh_country')",
         "constraint": "(!data('health_facility_formal_sick') && !data('health_facility_formal_type')) || (!!data('health_facility_formal_sick') ^ !!data('health_facility_formal_type'))",
         "validation_tags": "finalize",
-        "_row_num": 334
+        "_row_num": 340
       },
       {
         "type": "select_multiple",
@@ -2264,12 +2288,12 @@
         },
         "hideInContents": 1,
         "validation_tags": "finalize",
-        "_row_num": 335
+        "_row_num": 341
       },
       {
         "clause": "if",
         "condition": "selected(data('health_facility_formal_type'), 'other')",
-        "_row_num": 336
+        "_row_num": 342
       },
       {
         "type": "text",
@@ -2277,34 +2301,34 @@
         "display": {
           "prompt": "specify"
         },
-        "_row_num": 337
+        "_row_num": 343
       },
       {
         "clause": "end if",
-        "_row_num": 338
+        "_row_num": 344
       },
       {
         "clause": "if",
         "condition": "!!data('health_facility_formal_type')",
-        "_row_num": 339
+        "_row_num": 345
       },
       {
         "type": "assign",
         "name": "health_facility_formal_sick",
         "calculation": "null",
-        "_row_num": 340
+        "_row_num": 346
       },
       {
         "clause": "end if",
-        "_row_num": 341
+        "_row_num": 347
       },
       {
         "clause": "end screen",
-        "_row_num": 342
+        "_row_num": 348
       },
       {
         "clause": "begin screen",
-        "_row_num": 343
+        "_row_num": 349
       },
       {
         "type": "assign",
@@ -2313,14 +2337,14 @@
         "model": {
           "isSessionVariable": 1
         },
-        "_row_num": 344
+        "_row_num": 350
       },
       {
         "type": "note",
         "display": {
           "prompt": "snake_h3"
         },
-        "_row_num": 345
+        "_row_num": 351
       },
       {
         "type": "select_one",
@@ -2329,12 +2353,12 @@
         "display": {
           "prompt": "q58"
         },
-        "_row_num": 346
+        "_row_num": 352
       },
       {
         "clause": "if",
         "condition": "selected(data('any_snake_bite'), 'yes')",
-        "_row_num": 347
+        "_row_num": 353
       },
       {
         "type": "integer",
@@ -2344,21 +2368,21 @@
         },
         "required": "selected(data('any_snake_bite'), 'yes')",
         "validation_tags": "finalize",
-        "_row_num": 348
+        "_row_num": 354
       },
       {
         "type": "note",
         "display": {
           "prompt": "snake_prompt"
         },
-        "_row_num": 349
+        "_row_num": 355
       },
       {
         "type": "note",
         "display": {
           "prompt": "snake_detail"
         },
-        "_row_num": 350
+        "_row_num": 356
       },
       {
         "type": "select_multiple",
@@ -2367,7 +2391,7 @@
         "display": {
           "prompt": "q59a"
         },
-        "_row_num": 351
+        "_row_num": 357
       },
       {
         "type": "linked_table_counting",
@@ -2388,48 +2412,48 @@
           "valuesList": "linked_member_snake_bit"
         },
         "validation_tags": "finalize",
-        "_row_num": 352
+        "_row_num": 358
       },
       {
         "clause": "end if",
-        "_row_num": 353
+        "_row_num": 359
       },
       {
         "clause": "end screen",
-        "_row_num": 354
+        "_row_num": 360
       },
       {
         "clause": "begin screen",
-        "_row_num": 355
+        "_row_num": 361
       },
       {
         "type": "note",
         "display": {
           "prompt": "contact_h2"
         },
-        "_row_num": 356
+        "_row_num": 362
       },
       {
         "type": "note",
         "display": {
           "prompt": "q60"
         },
-        "_row_num": 357
+        "_row_num": 363
       },
       {
         "clause": "if",
         "condition": "selected(data('no_contact_num'), 'no_contact_num')",
-        "_row_num": 358
+        "_row_num": 364
       },
       {
         "type": "assign",
         "name": "hh_contact",
         "calculation": "null",
-        "_row_num": 359
+        "_row_num": 365
       },
       {
         "clause": "else",
-        "_row_num": 360
+        "_row_num": 366
       },
       {
         "type": "text",
@@ -2438,11 +2462,11 @@
           "type": "tel"
         },
         "hideInContents": 1,
-        "_row_num": 361
+        "_row_num": 367
       },
       {
         "clause": "end if",
-        "_row_num": 362
+        "_row_num": 368
       },
       {
         "type": "select_multiple",
@@ -2452,29 +2476,29 @@
           "prompt": "or_capital"
         },
         "hideInContents": 1,
-        "_row_num": 363
+        "_row_num": 369
       },
       {
         "type": "note",
         "display": {
           "prompt": "q61"
         },
-        "_row_num": 364
+        "_row_num": 370
       },
       {
         "clause": "if",
         "condition": "selected(data('no_alt_contact_num'), 'no_alt_contact_num')",
-        "_row_num": 365
+        "_row_num": 371
       },
       {
         "type": "assign",
         "name": "hh_contact_alt",
         "calculation": "null",
-        "_row_num": 366
+        "_row_num": 372
       },
       {
         "clause": "else",
-        "_row_num": 367
+        "_row_num": 373
       },
       {
         "type": "text",
@@ -2483,11 +2507,11 @@
           "type": "tel"
         },
         "hideInContents": 1,
-        "_row_num": 368
+        "_row_num": 374
       },
       {
         "clause": "end if",
-        "_row_num": 369
+        "_row_num": 375
       },
       {
         "type": "select_multiple",
@@ -2497,12 +2521,12 @@
           "prompt": "or_capital"
         },
         "hideInContents": 1,
-        "_row_num": 370
+        "_row_num": 376
       },
       {
         "clause": "if",
         "condition": "!!data('hh_contact_alt')",
-        "_row_num": 371
+        "_row_num": 377
       },
       {
         "type": "select_one",
@@ -2511,29 +2535,29 @@
         "display": {
           "prompt": "q62"
         },
-        "_row_num": 372
+        "_row_num": 378
       },
       {
         "type": "note",
         "display": {
           "prompt": "q62a"
         },
-        "_row_num": 373
+        "_row_num": 379
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_contact_alt_2'), 'yes')",
-        "_row_num": 374
+        "_row_num": 380
       },
       {
         "type": "assign",
         "name": "hh_contact_alt_2_num",
         "calculation": "null",
-        "_row_num": 375
+        "_row_num": 381
       },
       {
         "clause": "else",
-        "_row_num": 376
+        "_row_num": 382
       },
       {
         "type": "text",
@@ -2542,15 +2566,15 @@
           "type": "tel"
         },
         "hideInContents": 1,
-        "_row_num": 377
+        "_row_num": 383
       },
       {
         "clause": "end if",
-        "_row_num": 378
+        "_row_num": 384
       },
       {
         "clause": "end if",
-        "_row_num": 379
+        "_row_num": 385
       },
       {
         "type": "select_one",
@@ -2559,20 +2583,20 @@
         "display": {
           "prompt": "q63"
         },
-        "_row_num": 380
+        "_row_num": 386
       },
       {
         "clause": "end screen",
-        "_row_num": 381
+        "_row_num": 387
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_minicenced'), 'no')",
-        "_row_num": 383
+        "_row_num": 389
       },
       {
         "clause": "begin screen",
-        "_row_num": 384
+        "_row_num": 390
       },
       {
         "type": "assign",
@@ -2581,12 +2605,12 @@
         "model": {
           "isSessionVariable": 1
         },
-        "_row_num": 385
+        "_row_num": 391
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_minicenced'), 'no')",
-        "_row_num": 386
+        "_row_num": 392
       },
       {
         "type": "note",
@@ -2594,7 +2618,7 @@
           "prompt": "death_h2"
         },
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-        "_row_num": 387
+        "_row_num": 393
       },
       {
         "type": "note",
@@ -2602,7 +2626,7 @@
           "prompt": "death_new_only"
         },
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-        "_row_num": 388
+        "_row_num": 394
       },
       {
         "type": "select_one",
@@ -2614,12 +2638,12 @@
         "required": "selected(data('hh_minicenced'), 'no')",
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
         "validation_tags": "finalize",
-        "_row_num": 389
+        "_row_num": 395
       },
       {
         "clause": "if",
         "condition": "selected(data('hh_death'), 'yes')",
-        "_row_num": 390
+        "_row_num": 396
       },
       {
         "type": "integer",
@@ -2632,7 +2656,7 @@
           "step": 1
         },
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-        "_row_num": 391
+        "_row_num": 397
       },
       {
         "type": "linked_table_counting",
@@ -2652,34 +2676,34 @@
         },
         "hideInContents": "selected(data('hh_minicenced'), 'yes')",
         "validation_tags": "finalize",
-        "_row_num": 392
+        "_row_num": 398
       },
       {
         "clause": "end if",
-        "_row_num": 393
+        "_row_num": 399
       },
       {
         "clause": "end if",
-        "_row_num": 394
+        "_row_num": 400
       },
       {
         "clause": "end screen",
-        "_row_num": 395
+        "_row_num": 401
       },
       {
         "clause": "end if",
-        "_row_num": 396
+        "_row_num": 402
       },
       {
         "clause": "begin screen",
-        "_row_num": 398
+        "_row_num": 404
       },
       {
         "type": "note",
         "display": {
           "prompt": "ind_h2"
         },
-        "_row_num": 399
+        "_row_num": 405
       },
       {
         "type": "linked_table",
@@ -2689,11 +2713,11 @@
           "hide_delete_button": 1,
           "hide_add_instance": 1
         },
-        "_row_num": 400
+        "_row_num": 406
       },
       {
         "clause": "end screen",
-        "_row_num": 401
+        "_row_num": 407
       }
     ],
     "choices": [
@@ -13530,7 +13554,7 @@
       "distance_pigs_dry_season": {
         "_defn": [
           {
-            "_row_num": 257,
+            "_row_num": 260,
             "section_name": "survey"
           }
         ],
@@ -13541,7 +13565,7 @@
       "weaned_pigs_wet_season": {
         "_defn": [
           {
-            "_row_num": 259,
+            "_row_num": 265,
             "section_name": "survey"
           }
         ],
@@ -13552,7 +13576,7 @@
       "weaned_pigs_confined": {
         "_defn": [
           {
-            "_row_num": 261,
+            "_row_num": 267,
             "section_name": "survey"
           }
         ],
@@ -13563,7 +13587,7 @@
       "weaned_pigs_grazing": {
         "_defn": [
           {
-            "_row_num": 264,
+            "_row_num": 270,
             "section_name": "survey"
           }
         ],
@@ -13574,7 +13598,7 @@
       "weaned_pigs_grazing_water": {
         "_defn": [
           {
-            "_row_num": 265,
+            "_row_num": 271,
             "section_name": "survey"
           }
         ],
@@ -13585,7 +13609,7 @@
       "weaned_pigs_grazing_water_type": {
         "_defn": [
           {
-            "_row_num": 267,
+            "_row_num": 273,
             "section_name": "survey"
           }
         ],
@@ -13596,7 +13620,7 @@
       "pigs_disease_30_days": {
         "_defn": [
           {
-            "_row_num": 270,
+            "_row_num": 276,
             "section_name": "survey"
           }
         ],
@@ -13611,7 +13635,7 @@
       "hh_pigs_coming_year": {
         "_defn": [
           {
-            "_row_num": 277,
+            "_row_num": 283,
             "section_name": "survey"
           }
         ],
@@ -13622,7 +13646,7 @@
       "pigs_past_12_months": {
         "_defn": [
           {
-            "_row_num": 278,
+            "_row_num": 284,
             "section_name": "survey"
           }
         ],
@@ -13633,7 +13657,7 @@
       "pigs_ivermectin": {
         "_defn": [
           {
-            "_row_num": 281,
+            "_row_num": 287,
             "section_name": "survey"
           }
         ],
@@ -13644,7 +13668,7 @@
       "pigs_ivermectin_responsible": {
         "_defn": [
           {
-            "_row_num": 286,
+            "_row_num": 292,
             "section_name": "survey"
           }
         ],
@@ -13655,7 +13679,7 @@
       "pigs_ivermectin_responsible_dk": {
         "_defn": [
           {
-            "_row_num": 288,
+            "_row_num": 294,
             "section_name": "survey"
           }
         ],
@@ -13670,7 +13694,7 @@
       "pigs_slaughter": {
         "_defn": [
           {
-            "_row_num": 289,
+            "_row_num": 295,
             "section_name": "survey"
           }
         ],
@@ -13681,7 +13705,7 @@
       "pigs_slaughter_month": {
         "_defn": [
           {
-            "_row_num": 291,
+            "_row_num": 297,
             "section_name": "survey"
           }
         ],
@@ -13696,7 +13720,7 @@
       "water_bodies": {
         "_defn": [
           {
-            "_row_num": 300,
+            "_row_num": 306,
             "section_name": "survey"
           }
         ],
@@ -13707,7 +13731,7 @@
       "water_bodies_num": {
         "_defn": [
           {
-            "_row_num": 302,
+            "_row_num": 308,
             "section_name": "survey"
           }
         ],
@@ -13717,7 +13741,7 @@
       "water_count": {
         "_defn": [
           {
-            "_row_num": 304,
+            "_row_num": 310,
             "section_name": "survey"
           }
         ],
@@ -13730,7 +13754,7 @@
       "hh_spray": {
         "_defn": [
           {
-            "_row_num": 312,
+            "_row_num": 318,
             "section_name": "survey"
           }
         ],
@@ -13741,7 +13765,7 @@
       "hh_spray_why_not": {
         "_defn": [
           {
-            "_row_num": 314,
+            "_row_num": 320,
             "section_name": "survey"
           }
         ],
@@ -13752,7 +13776,7 @@
       "hh_spray_label_seen": {
         "_defn": [
           {
-            "_row_num": 317,
+            "_row_num": 323,
             "section_name": "survey"
           }
         ],
@@ -13763,7 +13787,7 @@
       "hh_spray_label_date": {
         "_defn": [
           {
-            "_row_num": 319,
+            "_row_num": 325,
             "section_name": "survey"
           }
         ],
@@ -13774,7 +13798,7 @@
       "hh_num_nets": {
         "_defn": [
           {
-            "_row_num": 323,
+            "_row_num": 329,
             "section_name": "survey"
           }
         ],
@@ -13784,7 +13808,7 @@
       "net_count": {
         "_defn": [
           {
-            "_row_num": 326,
+            "_row_num": 332,
             "section_name": "survey"
           }
         ],
@@ -13797,7 +13821,7 @@
       "malaria_prevention_method": {
         "_defn": [
           {
-            "_row_num": 330,
+            "_row_num": 336,
             "section_name": "survey"
           }
         ],
@@ -13812,7 +13836,7 @@
       "health_facility_formal_sick": {
         "_defn": [
           {
-            "_row_num": 334,
+            "_row_num": 340,
             "section_name": "survey"
           }
         ],
@@ -13823,7 +13847,7 @@
       "health_facility_formal_type": {
         "_defn": [
           {
-            "_row_num": 335,
+            "_row_num": 341,
             "section_name": "survey"
           }
         ],
@@ -13838,7 +13862,7 @@
       "health_facility_formal_type_specify": {
         "_defn": [
           {
-            "_row_num": 337,
+            "_row_num": 343,
             "section_name": "survey"
           }
         ],
@@ -13848,7 +13872,7 @@
       "any_snake_bite": {
         "_defn": [
           {
-            "_row_num": 346,
+            "_row_num": 352,
             "section_name": "survey"
           }
         ],
@@ -13859,7 +13883,7 @@
       "any_snake_bite_num": {
         "_defn": [
           {
-            "_row_num": 348,
+            "_row_num": 354,
             "section_name": "survey"
           }
         ],
@@ -13869,7 +13893,7 @@
       "snake_bite_who": {
         "_defn": [
           {
-            "_row_num": 351,
+            "_row_num": 357,
             "section_name": "survey"
           }
         ],
@@ -13884,7 +13908,7 @@
       "snake_count": {
         "_defn": [
           {
-            "_row_num": 352,
+            "_row_num": 358,
             "section_name": "survey"
           }
         ],
@@ -13897,7 +13921,7 @@
       "hh_contact": {
         "_defn": [
           {
-            "_row_num": 361,
+            "_row_num": 367,
             "section_name": "survey"
           }
         ],
@@ -13907,7 +13931,7 @@
       "hh_contact_no": {
         "_defn": [
           {
-            "_row_num": 363,
+            "_row_num": 369,
             "section_name": "survey"
           }
         ],
@@ -13922,7 +13946,7 @@
       "hh_contact_alt": {
         "_defn": [
           {
-            "_row_num": 368,
+            "_row_num": 374,
             "section_name": "survey"
           }
         ],
@@ -13932,7 +13956,7 @@
       "hh_contact_alt_no": {
         "_defn": [
           {
-            "_row_num": 370,
+            "_row_num": 376,
             "section_name": "survey"
           }
         ],
@@ -13947,7 +13971,7 @@
       "hh_contact_alt_2": {
         "_defn": [
           {
-            "_row_num": 372,
+            "_row_num": 378,
             "section_name": "survey"
           }
         ],
@@ -13958,7 +13982,7 @@
       "hh_contact_alt_2_num": {
         "_defn": [
           {
-            "_row_num": 377,
+            "_row_num": 383,
             "section_name": "survey"
           }
         ],
@@ -13968,7 +13992,7 @@
       "contact_for_project": {
         "_defn": [
           {
-            "_row_num": 380,
+            "_row_num": 386,
             "section_name": "survey"
           }
         ],
@@ -13979,7 +14003,7 @@
       "hh_death": {
         "_defn": [
           {
-            "_row_num": 389,
+            "_row_num": 395,
             "section_name": "survey"
           }
         ],
@@ -13990,7 +14014,7 @@
       "hh_death_count": {
         "_defn": [
           {
-            "_row_num": 391,
+            "_row_num": 397,
             "section_name": "survey"
           }
         ],
@@ -14000,7 +14024,7 @@
       "death_count": {
         "_defn": [
           {
-            "_row_num": 392,
+            "_row_num": 398,
             "section_name": "survey"
           }
         ],
@@ -15144,7 +15168,7 @@
             "display": {
               "prompt": "q44a"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 166,
             "__rowNum__": 165,
             "_token_type": "prompt",
@@ -15164,7 +15188,7 @@
               "min": 0,
               "step": 1
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "validation_tags": "finalize",
             "_row_num": 167,
             "__rowNum__": 166,
@@ -15185,7 +15209,7 @@
               "min": 0,
               "step": 1
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "validation_tags": "finalize",
             "_row_num": 168,
             "__rowNum__": 167,
@@ -15206,7 +15230,7 @@
               "min": 0,
               "step": 1
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "validation_tags": "finalize",
             "_row_num": 169,
             "__rowNum__": 168,
@@ -15222,7 +15246,7 @@
               "prompt": "q44a",
               "constraint_message": "cattle_not_found"
             },
-            "constraint": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle')) || (data('hh_n_cows_adult_female') + data('hh_n_cows_adult_male') + data('hh_n_cows_under_1_year')) > 0",
+            "constraint": "not(selected(data('hh_owns_livestock'), 'cattle')) || (data('hh_n_cows_adult_female') + data('hh_n_cows_adult_male') + data('hh_n_cows_under_1_year')) > 0",
             "model": {
               "isSessionVariable": 1
             },
@@ -15240,7 +15264,7 @@
             "display": {
               "prompt": "cattle_h5"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 176,
             "__rowNum__": 175,
             "_token_type": "prompt",
@@ -15253,7 +15277,7 @@
             "display": {
               "prompt": "q45.cattle"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 177,
             "__rowNum__": 176,
             "_token_type": "prompt",
@@ -15268,7 +15292,7 @@
             "display": {
               "prompt": "q45a"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 178,
             "__rowNum__": 177,
             "_token_type": "prompt",
@@ -15283,7 +15307,7 @@
             "display": {
               "prompt": "q45b"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 179,
             "__rowNum__": 178,
             "_token_type": "prompt",
@@ -15296,7 +15320,7 @@
             "display": {
               "prompt": "q45c.cattle"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 181,
             "__rowNum__": 180,
             "_token_type": "prompt",
@@ -15311,7 +15335,7 @@
             "display": {
               "prompt": "q45ci"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 184,
             "__rowNum__": 183,
             "_token_type": "prompt",
@@ -15339,7 +15363,7 @@
             "display": {
               "prompt": "q45cii"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 190,
             "__rowNum__": 189,
             "_token_type": "prompt",
@@ -15367,7 +15391,7 @@
             "display": {
               "prompt": "q46.cattle"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 195,
             "__rowNum__": 194,
             "_token_type": "prompt",
@@ -15382,7 +15406,7 @@
             "display": {
               "prompt": "q46a"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 197,
             "__rowNum__": 196,
             "_token_type": "prompt",
@@ -15397,7 +15421,7 @@
             "display": {
               "prompt": "q46b"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 200,
             "__rowNum__": 199,
             "_token_type": "prompt",
@@ -15412,7 +15436,7 @@
             "display": {
               "prompt": "q46c"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 201,
             "__rowNum__": 200,
             "_token_type": "prompt",
@@ -15427,7 +15451,7 @@
             "display": {
               "prompt": "q46ci"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "_row_num": 203,
             "__rowNum__": 202,
             "_token_type": "prompt",
@@ -15444,7 +15468,7 @@
               "constraint_message": "w_no_dk_no_animals"
             },
             "constraint": "(not(selected(data('cattle_disease_30_days'), 'no')) || (selected(data('cattle_disease_30_days'), 'no') && countSelected(data('cattle_disease_30_days')) === 1)) && (not(selected(data('cattle_disease_30_days'), 'dk')) || (selected(data('cattle_disease_30_days'), 'dk') && countSelected(data('cattle_disease_30_days')) === 1)) && (not(selected(data('cattle_disease_30_days'), 'not_30_days')) || (selected(data('cattle_disease_30_days'), 'not_30_days') && countSelected(data('cattle_disease_30_days')) === 1))",
-            "hideInContents": "selected(data('hh_country'), 'Mozambique') || not(selected(data('hh_owns_livestock'), 'cattle'))",
+            "hideInContents": "not(selected(data('hh_owns_livestock'), 'cattle'))",
             "validation_tags": "finalize",
             "_row_num": 206,
             "__rowNum__": 205,
@@ -15458,7 +15482,6 @@
             "display": {
               "prompt": "intervention_implication"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique')",
             "_row_num": 210,
             "__rowNum__": 209,
             "_token_type": "prompt",
@@ -15473,7 +15496,6 @@
             "display": {
               "prompt": "q44b.cattle"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique')",
             "_row_num": 212,
             "__rowNum__": 211,
             "_token_type": "prompt",
@@ -15488,7 +15510,6 @@
             "display": {
               "prompt": "q48.cattle"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique')",
             "_row_num": 213,
             "__rowNum__": 212,
             "_token_type": "prompt",
@@ -15503,7 +15524,6 @@
             "display": {
               "prompt": "q49.cattle"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique')",
             "_row_num": 216,
             "__rowNum__": 215,
             "_token_type": "prompt",
@@ -15516,7 +15536,6 @@
             "display": {
               "prompt": "q50.cattle"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique')",
             "_row_num": 217,
             "__rowNum__": 216,
             "_token_type": "prompt",
@@ -15555,7 +15574,6 @@
             "display": {
               "prompt": "q51.cattle"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique')",
             "_row_num": 224,
             "__rowNum__": 223,
             "_token_type": "prompt",
@@ -15572,7 +15590,6 @@
               "constraint_message": "w_all_dk"
             },
             "constraint": "(not(selected(data('cattle_slaughter_month'), 'all')) || (selected(data('cattle_slaughter_month'), 'all') && countSelected(data('cattle_slaughter_month')) === 1)) && (not(selected(data('cattle_slaughter_month'), 'dk')) || (selected(data('cattle_slaughter_month'), 'dk') && countSelected(data('cattle_slaughter_month')) === 1))",
-            "hideInContents": "selected(data('hh_country'), 'Mozambique')",
             "validation_tags": "finalize",
             "_row_num": 226,
             "__rowNum__": 225,
@@ -15588,7 +15605,6 @@
             "display": {
               "prompt": "q52"
             },
-            "hideInContents": "selected(data('hh_country'), 'Mozambique')",
             "_row_num": 228,
             "__rowNum__": 227,
             "_token_type": "prompt",
@@ -15605,7 +15621,6 @@
               "constraint_message": "w_all_dk"
             },
             "constraint": "(not(selected(data('cattle_milk_months'), 'all')) || (selected(data('cattle_milk_months'), 'all') && countSelected(data('cattle_milk_months')) === 1)) && (not(selected(data('cattle_milk_months'), 'dk')) || (selected(data('cattle_milk_months'), 'dk') && countSelected(data('cattle_milk_months')) === 1))",
-            "hideInContents": "selected(data('hh_country'), 'Mozambique')",
             "validation_tags": "finalize",
             "_row_num": 229,
             "__rowNum__": 228,
@@ -15771,6 +15786,19 @@
             "promptIdx": 117
           },
           {
+            "type": "note",
+            "display": {
+              "prompt": "distance_inconsistent"
+            },
+            "hideInContents": 1,
+            "_row_num": 256,
+            "__rowNum__": 255,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen245",
+            "promptIdx": 118
+          },
+          {
             "type": "select_one",
             "values_list": "dry_season_distance",
             "name": "distance_pigs_dry_season",
@@ -15778,12 +15806,24 @@
               "prompt": "q45cii"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-            "_row_num": 257,
-            "__rowNum__": 256,
+            "_row_num": 260,
+            "__rowNum__": 259,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen245",
-            "promptIdx": 118
+            "promptIdx": 119
+          },
+          {
+            "type": "note",
+            "display": {
+              "prompt": "distance_inconsistent"
+            },
+            "_row_num": 262,
+            "__rowNum__": 261,
+            "_token_type": "prompt",
+            "_type": "note",
+            "_branch_label_enclosing_screen": "survey/_screen245",
+            "promptIdx": 120
           },
           {
             "type": "select_one",
@@ -15793,12 +15833,12 @@
               "prompt": "q46.pig"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-            "_row_num": 259,
-            "__rowNum__": 258,
+            "_row_num": 265,
+            "__rowNum__": 264,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen245",
-            "promptIdx": 119
+            "promptIdx": 121
           },
           {
             "type": "select_one",
@@ -15808,12 +15848,12 @@
               "prompt": "q46a"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-            "_row_num": 261,
-            "__rowNum__": 260,
+            "_row_num": 267,
+            "__rowNum__": 266,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen245",
-            "promptIdx": 120
+            "promptIdx": 122
           },
           {
             "type": "select_one",
@@ -15823,12 +15863,12 @@
               "prompt": "q46b"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-            "_row_num": 264,
-            "__rowNum__": 263,
+            "_row_num": 270,
+            "__rowNum__": 269,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen245",
-            "promptIdx": 121
+            "promptIdx": 123
           },
           {
             "type": "select_one",
@@ -15838,12 +15878,12 @@
               "prompt": "q46c"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-            "_row_num": 265,
-            "__rowNum__": 264,
+            "_row_num": 271,
+            "__rowNum__": 270,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen245",
-            "promptIdx": 122
+            "promptIdx": 124
           },
           {
             "type": "select_one",
@@ -15853,12 +15893,12 @@
               "prompt": "q46ci"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
-            "_row_num": 267,
-            "__rowNum__": 266,
+            "_row_num": 273,
+            "__rowNum__": 272,
             "_token_type": "prompt",
             "_type": "select_one",
             "_branch_label_enclosing_screen": "survey/_screen245",
-            "promptIdx": 123
+            "promptIdx": 125
           },
           {
             "type": "select_multiple",
@@ -15871,12 +15911,12 @@
             "constraint": "(not(selected(data('pigs_disease_30_days'), 'no')) || (selected(data('pigs_disease_30_days'), 'no') && countSelected(data('pigs_disease_30_days')) === 1)) && (not(selected(data('pigs_disease_30_days'), 'dk')) || (selected(data('pigs_disease_30_days'), 'dk') && countSelected(data('pigs_disease_30_days')) === 1)) && (not(selected(data('pigs_disease_30_days'), 'not_30_days')) || (selected(data('pigs_disease_30_days'), 'not_30_days') && countSelected(data('pigs_disease_30_days')) === 1))",
             "hideInContents": "selected(data('hh_country'), 'Tanzania') || not(selected(data('hh_owns_livestock'), 'pigs'))",
             "validation_tags": "finalize",
-            "_row_num": 270,
-            "__rowNum__": 269,
+            "_row_num": 276,
+            "__rowNum__": 275,
             "_token_type": "prompt",
             "_type": "select_multiple",
             "_branch_label_enclosing_screen": "survey/_screen245",
-            "promptIdx": 124
+            "promptIdx": 126
           },
           {
             "type": "note",
@@ -15884,12 +15924,12 @@
               "prompt": "intervention_implication"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-            "_row_num": 275,
-            "__rowNum__": 274,
+            "_row_num": 281,
+            "__rowNum__": 280,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen274",
-            "promptIdx": 125
+            "_branch_label_enclosing_screen": "survey/_screen280",
+            "promptIdx": 127
           },
           {
             "type": "select_one",
@@ -15899,12 +15939,12 @@
               "prompt": "q44b.pig"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-            "_row_num": 277,
-            "__rowNum__": 276,
+            "_row_num": 283,
+            "__rowNum__": 282,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen274",
-            "promptIdx": 126
+            "_branch_label_enclosing_screen": "survey/_screen280",
+            "promptIdx": 128
           },
           {
             "type": "select_one",
@@ -15914,12 +15954,12 @@
               "prompt": "q48.pig"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-            "_row_num": 278,
-            "__rowNum__": 277,
+            "_row_num": 284,
+            "__rowNum__": 283,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen274",
-            "promptIdx": 127
+            "_branch_label_enclosing_screen": "survey/_screen280",
+            "promptIdx": 129
           },
           {
             "type": "select_one",
@@ -15929,12 +15969,12 @@
               "prompt": "q49.pig"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-            "_row_num": 281,
-            "__rowNum__": 280,
+            "_row_num": 287,
+            "__rowNum__": 286,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen274",
-            "promptIdx": 128
+            "_branch_label_enclosing_screen": "survey/_screen280",
+            "promptIdx": 130
           },
           {
             "type": "note",
@@ -15942,36 +15982,36 @@
               "prompt": "q50.pig"
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania')",
-            "_row_num": 282,
-            "__rowNum__": 281,
+            "_row_num": 288,
+            "__rowNum__": 287,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen274",
-            "promptIdx": 129
+            "_branch_label_enclosing_screen": "survey/_screen280",
+            "promptIdx": 131
           },
           {
             "type": "select_one_dropdown",
             "values_list": "hh_members_roster",
             "name": "pigs_ivermectin_responsible",
             "hideInContents": 1,
-            "_row_num": 286,
-            "__rowNum__": 285,
+            "_row_num": 292,
+            "__rowNum__": 291,
             "_token_type": "prompt",
             "_type": "select_one_dropdown",
-            "_branch_label_enclosing_screen": "survey/_screen274",
-            "promptIdx": 130
+            "_branch_label_enclosing_screen": "survey/_screen280",
+            "promptIdx": 132
           },
           {
             "type": "select_multiple",
             "values_list": "dk",
             "name": "pigs_ivermectin_responsible_dk",
             "hideInContents": 1,
-            "_row_num": 288,
-            "__rowNum__": 287,
+            "_row_num": 294,
+            "__rowNum__": 293,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen274",
-            "promptIdx": 131
+            "_branch_label_enclosing_screen": "survey/_screen280",
+            "promptIdx": 133
           },
           {
             "type": "select_one",
@@ -15982,12 +16022,12 @@
             },
             "hideInContents": "selected(data('hh_country'), 'Tanzania')",
             "validation_tags": "finalize",
-            "_row_num": 289,
-            "__rowNum__": 288,
+            "_row_num": 295,
+            "__rowNum__": 294,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen274",
-            "promptIdx": 132
+            "_branch_label_enclosing_screen": "survey/_screen280",
+            "promptIdx": 134
           },
           {
             "type": "select_multiple",
@@ -16000,24 +16040,24 @@
             "constraint": "(not(selected(data('pigs_slaughter_month'), 'all')) || (selected(data('pigs_slaughter_month'), 'all') && countSelected(data('pigs_slaughter_month')) === 1)) && (not(selected(data('pigs_slaughter_month'), 'dk')) || (selected(data('pigs_slaughter_month'), 'dk') && countSelected(data('pigs_slaughter_month')) === 1))",
             "hideInContents": "selected(data('hh_country'), 'Tanzania')",
             "validation_tags": "finalize",
-            "_row_num": 291,
-            "__rowNum__": 290,
+            "_row_num": 297,
+            "__rowNum__": 296,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen274",
-            "promptIdx": 133
+            "_branch_label_enclosing_screen": "survey/_screen280",
+            "promptIdx": 135
           },
           {
             "type": "note",
             "display": {
               "prompt": "env_h2"
             },
-            "_row_num": 299,
-            "__rowNum__": 298,
+            "_row_num": 305,
+            "__rowNum__": 304,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen297",
-            "promptIdx": 134
+            "_branch_label_enclosing_screen": "survey/_screen303",
+            "promptIdx": 136
           },
           {
             "type": "select_one",
@@ -16026,12 +16066,12 @@
             "display": {
               "prompt": "q53"
             },
-            "_row_num": 300,
-            "__rowNum__": 299,
+            "_row_num": 306,
+            "__rowNum__": 305,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen297",
-            "promptIdx": 135
+            "_branch_label_enclosing_screen": "survey/_screen303",
+            "promptIdx": 137
           },
           {
             "type": "integer",
@@ -16041,12 +16081,12 @@
             },
             "required": "selected(data('water_bodies'), 'yes')",
             "validation_tags": "finalize",
-            "_row_num": 302,
-            "__rowNum__": 301,
+            "_row_num": 308,
+            "__rowNum__": 307,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen297",
-            "promptIdx": 136
+            "_branch_label_enclosing_screen": "survey/_screen303",
+            "promptIdx": 138
           },
           {
             "type": "note",
@@ -16054,12 +16094,12 @@
               "prompt": "water_prompt"
             },
             "hideInContents": 1,
-            "_row_num": 303,
-            "__rowNum__": 302,
+            "_row_num": 309,
+            "__rowNum__": 308,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen297",
-            "promptIdx": 137
+            "_branch_label_enclosing_screen": "survey/_screen303",
+            "promptIdx": 139
           },
           {
             "type": "linked_table_counting",
@@ -16077,24 +16117,24 @@
               "valuesList": "linked_water_body"
             },
             "validation_tags": "finalize",
-            "_row_num": 304,
-            "__rowNum__": 303,
+            "_row_num": 310,
+            "__rowNum__": 309,
             "_token_type": "prompt",
             "_type": "linked_table_counting",
-            "_branch_label_enclosing_screen": "survey/_screen297",
-            "promptIdx": 138
+            "_branch_label_enclosing_screen": "survey/_screen303",
+            "promptIdx": 140
           },
           {
             "type": "note",
             "display": {
               "prompt": "malaria_h3"
             },
-            "_row_num": 310,
-            "__rowNum__": 309,
+            "_row_num": 316,
+            "__rowNum__": 315,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen308",
-            "promptIdx": 139
+            "_branch_label_enclosing_screen": "survey/_screen314",
+            "promptIdx": 141
           },
           {
             "type": "select_one",
@@ -16103,12 +16143,12 @@
             "display": {
               "prompt": "q54"
             },
-            "_row_num": 312,
-            "__rowNum__": 311,
+            "_row_num": 318,
+            "__rowNum__": 317,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen308",
-            "promptIdx": 140
+            "_branch_label_enclosing_screen": "survey/_screen314",
+            "promptIdx": 142
           },
           {
             "type": "select_one",
@@ -16117,12 +16157,12 @@
             "display": {
               "prompt": "q54a"
             },
-            "_row_num": 314,
-            "__rowNum__": 313,
+            "_row_num": 320,
+            "__rowNum__": 319,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen308",
-            "promptIdx": 141
+            "_branch_label_enclosing_screen": "survey/_screen314",
+            "promptIdx": 143
           },
           {
             "type": "select_one_with_other",
@@ -16131,12 +16171,12 @@
             "display": {
               "prompt": "q54b"
             },
-            "_row_num": 317,
-            "__rowNum__": 316,
+            "_row_num": 323,
+            "__rowNum__": 322,
             "_token_type": "prompt",
             "_type": "select_one_with_other",
-            "_branch_label_enclosing_screen": "survey/_screen308",
-            "promptIdx": 142
+            "_branch_label_enclosing_screen": "survey/_screen314",
+            "promptIdx": 144
           },
           {
             "type": "birth_date",
@@ -16147,12 +16187,12 @@
             },
             "constraint": "not(selected(data('hh_spray_label_seen'), 'yes')) || !data('hh_spray_label_date').isAfter()",
             "validation_tags": "finalize",
-            "_row_num": 319,
-            "__rowNum__": 318,
+            "_row_num": 325,
+            "__rowNum__": 324,
             "_token_type": "prompt",
             "_type": "birth_date",
-            "_branch_label_enclosing_screen": "survey/_screen308",
-            "promptIdx": 143
+            "_branch_label_enclosing_screen": "survey/_screen314",
+            "promptIdx": 145
           },
           {
             "type": "integer",
@@ -16163,12 +16203,12 @@
             },
             "constraint": "data('hh_num_nets') < 51",
             "validation_tags": "finalize",
-            "_row_num": 323,
-            "__rowNum__": 322,
+            "_row_num": 329,
+            "__rowNum__": 328,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen308",
-            "promptIdx": 144
+            "_branch_label_enclosing_screen": "survey/_screen314",
+            "promptIdx": 146
           },
           {
             "type": "note",
@@ -16176,12 +16216,12 @@
               "prompt": "net_prompt"
             },
             "hideInContents": 1,
-            "_row_num": 325,
-            "__rowNum__": 324,
+            "_row_num": 331,
+            "__rowNum__": 330,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen308",
-            "promptIdx": 145
+            "_branch_label_enclosing_screen": "survey/_screen314",
+            "promptIdx": 147
           },
           {
             "type": "linked_table_counting",
@@ -16199,12 +16239,12 @@
               "valuesList": "linked_mosquito_net"
             },
             "validation_tags": "finalize",
-            "_row_num": 326,
-            "__rowNum__": 325,
+            "_row_num": 332,
+            "__rowNum__": 331,
             "_token_type": "prompt",
             "_type": "linked_table_counting",
-            "_branch_label_enclosing_screen": "survey/_screen308",
-            "promptIdx": 146
+            "_branch_label_enclosing_screen": "survey/_screen314",
+            "promptIdx": 148
           },
           {
             "type": "select_multiple",
@@ -16217,24 +16257,24 @@
             "choice_filter": "choice_item.country === data('hh_country')",
             "constraint": "(not(selected(data('malaria_prevention_method'), 'none')) || (selected(data('malaria_prevention_method'), 'none') && countSelected(data('malaria_prevention_method')) === 1)) && (not(selected(data('malaria_prevention_method'), 'dk')) || (selected(data('malaria_prevention_method'), 'dk') && countSelected(data('malaria_prevention_method')) === 1))",
             "validation_tags": "finalize",
-            "_row_num": 330,
-            "__rowNum__": 329,
+            "_row_num": 336,
+            "__rowNum__": 335,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen329",
-            "promptIdx": 147
+            "_branch_label_enclosing_screen": "survey/_screen335",
+            "promptIdx": 149
           },
           {
             "type": "note",
             "display": {
               "prompt": "health_h2"
             },
-            "_row_num": 333,
-            "__rowNum__": 332,
+            "_row_num": 339,
+            "__rowNum__": 338,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen332",
-            "promptIdx": 148
+            "_branch_label_enclosing_screen": "survey/_screen338",
+            "promptIdx": 150
           },
           {
             "type": "select_one_dropdown",
@@ -16248,12 +16288,12 @@
             "choice_filter": "choice_item.country === data('hh_country')",
             "constraint": "(!data('health_facility_formal_sick') && !data('health_facility_formal_type')) || (!!data('health_facility_formal_sick') ^ !!data('health_facility_formal_type'))",
             "validation_tags": "finalize",
-            "_row_num": 334,
-            "__rowNum__": 333,
+            "_row_num": 340,
+            "__rowNum__": 339,
             "_token_type": "prompt",
             "_type": "select_one_dropdown",
-            "_branch_label_enclosing_screen": "survey/_screen332",
-            "promptIdx": 149
+            "_branch_label_enclosing_screen": "survey/_screen338",
+            "promptIdx": 151
           },
           {
             "type": "select_multiple",
@@ -16265,12 +16305,12 @@
             },
             "hideInContents": 1,
             "validation_tags": "finalize",
-            "_row_num": 335,
-            "__rowNum__": 334,
+            "_row_num": 341,
+            "__rowNum__": 340,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen332",
-            "promptIdx": 150
+            "_branch_label_enclosing_screen": "survey/_screen338",
+            "promptIdx": 152
           },
           {
             "type": "text",
@@ -16278,24 +16318,24 @@
             "display": {
               "prompt": "specify"
             },
-            "_row_num": 337,
-            "__rowNum__": 336,
+            "_row_num": 343,
+            "__rowNum__": 342,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen332",
-            "promptIdx": 151
+            "_branch_label_enclosing_screen": "survey/_screen338",
+            "promptIdx": 153
           },
           {
             "type": "note",
             "display": {
               "prompt": "snake_h3"
             },
-            "_row_num": 345,
-            "__rowNum__": 344,
+            "_row_num": 351,
+            "__rowNum__": 350,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen343",
-            "promptIdx": 152
+            "_branch_label_enclosing_screen": "survey/_screen349",
+            "promptIdx": 154
           },
           {
             "type": "select_one",
@@ -16304,12 +16344,12 @@
             "display": {
               "prompt": "q58"
             },
-            "_row_num": 346,
-            "__rowNum__": 345,
+            "_row_num": 352,
+            "__rowNum__": 351,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen343",
-            "promptIdx": 153
+            "_branch_label_enclosing_screen": "survey/_screen349",
+            "promptIdx": 155
           },
           {
             "type": "integer",
@@ -16319,36 +16359,36 @@
             },
             "required": "selected(data('any_snake_bite'), 'yes')",
             "validation_tags": "finalize",
-            "_row_num": 348,
-            "__rowNum__": 347,
+            "_row_num": 354,
+            "__rowNum__": 353,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen343",
-            "promptIdx": 154
+            "_branch_label_enclosing_screen": "survey/_screen349",
+            "promptIdx": 156
           },
           {
             "type": "note",
             "display": {
               "prompt": "snake_prompt"
             },
-            "_row_num": 349,
-            "__rowNum__": 348,
+            "_row_num": 355,
+            "__rowNum__": 354,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen343",
-            "promptIdx": 155
+            "_branch_label_enclosing_screen": "survey/_screen349",
+            "promptIdx": 157
           },
           {
             "type": "note",
             "display": {
               "prompt": "snake_detail"
             },
-            "_row_num": 350,
-            "__rowNum__": 349,
+            "_row_num": 356,
+            "__rowNum__": 355,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen343",
-            "promptIdx": 156
+            "_branch_label_enclosing_screen": "survey/_screen349",
+            "promptIdx": 158
           },
           {
             "type": "select_multiple",
@@ -16357,12 +16397,12 @@
             "display": {
               "prompt": "q59a"
             },
-            "_row_num": 351,
-            "__rowNum__": 350,
+            "_row_num": 357,
+            "__rowNum__": 356,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen343",
-            "promptIdx": 157
+            "_branch_label_enclosing_screen": "survey/_screen349",
+            "promptIdx": 159
           },
           {
             "type": "linked_table_counting",
@@ -16383,36 +16423,36 @@
               "valuesList": "linked_member_snake_bit"
             },
             "validation_tags": "finalize",
-            "_row_num": 352,
-            "__rowNum__": 351,
+            "_row_num": 358,
+            "__rowNum__": 357,
             "_token_type": "prompt",
             "_type": "linked_table_counting",
-            "_branch_label_enclosing_screen": "survey/_screen343",
-            "promptIdx": 158
+            "_branch_label_enclosing_screen": "survey/_screen349",
+            "promptIdx": 160
           },
           {
             "type": "note",
             "display": {
               "prompt": "contact_h2"
             },
-            "_row_num": 356,
-            "__rowNum__": 355,
+            "_row_num": 362,
+            "__rowNum__": 361,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 159
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 161
           },
           {
             "type": "note",
             "display": {
               "prompt": "q60"
             },
-            "_row_num": 357,
-            "__rowNum__": 356,
+            "_row_num": 363,
+            "__rowNum__": 362,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 160
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 162
           },
           {
             "type": "text",
@@ -16421,12 +16461,12 @@
               "type": "tel"
             },
             "hideInContents": 1,
-            "_row_num": 361,
-            "__rowNum__": 360,
+            "_row_num": 367,
+            "__rowNum__": 366,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 161
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 163
           },
           {
             "type": "select_multiple",
@@ -16436,24 +16476,24 @@
               "prompt": "or_capital"
             },
             "hideInContents": 1,
-            "_row_num": 363,
-            "__rowNum__": 362,
+            "_row_num": 369,
+            "__rowNum__": 368,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 162
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 164
           },
           {
             "type": "note",
             "display": {
               "prompt": "q61"
             },
-            "_row_num": 364,
-            "__rowNum__": 363,
+            "_row_num": 370,
+            "__rowNum__": 369,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 163
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 165
           },
           {
             "type": "text",
@@ -16462,12 +16502,12 @@
               "type": "tel"
             },
             "hideInContents": 1,
-            "_row_num": 368,
-            "__rowNum__": 367,
+            "_row_num": 374,
+            "__rowNum__": 373,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 164
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 166
           },
           {
             "type": "select_multiple",
@@ -16477,12 +16517,12 @@
               "prompt": "or_capital"
             },
             "hideInContents": 1,
-            "_row_num": 370,
-            "__rowNum__": 369,
+            "_row_num": 376,
+            "__rowNum__": 375,
             "_token_type": "prompt",
             "_type": "select_multiple",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 165
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 167
           },
           {
             "type": "select_one",
@@ -16491,24 +16531,24 @@
             "display": {
               "prompt": "q62"
             },
-            "_row_num": 372,
-            "__rowNum__": 371,
+            "_row_num": 378,
+            "__rowNum__": 377,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 166
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 168
           },
           {
             "type": "note",
             "display": {
               "prompt": "q62a"
             },
-            "_row_num": 373,
-            "__rowNum__": 372,
+            "_row_num": 379,
+            "__rowNum__": 378,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 167
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 169
           },
           {
             "type": "text",
@@ -16517,12 +16557,12 @@
               "type": "tel"
             },
             "hideInContents": 1,
-            "_row_num": 377,
-            "__rowNum__": 376,
+            "_row_num": 383,
+            "__rowNum__": 382,
             "_token_type": "prompt",
             "_type": "text",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 168
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 170
           },
           {
             "type": "select_one",
@@ -16531,12 +16571,12 @@
             "display": {
               "prompt": "q63"
             },
-            "_row_num": 380,
-            "__rowNum__": 379,
+            "_row_num": 386,
+            "__rowNum__": 385,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen355",
-            "promptIdx": 169
+            "_branch_label_enclosing_screen": "survey/_screen361",
+            "promptIdx": 171
           },
           {
             "type": "note",
@@ -16544,12 +16584,12 @@
               "prompt": "death_h2"
             },
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-            "_row_num": 387,
-            "__rowNum__": 386,
+            "_row_num": 393,
+            "__rowNum__": 392,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen384",
-            "promptIdx": 170
+            "_branch_label_enclosing_screen": "survey/_screen390",
+            "promptIdx": 172
           },
           {
             "type": "note",
@@ -16557,12 +16597,12 @@
               "prompt": "death_new_only"
             },
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-            "_row_num": 388,
-            "__rowNum__": 387,
+            "_row_num": 394,
+            "__rowNum__": 393,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen384",
-            "promptIdx": 171
+            "_branch_label_enclosing_screen": "survey/_screen390",
+            "promptIdx": 173
           },
           {
             "type": "select_one",
@@ -16574,12 +16614,12 @@
             "required": "selected(data('hh_minicenced'), 'no')",
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
             "validation_tags": "finalize",
-            "_row_num": 389,
-            "__rowNum__": 388,
+            "_row_num": 395,
+            "__rowNum__": 394,
             "_token_type": "prompt",
             "_type": "select_one",
-            "_branch_label_enclosing_screen": "survey/_screen384",
-            "promptIdx": 172
+            "_branch_label_enclosing_screen": "survey/_screen390",
+            "promptIdx": 174
           },
           {
             "type": "integer",
@@ -16592,12 +16632,12 @@
               "step": 1
             },
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
-            "_row_num": 391,
-            "__rowNum__": 390,
+            "_row_num": 397,
+            "__rowNum__": 396,
             "_token_type": "prompt",
             "_type": "integer",
-            "_branch_label_enclosing_screen": "survey/_screen384",
-            "promptIdx": 173
+            "_branch_label_enclosing_screen": "survey/_screen390",
+            "promptIdx": 175
           },
           {
             "type": "linked_table_counting",
@@ -16617,24 +16657,24 @@
             },
             "hideInContents": "selected(data('hh_minicenced'), 'yes')",
             "validation_tags": "finalize",
-            "_row_num": 392,
-            "__rowNum__": 391,
+            "_row_num": 398,
+            "__rowNum__": 397,
             "_token_type": "prompt",
             "_type": "linked_table_counting",
-            "_branch_label_enclosing_screen": "survey/_screen384",
-            "promptIdx": 174
+            "_branch_label_enclosing_screen": "survey/_screen390",
+            "promptIdx": 176
           },
           {
             "type": "note",
             "display": {
               "prompt": "ind_h2"
             },
-            "_row_num": 399,
-            "__rowNum__": 398,
+            "_row_num": 405,
+            "__rowNum__": 404,
             "_token_type": "prompt",
             "_type": "note",
-            "_branch_label_enclosing_screen": "survey/_screen398",
-            "promptIdx": 175
+            "_branch_label_enclosing_screen": "survey/_screen404",
+            "promptIdx": 177
           },
           {
             "type": "linked_table",
@@ -16644,20 +16684,20 @@
               "hide_delete_button": 1,
               "hide_add_instance": 1
             },
-            "_row_num": 400,
-            "__rowNum__": 399,
+            "_row_num": 406,
+            "__rowNum__": 405,
             "_token_type": "prompt",
             "_type": "linked_table",
-            "_branch_label_enclosing_screen": "survey/_screen398",
-            "promptIdx": 176
+            "_branch_label_enclosing_screen": "survey/_screen404",
+            "promptIdx": 178
           },
           {
             "_token_type": "prompt",
             "type": "contents",
             "_type": "contents",
-            "_row_num": 402,
-            "_branch_label_enclosing_screen": "survey/_screen402",
-            "promptIdx": 177
+            "_row_num": 408,
+            "_branch_label_enclosing_screen": "survey/_screen408",
+            "promptIdx": 179
           }
         ],
         "validation_tag_map": {
@@ -16687,21 +16727,21 @@
             109,
             110,
             111,
-            124,
-            132,
-            133,
-            136,
+            126,
+            134,
+            135,
             138,
-            143,
-            144,
+            140,
+            145,
             146,
-            147,
+            148,
             149,
-            150,
-            154,
-            158,
-            172,
-            174
+            151,
+            152,
+            156,
+            160,
+            174,
+            176
           ],
           "cattle": [
             81
@@ -17042,7 +17082,7 @@
               "__rowNum__": 206,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(82);\nactivePromptIndicies.push(83);\nactivePromptIndicies.push(84);\nactivePromptIndicies.push(85);\nif (not(selected(data('where_cattle_rainy_season'),'Inside the house where humans sleep')) || not(selected(data('where_cattle_dry_season'), 'Inside the house where humans sleep'))) {\nactivePromptIndicies.push(86);\n}\nif (selected(data('where_cattle_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Just outside the compound') || selected(data('where_cattle_rainy_season'), 'In a different household with a different household chief') || selected(data('where_cattle_rainy_season'), 'Farm') || selected(data('where_cattle_rainy_season'), 'In the field, away from the compound') || selected(data('where_cattle_rainy_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(87);\nif (selected(data('where_cattle_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the house') && selected(data('distance_cattle_rainy_season'), '50-100m') || selected(data('distance_cattle_rainy_season'), '100-500m') || selected(data('distance_cattle_rainy_season'), '500-1km') || selected(data('distance_cattle_rainy_season'), '>1km')) {\nactivePromptIndicies.push(88);\n}\n}\nif (selected(data('where_cattle_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_cattle_dry_season'), 'Just outside the compound') || selected(data('where_cattle_dry_season'), 'In a different household with a different household chief') || selected(data('where_cattle_dry_season'), 'Farm') || selected(data('where_cattle_dry_season'), 'In the field, away from the compound') || selected(data('where_cattle_dry_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(89);\nif (selected(data('where_cattle_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the house') && selected(data('distance_cattle_dry_season'), '50-100m') || selected(data('distance_cattle_dry_season'), '100-500m') || selected(data('distance_cattle_dry_season'), '500-1km') || selected(data('distance_cattle_dry_season'), '>1km')) {\nactivePromptIndicies.push(90);\n}\n}\nactivePromptIndicies.push(91);\nif (selected(data('weaned_cattle_wet_season'), 'confined')) {\nactivePromptIndicies.push(92);\n}\nif (selected(data('weaned_cattle_wet_season'), 'grazing')) {\nactivePromptIndicies.push(93);\nactivePromptIndicies.push(94);\nif (selected(data('weaned_cattle_grazing_water'), 'yes')) {\nactivePromptIndicies.push(95);\n}\n}\nactivePromptIndicies.push(96);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(82);\nactivePromptIndicies.push(83);\nactivePromptIndicies.push(84);\nactivePromptIndicies.push(85);\nif (not(selected(data('where_cattle_rainy_season'),'Inside the house where humans sleep')) || not(selected(data('where_cattle_dry_season'), 'Inside the house where humans sleep'))) {\nactivePromptIndicies.push(86);\n}\nif (selected(data('where_cattle_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Just outside the compound') || selected(data('where_cattle_rainy_season'), 'In a different household with a different household chief') || selected(data('where_cattle_rainy_season'), 'Farm') || selected(data('where_cattle_rainy_season'), 'In the field, away from the compound') || selected(data('where_cattle_rainy_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(87);\nif ((selected(data('where_cattle_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household')) && (selected(data('distance_cattle_rainy_season'), '50-100m') || selected(data('distance_cattle_rainy_season'), '100-500m') || selected(data('distance_cattle_rainy_season'), '500-1km') || selected(data('distance_cattle_rainy_season'), '>1km'))) {\nactivePromptIndicies.push(88);\n}\n}\nif (selected(data('where_cattle_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_cattle_dry_season'), 'Just outside the compound') || selected(data('where_cattle_dry_season'), 'In a different household with a different household chief') || selected(data('where_cattle_dry_season'), 'Farm') || selected(data('where_cattle_dry_season'), 'In the field, away from the compound') || selected(data('where_cattle_dry_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(89);\nif ((selected(data('where_cattle_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_cattle_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the household')) && (selected(data('distance_cattle_dry_season'), '50-100m') || selected(data('distance_cattle_dry_season'), '100-500m') || selected(data('distance_cattle_dry_season'), '500-1km') || selected(data('distance_cattle_dry_season'), '>1km'))) {\nactivePromptIndicies.push(90);\n}\n}\nactivePromptIndicies.push(91);\nif (selected(data('weaned_cattle_wet_season'), 'confined')) {\nactivePromptIndicies.push(92);\n}\nif (selected(data('weaned_cattle_wet_season'), 'grazing')) {\nactivePromptIndicies.push(93);\nactivePromptIndicies.push(94);\nif (selected(data('weaned_cattle_grazing_water'), 'yes')) {\nactivePromptIndicies.push(95);\n}\n}\nactivePromptIndicies.push(96);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 28
           },
           {
@@ -17078,8 +17118,8 @@
           {
             "clause": "end if",
             "_token_type": "goto_label",
-            "_branch_label": "_else295",
-            "_row_num": 295,
+            "_branch_label": "_else301",
+            "_row_num": 301,
             "operationIdx": 32
           },
           {
@@ -17094,8 +17134,8 @@
           {
             "clause": "end if",
             "_token_type": "goto_label",
-            "_branch_label": "_else272",
-            "_row_num": 272,
+            "_branch_label": "_else278",
+            "_row_num": 278,
             "operationIdx": 34
           },
           {
@@ -17127,166 +17167,145 @@
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 271,
-              "__rowNum__": 270,
+              "_row_num": 277,
+              "__rowNum__": 276,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(112);\nactivePromptIndicies.push(113);\nactivePromptIndicies.push(114);\nactivePromptIndicies.push(115);\nif (not(selected(data('where_pigs_rainy_season'),'Inside the house where humans sleep')) || not(selected(data('where_pigs_dry_season'), 'Inside the house where humans sleep'))) {\nactivePromptIndicies.push(116);\n}\nif (selected(data('where_pigs_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_pigs_rainy_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Just outside the compound') || selected(data('where_pigs_rainy_season'), 'In a different household with a different household chief') || selected(data('where_pigs_rainy_season'), 'Farm') || selected(data('where_pigs_rainy_season'), 'In the field, away from the compound') || selected(data('where_pigs_rainy_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(117);\n}\nif (selected(data('where_pigs_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_dry_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_pigs_dry_season'),'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_pigs_dry_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_pigs_dry_season'), 'Just outside the compound') || selected(data('where_pigs_dry_season'), 'In a different household with a different household chief') || selected(data('where_pigs_dry_season'), 'Farm') || selected(data('where_pigs_dry_season'), 'In the field, away from the compound') || selected(data('where_pigs_dry_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(118);\n}\nactivePromptIndicies.push(119);\nif (selected(data('weaned_pigs_wet_season'), 'confined')) {\nactivePromptIndicies.push(120);\n}\nif (selected(data('weaned_pigs_wet_season'), 'grazing')) {\nactivePromptIndicies.push(121);\nactivePromptIndicies.push(122);\nif (selected(data('weaned_pigs_grazing_water'), 'yes')) {\nactivePromptIndicies.push(123);\n}\n}\nactivePromptIndicies.push(124);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(112);\nactivePromptIndicies.push(113);\nactivePromptIndicies.push(114);\nactivePromptIndicies.push(115);\nif (not(selected(data('where_pigs_rainy_season'),'Inside the house where humans sleep')) || not(selected(data('where_pigs_dry_season'), 'Inside the house where humans sleep'))) {\nactivePromptIndicies.push(116);\n}\nif (selected(data('where_pigs_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_pigs_rainy_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Just outside the compound') || selected(data('where_pigs_rainy_season'), 'In a different household with a different household chief') || selected(data('where_pigs_rainy_season'), 'Farm') || selected(data('where_pigs_rainy_season'), 'In the field, away from the compound') || selected(data('where_pigs_rainy_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(117);\nif ((selected(data('where_pigs_rainy_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_rainy_season'), 'Inside the compound but not inside a structure within 15 meters from the household')) && (selected(data('distance_pigs_rainy_season'), '50-100m') || selected(data('distance_pigs_rainy_season'), '100-500m') || selected(data('distance_pigs_rainy_season'), '500-1km') || selected(data('distance_pigs_rainy_season'), '>1km'))) {\nactivePromptIndicies.push(118);\n}\n}\nif (selected(data('where_pigs_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_dry_season'), 'Inside an animal structure inside the compound but > 15 meters from the house') || selected(data('where_pigs_dry_season'),'Inside the compound but not inside a structure within 15 meters from the household') || selected(data('where_pigs_dry_season'), 'Inside the compound but not inside a structure, but >15 meters from the house') || selected(data('where_pigs_dry_season'), 'Just outside the compound') || selected(data('where_pigs_dry_season'), 'In a different household with a different household chief') || selected(data('where_pigs_dry_season'), 'Farm') || selected(data('where_pigs_dry_season'), 'In the field, away from the compound') || selected(data('where_pigs_dry_season'), 'Unspecified location for keeping them')) {\nactivePromptIndicies.push(119);\nif ((selected(data('where_pigs_dry_season'), 'Inside an animal structure and within 15 meters from the house') || selected(data('where_pigs_dry_season'), 'Inside the compound but not inside a structure within 15 meters from the household')) && (selected(data('distance_pigs_dry_season'), '50-100m') || selected(data('distance_pigs_dry_season'), '100-500m') || selected(data('distance_pigs_dry_season'), '500-1km') || selected(data('distance_pigs_dry_season'), '>1km'))) {\nactivePromptIndicies.push(120);\n}\n}\nactivePromptIndicies.push(121);\nif (selected(data('weaned_pigs_wet_season'), 'confined')) {\nactivePromptIndicies.push(122);\n}\nif (selected(data('weaned_pigs_wet_season'), 'grazing')) {\nactivePromptIndicies.push(123);\nactivePromptIndicies.push(124);\nif (selected(data('weaned_pigs_grazing_water'), 'yes')) {\nactivePromptIndicies.push(125);\n}\n}\nactivePromptIndicies.push(126);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 37
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
-            "_branch_label": "_endif272",
-            "_row_num": 272,
+            "_branch_label": "_endif278",
+            "_row_num": 278,
             "operationIdx": 38
           },
           {
             "clause": "begin screen",
-            "_row_num": 274,
-            "__rowNum__": 273,
+            "_row_num": 280,
+            "__rowNum__": 279,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 294,
-              "__rowNum__": 293,
+              "_row_num": 300,
+              "__rowNum__": 299,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(125);\nif (not(selected(data('hh_owns_livestock'), 'pigs'))) {\nactivePromptIndicies.push(126);\nactivePromptIndicies.push(127);\n}\nif (selected(data('hh_owns_livestock'), 'pigs') || selected(data('pigs_past_12_months'), 'yes')) {\nactivePromptIndicies.push(128);\nactivePromptIndicies.push(129);\nif (selected(data('pigs_ivermectin_responsible_dk'), 'dk')) {\nassign('pigs_ivermectin_responsible', null);\n}\nelse {\nactivePromptIndicies.push(130);\n}\nactivePromptIndicies.push(131);\nactivePromptIndicies.push(132);\nif (selected(data('pigs_slaughter'), 'yes')) {\nactivePromptIndicies.push(133);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(127);\nif (not(selected(data('hh_owns_livestock'), 'pigs'))) {\nactivePromptIndicies.push(128);\nactivePromptIndicies.push(129);\n}\nif (selected(data('hh_owns_livestock'), 'pigs') || selected(data('pigs_past_12_months'), 'yes')) {\nactivePromptIndicies.push(130);\nactivePromptIndicies.push(131);\nif (selected(data('pigs_ivermectin_responsible_dk'), 'dk')) {\nassign('pigs_ivermectin_responsible', null);\n}\nelse {\nactivePromptIndicies.push(132);\n}\nactivePromptIndicies.push(133);\nactivePromptIndicies.push(134);\nif (selected(data('pigs_slaughter'), 'yes')) {\nactivePromptIndicies.push(135);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 39
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
-            "_branch_label": "_endif295",
-            "_row_num": 295,
+            "_branch_label": "_endif301",
+            "_row_num": 301,
             "operationIdx": 40
           },
           {
             "clause": "begin screen",
-            "_row_num": 297,
-            "__rowNum__": 296,
+            "_row_num": 303,
+            "__rowNum__": 302,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 306,
-              "__rowNum__": 305,
+              "_row_num": 312,
+              "__rowNum__": 311,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(134);\nactivePromptIndicies.push(135);\nif (selected(data('water_bodies'), 'yes')) {\nactivePromptIndicies.push(136);\nactivePromptIndicies.push(137);\nactivePromptIndicies.push(138);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(136);\nactivePromptIndicies.push(137);\nif (selected(data('water_bodies'), 'yes')) {\nactivePromptIndicies.push(138);\nactivePromptIndicies.push(139);\nactivePromptIndicies.push(140);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 41
           },
           {
             "clause": "begin screen",
-            "_row_num": 308,
-            "__rowNum__": 307,
+            "_row_num": 314,
+            "__rowNum__": 313,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 328,
-              "__rowNum__": 327,
+              "_row_num": 334,
+              "__rowNum__": 333,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(139);\nif (selected(data('hh_country'), 'Mozambique')) {\nactivePromptIndicies.push(140);\nif (selected(data('hh_spray'), 'no')) {\nactivePromptIndicies.push(141);\n}\nif (selected(data('hh_spray'), 'yes')) {\nactivePromptIndicies.push(142);\nif (selected(data('hh_spray_label_seen'), 'yes')) {\nactivePromptIndicies.push(143);\n}\n}\n}\nactivePromptIndicies.push(144);\nif (data('hh_num_nets') > 0) {\nactivePromptIndicies.push(145);\nactivePromptIndicies.push(146);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(141);\nif (selected(data('hh_country'), 'Mozambique')) {\nactivePromptIndicies.push(142);\nif (selected(data('hh_spray'), 'no')) {\nactivePromptIndicies.push(143);\n}\nif (selected(data('hh_spray'), 'yes')) {\nactivePromptIndicies.push(144);\nif (selected(data('hh_spray_label_seen'), 'yes')) {\nactivePromptIndicies.push(145);\n}\n}\n}\nactivePromptIndicies.push(146);\nif (data('hh_num_nets') > 0) {\nactivePromptIndicies.push(147);\nactivePromptIndicies.push(148);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 42
           },
           {
             "clause": "begin screen",
-            "_row_num": 329,
-            "__rowNum__": 328,
+            "_row_num": 335,
+            "__rowNum__": 334,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 331,
-              "__rowNum__": 330,
+              "_row_num": 337,
+              "__rowNum__": 336,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(147);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(149);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 43
           },
           {
             "clause": "begin screen",
-            "_row_num": 332,
-            "__rowNum__": 331,
+            "_row_num": 338,
+            "__rowNum__": 337,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 342,
-              "__rowNum__": 341,
+              "_row_num": 348,
+              "__rowNum__": 347,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(148);\nactivePromptIndicies.push(149);\nactivePromptIndicies.push(150);\nif (selected(data('health_facility_formal_type'), 'other')) {\nactivePromptIndicies.push(151);\n}\nif (!!data('health_facility_formal_type')) {\nassign('health_facility_formal_sick', null);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(150);\nactivePromptIndicies.push(151);\nactivePromptIndicies.push(152);\nif (selected(data('health_facility_formal_type'), 'other')) {\nactivePromptIndicies.push(153);\n}\nif (!!data('health_facility_formal_type')) {\nassign('health_facility_formal_sick', null);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 44
           },
           {
             "clause": "begin screen",
-            "_row_num": 343,
-            "__rowNum__": 342,
+            "_row_num": 349,
+            "__rowNum__": 348,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 354,
-              "__rowNum__": 353,
+              "_row_num": 360,
+              "__rowNum__": 359,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(152);\nactivePromptIndicies.push(153);\nif (selected(data('any_snake_bite'), 'yes')) {\nactivePromptIndicies.push(154);\nactivePromptIndicies.push(155);\nactivePromptIndicies.push(156);\nactivePromptIndicies.push(157);\nactivePromptIndicies.push(158);\n}\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nactivePromptIndicies.push(154);\nactivePromptIndicies.push(155);\nif (selected(data('any_snake_bite'), 'yes')) {\nactivePromptIndicies.push(156);\nactivePromptIndicies.push(157);\nactivePromptIndicies.push(158);\nactivePromptIndicies.push(159);\nactivePromptIndicies.push(160);\n}\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 45
           },
           {
             "clause": "begin screen",
-            "_row_num": 355,
-            "__rowNum__": 354,
+            "_row_num": 361,
+            "__rowNum__": 360,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
-              "_row_num": 381,
-              "__rowNum__": 380,
+              "_row_num": 387,
+              "__rowNum__": 386,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(159);\nactivePromptIndicies.push(160);\nif (selected(data('no_contact_num'), 'no_contact_num')) {\nassign('hh_contact', null);\n}\nelse {\nactivePromptIndicies.push(161);\n}\nactivePromptIndicies.push(162);\nactivePromptIndicies.push(163);\nif (selected(data('no_alt_contact_num'), 'no_alt_contact_num')) {\nassign('hh_contact_alt', null);\n}\nelse {\nactivePromptIndicies.push(164);\n}\nactivePromptIndicies.push(165);\nif (!!data('hh_contact_alt')) {\nactivePromptIndicies.push(166);\nactivePromptIndicies.push(167);\nif (selected(data('hh_contact_alt_2'), 'yes')) {\nassign('hh_contact_alt_2_num', null);\n}\nelse {\nactivePromptIndicies.push(168);\n}\n}\nactivePromptIndicies.push(169);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(161);\nactivePromptIndicies.push(162);\nif (selected(data('no_contact_num'), 'no_contact_num')) {\nassign('hh_contact', null);\n}\nelse {\nactivePromptIndicies.push(163);\n}\nactivePromptIndicies.push(164);\nactivePromptIndicies.push(165);\nif (selected(data('no_alt_contact_num'), 'no_alt_contact_num')) {\nassign('hh_contact_alt', null);\n}\nelse {\nactivePromptIndicies.push(166);\n}\nactivePromptIndicies.push(167);\nif (!!data('hh_contact_alt')) {\nactivePromptIndicies.push(168);\nactivePromptIndicies.push(169);\nif (selected(data('hh_contact_alt_2'), 'yes')) {\nassign('hh_contact_alt_2_num', null);\n}\nelse {\nactivePromptIndicies.push(170);\n}\n}\nactivePromptIndicies.push(171);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 46
           },
           {
             "clause": "if",
             "condition": "selected(data('hh_minicenced'), 'no')",
-            "_row_num": 383,
-            "__rowNum__": 382,
+            "_row_num": 389,
+            "__rowNum__": 388,
             "_token_type": "goto_label",
-            "_branch_label": "_then383",
+            "_branch_label": "_then389",
             "operationIdx": 47
           },
           {
             "clause": "end if",
             "_token_type": "goto_label",
-            "_branch_label": "_else396",
-            "_row_num": 396,
+            "_branch_label": "_else402",
+            "_row_num": 402,
             "operationIdx": 48
           },
           {
             "clause": "begin screen",
-            "_row_num": 384,
-            "__rowNum__": 383,
-            "_token_type": "begin_screen",
-            "_end_screen_clause": {
-              "clause": "end screen",
-              "_row_num": 395,
-              "__rowNum__": 394,
-              "_token_type": "end_screen"
-            },
-            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nif (selected(data('hh_minicenced'), 'no')) {\nactivePromptIndicies.push(170);\nactivePromptIndicies.push(171);\nactivePromptIndicies.push(172);\nif (selected(data('hh_death'), 'yes')) {\nactivePromptIndicies.push(173);\nactivePromptIndicies.push(174);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
-            "operationIdx": 49
-          },
-          {
-            "clause": "end if",
-            "_token_type": "goto_label",
-            "_branch_label": "_endif396",
-            "_row_num": 396,
-            "operationIdx": 50
-          },
-          {
-            "clause": "begin screen",
-            "_row_num": 398,
-            "__rowNum__": 397,
+            "_row_num": 390,
+            "__rowNum__": 389,
             "_token_type": "begin_screen",
             "_end_screen_clause": {
               "clause": "end screen",
@@ -17294,19 +17313,40 @@
               "__rowNum__": 400,
               "_token_type": "end_screen"
             },
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(175);\nactivePromptIndicies.push(176);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nassign('workaround', null);\nif (selected(data('hh_minicenced'), 'no')) {\nactivePromptIndicies.push(172);\nactivePromptIndicies.push(173);\nactivePromptIndicies.push(174);\nif (selected(data('hh_death'), 'yes')) {\nactivePromptIndicies.push(175);\nactivePromptIndicies.push(176);\n}\n}\n\nreturn activePromptIndicies;\n}\n",
+            "operationIdx": 49
+          },
+          {
+            "clause": "end if",
+            "_token_type": "goto_label",
+            "_branch_label": "_endif402",
+            "_row_num": 402,
+            "operationIdx": 50
+          },
+          {
+            "clause": "begin screen",
+            "_row_num": 404,
+            "__rowNum__": 403,
+            "_token_type": "begin_screen",
+            "_end_screen_clause": {
+              "clause": "end screen",
+              "_row_num": 407,
+              "__rowNum__": 406,
+              "_token_type": "end_screen"
+            },
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(177);\nactivePromptIndicies.push(178);\n\nreturn activePromptIndicies;\n}\n",
             "operationIdx": 51
           },
           {
             "_token_type": "exit_section",
             "clause": "exit section",
-            "_row_num": 402,
+            "_row_num": 408,
             "operationIdx": 52
           },
           {
-            "_row_num": 402,
+            "_row_num": 408,
             "_token_type": "begin_screen",
-            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(177);\n\nreturn activePromptIndicies;\n}\n",
+            "_screen_block": "function() {var activePromptIndicies = [];\nactivePromptIndicies.push(179);\n\nreturn activePromptIndicies;\n}\n",
             "screen": {
               "hideInBackHistory": true
             },
@@ -17315,7 +17355,7 @@
           {
             "_token_type": "resume",
             "clause": "resume",
-            "_row_num": 402,
+            "_row_num": 408,
             "operationIdx": 54
           }
         ],
@@ -17354,24 +17394,24 @@
           "_then235": 35,
           "_screen236": 35,
           "_screen245": 37,
-          "_else272": 39,
-          "_endif272": 39,
-          "_screen274": 39,
-          "_else295": 41,
-          "_endif295": 41,
-          "_screen297": 41,
-          "_screen308": 42,
-          "_screen329": 43,
-          "_screen332": 44,
-          "_screen343": 45,
-          "_screen355": 46,
-          "_then383": 49,
-          "_screen384": 49,
-          "_else396": 51,
-          "_endif396": 51,
-          "_screen398": 51,
+          "_else278": 39,
+          "_endif278": 39,
+          "_screen280": 39,
+          "_else301": 41,
+          "_endif301": 41,
+          "_screen303": 41,
+          "_screen314": 42,
+          "_screen335": 43,
+          "_screen338": 44,
+          "_screen349": 45,
+          "_screen361": 46,
+          "_then389": 49,
+          "_screen390": 49,
+          "_else402": 51,
+          "_endif402": 51,
+          "_screen404": 51,
           "_contents": 53,
-          "_screen402": 53
+          "_screen408": 53
         }
       },
       "initial": {
@@ -18742,7 +18782,7 @@
       "distance_pigs_dry_season": {
         "_defn": [
           {
-            "_row_num": 257,
+            "_row_num": 260,
             "section_name": "survey"
           }
         ],
@@ -18756,7 +18796,7 @@
       "weaned_pigs_wet_season": {
         "_defn": [
           {
-            "_row_num": 259,
+            "_row_num": 265,
             "section_name": "survey"
           }
         ],
@@ -18770,7 +18810,7 @@
       "weaned_pigs_confined": {
         "_defn": [
           {
-            "_row_num": 261,
+            "_row_num": 267,
             "section_name": "survey"
           }
         ],
@@ -18784,7 +18824,7 @@
       "weaned_pigs_grazing": {
         "_defn": [
           {
-            "_row_num": 264,
+            "_row_num": 270,
             "section_name": "survey"
           }
         ],
@@ -18798,7 +18838,7 @@
       "weaned_pigs_grazing_water": {
         "_defn": [
           {
-            "_row_num": 265,
+            "_row_num": 271,
             "section_name": "survey"
           }
         ],
@@ -18812,7 +18852,7 @@
       "weaned_pigs_grazing_water_type": {
         "_defn": [
           {
-            "_row_num": 267,
+            "_row_num": 273,
             "section_name": "survey"
           }
         ],
@@ -18826,7 +18866,7 @@
       "pigs_disease_30_days": {
         "_defn": [
           {
-            "_row_num": 270,
+            "_row_num": 276,
             "section_name": "survey"
           }
         ],
@@ -18851,7 +18891,7 @@
       "hh_pigs_coming_year": {
         "_defn": [
           {
-            "_row_num": 277,
+            "_row_num": 283,
             "section_name": "survey"
           }
         ],
@@ -18865,7 +18905,7 @@
       "pigs_past_12_months": {
         "_defn": [
           {
-            "_row_num": 278,
+            "_row_num": 284,
             "section_name": "survey"
           }
         ],
@@ -18879,7 +18919,7 @@
       "pigs_ivermectin": {
         "_defn": [
           {
-            "_row_num": 281,
+            "_row_num": 287,
             "section_name": "survey"
           }
         ],
@@ -18893,7 +18933,7 @@
       "pigs_ivermectin_responsible": {
         "_defn": [
           {
-            "_row_num": 286,
+            "_row_num": 292,
             "section_name": "survey"
           }
         ],
@@ -18907,7 +18947,7 @@
       "pigs_ivermectin_responsible_dk": {
         "_defn": [
           {
-            "_row_num": 288,
+            "_row_num": 294,
             "section_name": "survey"
           }
         ],
@@ -18932,7 +18972,7 @@
       "pigs_slaughter": {
         "_defn": [
           {
-            "_row_num": 289,
+            "_row_num": 295,
             "section_name": "survey"
           }
         ],
@@ -18946,7 +18986,7 @@
       "pigs_slaughter_month": {
         "_defn": [
           {
-            "_row_num": 291,
+            "_row_num": 297,
             "section_name": "survey"
           }
         ],
@@ -18971,7 +19011,7 @@
       "water_bodies": {
         "_defn": [
           {
-            "_row_num": 300,
+            "_row_num": 306,
             "section_name": "survey"
           }
         ],
@@ -18985,7 +19025,7 @@
       "water_bodies_num": {
         "_defn": [
           {
-            "_row_num": 302,
+            "_row_num": 308,
             "section_name": "survey"
           }
         ],
@@ -18998,7 +19038,7 @@
       "water_count": {
         "_defn": [
           {
-            "_row_num": 304,
+            "_row_num": 310,
             "section_name": "survey"
           }
         ],
@@ -19014,7 +19054,7 @@
       "hh_spray": {
         "_defn": [
           {
-            "_row_num": 312,
+            "_row_num": 318,
             "section_name": "survey"
           }
         ],
@@ -19028,7 +19068,7 @@
       "hh_spray_why_not": {
         "_defn": [
           {
-            "_row_num": 314,
+            "_row_num": 320,
             "section_name": "survey"
           }
         ],
@@ -19042,7 +19082,7 @@
       "hh_spray_label_seen": {
         "_defn": [
           {
-            "_row_num": 317,
+            "_row_num": 323,
             "section_name": "survey"
           }
         ],
@@ -19056,7 +19096,7 @@
       "hh_spray_label_date": {
         "_defn": [
           {
-            "_row_num": 319,
+            "_row_num": 325,
             "section_name": "survey"
           }
         ],
@@ -19070,7 +19110,7 @@
       "hh_num_nets": {
         "_defn": [
           {
-            "_row_num": 323,
+            "_row_num": 329,
             "section_name": "survey"
           }
         ],
@@ -19083,7 +19123,7 @@
       "net_count": {
         "_defn": [
           {
-            "_row_num": 326,
+            "_row_num": 332,
             "section_name": "survey"
           }
         ],
@@ -19099,7 +19139,7 @@
       "malaria_prevention_method": {
         "_defn": [
           {
-            "_row_num": 330,
+            "_row_num": 336,
             "section_name": "survey"
           }
         ],
@@ -19124,7 +19164,7 @@
       "health_facility_formal_sick": {
         "_defn": [
           {
-            "_row_num": 334,
+            "_row_num": 340,
             "section_name": "survey"
           }
         ],
@@ -19138,7 +19178,7 @@
       "health_facility_formal_type": {
         "_defn": [
           {
-            "_row_num": 335,
+            "_row_num": 341,
             "section_name": "survey"
           }
         ],
@@ -19163,7 +19203,7 @@
       "health_facility_formal_type_specify": {
         "_defn": [
           {
-            "_row_num": 337,
+            "_row_num": 343,
             "section_name": "survey"
           }
         ],
@@ -19176,7 +19216,7 @@
       "any_snake_bite": {
         "_defn": [
           {
-            "_row_num": 346,
+            "_row_num": 352,
             "section_name": "survey"
           }
         ],
@@ -19190,7 +19230,7 @@
       "any_snake_bite_num": {
         "_defn": [
           {
-            "_row_num": 348,
+            "_row_num": 354,
             "section_name": "survey"
           }
         ],
@@ -19203,7 +19243,7 @@
       "snake_bite_who": {
         "_defn": [
           {
-            "_row_num": 351,
+            "_row_num": 357,
             "section_name": "survey"
           }
         ],
@@ -19228,7 +19268,7 @@
       "snake_count": {
         "_defn": [
           {
-            "_row_num": 352,
+            "_row_num": 358,
             "section_name": "survey"
           }
         ],
@@ -19244,7 +19284,7 @@
       "hh_contact": {
         "_defn": [
           {
-            "_row_num": 361,
+            "_row_num": 367,
             "section_name": "survey"
           }
         ],
@@ -19257,7 +19297,7 @@
       "hh_contact_no": {
         "_defn": [
           {
-            "_row_num": 363,
+            "_row_num": 369,
             "section_name": "survey"
           }
         ],
@@ -19282,7 +19322,7 @@
       "hh_contact_alt": {
         "_defn": [
           {
-            "_row_num": 368,
+            "_row_num": 374,
             "section_name": "survey"
           }
         ],
@@ -19295,7 +19335,7 @@
       "hh_contact_alt_no": {
         "_defn": [
           {
-            "_row_num": 370,
+            "_row_num": 376,
             "section_name": "survey"
           }
         ],
@@ -19320,7 +19360,7 @@
       "hh_contact_alt_2": {
         "_defn": [
           {
-            "_row_num": 372,
+            "_row_num": 378,
             "section_name": "survey"
           }
         ],
@@ -19334,7 +19374,7 @@
       "hh_contact_alt_2_num": {
         "_defn": [
           {
-            "_row_num": 377,
+            "_row_num": 383,
             "section_name": "survey"
           }
         ],
@@ -19347,7 +19387,7 @@
       "contact_for_project": {
         "_defn": [
           {
-            "_row_num": 380,
+            "_row_num": 386,
             "section_name": "survey"
           }
         ],
@@ -19361,7 +19401,7 @@
       "hh_death": {
         "_defn": [
           {
-            "_row_num": 389,
+            "_row_num": 395,
             "section_name": "survey"
           }
         ],
@@ -19375,7 +19415,7 @@
       "hh_death_count": {
         "_defn": [
           {
-            "_row_num": 391,
+            "_row_num": 397,
             "section_name": "survey"
           }
         ],
@@ -19388,7 +19428,7 @@
       "death_count": {
         "_defn": [
           {
-            "_row_num": 392,
+            "_row_num": 398,
             "section_name": "survey"
           }
         ],

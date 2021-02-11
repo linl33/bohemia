@@ -232,7 +232,6 @@
         "display": {
           "prompt": "err_no_consent"
         },
-        "required": 1,
         "_row_num": 32
       },
       {
@@ -267,7 +266,6 @@
         "display": {
           "prompt": "err_no_assent"
         },
-        "required": 1,
         "_row_num": 39
       },
       {
@@ -293,7 +291,6 @@
         "display": {
           "prompt": "err_no_consent"
         },
-        "required": 1,
         "_row_num": 43
       },
       {
@@ -307,6 +304,7 @@
         "display": {
           "prompt": "ind_q5ai"
         },
+        "choice_filter": "choice_item.instance_id !== opendatakit.getCurrentInstanceId()",
         "_row_num": 45
       },
       {
@@ -343,6 +341,7 @@
         "display": {
           "prompt": "ind_q6a"
         },
+        "choice_filter": "choice_item.instance_id !== opendatakit.getCurrentInstanceId()",
         "_row_num": 52
       },
       {
@@ -354,7 +353,6 @@
         "display": {
           "prompt": "err_no_consent"
         },
-        "required": 1,
         "_row_num": 54
       },
       {
@@ -1010,6 +1008,7 @@
         "display": {
           "prompt": "ind_q28"
         },
+        "choice_filter": "calculates.compare_time_order()(data('time_indoors'), choice_item.data_value, calculates.sunset_time_order()) <= 0",
         "_row_num": 159
       },
       {
@@ -1037,6 +1036,7 @@
         "display": {
           "prompt": "ind_q31"
         },
+        "choice_filter": "calculates.compare_time_order()(data('time_get_out_bed'), choice_item.data_value, calculates.sunrise_time_order()) <= 0",
         "_row_num": 162
       },
       {
@@ -3954,6 +3954,21 @@
         "calculation_name": "no_is_exclusive",
         "calculation": "countSelected(data('ind_treatment')) > 1 && selected(data('ind_treatment'), 'no')",
         "_row_num": 11
+      },
+      {
+        "calculation_name": "sunset_time_order",
+        "calculation": "(function() { return function(time) {\n    return {\n        'Before sunset': 0,\n        'At sunset': 1,\n        '1-2h after sunset': 2,\n        '2-4h after sunset': 3,\n        '>4h after sunset': 4\n    }[time];\n}})()",
+        "_row_num": 12
+      },
+      {
+        "calculation_name": "sunrise_time_order",
+        "calculation": "(function() { return function(time) {\n    return {\n        '>4h before sunrise': 0,\n        '2-4h before sunrise': 1,\n        '1-2h before sunrise': 2,\n        'At sunrise': 3,\n        'After sunrise': 4\n    }[time];\n}})()",
+        "_row_num": 13
+      },
+      {
+        "calculation_name": "compare_time_order",
+        "calculation": "(function() { return function(left, right, orderMapper) {\n    return orderMapper(left) - orderMapper(right);\n}})()",
+        "_row_num": 14
       }
     ],
     "prompt_types": [
@@ -3978,7 +3993,8 @@
       "uri": "formula",
       "callback": "formula(context)",
       "choice_filter": "formula(choice_item)",
-      "templatePath": "requirejs_path"
+      "templatePath": "requirejs_path",
+      "hideInContents": "formula"
     },
     "settings": {
       "form_id": {
@@ -6314,6 +6330,21 @@
         "calculation_name": "no_is_exclusive",
         "calculation": "countSelected(data('ind_treatment')) > 1 && selected(data('ind_treatment'), 'no')",
         "_row_num": 11
+      },
+      "sunset_time_order": {
+        "calculation_name": "sunset_time_order",
+        "calculation": "(function() { return function(time) {\n    return {\n        'Before sunset': 0,\n        'At sunset': 1,\n        '1-2h after sunset': 2,\n        '2-4h after sunset': 3,\n        '>4h after sunset': 4\n    }[time];\n}})()",
+        "_row_num": 12
+      },
+      "sunrise_time_order": {
+        "calculation_name": "sunrise_time_order",
+        "calculation": "(function() { return function(time) {\n    return {\n        '>4h before sunrise': 0,\n        '2-4h before sunrise': 1,\n        '1-2h before sunrise': 2,\n        'At sunrise': 3,\n        'After sunrise': 4\n    }[time];\n}})()",
+        "_row_num": 13
+      },
+      "compare_time_order": {
+        "calculation_name": "compare_time_order",
+        "calculation": "(function() { return function(left, right, orderMapper) {\n    return orderMapper(left) - orderMapper(right);\n}})()",
+        "_row_num": 14
       }
     },
     "model": {
@@ -8110,7 +8141,6 @@
             "display": {
               "prompt": "err_no_consent"
             },
-            "required": 1,
             "_row_num": 32,
             "__rowNum__": 31,
             "_token_type": "prompt",
@@ -8137,7 +8167,6 @@
             "display": {
               "prompt": "err_no_assent"
             },
-            "required": 1,
             "_row_num": 39,
             "__rowNum__": 38,
             "_token_type": "prompt",
@@ -8164,7 +8193,6 @@
             "display": {
               "prompt": "err_no_consent"
             },
-            "required": 1,
             "_row_num": 43,
             "__rowNum__": 42,
             "_token_type": "prompt",
@@ -8179,6 +8207,7 @@
             "display": {
               "prompt": "ind_q5ai"
             },
+            "choice_filter": "choice_item.instance_id !== opendatakit.getCurrentInstanceId()",
             "_row_num": 45,
             "__rowNum__": 44,
             "_token_type": "prompt",
@@ -8207,6 +8236,7 @@
             "display": {
               "prompt": "ind_q6a"
             },
+            "choice_filter": "choice_item.instance_id !== opendatakit.getCurrentInstanceId()",
             "_row_num": 52,
             "__rowNum__": 51,
             "_token_type": "prompt",
@@ -8219,7 +8249,6 @@
             "display": {
               "prompt": "err_no_consent"
             },
-            "required": 1,
             "_row_num": 54,
             "__rowNum__": 53,
             "_token_type": "prompt",
@@ -8871,6 +8900,7 @@
             "display": {
               "prompt": "ind_q28"
             },
+            "choice_filter": "calculates.compare_time_order()(data('time_indoors'), choice_item.data_value, calculates.sunset_time_order()) <= 0",
             "_row_num": 159,
             "__rowNum__": 158,
             "_token_type": "prompt",
@@ -8913,6 +8943,7 @@
             "display": {
               "prompt": "ind_q31"
             },
+            "choice_filter": "calculates.compare_time_order()(data('time_get_out_bed'), choice_item.data_value, calculates.sunrise_time_order()) <= 0",
             "_row_num": 162,
             "__rowNum__": 161,
             "_token_type": "prompt",
@@ -9078,10 +9109,6 @@
             8,
             10,
             12,
-            16,
-            18,
-            20,
-            24,
             35,
             37,
             43,
