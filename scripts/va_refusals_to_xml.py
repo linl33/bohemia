@@ -12,6 +12,6 @@ os.system('xls2xform varefusals.xlsx varefusals.xml ')
 # Move
 shutil.move('varefusals.xlsx', '../forms/varefusals/varefusals.xlsx')
 shutil.move('varefusals.xml',  '../forms/varefusals/varefusals.xml')
-shutil.move('itemsets.csv', '../forms/varefusals/itemsets.csv')
+# shutil.move('itemsets.csv', '../forms/varefusals/itemsets.csv')
 
 print('Done. Docs in forms/varefusals.')
