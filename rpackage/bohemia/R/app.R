@@ -244,6 +244,7 @@ app_ui <- function(request) {
                         ),
                         tabPanel('Refusals and Absences',
                                  uiOutput('ui_geo_r_and_a'),
+                                 uiOutput('ui_date_r_and_a'),
                                  uiOutput('ui_refusals_and_absences')))),
           tabItem(
             tabName="enrollment",
@@ -1250,7 +1251,7 @@ app_server <- function(input, output, session) {
       sub_title_anom <- paste0(last_monday, ' - ', last_sunday, ': ', num_forms_since_monday)
       
       title_anom <- paste0('Anomalies resolved: ', anom_corrected,' out of ',total_anom)
-
+      
       fluidPage(
         fluidRow(
           br(),
@@ -1805,7 +1806,7 @@ app_server <- function(input, output, session) {
         }
         
       }
-
+      
       
       
     }
@@ -1947,7 +1948,7 @@ app_server <- function(input, output, session) {
                                   selectInput('dt_choose_form', 'Choose form', choices = c('Minicensus', 'Enumerations', 'Both')),
                                   checkboxInput(inputId = 'make_percent', label = 'Show percentage', value = FALSE),
                                   tags$div(style='overflow-x: scroll; position: relative', plotOutput('dt_monitor_by_plot', height = '800px', width = '4500px'))
-                                  ),
+                         ),
                          tabPanel('Map',
                                   leafletOutput('leaf_lx', height = 800)))))
             })
@@ -2276,7 +2277,7 @@ app_server <- function(input, output, session) {
         pd_ok <- TRUE
       }
     }
-  
+    
     hqx <- hq$data
     
     if(pd_ok){
@@ -2305,7 +2306,7 @@ app_server <- function(input, output, session) {
     }
     l
   })
-
+  
   
   # table for anomaly description
   output$table_individual_errors <- renderTable({
@@ -3307,29 +3308,29 @@ app_server <- function(input, output, session) {
       mutate(`% VA forms pending` = 100 - `% VA forms completed`) %>%
       tidyr::gather(key=key, value=value, -c(location))
     
-      plot <- ggplot(data = va_progress_geo %>%
-                       filter(grepl('%', key)),
-                     aes(x = "",
-                         y = value,
-                         fill = key)) +
-        geom_bar(stat = 'identity', width = 1) +
-        theme_void() +
-        coord_polar("y", start=0) +
-        # geom_text(data = va_progress_geo %>%
-        #             filter(!grepl('%', key)),
-        #           aes(y = value, label = value, fill = NA, color = NA), color = "white", size=6) +
-        facet_wrap(~location) +
-        theme(legend.position = 'bottom') +
-        scale_fill_manual(name='', values = c('lightblue', 'darkorange')) 
-      # plot <- ggplot(va_progress_geo, aes(reorder(location, -value), value, fill=key)) + geom_bar(stat = 'identity', alpha=0.6, width = 1) +
-      #   coord_polar() +
-      #   labs(x='', y ='Number of forms', title = 'Deaths reported vs forms collected') +
-      #   scale_fill_manual(name='', values = c('darkred', 'darkblue')) +
-      #   theme_bohemia() +
-      #   theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
-      #         axis.title = element_text(size = 14),
-      #         plot.title = element_text(size = 20))
-
+    plot <- ggplot(data = va_progress_geo %>%
+                     filter(grepl('%', key)),
+                   aes(x = "",
+                       y = value,
+                       fill = key)) +
+      geom_bar(stat = 'identity', width = 1) +
+      theme_void() +
+      coord_polar("y", start=0) +
+      # geom_text(data = va_progress_geo %>%
+      #             filter(!grepl('%', key)),
+      #           aes(y = value, label = value, fill = NA, color = NA), color = "white", size=6) +
+      facet_wrap(~location) +
+      theme(legend.position = 'bottom') +
+      scale_fill_manual(name='', values = c('lightblue', 'darkorange')) 
+    # plot <- ggplot(va_progress_geo, aes(reorder(location, -value), value, fill=key)) + geom_bar(stat = 'identity', alpha=0.6, width = 1) +
+    #   coord_polar() +
+    #   labs(x='', y ='Number of forms', title = 'Deaths reported vs forms collected') +
+    #   scale_fill_manual(name='', values = c('darkred', 'darkblue')) +
+    #   theme_bohemia() +
+    #   theme(axis.text = element_text(size = 10, angle=90, vjust=0.5),
+    #         axis.title = element_text(size = 14),
+    #         plot.title = element_text(size = 20))
+    
     return(plot)
     
   })
@@ -4281,7 +4282,7 @@ app_server <- function(input, output, session) {
                column(6,
                       checkboxInput(inputId = 'ui_show_percent', label = 'Show percentage on y-axis', value = FALSE))
       ),
-     
+      
       fluidRow(column(12,
                       tags$div(style='overflow-x: scroll; position: relative',plotOutput('ui_fw_plot', height = '700px', width = '2500px')))),
       fluidRow(column(12,
@@ -4398,11 +4399,11 @@ app_server <- function(input, output, session) {
       m <- l@map
       # subset by wid and dates 
       sub_mini <- pd %>%  filter(wid == fid) %>% filter(todays_date >= date_slider[1],
-                                                       todays_date <= date_slider[2])
+                                                        todays_date <= date_slider[2])
       enum<- enum %>%  filter(wid == fid) %>% filter(todays_date >= date_slider[1],
-                                                        todays_date <= date_slider[2])
+                                                     todays_date <= date_slider[2])
       va <- va %>%  filter(wid == fid) %>% filter(todays_date >= date_slider[1],
-                                                        todays_date <= date_slider[2])
+                                                  todays_date <= date_slider[2])
       
       if(nrow(sub_mini)==0 & nrow(enum)==0 & nrow(va)==0){
         m <- l@map
@@ -4455,7 +4456,7 @@ app_server <- function(input, output, session) {
   output$traccar_recent <- renderLeaflet({
     co = country()
     traccar <- dbGetQuery(conn = con,
-                              statement = 'SELECT unique_id, devicetime, latitude, longitude, valid FROM traccar INNER JOIN(SELECT unique_id, MAX(devicetime) as devicetime FROM traccar GROUP BY unique_id) AS t1 USING(unique_id, devicetime)')
+                          statement = 'SELECT unique_id, devicetime, latitude, longitude, valid FROM traccar INNER JOIN(SELECT unique_id, MAX(devicetime) as devicetime FROM traccar GROUP BY unique_id) AS t1 USING(unique_id, devicetime)')
     # create a days ago variable 
     traccar$date <- lubridate::as_date(traccar$devicetime)
     todays_date <- Sys.Date()
@@ -4474,18 +4475,18 @@ app_server <- function(input, output, session) {
       if(nrow(sub_traccar) > 0){
         color_pal <- colorNumeric(palette =  colorRampPalette(c('red', 'green'))(length(pts$days_ago)),domain = sort(unique(pts$days_ago)), reverse = T)
         
-          
+        
         l <- l %>%leaflet() %>%
           addTiles() %>%
           addCircleMarkers(data = pts,
-                      color  = ~color_pal(days_ago),
-                      # fillColor = pts$status,
-                      popup = pts %>% dplyr::select(`FW ID`,devicetime, valid),
-                      group = "pts") %>%
-        addLegend("bottomright", 
-                  colors =color_pal(sort(unique(pts$days_ago))),
-                  labels=sort(unique(pts$days_ago)),
-                  opacity = 1)
+                           color  = ~color_pal(days_ago),
+                           # fillColor = pts$status,
+                           popup = pts %>% dplyr::select(`FW ID`,devicetime, valid),
+                           group = "pts") %>%
+          addLegend("bottomright", 
+                    colors =color_pal(sort(unique(pts$days_ago))),
+                    labels=sort(unique(pts$days_ago)),
+                    opacity = 1)
         
       }
     }
@@ -4493,7 +4494,7 @@ app_server <- function(input, output, session) {
     l
   })
   
- 
+  
   output$traccar_leaf <- renderLeaflet({
     # leaflet() %>% addTiles()
     # Get the traccar data for that country
@@ -4722,7 +4723,7 @@ app_server <- function(input, output, session) {
         # filter(date == date_slider)
         filter(date >= date_slider[1],
                date <= date_slider[2])
-
+      
       
       out <- sub_data %>%
         mutate(bohemia_id = as.numeric(as.character(unique_id))) %>%
@@ -4734,8 +4735,8 @@ app_server <- function(input, output, session) {
                                     first_name, ' ',
                                     last_name, ' (',
                                     Role, ')')) %>%
-      group_by(Fieldworker) %>%
-      filter(devicetime == max(devicetime))
+        group_by(Fieldworker) %>%
+        filter(devicetime == max(devicetime))
       
       leaflet() %>%
         addTiles() %>%
@@ -4883,6 +4884,30 @@ app_server <- function(input, output, session) {
             })
   })
   
+  # date range for refusals and absences
+  output$ui_date_r_and_a <- renderUI({
+    # See if the user is logged in and has access
+    si <- session_info
+    li <- si$logged_in
+    ac <- TRUE
+    # Generate the ui
+    make_ui(li = li,
+            ac = ac,
+            ok = {
+              # pd <- odk_data$data
+              # pd <- pd$minicensus_main
+              fluidPage(
+                column(6,
+                       sliderInput(inputId = 'date_r_and_a', 
+                                   label = 'Select dates', 
+                                   min= as.Date('2020-09-01'), #  min(pd$todays_date), 
+                                   max= Sys.Date(), #max(pd$todays_date), 
+                                   value = c(as.Date('2020-09-01'), Sys.Date())))
+              )
+              
+            })
+  })
+  
   # Refusals and absences UI
   output$ui_refusals_and_absences <- renderUI({
     # See if the user is logged in and has access
@@ -4895,6 +4920,13 @@ app_server <- function(input, output, session) {
             ok = {
               # Get the country
               co <- country()
+              
+              #get date range 
+              date_range <- input$date_r_and_a
+              if(is.null(date_range)){
+                date_range <- c(as.Date('2020-09-01'), Sys.Date())
+              }
+              
               geo_r_and_a <- input$geo_r_and_a
               if(is.null(geo_r_and_a)){
                 NULL
@@ -4911,6 +4943,7 @@ app_server <- function(input, output, session) {
                 # Keep only the country in question
                 rf <- rf %>% dplyr::filter(country == co)
                 
+                # HERE make it work with week
                 # Get agg
                 rf_agg <- rf %>%
                   mutate(free_text = reason_no_participate) %>%
@@ -4928,6 +4961,7 @@ app_server <- function(input, output, session) {
                 
                 out_rf <- rf_agg %>%
                   filter(reason_no_participate == 'refused') %>%
+                  filter(date >= date_range[1], date<=date_range[2]) %>%
                   dplyr::select(district, ward, village, hamlet, hh_id,
                                 `Refusal date` = date,
                                 `Description` = free_text)
@@ -4935,13 +4969,51 @@ app_server <- function(input, output, session) {
                 out_ab <- rf_agg %>%
                   filter(reason_no_participate == 'not_present',
                          reason_no_participate != 'refused')  %>%
+                  filter(date >= date_range[1], date<=date_range[2]) %>%
                   dplyr::select(district, ward, village, hamlet, hh_id,
                                 `Visits` = n,
                                 `Last visit` = date)
                 
                 if(grouper!='household'){
-                  out_rf <- out_rf %>% group_by_(grouper) %>% summarise(`Number of refusals` = n())
-                  out_ab <- out_ab %>% group_by_(grouper) %>% summarise(`Number of absences` = n())
+                  # here make sure numbers are right and then apply to other graphs
+                  # get the time series version
+                  out_rf_time <- out_rf  %>% 
+                    mutate(week = lubridate::week(`Refusal date`)) %>%
+                    group_by(week) %>%
+                    mutate(week_label = min(`Refusal date`)) %>%
+                    group_by(week_label) %>% summarise(`Number of refusals` = n())
+                  
+                  out_ab_time <- out_ab  %>% 
+                    mutate(week = lubridate::week(`Last visit`)) %>%
+                    group_by(week) %>%
+                    mutate(week_label = min(`Last visit`)) %>%
+                    group_by(week_label) %>% summarise(`Number of absences` = n())
+                  
+                  out_rf <- out_rf %>% 
+                    group_by_(grouper) %>% 
+                    summarise(`Number of refusals` = n())
+                  
+                  out_ab <- out_ab %>% 
+                    group_by_(grouper) %>% 
+                    summarise(`Number of absences` = n())
+                  
+                  # create time plots
+                  # finished ref, now do ab below this and then make plots when condition is households (belwo)
+                  output$ref_plot_time <- renderPlot({
+                    ggplot(out_rf_time, aes(week_label, `Number of refusals`)) + geom_bar(stat = 'identity') +
+                      labs(x='') + theme_bohemia() +
+                      theme(axis.text = element_text(angle=90, vjust=0.5, size = sizex),
+                            axis.title = element_text(size = 14),
+                            plot.title = element_text(size = 20))
+                  })
+                  
+                  output$ab_plot_time <- renderPlot({
+                    ggplot(out_ab_time, aes(week_label, `Number of absences`)) + geom_bar(stat = 'identity') +
+                      labs(x='') + theme_bohemia() +
+                      theme(axis.text = element_text(angle=90, vjust=0.5, size = sizex),
+                            axis.title = element_text(size = 14),
+                            plot.title = element_text(size = 20))
+                  })
                   
                   # only create plots if household level not selected
                   # create plot for refusals
@@ -4996,7 +5068,12 @@ app_server <- function(input, output, session) {
                                                  download_options = TRUE)
                              ),
                              fluidRow(
-                               plotOutput('ref_plot', height = '700px')
+                               column(6, 
+                                      plotOutput('ref_plot', height = '700px')),
+                               column(6, 
+                                      plotOutput('ref_plot_time', height = '700px')),
+                               
+                               
                              )
                            )),
                   tabPanel(title = 'Absences',
@@ -5007,7 +5084,12 @@ app_server <- function(input, output, session) {
                                                  download_options = TRUE)
                              ),
                              fluidRow(
-                               plotOutput('ab_plot', height = '700px')
+                               column(6, 
+                                      plotOutput('ab_plot', height = '700px')),
+                               column(6, 
+                                      plotOutput('ab_plot_time', height = '700px')),
+                               
+                               
                              )
                            ))
                 )
@@ -5580,12 +5662,12 @@ app_server <- function(input, output, session) {
               
               pd <- bohemia::gps %>% left_join(bohemia::locations %>% 
                                                  dplyr::select(-clinical_trial))
-                
+              
               if(the_iso == 'MOZ'){
                 pd <- pd %>%
                   mutate(n_households = round(n_households * 0.55))
               }
-
+              
               pdx <- pd <- pd %>%
                 filter(iso == the_iso,
                        clinical_trial == 0)
@@ -5878,7 +5960,6 @@ app_server <- function(input, output, session) {
               } else {
                 anx <- an
               }
-              
               by_fw_type <-anx %>%
                 mutate(date = as.Date(date)) %>%
                 filter(date >=date_range[1], 
@@ -5985,11 +6066,12 @@ app_server <- function(input, output, session) {
                 group_by(country = the_country,
                          date = todays_date) %>%
                 summarise(`Va forms` = n())
+              out_va$country <- the_country
               out_refusals <- pd$refusals %>%
                 mutate(reason_no_participate = ifelse(reason_no_participate %in% 
                                                         c('SEM COMENTARIO',
                                                           'He didnt want to do it',
-                                                          'Dont know'),
+                                                          'Dont know', 'refused'),
                                                       'refused',
                                                       'not_present')) %>%
                 group_by(country,
@@ -6057,7 +6139,7 @@ app_server <- function(input, output, session) {
                          bohemia::prettify(by_fw_type,
                                            nrows = nrow(by_type),
                                            download_options = TRUE)
-                         )
+                  )
                 ),
                 fluidRow(
                   column(12,
@@ -6637,7 +6719,7 @@ app_server <- function(input, output, session) {
                                     'Needs response'))) %>%
       mutate(week = lubridate::week(date)) %>%
       group_by(week) %>%
-      mutate(week_label = paste0('Week of ', min(date))) %>%
+      mutate(week_label = paste0(min(date))) %>%
       group_by(category = status, date = week_label) %>%
       tally %>%
       ungroup 
@@ -6646,6 +6728,7 @@ app_server <- function(input, output, session) {
                           levels = c('Needs response',
                                      'Response submitted',
                                      'Done'))
+    # save(pd, file = 'temp_pd.rda')
     ggplot(data = pd,
            aes(x = date,
                y = n,
@@ -6659,7 +6742,7 @@ app_server <- function(input, output, session) {
            y = 'Number of anomalies',
            title = 'Anomalies/errors and status over time') +
       theme_bohemia() +
-      theme(axis.text.x = element_text(angle=45, hjust=1, size = sizex))
+      theme(axis.text.x = element_text(angle=45, hjust=1, size = 14))
   })
   
   # Alert ui
@@ -6918,7 +7001,7 @@ app_server <- function(input, output, session) {
         df <- odk_data$data$va
       } else if(which_download == 'VA (full)'){
         df <- dbGetQuery(conn = con,
-                                statement = paste0("SELECT * FROM va WHERE server = '", the_server, "'"))
+                         statement = paste0("SELECT * FROM va WHERE server = '", the_server, "'"))
       } else if(which_download == 'Modifications'){
         df <- odk_data$data$fixes
       } 
@@ -7280,3 +7363,4 @@ app <- function(){
            server = app_server,
            options = list('launch.browswer' = !is_aws))
 }
+
