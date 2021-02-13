@@ -5000,7 +5000,7 @@ app_server <- function(input, output, session) {
                   # create time plots
                   # finished ref, now do ab below this and then make plots when condition is households (belwo)
                   output$ref_plot_time <- renderPlot({
-                    ggplot(out_rf_time, aes(week_label, `Number of refusals`)) + geom_bar(stat = 'identity') +
+                    ggplot(out_rf_time, aes(as.factor(week_label), `Number of refusals`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
                       theme(axis.text = element_text(angle=90, vjust=0.5, size = sizex),
                             axis.title = element_text(size = 14),
@@ -5008,7 +5008,7 @@ app_server <- function(input, output, session) {
                   })
                   
                   output$ab_plot_time <- renderPlot({
-                    ggplot(out_ab_time, aes(week_label, `Number of absences`)) + geom_bar(stat = 'identity') +
+                    ggplot(out_ab_time, aes(as.factor(week_label), `Number of absences`)) + geom_bar(stat = 'identity') +
                       labs(x='') + theme_bohemia() +
                       theme(axis.text = element_text(angle=90, vjust=0.5, size = sizex),
                             axis.title = element_text(size = 14),
