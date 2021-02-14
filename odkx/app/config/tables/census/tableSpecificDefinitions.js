@@ -230,7 +230,7 @@ window.odkTableSpecificDefinitions = {
       "text": {
         "default": "Brother/sister of household head",
         "pt": "irmão/irmã do chefe do agregado familiar",
-        "sw": "Ndugu/dada wa Mkuu wa kaya"
+        "sw": "Kaka/Dada wa Mkuu wa kaya"
       },
       "_row_num": 27
     },
@@ -257,7 +257,7 @@ window.odkTableSpecificDefinitions = {
       "text": {
         "default": "Brother/sister in law of household head",
         "pt": "Cunhado/cunhada do chefe do agregado familiar",
-        "sw": "Ndugu/dada mkwe wa Mkuu wa kaya"
+        "sw": "Kaka/Dada Mkwe wa Mkuu wa Kaya"
       },
       "_row_num": 30
     },
@@ -2079,6 +2079,15 @@ window.odkTableSpecificDefinitions = {
       },
       "_row_num": 234
     },
+    "cannot_enter_0": {
+      "string_token": "cannot_enter_0",
+      "text": {
+        "default": "Cannot enter 0.",
+        "pt": "0 não é uma resposta permitida.",
+        "sw": "0 hakuruhusiwi."
+      },
+      "_row_num": 235
+    },
     "q11": {
       "string_token": "q11",
       "text": {
@@ -2659,7 +2668,7 @@ window.odkTableSpecificDefinitions = {
       "string_token": "q54b",
       "text": {
         "default": "54b. [If yes, ask to see the label] Was the spray registry label seen?",
-        "pt": "54b. [Se sim, pedir para ver a etiqueta Viu a etiqueta de registo da pulverização?",
+        "pt": "54b. [Se sim, pedir para ver a etiqueta] Viu a etiqueta de registo da pulverização?",
         "sw": "54b. [Ikiwa ndiyo, omba kuona kibandiko] Je, kibandiko cha usajili wa kunyunyuzia dawa inaonekana?"
       },
       "_row_num": 300
