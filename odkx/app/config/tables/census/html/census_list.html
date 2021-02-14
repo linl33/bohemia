@@ -13,40 +13,41 @@
     <script defer src="../../../../system/js/odkData.js"></script>
     <script defer src="../../../../system/tables/js/odkTables.js"></script>
 
+    <script defer src="../../../assets/js/localize.js"></script>
     <script defer src="../js/census_list.js"></script>
 </head>
 <body>
 <div class="d-flex d-none flex-column vh-100" id="wrapper">
     <nav class="nav nav-pills nav-justified pt-1 mx-1 bg-white">
-        <a class="nav-link active" href="#byHhId" data-toggle="pill" id="hhIdTab">Search by Household ID</a>
-        <a class="nav-link" href="#byMember" data-toggle="pill" id="memberTab">Search by Member</a>
+        <a class="nav-link active" href="#byHhId" data-toggle="pill" id="hhIdTab" data-localize="hh_tab"></a>
+        <a class="nav-link" href="#byMember" data-toggle="pill" id="memberTab" data-localize="member_tab"></a>
     </nav>
 
     <main class="container-fluid mt-3 d-flex h-100">
         <div class="tab-content tab-content-flex">
             <div class="tab-pane active flex-column h-100" id="byHhId">
                 <div class="input-group input-group-lg mb-3">
-                    <input type="text" class="form-control" id="hhIdSearchInput" placeholder="ABC-123">
+                    <input type="text" class="form-control" id="hhIdSearchInput" data-localize-placeholder="hh_id_placeholder">
                     <span class="input-group-append h-100">
-                        <button id="hhIdMapButton" class="btn btn-outline-secondary d-none" type="button">Map</button>
-                        <button id="hhIdSearchButton" class="btn btn-outline-secondary" type="button">Search</button>
+                        <button id="hhIdMapButton" class="btn btn-outline-secondary d-none" type="button" data-localize="map_button"></button>
+                        <button id="hhIdSearchButton" class="btn btn-outline-secondary" type="button" data-localize="search_button"></button>
                     </span>
                 </div>
 
-                <p class="h3 text-center mt-4 d-none" id="hhIdNoResult">No Result</p>
+                <p class="h3 text-center mt-4 d-none" id="hhIdNoResult" data-localize="no_result"></p>
                 <ul class="list-group overflow-auto h-100" id="hhIdSearchList"></ul>
             </div>
 
             <div class="tab-pane flex-column h-100" id="byMember">
                 <div class="input-group input-group-lg mb-3">
-                    <input type="text" class="form-control" id="memberSearchInput" placeholder="Enter Name">
+                    <input type="text" class="form-control" id="memberSearchInput" data-localize-placeholder="member_placeholder">
                     <span class="input-group-append h-100">
-                        <button id="memberMapButton" class="btn btn-outline-secondary d-none" type="button">Map</button>
-                        <button id="memberSearchButton" class="btn btn-outline-secondary" type="button">Search</button>
+                        <button id="memberMapButton" class="btn btn-outline-secondary d-none" type="button" data-localize="map_button"></button>
+                        <button id="memberSearchButton" class="btn btn-outline-secondary" type="button" data-localize="search_button"></button>
                     </span>
                 </div>
 
-                <p class="h3 text-center mt-4 d-none" id="memberNoResult">No Result</p>
+                <p class="h3 text-center mt-4 d-none" id="memberNoResult" data-localize="no_result"></p>
                 <ul class="list-group overflow-auto h-100" id="memberSearchList"></ul>
             </div>
         </div>
@@ -63,8 +64,8 @@
             <div class="modal-body" id="hhRosterModalBody"></div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="hhRosterModalProceed">Proceed</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-localize="cancel_button"></button>
+                <button type="button" class="btn btn-primary" id="hhRosterModalProceed" data-localize="proceed_button"></button>
             </div>
         </div>
     </div>

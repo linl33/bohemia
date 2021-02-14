@@ -26,7 +26,7 @@
       evt.preventDefault();
 
       window.localStorage.setItem('FW_ID', document.getElementById('fwIdInput').value.trim());
-      alert('Fieldworker ID updated');
+      alert(odkCommon.localizeText(localizeUtil.getLocale(), 'fw_id_updated'));
     });
 
     document.getElementById('enterFwIdScan').addEventListener('click', function () {
@@ -40,6 +40,8 @@
     if (!!odkCommon.getSessionVariable('fwIdInput')) {
       document.getElementById('fwIdInput').value = odkCommon.getSessionVariable('fwIdInput');
     }
+
+    localizeUtil.localizePage();
 
     document
       .getElementById('wrapper')

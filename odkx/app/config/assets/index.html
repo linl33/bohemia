@@ -11,34 +11,35 @@
     <script defer src="../../system/js/odkCommon.js"></script>
     <script defer src="../../system/tables/js/odkTables.js"></script>
 
+    <script defer src="js/localize.js"></script>
     <script defer src="js/index.js"></script>
 </head>
 
 <body>
 <div class="d-none" id="wrapper">
     <h1 class="text-uppercase text-center my-5">
-        <span>BOHEMIA CENSUS</span>
+        <span data-localize="op_title"></span>
         <span id="homeScreenFwId" class="mb-1 d-block">
-            <span>Fieldworker ID: </span>
+            <span class="pr-1" data-localize="fw_id_label"></span>
             <span id="fwIdSpan"></span>
         </span>
     </h1>
 
     <main class="container-fluid mt-3">
         <button type="button" class="btn btn-lg btn-dark btn-block py-4" id="enterFwId">
-            <span class="h2">Enter Fieldworker ID</span>
+            <span class="h2" data-localize="fw_id_button"></span>
         </button>
 
         <button type="button" class="btn btn-lg btn-dark btn-block py-4" id="newHhButton">
-            <span class="h2">Add New Household</span>
+            <span class="h2" data-localize="new_hh_button"></span>
         </button>
 
         <button type="button" class="btn btn-lg btn-dark btn-block py-4" id="editHhButton">
-            <span class="h2">Edit Existing Household</span>
+            <span class="h2" data-localize="existing_hh_button"></span>
         </button>
 
         <button type="button" class="btn btn-lg btn-primary btn-block py-4" id="syncHhButton">
-            <span class="h2">Send Data</span>
+            <span class="h2" data-localize="send_button"></span>
         </button>
     </main>
 </div>

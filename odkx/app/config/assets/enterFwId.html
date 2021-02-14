@@ -11,24 +11,23 @@
     <script defer src="../../system/js/odkCommon.js"></script>
     <script defer src="../../system/tables/js/odkTables.js"></script>
 
+    <script defer src="js/localize.js"></script>
     <script defer src="js/enterFwId.js"></script>
 </head>
 
 <body>
 <div class="d-none" id="wrapper">
-    <h1 class="text-uppercase text-center my-5">
-        Fieldworker ID
-    </h1>
+    <h1 class="text-uppercase text-center my-5" data-localize="fw_id_title"></h1>
 
     <main class="container-fluid mt-3">
         <form id="enterFwIdForm">
             <div class="form-group">
-                <label for="fwIdInput">Fieldworker ID</label>
-                <button type="button" class="btn btn-dark d-block mb-2" id="enterFwIdScan">Scan</button>
+                <label for="fwIdInput" data-localize="fw_id_title"></label>
+                <button type="button" class="btn btn-dark d-block mb-2" id="enterFwIdScan" data-localize="scan_button"></button>
                 <input type="tel" class="form-control" id="fwIdInput">
-                <small class="form-text text-muted">If QR code is unavailable, manually enter 3 digit Fieldworker ID</small>
+                <small class="form-text text-muted" data-localize="qr_hint"></small>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" data-localize="submit_button"></button>
         </form>
     </main>
 </div>

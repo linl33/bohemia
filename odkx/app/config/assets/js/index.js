@@ -48,5 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('editHhButton').disabled = true;
   }
 
+  localizeUtil.localizePage();
+
   document.getElementById('wrapper').classList.remove('d-none');
 });

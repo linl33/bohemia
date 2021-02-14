@@ -300,6 +300,8 @@
       }
     });
 
+    localizeUtil.localizePage();
+
     document
       .getElementById('wrapper')
       .classList
