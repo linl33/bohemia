@@ -44,10 +44,12 @@
   }
 
   var hhOnClick = function (evt) {
+    var hhId = evt.currentTarget.dataset['hh_id'];
+
     odkData.query(
       'census',
       'hh_id = ?',
-      [evt.currentTarget.dataset['hh_id']],
+      [hhId],
       null,
       null,
       null,
@@ -56,13 +58,10 @@
       0,
       false,
       function (result) {
-        odkTables.editRowWithSurvey(
-          null,
-          'census',
-          result.getRowId(0),
-          'census',
-          null
-        );
+        odkCommon.closeWindow(-1, {
+          hhId: hhId,
+          hhRowId: result.getRowId(0)
+        });
       },
       callbackFailure
     );

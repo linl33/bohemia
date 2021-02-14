@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function (evt) {
   });
 
   window.localStorage.removeItem('bohemiaHhSearch');
+  window.localStorage.removeItem('bohemiaMemberSearch');
 
   document.getElementById('wrapper').style.display = 'inherit';
 });
