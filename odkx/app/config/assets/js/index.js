@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
       'census',
       null,
       {
-        fw_id: window.localStorage.getItem('FW_ID') || null
+        fw_id: window.localStorage.getItem('FW_ID') || null,
+        hh_minicenced: 'no'
       }
     );
   });
