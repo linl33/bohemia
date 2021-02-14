@@ -5561,6 +5561,7 @@ app_server <- function(input, output, session) {
               liu <- input$log_in_user
               the_authorized_users <- c("iirema@ihi.or.tz",
                                         "eldo.elobolobo@manhica.net",
+                                        'joao.dasilva@manhica.net',
                                         "joe@databrew.cc")
               
               # See if the selected hamlet has already been marked as done or not
