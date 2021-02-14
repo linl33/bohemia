@@ -5,6 +5,8 @@
   var NAV_ACTION = 'NAV';
   var ACTION_KEY = 'CENSUS_LIST_ACTION';
 
+  var platInfo = JSON.parse(odkCommon.getPlatformInfo());
+
   var callbackFailure = function (error) {
     window.localStorage.removeItem(searchParam.hhId.storageKey);
     window.localStorage.removeItem(searchParam.member.storageKey);
@@ -95,12 +97,37 @@
   }
 
   var hhRosterConfirm = function (evt) {
-    odkTables.editRowWithSurvey(
-      null,
+    // modified from odkTables.editRowWithSurvey
+    // to pass fw_id
+
+    var uri = odkCommon.constructSurveyUri(
+      'census',
       'census',
       evt.currentTarget.dataset['rowId'],
-      'census',
-      null
+      null,
+      {
+        fw_id: window.localStorage.getItem('FW_ID') || null
+      }
+    );
+
+    var hashString = uri.substring(uri.indexOf('#'));
+
+    var extrasBundle = {
+      url: platInfo.baseUri + 'system/index.html' + hashString
+    };
+
+    var intentArgs = {
+      data: uri,
+      type: "vnd.android.cursor.item/vnd.opendatakit.form",
+      action: "android.intent.action.EDIT",
+      category: "android.intent.category.DEFAULT",
+      extras: extrasBundle
+    };
+
+    return odkCommon.doAction(
+      null,
+      "org.opendatakit.survey.activities.SplashScreenActivity",
+      intentArgs
     );
   }
 
@@ -172,11 +199,15 @@
     }
 
     var action = odkCommon.viewFirstQueuedAction();
-    if (action === undefined || action === null || action.jsonValue.status !== -1) {
+    if (action === undefined || action === null) {
       return;
     }
 
     odkCommon.removeFirstQueuedAction();
+
+    if (action.jsonValue.status !== -1) {
+      return;
+    }
 
     var hhMetadata;
     if (action.dispatchStruct[ACTION_KEY] === NAV_ACTION) {

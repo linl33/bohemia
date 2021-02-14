@@ -1,3 +1,7 @@
+#homeScreenFwId {
+    font-size: 40%;
+}
+
 .tab-content-flex>.active {
     display: flex;
 }

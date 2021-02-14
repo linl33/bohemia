@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--Menu-->
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="css/hope-homescreen.css" type="text/css" rel="stylesheet">
+    <link href="css/bootstrap-4.6.0/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="css/bohemia.css" type="text/css" rel="stylesheet">
+
     <script defer src="commonDefinitions.js"></script>
     <script defer src="../../system/js/odkCommon.js"></script>
     <script defer src="../../system/tables/js/odkTables.js"></script>
@@ -14,19 +15,32 @@
 </head>
 
 <body>
-<h1>BOHEMIA CENSUS</h1>
-<div id="wrapper">
-    <button id="newHhButton">
-        Add New Household
-    </button>
+<div class="d-none" id="wrapper">
+    <h1 class="text-uppercase text-center my-5">
+        <span>BOHEMIA CENSUS</span>
+        <span id="homeScreenFwId" class="mb-1 d-block">
+            <span>Fieldworker ID: </span>
+            <span id="fwIdSpan"></span>
+        </span>
+    </h1>
 
-    <button id="editHhButton">
-        Edit Existing Household
-    </button>
+    <main class="container-fluid mt-3">
+        <button type="button" class="btn btn-lg btn-dark btn-block py-4" id="enterFwId">
+            <span class="h2">Enter Fieldworker ID</span>
+        </button>
 
-    <button id="syncHhButton">
-        Send Data
-    </button>
+        <button type="button" class="btn btn-lg btn-dark btn-block py-4" id="newHhButton">
+            <span class="h2">Add New Household</span>
+        </button>
+
+        <button type="button" class="btn btn-lg btn-dark btn-block py-4" id="editHhButton">
+            <span class="h2">Edit Existing Household</span>
+        </button>
+
+        <button type="button" class="btn btn-lg btn-primary btn-block py-4" id="syncHhButton">
+            <span class="h2">Send Data</span>
+        </button>
+    </main>
 </div>
 </body>
 </html>
